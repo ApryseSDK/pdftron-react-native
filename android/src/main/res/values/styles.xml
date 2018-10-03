@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyToolManager">
+        <!-- whether to copy marked-up text of TextMarkup annot to annotation's 'content' property upon TextMarkup annotation creation -->
+        <item name="copy_annotated_text_to_note">true</item>
+        <!-- remove some tools from AnnotationToolbar and QuickMenu -->
+        <item name="disable_tool_modes">@array/disable_tool_modes</item>
+    </style>
+</resources>
