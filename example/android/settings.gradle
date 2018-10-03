@@ -1,0 +1,5 @@
+rootProject.name = 'example'
+include ':react-native-pdftron'
+project(':react-native-pdftron').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pdftron/android')
+
+include ':app'

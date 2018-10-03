@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="CustomAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/app_color_primary_day</item>
+        <item name="colorPrimaryDark">@color/app_color_primary_dark_day</item>
+        <item name="colorAccent">@color/app_color_accent</item>
+        <!-- Action bar -->
+        <item name="actionModeBackground">?attr/colorPrimary</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+</resources>

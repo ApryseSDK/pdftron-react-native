@@ -1,0 +1,4 @@
+target 'example' do
+    use_frameworks!
+    pod 'PDFNet', podspec: 'POD_LINK_GOES_HERE'
+end
