@@ -191,7 +191,7 @@ android {
 ```
 target 'MyApp' do
     use_frameworks!
-    pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
+    pod 'PDFNet', podspec: 'POD_LINK_GOES_HERE'
 +end
 ```
 
