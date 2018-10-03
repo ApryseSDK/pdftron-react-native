@@ -193,7 +193,7 @@ android {
 target 'MyApp' do
     use_frameworks!
     pod 'PDFNet', podspec: 'POD_LINK_GOES_HERE'
-+end
+end
 ```
 
 5. In `ios` folder, run `pod install`
