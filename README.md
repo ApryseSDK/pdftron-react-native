@@ -5,6 +5,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Components](#components)
+- [License](#license)
 
 ## System requirements
 - npm
@@ -358,3 +359,6 @@ string, optional
 function, optional
 ##### showLeadingNavButton
 bool, optional
+
+## License
+See [License](./LICENSE)
