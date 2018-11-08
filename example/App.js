@@ -29,7 +29,7 @@ export default class App extends Component<Props> {
       permissionGranted: Platform.OS === 'ios' ? true : false
     };
 
-    RNPdftron.initialize("YOUR_PDFTRON_LICENSE_KEY_GOES_HERE");
+    RNPdftron.initialize("");
   }
 
   componentDidMount() {
