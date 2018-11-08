@@ -52,8 +52,13 @@
     
     [navigationController didMoveToParentViewController:controller];
     
-    // Open an existing local file URL.
+    // Open a file URL.
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:_document withExtension:@"pdf"];
+    if ([_document containsString:@"://"]) {
+        fileURL = [NSURL URLWithString:_document];
+    } else if ([_document hasPrefix:@"/"]) {
+        fileURL = [NSURL fileURLWithPath:_document];
+    }
     NSError *error = nil;
     BOOL success = [_documentController openDocumentWithURL:fileURL error:&error];
     if (!success) {
