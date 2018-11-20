@@ -267,6 +267,11 @@ public class DocumentView extends FrameLayout implements
     }
 
     @Override
+    public boolean canShowFileCloseSnackbar() {
+        return false;
+    }
+
+    @Override
     public boolean onToolbarCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         return false;
     }
@@ -298,6 +303,11 @@ public class DocumentView extends FrameLayout implements
 
     @Override
     public void onTabPaused(FileInfo fileInfo, boolean b) {
+
+    }
+
+    @Override
+    public void onJumpToSdCardFolder() {
 
     }
 }
