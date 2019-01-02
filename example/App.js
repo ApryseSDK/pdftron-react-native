@@ -16,8 +16,7 @@ import {
   Alert
 } from 'react-native';
 
-import { DocumentView } from 'react-native-pdftron';
-const RNPdftron = NativeModules.RNPdftron;
+import { DocumentView, RNPdftron } from 'react-native-pdftron';
 
 type Props = {};
 export default class App extends Component<Props> {
