@@ -310,4 +310,9 @@ public class DocumentView extends FrameLayout implements
     public void onJumpToSdCardFolder() {
 
     }
+
+    @Override
+    public void onTabDocumentLoaded(String s) {
+
+    }
 }
