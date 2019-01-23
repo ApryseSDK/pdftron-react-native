@@ -184,7 +184,7 @@ android {
 
 ### iOS
 
-1. First, follow the official getting started guide on [setting up React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [create a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`)
+1. First, follow the official getting started guide on [setting up React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [create a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`
 2. In `MyApp` folder, install `react-native-pdftron` with `npm install git+https://github.com/PDFTron/pdftron-react-native.git --save`
 3. Link the module `react-native link react-native-pdftron`
 4. Add a `Podfile` in the `ios` folder with the following:
