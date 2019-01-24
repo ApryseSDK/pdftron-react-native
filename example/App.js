@@ -85,7 +85,7 @@ export default class App extends Component<Props> {
       )
     }
 
-    const path = Platform.OS === 'ios' ? "getting_started" : "android.resource://com.example/raw/getting_started.pdf";
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pdfref.pdf";
 
     return (
       <DocumentView

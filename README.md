@@ -218,8 +218,7 @@ import {
   Alert
 } from 'react-native';
 
-import { DocumentView } from 'react-native-pdftron';
-const RNPdftron = NativeModules.RNPdftron;
+import { DocumentView, RNPdftron } from 'react-native-pdftron';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -231,7 +230,7 @@ export default class App extends Component<Props> {
       permissionGranted: Platform.OS === 'ios' ? true : false
     };
 
-    RNPdftron.initialize("your_pdftron_license_key");
+    RNPdftron.initialize("");
   }
 
   componentDidMount() {
@@ -288,7 +287,7 @@ export default class App extends Component<Props> {
       )
     }
 
-    const path = Platform.OS === 'ios' ? "sample" : "android.resource://com.myapp/raw/sample.pdf";
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pdfref.pdf";
 
     return (
       <DocumentView
