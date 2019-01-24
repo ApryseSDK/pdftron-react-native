@@ -66,7 +66,7 @@ public class DocumentView extends FrameLayout implements
         setLayoutParams(params);
 
         Activity currentActivity = reactContext.getCurrentActivity();
-        if (currentActivity != null && currentActivity instanceof FragmentActivity) {
+        if (currentActivity instanceof FragmentActivity) {
             mFragmentManager = ((FragmentActivity) reactContext.getCurrentActivity()).getSupportFragmentManager();
         } else {
             throw new IllegalStateException("FragmentActivity required.");
@@ -149,17 +149,15 @@ public class DocumentView extends FrameLayout implements
         }
         Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath);
         if (fileUri != null) {
-            ToolManagerBuilder toolManagerBuilder = ToolManagerBuilder.from(getContext(), R.style.MyToolManager);
-
             ViewerConfig.Builder builder = new ViewerConfig.Builder();
             ViewerConfig config = builder
                     .fullscreenModeEnabled(false)
                     .multiTabEnabled(false)
                     .showCloseTabOption(false)
-                    .setToolManagerBuilder(toolManagerBuilder)
+                    .useSupportActionBar(false)
                     .build();
 
-            Bundle args = PdfViewCtrlTabFragment.createBasicPdfViewCtrlTabBundle(getContext(), fileUri, "", config);
+            Bundle args = PdfViewCtrlTabFragment.createBasicPdfViewCtrlTabBundle(getContext(), fileUri, mPassword, config);
             args.putParcelable(PdfViewCtrlTabHostFragment.BUNDLE_TAB_HOST_CONFIG, config);
             args.putInt(PdfViewCtrlTabHostFragment.BUNDLE_TAB_HOST_NAV_ICON, mShowNavIcon ? mNavIconRes : 0);
 
