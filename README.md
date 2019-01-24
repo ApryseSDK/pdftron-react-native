@@ -85,14 +85,14 @@ allprojects {
 android {
 -   compileSdkVersion 23
 -   buildToolsVersion "23.0.1"
-+   compileSdkVersion 27
-+   buildToolsVersion "27.0.3"
++   compileSdkVersion 28
++   buildToolsVersion "28.0.2"
 
     defaultConfig {
         applicationId "com.myapp"
         minSdkVersion 16
 -       targetSdkVersion 22
-+       targetSdkVersion 27
++       targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         ndk {
@@ -102,8 +102,8 @@ android {
 +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
     }
 +   configurations.all {
-+       resolutionStrategy.force "com.android.support:appcompat-v7:27.0.2"
-+       resolutionStrategy.force "com.android.support:support-v4:27.0.2"
++       resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
++       resolutionStrategy.force "com.android.support:support-v4:28.0.0"
 +   }
 }
 ```
