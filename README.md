@@ -136,36 +136,11 @@ android {
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-
-+   <provider
-+       android:name="android.support.v4.content.FileProvider"
-+       android:authorities="${applicationId}.provider"
-+       android:exported="false"
-+       android:grantUriPermissions="true">
-+       <meta-data
-+           android:name="android.support.FILE_PROVIDER_PATHS"
-+           android:resource="@xml/provider_paths" />
-+   </provider>
   </application>
 </manifest>
 ```
 
-9. Define Activity theme in `android/app/src/main/res/values/styles.xml`:
-
-```diff
-<resources>
-+   <style name="CustomAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-+       <item name="colorPrimary">@color/app_color_primary_day</item>
-+       <item name="colorPrimaryDark">@color/app_color_primary_dark_day</item>
-+       <item name="colorAccent">@color/app_color_accent</item>
-+       <!-- Action bar -->
-+       <item name="actionModeBackground">?attr/colorPrimary</item>
-+       <item name="windowActionModeOverlay">true</item>
-+   </style>
-</resources>
-```
-
-10. Use `ReactCompatActivity` instead of `ReactActivity` in `android/app/src/main/java/com/myapp/MainActivity.java` to make good use of the support library:
+9. Use `ReactCompatActivity` instead of `ReactActivity` in `android/app/src/main/java/com/myapp/MainActivity.java` to make good use of the support library:
 
 ```diff
 -import com.facebook.react.ReactActivity;
@@ -177,9 +152,9 @@ android {
 }
 ```
 
-11. Create a `android/app/src/main/res/raw` folder and add a sample file to it, i.e. `sample.pdf`
-12. Lastly, replace `App.js` with what is shown [here](#usage)
-13. In root directory, run `react-native run-android`
+10. Create a `android/app/src/main/res/raw` folder and add a sample file to it, i.e. `sample.pdf`
+11. Lastly, replace `App.js` with what is shown [here](#usage)
+12. In root directory, run `react-native run-android`
 
 ### iOS
 
