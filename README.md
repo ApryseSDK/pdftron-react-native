@@ -37,7 +37,7 @@ buildscript {
     }
     dependencies {
 -       classpath 'com.android.tools.build:gradle:2.2.3'
-+       classpath 'com.android.tools.build:gradle:3.1.2'
++       classpath 'com.android.tools.build:gradle:3.2.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -76,7 +76,7 @@ allprojects {
 
 ```diff
 -distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip
-+distributionUrl=https\://services.gradle.org/distributions/gradle-4.4-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-4.6-all.zip
 ```
 
 7. In your `android/app/build.gradle`:
