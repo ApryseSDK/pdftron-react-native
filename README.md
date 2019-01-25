@@ -14,11 +14,9 @@
 
 ## Preview
 
-### Android
-![demo](./react-native-pdftron-demo-android.gif)
-
-### iOS
-![demo](./react-native-pdftron-demo-ios.gif)
+**Android** |  **iOS**
+:--:|:--:
+![demo](./react-native-pdftron-demo-android.gif) | ![demo](./react-native-pdftron-demo-ios.gif)
 
 ## Installation
 
