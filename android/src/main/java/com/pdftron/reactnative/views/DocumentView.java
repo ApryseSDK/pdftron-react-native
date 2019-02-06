@@ -166,4 +166,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public boolean canRecreateActivity() {
         return false;
     }
+    
+    @Override
+    public void onTabDocumentLoaded(String s) {
+    }
 }
