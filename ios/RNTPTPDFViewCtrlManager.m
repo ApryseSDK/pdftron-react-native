@@ -17,9 +17,9 @@ RCT_EXPORT_MODULE()
     // Create a new PDFViewCtrl
     RNTPTPDFViewCtrl* pdfViewCtrl = [[RNTPTPDFViewCtrl alloc] init];
     
-    _toolManager = [[ToolManager alloc] initWithPDFViewCtrl:pdfViewCtrl];
+    _toolManager = [[PTToolManager alloc] initWithPDFViewCtrl:pdfViewCtrl];
     [pdfViewCtrl setToolDelegate:_toolManager];
-    [_toolManager changeTool: [PanTool class]];
+    [_toolManager changeTool:[PTPanTool class]];
     
     return pdfViewCtrl;
 }

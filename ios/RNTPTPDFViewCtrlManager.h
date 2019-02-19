@@ -9,7 +9,7 @@
 #import <Tools/Tools.h>
 
 @interface RNTPTPDFViewCtrlManager : RCTViewManager {
-    ToolManager * _toolManager;
+    PTToolManager * _toolManager;
 }
 
 @end
