@@ -59,11 +59,8 @@
     } else if ([_document hasPrefix:@"/"]) {
         fileURL = [NSURL fileURLWithPath:_document];
     }
-    NSError *error = nil;
-    BOOL success = [_documentController openDocumentWithURL:fileURL error:&error];
-    if (!success) {
-        // Failed to open document.
-    }
+
+    [_documentController openDocumentWithURL:fileURL];
 }
 
 - (void)navButtonClicked
