@@ -115,7 +115,8 @@ android {
 
   <application
     ...
-+   android:largeHeap="true">
++   android:largeHeap="true"
++   android:usesCleartextTraffic="true">
 
 +   <meta-data
 +     android:name="pdftron_license_key"
