@@ -1,4 +1,4 @@
-# react-native-pdftron
+# PDFTron React Native Wrapper
 
 - [System requirements](#system-requirements)
 - [Preview](#preview)
@@ -7,10 +7,12 @@
 - [Components](#components)
 - [License](#license)
 
-## System requirements
+## Prerequisites
+- A valid evaluation or commercial license key. If you do not have a license key, please contact sales for a commercial license key or click [here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true) to get an evaluation key.
+- AWS credentials that comes with your license key.
 - npm
-- PDFTron SDK >= 6.8.0
-- react-native >= 0.49.3
+- PDFTron SDK >= 6.10.0
+- react-native >= 0.59.0
 
 ## Preview
 
@@ -22,20 +24,26 @@
 
 ### Android
 
-1. First, follow the official getting started guide on [setting up React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [create a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your package ID is `com.myapp` (i.e. through `react-native init MyApp`)
-2. In `MyApp` folder, install `react-native-pdftron` with `npm install git+https://github.com/PDFTron/pdftron-react-native.git --save`
-3. Link the module `react-native link react-native-pdftron`
-4. In your root `android/build.gradle`:
+1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your package ID is `com.myapp` (by calling `react-native init MyApp`)
+2. In `MyApp` folder, install `react-native-pdftron` by calling `npm install git+https://github.com/PDFTron/pdftron-react-native.git --save`
+3. Then link the module by calling `react-native link react-native-pdftron`
+4. In your root `android/build.gradle` file, add the following:
 
 ```diff
 buildscript {
+    ext {
+        buildToolsVersion = "28.0.3"
+        minSdkVersion = 16
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+        supportLibVersion = "28.0.0"
+    }
     repositories {
+        google()
         jcenter()
-+       google()
     }
     dependencies {
--       classpath 'com.android.tools.build:gradle:2.2.3'
-+       classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -45,12 +53,12 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        google()
         jcenter()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-+       google()
 +       maven {
 +           url "s3://pdftron-maven/release"
 +           credentials(AwsCredentials) {
@@ -62,51 +70,45 @@ allprojects {
 }
 ```
 
-5. If you have not requested a trial, [obtain your license key here](https://www.pdftron.com/documentation/android/guides/getting-started/integrate-gradle/), then in your root `android/gradle.properties`:
+5. If you have not requested a trial, [obtain your license key here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true). In your root `android/gradle.properties` add your PDFTron license key and AWS credentials:
 
 ```diff
-+AWS_ACCESS_KEY=YOUR_AWS_ACCESS_KEY
-+AWS_SECRET_KEY=YOUR_AWS_SECRET_KEY
-+PDFTRON_LICENSE_KEY=YOUR_PDFTRON_LICENSE_KEY_GOES_HERE
+AWS_ACCESS_KEY=YOUR_AWS_ACCESS_KEY
+AWS_SECRET_KEY=YOUR_AWS_SECRET_KEY
+PDFTRON_LICENSE_KEY=YOUR_PDFTRON_LICENSE_KEY_GOES_HERE
 ```
 
-6. Update gradle version in `android/gradle/wrapper/gradle-wrapper.properties`:
-
-```diff
--distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip
-+distributionUrl=https\://services.gradle.org/distributions/gradle-4.6-all.zip
-```
-
-7. In your `android/app/build.gradle`:
+6. In your `android/app/build.gradle`:
 
 ```diff
 android {
--   compileSdkVersion 23
--   buildToolsVersion "23.0.1"
-+   compileSdkVersion 28
-+   buildToolsVersion "28.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
-        applicationId "com.myapp"
-        minSdkVersion 16
--       targetSdkVersion 22
-+       targetSdkVersion 28
+        applicationId "com.reactnativesample"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        ndk {
-            abiFilters "armeabi-v7a", "x86"
-        }
 +       multiDexEnabled true
 +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
     }
+    
 +   configurations.all {
 +       resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
 +       resolutionStrategy.force "com.android.support:support-v4:28.0.0"
 +   }
+
+    ...
 }
 ```
 
-8. Add license key placeholder to your `android/app/src/main/AndroidManifest.xml` file:
+7. Add license key placeholder to your `android/app/src/main/AndroidManifest.xml` file:
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -139,25 +141,13 @@ android {
 </manifest>
 ```
 
-9. Use `ReactCompatActivity` instead of `ReactActivity` in `android/app/src/main/java/com/myapp/MainActivity.java` to make good use of the support library:
-
-```diff
--import com.facebook.react.ReactActivity;
-+import com.facebook.react.ReactCompatActivity;
-
--public class MainActivity extends ReactActivity {
-+public class MainActivity extends ReactCompatActivity {
-  ...
-}
-```
-
-10. Create a `android/app/src/main/res/raw` folder and add a sample file to it, i.e. `sample.pdf`
-11. Lastly, replace `App.js` with what is shown [here](#usage)
-12. In root directory, run `react-native run-android`
+8. Create a `android/app/src/main/res/raw` folder and add a sample file to it, i.e. `sample.pdf`
+9. Lastly, replace `App.js` with what is shown [here](#usage)
+10. In the root project directory, run `react-native run-android`
 
 ### iOS
 
-1. First, follow the official getting started guide on [setting up React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [create a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`
+1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1). The following steps will assume your app is created through `react-native init MyApp`
 2. In `MyApp` folder, install `react-native-pdftron` with `npm install git+https://github.com/PDFTron/pdftron-react-native.git --save`
 3. Link the module `react-native link react-native-pdftron`
 4. Add a `Podfile` in the `ios` folder with the following:
