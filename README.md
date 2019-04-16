@@ -9,7 +9,7 @@
 
 ## Prerequisites
 - A valid evaluation or commercial license key. If you do not have a license key, please contact sales for a commercial license key or click [here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true) to get an evaluation key.
-- AWS credentials that comes with your license key.
+- PDFTron gradle credentials that comes with your license key (Android)
 - npm
 - PDFTron SDK >= 6.10.0
 - react-native >= 0.59.0
@@ -76,7 +76,7 @@
     }
     ```
 
-5. Add your AWS credentials in the `android/gradle.properties` file.
+5. Add your PDFTron credentials in the `android/gradle.properties` file.
 
     ```diff
     AWS_ACCESS_KEY=YOUR_AWS_ACCESS_KEY
