@@ -329,5 +329,8 @@ function, optional
 ##### showLeadingNavButton
 bool, optional
 
+## Contributing
+See [Contributing](./CONTRIBUTING.md)
+
 ## License
 See [License](./LICENSE)
