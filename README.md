@@ -107,6 +107,9 @@
     +       resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
     +       resolutionStrategy.force "com.android.support:support-v4:28.0.0"
     +   }
+        dependencies {
+    +       implementation "com.android.support:multidex:1.0.3"
+        }
 
         ...
     }
@@ -141,8 +144,17 @@
     </manifest>
     ```
 
-8. Replace `App.js` with what is shown [here](#usage)
-9. Finally in the root project directory, run `react-native run-android`.
+8. In your `android\app\src\main\java\com\reactnativesample\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+    ```diff
+    - import android.app.Application;
+    + import android.support.multidex.MultiDexApplication;
+    ...
+    - public class MainApplication extends Application implements ReactApplication {
+    + public class MainApplication extends MultiDexApplication implements ReactApplication {
+    ```
+
+9. Replace `App.js` with what is shown [here](#usage)
+10. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
