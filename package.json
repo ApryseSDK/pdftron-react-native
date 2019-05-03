@@ -9,8 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-pdftron.git",
-    "baseUrl": "https://github.com/github_account/react-native-pdftron"
+    "url": "git+https://github.com/PDFTron/pdftron-react-native.git",
+    "baseUrl": "https://github.com/PDFTron/pdftron-react-native"
   },
   "keywords": [
     "react-native",

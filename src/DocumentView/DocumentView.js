@@ -19,6 +19,8 @@ export default class DocumentView extends PureComponent {
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
+    disabledElements: PropTypes.array,
+    disabledTools: PropTypes.array,
     ...ViewPropTypes,
   };
 

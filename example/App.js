@@ -16,7 +16,7 @@ import {
   Alert
 } from 'react-native';
 
-import { DocumentView, RNPdftron } from 'react-native-pdftron';
+import { DocumentView, RNPdftron, Config } from 'react-native-pdftron';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -93,6 +93,8 @@ export default class App extends Component<Props> {
         showLeadingNavButton={true}
         leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
         onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+        disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
+        disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
       />
     );
   }

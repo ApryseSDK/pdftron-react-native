@@ -3,6 +3,7 @@ package com.pdftron.reactnative.viewmanagers;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -43,6 +44,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "showLeadingNavButton")
     public void setShowNavButton(DocumentView documentView, boolean show) {
         documentView.setShowNavIcon(show);
+    }
+
+    @ReactProp(name = "disabledElements")
+    public void setDisabledElements(DocumentView documentView, @NonNull ReadableArray array) {
+        documentView.setDisabledElements(array);
+    }
+
+    @ReactProp(name = "disabledTools")
+    public void setDisabledTools(DocumentView documentView, @NonNull ReadableArray array) {
+        documentView.setDisabledTools(array);
     }
 
     @Override
