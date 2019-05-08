@@ -29,6 +29,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // EVENTS END
 
     private String mDocumentPath;
+    private String mCacheDir;
 
     public DocumentView(Context context) {
         super(context);
@@ -51,6 +52,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         Activity currentActivity = reactContext.getCurrentActivity();
         if (currentActivity instanceof FragmentActivity) {
             setSupportFragmentManager(((FragmentActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
+            mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
         } else {
             throw new IllegalStateException("FragmentActivity required.");
         }
@@ -120,14 +122,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     ToolManager.ToolMode.STAMPER
                 });
             ViewerConfig.Builder builder = new ViewerConfig.Builder();
-            ViewerConfig config = builder
+            builder = builder
                 .fullscreenModeEnabled(false)
                 .multiTabEnabled(false)
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
-                .toolManagerBuilder(toolManagerBuilder)
-                .build();
-            setViewerConfig(config);
+                .toolManagerBuilder(toolManagerBuilder);
+            if (mCacheDir != null) {
+                builder = builder.openUrlCachePath(mCacheDir);
+            }
+            setViewerConfig(builder.build());
         }
         super.onAttachedToWindow();
 
