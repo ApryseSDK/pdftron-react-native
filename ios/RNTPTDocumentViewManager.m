@@ -36,47 +36,22 @@ RCT_CUSTOM_VIEW_PROPERTY(leadingNavButtonIcon, NSString, RNTPTDocumentView)
     }
 }
 
-#pragma mark - Button Visbility
 
-RCT_CUSTOM_VIEW_PROPERTY(shareButtonHidden, BOOL, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
 {
     if (json) {
-        view.shareButtonHidden = [RCTConvert BOOL:json];
+        NSArray* disabledElements = [RCTConvert NSArray:json];
+        [view disableElements:disabledElements];
     }
+    
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(searchButtonHidden, BOOL, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
 {
-    if (json) {
-        view.searchButtonHidden = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(annotationToolbarButtonHidden, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.annotationToolbarButtonHidden = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(thumbnailBrowserButtonHidden, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.thumbnailBrowserButtonHidden = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(navigationListsButtonHidden, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.navigationListsButtonHidden = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(viewerSettingsButtonHidden, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.viewerSettingsButtonHidden = [RCTConvert BOOL:json];
+    
+    if( json ) {
+        NSArray* disabledTools = [RCTConvert NSArray:json];
+        [view setToolsPermission:disabledTools toValue:NO];
     }
 }
 
@@ -108,7 +83,6 @@ RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsWithControls, BOOL, RNTPTDocumentView
         view.pageIndicatorShowsWithControls = [RCTConvert BOOL:json];
     }
 }
-
 
 
 - (UIView *)view

@@ -18,7 +18,7 @@
 
 @interface RNTPTDocumentView : UIView
 
-@property (readonly) PTDocumentViewController *documentController;
+@property (readonly) PTDocumentViewController *documentViewController;
 
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
@@ -27,14 +27,6 @@
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 
-// button visibility
-@property (nonatomic, assign) BOOL shareButtonHidden;
-@property (nonatomic, assign) BOOL searchButtonHidden;
-@property (nonatomic, assign) BOOL annotationToolbarButtonHidden;
-@property (nonatomic, assign) BOOL thumbnailBrowserButtonHidden;
-@property (nonatomic, assign) BOOL navigationListsButtonHidden;
-@property (nonatomic, assign) BOOL viewerSettingsButtonHidden;
-
 @property NSString *document;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
@@ -42,5 +34,9 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 
 @property (nonatomic, weak) id <RNTPTDocumentViewDelegate> delegate;
+
+
+-(void)disableElements:(NSArray<NSString*>*)disabledElements;
+-(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value;
 
 @end
