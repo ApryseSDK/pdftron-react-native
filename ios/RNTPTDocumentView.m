@@ -25,9 +25,10 @@
     if (controller == nil || self.window == nil) {
         return;
     }
+
     
-    _documentController = [[PTTabbedDocumentViewController alloc] init];
-    _documentController.tabsEnabled = NO;
+    _documentController = [[PTDocumentViewController alloc] init];
+
     if (_showNavButton) {
         UIImage *navImage = [UIImage imageNamed:_navButtonPath];
         UIBarButtonItem *navButton = [[UIBarButtonItem alloc] initWithImage:navImage style:UIBarButtonItemStylePlain target:self action:@selector(navButtonClicked)];
@@ -60,8 +61,92 @@
         fileURL = [NSURL fileURLWithPath:_document];
     }
 
+    // these all already default to NO so we can take them directly
+    _documentController.shareButtonHidden = self.shareButtonHidden;
+    _documentController.searchButtonHidden = self.searchButtonHidden;
+    _documentController.annotationToolbarButtonHidden = self.annotationToolbarButtonHidden;
+    _documentController.thumbnailBrowserButtonHidden = self.thumbnailBrowserButtonHidden;
+    _documentController.navigationListsButtonHidden = self.navigationListsButtonHidden;
+    
+    _documentController.nightModeEnabled = self.nightModeEnabled;
+    _documentController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    _documentController.pageIndicatorEnabled = self.pageIndicatorEnabled;
+    _documentController.pageIndicatorShowsOnPageChange = self.pageIndicatorShowsOnPageChange;
+    _documentController.pageIndicatorShowsWithControls = self.pageIndicatorShowsWithControls;
+    
     [_documentController openDocumentWithURL:fileURL];
 }
+
+#pragma mark - Button visibility
+
+-(void)setShareButtonHidden:(BOOL)shareButtonHidden
+{
+    _documentController.shareButtonHidden = shareButtonHidden;
+    _shareButtonHidden = shareButtonHidden;
+}
+
+-(void)setSearchButtonHidden:(BOOL)searchButtonHidden
+{
+    _documentController.searchButtonHidden = searchButtonHidden;
+    _searchButtonHidden = searchButtonHidden;
+}
+
+-(void)setAnnotationToolbarButtonHidden:(BOOL)annotationToolbarButtonHidden
+{
+    _documentController.annotationToolbarButtonHidden = annotationToolbarButtonHidden;
+    _annotationToolbarButtonHidden = annotationToolbarButtonHidden;
+}
+
+-(void)setThumbnailBrowserButtonHidden:(BOOL)thumbnailBrowserButtonHidden
+{
+    _documentController.thumbnailBrowserButtonHidden = thumbnailBrowserButtonHidden;
+    _thumbnailBrowserButtonHidden = thumbnailBrowserButtonHidden;
+}
+
+-(void)setNavigationListsButtonHidden:(BOOL)navigationListsButtonHidden
+{
+    _documentController.navigationListsButtonHidden = navigationListsButtonHidden;
+    _navigationListsButtonHidden = navigationListsButtonHidden;
+}
+
+-(void)setViewerSettingsButtonHidden:(BOOL)viewerSettingsButtonHidden
+{
+    _documentController.viewerSettingsButtonHidden = viewerSettingsButtonHidden;
+    _viewerSettingsButtonHidden = viewerSettingsButtonHidden;
+}
+
+#pragma mark - Viewer options
+
+-(void)setNightModeEnabled:(BOOL)nightModeEnabled
+{
+    _documentController.nightModeEnabled = nightModeEnabled;
+    _nightModeEnabled = nightModeEnabled;
+}
+
+-(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
+{
+    _documentController.bottomToolbarEnabled = bottomToolbarEnabled;
+    _bottomToolbarEnabled = bottomToolbarEnabled;
+}
+
+-(void)setPageIndicatorEnabled:(BOOL)pageIndicatorEnabled
+{
+    _documentController.pageIndicatorEnabled = pageIndicatorEnabled;
+    _pageIndicatorEnabled = pageIndicatorEnabled;
+}
+
+-(void)setPageIndicatorShowsOnPageChange:(BOOL)pageIndicatorShowsOnPageChange
+{
+    _documentController.pageIndicatorShowsOnPageChange = pageIndicatorShowsOnPageChange;
+    _pageIndicatorShowsOnPageChange = pageIndicatorShowsOnPageChange;
+}
+
+-(void)setPageIndicatorShowsWithControls:(BOOL)pageIndicatorShowsWithControls
+{
+    _documentController.pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
+    _pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
+}
+
 
 - (void)navButtonClicked
 {

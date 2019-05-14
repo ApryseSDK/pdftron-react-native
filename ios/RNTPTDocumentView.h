@@ -18,7 +18,23 @@
 
 @interface RNTPTDocumentView : UIView
 
-@property (readonly) PTTabbedDocumentViewController *documentController;
+@property (readonly) PTDocumentViewController *documentController;
+
+// viewer options
+@property (nonatomic, assign) BOOL nightModeEnabled;
+@property (nonatomic, assign) BOOL bottomToolbarEnabled;
+@property (nonatomic, assign) BOOL pageIndicatorEnabled;
+@property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
+@property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
+
+// button visibility
+@property (nonatomic, assign) BOOL shareButtonHidden;
+@property (nonatomic, assign) BOOL searchButtonHidden;
+@property (nonatomic, assign) BOOL annotationToolbarButtonHidden;
+@property (nonatomic, assign) BOOL thumbnailBrowserButtonHidden;
+@property (nonatomic, assign) BOOL navigationListsButtonHidden;
+@property (nonatomic, assign) BOOL viewerSettingsButtonHidden;
+
 @property NSString *document;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
