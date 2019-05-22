@@ -32,8 +32,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // EVENTS END
 
     private String mDocumentPath;
+
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
+    private String mCacheDir;
 
     public DocumentView(Context context) {
         super(context);
@@ -56,6 +58,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         Activity currentActivity = reactContext.getCurrentActivity();
         if (currentActivity instanceof FragmentActivity) {
             setSupportFragmentManager(((FragmentActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
+            mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
         } else {
             throw new IllegalStateException("FragmentActivity required.");
         }
@@ -179,6 +182,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     private ViewerConfig getConfig() {
+        if (mCacheDir != null) {
+            builder = builder.openUrlCachePath(mCacheDir);
+        }
         return mBuilder
                 .toolManagerBuilder(mToolManagerBuilder)
                 .build();

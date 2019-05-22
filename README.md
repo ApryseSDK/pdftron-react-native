@@ -18,7 +18,7 @@
 
 **Android** |  **iOS**
 :--:|:--:
-![demo](./react-native-pdftron-demo-android.gif) | ![demo](./react-native-pdftron-demo-ios.gif)
+<img alt='demo' src='http://pdftron.s3.amazonaws.com/custom/websitefiles/react-native-pdftron-demo-android.gif' style='width:80%' /> | ![demo](./react-native-pdftron-demo-ios.gif)
 
 ## Installation
 
