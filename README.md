@@ -329,6 +329,8 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [leadingNavButtonIcon](#leadingnavbuttonicon)
 - [onLeadingNavButtonPressed](#onleadingnavbuttonpressed)
 - [showLeadingNavButton](#showleadingnavbutton)
+- [disabledElements](#disabledelements)
+- [disabledTools](#disabledtools)
 
 ##### document
 string, required
@@ -340,6 +342,22 @@ string, optional
 function, optional
 ##### showLeadingNavButton
 bool, optional
+##### disabledElements
+array of string, optional
+##### disabledTools
+array of string, optional
+
+```js
+import { DocumentView, Config } from 'react-native-pdftron';
+<DocumentView
+  document={path}
+  showLeadingNavButton={true}
+  leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
+  onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+  disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
+  disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+/>
+```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

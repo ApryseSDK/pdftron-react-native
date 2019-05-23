@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -19,6 +20,8 @@ import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
+
+import java.util.ArrayList;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
@@ -29,6 +32,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // EVENTS END
 
     private String mDocumentPath;
+
+    private ToolManagerBuilder mToolManagerBuilder;
+    private ViewerConfig.Builder mBuilder;
     private String mCacheDir;
 
     public DocumentView(Context context) {
@@ -56,6 +62,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         } else {
             throw new IllegalStateException("FragmentActivity required.");
         }
+
+        mToolManagerBuilder = ToolManagerBuilder.from();
+        mBuilder = new ViewerConfig.Builder();
+        mBuilder
+                .fullscreenModeEnabled(false)
+                .multiTabEnabled(false)
+                .showCloseTabOption(false)
+                .useSupportActionBar(false);
     }
 
     public void setDocument(String path) {
@@ -67,6 +81,113 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setNavResName(String resName) {
         setNavIconResName(resName);
+    }
+
+    public void setDisabledElements(ReadableArray array) {
+        disableElements(array);
+    }
+
+    public void setDisabledTools(ReadableArray array) {
+        disableTools(array);
+    }
+
+    private void disableElements(ReadableArray args) {
+        for (int i = 0; i < args.size(); i++) {
+            String item = args.getString(i);
+            if ("toolsButton".equals(item)) {
+                mBuilder = mBuilder.showAnnotationToolbarOption(false);
+            } else if ("searchButton".equals(item)) {
+                mBuilder = mBuilder.showSearchView(false);
+            } else if ("shareButton".equals(item)) {
+                mBuilder = mBuilder.showShareOption(false);
+            } else if ("viewControlsButton".equals(item)) {
+                mBuilder = mBuilder.showDocumentSettingsOption(false);
+            } else if ("thumbnailsButton".equals(item)) {
+                mBuilder = mBuilder.showThumbnailView(false);
+            } else if ("listsButton".equals(item)) {
+                mBuilder = mBuilder
+                        .showAnnotationsList(false)
+                        .showOutlineList(false)
+                        .showUserBookmarksList(false);
+            } else if ("thumbnailSlider".equals(item)) {
+                mBuilder = mBuilder.showBottomNavBar(false);
+            }
+        }
+        disableTools(args);
+    }
+
+    private void disableTools(ReadableArray args) {
+        ArrayList<ToolManager.ToolMode> modesArr = new ArrayList<>();
+        for (int i = 0; i < args.size(); i++) {
+            String item = args.getString(i);
+            ToolManager.ToolMode mode = convStringToToolMode(item);
+            if (mode != null) {
+                modesArr.add(mode);
+            }
+        }
+        ToolManager.ToolMode[] modes = modesArr.toArray(new ToolManager.ToolMode[modesArr.size()]);
+        if (modes.length > 0) {
+            mToolManagerBuilder = mToolManagerBuilder.disableToolModes(modes);
+        }
+    }
+
+    private ToolManager.ToolMode convStringToToolMode(String item) {
+        ToolManager.ToolMode mode = null;
+        if ("freeHandToolButton".equals(item) || "AnnotationCreateFreeHand".equals(item)) {
+            mode = ToolManager.ToolMode.INK_CREATE;
+        } else if ("highlightToolButton".equals(item) || "AnnotationCreateTextHighlight".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_HIGHLIGHT;
+        } else if ("underlineToolButton".equals(item) || "AnnotationCreateTextUnderline".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_UNDERLINE;
+        } else if ("squigglyToolButton".equals(item) || "AnnotationCreateTextSquiggly".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_SQUIGGLY;
+        } else if ("strikeoutToolButton".equals(item) || "AnnotationCreateTextStrikeout".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_STRIKEOUT;
+        } else if ("rectangleToolButton".equals(item) || "AnnotationCreateRectangle".equals(item)) {
+            mode = ToolManager.ToolMode.RECT_CREATE;
+        } else if ("ellipseToolButton".equals(item) || "AnnotationCreateEllipse".equals(item)) {
+            mode = ToolManager.ToolMode.OVAL_CREATE;
+        } else if ("lineToolButton".equals(item) || "AnnotationCreateLine".equals(item)) {
+            mode = ToolManager.ToolMode.LINE_CREATE;
+        } else if ("arrowToolButton".equals(item) || "AnnotationCreateArrow".equals(item)) {
+            mode = ToolManager.ToolMode.ARROW_CREATE;
+        } else if ("polylineToolButton".equals(item) || "AnnotationCreatePolyline".equals(item)) {
+            mode = ToolManager.ToolMode.POLYLINE_CREATE;
+        } else if ("polygonToolButton".equals(item) || "AnnotationCreatePolygon".equals(item)) {
+            mode = ToolManager.ToolMode.POLYGON_CREATE;
+        } else if ("cloudToolButton".equals(item) || "AnnotationCreatePolygonCloud".equals(item)) {
+            mode = ToolManager.ToolMode.CLOUD_CREATE;
+        } else if ("signatureToolButton".equals(item) || "AnnotationCreateSignature".equals(item)) {
+            mode = ToolManager.ToolMode.SIGNATURE;
+        } else if ("freeTextToolButton".equals(item) || "AnnotationCreateFreeText".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_CREATE;
+        } else if ("stickyToolButton".equals(item) || "AnnotationCreateSticky".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_ANNOT_CREATE;
+        } else if ("calloutToolButton".equals(item) || "AnnotationCreateCallout".equals(item)) {
+            mode = ToolManager.ToolMode.CALLOUT_CREATE;
+        } else if ("stampToolButton".equals(item) || "AnnotationCreateStamp".equals(item)) {
+            mode = ToolManager.ToolMode.STAMPER;
+        } else if ("AnnotationCreateDistanceMeasurement".equals(item)) {
+            mode = ToolManager.ToolMode.RULER_CREATE;
+        } else if ("AnnotationCreatePerimeterMeasurement".equals(item)) {
+            mode = ToolManager.ToolMode.PERIMETER_MEASURE_CREATE;
+        } else if ("AnnotationCreateAreaMeasurement".equals(item)) {
+            mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
+        } else if ("TextSelect".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_SELECT;
+        } else if ("AnnotationEdit".equals(item)) {
+            mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
+        }
+        return mode;
+    }
+
+    private ViewerConfig getConfig() {
+        if (mCacheDir != null) {
+            builder = builder.openUrlCachePath(mCacheDir);
+        }
+        return mBuilder
+                .toolManagerBuilder(mToolManagerBuilder)
+                .build();
     }
 
     private boolean mShouldHandleKeyboard = false;
@@ -99,8 +220,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void run() {
             measure(
-                MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
+                    MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
             layout(getLeft(), getTop(), getRight(), getBottom());
         }
     };
@@ -117,21 +238,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath);
         if (fileUri != null) {
             setDocumentUri(fileUri);
-            ToolManagerBuilder toolManagerBuilder = ToolManagerBuilder.from()
-                .disableToolModes(new ToolManager.ToolMode[]{
-                    ToolManager.ToolMode.STAMPER
-                });
-            ViewerConfig.Builder builder = new ViewerConfig.Builder();
-            builder = builder
-                .fullscreenModeEnabled(false)
-                .multiTabEnabled(false)
-                .showCloseTabOption(false)
-                .useSupportActionBar(false)
-                .toolManagerBuilder(toolManagerBuilder);
-            if (mCacheDir != null) {
-                builder = builder.openUrlCachePath(mCacheDir);
-            }
-            setViewerConfig(builder.build());
+            setViewerConfig(getConfig());
         }
         super.onAttachedToWindow();
 
@@ -151,9 +258,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         event.putString(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
         ReactContext reactContext = (ReactContext) getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-            getId(),
-            "topChange",
-            event);
+                getId(),
+                "topChange",
+                event);
     }
 
     @Override
