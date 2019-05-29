@@ -183,7 +183,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private ViewerConfig getConfig() {
         if (mCacheDir != null) {
-            builder = builder.openUrlCachePath(mCacheDir);
+            mBuilder.openUrlCachePath(mCacheDir);
         }
         return mBuilder
                 .toolManagerBuilder(mToolManagerBuilder)
