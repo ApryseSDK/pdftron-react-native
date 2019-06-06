@@ -8,7 +8,7 @@
 - [License](#license)
 
 ## Prerequisites
-- No license key is requird for trial. However, a valid commercial license key is required after trial. If you do not have a license key, please contact sales for a commercial license key or click [here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true) to get an evaluation key.
+- No license key is requird for trial. However, a valid commercial license key is required after trial.
 - npm
 - PDFTron SDK >= 6.10.0
 - react-native >= 0.59.0
