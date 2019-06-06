@@ -8,7 +8,7 @@
 - [License](#license)
 
 ## Prerequisites
-- A valid evaluation or commercial license key. If you do not have a license key, please contact sales for a commercial license key or click [here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true) to get an evaluation key.
+- No license key is requird for trial. However, a valid commercial license key is required after trial. If you do not have a license key, please contact sales for a commercial license key or click [here](https://www.pdftron.com/documentation/android/guides/react-native/?showkey=true) to get an evaluation key.
 - npm
 - PDFTron SDK >= 6.10.0
 - react-native >= 0.59.0
@@ -160,7 +160,7 @@
     ```
     target 'MyApp' do
         use_frameworks!
-        pod 'PDFNet', podspec: 'POD_LINK_GOES_HERE'
+        pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
     end
     ```
 
@@ -173,8 +173,6 @@
 ## Usage
 
 Replace `App.js` with the following:
-
-**Replace `your_pdftron_license_key` string with your license key**
 
 ```javascript
 import React, { Component } from 'react';
@@ -201,7 +199,7 @@ export default class App extends Component<Props> {
       permissionGranted: Platform.OS === 'ios' ? true : false
     };
 
-    RNPdftron.initialize("your_pdftron_license_key ");
+    RNPdftron.initialize("Insert commercial license key here after purchase");
   }
 
   componentDidMount() {
