@@ -256,7 +256,7 @@ export default class App extends Component<Props> {
       )
     }
 
-    const path = "https://pdftron.s3.amazonaws.com/downloads/pdfref.pdf";
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
       <DocumentView
