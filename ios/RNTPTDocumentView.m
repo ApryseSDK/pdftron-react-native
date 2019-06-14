@@ -7,6 +7,10 @@
 
 #import "RNTPTDocumentView.h"
 
+@interface RNTPTDocumentView () <PTDocumentViewControllerDelegate>
+
+@end
+
 @implementation RNTPTDocumentView
 @synthesize delegate;
 
@@ -15,6 +19,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _documentViewController = [[PTDocumentViewController alloc] init];
+        _documentViewController.delegate = self;
     }
     return self;
 }
@@ -285,12 +290,19 @@
     
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+#pragma mark - <PTDocumentViewControllerDelegate>
+
+- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+{
+    // Don't export the downloaded file (ie. keep using the cache file).
+    return NO;
 }
-*/
+
+- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldDeleteCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+{
+    // Don't delete the cache file.
+    // (This will only be called if -documentViewController:shouldExportCachedDocumentAtURL: returns YES)
+    return NO;
+}
 
 @end
