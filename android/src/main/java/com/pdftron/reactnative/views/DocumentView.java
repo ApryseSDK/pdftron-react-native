@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -20,6 +21,9 @@ import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -89,6 +93,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setDisabledTools(ReadableArray array) {
         disableTools(array);
+    }
+
+    public void setCustomHeaders(ReadableMap map) {
+        if (null == map) {
+            return;
+        }
+        try {
+            JSONObject headers = ReactUtils.convertMapToJson(map);
+            // TODO
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void disableElements(ReadableArray args) {

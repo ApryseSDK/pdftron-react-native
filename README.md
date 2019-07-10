@@ -332,6 +332,8 @@ bool, optional
 array of string, optional
 ##### disabledTools
 array of string, optional
+##### customHeaders
+object, optional
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
@@ -342,6 +344,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+  customHeaders={{Foo: bar}}
 />
 ```
 

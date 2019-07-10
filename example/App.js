@@ -12,7 +12,6 @@ import {
   View,
   PermissionsAndroid,
   BackHandler,
-  NativeModules,
   Alert
 } from 'react-native';
 
