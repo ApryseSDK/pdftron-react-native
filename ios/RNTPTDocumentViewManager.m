@@ -84,6 +84,12 @@ RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsWithControls, BOOL, RNTPTDocumentView
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
+{
+    if (json) {
+        view.customHeaders = [RCTConvert NSDictionary:json];
+    }
+}
 
 - (UIView *)view
 {

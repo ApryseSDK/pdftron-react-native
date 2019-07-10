@@ -30,6 +30,7 @@
 @property NSString *document;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 

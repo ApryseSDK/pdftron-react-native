@@ -267,6 +267,15 @@
     _pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
 }
 
+- (void)setCustomHeaders:(NSDictionary<NSString *,NSString *> *)customHeaders
+{
+    PTHTTPRequestOptions *options = self.documentViewController.httpRequestOptions;
+    [customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+        [options AddHeader:key val:value];
+    }];
+    _customHeaders = customHeaders;
+}
+
 
 - (void)navButtonClicked
 {
