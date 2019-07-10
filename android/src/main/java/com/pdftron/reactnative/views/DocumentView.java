@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
@@ -14,8 +13,6 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableMapKeySetIterator;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -24,6 +21,9 @@ import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -99,13 +99,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (null == map) {
             return;
         }
-        ReadableMapKeySetIterator it = map.keySetIterator();
-        while (it.hasNextKey()) {
-            String key = it.nextKey();
-            if (map.getType(key) == ReadableType.String) {
-                String val = map.getString(key);
-                Log.d(TAG, "key: " + key + " | val: " + val);
-            }
+        try {
+            JSONObject headers = ReactUtils.convertMapToJson(map);
+            // TODO
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
