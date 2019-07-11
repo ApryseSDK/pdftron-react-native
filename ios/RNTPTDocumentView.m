@@ -83,36 +83,37 @@
     
     typedef void (^HideElementBlock)(void);
     
-    NSDictionary *hideElementActions = @{
-                                         @"toolsButton":
-                                             ^{
-                                                 self.documentViewController.annotationToolbarButtonHidden = YES;
-                                             },
-                                         @"searchButton":
-                                             ^{
-                                                 self.documentViewController.searchButtonHidden = YES;
-                                             },
-                                         @"shareButton":
-                                             ^{
-                                                 self.documentViewController.shareButtonHidden = YES;
-                                             },
-                                         @"viewControlsButton":
-                                             ^{
-                                                 self.documentViewController.viewerSettingsButtonHidden = YES;
-                                             },
-                                         @"thumbnailsButton":
-                                             ^{
-                                                 self.documentViewController.thumbnailBrowserButtonHidden = YES;
-                                             },
-                                         @"listsButton":
-                                             ^{
-                                                 self.documentViewController.navigationListsButtonHidden = YES;
-                                             },
-                                         @"thumbnailSlider":
-                                             ^{
-                                                 self.documentViewController.thumbnailSliderHidden = YES;
-                                             }
-                                         };
+    NSDictionary *hideElementActions =
+    @{
+      @"toolsButton":
+          ^{
+              self.documentViewController.annotationToolbarButtonHidden = YES;
+          },
+      @"searchButton":
+          ^{
+              self.documentViewController.searchButtonHidden = YES;
+          },
+      @"shareButton":
+          ^{
+              self.documentViewController.shareButtonHidden = YES;
+          },
+      @"viewControlsButton":
+          ^{
+              self.documentViewController.viewerSettingsButtonHidden = YES;
+          },
+      @"thumbnailsButton":
+          ^{
+              self.documentViewController.thumbnailBrowserButtonHidden = YES;
+          },
+      @"listsButton":
+          ^{
+              self.documentViewController.navigationListsButtonHidden = YES;
+          },
+      @"thumbnailSlider":
+          ^{
+              self.documentViewController.thumbnailSliderHidden = YES;
+          }
+      };
     
     
     for(NSObject* item in disabledElements)
@@ -301,11 +302,11 @@
 
 #pragma mark - <PTDocumentViewControllerDelegate>
 
-- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
-{
-    // Don't export the downloaded file (ie. keep using the cache file).
-    return NO;
-}
+//- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+//{
+//    // Don't export the downloaded file (ie. keep using the cache file).
+//    return NO;
+//}
 
 - (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldDeleteCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
 {
