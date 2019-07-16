@@ -27,6 +27,7 @@
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 
+@property NSString *password;
 @property NSString *document;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
