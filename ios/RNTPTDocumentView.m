@@ -68,7 +68,7 @@
         fileURL = [NSURL fileURLWithPath:_document];
     }
     
-    [_documentViewController openDocumentWithURL:fileURL password:self.password];
+    [_documentViewController openDocumentWithURL:fileURL password:_password];
 }
 
 -(void)disableElements:(NSArray<NSString*>*)disabledElements

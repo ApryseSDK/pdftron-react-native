@@ -28,6 +28,7 @@
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 
 @property NSString *document;
+@property NSString *password;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
