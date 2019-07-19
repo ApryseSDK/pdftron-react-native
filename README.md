@@ -317,6 +317,8 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [showLeadingNavButton](#showleadingnavbutton)
 - [disabledElements](#disabledelements)
 - [disabledTools](#disabledtools)
+- [customHeaders](#customheaders)
+- [initialPageNumber](#initialpagenumber)
 
 ##### document
 string, required
@@ -334,6 +336,8 @@ array of string, optional
 array of string, optional
 ##### customHeaders
 object, optional
+##### initialPageNumber
+number, optional
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
@@ -345,6 +349,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
+  initialPageNumber={11}
 />
 ```
 
