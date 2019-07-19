@@ -7,7 +7,80 @@
 
 #import "RNTPTDocumentView.h"
 
-@interface RNTPTDocumentView () <PTDocumentViewControllerDelegate>
+@class RNTPTDocumentViewController;
+
+@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate>
+@optional
+
+- (void)rnt_documentViewControllerDocumentLoaded:(RNTPTDocumentViewController *)documentViewController;
+
+@end
+
+@interface RNTPTDocumentViewController : PTDocumentViewController
+
+@property (nonatomic) BOOL local;
+
+@property (nonatomic) BOOL needsDocumentLoaded;
+@property (nonatomic) BOOL documentLoaded;
+
+@property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
+
+@end
+
+@implementation RNTPTDocumentViewController
+
+@dynamic delegate;
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    if (self.needsDocumentLoaded) {
+        self.needsDocumentLoaded = NO;
+        self.documentLoaded = YES;
+        
+        if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDocumentLoaded:)]) {
+            [self.delegate rnt_documentViewControllerDocumentLoaded:self];
+        }
+    }
+}
+
+- (void)openDocumentWithURL:(NSURL *)url password:(NSString *)password
+{
+    if ([url isFileURL]) {
+        self.local = YES;
+    } else {
+        self.local = NO;
+    }
+    self.documentLoaded = NO;
+    self.needsDocumentLoaded = NO;
+    
+    [super openDocumentWithURL:url password:password];
+}
+
+#pragma mark - <PTPDFViewCtrlDelegate>
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
+{
+    [super pdfViewCtrl:pdfViewCtrl onSetDoc:doc];
+    
+    if (self.local && !self.documentLoaded) {
+        self.needsDocumentLoaded = YES;
+    }
+}
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum
+{
+    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
+    
+    if (type == e_ptdownloadedtype_opened && !self.documentLoaded) {
+        self.needsDocumentLoaded = YES;
+    }
+}
+
+@end
+
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate>
 
 @end
 
@@ -18,7 +91,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _documentViewController = [[PTDocumentViewController alloc] init];
+        _documentViewController = [[RNTPTDocumentViewController alloc] init];
         _documentViewController.delegate = self;
     }
     return self;
@@ -311,6 +384,15 @@
     // Don't delete the cache file.
     // (This will only be called if -documentViewController:shouldExportCachedDocumentAtURL: returns YES)
     return NO;
+}
+
+#pragma mark - <RNTPTDocumentViewControllerDelegate>
+
+- (void)rnt_documentViewControllerDocumentLoaded:(RNTPTDocumentViewController *)documentViewController
+{
+    if (self.initialPageNumber > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
+    }
 }
 
 @end

@@ -27,6 +27,13 @@ RCT_CUSTOM_VIEW_PROPERTY(password, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(initialPageNumber, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.initialPageNumber = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showLeadingNavButton, BOOL, RNTPTDocumentView)
 {
     if (json) {
