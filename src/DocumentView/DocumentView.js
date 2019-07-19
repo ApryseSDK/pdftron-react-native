@@ -16,7 +16,7 @@ export default class DocumentView extends PureComponent {
   static propTypes = {
     document: PropTypes.string,
     password: PropTypes.string,
-    defaultPageNumber: PropTypes.number,
+    initialPageNumber: PropTypes.number,
     customHeaders: PropTypes.object,
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
