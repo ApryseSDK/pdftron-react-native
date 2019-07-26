@@ -23,7 +23,6 @@ import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -101,8 +100,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             return;
         }
         try {
-            JSONObject headers = ReactUtils.convertMapToJson(map);
-            // TODO
+            mCustomHeaders = ReactUtils.convertMapToJson(map);
         } catch (JSONException e) {
             e.printStackTrace();
         }
