@@ -57,12 +57,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDisabledTools(array);
     }
 
-    @ReactProp(name="customHeaders")
+    @ReactProp(name = "customHeaders")
     public void setCustomHeaders(DocumentView documentView, @Nullable ReadableMap map) {
         documentView.setCustomHeaders(map);
     }
 
-    @ReactProp(name="initialPageNumber")
+    @ReactProp(name = "initialPageNumber")
     public void setInitialPageNumber(DocumentView documentView, int pageNum) {
         documentView.setInitialPageNumber(pageNum);
     }

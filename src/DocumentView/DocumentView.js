@@ -21,6 +21,7 @@ export default class DocumentView extends PureComponent {
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
+    onDocumentLoaded: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     ...ViewPropTypes,
@@ -30,6 +31,11 @@ export default class DocumentView extends PureComponent {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
+      }
+    } else if (event.nativeEvent.onDocumentLoaded) {
+      if (this.props.onDocumentLoaded) {
+        console.log('nativeEvent', event.nativeEvent);
+        this.props.onDocumentLoaded();
       }
     }
   }

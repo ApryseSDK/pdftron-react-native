@@ -32,6 +32,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     // EVENTS
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
+    private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     // EVENTS END
 
     private String mDocumentPath;
@@ -273,13 +274,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     @Override
     public void onNavButtonPressed() {
-        WritableMap event = Arguments.createMap();
-        event.putString(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
-        ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                getId(),
-                "topChange",
-                event);
+        onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
     @Override
@@ -308,5 +303,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 ex.printStackTrace();
             }
         }
+
+        onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+    }
+
+    public void onReceiveNativeEvent(String key, String message) {
+        onReceiveNativeEvent("topChange", key, message);
+    }
+
+    public void onReceiveNativeEvent(String eventName, String key, String message) {
+        WritableMap event = Arguments.createMap();
+        event.putString(key, message);
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                eventName,
+                event);
     }
 }
