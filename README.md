@@ -363,6 +363,8 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ##### importAnnotations
 To import existing XFDF string to the current document.
 
+Returns a Promise.
+
 ```js
 const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">...</xfdf>';
 this._viewer.importAnnotations(xfdf);
@@ -370,6 +372,8 @@ this._viewer.importAnnotations(xfdf);
 
 ##### exportAnnotations
 To extract XFDF from the current document.
+
+Returns a Promise.
 
 ```js
 this._viewer.exportAnnotations().then((xfdf) => {
