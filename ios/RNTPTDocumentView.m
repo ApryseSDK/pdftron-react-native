@@ -21,6 +21,7 @@
 @property (nonatomic) BOOL local;
 
 @property (nonatomic) BOOL needsDocumentLoaded;
+@property (nonatomic) BOOL needsRemoteDocumentLoaded;
 @property (nonatomic) BOOL documentLoaded;
 
 @property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
@@ -37,6 +38,7 @@
     
     if (self.needsDocumentLoaded) {
         self.needsDocumentLoaded = NO;
+        self.needsRemoteDocumentLoaded = NO;
         self.documentLoaded = YES;
         
         if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDocumentLoaded:)]) {
@@ -54,6 +56,7 @@
     }
     self.documentLoaded = NO;
     self.needsDocumentLoaded = NO;
+    self.needsRemoteDocumentLoaded = NO;
     
     [super openDocumentWithURL:url password:password];
 }
@@ -67,15 +70,18 @@
     if (self.local && !self.documentLoaded) {
         self.needsDocumentLoaded = YES;
     }
+    else if (!self.local && !self.documentLoaded && self.needsRemoteDocumentLoaded) {
+        self.needsDocumentLoaded = YES;
+    }
 }
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum
 {
-    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
-    
-    if (type == e_ptdownloadedtype_opened && !self.documentLoaded) {
-        self.needsDocumentLoaded = YES;
+    if (type == e_ptdownloadedtype_finished && !self.documentLoaded) {
+        self.needsRemoteDocumentLoaded = YES;
     }
+    
+    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
 }
 
 @end
@@ -99,7 +105,17 @@
 
 - (void)didMoveToWindow
 {
-    if (_documentViewController.navigationController ) {
+    if (self.window) {
+        if ([self.delegate respondsToSelector:@selector(documentViewAttachedToWindow:)]) {
+            [self.delegate documentViewAttachedToWindow:self];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(documentViewDetachedFromWindow:)]) {
+            [self.delegate documentViewDetachedFromWindow:self];
+        }
+    }
+    
+    if (_documentViewController.navigationController) {
         return;
     }
     
@@ -307,6 +323,48 @@
     [self setToolsPermission:disabledTools toValue:NO];
 }
 
+#pragma mark - Annotation import/export
+
+- (NSString *)exportAnnotations
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLockRead];
+        shouldUnlock = YES;
+        
+        PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtract:e_ptboth];
+        return [fdfDoc SaveAsXFDFToString];
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlockRead];
+        }
+    }
+    
+    return nil;
+}
+
+- (void)importAnnotations:(NSString *)xfdfString
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLockRead];
+        shouldUnlock = YES;
+        
+        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+        
+        [[pdfViewCtrl GetDoc] FDFUpdate:fdfDoc];
+        [pdfViewCtrl Update:YES];
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlockRead];
+        }
+    }
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
@@ -392,6 +450,10 @@
 {
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
+        [self.delegate documentLoaded:self];
     }
 }
 

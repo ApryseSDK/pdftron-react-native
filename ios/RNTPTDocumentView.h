@@ -13,7 +13,11 @@
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
 @optional
+- (void)documentViewAttachedToWindow:(RNTPTDocumentView *)documentView;
+- (void)documentViewDetachedFromWindow:(RNTPTDocumentView *)documentView;
+
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
+- (void)documentLoaded:(RNTPTDocumentView *)sender;
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -41,5 +45,8 @@
 
 -(void)disableElements:(NSArray<NSString*>*)disabledElements;
 -(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value;
+
+- (NSString *)exportAnnotations;
+- (void)importAnnotations:(NSString *)xfdfString;
 
 @end

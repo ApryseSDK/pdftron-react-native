@@ -16,6 +16,10 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.pdftron.common.PDFNetException;
+import com.pdftron.fdf.FDFDoc;
+import com.pdftron.pdf.PDFDoc;
+import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
@@ -32,6 +36,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     // EVENTS
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
+    private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     // EVENTS END
 
     private String mDocumentPath;
@@ -273,13 +278,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     @Override
     public void onNavButtonPressed() {
-        WritableMap event = Arguments.createMap();
-        event.putString(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
-        ReactContext reactContext = (ReactContext) getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                getId(),
-                "topChange",
-                event);
+        onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
     @Override
@@ -303,10 +302,82 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         if (mInitialPageNumber > 0) {
             try {
-                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl().setCurrentPage(mInitialPageNumber);
+                getPdfViewCtrl().setCurrentPage(mInitialPageNumber);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+
+        onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+    }
+
+    public void importAnnotations(String xfdf) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            if (pdfDoc.hasDownloader()) {
+                // still downloading file, let's wait for next call
+                return;
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
+            pdfDoc.fdfUpdate(fdfDoc);
+            pdfViewCtrl.update(true);
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
+    }
+
+    public String exportAnnotations() throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+            FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
+            return fdfDoc.saveAsXFDF();
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+    }
+
+    public PDFViewCtrl getPdfViewCtrl() {
+        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+    }
+
+    public void onReceiveNativeEvent(String key, String message) {
+        onReceiveNativeEvent("topChange", key, message);
+    }
+
+    public void onReceiveNativeEvent(String eventName, String key, String message) {
+        WritableMap event = Arguments.createMap();
+        event.putString(key, message);
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                eventName,
+                event);
     }
 }

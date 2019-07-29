@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
-  Text,
-  View,
-  Dimensions,
-  Platform
+  Platform,
+  NativeModules,
+  findNodeHandle
 } from 'react-native';
-
-const { height, width } = Dimensions.get('window');
+const { DocumentViewManager } = NativeModules;
 
 export default class DocumentView extends PureComponent {
 
@@ -21,6 +19,7 @@ export default class DocumentView extends PureComponent {
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
+    onDocumentLoaded: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     ...ViewPropTypes,
@@ -31,12 +30,37 @@ export default class DocumentView extends PureComponent {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
       }
+    } else if (event.nativeEvent.onDocumentLoaded) {
+      if (this.props.onDocumentLoaded) {
+        this.props.onDocumentLoaded();
+      }
     }
   }
+
+  importAnnotations = (xfdf) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.importAnnotations(tag, xfdf);
+    }
+    return Promise.resolve();
+  }
+
+  exportAnnotations = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.exportAnnotations(tag);
+    }
+    return Promise.resolve();
+  }
+
+  _setNativeRef = (ref) => {
+    this._viewerRef = ref;
+  };
 
   render() {
     return (
       <RCTDocumentView
+        ref={this._setNativeRef}
         style={{ flex:1 }}
         onChange={this.onChange}
         {...this.props}

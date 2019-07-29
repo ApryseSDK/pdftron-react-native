@@ -11,13 +11,15 @@ import com.pdftron.reactnative.R;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 
+    private static final String REACT_CLASS = "RNPdftron";
+
     public RNPdftronModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     @Override
     public String getName() {
-        return "RNPdftron";
+        return REACT_CLASS;
     }
 
     @ReactMethod

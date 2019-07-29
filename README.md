@@ -314,6 +314,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [password](#password)
 - [leadingNavButtonIcon](#leadingnavbuttonicon)
 - [onLeadingNavButtonPressed](#onleadingnavbuttonpressed)
+- [onDocumentLoaded](#ondocumentloaded)
 - [showLeadingNavButton](#showleadingnavbutton)
 - [disabledElements](#disabledelements)
 - [disabledTools](#disabledtools)
@@ -342,15 +343,42 @@ number, optional
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
 <DocumentView
+  ref={(c) => this._viewer = c}
   document={path}
   showLeadingNavButton={true}
   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
   onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+  onDocumentLoaded={this.onDocumentLoaded}
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
 />
+```
+
+#### Methods
+- [importAnnotations](#importannotations)
+- [exportAnnotations](#exportannotations)
+
+##### importAnnotations
+To import XFDF string to the current document.
+
+Returns a Promise.
+
+```js
+const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">...</xfdf>';
+this._viewer.importAnnotations(xfdf);
+```
+
+##### exportAnnotations
+To extract XFDF from the current document.
+
+Returns a Promise.
+
+```js
+this._viewer.exportAnnotations().then((xfdf) => {
+  console.log('xfdf', xfdf);
+});
 ```
 
 ## Contributing
