@@ -313,12 +313,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void importAnnotations(String xfdf) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            if (pdfDoc.hasDownloader()) {
+                // still downloading file, let's wait for next call
+                return;
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+
         boolean shouldUnlock = false;
         try {
             pdfViewCtrl.docLock(true);
             shouldUnlock = true;
 
-            PDFDoc pdfDoc = pdfViewCtrl.getDoc();
             FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
             pdfDoc.fdfUpdate(fdfDoc);
             pdfViewCtrl.update(true);

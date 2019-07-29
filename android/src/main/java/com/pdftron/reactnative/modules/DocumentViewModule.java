@@ -24,22 +24,32 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void importAnnotations(int tag, String xfdf, Promise promise) {
-        try {
-            mDocumentViewInstance.importAnnotations(tag, xfdf);
-            promise.resolve(null);
-        } catch (Exception ex) {
-            promise.reject(ex);
-        }
+    public void importAnnotations(final int tag, final String xfdf, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.importAnnotations(tag, xfdf);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
     }
 
     @ReactMethod
-    public void exportAnnotations(int tag, Promise promise) {
-        try {
-            String xfdf = mDocumentViewInstance.exportAnnotations(tag);
-            promise.resolve(xfdf);
-        } catch (Exception ex) {
-            promise.reject(ex);
-        }
+    public void exportAnnotations(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String xfdf = mDocumentViewInstance.exportAnnotations(tag);
+                    promise.resolve(xfdf);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
     }
 }
