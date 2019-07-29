@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
@@ -305,6 +306,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+    }
+
+    public void importAnnotations(String xfdf) throws PDFNetException {
+
+    }
+
+    public String exportAnnotations() throws PDFNetException {
+        return "result is ok";
     }
 
     public void onReceiveNativeEvent(String key, String message) {
