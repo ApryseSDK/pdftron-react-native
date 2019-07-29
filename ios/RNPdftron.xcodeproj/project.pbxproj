@@ -12,6 +12,7 @@
 		CE0885F320E2CA1300AB7A9B /* RNTPTDocumentViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0885F220E2CA1300AB7A9B /* RNTPTDocumentViewManager.m */; };
 		CE0885F620E2CAB100AB7A9B /* RNTPTPDFViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0885F520E2CAB100AB7A9B /* RNTPTPDFViewCtrl.m */; };
 		CE0885F920E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0885F820E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m */; };
+		D30BB17922EFA8D000D90D24 /* RNTPTDocumentViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,8 @@
 		CE0885F520E2CAB100AB7A9B /* RNTPTPDFViewCtrl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTPTPDFViewCtrl.m; sourceTree = "<group>"; };
 		CE0885F720E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTPTPDFViewCtrlManager.h; sourceTree = "<group>"; };
 		CE0885F820E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTPTPDFViewCtrlManager.m; sourceTree = "<group>"; };
+		D30BB17722EFA8D000D90D24 /* RNTPTDocumentViewModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTPTDocumentViewModule.h; sourceTree = "<group>"; };
+		D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTPTDocumentViewModule.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +75,8 @@
 				CE0885EF20E2C9F400AB7A9B /* RNTPTDocumentView.m */,
 				B3E7B5881CC2AC0600A0062D /* RNPdftron.h */,
 				B3E7B5891CC2AC0600A0062D /* RNPdftron.m */,
+				D30BB17722EFA8D000D90D24 /* RNTPTDocumentViewModule.h */,
+				D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -132,6 +137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D30BB17922EFA8D000D90D24 /* RNTPTDocumentViewModule.m in Sources */,
 				CE0885F020E2C9F400AB7A9B /* RNTPTDocumentView.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNPdftron.m in Sources */,
 				CE0885F320E2CA1300AB7A9B /* RNTPTDocumentViewManager.m in Sources */,
