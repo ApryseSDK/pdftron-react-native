@@ -361,7 +361,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [exportAnnotations](#exportannotations)
 
 ##### importAnnotations
-To import existing XFDF string to the current document.
+To import XFDF string to the current document.
 
 Returns a Promise.
 
