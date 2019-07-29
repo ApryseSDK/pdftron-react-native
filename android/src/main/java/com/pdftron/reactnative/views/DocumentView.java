@@ -17,6 +17,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.fdf.FDFDoc;
+import com.pdftron.pdf.PDFDoc;
+import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
@@ -299,7 +302,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         if (mInitialPageNumber > 0) {
             try {
-                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl().setCurrentPage(mInitialPageNumber);
+                getPdfViewCtrl().setCurrentPage(mInitialPageNumber);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -309,11 +312,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void importAnnotations(String xfdf) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
 
+            PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+            FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
+            pdfDoc.fdfUpdate(fdfDoc);
+            pdfViewCtrl.update(true);
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     public String exportAnnotations() throws PDFNetException {
-        return "result is ok";
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+            FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
+            return fdfDoc.saveAsXFDF();
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+    }
+
+    public PDFViewCtrl getPdfViewCtrl() {
+        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
     }
 
     public void onReceiveNativeEvent(String key, String message) {
