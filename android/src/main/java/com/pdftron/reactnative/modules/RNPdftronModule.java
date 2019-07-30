@@ -25,9 +25,7 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initialize(@NonNull String key) {
         try {
-            if (!PDFNet.hasBeenInitialized()) {
-                PDFNet.initialize(getReactApplicationContext(), R.raw.pdfnet, key);
-            }
+            PDFNet.initialize(getReactApplicationContext(), R.raw.pdfnet, key);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
