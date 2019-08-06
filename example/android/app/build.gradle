@@ -105,7 +105,6 @@ android {
         versionName "1.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-        manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
