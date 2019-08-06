@@ -104,11 +104,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (null == map) {
             return;
         }
-        try {
-            mCustomHeaders = ReactUtils.convertMapToJson(map);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            mCustomHeaders = ReactUtils.convertMapToJson(map);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void setInitialPageNumber(int pageNum) {
