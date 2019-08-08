@@ -81,33 +81,33 @@ RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
 }
 
 // viewer options
-RCT_CUSTOM_VIEW_PROPERTY(nightModeEnabled, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.nightModeEnabled = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(bottomToolbarEnabled, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.bottomToolbarEnabled = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsOnPageChange, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.pageIndicatorShowsOnPageChange = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsWithControls, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.pageIndicatorShowsWithControls = [RCTConvert BOOL:json];
-    }
-}
+//RCT_CUSTOM_VIEW_PROPERTY(nightModeEnabled, BOOL, RNTPTDocumentView)
+//{
+//    if (json) {
+//        view.nightModeEnabled = [RCTConvert BOOL:json];
+//    }
+//}
+//
+//RCT_CUSTOM_VIEW_PROPERTY(bottomToolbarEnabled, BOOL, RNTPTDocumentView)
+//{
+//    if (json) {
+//        view.bottomToolbarEnabled = [RCTConvert BOOL:json];
+//    }
+//}
+//
+//RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsOnPageChange, BOOL, RNTPTDocumentView)
+//{
+//    if (json) {
+//        view.pageIndicatorShowsOnPageChange = [RCTConvert BOOL:json];
+//    }
+//}
+//
+//RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsWithControls, BOOL, RNTPTDocumentView)
+//{
+//    if (json) {
+//        view.pageIndicatorShowsWithControls = [RCTConvert BOOL:json];
+//    }
+//}
 
 RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
 {
