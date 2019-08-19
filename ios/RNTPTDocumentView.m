@@ -103,35 +103,50 @@
     return self;
 }
 
+#pragma mark - View lifecycle
+
 - (void)didMoveToWindow
 {
     if (self.window) {
         if ([self.delegate respondsToSelector:@selector(documentViewAttachedToWindow:)]) {
             [self.delegate documentViewAttachedToWindow:self];
         }
+        
+        [self loadDocumentViewController];
     } else {
         if ([self.delegate respondsToSelector:@selector(documentViewDetachedFromWindow:)]) {
             [self.delegate documentViewDetachedFromWindow:self];
         }
+
+        [self unloadDocumentViewController];
     }
-    
-    if (_documentViewController.navigationController) {
+}
+
+#pragma mark - DocumentViewController loading
+
+- (void)loadDocumentViewController
+{
+    // Check if document view controller has already been added to a navigation controller.
+    if (self.documentViewController.navigationController) {
         return;
     }
     
-    UIViewController *parentController = self.findParentViewController;
+    // Find the view's containing UIViewController.
+    UIViewController *parentController = [self findParentViewController];
     if (parentController == nil || self.window == nil) {
         return;
     }
-
-
-    if (_showNavButton) {
-        UIImage *navImage = [UIImage imageNamed:_navButtonPath];
-        UIBarButtonItem *navButton = [[UIBarButtonItem alloc] initWithImage:navImage style:UIBarButtonItemStylePlain target:self action:@selector(navButtonClicked)];
-        _documentViewController.navigationItem.leftBarButtonItem = navButton;
+    
+    if (self.showNavButton) {
+        UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
+        UIBarButtonItem *navButton = [[UIBarButtonItem alloc] initWithImage:navImage
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:self
+                                                                     action:@selector(navButtonClicked)];
+        self.documentViewController.navigationItem.leftBarButtonItem = navButton;
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_documentViewController];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController];
     
     UIView *controllerView = navigationController.view;
     
@@ -150,14 +165,28 @@
     [navigationController didMoveToParentViewController:parentController];
     
     // Open a file URL.
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:_document withExtension:@"pdf"];
-    if ([_document containsString:@"://"]) {
-        fileURL = [NSURL URLWithString:_document];
-    } else if ([_document hasPrefix:@"/"]) {
-        fileURL = [NSURL fileURLWithPath:_document];
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
+    if ([self.document containsString:@"://"]) {
+        fileURL = [NSURL URLWithString:self.document];
+    } else if ([self.document hasPrefix:@"/"]) {
+        fileURL = [NSURL fileURLWithPath:self.document];
     }
     
-    [_documentViewController openDocumentWithURL:fileURL password:self.password];
+    [self.documentViewController openDocumentWithURL:fileURL password:self.password];
+}
+
+- (void)unloadDocumentViewController
+{
+    UINavigationController *navigationController = self.documentViewController.navigationController;
+    if (navigationController) {
+        // Clear navigation stack (PTDocumentViewController).
+        navigationController.viewControllers = @[];
+
+        // Remove from parent view controller.
+        [navigationController willMoveToParentViewController:nil];
+        [navigationController.view removeFromSuperview];
+        [navigationController removeFromParentViewController];
+    }
 }
 
 -(void)disableElements:(NSArray<NSString*>*)disabledElements
@@ -414,19 +443,15 @@
     }
 }
 
-- (UIViewController *)findParentViewController {
+- (UIViewController *)findParentViewController
+{
     UIResponder *parentResponder = self;
     while ((parentResponder = parentResponder.nextResponder)) {
-        if ([parentResponder isKindOfClass:UIViewController.class]) {
+        if ([parentResponder isKindOfClass:[UIViewController class]]) {
             return (UIViewController *)parentResponder;
         }
     }
     return nil;
-}
-
-- (void)dealloc
-{
-    
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>
