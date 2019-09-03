@@ -18,14 +18,18 @@
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
+- (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 @end
 
 @interface RNTPTDocumentView : UIView
 
 @property (nonatomic, readonly) PTDocumentViewController *documentViewController;
 
+- (void)setToolMode:(NSString *)toolMode;
+
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
+@property (nonatomic, assign) BOOL topToolbarEnabled;
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
@@ -34,6 +38,7 @@
 @property NSString *password;
 @property NSString *document;
 @property (nonatomic) int initialPageNumber;
+@property (nonatomic) int pageNumber;
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;

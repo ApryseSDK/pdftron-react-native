@@ -13,6 +13,10 @@
 
 @property (nonatomic, strong) NSMutableDictionary<NSNumber *, RNTPTDocumentView *> *documentViews;
 
+- (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode;
+
+- (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
+
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
 
