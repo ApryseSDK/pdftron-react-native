@@ -339,6 +339,16 @@ array of string, optional
 object, optional
 ##### initialPageNumber
 number, optional
+##### pageNumber
+number, optional
+##### onPageChanged
+function, optional
+##### topToolbarEnabled
+bool, optional
+##### bottomToolbarEnabled
+bool, optional
+##### pageIndicatorEnabled
+bool, optional
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
@@ -353,12 +363,33 @@ import { DocumentView, Config } from 'react-native-pdftron';
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
+  onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
 />
 ```
 
 #### Methods
+- [setToolMode](#settoolmode)
+- [getPageCount](#getpagecount)
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
+
+##### setToolMode
+To set the current tool mode (`Config.Tools` constants).
+
+```js
+this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
+```
+
+##### getPageCount
+To get the current page count of the document.
+
+Returns a Promise.
+
+```js
+this._viewer.getPageCount().then((pageCount) => {
+  console.log('pageCount', pageCount);
+});
+```
 
 ##### importAnnotations
 To import XFDF string to the current document.
