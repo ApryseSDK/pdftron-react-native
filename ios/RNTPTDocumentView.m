@@ -132,7 +132,12 @@
         if ([self.delegate respondsToSelector:@selector(documentViewDetachedFromWindow:)]) {
             [self.delegate documentViewDetachedFromWindow:self];
         }
+    }
+}
 
+- (void)didMoveToSuperview
+{
+    if (!self.superview) {
         [self unloadDocumentViewController];
     }
 }
