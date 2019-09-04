@@ -84,6 +84,21 @@
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
 }
 
+- (void)outlineViewControllerDidCancel:(PTOutlineViewController *)outlineViewController
+{
+    [outlineViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)annotationViewControllerDidCancel:(PTAnnotationViewController *)annotationViewController
+{
+    [annotationViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)bookmarkViewControllerDidCancel:(PTBookmarkViewController *)bookmarkViewController
+{
+    [bookmarkViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
 
 @interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate>
