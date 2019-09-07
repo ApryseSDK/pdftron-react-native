@@ -91,6 +91,26 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInitialPageNumber(pageNum);
     }
 
+    @ReactProp(name = "pageNumber")
+    public void setPageNumber(DocumentView documentView, int pageNum) {
+        documentView.setPageNumber(pageNum);
+    }
+
+    @ReactProp(name = "topToolbarEnabled")
+    public void setTopToolbarEnabled(DocumentView documentView, boolean topToolbarEnabled) {
+        documentView.setTopToolbarEnabled(topToolbarEnabled);
+    }
+
+    @ReactProp(name = "bottomToolbarEnabled")
+    public void setBottomToolbarEnabled(DocumentView documentView, boolean bottomToolbarEnabled) {
+        documentView.setBottomToolbarEnabled(bottomToolbarEnabled);
+    }
+
+    @ReactProp(name = "pageIndicatorEnabled")
+    public void setPageIndicatorEnabled(DocumentView documentView, boolean pageIndicatorEnabled) {
+        documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -106,6 +126,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.exportAnnotations();
         } else {
             throw new PDFNetException("", 0L, getName(), "exportAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setToolMode(int tag, String item) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setToolMode(item);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setToolMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public int getPageCount(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageCount();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageCount", "Unable to find DocumentView.");
         }
     }
 
