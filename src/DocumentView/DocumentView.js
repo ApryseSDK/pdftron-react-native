@@ -15,13 +15,18 @@ export default class DocumentView extends PureComponent {
     document: PropTypes.string,
     password: PropTypes.string,
     initialPageNumber: PropTypes.number,
+    pageNumber: PropTypes.number,
     customHeaders: PropTypes.object,
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
+    onPageChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
+    topToolbarEnabled: PropTypes.bool,
+    bottomToolbarEnabled: PropTypes.bool,
+    pageIndicatorEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -34,7 +39,29 @@ export default class DocumentView extends PureComponent {
       if (this.props.onDocumentLoaded) {
         this.props.onDocumentLoaded();
       }
+    } else if (event.nativeEvent.onPageChanged) {
+      if (this.props.onPageChanged) {
+        this.props.onPageChanged({
+        	'previousPageNumber': event.nativeEvent.previousPageNumber,
+        	'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
     }
+  }
+
+  setToolMode = (toolMode) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+    	DocumentViewManager.setToolMode(tag, toolMode);
+    }
+  }
+
+  getPageCount = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
   }
 
   importAnnotations = (xfdf) => {

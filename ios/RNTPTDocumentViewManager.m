@@ -48,6 +48,13 @@ RCT_CUSTOM_VIEW_PROPERTY(initialPageNumber, int, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(pageNumber, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.pageNumber = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showLeadingNavButton, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -87,14 +94,28 @@ RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
 //        view.nightModeEnabled = [RCTConvert BOOL:json];
 //    }
 //}
-//
-//RCT_CUSTOM_VIEW_PROPERTY(bottomToolbarEnabled, BOOL, RNTPTDocumentView)
-//{
-//    if (json) {
-//        view.bottomToolbarEnabled = [RCTConvert BOOL:json];
-//    }
-//}
-//
+
+RCT_CUSTOM_VIEW_PROPERTY(topToolbarEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.topToolbarEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(bottomToolbarEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.bottomToolbarEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.pageIndicatorEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 //RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorShowsOnPageChange, BOOL, RNTPTDocumentView)
 //{
 //    if (json) {
@@ -123,6 +144,25 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     return documentView;
 }
 
+#pragma mark - Commands
+
+RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs) {
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
+        RNTPTDocumentView *view = (RNTPTDocumentView *)viewRegistry[reactTag];
+        if (!view || ![view isKindOfClass:[RNTPTDocumentView class]]) {
+            RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
+            return;
+        }
+        
+        [self handleCommandWithID:commandID commandArgs:commandArgs view:view];
+    }];
+}
+
+- (void)handleCommandWithID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs view:(RNTPTDocumentView *)view
+{
+    
+}
+
 #pragma mark - Events
 
 - (void)navButtonClicked: (RNTPTDocumentView *) sender
@@ -141,7 +181,38 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     }
 }
 
+- (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+                          @"onPageChanged": @{
+                                  @"previousPageNumber": @(previousPageNumber),
+                                  @"pageNumber": @(sender.pageNumber),
+                                  },
+                          });
+    }
+}
+
 #pragma mark - Methods
+
+- (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setToolMode:toolMode];
+    }
+}
+
+- (int)getPageCountForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return documentView.documentViewController.pdfViewCtrl.pageCount;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+        return 0;
+    }
+}
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag
 {

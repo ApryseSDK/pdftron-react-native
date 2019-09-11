@@ -29,7 +29,30 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
               }];
 }
 
+#pragma mark - Methods
+
+RCT_REMAP_METHOD(setToolMode,
+                 setToolModeForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolMode:(NSString *)toolMode)
+{
+    [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+}
+
 #pragma mark - Methods (w/ promises)
+
+RCT_REMAP_METHOD(getPageCount,
+                 getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageCount = [[self documentViewManager] getPageCountForDocumentViewTag:tag];
+        resolve(@(pageCount));
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get page count", [self errorFromException:exception]);
+    }
+}
 
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag

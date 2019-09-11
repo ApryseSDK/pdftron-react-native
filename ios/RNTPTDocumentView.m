@@ -19,7 +19,6 @@
 @interface RNTPTDocumentViewController : PTDocumentViewController
 
 @property (nonatomic) BOOL local;
-
 @property (nonatomic) BOOL needsDocumentLoaded;
 @property (nonatomic) BOOL needsRemoteDocumentLoaded;
 @property (nonatomic) BOOL documentLoaded;
@@ -59,6 +58,15 @@
     self.needsRemoteDocumentLoaded = NO;
     
     [super openDocumentWithURL:url password:password];
+}
+
+- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    if (!self.automaticallyHidesControls) {
+        return;
+    }
+    
+    [super setControlsHidden:hidden animated:animated];
 }
 
 #pragma mark - <PTPDFViewCtrlDelegate>
@@ -146,6 +154,8 @@
 
 - (void)loadDocumentViewController
 {
+    [self registerForPDFViewCtrlNotifications];
+    
     // Check if document view controller has already been added to a navigation controller.
     if (self.documentViewController.navigationController) {
         return;
@@ -170,19 +180,17 @@
     
     UIView *controllerView = navigationController.view;
     
+    // View controller containment.
     [parentController addChildViewController:navigationController];
+    
+    controllerView.frame = self.bounds;
+    controllerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
     [self addSubview:controllerView];
     
-    controllerView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [NSLayoutConstraint activateConstraints:
-     @[[controllerView.topAnchor constraintEqualToAnchor:self.topAnchor],
-       [controllerView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-       [controllerView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-       [controllerView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-       ]];
-    
     [navigationController didMoveToParentViewController:parentController];
+    
+    navigationController.navigationBarHidden = !self.topToolbarEnabled;
     
     // Open a file URL.
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
@@ -197,6 +205,8 @@
 
 - (void)unloadDocumentViewController
 {
+    [self deregisterForPDFViewCtrlNotifications];
+    
     UINavigationController *navigationController = self.documentViewController.navigationController;
     if (navigationController) {
         // Clear navigation stack (PTDocumentViewController).
@@ -208,6 +218,29 @@
         [navigationController removeFromParentViewController];
     }
 }
+
+#pragma mark Notifications
+
+- (void)registerForPDFViewCtrlNotifications
+{
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+    
+    [center addObserver:self
+               selector:@selector(pdfViewCtrlDidChangePageWithNotification:)
+                   name:PTPDFViewCtrlPageDidChangeNotification
+                 object:self.documentViewController.pdfViewCtrl];
+}
+
+- (void)deregisterForPDFViewCtrlNotifications
+{
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center removeObserver:self
+                      name:PTPDFViewCtrlPageDidChangeNotification
+                    object:self.documentViewController.pdfViewCtrl];
+}
+
+#pragma mark - Disabling elements
 
 -(void)disableElements:(NSArray<NSString*>*)disabledElements
 {
@@ -372,6 +405,118 @@
     [self setToolsPermission:disabledTools toValue:NO];
 }
 
+- (void)setToolMode:(NSString *)toolMode
+{
+    if (toolMode.length == 0) {
+        return;
+    }
+    
+    Class toolClass = Nil;
+    
+    if( [toolMode isEqualToString:@"AnnotationEdit"] )
+    {
+        // multi-select not implemented
+    }
+    else if( [toolMode isEqualToString:@"AnnotationCreateSticky"])
+    {
+        toolClass = [PTStickyNoteCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateFreeHand"])
+    {
+        toolClass = [PTFreeHandCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"TextSelect"] )
+    {
+        toolClass = [PTTextSelectTool class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateTextHighlight"])
+    {
+        toolClass = [PTTextHighlightCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateTextUnderline"])
+    {
+        toolClass = [PTTextUnderlineCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateTextSquiggly"])
+    {
+        toolClass = [PTTextSquigglyCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateTextStrikeout"])
+    {
+        toolClass = [PTTextStrikeoutCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateFreeText"])
+    {
+        toolClass = [PTFreeTextCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateCallout"])
+    {
+        // not supported
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateSignature"])
+    {
+        toolClass = [PTDigitalSignatureTool class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateLine"])
+    {
+        toolClass = [PTLineCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateArrow"])
+    {
+        toolClass = [PTArrowCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreatePolyline"])
+    {
+        toolClass = [PTPolylineCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateStamp"])
+    {
+        // not implemented
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateRectangle"])
+    {
+        toolClass = [PTRectangleCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateEllipse"])
+    {
+        toolClass = [PTEllipseCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreatePolygon"])
+    {
+        toolClass = [PTPolygonCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreatePolygonCloud"])
+    {
+        toolClass = [PTCloudCreate class];
+    }
+
+    if (toolClass) {
+        [self.documentViewController.toolManager changeTool:toolClass];
+    }
+}
+
+- (void)setPageNumber:(int)pageNumber
+{
+    if (_pageNumber == pageNumber) {
+        // No change.
+        return;
+    }
+    
+    BOOL success = NO;
+    @try {
+        success = [self.documentViewController.pdfViewCtrl SetCurrentPage:pageNumber];
+    } @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        success = NO;
+    }
+    
+    if (success) {
+        _pageNumber = pageNumber;
+    } else {
+        NSLog(@"Failed to set current page number");
+    }
+}
+
 #pragma mark - Annotation import/export
 
 - (NSString *)exportAnnotations
@@ -420,6 +565,18 @@
 {
     self.documentViewController.nightModeEnabled = nightModeEnabled;
     _nightModeEnabled = nightModeEnabled;
+}
+
+-(void)setTopToolbarEnabled:(BOOL)topToolbarEnabled
+{
+    if (!topToolbarEnabled) {
+        self.documentViewController.controlsHidden = YES;
+        self.documentViewController.automaticallyHidesControls = NO;
+    } else {
+        self.documentViewController.automaticallyHidesControls = YES;
+        self.documentViewController.controlsHidden = NO;
+    }
+    _topToolbarEnabled = topToolbarEnabled;
 }
 
 -(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
@@ -499,6 +656,25 @@
     
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
+    }
+}
+
+#pragma mark - Notifications
+
+- (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.pdfViewCtrl) {
+        return;
+    }
+    
+    int previousPageNumber = ((NSNumber *)notification.userInfo[PTPDFViewCtrlPreviousPageNumberUserInfoKey]).intValue;
+    int pageNumber = ((NSNumber *)notification.userInfo[PTPDFViewCtrlCurrentPageNumberUserInfoKey]).intValue;
+    
+    _pageNumber = pageNumber;
+    
+    // Notify delegate of change.
+    if ([self.delegate respondsToSelector:@selector(pageChanged:previousPageNumber:)]) {
+        [self.delegate pageChanged:self previousPageNumber:previousPageNumber];
     }
 }
 

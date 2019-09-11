@@ -37,6 +37,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // EVENTS
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
+    private static final String ON_PAGE_CHANGED = "onPageChanged";
+
+    private static final String PREV_PAGE_KEY = "previousPageNumber";
+    private static final String PAGE_CURRENT_KEY = "pageNumber";
     // EVENTS END
 
     private String mDocumentPath;
@@ -45,6 +49,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private ViewerConfig.Builder mBuilder;
     private String mCacheDir;
     private int mInitialPageNumber = -1;
+
+    private boolean mTopToolbarEnabled = true;
 
     public DocumentView(Context context) {
         super(context);
@@ -113,6 +119,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setInitialPageNumber(int pageNum) {
         mInitialPageNumber = pageNum;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        if (mPdfViewCtrlTabHostFragment != null &&
+                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null &&
+                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().isDocumentReady()) {
+            try {
+                getPdfViewCtrl().setCurrentPage(pageNumber);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void setTopToolbarEnabled(boolean topToolbarEnabled) {
+        mTopToolbarEnabled = topToolbarEnabled;
+    }
+
+    public void setBottomToolbarEnabled(boolean bottomToolbarEnabled) {
+        mBuilder = mBuilder.showBottomNavBar(bottomToolbarEnabled);
+    }
+
+    public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
+        mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
     }
 
     private void disableElements(ReadableArray args) {
@@ -266,6 +296,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
         super.onAttachedToWindow();
 
+        if (!mTopToolbarEnabled) {
+            mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
+            mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
+        }
+
         getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
     }
 
@@ -309,6 +344,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+
+        getPdfViewCtrl().addPageChangeListener(new PDFViewCtrl.PageChangeListener() {
+            @Override
+            public void onPageChange(int old_page, int cur_page, PDFViewCtrl.PageChangeState pageChangeState) {
+                if (old_page != cur_page || pageChangeState == PDFViewCtrl.PageChangeState.END) {
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_PAGE_CHANGED, ON_PAGE_CHANGED);
+                    params.putInt(PREV_PAGE_KEY, old_page);
+                    params.putInt(PAGE_CURRENT_KEY, cur_page);
+                    onReceiveNativeEvent(params);
+                }
+            }
+        });
     }
 
     public void importAnnotations(String xfdf) throws PDFNetException {
@@ -363,21 +411,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public int getPageCount() throws PDFNetException {
+        return getPdfDoc().getPageCount();
+    }
+
+    public void setToolMode(String item) {
+        if (getToolManager() != null) {
+            ToolManager.ToolMode mode = convStringToToolMode(item);
+            getToolManager().setTool(getToolManager().createTool(mode, null));
+        }
+    }
+
     public PDFViewCtrl getPdfViewCtrl() {
         return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
     }
 
-    public void onReceiveNativeEvent(String key, String message) {
-        onReceiveNativeEvent("topChange", key, message);
+    public PDFDoc getPdfDoc() {
+        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
     }
 
-    public void onReceiveNativeEvent(String eventName, String key, String message) {
+    public ToolManager getToolManager() {
+        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+    }
+
+    public void onReceiveNativeEvent(String key, String message) {
         WritableMap event = Arguments.createMap();
         event.putString(key, message);
         ReactContext reactContext = (ReactContext) getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
                 getId(),
-                eventName,
+                "topChange",
+                event);
+    }
+
+    public void onReceiveNativeEvent(WritableMap event) {
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                getId(),
+                "topChange",
                 event);
     }
 }

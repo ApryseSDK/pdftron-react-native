@@ -52,4 +52,33 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
             }
         });
     }
+
+    @ReactMethod
+    public void setToolMode(final int tag, final String item) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setToolMode(tag, item);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPageCount(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int count = mDocumentViewInstance.getPageCount(tag);
+                    promise.resolve(count);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
 }
