@@ -144,25 +144,6 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     return documentView;
 }
 
-#pragma mark - Commands
-
-RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs) {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        RNTPTDocumentView *view = (RNTPTDocumentView *)viewRegistry[reactTag];
-        if (!view || ![view isKindOfClass:[RNTPTDocumentView class]]) {
-            RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
-            return;
-        }
-        
-        [self handleCommandWithID:commandID commandArgs:commandArgs view:view];
-    }];
-}
-
-- (void)handleCommandWithID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs view:(RNTPTDocumentView *)view
-{
-    
-}
-
 #pragma mark - Events
 
 - (void)navButtonClicked: (RNTPTDocumentView *) sender
