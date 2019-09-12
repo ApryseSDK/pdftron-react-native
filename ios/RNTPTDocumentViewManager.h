@@ -8,6 +8,7 @@
 #import "RNTPTDocumentView.h"
 
 #import <React/RCTViewManager.h>
+#import <React/RCTUIManager.h>
 
 @interface RNTPTDocumentViewManager : RCTViewManager <RNTPTDocumentViewDelegate>
 
