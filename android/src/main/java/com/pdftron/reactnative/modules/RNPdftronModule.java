@@ -30,4 +30,13 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             ex.printStackTrace();
         }
     }
+
+    @ReactMethod
+    public void enableJavaScript(boolean enabled) {
+        try {
+            PDFNet.enableJavaScript(enabled);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

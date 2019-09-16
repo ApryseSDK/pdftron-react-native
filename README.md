@@ -200,6 +200,7 @@ export default class App extends Component<Props> {
     };
 
     RNPdftron.initialize("Insert commercial license key here after purchase");
+    RNPdftron.enableJavaScript(true);
   }
 
   componentDidMount() {
