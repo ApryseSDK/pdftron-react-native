@@ -19,6 +19,9 @@
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+- (void)documentSaveStarted:(RNTPTDocumentView *)sender;
+- (void)documentSaveFinished:(RNTPTDocumentView *)sender;
+- (void)documentSaveFailed:(RNTPTDocumentView *)sender failMessage:(NSString *)failMessage;
 @end
 
 @interface RNTPTDocumentView : UIView

@@ -7,20 +7,34 @@ import com.facebook.react.bridge.ReactMethod;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule {
-
     private static final String REACT_CLASS = "DocumentViewManager";
 
     private DocumentViewViewManager mDocumentViewInstance;
 
     public DocumentViewModule(ReactApplicationContext reactContext, DocumentViewViewManager viewManager) {
         super(reactContext);
-
         mDocumentViewInstance = viewManager;
     }
 
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void forceDocumentSave(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.forceDocSave(tag);
+                    promise.resolve(null);
+                }
+                catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
     }
 
     @ReactMethod

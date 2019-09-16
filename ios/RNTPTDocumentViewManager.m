@@ -193,6 +193,27 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
     }
 }
 
+- (void)documentSaveStarted:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{@"onDocumentSaveStart": @(true)});
+    }
+}
+
+- (void)documentSaveFinished:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{@"onDocumentSaveFinish": @(true)});
+    }
+}
+
+- (void)documentSaveFailed:(RNTPTDocumentView *)sender failMessage:(NSString *)failMessage
+{
+    if (sender.onChange) {
+        sender.onChange(@{@"onDocumentSaveFail": (failMessage ? : @"")});
+    }
+}
+
 #pragma mark - Methods
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
@@ -233,6 +254,10 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
+}
+
+- (void)doSave:(NSNumber *)tag {
+    // TODO This is a no-op for now.
 }
 
 #pragma mark - DocumentView attached/detached

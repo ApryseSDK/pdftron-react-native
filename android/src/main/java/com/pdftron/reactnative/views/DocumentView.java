@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
@@ -31,25 +32,26 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
-
     private static final String TAG = DocumentView.class.getSimpleName();
 
     // EVENTS
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     private static final String ON_PAGE_CHANGED = "onPageChanged";
+    private static final String ON_DOCUMENT_SAVE_START = "onDocumentSaveStart";
+    private static final String ON_DOCUMENT_SAVE_FINISH = "onDocumentSaveFinish";
+    private static final String ON_DOCUMENT_SAVE_FAIL = "onDocumentSaveFail";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
+    private static final String FAIL_MESSAGE_KEY = "failMessage";
     // EVENTS END
 
     private String mDocumentPath;
-
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
     private String mCacheDir;
     private int mInitialPageNumber = -1;
-
     private boolean mTopToolbarEnabled = true;
 
     public DocumentView(Context context) {
@@ -280,6 +282,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     };
 
+    public void doDocSave() {
+        try {
+            onReceiveNativeEvent(ON_DOCUMENT_SAVE_START, ON_DOCUMENT_SAVE_START);
+            Log.d(TAG, "Starting document save...");
+            getPdfDoc().save();
+            onReceiveNativeEvent(ON_DOCUMENT_SAVE_FINISH, ON_DOCUMENT_SAVE_FINISH);
+        } catch (Exception ex) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_DOCUMENT_SAVE_FAIL, ON_DOCUMENT_SAVE_FAIL);
+            params.putString(FAIL_MESSAGE_KEY, ex.getMessage());
+            onReceiveNativeEvent(params);
+        }
+    }
+
     @Override
     public void requestLayout() {
         super.requestLayout();
@@ -307,7 +323,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
     }
 

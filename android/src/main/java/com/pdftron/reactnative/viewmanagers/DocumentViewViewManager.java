@@ -15,7 +15,6 @@ import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.views.DocumentView;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
-
     private static final String REACT_CLASS = "RCTDocumentView";
 
     private SparseArray<DocumentView> mDocumentViews = new SparseArray<>();
@@ -49,6 +48,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
 
         return documentView;
+    }
+
+    public void forceDocSave(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.doDocSave();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
+        }
     }
 
     @ReactProp(name = "document")

@@ -83,5 +83,13 @@ RCT_REMAP_METHOD(importAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(forceDocumentSave,
+                 doSaveWithTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve(nil);
+}
+
 @end
   
