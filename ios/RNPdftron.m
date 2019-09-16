@@ -17,7 +17,7 @@ RCT_EXPORT_METHOD(initialize:(nonnull NSString *)key)
     RCTLogInfo(@"PDFNet version: %f", [PTPDFNet GetVersion]);
 }
 
-RCT_EXPORT_METHOD(enableJavascript:(BOOL)enabled)
+RCT_EXPORT_METHOD(enableJavaScript:(BOOL)enabled)
 {
     [PTPDFNet EnableJavaScript:enabled];
 }
