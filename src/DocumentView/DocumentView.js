@@ -10,7 +10,6 @@ import {
 const { DocumentViewManager } = NativeModules;
 
 export default class DocumentView extends PureComponent {
-
   static propTypes = {
     document: PropTypes.string,
     password: PropTypes.string,
@@ -22,6 +21,9 @@ export default class DocumentView extends PureComponent {
     onLeadingNavButtonPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onDocumentSaveStart: PropTypes.func,
+    onDocumentSaveFinish: PropTypes.func,
+    onDocumentSaveFailed: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     topToolbarEnabled: PropTypes.bool,
@@ -37,6 +39,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onDocumentLoaded) {
       if (this.props.onDocumentLoaded) {
+        console.log("Executing document load event.");
         this.props.onDocumentLoaded();
       }
     } else if (event.nativeEvent.onPageChanged) {
@@ -46,14 +49,40 @@ export default class DocumentView extends PureComponent {
         	'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onDocumentSaveStart) {
+      console.log("Got native event onDocumentSaveStart");
+      if (this.props.onDocumentSaveStart) {
+        console.log("Executing onDocumentSaveStart callback.");
+        this.props.onDocumentSaveStart();
+      }
+    } else if (event.nativeEvent.onDocumentSaveFinish) {
+      console.log("Got native event onDocumentSaveFinish");
+      if (this.props.onDocumentSaveFinish) {
+        console.log("Executing onDocumentSaveFinsih callback.");
+        this.props.onDocumentSaveFinish();
+      }
+    } else if (event.nativeEvent.onDocumentSaveFailed) {
+      if (this.props.onDocumentSaveFailed) {
+        this.props.onDocumentSaveFailed(event.nativeEvent.failMessage);
+      }
     }
+  }
+
+  forceDocumentSave = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      console.log("Doing force save...");
+      return DocumentViewManager.forceDocumentSave(tag);
+    }
+    return Promise.resolve();
   }
 
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-    	DocumentViewManager.setToolMode(tag, toolMode);
+    	return DocumentViewManager.setToolMode(tag, toolMode);
     }
+    return Promise.resolve();
   }
 
   getPageCount = () => {

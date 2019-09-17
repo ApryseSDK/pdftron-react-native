@@ -31,6 +31,11 @@
 
 @dynamic delegate;
 
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [[self document] SaveToFile:[[self document] GetFileName] flags:0];
+}
+
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
