@@ -373,7 +373,7 @@ Perameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in format {id: string, pageNumber: int}
+annotations | array | array of annotation data in the format {id: string, pageNumber: int}
 
 Example:
 
@@ -432,15 +432,24 @@ this._viewer.importAnnotations(xfdf);
 ##### exportAnnotations
 To extract XFDF from the current document.
 
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+options | object | key: annotList, type: array
+
 Returns a Promise.
 
 ```js
 this._viewer.exportAnnotations().then((xfdf) => {
   console.log('xfdf', xfdf);
 });
+```
 
-// with options
-// annotList is an array of annotation data in format {id: string, pageNumber: int}
+With options:
+
+```js
+// annotList is an array of annotation data in the format {id: string, pageNumber: int}
 this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
   console.log('xfdf for annotations', xfdf);
 });
