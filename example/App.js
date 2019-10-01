@@ -86,6 +86,16 @@ export default class App extends Component<Props> {
     }
   }
 
+  onAnnotationChanged = ({action, annotations}) => {
+    console.log('action', action);
+    console.log('annotations', annotations);
+    if (this._viewer) {
+      this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
+        console.log('xfdf for annotations', xfdf);
+      });
+    }
+  }
+
   render() {
     if (!this.state.permissionGranted) {
       return (
@@ -107,6 +117,7 @@ export default class App extends Component<Props> {
         leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
         onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
         onDocumentLoaded={this.onDocumentLoaded}
+        onAnnotationChanged={this.onAnnotationChanged}
         disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
         disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
       />
