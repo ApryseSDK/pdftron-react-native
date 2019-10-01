@@ -315,12 +315,17 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [password](#password)
 - [leadingNavButtonIcon](#leadingnavbuttonicon)
 - [onLeadingNavButtonPressed](#onleadingnavbuttonpressed)
-- [onDocumentLoaded](#ondocumentloaded)
 - [showLeadingNavButton](#showleadingnavbutton)
+- [onDocumentLoaded](#ondocumentloaded)
 - [disabledElements](#disabledelements)
 - [disabledTools](#disabledtools)
 - [customHeaders](#customheaders)
 - [initialPageNumber](#initialpagenumber)
+- [pageNumber](#pagenumber)
+- [topToolbarEnabled](#toptoolbarenabled)
+- [bottomToolbarEnabled](#bottomtoolbarenabled)
+- [pageIndicatorEnabled](#pageindicatorenabled)
+- [onAnnotationChanged](#onannotationchanged)
 
 ##### document
 string, required
@@ -332,6 +337,8 @@ string, optional
 function, optional
 ##### showLeadingNavButton
 bool, optional
+##### onDocumentLoaded
+function, optional
 ##### disabledElements
 array of string, optional
 ##### disabledTools
@@ -344,12 +351,31 @@ number, optional
 number, optional
 ##### onPageChanged
 function, optional
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
 ##### topToolbarEnabled
 bool, optional
 ##### bottomToolbarEnabled
 bool, optional
 ##### pageIndicatorEnabled
 bool, optional
+##### onAnnotationChanged
+function, optional
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+action | string | the action that occurred (add, delete, modify)
+annotations | array | array of annotation data in format {id: string, pageNumber: int}
+
+Example:
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
@@ -358,13 +384,14 @@ import { DocumentView, Config } from 'react-native-pdftron';
   document={path}
   showLeadingNavButton={true}
   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-  onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
-  onDocumentLoaded={this.onDocumentLoaded}
+  onLeadingNavButtonPressed={() => {}}
+  onDocumentLoaded={() => {}}
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
+  onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
 />
 ```
 
@@ -410,6 +437,12 @@ Returns a Promise.
 ```js
 this._viewer.exportAnnotations().then((xfdf) => {
   console.log('xfdf', xfdf);
+});
+
+// with options
+// annotList is an array of annotation data in format {id: string, pageNumber: int}
+this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
+  console.log('xfdf for annotations', xfdf);
 });
 ```
 
