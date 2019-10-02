@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -13,22 +14,26 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
+import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.Utils;
+import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
@@ -38,9 +43,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     private static final String ON_PAGE_CHANGED = "onPageChanged";
+    private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
+
+    private static final String KEY_annotList = "annotList";
+    private static final String KEY_annotId = "id";
+    private static final String KEY_annotPage = "pageNumber";
+
+    private static final String KEY_action = "action";
+    private static final String KEY_action_add = "add";
+    private static final String KEY_action_modify = "modify";
+    private static final String KEY_action_delete = "delete";
+    private static final String KEY_annotations = "annotations";
     // EVENTS END
 
     private String mDocumentPath;
@@ -309,6 +325,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
+
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
+        }
+        if (getToolManager() != null) {
+            getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
+        }
     }
 
     @Override
@@ -331,6 +354,84 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
+    private PDFViewCtrl.PageChangeListener mPageChangeListener = new PDFViewCtrl.PageChangeListener() {
+        @Override
+        public void onPageChange(int old_page, int cur_page, PDFViewCtrl.PageChangeState pageChangeState) {
+            if (old_page != cur_page || pageChangeState == PDFViewCtrl.PageChangeState.END) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_PAGE_CHANGED, ON_PAGE_CHANGED);
+                params.putInt(PREV_PAGE_KEY, old_page);
+                params.putInt(PAGE_CURRENT_KEY, cur_page);
+                onReceiveNativeEvent(params);
+            }
+        }
+    };
+
+    private ToolManager.AnnotationModificationListener mAnnotationModificationListener = new ToolManager.AnnotationModificationListener() {
+        @Override
+        public void onAnnotationsAdded(Map<Annot, Integer> map) {
+            handleAnnotationChanged(KEY_action_add, map);
+        }
+
+        @Override
+        public void onAnnotationsPreModify(Map<Annot, Integer> map) {
+
+        }
+
+        @Override
+        public void onAnnotationsModified(Map<Annot, Integer> map, Bundle bundle) {
+            handleAnnotationChanged(KEY_action_modify, map);
+        }
+
+        @Override
+        public void onAnnotationsPreRemove(Map<Annot, Integer> map) {
+            handleAnnotationChanged(KEY_action_delete, map);
+        }
+
+        @Override
+        public void onAnnotationsRemoved(Map<Annot, Integer> map) {
+
+        }
+
+        @Override
+        public void onAnnotationsRemovedOnPage(int i) {
+
+        }
+
+        @Override
+        public void annotationsCouldNotBeAdded(String s) {
+
+        }
+    };
+
+    private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
+        params.putString(KEY_action, action);
+
+        WritableArray annotList = Arguments.createArray();
+        for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+            Annot key = entry.getKey();
+
+            String uid = null;
+            try {
+                uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (uid != null) {
+                Integer value = entry.getValue();
+                WritableMap annotData = Arguments.createMap();
+                annotData.putString(KEY_annotId, uid);
+                annotData.putInt(KEY_annotPage, value);
+                annotList.pushMap(annotData);
+            }
+        }
+
+        params.putArray(KEY_annotations, annotList);
+        onReceiveNativeEvent(params);
+    }
+
     @Override
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
@@ -345,18 +446,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
 
-        getPdfViewCtrl().addPageChangeListener(new PDFViewCtrl.PageChangeListener() {
-            @Override
-            public void onPageChange(int old_page, int cur_page, PDFViewCtrl.PageChangeState pageChangeState) {
-                if (old_page != cur_page || pageChangeState == PDFViewCtrl.PageChangeState.END) {
-                    WritableMap params = Arguments.createMap();
-                    params.putString(ON_PAGE_CHANGED, ON_PAGE_CHANGED);
-                    params.putInt(PREV_PAGE_KEY, old_page);
-                    params.putInt(PAGE_CURRENT_KEY, cur_page);
-                    onReceiveNativeEvent(params);
-                }
-            }
-        });
+        getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
+
+        getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
     }
 
     public void importAnnotations(String xfdf) throws PDFNetException {
@@ -394,7 +486,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
-    public String exportAnnotations() throws PDFNetException {
+    public String exportAnnotations(ReadableMap options) throws Exception {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         boolean shouldUnlockRead = false;
         try {
@@ -402,8 +494,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             shouldUnlockRead = true;
 
             PDFDoc pdfDoc = pdfViewCtrl.getDoc();
-            FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
-            return fdfDoc.saveAsXFDF();
+            if (null == options || !options.hasKey(KEY_annotList)) {
+                FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
+                return fdfDoc.saveAsXFDF();
+            } else {
+                ReadableArray arr = options.getArray(KEY_annotList);
+                ArrayList<Annot> annots = new ArrayList<>(arr.size());
+                for (int i = 0; i < arr.size(); i++) {
+                    ReadableMap annotData = arr.getMap(i);
+                    String id = annotData.getString(KEY_annotId);
+                    int page = annotData.getInt(KEY_annotPage);
+                    if (!Utils.isNullOrEmpty(id)) {
+                        Annot ann = ViewerUtils.getAnnotById(getPdfViewCtrl(), id, page);
+                        if (ann != null && ann.isValid()) {
+                            annots.add(ann);
+                        }
+                    }
+                }
+                if (annots.size() > 0) {
+                    FDFDoc fdfDoc = pdfDoc.fdfExtract(annots);
+                    return fdfDoc.saveAsXFDF();
+                }
+                return "";
+            }
         } finally {
             if (shouldUnlockRead) {
                 pdfViewCtrl.docUnlockRead();

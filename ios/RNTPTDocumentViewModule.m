@@ -56,11 +56,13 @@ RCT_REMAP_METHOD(getPageCount,
 
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 options:(NSDictionary *)options
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *xfdf = [[self documentViewManager] exportAnnotationsForDocumentViewTag:tag];
+        NSString *xfdf = [[self documentViewManager] exportAnnotationsForDocumentViewTag:tag
+                                                                                 options:options];
         resolve(xfdf);
     }
     @catch (NSException *exception) {

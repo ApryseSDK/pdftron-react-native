@@ -19,6 +19,9 @@
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+
+- (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -51,7 +54,7 @@
 -(void)disableElements:(NSArray<NSString*>*)disabledElements;
 -(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value;
 
-- (NSString *)exportAnnotations;
+- (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 
 @end

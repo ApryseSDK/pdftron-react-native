@@ -27,6 +27,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
+    onAnnotationChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -44,6 +45,13 @@ export default class DocumentView extends PureComponent {
         this.props.onPageChanged({
         	'previousPageNumber': event.nativeEvent.previousPageNumber,
         	'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationChanged) {
+      if (this.props.onAnnotationChanged) {
+        this.props.onAnnotationChanged({
+          'action': event.nativeEvent.action,
+          'annotations': event.nativeEvent.annotations,
         });
       }
     }
@@ -72,10 +80,10 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exportAnnotations = () => {
+  exportAnnotations = (options) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.exportAnnotations(tag);
+      return DocumentViewManager.exportAnnotations(tag, options);
     }
     return Promise.resolve();
   }

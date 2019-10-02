@@ -120,10 +120,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public String exportAnnotations(int tag) throws PDFNetException {
+    public String exportAnnotations(int tag, ReadableMap options) throws Exception {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.exportAnnotations();
+            return documentView.exportAnnotations(options);
         } else {
             throw new PDFNetException("", 0L, getName(), "exportAnnotations", "Unable to find DocumentView.");
         }

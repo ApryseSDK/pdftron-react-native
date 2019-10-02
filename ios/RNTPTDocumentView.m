@@ -229,6 +229,21 @@
                selector:@selector(pdfViewCtrlDidChangePageWithNotification:)
                    name:PTPDFViewCtrlPageDidChangeNotification
                  object:self.documentViewController.pdfViewCtrl];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidAddAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationAddedNotification
+                 object:self.documentViewController.toolManager];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidModifyAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationModifiedNotification
+                 object:self.documentViewController.toolManager];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationRemovedNotification
+                 object:self.documentViewController.toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications
@@ -238,6 +253,18 @@
     [center removeObserver:self
                       name:PTPDFViewCtrlPageDidChangeNotification
                     object:self.documentViewController.pdfViewCtrl];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationAddedNotification
+                    object:self.documentViewController.toolManager];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationModifiedNotification
+                    object:self.documentViewController.toolManager];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationRemovedNotification
+                    object:self.documentViewController.toolManager];
 }
 
 #pragma mark - Disabling elements
@@ -519,7 +546,49 @@
 
 #pragma mark - Annotation import/export
 
-- (NSString *)exportAnnotations
+- (PTAnnot *)findAnnotWithUniqueID:(NSString *)uniqueID onPageNumber:(int)pageNumber
+{
+    if (uniqueID.length == 0 || pageNumber < 1) {
+        return nil;
+    }
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLockRead];
+        shouldUnlock = YES;
+        
+        NSArray<PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:pageNumber];
+        for (PTAnnot *annot in annots) {
+            if (![annot IsValid]) {
+                continue;
+            }
+            
+            // Check if the annot's unique ID matches.
+            NSString *annotUniqueId = nil;
+            PTObj *annotUniqueIdObj = [annot GetUniqueID];
+            if ([annotUniqueIdObj IsValid]) {
+                annotUniqueId = [annotUniqueIdObj GetAsPDFText];
+            }
+            if (annotUniqueId && [annotUniqueId isEqualToString:uniqueID]) {
+                return annot;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlockRead];
+        }
+    }
+    
+    return nil;
+}
+
+
+- (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     BOOL shouldUnlock = NO;
@@ -527,8 +596,32 @@
         [pdfViewCtrl DocLockRead];
         shouldUnlock = YES;
         
-        PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtract:e_ptboth];
-        return [fdfDoc SaveAsXFDFToString];
+        if (!options || !options[@"annotList"]) {
+            PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtract:e_ptboth];
+            return [fdfDoc SaveAsXFDFToString];
+        } else {
+            PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+            
+            NSArray *arr = options[@"annotList"];
+            for (NSDictionary *annotation in arr) {
+                NSString *annotationId = annotation[@"id"];
+                int pageNumber = ((NSNumber *)annotation[@"pageNumber"]).intValue;
+                if (annotationId.length > 0) {
+                    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
+                                                    onPageNumber:pageNumber];
+                    if ([annot IsValid]) {
+                        [annots add:annot];
+                    }
+                }
+            }
+            
+            if ([annots size] > 0) {
+                PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtractAnnots:annots];
+                return [fdfDoc SaveAsXFDFToString];
+            } else {
+                return nil;
+            }
+        }
     }
     @finally {
         if (shouldUnlock) {
@@ -675,6 +768,63 @@
     // Notify delegate of change.
     if ([self.delegate respondsToSelector:@selector(pageChanged:previousPageNumber:)]) {
         [self.delegate pageChanged:self previousPageNumber:previousPageNumber];
+    }
+}
+
+- (void)toolManagerDidAddAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"add"];
+    }
+}
+
+- (void)toolManagerDidModifyAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"modify"];
+    }
+}
+
+- (void)toolManagerDidRemoveAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"remove"];
     }
 }
 
