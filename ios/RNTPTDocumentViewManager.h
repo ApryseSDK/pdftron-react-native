@@ -17,7 +17,7 @@
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
-- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag;
+- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
 
 @end
