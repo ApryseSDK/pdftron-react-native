@@ -256,8 +256,14 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
     }
 }
 
-- (void)doSave:(NSNumber *)tag {
-    // TODO This is a no-op for now.
+- (void)doSaveForDocumentViewTag:(NSNumber *)tag {
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView doDocSave];
+    }
+    else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
 }
 
 #pragma mark - DocumentView attached/detached

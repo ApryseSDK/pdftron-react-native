@@ -20,5 +20,6 @@
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
+- (void)doSaveForDocumentViewTag:(NSNumber *)tag;
 
 @end

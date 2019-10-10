@@ -56,5 +56,6 @@
 
 - (NSString *)exportAnnotations;
 - (void)importAnnotations:(NSString *)xfdfString;
+- (void)doDocSave;
 
 @end

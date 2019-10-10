@@ -547,6 +547,7 @@
 - (void)importAnnotations:(NSString *)xfdfString
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLockRead];
@@ -683,4 +684,58 @@
     }
 }
 
+#pragma mark - Force Save
+
+- (void)doDocSave
+{
+    NSString *failMessage = @"";
+    BOOL success = NO;
+    BOOL shouldUnlock = NO;
+    
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+    
+    @try {
+        NSLog(@"Beginning file save.");
+        if ([self.delegate respondsToSelector:@selector(documentSaveStarted:)]) {
+            NSLog(@"Sending documentSaveStarted event.");
+            [self.delegate documentSaveStarted:self];
+        }
+        
+        if ([doc TryLock:500]) {
+            NSLog(@"Successfully acquired file lock");
+            shouldUnlock = YES;
+            NSLog(@"Saving file: %@", [doc GetFileName]);
+            [doc SaveToFile:[doc GetFileName] flags:e_ptincremental];
+            success = YES;
+        }
+        else {
+            failMessage = @"Timeout while trying to acquire file lock.";
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        success = NO;
+        failMessage = exception.reason;
+    }
+    @finally {
+        if (shouldUnlock) {
+            NSLog(@"Unlocking file.");
+            [doc Unlock];
+        }
+        
+        if (success) {
+            if ([self.delegate respondsToSelector:@selector(documentSaveFinished:)]) {
+                NSLog(@"Sending file save finish event.");
+                [self.delegate documentSaveFinished:self];
+            }
+        }
+        else {
+            if ([self.delegate respondsToSelector:@selector(documentSaveFailed:failMessage:)]) {
+                NSLog(@"Sending fail event. Reason: %@", failMessage);
+                [self.delegate documentSaveFailed:self failMessage:failMessage];
+            }
+        }
+    }
+}
 @end
