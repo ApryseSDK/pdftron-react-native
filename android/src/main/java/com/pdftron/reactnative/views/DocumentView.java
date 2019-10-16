@@ -322,16 +322,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
-
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
         }
+        
+        super.onDetachedFromWindow();
+
+        getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
     }
 
     @Override
