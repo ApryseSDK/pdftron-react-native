@@ -400,6 +400,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [getPageCount](#getpagecount)
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
+- [flattenAnnotations](#flattenannotations)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -453,6 +454,16 @@ With options:
 this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
   console.log('xfdf for annotations', xfdf);
 });
+```
+
+##### flattenAnnotations
+To flatten the forms and (optionally) annotations in the current document. The `formsOnly` parameter controls whether only forms are flattened.
+
+Returns a Promise.
+
+```js
+// flatten forms and annotations in the current document.
+this._viewer.flattenAnnotations(false);
 ```
 
 ## Contributing
