@@ -652,6 +652,29 @@
     }
 }
 
+#pragma mark - Flatten annotations
+
+- (void)flattenAnnotations:(BOOL)formsOnly
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+        
+        [doc FlattenAnnotations:formsOnly];
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+    
+    [pdfViewCtrl Update:YES];
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled

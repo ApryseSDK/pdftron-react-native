@@ -57,4 +57,6 @@
 - (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 
+- (void)flattenAnnotations:(BOOL)formsOnly;
+
 @end

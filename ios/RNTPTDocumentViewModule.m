@@ -85,5 +85,20 @@ RCT_REMAP_METHOD(importAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(flattenAnnotations,
+                 flattenAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 formsOnly:(BOOL)formsOnly
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] flattenAnnotationsForDocumentViewTag:tag formsOnly:formsOnly];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"flatten_failed", @"Failed to flatten annotations", [self errorFromException:exception]);
+    }
+}
+
 @end
   
