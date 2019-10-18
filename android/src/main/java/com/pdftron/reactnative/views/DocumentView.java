@@ -524,6 +524,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public void flattenAnnotations(boolean formsOnly) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            pdfDoc.flattenAnnotations(formsOnly);
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
+    }
+
     public int getPageCount() throws PDFNetException {
         return getPdfDoc().getPageCount();
     }

@@ -55,6 +55,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void flattenAnnotations(final int tag, final boolean formsOnly, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.flattenAnnotations(tag, formsOnly);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setToolMode(final int tag, final String item) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

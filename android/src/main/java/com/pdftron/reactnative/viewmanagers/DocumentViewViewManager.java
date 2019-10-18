@@ -129,6 +129,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void flattenAnnotations(int tag, boolean formsOnly) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.flattenAnnotations(formsOnly);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "flattenAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
     public void setToolMode(int tag, String item) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
