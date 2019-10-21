@@ -122,6 +122,10 @@
     if (self) {
         _documentViewController = [[RNTPTDocumentViewController alloc] init];
         _documentViewController.delegate = self;
+        
+        _topToolbarEnabled = YES;
+        _bottomToolbarEnabled = YES;
+        _pageIndicatorEnabled = YES;
     }
     return self;
 }
