@@ -45,6 +45,7 @@
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 
