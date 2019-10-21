@@ -137,6 +137,27 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(readOnly, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.readOnly = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(fitMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.fitMode = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(layoutMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.layoutMode = [RCTConvert NSString:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];

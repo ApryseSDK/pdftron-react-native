@@ -345,6 +345,12 @@ array of string, optional
 array of string, optional
 ##### customHeaders
 object, optional
+##### readOnly
+bool, optional
+##### fitMode
+string, optional
+##### layoutMode
+string, optional
 ##### initialPageNumber
 number, optional
 ##### pageNumber
@@ -390,6 +396,9 @@ import { DocumentView, Config } from 'react-native-pdftron';
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
+  readOnly={false}
+  fitMode={Config.FitMode.FitPage}
+  layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
 />

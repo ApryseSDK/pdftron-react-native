@@ -23,9 +23,11 @@ import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
+import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
+import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
@@ -61,8 +63,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private String mDocumentPath;
 
+    private PDFViewCtrlConfig mPDFViewCtrlConfig;
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
+
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
@@ -90,6 +94,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (currentActivity instanceof FragmentActivity) {
             setSupportFragmentManager(((FragmentActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
             mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
+            mPDFViewCtrlConfig = PDFViewCtrlConfig.getDefaultConfig(currentActivity);
         } else {
             throw new IllegalStateException("FragmentActivity required.");
         }
@@ -161,6 +166,49 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
     }
 
+    public void setReadOnly(boolean readOnly) {
+        mBuilder = mBuilder.documentEditingEnabled(!readOnly);
+    }
+
+    public void setFitMode(String fitMode) {
+        if (mPDFViewCtrlConfig != null) {
+            PDFViewCtrl.PageViewMode mode = null;
+            if ("FitPage".equals(fitMode)) {
+                mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
+            } else if ("FitWidth".equals(fitMode)) {
+                mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
+            } else if ("FitHeight".equals(fitMode)) {
+                mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
+            } else if ("Zoom".equals(fitMode)) {
+                mode = PDFViewCtrl.PageViewMode.ZOOM;
+            }
+            if (mode != null) {
+                mPDFViewCtrlConfig.setPageViewMode(mode);
+            }
+        }
+    }
+
+    public void setLayoutMode(String layoutMode) {
+        String mode = null;
+        if ("Single".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_SINGLEPAGE_VALUE;
+        } else if ("Continuous".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_CONTINUOUS_VALUE;
+        } else if ("Facing".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_VALUE;
+        } else if ("FacingContinuous".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_CONT_VALUE;
+        } else if ("FacingCover".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_VALUE;
+        } else if ("FacingCoverContinuous".equals(layoutMode)) {
+            mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_CONT_VALUE;
+        }
+        Context context = getContext();
+        if (mode != null && context != null) {
+            PdfViewCtrlSettingsManager.updateViewMode(context, mode);
+        }
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -181,6 +229,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         .showUserBookmarksList(false);
             } else if ("thumbnailSlider".equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
+            } else if ("editPagesButton".equals(item)) {
+                mBuilder = mBuilder.showEditPagesOption(false);
+            } else if ("printButton".equals(item)) {
+                mBuilder = mBuilder.showPrintOption(false);
+            } else if ("closeButton".equals(item)) {
+                mBuilder = mBuilder.showCloseTabOption(false);
+            } else if ("saveCopyButton".equals(item)) {
+                mBuilder = mBuilder.showSaveCopyOption(false);
+            } else if ("formToolsButton".equals(item)) {
+                mBuilder = mBuilder.showFormToolbarOption(false);
+            } else if ("moreItemsButton".equals(item)) {
+                mBuilder = mBuilder
+                        .showEditPagesOption(false)
+                        .showPrintOption(false)
+                        .showCloseTabOption(false)
+                        .showSaveCopyOption(false)
+                        .showFormToolbarOption(false);
+            } else if ("outlineListButton".equals(item)) {
+                mBuilder = mBuilder.showOutlineList(false);
+            } else if ("annotationListButton".equals(item)) {
+                mBuilder = mBuilder.showAnnotationsList(false);
+            } else if ("userBookmarkListButton".equals(item)) {
+                mBuilder = mBuilder.showUserBookmarksList(false);
             }
         }
         disableTools(args);
@@ -256,6 +327,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mBuilder.openUrlCachePath(mCacheDir);
         }
         return mBuilder
+                .pdfViewCtrlConfig(mPDFViewCtrlConfig)
                 .toolManagerBuilder(mToolManagerBuilder)
                 .build();
     }
@@ -328,7 +400,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
         }
-        
+
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
@@ -554,15 +626,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public PDFViewCtrl getPdfViewCtrl() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+        }
+        return null;
     }
 
     public PDFDoc getPdfDoc() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
+        }
+        return null;
     }
 
     public ToolManager getToolManager() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        }
+        return null;
     }
 
     public void onReceiveNativeEvent(String key, String message) {

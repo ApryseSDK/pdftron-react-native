@@ -154,6 +154,7 @@
 
 - (void)loadDocumentViewController
 {
+    [self registerForDocumentViewControllerNotifications];
     [self registerForPDFViewCtrlNotifications];
     
     // Check if document view controller has already been added to a navigation controller.
@@ -221,6 +222,16 @@
 
 #pragma mark Notifications
 
+- (void)registerForDocumentViewControllerNotifications
+{
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center addObserver:self
+               selector:@selector(documentViewControllerDidOpenDocumentWithNotification:)
+                   name:PTDocumentViewControllerDidOpenDocumentNotification
+                 object:self.documentViewController];
+}
+
 - (void)registerForPDFViewCtrlNotifications
 {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
@@ -279,37 +290,54 @@
     
     typedef void (^HideElementBlock)(void);
     
-    NSDictionary *hideElementActions =
-    @{
-      @"toolsButton":
-          ^{
-              self.documentViewController.annotationToolbarButtonHidden = YES;
-          },
-      @"searchButton":
-          ^{
-              self.documentViewController.searchButtonHidden = YES;
-          },
-      @"shareButton":
-          ^{
-              self.documentViewController.shareButtonHidden = YES;
-          },
-      @"viewControlsButton":
-          ^{
-              self.documentViewController.viewerSettingsButtonHidden = YES;
-          },
-      @"thumbnailsButton":
-          ^{
-              self.documentViewController.thumbnailBrowserButtonHidden = YES;
-          },
-      @"listsButton":
-          ^{
-              self.documentViewController.navigationListsButtonHidden = YES;
-          },
-      @"thumbnailSlider":
-          ^{
-              self.documentViewController.thumbnailSliderHidden = YES;
-          }
-      };
+    NSDictionary *hideElementActions = @{
+        @"toolsButton":
+            ^{
+                self.documentViewController.annotationToolbarButtonHidden = YES;
+            },
+        @"searchButton":
+            ^{
+                self.documentViewController.searchButtonHidden = YES;
+            },
+        @"shareButton":
+            ^{
+                self.documentViewController.shareButtonHidden = YES;
+            },
+        @"viewControlsButton":
+            ^{
+                self.documentViewController.viewerSettingsButtonHidden = YES;
+            },
+        @"thumbnailsButton":
+            ^{
+                self.documentViewController.thumbnailBrowserButtonHidden = YES;
+            },
+        @"listsButton":
+            ^{
+                self.documentViewController.navigationListsButtonHidden = YES;
+            },
+        @"moreItemsButton":
+            ^{
+                self.documentViewController.moreItemsButtonHidden = YES;
+            },
+
+        @"thumbnailSlider":
+            ^{
+                self.documentViewController.thumbnailSliderHidden = YES;
+            },
+        
+        @"outlineListButton":
+            ^{
+                self.documentViewController.outlineListHidden = YES;
+            },
+        @"annotationListButton":
+            ^{
+                self.documentViewController.annotationListHidden = YES;
+            },
+        @"userBookmarkListButton":
+            ^{
+                self.documentViewController.bookmarkListHidden = YES;
+            },
+    };
     
     
     for(NSObject* item in disabledElements)
@@ -728,6 +756,57 @@
     _customHeaders = customHeaders;
 }
 
+- (void)setReadOnly:(BOOL)readOnly
+{
+    _readOnly = readOnly;
+    
+    // Enable readonly flag on tool manager *only* when not already readonly.
+    // If the document is being streamed or converted, we don't want to accidentally allow editing by
+    // disabling the readonly flag.
+    if (![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+    
+    self.documentViewController.thumbnailsViewController.editingEnabled = !readOnly;
+}
+
+- (void)setFitMode:(NSString *)fitMode
+{
+    if ([fitMode isEqualToString:@"FitPage"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+    }
+    else if ([fitMode isEqualToString:@"FitWidth"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+    }
+    else if ([fitMode isEqualToString:@"FitHeight"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+    }
+    else if ([fitMode isEqualToString:@"Zoom"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
+    }
+}
+
+- (void)setLayoutMode:(NSString *)layoutMode
+{
+    if ([layoutMode isEqualToString:@"Single"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
+    }
+    else if ([layoutMode isEqualToString:@"Continuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"Facing"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
+    }
+    else if ([layoutMode isEqualToString:@"FacingContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCover"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCoverContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
 
 - (void)navButtonClicked
 {
@@ -770,12 +849,27 @@
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
+    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
     }
 }
 
 #pragma mark - Notifications
+
+- (void)documentViewControllerDidOpenDocumentWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController) {
+        return;
+    }
+    
+    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+}
 
 - (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
 {
