@@ -57,5 +57,19 @@ export default {
     annotationCreateDistanceMeasurement : 'AnnotationCreateDistanceMeasurement',
     annotationCreatePerimeterMeasurement : 'AnnotationCreatePerimeterMeasurement',
     annotationCreateAreaMeasurement : 'AnnotationCreateAreaMeasurement',
+  },
+  FitMode: {
+    FitPage: 'FitPage',
+    FitWidth: 'FitWidth',
+    FitHeight: 'FitHeight',
+    Zoom: 'Zoom',
+  },
+  LayoutMode: {
+    Single: 'Single',
+    Continuous: 'Continuous',
+    Facing: 'Facing',
+    FacingContinuous: 'FacingContinuous',
+    FacingCover: 'FacingCover',
+    FacingCoverContinuous: 'FacingCoverContinuous',
   }
 };

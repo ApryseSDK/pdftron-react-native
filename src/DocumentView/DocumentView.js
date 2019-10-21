@@ -29,6 +29,8 @@ export default class DocumentView extends PureComponent {
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationChanged: PropTypes.func,
     readOnly: PropTypes.bool,
+    fitMode: PropTypes.string,
+    layoutMode: PropTypes.string,
     ...ViewPropTypes,
   };
 
