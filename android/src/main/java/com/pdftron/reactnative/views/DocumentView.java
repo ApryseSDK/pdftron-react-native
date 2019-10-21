@@ -581,15 +581,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public PDFViewCtrl getPdfViewCtrl() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+        }
+        return null;
     }
 
     public PDFDoc getPdfDoc() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
+        }
+        return null;
     }
 
     public ToolManager getToolManager() {
-        return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        }
+        return null;
     }
 
     public void onReceiveNativeEvent(String key, String message) {
