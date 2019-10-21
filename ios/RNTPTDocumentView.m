@@ -770,6 +770,44 @@
     self.documentViewController.thumbnailsViewController.editingEnabled = !readOnly;
 }
 
+- (void)setFitMode:(NSString *)fitMode
+{
+    if ([fitMode isEqualToString:@"FitPage"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+    }
+    else if ([fitMode isEqualToString:@"FitWidth"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+    }
+    else if ([fitMode isEqualToString:@"FitHeight"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+    }
+    else if ([fitMode isEqualToString:@"Zoom"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
+    }
+}
+
+- (void)setLayoutMode:(NSString *)layoutMode
+{
+    if ([layoutMode isEqualToString:@"Single"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
+    }
+    else if ([layoutMode isEqualToString:@"Continuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"Facing"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
+    }
+    else if ([layoutMode isEqualToString:@"FacingContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCover"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCoverContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
+
 - (void)navButtonClicked
 {
     if([self.delegate respondsToSelector:@selector(navButtonClicked:)]) {
