@@ -121,6 +121,8 @@ export default class App extends Component<Props> {
         readOnly={true}
         disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.annotationListButton, Config.Buttons.userBookmarkListButton]}
         disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+        fitMode={Config.FitMode.FitPage}
+        layoutMode={Config.LayoutMode.Continuous}
       />
     );
   }
