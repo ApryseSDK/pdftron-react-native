@@ -161,6 +161,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
     }
 
+    public void setReadOnly(boolean readOnly) {
+        mBuilder = mBuilder.documentEditingEnabled(!readOnly);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -181,6 +185,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         .showUserBookmarksList(false);
             } else if ("thumbnailSlider".equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
+            } else if ("editPagesButton".equals(item)) {
+                mBuilder = mBuilder.showEditPagesOption(false);
+            } else if ("printButton".equals(item)) {
+                mBuilder = mBuilder.showPrintOption(false);
+            } else if ("closeButton".equals(item)) {
+                mBuilder = mBuilder.showCloseTabOption(false);
+            } else if ("saveCopyButton".equals(item)) {
+                mBuilder = mBuilder.showSaveCopyOption(false);
+            } else if ("formToolsButton".equals(item)) {
+                mBuilder = mBuilder.showFormToolbarOption(false);
+            } else if ("moreItemsButton".equals(item)) {
+                mBuilder = mBuilder
+                        .showEditPagesOption(false)
+                        .showPrintOption(false)
+                        .showCloseTabOption(false)
+                        .showSaveCopyOption(false)
+                        .showFormToolbarOption(false);
+            } else if ("outlineListButton".equals(item)) {
+                mBuilder = mBuilder.showOutlineList(false);
+            } else if ("annotationListButton".equals(item)) {
+                mBuilder = mBuilder.showAnnotationsList(false);
+            } else if ("userBookmarkListButton".equals(item)) {
+                mBuilder = mBuilder.showUserBookmarksList(false);
             }
         }
         disableTools(args);
@@ -328,7 +355,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
         }
-        
+
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);

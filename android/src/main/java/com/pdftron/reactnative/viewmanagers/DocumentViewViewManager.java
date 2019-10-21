@@ -111,6 +111,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
     }
 
+    @ReactProp(name = "readOnly")
+    public void setReadOnly(DocumentView documentView, boolean readOnly) {
+        documentView.setReadOnly(readOnly);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
