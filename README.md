@@ -345,6 +345,8 @@ array of string, optional
 array of string, optional
 ##### customHeaders
 object, optional
+##### readOnly
+bool, optional
 ##### initialPageNumber
 number, optional
 ##### pageNumber

@@ -118,7 +118,8 @@ export default class App extends Component<Props> {
         onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
         onDocumentLoaded={this.onDocumentLoaded}
         onAnnotationChanged={this.onAnnotationChanged}
-        disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
+        readOnly={true}
+        disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.annotationListButton, Config.Buttons.userBookmarkListButton]}
         disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
       />
     );
