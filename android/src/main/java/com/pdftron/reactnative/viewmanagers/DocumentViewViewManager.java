@@ -116,6 +116,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setReadOnly(readOnly);
     }
 
+    @ReactProp(name = "fitMode")
+    public void setFitMode(DocumentView documentView, String fitMode) {
+        documentView.setFitMode(fitMode);
+    }
+
+    @ReactProp(name = "layoutMode")
+    public void setLayoutMode(DocumentView documentView, String layoutMode) {
+        documentView.setLayoutMode(layoutMode);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
