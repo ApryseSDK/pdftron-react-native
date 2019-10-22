@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.pdftron.pdf.PDFNet;
-import com.pdftron.reactnative.R;
+import com.pdftron.pdf.utils.AppUtils;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 
@@ -25,7 +25,7 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initialize(@NonNull String key) {
         try {
-            PDFNet.initialize(getReactApplicationContext(), R.raw.pdfnet, key);
+            AppUtils.initializePDFNetApplication(getReactApplicationContext(), key);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
