@@ -778,12 +778,15 @@
 {
     if ([fitMode isEqualToString:@"FitPage"]) {
         [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
     }
     else if ([fitMode isEqualToString:@"FitWidth"]) {
         [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
     }
     else if ([fitMode isEqualToString:@"FitHeight"]) {
         [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
     }
     else if ([fitMode isEqualToString:@"Zoom"]) {
         [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
