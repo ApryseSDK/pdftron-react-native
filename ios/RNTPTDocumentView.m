@@ -790,6 +790,7 @@
     }
     else if ([fitMode isEqualToString:@"Zoom"]) {
         [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
     }
 }
 
