@@ -134,7 +134,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
     }
     splits {
         abi {
@@ -181,9 +180,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:0.61.2"  // From node_modules
     implementation project(':react-native-pdftron')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation "com.android.support:multidex:1.0.3"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

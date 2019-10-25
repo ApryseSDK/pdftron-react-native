@@ -30,10 +30,6 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
-         maven {
-            // PDFTron
-            url "https://pdftron-maven.s3.amazonaws.com/release"
-        }
 
         google()
         jcenter()
