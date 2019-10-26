@@ -180,11 +180,10 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-pdftron')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation "com.android.support:multidex:1.0.3"
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
