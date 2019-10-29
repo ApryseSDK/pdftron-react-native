@@ -9,9 +9,9 @@
 
 ## Prerequisites
 - No license key is requird for trial. However, a valid commercial license key is required after trial.
-- npm
+- npm or yarn
 - PDFTron SDK >= 6.10.0
-- react-native >= 0.59.0
+- react-native >= 0.60.0
 
 ## Preview
 
@@ -21,15 +21,29 @@
 
 ## Installation
 
-### Android
+0. If using yarn, do: `yarn global add react-native-cli`
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your package ID is `com.myapp` (by calling `react-native init MyApp`)
+1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`.
+
 2. In `MyApp` folder, install `react-native-pdftron` by calling:
     ```shell
-    npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
+    yarn add github:PDFTron/pdftron-react-native
+    yarn add @react-native-community/cli --dev
+    yarn add @react-native-community/cli-platform-android --dev
+    yarn add @react-native-community/cli-platform-ios --dev
+    yarn install
+    ```
+    or
+    ```shell
+    npm install github:PDFTron/pdftron-react-native --save
+    npm install @react-native-community/cli --save-dev
+    npm install @react-native-community/cli-platform-android --save-dev
+    npm install @react-native-community/cli-platform-ios --save-dev
     ```
 
-3. Add the following in your `android/app/build.gradle` file:
+### Android
+
+1. Add the following in your `android/app/build.gradle` file:
 
     ```diff
     android {
@@ -50,14 +64,14 @@
         }
 
         dependencies {
-    +       implementation "com.android.support:multidex:1.0.3"
+    +       implementation "androidx.multidex:multidex:2.0.1"
         }
 
         ...
     }
     ```
 
-4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+2. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -85,26 +99,21 @@
     </manifest>
     ```
 
-5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+3. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
-    + import android.support.multidex.MultiDexApplication;
+    + import androidx.multidex.MultiDexApplication;
     ...
     - public class MainApplication extends Application implements ReactApplication {
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-6. Replace `App.js` with what is shown [here](#usage)
-7. Finally in the root project directory, run `react-native run-android`.
+4. Replace `App.js` with what is shown [here](#usage)
+5. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1). The following steps will assume your app is created through `react-native init MyApp`.
-2. In `MyApp` folder, install `react-native-pdftron` by calling:
-    ```
-    npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
-    ```
-3. Add a `Podfile` in the `ios` folder with the following:
+1. Open `Podfile` in the `ios` folder, add:
 
     ```
     target 'MyApp' do
@@ -114,10 +123,10 @@
     end
     ```
 
-4. In the `ios` folder, run `pod install`.
-5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
-6. Replace `App.js` with what is shown [here](#usage).
-7. Finally in the root project directory, run `react-native run-ios`.
+2. In the `ios` folder, run `pod install`.
+3. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
+4. Replace `App.js` with what is shown [here](#usage).
+5. Finally in the root project directory, run `react-native run-ios`.
 
 ## Usage
 
