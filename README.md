@@ -28,50 +28,8 @@
     ```shell
     npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
     ```
-3. Then link the module by calling: 
-    ```shell
-    react-native link react-native-pdftron
-    ```
-4. In your root `android/build.gradle` file, add the following:
 
-    ```diff
-    buildscript {
-        ext {
-            buildToolsVersion = "28.0.3"
-            minSdkVersion = 16
-            compileSdkVersion = 28
-            targetSdkVersion = 28
-            supportLibVersion = "28.0.0"
-        }
-        repositories {
-            google()
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:3.3.1'
-
-            // NOTE: Do not place your application dependencies here; they belong
-            // in the individual module build.gradle files
-        }
-    }
-
-    allprojects {
-        repositories {
-            mavenLocal()
-            google()
-            jcenter()
-            maven {
-                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-                url "$rootDir/../node_modules/react-native/android"
-            }
-    +       maven {
-    +           url "https://pdftron-maven.s3.amazonaws.com/release"
-    +       }
-        }
-    }
-    ```
-
-5. Add the following in your `android/app/build.gradle` file:
+3. Add the following in your `android/app/build.gradle` file:
 
     ```diff
     android {
@@ -91,10 +49,6 @@
     +       multiDexEnabled true
         }
 
-    +   configurations.all {
-    +       resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
-    +       resolutionStrategy.force "com.android.support:support-v4:28.0.0"
-    +   }
         dependencies {
     +       implementation "com.android.support:multidex:1.0.3"
         }
@@ -103,12 +57,11 @@
     }
     ```
 
-6. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.myapp">
-    + <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
       <application
         ...
@@ -132,7 +85,7 @@
     </manifest>
     ```
 
-7. In your `android\app\src\main\java\com\reactnativesample\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import android.support.multidex.MultiDexApplication;
@@ -141,8 +94,8 @@
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-8. Replace `App.js` with what is shown [here](#usage)
-9. Finally in the root project directory, run `react-native run-android`.
+6. Replace `App.js` with what is shown [here](#usage)
+7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
@@ -151,24 +104,20 @@
     ```
     npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
     ```
-3. Link the module by calling: 
-    ```
-    react-native link react-native-pdftron
-    ```
-4. Add a `Podfile` in the `ios` folder with the following:
+3. Add a `Podfile` in the `ios` folder with the following:
 
     ```
     target 'MyApp' do
         use_frameworks!
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
+        pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
     ```
 
-5. In the `ios` folder, run `pod install`.
-6. If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
-7. Try building `MyApp`. If any error occurs, change the project settings as described [here](https://github.com/facebook/react-native/issues/7308#issuecomment-230198331).
-8. Replace `App.js` with what is shown [here](#usage).
-9. Finally in the root project directory, run `react-native run-ios`.
+4. In the `ios` folder, run `pod install`.
+5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
+6. Replace `App.js` with what is shown [here](#usage).
+7. Finally in the root project directory, run `react-native run-ios`.
 
 ## Usage
 
