@@ -10,6 +10,16 @@ buildscript {
     }
 }
 
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://pdftron-maven.s3.amazonaws.com/release"
+        }
+    }
+}
+
 apply plugin: 'com.android.library'
 
 android {

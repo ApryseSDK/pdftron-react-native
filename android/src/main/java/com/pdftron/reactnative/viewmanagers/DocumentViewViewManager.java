@@ -1,7 +1,5 @@
 package com.pdftron.reactnative.viewmanagers;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -13,6 +11,9 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.views.DocumentView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 

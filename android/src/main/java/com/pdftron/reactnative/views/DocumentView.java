@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -36,6 +35,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
@@ -91,8 +93,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         setLayoutParams(params);
 
         Activity currentActivity = reactContext.getCurrentActivity();
-        if (currentActivity instanceof FragmentActivity) {
-            setSupportFragmentManager(((FragmentActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
+        if (currentActivity instanceof AppCompatActivity) {
+            setSupportFragmentManager(((AppCompatActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
             mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
             mPDFViewCtrlConfig = PDFViewCtrlConfig.getDefaultConfig(currentActivity);
         } else {
@@ -324,7 +326,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private ViewerConfig getConfig() {
         if (mCacheDir != null) {
-            mBuilder.openUrlCachePath(mCacheDir);
+            mBuilder.openUrlCachePath(mCacheDir)
+                    .saveCopyExportPath(mCacheDir);
         }
         return mBuilder
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)

@@ -1,13 +1,13 @@
 
 package com.pdftron.reactnative.modules;
 
-import android.support.annotation.NonNull;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.utils.AppUtils;
+
+import androidx.annotation.NonNull;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 

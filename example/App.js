@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -23,38 +17,7 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
-    };
-
     RNPdftron.initialize("");
-  }
-
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestStoragePermission();
-    }
-  }
-
-  async requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          permissionGranted: true
-        });
-        console.log("Storage permission granted");
-      } else {
-        this.setState({
-          permissionGranted: false
-        });
-        console.log("Storage permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
   }
 
   onLeadingNavButtonPressed = () => {
@@ -97,16 +60,6 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    if (!this.state.permissionGranted) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Storage permission required.
-          </Text>
-        </View>
-      )
-    }
-
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
