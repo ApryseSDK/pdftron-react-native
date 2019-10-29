@@ -8,10 +8,10 @@
 - [License](#license)
 
 ## Prerequisites
-- No license key is requird for trial. However, a valid commercial license key is required after trial.
+- No license key is required for trial. However, a valid commercial license key is required after trial.
 - npm or yarn
 - PDFTron SDK >= 6.10.0
-- react-native >= 0.60.0
+- react-native >= 0.60.0 (for versions before 0.60.0, use branch `rn553`)
 
 ## Preview
 
