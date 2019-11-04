@@ -26,9 +26,11 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.tools.ToolManager;
+import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import org.json.JSONException;
@@ -48,6 +50,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     private static final String ON_PAGE_CHANGED = "onPageChanged";
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
+    private static final String ON_DOCUMENT_ERROR = "onDocumentError";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -524,6 +527,36 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
+    }
+
+    @Override
+    public void onOpenDocError() {
+        super.onOpenDocError();
+
+        String error = "Unknown error";
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+            int messageId = com.pdftron.pdf.tools.R.string.error_opening_doc_message;
+            int errorCode = mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getTabErrorCode();
+            switch (errorCode) {
+                case PdfDocManager.DOCUMENT_SETDOC_ERROR_ZERO_PAGE:
+                    messageId = R.string.error_empty_file_message;
+                    break;
+                case PdfDocManager.DOCUMENT_SETDOC_ERROR_OPENURL_CANCELLED:
+                    messageId = R.string.download_cancelled_message;
+                    break;
+                case PdfDocManager.DOCUMENT_SETDOC_ERROR_WRONG_PASSWORD:
+                    messageId = R.string.password_not_valid_message;
+                    break;
+                case PdfDocManager.DOCUMENT_SETDOC_ERROR_NOT_EXIST:
+                    messageId = R.string.file_does_not_exist_message;
+                    break;
+                case PdfDocManager.DOCUMENT_SETDOC_ERROR_DOWNLOAD_CANCEL:
+                    messageId = R.string.download_size_cancelled_message;
+                    break;
+            }
+            error = mPdfViewCtrlTabHostFragment.getString(messageId);
+        }
+        onReceiveNativeEvent(ON_DOCUMENT_ERROR, error);
     }
 
     public void importAnnotations(String xfdf) throws PDFNetException {
