@@ -866,6 +866,13 @@
     }
 }
 
+- (void)documentViewController:(PTDocumentViewController *)documentViewController didFailToOpenDocumentWithError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
+        [self.delegate documentError:self error:error.localizedFailureReason];
+    }
+}
+
 #pragma mark - Notifications
 
 - (void)documentViewControllerDidOpenDocumentWithNotification:(NSNotification *)notification

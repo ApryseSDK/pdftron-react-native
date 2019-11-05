@@ -21,6 +21,7 @@ export default class DocumentView extends PureComponent {
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
+    onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
@@ -57,7 +58,11 @@ export default class DocumentView extends PureComponent {
           'annotations': event.nativeEvent.annotations,
         });
       }
-    }
+    } else if (event.nativeEvent.onDocumentError) {
+      if (this.props.onDocumentError) {
+        this.props.onDocumentError();
+      }
+    } 
   }
 
   setToolMode = (toolMode) => {
