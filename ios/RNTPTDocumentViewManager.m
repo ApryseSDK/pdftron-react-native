@@ -183,6 +183,15 @@ RCT_CUSTOM_VIEW_PROPERTY(layoutMode, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)documentError:(RNTPTDocumentView *)sender error:(NSString *)error
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onDocumentError": (error ?: @""),
+        });
+    }
+}
+
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber
 {
     if (sender.onChange) {

@@ -18,6 +18,7 @@
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
+- (void)documentError:(RNTPTDocumentView *)sender error:(NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
