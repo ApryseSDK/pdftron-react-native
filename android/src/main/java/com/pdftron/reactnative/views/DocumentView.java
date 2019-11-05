@@ -214,6 +214,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public void setContinuousAnnotationEditing(boolean contEditing) {
+        Context context = getContext();
+        if (context != null) {
+            PdfViewCtrlSettingsManager.setContinuousAnnotationEdit(context, contEditing);
+        }
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);

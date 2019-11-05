@@ -25,9 +25,12 @@
 
 @end
 
+@interface RNTPTDocumentViewController : PTDocumentViewController
+@end
+
 @interface RNTPTDocumentView : UIView
 
-@property (nonatomic, readonly) PTDocumentViewController *documentViewController;
+@property (nonatomic, readonly) RNTPTDocumentViewController *documentViewController;
 
 - (void)setToolMode:(NSString *)toolMode;
 
@@ -50,6 +53,8 @@
 
 @property (nonatomic, copy) NSString *fitMode;
 @property (nonatomic, copy) NSString *layoutMode;
+
+@property (nonatomic) BOOL continuousAnnotationEditing;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 
