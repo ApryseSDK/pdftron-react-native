@@ -16,12 +16,14 @@
 
 @end
 
-@interface RNTPTDocumentViewController : PTDocumentViewController
+@interface RNTPTDocumentViewController ()
 
 @property (nonatomic) BOOL local;
 @property (nonatomic) BOOL needsDocumentLoaded;
 @property (nonatomic) BOOL needsRemoteDocumentLoaded;
 @property (nonatomic) BOOL documentLoaded;
+
+@property (nonatomic) BOOL continuousAnnotationEditing;
 
 @property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
 
@@ -67,6 +69,13 @@
     }
     
     [super setControlsHidden:hidden animated:animated];
+}
+
+#pragma mark - <PTAnnotationToolbarDelegate>
+
+- (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
+{
+    return !self.continuousAnnotationEditing;
 }
 
 #pragma mark - <PTPDFViewCtrlDelegate>
@@ -814,6 +823,13 @@
     else if ([layoutMode isEqualToString:@"FacingCoverContinuous"]) {
         [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
     }
+}
+
+- (void)setContinuousAnnotationEditing:(BOOL)continuousAnnotationEditing
+{
+    _continuousAnnotationEditing = continuousAnnotationEditing;
+    
+    self.documentViewController.continuousAnnotationEditing = continuousAnnotationEditing;
 }
 
 - (void)navButtonClicked

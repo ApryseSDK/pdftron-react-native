@@ -280,6 +280,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [disabledTools](#disabledtools)
 - [customHeaders](#customheaders)
 - [readOnly](#readonly)
+- [continuousAnnotationEditing](#continuousannotationediting)
 - [fitMode](#fitmode)
 - [layoutMode](#layoutmode)
 - [initialPageNumber](#initialpagenumber)
@@ -310,6 +311,8 @@ array of string, optional
 ##### customHeaders
 object, optional
 ##### readOnly
+bool, optional
+##### continuousAnnotationEditing
 bool, optional
 ##### fitMode
 string, optional
@@ -362,6 +365,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
   readOnly={false}
+  continuousAnnotationEditing={true}
   fitMode={Config.FitMode.FitPage}
   layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
