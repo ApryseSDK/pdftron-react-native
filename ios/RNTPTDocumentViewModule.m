@@ -100,5 +100,20 @@ RCT_REMAP_METHOD(flattenAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(saveDocument,
+                 saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] saveDocumentForDocumentViewTag:tag completionHandler:^{
+            resolve(nil);
+        }];
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to export annotations", [self errorFromException:exception]);
+    }
+}
+
 @end
   

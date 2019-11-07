@@ -69,4 +69,6 @@
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 
+- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler;
+
 @end
