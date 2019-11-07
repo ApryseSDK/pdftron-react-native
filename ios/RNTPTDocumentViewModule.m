@@ -111,7 +111,7 @@ RCT_REMAP_METHOD(saveDocument,
         }];
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to export annotations", [self errorFromException:exception]);
+        reject(@"save_failed", @"Failed to save document", [self errorFromException:exception]);
     }
 }
 
