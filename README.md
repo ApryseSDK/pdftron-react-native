@@ -379,6 +379,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
 - [flattenAnnotations](#flattenannotations)
+- [saveDocument](#savedocument)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -442,6 +443,17 @@ Returns a Promise.
 ```js
 // flatten forms and annotations in the current document.
 this._viewer.flattenAnnotations(false);
+```
+
+##### saveDocument
+To save the current document.
+
+Returns a Promise.
+
+```js
+this._viewer.saveDocument().then(() => {
+  console.log('saveDocument');
+});
 ```
 
 ## Contributing
