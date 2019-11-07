@@ -100,5 +100,20 @@ RCT_REMAP_METHOD(flattenAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(saveDocument,
+                 saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] saveDocumentForDocumentViewTag:tag completionHandler:^{
+            resolve(nil);
+        }];
+    }
+    @catch (NSException *exception) {
+        reject(@"save_failed", @"Failed to save document", [self errorFromException:exception]);
+    }
+}
+
 @end
   

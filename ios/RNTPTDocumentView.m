@@ -716,6 +716,15 @@
     [pdfViewCtrl Update:YES];
 }
 
+- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler
+{
+    [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
