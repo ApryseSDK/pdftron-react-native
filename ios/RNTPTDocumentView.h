@@ -54,6 +54,8 @@
 @property (nonatomic, copy) NSString *fitMode;
 @property (nonatomic, copy) NSString *layoutMode;
 
+@property (nonatomic, copy) NSString *annotationAuthor;
+
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;

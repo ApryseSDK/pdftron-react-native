@@ -841,6 +841,11 @@
     self.documentViewController.continuousAnnotationEditing = continuousAnnotationEditing;
 }
 
+- (void)setAnnotationAuthor:(NSString *)annotationAuthor
+{
+    self.documentViewController.toolManager.annotationAuthor = annotationAuthor;
+}
+
 - (void)navButtonClicked
 {
     if([self.delegate respondsToSelector:@selector(navButtonClicked:)]) {
