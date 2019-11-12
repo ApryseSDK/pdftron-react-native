@@ -33,6 +33,7 @@ export default class DocumentView extends PureComponent {
     fitMode: PropTypes.string,
     layoutMode: PropTypes.string,
     continuousAnnotationEditing: PropTypes.bool,
+    annotationAuthor: PropTypes.string,
     ...ViewPropTypes,
   };
 
