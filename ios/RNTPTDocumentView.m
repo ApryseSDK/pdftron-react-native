@@ -16,12 +16,14 @@
 
 @end
 
-@interface RNTPTDocumentViewController : PTDocumentViewController
+@interface RNTPTDocumentViewController ()
 
 @property (nonatomic) BOOL local;
 @property (nonatomic) BOOL needsDocumentLoaded;
 @property (nonatomic) BOOL needsRemoteDocumentLoaded;
 @property (nonatomic) BOOL documentLoaded;
+
+@property (nonatomic) BOOL continuousAnnotationEditing;
 
 @property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
 
@@ -72,6 +74,13 @@
     }
     
     [super setControlsHidden:hidden animated:animated];
+}
+
+#pragma mark - <PTAnnotationToolbarDelegate>
+
+- (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
+{
+    return !self.continuousAnnotationEditing;
 }
 
 #pragma mark - <PTPDFViewCtrlDelegate>
@@ -127,6 +136,10 @@
     if (self) {
         _documentViewController = [[RNTPTDocumentViewController alloc] init];
         _documentViewController.delegate = self;
+        
+        _topToolbarEnabled = YES;
+        _bottomToolbarEnabled = YES;
+        _pageIndicatorEnabled = YES;
     }
     return self;
 }
@@ -159,6 +172,7 @@
 
 - (void)loadDocumentViewController
 {
+    [self registerForDocumentViewControllerNotifications];
     [self registerForPDFViewCtrlNotifications];
     
     // Check if document view controller has already been added to a navigation controller.
@@ -226,6 +240,16 @@
 
 #pragma mark Notifications
 
+- (void)registerForDocumentViewControllerNotifications
+{
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center addObserver:self
+               selector:@selector(documentViewControllerDidOpenDocumentWithNotification:)
+                   name:PTDocumentViewControllerDidOpenDocumentNotification
+                 object:self.documentViewController];
+}
+
 - (void)registerForPDFViewCtrlNotifications
 {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
@@ -234,6 +258,21 @@
                selector:@selector(pdfViewCtrlDidChangePageWithNotification:)
                    name:PTPDFViewCtrlPageDidChangeNotification
                  object:self.documentViewController.pdfViewCtrl];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidAddAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationAddedNotification
+                 object:self.documentViewController.toolManager];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidModifyAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationModifiedNotification
+                 object:self.documentViewController.toolManager];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationRemovedNotification
+                 object:self.documentViewController.toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications
@@ -243,6 +282,18 @@
     [center removeObserver:self
                       name:PTPDFViewCtrlPageDidChangeNotification
                     object:self.documentViewController.pdfViewCtrl];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationAddedNotification
+                    object:self.documentViewController.toolManager];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationModifiedNotification
+                    object:self.documentViewController.toolManager];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationRemovedNotification
+                    object:self.documentViewController.toolManager];
 }
 
 #pragma mark - Disabling elements
@@ -257,37 +308,54 @@
     
     typedef void (^HideElementBlock)(void);
     
-    NSDictionary *hideElementActions =
-    @{
-      @"toolsButton":
-          ^{
-              self.documentViewController.annotationToolbarButtonHidden = YES;
-          },
-      @"searchButton":
-          ^{
-              self.documentViewController.searchButtonHidden = YES;
-          },
-      @"shareButton":
-          ^{
-              self.documentViewController.shareButtonHidden = YES;
-          },
-      @"viewControlsButton":
-          ^{
-              self.documentViewController.viewerSettingsButtonHidden = YES;
-          },
-      @"thumbnailsButton":
-          ^{
-              self.documentViewController.thumbnailBrowserButtonHidden = YES;
-          },
-      @"listsButton":
-          ^{
-              self.documentViewController.navigationListsButtonHidden = YES;
-          },
-      @"thumbnailSlider":
-          ^{
-              self.documentViewController.thumbnailSliderHidden = YES;
-          }
-      };
+    NSDictionary *hideElementActions = @{
+        @"toolsButton":
+            ^{
+                self.documentViewController.annotationToolbarButtonHidden = YES;
+            },
+        @"searchButton":
+            ^{
+                self.documentViewController.searchButtonHidden = YES;
+            },
+        @"shareButton":
+            ^{
+                self.documentViewController.shareButtonHidden = YES;
+            },
+        @"viewControlsButton":
+            ^{
+                self.documentViewController.viewerSettingsButtonHidden = YES;
+            },
+        @"thumbnailsButton":
+            ^{
+                self.documentViewController.thumbnailBrowserButtonHidden = YES;
+            },
+        @"listsButton":
+            ^{
+                self.documentViewController.navigationListsButtonHidden = YES;
+            },
+        @"moreItemsButton":
+            ^{
+                self.documentViewController.moreItemsButtonHidden = YES;
+            },
+
+        @"thumbnailSlider":
+            ^{
+                self.documentViewController.thumbnailSliderHidden = YES;
+            },
+        
+        @"outlineListButton":
+            ^{
+                self.documentViewController.outlineListHidden = YES;
+            },
+        @"annotationListButton":
+            ^{
+                self.documentViewController.annotationListHidden = YES;
+            },
+        @"userBookmarkListButton":
+            ^{
+                self.documentViewController.bookmarkListHidden = YES;
+            },
+    };
     
     
     for(NSObject* item in disabledElements)
@@ -524,7 +592,49 @@
 
 #pragma mark - Annotation import/export
 
-- (NSString *)exportAnnotations
+- (PTAnnot *)findAnnotWithUniqueID:(NSString *)uniqueID onPageNumber:(int)pageNumber
+{
+    if (uniqueID.length == 0 || pageNumber < 1) {
+        return nil;
+    }
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLockRead];
+        shouldUnlock = YES;
+        
+        NSArray<PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:pageNumber];
+        for (PTAnnot *annot in annots) {
+            if (![annot IsValid]) {
+                continue;
+            }
+            
+            // Check if the annot's unique ID matches.
+            NSString *annotUniqueId = nil;
+            PTObj *annotUniqueIdObj = [annot GetUniqueID];
+            if ([annotUniqueIdObj IsValid]) {
+                annotUniqueId = [annotUniqueIdObj GetAsPDFText];
+            }
+            if (annotUniqueId && [annotUniqueId isEqualToString:uniqueID]) {
+                return annot;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlockRead];
+        }
+    }
+    
+    return nil;
+}
+
+
+- (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     BOOL shouldUnlock = NO;
@@ -532,8 +642,32 @@
         [pdfViewCtrl DocLockRead];
         shouldUnlock = YES;
         
-        PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtract:e_ptboth];
-        return [fdfDoc SaveAsXFDFToString];
+        if (!options || !options[@"annotList"]) {
+            PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtract:e_ptboth];
+            return [fdfDoc SaveAsXFDFToString];
+        } else {
+            PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+            
+            NSArray *arr = options[@"annotList"];
+            for (NSDictionary *annotation in arr) {
+                NSString *annotationId = annotation[@"id"];
+                int pageNumber = ((NSNumber *)annotation[@"pageNumber"]).intValue;
+                if (annotationId.length > 0) {
+                    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
+                                                    onPageNumber:pageNumber];
+                    if ([annot IsValid]) {
+                        [annots add:annot];
+                    }
+                }
+            }
+            
+            if ([annots size] > 0) {
+                PTFDFDoc *fdfDoc = [[pdfViewCtrl GetDoc] FDFExtractAnnots:annots];
+                return [fdfDoc SaveAsXFDFToString];
+            } else {
+                return nil;
+            }
+        }
     }
     @finally {
         if (shouldUnlock) {
@@ -563,6 +697,38 @@
             [pdfViewCtrl DocUnlockRead];
         }
     }
+}
+
+#pragma mark - Flatten annotations
+
+- (void)flattenAnnotations:(BOOL)formsOnly
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+        
+        [doc FlattenAnnotations:formsOnly];
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+    
+    [pdfViewCtrl Update:YES];
+}
+
+- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler
+{
+    [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
 }
 
 #pragma mark - Viewer options
@@ -618,6 +784,73 @@
     _customHeaders = customHeaders;
 }
 
+- (void)setReadOnly:(BOOL)readOnly
+{
+    _readOnly = readOnly;
+    
+    // Enable readonly flag on tool manager *only* when not already readonly.
+    // If the document is being streamed or converted, we don't want to accidentally allow editing by
+    // disabling the readonly flag.
+    if (![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+    
+    self.documentViewController.thumbnailsViewController.editingEnabled = !readOnly;
+}
+
+- (void)setFitMode:(NSString *)fitMode
+{
+    if ([fitMode isEqualToString:@"FitPage"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
+    }
+    else if ([fitMode isEqualToString:@"FitWidth"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
+    }
+    else if ([fitMode isEqualToString:@"FitHeight"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
+    }
+    else if ([fitMode isEqualToString:@"Zoom"]) {
+        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
+        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
+    }
+}
+
+- (void)setLayoutMode:(NSString *)layoutMode
+{
+    if ([layoutMode isEqualToString:@"Single"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
+    }
+    else if ([layoutMode isEqualToString:@"Continuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"Facing"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
+    }
+    else if ([layoutMode isEqualToString:@"FacingContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCover"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
+    }
+    else if ([layoutMode isEqualToString:@"FacingCoverContinuous"]) {
+        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
+
+- (void)setContinuousAnnotationEditing:(BOOL)continuousAnnotationEditing
+{
+    _continuousAnnotationEditing = continuousAnnotationEditing;
+    
+    self.documentViewController.continuousAnnotationEditing = continuousAnnotationEditing;
+}
+
+- (void)setAnnotationAuthor:(NSString *)annotationAuthor
+{
+    self.documentViewController.toolManager.annotationAuthor = annotationAuthor;
+}
 
 - (void)navButtonClicked
 {
@@ -660,12 +893,34 @@
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
+    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+    
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
     }
 }
 
+- (void)documentViewController:(PTDocumentViewController *)documentViewController didFailToOpenDocumentWithError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
+        [self.delegate documentError:self error:error.localizedFailureReason];
+    }
+}
+
 #pragma mark - Notifications
+
+- (void)documentViewControllerDidOpenDocumentWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController) {
+        return;
+    }
+    
+    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
+        self.documentViewController.toolManager.readonly = YES;
+    }
+}
 
 - (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
 {
@@ -736,6 +991,63 @@
                 [self.delegate documentSaveFailed:self failMessage:failMessage];
             }
         }
+    }
+}
+
+- (void)toolManagerDidAddAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"add"];
+    }
+}
+
+- (void)toolManagerDidModifyAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"modify"];
+    }
+}
+
+- (void)toolManagerDidRemoveAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
+        [self.delegate annotationChanged:self annotation:@{
+            @"id": annotId,
+            @"pageNumber": @(pageNumber),
+        } action:@"remove"];
     }
 }
 @end

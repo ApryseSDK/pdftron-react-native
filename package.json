@@ -20,12 +20,10 @@
   ],
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "prop-types": "*",
     "react": "*",
     "react-native": "*"
   },
   "devDependencies": {
-    "react": "16.3.1",
-    "prop-types": "^15.6.1"
+    "react": "*"
   }
 }

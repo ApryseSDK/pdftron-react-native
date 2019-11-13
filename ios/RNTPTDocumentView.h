@@ -18,15 +18,21 @@
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
+- (void)documentError:(RNTPTDocumentView *)sender error:(NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)documentSaveStarted:(RNTPTDocumentView *)sender;
 - (void)documentSaveFinished:(RNTPTDocumentView *)sender;
 - (void)documentSaveFailed:(RNTPTDocumentView *)sender failMessage:(NSString *)failMessage;
+- (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+
+@end
+
+@interface RNTPTDocumentViewController : PTDocumentViewController
 @end
 
 @interface RNTPTDocumentView : UIView
 
-@property (nonatomic, readonly) PTDocumentViewController *documentViewController;
+@property (nonatomic, readonly) RNTPTDocumentViewController *documentViewController;
 
 - (void)setToolMode:(NSString *)toolMode;
 
@@ -45,6 +51,14 @@
 @property BOOL showNavButton;
 @property NSString *navButtonPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
+
+@property (nonatomic, copy) NSString *fitMode;
+@property (nonatomic, copy) NSString *layoutMode;
+
+@property (nonatomic, copy) NSString *annotationAuthor;
+
+@property (nonatomic) BOOL continuousAnnotationEditing;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 
@@ -54,8 +68,12 @@
 -(void)disableElements:(NSArray<NSString*>*)disabledElements;
 -(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value;
 
-- (NSString *)exportAnnotations;
+- (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 - (void)doDocSave;
+
+- (void)flattenAnnotations:(BOOL)formsOnly;
+
+- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler;
 
 @end

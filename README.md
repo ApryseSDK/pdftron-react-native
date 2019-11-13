@@ -8,10 +8,10 @@
 - [License](#license)
 
 ## Prerequisites
-- No license key is requird for trial. However, a valid commercial license key is required after trial.
-- npm
+- No license key is required for trial. However, a valid commercial license key is required after trial.
+- npm or yarn
 - PDFTron SDK >= 6.10.0
-- react-native >= 0.59.0
+- react-native >= 0.60.0 (for versions before 0.60.0, use branch `rn553`)
 
 ## Preview
 
@@ -21,57 +21,29 @@
 
 ## Installation
 
-### Android
+0. If using yarn, do: `yarn global add react-native-cli`
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your package ID is `com.myapp` (by calling `react-native init MyApp`)
+1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`.
+
 2. In `MyApp` folder, install `react-native-pdftron` by calling:
     ```shell
-    npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
+    yarn add github:PDFTron/pdftron-react-native
+    yarn add @react-native-community/cli --dev
+    yarn add @react-native-community/cli-platform-android --dev
+    yarn add @react-native-community/cli-platform-ios --dev
+    yarn install
     ```
-3. Then link the module by calling: 
+    or
     ```shell
-    react-native link react-native-pdftron
-    ```
-4. In your root `android/build.gradle` file, add the following:
-
-    ```diff
-    buildscript {
-        ext {
-            buildToolsVersion = "28.0.3"
-            minSdkVersion = 16
-            compileSdkVersion = 28
-            targetSdkVersion = 28
-            supportLibVersion = "28.0.0"
-        }
-        repositories {
-            google()
-            jcenter()
-        }
-        dependencies {
-            classpath 'com.android.tools.build:gradle:3.3.1'
-
-            // NOTE: Do not place your application dependencies here; they belong
-            // in the individual module build.gradle files
-        }
-    }
-
-    allprojects {
-        repositories {
-            mavenLocal()
-            google()
-            jcenter()
-            maven {
-                // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-                url "$rootDir/../node_modules/react-native/android"
-            }
-    +       maven {
-    +           url "https://pdftron-maven.s3.amazonaws.com/release"
-    +       }
-        }
-    }
+    npm install github:PDFTron/pdftron-react-native --save
+    npm install @react-native-community/cli --save-dev
+    npm install @react-native-community/cli-platform-android --save-dev
+    npm install @react-native-community/cli-platform-ios --save-dev
     ```
 
-5. Add the following in your `android/app/build.gradle` file:
+### Android
+
+1. Add the following in your `android/app/build.gradle` file:
 
     ```diff
     android {
@@ -91,24 +63,19 @@
     +       multiDexEnabled true
         }
 
-    +   configurations.all {
-    +       resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
-    +       resolutionStrategy.force "com.android.support:support-v4:28.0.0"
-    +   }
         dependencies {
-    +       implementation "com.android.support:multidex:1.0.3"
+    +       implementation "androidx.multidex:multidex:2.0.1"
         }
 
         ...
     }
     ```
 
-6. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+2. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.myapp">
-    + <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
       <application
         ...
@@ -132,43 +99,34 @@
     </manifest>
     ```
 
-7. In your `android\app\src\main\java\com\reactnativesample\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+3. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
-    + import android.support.multidex.MultiDexApplication;
+    + import androidx.multidex.MultiDexApplication;
     ...
     - public class MainApplication extends Application implements ReactApplication {
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-8. Replace `App.js` with what is shown [here](#usage)
-9. Finally in the root project directory, run `react-native run-android`.
+4. Replace `App.js` with what is shown [here](#usage)
+5. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1). The following steps will assume your app is created through `react-native init MyApp`.
-2. In `MyApp` folder, install `react-native-pdftron` by calling:
-    ```
-    npm install git+https://github.com/PDFTron/pdftron-react-native.git --save
-    ```
-3. Link the module by calling: 
-    ```
-    react-native link react-native-pdftron
-    ```
-4. Add a `Podfile` in the `ios` folder with the following:
+1. Open `Podfile` in the `ios` folder, add:
 
     ```
     target 'MyApp' do
         use_frameworks!
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
+        pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
     ```
 
-5. In the `ios` folder, run `pod install`.
-6. If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
-7. Try building `MyApp`. If any error occurs, change the project settings as described [here](https://github.com/facebook/react-native/issues/7308#issuecomment-230198331).
-8. Replace `App.js` with what is shown [here](#usage).
-9. Finally in the root project directory, run `react-native run-ios`.
+2. In the `ios` folder, run `pod install`.
+3. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
+4. Replace `App.js` with what is shown [here](#usage).
+5. Finally in the root project directory, run `react-native run-ios`.
 
 ## Usage
 
@@ -200,6 +158,7 @@ export default class App extends Component<Props> {
     };
 
     RNPdftron.initialize("Insert commercial license key here after purchase");
+    RNPdftron.enableJavaScript(true);
   }
 
   componentDidMount() {
@@ -314,12 +273,23 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [password](#password)
 - [leadingNavButtonIcon](#leadingnavbuttonicon)
 - [onLeadingNavButtonPressed](#onleadingnavbuttonpressed)
-- [onDocumentLoaded](#ondocumentloaded)
 - [showLeadingNavButton](#showleadingnavbutton)
+- [onDocumentLoaded](#ondocumentloaded)
+- [onDocumentError](#ondocumenterror)
 - [disabledElements](#disabledelements)
 - [disabledTools](#disabledtools)
 - [customHeaders](#customheaders)
+- [readOnly](#readonly)
+- [annotationAuthor](#annotationauthor)
+- [continuousAnnotationEditing](#continuousannotationediting)
+- [fitMode](#fitmode)
+- [layoutMode](#layoutmode)
 - [initialPageNumber](#initialpagenumber)
+- [pageNumber](#pagenumber)
+- [topToolbarEnabled](#toptoolbarenabled)
+- [bottomToolbarEnabled](#bottomtoolbarenabled)
+- [pageIndicatorEnabled](#pageindicatorenabled)
+- [onAnnotationChanged](#onannotationchanged)
 
 ##### document
 string, required
@@ -331,24 +301,57 @@ string, optional
 function, optional
 ##### showLeadingNavButton
 bool, optional
+##### onDocumentLoaded
+function, optional
+##### onDocumentError
+function, optional
 ##### disabledElements
 array of string, optional
 ##### disabledTools
 array of string, optional
 ##### customHeaders
 object, optional
+##### readOnly
+bool, optional
+##### annotationAuthor
+string, optional
+##### continuousAnnotationEditing
+bool, optional
+##### fitMode
+string, optional
+##### layoutMode
+string, optional
 ##### initialPageNumber
 number, optional
 ##### pageNumber
 number, optional
 ##### onPageChanged
 function, optional
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
 ##### topToolbarEnabled
 bool, optional
 ##### bottomToolbarEnabled
 bool, optional
 ##### pageIndicatorEnabled
 bool, optional
+##### onAnnotationChanged
+function, optional
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+action | string | the action that occurred (add, delete, modify)
+annotations | array | array of annotation data in the format {id: string, pageNumber: int}
+
+Example:
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
@@ -357,13 +360,20 @@ import { DocumentView, Config } from 'react-native-pdftron';
   document={path}
   showLeadingNavButton={true}
   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-  onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
-  onDocumentLoaded={this.onDocumentLoaded}
+  onLeadingNavButtonPressed={() => {}}
+  onDocumentLoaded={() => {}}
+  onDocumentError={() => {}}
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
   initialPageNumber={11}
+  readOnly={false}
+  annotationAuthor={'PDFTron'}
+  continuousAnnotationEditing={true}
+  fitMode={Config.FitMode.FitPage}
+  layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
+  onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
 />
 ```
 
@@ -372,6 +382,8 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [getPageCount](#getpagecount)
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
+- [flattenAnnotations](#flattenannotations)
+- [saveDocument](#savedocument)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -404,11 +416,47 @@ this._viewer.importAnnotations(xfdf);
 ##### exportAnnotations
 To extract XFDF from the current document.
 
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+options | object | key: annotList, type: array
+
 Returns a Promise.
 
 ```js
 this._viewer.exportAnnotations().then((xfdf) => {
   console.log('xfdf', xfdf);
+});
+```
+
+With options:
+
+```js
+// annotList is an array of annotation data in the format {id: string, pageNumber: int}
+this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
+  console.log('xfdf for annotations', xfdf);
+});
+```
+
+##### flattenAnnotations
+To flatten the forms and (optionally) annotations in the current document. The `formsOnly` parameter controls whether only forms are flattened.
+
+Returns a Promise.
+
+```js
+// flatten forms and annotations in the current document.
+this._viewer.flattenAnnotations(false);
+```
+
+##### saveDocument
+To save the current document.
+
+Returns a Promise.
+
+```js
+this._viewer.saveDocument().then(() => {
+  console.log('saveDocument');
 });
 ```
 

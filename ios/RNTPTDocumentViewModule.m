@@ -56,11 +56,13 @@ RCT_REMAP_METHOD(getPageCount,
 
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 options:(NSDictionary *)options
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *xfdf = [[self documentViewManager] exportAnnotationsForDocumentViewTag:tag];
+        NSString *xfdf = [[self documentViewManager] exportAnnotationsForDocumentViewTag:tag
+                                                                                 options:options];
         resolve(xfdf);
     }
     @catch (NSException *exception) {
@@ -94,6 +96,36 @@ RCT_REMAP_METHOD(forceDocumentSave,
     }
     @catch (NSException *exception) {
         reject(@"force_save_failed", @"Failed to save document.", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(flattenAnnotations,
+                 flattenAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 formsOnly:(BOOL)formsOnly
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] flattenAnnotationsForDocumentViewTag:tag formsOnly:formsOnly];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"flatten_failed", @"Failed to flatten annotations", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(saveDocument,
+                 saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] saveDocumentForDocumentViewTag:tag completionHandler:^{
+            resolve(nil);
+        }];
+    }
+    @catch (NSException *exception) {
+        reject(@"save_failed", @"Failed to save document", [self errorFromException:exception]);
     }
 }
 

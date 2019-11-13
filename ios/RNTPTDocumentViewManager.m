@@ -137,30 +137,46 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(readOnly, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.readOnly = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(fitMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.fitMode = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(layoutMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.layoutMode = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(continuousAnnotationEditing, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.continuousAnnotationEditing = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(annotationAuthor, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.annotationAuthor = [RCTConvert NSString:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
     documentView.delegate = self;
     return documentView;
-}
-
-#pragma mark - Commands
-
-RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs) {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        RNTPTDocumentView *view = (RNTPTDocumentView *)viewRegistry[reactTag];
-        if (!view || ![view isKindOfClass:[RNTPTDocumentView class]]) {
-            RCTLogError(@"Cannot find NativeView with tag #%@", reactTag);
-            return;
-        }
-        
-        [self handleCommandWithID:commandID commandArgs:commandArgs view:view];
-    }];
-}
-
-- (void)handleCommandWithID:(NSInteger)commandID commandArgs:(NSArray *)commandArgs view:(RNTPTDocumentView *)view
-{
-    
 }
 
 #pragma mark - Events
@@ -178,6 +194,15 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
         sender.onChange(@{
                           @"onDocumentLoaded": (sender.document ?: @""),
                           });
+    }
+}
+
+- (void)documentError:(RNTPTDocumentView *)sender error:(NSString *)error
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onDocumentError": (error ?: @""),
+        });
     }
 }
 
@@ -213,6 +238,16 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
         sender.onChange(@{@"onDocumentSaveFail": (failMessage ? : @"")});
     }
 }
+- (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationChanged" : @"onAnnotationChanged",
+            @"action": action,
+            @"annotations": @[annotation],
+        });
+    }
+}
 
 #pragma mark - Methods
 
@@ -235,11 +270,11 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
     }
 }
 
-- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag
+- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return [documentView exportAnnotations];
+        return [documentView exportAnnotationsWithOptions:options];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;
@@ -263,6 +298,32 @@ RCT_EXPORT_METHOD(handleCommand:(nonnull NSNumber*)reactTag commandID:(NSInteger
     }
     else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView flattenAnnotations:formsOnly];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(void))completionHandler
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView saveDocumentWithCompletionHandler:^{
+            if (completionHandler) {
+                completionHandler();
+            }
+        }];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:@"Unable to find DocumentView for tag"
+                                     userInfo:nil];
     }
 }
 

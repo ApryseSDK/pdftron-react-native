@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -23,38 +17,7 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
-    };
-
     RNPdftron.initialize("");
-  }
-
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestStoragePermission();
-    }
-  }
-
-  async requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          permissionGranted: true
-        });
-        console.log("Storage permission granted");
-      } else {
-        this.setState({
-          permissionGranted: false
-        });
-        console.log("Storage permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
   }
 
   onLeadingNavButtonPressed = () => {
@@ -86,17 +49,17 @@ export default class App extends Component<Props> {
     }
   }
 
-  render() {
-    if (!this.state.permissionGranted) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Storage permission required.
-          </Text>
-        </View>
-      )
+  onAnnotationChanged = ({action, annotations}) => {
+    console.log('action', action);
+    console.log('annotations', annotations);
+    if (this._viewer) {
+      this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
+        console.log('xfdf for annotations', xfdf);
+      });
     }
+  }
 
+  render() {
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
@@ -107,8 +70,12 @@ export default class App extends Component<Props> {
         leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
         onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
         onDocumentLoaded={this.onDocumentLoaded}
-        disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
+        onAnnotationChanged={this.onAnnotationChanged}
+        readOnly={false}
+        disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.annotationListButton, Config.Buttons.userBookmarkListButton]}
         disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+        fitMode={Config.FitMode.FitPage}
+        layoutMode={Config.LayoutMode.Continuous}
       />
     );
   }

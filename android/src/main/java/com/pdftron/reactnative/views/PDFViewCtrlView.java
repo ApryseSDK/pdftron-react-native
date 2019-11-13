@@ -2,7 +2,6 @@ package com.pdftron.reactnative.views;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import javax.annotation.Nonnull;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class PDFViewCtrlView extends PDFViewCtrl {
 
@@ -41,8 +42,8 @@ public class PDFViewCtrlView extends PDFViewCtrl {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        if (reactContext.getCurrentActivity() instanceof FragmentActivity) {
-            ToolManagerBuilder.from().build((FragmentActivity) reactContext.getCurrentActivity(), this);
+        if (reactContext.getCurrentActivity() instanceof AppCompatActivity) {
+            ToolManagerBuilder.from().build((AppCompatActivity) reactContext.getCurrentActivity(), this);
         }
     }
 

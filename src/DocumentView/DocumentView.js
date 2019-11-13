@@ -20,6 +20,7 @@ export default class DocumentView extends PureComponent {
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
+    onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
     onDocumentSaveStart: PropTypes.func,
     onDocumentSaveFinish: PropTypes.func,
@@ -29,6 +30,12 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
+    onAnnotationChanged: PropTypes.func,
+    readOnly: PropTypes.bool,
+    fitMode: PropTypes.string,
+    layoutMode: PropTypes.string,
+    continuousAnnotationEditing: PropTypes.bool,
+    annotationAuthor: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -65,7 +72,18 @@ export default class DocumentView extends PureComponent {
       if (this.props.onDocumentSaveFailed) {
         this.props.onDocumentSaveFailed(event.nativeEvent.failMessage);
       }
-    }
+    } else if (event.nativeEvent.onAnnotationChanged) {
+      if (this.props.onAnnotationChanged) {
+        this.props.onAnnotationChanged({
+          'action': event.nativeEvent.action,
+          'annotations': event.nativeEvent.annotations,
+        });
+      }
+    } else if (event.nativeEvent.onDocumentError) {
+      if (this.props.onDocumentError) {
+        this.props.onDocumentError();
+      }
+    } 
   }
 
   forceDocumentSave = () => {
@@ -101,10 +119,26 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exportAnnotations = () => {
+  exportAnnotations = (options) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.exportAnnotations(tag);
+      return DocumentViewManager.exportAnnotations(tag, options);
+    }
+    return Promise.resolve();
+  }
+
+  flattenAnnotations = (formsOnly) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.flattenAnnotations(tag, formsOnly);
+    }
+    return Promise.resolve();
+  }
+
+  saveDocument = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.saveDocument(tag);
     }
     return Promise.resolve();
   }

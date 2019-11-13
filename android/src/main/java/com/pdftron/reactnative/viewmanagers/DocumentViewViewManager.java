@@ -1,7 +1,5 @@
 package com.pdftron.reactnative.viewmanagers;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -13,6 +11,9 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.views.DocumentView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     private static final String REACT_CLASS = "RCTDocumentView";
@@ -119,6 +120,31 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
     }
 
+    @ReactProp(name = "readOnly")
+    public void setReadOnly(DocumentView documentView, boolean readOnly) {
+        documentView.setReadOnly(readOnly);
+    }
+
+    @ReactProp(name = "fitMode")
+    public void setFitMode(DocumentView documentView, String fitMode) {
+        documentView.setFitMode(fitMode);
+    }
+
+    @ReactProp(name = "layoutMode")
+    public void setLayoutMode(DocumentView documentView, String layoutMode) {
+        documentView.setLayoutMode(layoutMode);
+    }
+
+    @ReactProp(name = "continuousAnnotationEditing")
+    public void setContinuousAnnotationEditing(DocumentView documentView, boolean contEditing) {
+        documentView.setContinuousAnnotationEditing(contEditing);
+    }
+
+    @ReactProp(name = "annotationAuthor")
+    public void setAnnotationAuthor(DocumentView documentView, String author) {
+        documentView.setAnnotationAuthor(author);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -128,12 +154,30 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public String exportAnnotations(int tag) throws PDFNetException {
+    public String exportAnnotations(int tag, ReadableMap options) throws Exception {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.exportAnnotations();
+            return documentView.exportAnnotations(options);
         } else {
             throw new PDFNetException("", 0L, getName(), "exportAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public void saveDocument(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.saveDocument();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "saveDocument", "Unable to find DocumentView.");
+        }
+    }
+
+    public void flattenAnnotations(int tag, boolean formsOnly) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.flattenAnnotations(formsOnly);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "flattenAnnotations", "Unable to find DocumentView.");
         }
     }
 

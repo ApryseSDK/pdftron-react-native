@@ -18,8 +18,12 @@
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
-- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag;
+- (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
 - (void)doSaveForDocumentViewTag:(NSNumber *)tag;
+
+- (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly;
+
+- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(void))completionHandler;
 
 @end

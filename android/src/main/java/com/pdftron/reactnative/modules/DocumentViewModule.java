@@ -4,6 +4,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule {
@@ -53,13 +54,43 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void exportAnnotations(final int tag, final Promise promise) {
+    public void exportAnnotations(final int tag, final ReadableMap options, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    String xfdf = mDocumentViewInstance.exportAnnotations(tag);
+                    String xfdf = mDocumentViewInstance.exportAnnotations(tag, options);
                     promise.resolve(xfdf);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void saveDocument(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.saveDocument(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void flattenAnnotations(final int tag, final boolean formsOnly, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.flattenAnnotations(tag, formsOnly);
+                    promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
