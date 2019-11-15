@@ -132,6 +132,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setContinuousAnnotationEditing(contEditing);
     }
 
+    @ReactProp(name = "annotationAuthor")
+    public void setAnnotationAuthor(DocumentView documentView, String author) {
+        documentView.setAnnotationAuthor(author);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

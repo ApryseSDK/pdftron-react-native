@@ -221,6 +221,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public void setAnnotationAuthor(String author) {
+        Context context = getContext();
+        if (context != null && !Utils.isNullOrEmpty(author)) {
+            PdfViewCtrlSettingsManager.updateAuthorName(context, author);
+            PdfViewCtrlSettingsManager.setAnnotListShowAuthor(context, true);
+        }
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
