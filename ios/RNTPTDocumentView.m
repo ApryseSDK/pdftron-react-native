@@ -943,6 +943,25 @@
     int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
     
     NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    if (annotId.length == 0) {
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+        BOOL shouldUnlock = NO;
+        @try {
+            [pdfViewCtrl DocLock:YES];
+            shouldUnlock = YES;
+            
+            annotId = [NSUUID UUID].UUIDString;
+            [annot SetUniqueID:annotId id_buf_sz:0];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        }
+        @finally {
+            if (shouldUnlock) {
+                [pdfViewCtrl DocUnlock];
+            }
+        }
+    }
     
     if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
         [self.delegate annotationChanged:self annotation:@{
