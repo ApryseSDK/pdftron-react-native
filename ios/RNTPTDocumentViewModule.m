@@ -106,12 +106,31 @@ RCT_REMAP_METHOD(saveDocument,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] saveDocumentForDocumentViewTag:tag completionHandler:^{
+        [[self documentViewManager] saveDocumentForDocumentViewTag:tag
+             completionHandler:^{
             resolve(nil);
         }];
     }
     @catch (NSException *exception) {
         reject(@"save_failed", @"Failed to save document", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(saveDocumentToPath,
+                 saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
+                 filePath:(NSString *)path
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] saveDocumentForDocumentViewTag:tag
+            completionHandler:^{
+                resolve(nil);
+            }
+            filePath:path];
+    }
+    @catch (NSException *exception) {
+        reject(@"save_to_path_failed", @"Failed to save document", [self errorFromException:exception]);
     }
 }
 

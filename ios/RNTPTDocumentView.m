@@ -725,6 +725,28 @@
     }];
 }
 
+- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler filePath:(NSString *)path
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+        
+        [doc SaveToFile:path flags:0];
+        if(completionHandler) {
+            completionHandler();
+        }
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled

@@ -30,6 +30,7 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.sdf.SDFDoc;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.utils.ReactUtils;
 
@@ -650,6 +651,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void saveDocument() {
         if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
             mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().save(false, true, true);
+        }
+    }
+
+    public void saveDocument(String filePath) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            pdfDoc.save(filePath, SDFDoc.SaveMode.NO_FLAGS, null);
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
         }
     }
 

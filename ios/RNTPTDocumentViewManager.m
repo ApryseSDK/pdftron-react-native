@@ -297,6 +297,22 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationAuthor, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(void))completionHandler filePath:(NSString *)path
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView saveDocumentWithCompletionHandler:^{
+            if (completionHandler) {
+                completionHandler();
+            }
+        } filePath:path];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:@"Unable to find DocumentView for tag"
+                                     userInfo:nil];
+    }
+}
+
 #pragma mark - DocumentView attached/detached
 
 - (void)documentViewAttachedToWindow:(RNTPTDocumentView *)documentView
