@@ -455,8 +455,8 @@ To save the current document.
 Returns a Promise.
 
 ```js
-this._viewer.saveDocument().then(() => {
-  console.log('saveDocument');
+this._viewer.saveDocument().then((filePath) => {
+  console.log('saveDocument:', filePath);
 });
 ```
 
