@@ -647,10 +647,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
-    public void saveDocument() {
+    public String saveDocument() {
         if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
             mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().save(false, true, true);
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getFilePath();
         }
+        return null;
     }
 
     public void flattenAnnotations(boolean formsOnly) throws PDFNetException {
