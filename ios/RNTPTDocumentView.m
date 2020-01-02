@@ -64,7 +64,7 @@
 
 - (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    if (!self.automaticallyHidesControls) {
+    if (hidden && !self.automaticallyHidesControls) {
         return;
     }
     
