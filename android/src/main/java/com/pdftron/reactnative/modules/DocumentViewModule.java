@@ -60,8 +60,8 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.saveDocument(tag);
-                    promise.resolve(null);
+                    String path = mDocumentViewInstance.saveDocument(tag);
+                    promise.resolve(path);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }

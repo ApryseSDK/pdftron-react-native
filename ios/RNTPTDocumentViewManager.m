@@ -281,13 +281,13 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationAuthor, NSString, RNTPTDocumentView)
     }
 }
 
-- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(void))completionHandler
+- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        [documentView saveDocumentWithCompletionHandler:^{
+        [documentView saveDocumentWithCompletionHandler:^(NSString * _Nullable filePath){
             if (completionHandler) {
-                completionHandler();
+                completionHandler(filePath);
             }
         }];
     } else {

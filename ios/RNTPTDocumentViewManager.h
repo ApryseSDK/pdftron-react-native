@@ -22,6 +22,6 @@
 
 - (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly;
 
-- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(void))completionHandler;
+- (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
 @end

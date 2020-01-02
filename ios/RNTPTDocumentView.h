@@ -71,6 +71,6 @@
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 
-- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler;
+- (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
 @end

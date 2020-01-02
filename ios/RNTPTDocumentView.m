@@ -716,11 +716,13 @@
     [pdfViewCtrl Update:YES];
 }
 
-- (void)saveDocumentWithCompletionHandler:(void (^)(void))completionHandler
+- (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
+    NSString *filePath = self.documentViewController.coordinatedDocument.fileURL.path;
+
     [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
         if (completionHandler) {
-            completionHandler();
+            completionHandler((success) ? filePath : nil);
         }
     }];
 }
