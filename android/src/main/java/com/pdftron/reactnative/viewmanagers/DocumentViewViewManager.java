@@ -21,6 +21,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     private SparseArray<DocumentView> mDocumentViews = new SparseArray<>();
 
     @Override
+    @NonNull
     public String getName() {
         return REACT_CLASS;
     }
@@ -43,7 +44,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     };
 
     @Override
-    protected DocumentView createViewInstance(ThemedReactContext reactContext) {
+    @NonNull
+    protected DocumentView createViewInstance(@NonNull ThemedReactContext reactContext) {
         DocumentView documentView = new DocumentView(reactContext);
         documentView.setup(reactContext);
         documentView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
@@ -56,7 +58,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             documentView.doDocSave();
         } else {
-            throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "forceDocSave", "Unable to find DocumentView.");
         }
     }
 

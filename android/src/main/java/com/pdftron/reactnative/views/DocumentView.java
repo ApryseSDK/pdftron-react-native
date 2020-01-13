@@ -39,6 +39,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
@@ -93,7 +94,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setup(ThemedReactContext reactContext) {
+    public void setup(@NonNull ThemedReactContext reactContext) {
         int width = ViewGroup.LayoutParams.MATCH_PARENT;
         int height = ViewGroup.LayoutParams.MATCH_PARENT;
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width, height);

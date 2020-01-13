@@ -90,13 +90,14 @@ RCT_REMAP_METHOD(forceDocumentSave,
                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    @try {
-        [[self documentViewManager] doSaveForDocumentViewTag:tag];
-        resolve(nil);
-    }
-    @catch (NSException *exception) {
-        reject(@"force_save_failed", @"Failed to save document.", [self errorFromException:exception]);
-    }
+    // @try {
+    //     [[self documentViewManager] doSaveForDocumentViewTag:tag];
+    //     resolve(nil);
+    // }
+    // @catch (NSException *exception) {
+    //     reject(@"force_save_failed", @"Failed to save document.", [self errorFromException:exception]);
+    // }
+    [[self documentViewManager] doSaveForDocumentViewTag:tag];
 }
 
 RCT_REMAP_METHOD(flattenAnnotations,

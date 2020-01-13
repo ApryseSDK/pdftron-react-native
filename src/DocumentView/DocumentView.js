@@ -90,9 +90,10 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       console.log("Doing force save...");
-      return DocumentViewManager.forceDocumentSave(tag);
+      //return DocumentViewManager.forceDocumentSave(tag);
+      DocumentViewManager.forceDocumentSave(tag);
     }
-    return Promise.resolve();
+    //return Promise.resolve();
   }
 
   setToolMode = (toolMode) => {

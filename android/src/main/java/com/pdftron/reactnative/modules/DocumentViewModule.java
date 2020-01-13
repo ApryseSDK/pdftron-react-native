@@ -1,11 +1,17 @@
 package com.pdftron.reactnative.modules;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule {
     private static final String REACT_CLASS = "DocumentViewManager";
@@ -18,24 +24,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
     }
 
     @Override
+    @NonNull
     public String getName() {
         return REACT_CLASS;
     }
 
+    private static PDFNetException syncEx = null;
+    private static boolean needWait = false;
+
     @ReactMethod
-    public void forceDocumentSave(final int tag, final Promise promise) {
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mDocumentViewInstance.forceDocSave(tag);
-                    promise.resolve(null);
+    public void forceDocumentSave(final int tag) throws PDFNetException {
+        needWait = false;
+        syncEx = null;
+        final Lock lock = new ReentrantLock();
+        synchronized (lock) {
+            getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (lock.tryLock()) {
+                        needWait = true;
+                        try {
+                            mDocumentViewInstance.forceDocSave(tag);
+                        } catch (PDFNetException e) {
+                            syncEx = e;
+                        } finally {
+                            lock.unlock();
+                            needWait = false;
+                        }
+                    }
+                    else {
+                        syncEx = new PDFNetException("", 0L, getName(), "forceDocumentSave()", "Unable to acquire lock during save");
+                    }
                 }
-                catch (Exception ex) {
-                    promise.reject(ex);
-                }
+            });
+        }
+
+        try {
+            while (needWait) {
+                Thread.sleep(1);
             }
-        });
+        }
+        catch (InterruptedException ignore) { }
+
+        if (syncEx != null) {
+            throw syncEx;
+        }
     }
 
     @ReactMethod
