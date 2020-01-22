@@ -25,6 +25,8 @@
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
+@property (nonatomic) BOOL topToolbarEnabled;
+
 @property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
 
 @end
@@ -32,6 +34,15 @@
 @implementation RNTPTDocumentViewController
 
 @dynamic delegate;
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _topToolbarEnabled = YES;
+    }
+    return self;
+}
 
 - (void)viewWillLayoutSubviews
 {
@@ -64,7 +75,7 @@
 
 - (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    if (hidden && !self.automaticallyHidesControls) {
+    if (!hidden && !self.topToolbarEnabled){
         return;
     }
     
@@ -191,6 +202,10 @@
     }
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController];
+    
+    const BOOL translucent = self.documentViewController.hidesControlsOnTap;
+    navigationController.navigationBar.translucent = translucent;
+    self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     
     UIView *controllerView = navigationController.view;
     
@@ -737,13 +752,19 @@
 
 -(void)setTopToolbarEnabled:(BOOL)topToolbarEnabled
 {
+    self.documentViewController.topToolbarEnabled = topToolbarEnabled;
+    
     if (!topToolbarEnabled) {
+        self.documentViewController.hidesControlsOnTap = NO;
         self.documentViewController.controlsHidden = YES;
-        self.documentViewController.automaticallyHidesControls = NO;
     } else {
-        self.documentViewController.automaticallyHidesControls = YES;
+        self.documentViewController.hidesControlsOnTap = YES;
         self.documentViewController.controlsHidden = NO;
     }
+    const BOOL translucent = self.documentViewController.hidesControlsOnTap;
+    self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
+    self.documentViewController.navigationController.navigationBar.translucent = translucent;
+    
     _topToolbarEnabled = topToolbarEnabled;
 }
 
