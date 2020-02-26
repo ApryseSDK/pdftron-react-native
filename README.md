@@ -76,6 +76,12 @@
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.myapp">
+        
+		<uses-permission android:name="android.permission.INTERNET" />
+		<!-- Required to read and write documents from device storage -->
+	+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+		<!-- Required if you want to record audio annotations -->
+	+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 
       <application
         ...
