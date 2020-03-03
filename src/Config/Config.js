@@ -37,6 +37,7 @@ export default {
   Tools: {
     annotationEdit : 'AnnotationEdit',
     textSelect : 'TextSelect',
+    pan: 'Pan',
     annotationCreateSticky : 'AnnotationCreateSticky',
     annotationCreateFreeHand : 'AnnotationCreateFreeHand',
     annotationCreateTextHighlight : 'AnnotationCreateTextHighlight',
