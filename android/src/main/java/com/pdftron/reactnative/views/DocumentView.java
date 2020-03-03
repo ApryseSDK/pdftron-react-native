@@ -656,7 +656,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void flattenAnnotations(boolean formsOnly) throws PDFNetException {
+        // go back to pan tool first so it will commit currently typing text boxes
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl.getToolManager() instanceof ToolManager) {
+            ToolManager toolManager = (ToolManager) pdfViewCtrl.getToolManager();
+            toolManager.setTool(toolManager.createTool(ToolManager.ToolMode.PAN, toolManager.getTool()));
+        }
 
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
 
