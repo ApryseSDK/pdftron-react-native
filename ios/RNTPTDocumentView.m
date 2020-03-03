@@ -712,6 +712,8 @@
 
 - (void)flattenAnnotations:(BOOL)formsOnly
 {
+    [self.documentViewController.toolManager changeTool:[PTPanTool class]];
+    
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
