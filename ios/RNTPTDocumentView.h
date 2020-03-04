@@ -58,6 +58,8 @@
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
+@property (nonatomic) BOOL showSavedSignatures;
+
 @property (nonatomic, copy) RCTBubblingEventBlock onChange;
 
 @property (nonatomic, weak) id <RNTPTDocumentViewDelegate> delegate;
