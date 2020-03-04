@@ -295,6 +295,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [topToolbarEnabled](#toptoolbarenabled)
 - [bottomToolbarEnabled](#bottomtoolbarenabled)
 - [pageIndicatorEnabled](#pageindicatorenabled)
+- [showSavedSignatures](#showsavedsignatures)
 - [onAnnotationChanged](#onannotationchanged)
 
 ##### document
@@ -346,6 +347,8 @@ bool, optional
 ##### bottomToolbarEnabled
 bool, optional
 ##### pageIndicatorEnabled
+bool, optional
+##### showSavedSignatures
 bool, optional
 ##### onAnnotationChanged
 function, optional

@@ -875,6 +875,11 @@
     self.documentViewController.toolManager.annotationAuthor = annotationAuthor;
 }
 
+- (void)setShowSavedSignatures:(BOOL)showSavedSignatures
+{
+    self.documentViewController.toolManager.showDefaultSignature = showSavedSignatures;
+}
+
 - (void)navButtonClicked
 {
     if([self.delegate respondsToSelector:@selector(navButtonClicked:)]) {
