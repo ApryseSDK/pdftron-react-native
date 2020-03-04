@@ -137,6 +137,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationAuthor(author);
     }
 
+    @ReactProp(name = "showSavedSignatures")
+    public void setShowSavedSignatures(DocumentView documentView, boolean show) {
+        documentView.setShowSavedSignatures(show);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

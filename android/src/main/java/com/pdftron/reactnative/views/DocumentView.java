@@ -229,6 +229,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public void setShowSavedSignatures(boolean showSavedSignatures) {
+        mToolManagerBuilder = mToolManagerBuilder.setShowSavedSignatures(showSavedSignatures);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
