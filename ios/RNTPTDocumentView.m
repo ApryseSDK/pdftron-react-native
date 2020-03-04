@@ -512,6 +512,10 @@
     {
         toolClass = [PTTextSelectTool class];
     }
+    else if ( [toolMode isEqualToString:@"Pan"] )
+    {
+        toolClass = [PTPanTool class];
+    }
     else if ( [toolMode isEqualToString:@"AnnotationCreateTextHighlight"])
     {
         toolClass = [PTTextHighlightCreate class];
