@@ -748,6 +748,34 @@
     }];
 }
 
+- (void)setFlagForFields:(NSArray *)fields setFlag:(NSInteger)flag toValue:(BOOL)value
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+        
+        for (NSString * field in fields) {
+            PTFieldIterator * fieldItr = [doc GetFieldIteratorWithName:field];
+            for(; [fieldItr HasNext]; [fieldItr Next]) {
+                PTField * field = [fieldItr Current];
+                
+                [field SetFlag:(PTFieldFlag)flag value:value];
+            }
+        }
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+    
+    [pdfViewCtrl Update:YES];
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled

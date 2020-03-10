@@ -304,6 +304,16 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     }
 }
 
+- (void)setFlagForFieldsForDocumentViewTag:(NSNumber *)tag forFields:(NSArray *)fields setFlag:(NSInteger)flag toValue:(BOOL)value
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setFlagForFields:fields setFlag:flag toValue:value];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 #pragma mark - DocumentView attached/detached
 
 - (void)documentViewAttachedToWindow:(RNTPTDocumentView *)documentView

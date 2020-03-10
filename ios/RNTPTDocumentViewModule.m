@@ -119,5 +119,22 @@ RCT_REMAP_METHOD(saveDocument,
     }
 }
 
+RCT_REMAP_METHOD(setFlagForFields,
+                 setFlagForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+                 fields:(NSArray *)fields
+                 flag:(NSInteger)flag
+                 value:(BOOL)value
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setFlagForFieldsForDocumentViewTag:tag forFields:fields setFlag:flag toValue:value];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_flag_for_fields", @"Failed to set flag on fields", [self errorFromException:exception]);
+    }
+}
+
 @end
   

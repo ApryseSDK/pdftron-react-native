@@ -75,4 +75,6 @@
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
+- (void)setFlagForFields:(NSArray *)fields setFlag:(NSInteger)flag toValue:(BOOL)value;
+
 @end
