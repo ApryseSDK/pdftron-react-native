@@ -350,6 +350,9 @@ bool, optional
 bool, optional
 ##### showSavedSignatures
 bool, optional
+##### isBase64String
+bool, optional
+If true, `document` prop will be treated as a base64 string.
 ##### onAnnotationChanged
 function, optional
 
