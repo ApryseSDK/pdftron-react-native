@@ -757,13 +757,14 @@
         shouldUnlock = YES;
         
         PTPDFDoc *doc = [pdfViewCtrl GetDoc];
-        
-        for (NSString * field in fields) {
-            PTFieldIterator * fieldItr = [doc GetFieldIteratorWithName:field];
-            for(; [fieldItr HasNext]; [fieldItr Next]) {
+
+        for (NSString * fieldName in fields) {
+            PTFieldIterator * fieldItr = [doc GetFieldIteratorWithName:fieldName];
+            if([fieldItr HasNext]) {
                 PTField * field = [fieldItr Current];
-                
                 [field SetFlag:(PTFieldFlag)flag value:value];
+            } else {
+                NSLog(@"Unable to find field %@ to set flag", fieldName);
             }
         }
     }
