@@ -3,6 +3,7 @@ package com.pdftron.reactnative.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
@@ -11,21 +12,35 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.pdftron.pdf.utils.Utils;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class ReactUtils {
 
     private static final String TAG = ReactUtils.class.getName();
 
-    public static Uri getUri(Context context, String path) {
+    public static Uri getUri(Context context, String path, boolean isBase64) {
         if (context == null || path == null) {
             return null;
         }
         try {
+            if (isBase64) {
+                byte[] data = Base64.decode(path, Base64.DEFAULT);
+                File tempFile = File.createTempFile("tmp", ".pdf");
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(tempFile);
+                    IOUtils.write(data, fos);
+                    return Uri.fromFile(tempFile);
+                } finally {
+                    IOUtils.closeQuietly(fos);
+                }
+            }
             Uri fileUri = Uri.parse(path);
             if (ContentResolver.SCHEME_ANDROID_RESOURCE.equals(fileUri.getScheme())) {
                 String resNameWithExtension = fileUri.getLastPathSegment();

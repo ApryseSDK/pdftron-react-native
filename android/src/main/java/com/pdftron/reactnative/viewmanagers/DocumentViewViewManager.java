@@ -142,6 +142,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowSavedSignatures(show);
     }
 
+    @ReactProp(name = "isBase64String")
+    public void setIsBase64String(DocumentView documentView, boolean isBase64) {
+        documentView.setIsBase64String(isBase64);
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
