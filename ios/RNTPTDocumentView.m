@@ -221,15 +221,30 @@
     
     navigationController.navigationBarHidden = !self.topToolbarEnabled;
     
-    // Open a file URL.
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
-    if ([self.document containsString:@"://"]) {
-        fileURL = [NSURL URLWithString:self.document];
-    } else if ([self.document hasPrefix:@"/"]) {
-        fileURL = [NSURL fileURLWithPath:self.document];
+    if (![self isBase64String]) {
+        // Open a file URL.
+        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
+        if ([self.document containsString:@"://"]) {
+            fileURL = [NSURL URLWithString:self.document];
+        } else if ([self.document hasPrefix:@"/"]) {
+            fileURL = [NSURL fileURLWithPath:self.document];
+        }
+        
+        [self.documentViewController openDocumentWithURL:fileURL password:self.password];
+    } else {
+        NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
+        
+        PTPDFDoc *doc = nil;
+        @try {
+            doc = [[PTPDFDoc alloc] initWithBuf:data buf_size:data.length];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+            return;
+        }
+        
+        [self.documentViewController openDocumentWithPDFDoc:doc];
     }
-    
-    [self.documentViewController openDocumentWithURL:fileURL password:self.password];
 }
 
 - (void)unloadDocumentViewController
@@ -739,13 +754,28 @@
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
-    NSString *filePath = self.documentViewController.coordinatedDocument.fileURL.path;
-
-    [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
+    if (![self isBase64String]) {
+        NSString *filePath = self.documentViewController.coordinatedDocument.fileURL.path;
+        
+        [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
+            if (completionHandler) {
+                completionHandler((success) ? filePath : nil);
+            }
+        }];
+    } else {
+        __block NSString *base64String = nil;
+        __block BOOL success = NO;
+        NSError *error = nil;
+        [self.documentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            NSData *data = [doc SaveToBuf:0];
+            
+            base64String = [data base64EncodedStringWithOptions:0];
+            success = YES;
+        } error:&error];
         if (completionHandler) {
-            completionHandler((success) ? filePath : nil);
+            completionHandler((error == nil) ? base64String : nil);
         }
-    }];
+    }
 }
 
 #pragma mark - Viewer options

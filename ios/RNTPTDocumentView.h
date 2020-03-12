@@ -44,6 +44,7 @@
 
 @property NSString *password;
 @property NSString *document;
+@property (nonatomic, getter=isBase64String) BOOL base64String;
 @property (nonatomic) int initialPageNumber;
 @property (nonatomic) int pageNumber;
 @property BOOL showNavButton;

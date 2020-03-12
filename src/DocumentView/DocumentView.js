@@ -35,6 +35,7 @@ export default class DocumentView extends PureComponent {
     continuousAnnotationEditing: PropTypes.bool,
     annotationAuthor: PropTypes.string,
     showSavedSignatures: PropTypes.bool,
+    isBase64String: PropTypes.bool,
     ...ViewPropTypes,
   };
 
