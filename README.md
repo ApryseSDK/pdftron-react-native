@@ -296,6 +296,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [bottomToolbarEnabled](#bottomtoolbarenabled)
 - [pageIndicatorEnabled](#pageindicatorenabled)
 - [showSavedSignatures](#showsavedsignatures)
+- [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
 
 ##### document
