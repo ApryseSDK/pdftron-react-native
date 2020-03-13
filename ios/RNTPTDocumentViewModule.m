@@ -121,14 +121,14 @@ RCT_REMAP_METHOD(saveDocument,
 
 RCT_REMAP_METHOD(setFlagForFields,
                  setFlagForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
-                 fields:(NSArray *)fields
+                 fields:(NSArray<NSString *> *)fields
                  flag:(NSInteger)flag
                  value:(BOOL)value
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setFlagForFieldsForDocumentViewTag:tag forFields:fields setFlag:flag toValue:value];
+        [[self documentViewManager] setFlagForFieldsForDocumentViewTag:tag forFields:fields setFlag:(PTFieldFlag)flag toValue:value];
         resolve(nil);
     }
     @catch (NSException *exception) {

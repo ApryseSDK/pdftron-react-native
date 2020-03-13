@@ -748,7 +748,7 @@
     }];
 }
 
-- (void)setFlagForFields:(NSArray *)fields setFlag:(NSInteger)flag toValue:(BOOL)value
+- (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     BOOL shouldUnlock = NO;
