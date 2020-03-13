@@ -759,12 +759,15 @@
         PTPDFDoc *doc = [pdfViewCtrl GetDoc];
 
         for (NSString * fieldName in fields) {
-            PTFieldIterator * fieldItr = [doc GetFieldIteratorWithName:fieldName];
-            if([fieldItr HasNext]) {
+            PTFieldIterator * fieldItr = [doc GetFieldIterator];
+
+            // loop through full iterator in case multiple fields match name
+            for(; [fieldItr HasNext]; [fieldItr Next]) {
                 PTField * field = [fieldItr Current];
-                [field SetFlag:(PTFieldFlag)flag value:value];
-            } else {
-                NSLog(@"Unable to find field %@ to set flag", fieldName);
+
+                if([[field GetName] isEqualToString:fieldName]) {
+                    [field SetFlag:(PTFieldFlag)flag value:value];
+                }
             }
         }
     }
