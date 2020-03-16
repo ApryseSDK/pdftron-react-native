@@ -72,5 +72,9 @@ export default {
     FacingContinuous: 'FacingContinuous',
     FacingCover: 'FacingCover',
     FacingCoverContinuous: 'FacingCoverContinuous',
+  },
+  FieldFlags: {
+    ReadOnly: 0,
+    Required: 1
   }
 };
