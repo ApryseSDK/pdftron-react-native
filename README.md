@@ -393,6 +393,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [exportAnnotations](#exportannotations)
 - [flattenAnnotations](#flattenannotations)
 - [saveDocument](#savedocument)
+- [setFlagForFields](#setFlagForFields)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -467,6 +468,23 @@ Returns a Promise.
 this._viewer.saveDocument().then((filePath) => {
   console.log('saveDocument:', filePath);
 });
+```
+
+##### setFlagForFields
+Set a field flag value on one or more form fields.
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | list of field names for which the flag should be set
+flag | integer | flag to be set (see https://www.pdftron.com/api/ios/Enums/PTFieldFlag.html)
+value | bool | value to set for flag
+
+Returns a Promise.
+
+```js
+this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
 
 ## Contributing
