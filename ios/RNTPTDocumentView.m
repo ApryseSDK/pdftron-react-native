@@ -770,14 +770,14 @@
                 }
             }
         }
+
+        [pdfViewCtrl Update:YES];
     }
     @finally {
         if (shouldUnlock) {
             [pdfViewCtrl DocUnlock];
         }
     }
-    
-    [pdfViewCtrl Update:YES];
 }
 
 #pragma mark - Viewer options

@@ -715,6 +715,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     }
                 }
             }
+
+            pdfViewCtrl.update(true);
         } finally {
             if (shouldUnlock) {
                 pdfViewCtrl.docUnlock();
