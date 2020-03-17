@@ -116,6 +116,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setFlagForFields = (fields, flag, value) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

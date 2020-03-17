@@ -22,6 +22,8 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
+import com.pdftron.pdf.Field;
+import com.pdftron.pdf.FieldIterator;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
@@ -711,6 +713,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public int getPageCount() throws PDFNetException {
         return getPdfDoc().getPageCount();
+    }
+
+    public void setFlagForFields(ReadableArray fields, Integer flag, Boolean value) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            int fieldCount = fields.size();
+
+            for(int i = 0; i < fieldCount; i++) {
+                String fieldName = fields.getString(i);
+                if(fieldName == null) continue;
+
+                // loop through all fields looking for a matching name
+                // in case multiple form fields share the same name
+                FieldIterator itr = pdfDoc.getFieldIterator();
+                while(itr.hasNext()) {
+                    Field field = itr.next();
+                    if(field.getName().equals(fieldName)) {
+                        field.setFlag(flag, value);
+                    }
+                }
+            }
+
+            pdfViewCtrl.update(true);
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     public void setToolMode(String item) {
