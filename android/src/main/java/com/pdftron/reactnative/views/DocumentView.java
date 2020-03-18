@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,8 @@ import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
+import com.pdftron.pdf.controls.AnnotationToolbar;
+import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -424,6 +427,25 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
         super.onAttachedToWindow();
 
+        // since we are using this component as an individual component,
+        // we don't want to fit system window
+        View host = findViewById(R.id.pdfviewctrl_tab_host);
+        if (host != null) {
+            host.setFitsSystemWindows(false);
+        }
+        View tabContent = findViewById(R.id.realtabcontent);
+        if (tabContent != null) {
+            tabContent.setFitsSystemWindows(false);
+        }
+        View appBar = findViewById(R.id.app_bar_layout);
+        if (appBar != null) {
+            appBar.setFitsSystemWindows(false);
+        }
+        View annotToolbar = findViewById(R.id.annotationToolbar);
+        if (annotToolbar != null) {
+            annotToolbar.setFitsSystemWindows(false);
+        }
+
         if (!mTopToolbarEnabled) {
             mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
             mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
@@ -726,16 +748,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
             int fieldCount = fields.size();
 
-            for(int i = 0; i < fieldCount; i++) {
+            for (int i = 0; i < fieldCount; i++) {
                 String fieldName = fields.getString(i);
-                if(fieldName == null) continue;
+                if (fieldName == null) continue;
 
                 // loop through all fields looking for a matching name
                 // in case multiple form fields share the same name
                 FieldIterator itr = pdfDoc.getFieldIterator();
-                while(itr.hasNext()) {
+                while (itr.hasNext()) {
                     Field field = itr.next();
-                    if(field.getName().equals(fieldName)) {
+                    if (field.getName().equals(fieldName)) {
                         field.setFlag(flag, value);
                     }
                 }
