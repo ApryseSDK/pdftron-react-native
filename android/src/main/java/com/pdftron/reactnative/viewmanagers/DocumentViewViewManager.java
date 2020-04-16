@@ -162,6 +162,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setCurrentUserName(currentUserName);
     }
 
+    @ReactProp(name = "webViewerServerRoot")
+    public void setWebViewerServerRoot(DocumentView documentView, String wvsRoot) {
+        documentView.setWebViewerServerRoot(wvsRoot);
+    }
+
+    @ReactProp(name = "shareId")
+    public void setShareId(DocumentView documentView, String shareId) {
+        documentView.setShareId(shareId);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

@@ -25,6 +25,7 @@ import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
+import com.pdftron.collab.webviewerserver.BlackBoxConnection;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
@@ -96,6 +97,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private boolean mCollabEnabled;
     private String mCurrentUser;
     private String mCurrentUserName;
+
+    // collab wvs
+    private BlackBoxConnection mBlackBoxConnection;
+    private String mWebViewerServerRoot;
+    private String mShareId;
 
     public DocumentView(Context context) {
         super(context);
@@ -281,6 +287,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setCurrentUserName(String currentUserName) {
         mCurrentUserName = currentUserName;
+    }
+
+    public void setWebViewerServerRoot(String wvsRoot) {
+        mWebViewerServerRoot = wvsRoot;
+    }
+
+    public void setShareId(String shareId) {
+        mShareId = shareId;
     }
 
     private void disableElements(ReadableArray args) {
@@ -511,6 +525,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mTempFile != null && mTempFile.exists()) {
             mTempFile.delete();
         }
+
+        if (mBlackBoxConnection != null) {
+            mBlackBoxConnection.stop();
+        }
     }
 
     @Override
@@ -633,21 +651,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {
             CollabViewerTabHostFragment collabHost = (CollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment;
             mCollabManager = collabHost.getCollabManager();
-            if (mCollabManager != null && mCurrentUser != null) {
-                mCollabManager.setCurrentUser(mCurrentUser, mCurrentUserName);
-                mCollabManager.setCurrentDocument(mDocumentPath);
-                mCollabManager.setCollabManagerListener(new CollabManager.CollabManagerListener() {
-                    @Override
-                    public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
-                        if (mCollabManager != null) {
-                            WritableMap params = Arguments.createMap();
-                            params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
-                            params.putString(KEY_action, s);
-                            params.putString(KEY_xfdfCommand, mCollabManager.getLastXfdf());
-                            onReceiveNativeEvent(params);
+            if (mCollabManager != null) {
+                if (!Utils.isNullOrEmpty(mWebViewerServerRoot) && !Utils.isNullOrEmpty(mShareId)) {
+                    mBlackBoxConnection = new BlackBoxConnection();
+                    mBlackBoxConnection.setCollabManager(mCollabManager);
+                    mBlackBoxConnection.start(mWebViewerServerRoot, mDocumentPath, mShareId);
+                } else if (mCurrentUser != null) {
+                    mCollabManager.setCurrentUser(mCurrentUser, mCurrentUserName);
+                    mCollabManager.setCurrentDocument(mDocumentPath);
+                    mCollabManager.setCollabManagerListener(new CollabManager.CollabManagerListener() {
+                        @Override
+                        public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
+                            if (mCollabManager != null) {
+                                WritableMap params = Arguments.createMap();
+                                params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
+                                params.putString(KEY_action, s);
+                                params.putString(KEY_xfdfCommand, mCollabManager.getLastXfdf());
+                                onReceiveNativeEvent(params);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
