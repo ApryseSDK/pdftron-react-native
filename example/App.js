@@ -75,11 +75,14 @@ export default class App extends Component<Props> {
         <DocumentView
           ref={(c) => this._viewer = c}
           document={path}
+          collabEnabled={true}
+          currentUser={'mike'}
           showLeadingNavButton={true}
           leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
           onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
           onDocumentLoaded={this.onDocumentLoaded}
           onAnnotationChanged={this.onAnnotationChanged}
+          onSendXfdfCommand={this.onSendXfdfCommand}
           readOnly={false}
           disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.userBookmarkListButton]}
           disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
