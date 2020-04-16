@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
+  SafeAreaView,
+  StatusBar,
   PermissionsAndroid,
   BackHandler,
   Alert
@@ -59,24 +61,35 @@ export default class App extends Component<Props> {
     }
   }
 
+  onSendXfdfCommand = ({action, xfdfCommand}) => {
+    console.log('action', action);
+    console.log('xfdfCommand', xfdfCommand);
+  }
+
   render() {
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
-      <DocumentView
-        ref={(c) => this._viewer = c}
-        document={path}
-        showLeadingNavButton={true}
-        leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-        onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
-        onDocumentLoaded={this.onDocumentLoaded}
-        onAnnotationChanged={this.onAnnotationChanged}
-        readOnly={false}
-        disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.annotationListButton, Config.Buttons.userBookmarkListButton]}
-        disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
-        fitMode={Config.FitMode.FitPage}
-        layoutMode={Config.LayoutMode.Continuous}
-      />
+      <SafeAreaView style={styles.container}>
+        <StatusBar hidden={true} />
+        <DocumentView
+          ref={(c) => this._viewer = c}
+          document={path}
+          collabEnabled={true}
+          currentUser={'mike'}
+          showLeadingNavButton={true}
+          leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
+          onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+          onDocumentLoaded={this.onDocumentLoaded}
+          onAnnotationChanged={this.onAnnotationChanged}
+          onSendXfdfCommand={this.onSendXfdfCommand}
+          readOnly={false}
+          disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.userBookmarkListButton]}
+          disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+          fitMode={Config.FitMode.FitPage}
+          layoutMode={Config.LayoutMode.Continuous}
+        />
+      </SafeAreaView>
     );
   }
 }
@@ -84,8 +97,5 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   }
 });
