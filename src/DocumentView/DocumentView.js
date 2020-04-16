@@ -39,6 +39,7 @@ export default class DocumentView extends PureComponent {
     collabEnabled: PropTypes.bool,
     currentUser: PropTypes.string,
     currentUserName: PropTypes.string,
+    onExportAnnotationCommand: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -69,9 +70,9 @@ export default class DocumentView extends PureComponent {
       if (this.props.onDocumentError) {
         this.props.onDocumentError();
       }
-    } else if (event.nativeEvent.onSendXfdfCommand) {
-      if (this.props.onSendXfdfCommand) {
-        this.props.onSendXfdfCommand({
+    } else if (event.nativeEvent.onExportAnnotationCommand) {
+      if (this.props.onExportAnnotationCommand) {
+        this.props.onExportAnnotationCommand({
           'action': event.nativeEvent.action,
           'xfdfCommand': event.nativeEvent.xfdfCommand,
         });

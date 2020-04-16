@@ -62,7 +62,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_PAGE_CHANGED = "onPageChanged";
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
-    private static final String ON_SEND_XFDF_COMMAND = "onSendXfdfCommand";
+    private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -664,7 +664,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
                             if (mCollabManager != null) {
                                 WritableMap params = Arguments.createMap();
-                                params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
+                                params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
                                 params.putString(KEY_action, s);
                                 params.putString(KEY_xfdfCommand, mCollabManager.getLastXfdf());
                                 onReceiveNativeEvent(params);
