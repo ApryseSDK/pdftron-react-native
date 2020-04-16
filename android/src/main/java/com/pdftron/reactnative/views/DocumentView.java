@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.Arguments;
@@ -20,6 +21,10 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.pdftron.collab.db.entity.AnnotationEntity;
+import com.pdftron.collab.ui.viewer.CollabManager;
+import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
+import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
@@ -30,8 +35,7 @@ import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.AnnotationToolbar;
-import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
+import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -47,7 +51,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
+public class DocumentView extends DocumentViewNative {
 
     private static final String TAG = DocumentView.class.getSimpleName();
 
@@ -57,6 +61,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_PAGE_CHANGED = "onPageChanged";
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
+    private static final String ON_SEND_XFDF_COMMAND = "onSendXfdfCommand";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -70,6 +75,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_action_modify = "modify";
     private static final String KEY_action_delete = "delete";
     private static final String KEY_annotations = "annotations";
+    private static final String KEY_xfdfCommand = "xfdfCommand";
     // EVENTS END
 
     private String mDocumentPath;
@@ -84,6 +90,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private int mInitialPageNumber = -1;
 
     private boolean mTopToolbarEnabled = true;
+
+    // collab
+    private CollabManager mCollabManager;
+    private boolean mCollabEnabled;
+    private String mCurrentUser;
+    private String mCurrentUserName;
 
     public DocumentView(Context context) {
         super(context);
@@ -119,6 +131,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 .multiTabEnabled(false)
                 .showCloseTabOption(false)
                 .useSupportActionBar(false);
+    }
+
+    @Override
+    protected PdfViewCtrlTabHostFragment getViewer() {
+        if (mCollabEnabled) {
+            // Create the Fragment using CollabViewerBuilder
+            return CollabViewerBuilder.withUri(mDocumentUri, mPassword)
+                    .usingConfig(mViewerConfig)
+                    .build(getContext());
+            // sgong todo add missing param after updating collab builder
+//                            .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
+//                            .usingCustomHeaders(mCustomHeaders);
+        }
+        return super.getViewer();
     }
 
     public void setDocument(String path) {
@@ -245,6 +271,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mIsBase64 = isBase64String;
     }
 
+    public void setCollabEnabled(boolean collabEnabled) {
+        mCollabEnabled = collabEnabled;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        mCurrentUser = currentUser;
+    }
+
+    public void setCurrentUserName(String currentUserName) {
+        mCurrentUserName = currentUserName;
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -281,7 +319,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         .showPrintOption(false)
                         .showCloseTabOption(false)
                         .showSaveCopyOption(false)
-                        .showFormToolbarOption(false);
+                        .showFormToolbarOption(false)
+                        .showFillAndSignToolbarOption(false)
+                        .showEditMenuOption(false)
+                        .showReflowOption(false);
             } else if ("outlineListButton".equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
             } else if ("annotationListButton".equals(item)) {
@@ -587,6 +628,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
+
+        // collab
+        if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {
+            CollabViewerTabHostFragment collabHost = (CollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment;
+            mCollabManager = collabHost.getCollabManager();
+            if (mCollabManager != null && mCurrentUser != null) {
+                mCollabManager.setCurrentUser(mCurrentUser, mCurrentUserName);
+                mCollabManager.setCurrentDocument(mDocumentPath);
+                mCollabManager.setCollabManagerListener(new CollabManager.CollabManagerListener() {
+                    @Override
+                    public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
+                        WritableMap params = Arguments.createMap();
+                        params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
+                        params.putString(KEY_action, s);
+                        params.putString(KEY_xfdfCommand, "todo");
+                        onReceiveNativeEvent(params);
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -617,6 +678,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             error = mPdfViewCtrlTabHostFragment.getString(messageId);
         }
         onReceiveNativeEvent(ON_DOCUMENT_ERROR, error);
+    }
+
+    public void importAnnotationCommand(String xfdfCommand, boolean initialLoad) throws PDFNetException {
+        if (mCollabManager != null) {
+            mCollabManager.importAnnotationCommand(xfdfCommand, initialLoad);
+        } else {
+            throw new PDFNetException("", 0L, TAG, "importAnnotationCommand", "set collabEnabled to true is required.");
+        }
     }
 
     public void importAnnotations(String xfdf) throws PDFNetException {

@@ -36,6 +36,9 @@ export default class DocumentView extends PureComponent {
     annotationAuthor: PropTypes.string,
     showSavedSignatures: PropTypes.bool,
     isBase64String: PropTypes.bool,
+    collabEnabled: PropTypes.bool,
+    currentUser: PropTypes.string,
+    currentUserName: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -66,7 +69,14 @@ export default class DocumentView extends PureComponent {
       if (this.props.onDocumentError) {
         this.props.onDocumentError();
       }
-    } 
+    } else if (event.nativeEvent.onSendXfdfCommand) {
+      if (this.props.onSendXfdfCommand) {
+        this.props.onSendXfdfCommand({
+          'action': event.nativeEvent.action,
+          'xfdfCommand': event.nativeEvent.xfdfCommand,
+        });
+      }
+    }
   }
 
   setToolMode = (toolMode) => {

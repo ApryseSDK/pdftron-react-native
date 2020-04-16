@@ -26,6 +26,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void importAnnotationCommand(final int tag, final String xfdfCommand, final boolean initialLoad, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.importAnnotationCommand(tag, xfdfCommand, initialLoad);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void importAnnotations(final int tag, final String xfdf, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

@@ -147,6 +147,30 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setIsBase64String(isBase64);
     }
 
+    @ReactProp(name = "collabEnabled")
+    public void setCollabEnabled(DocumentView documentView, boolean collabEnabled) {
+        documentView.setCollabEnabled(collabEnabled);
+    }
+
+    @ReactProp(name = "currentUser")
+    public void setCurrentUser(DocumentView documentView, String currentUser) {
+        documentView.setCurrentUser(currentUser);
+    }
+
+    @ReactProp(name = "currentUserName")
+    public void setCurrentUserName(DocumentView documentView, String currentUserName) {
+        documentView.setCurrentUserName(currentUserName);
+    }
+
+    public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.importAnnotationCommand(xfdfCommand, initialLoad);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "importAnnotationCommand", "set collabEnabled to true is required.");
+        }
+    }
+
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
