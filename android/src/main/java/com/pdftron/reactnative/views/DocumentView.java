@@ -51,7 +51,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class DocumentView extends DocumentViewNative {
+public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String TAG = DocumentView.class.getSimpleName();
 
@@ -639,11 +639,13 @@ public class DocumentView extends DocumentViewNative {
                 mCollabManager.setCollabManagerListener(new CollabManager.CollabManagerListener() {
                     @Override
                     public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
-                        WritableMap params = Arguments.createMap();
-                        params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
-                        params.putString(KEY_action, s);
-                        params.putString(KEY_xfdfCommand, "todo");
-                        onReceiveNativeEvent(params);
+                        if (mCollabManager != null) {
+                            WritableMap params = Arguments.createMap();
+                            params.putString(ON_SEND_XFDF_COMMAND, ON_SEND_XFDF_COMMAND);
+                            params.putString(KEY_action, s);
+                            params.putString(KEY_xfdfCommand, mCollabManager.getLastXfdf());
+                            onReceiveNativeEvent(params);
+                        }
                     }
                 });
             }
