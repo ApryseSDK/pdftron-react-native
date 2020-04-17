@@ -398,6 +398,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [flattenAnnotations](#flattenannotations)
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
+- [setValueForFields](#setValueForFields)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -490,6 +491,29 @@ Returns a Promise.
 ```js
 this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
+
+##### setValueForFields
+Set field values on one or more form fields.
+
+Perameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldsMap | object | map of field names and values which should be set
+
+Returns a Promise.
+
+```js
+this._viewer.setFlagForFields({
+  'textField1': 'Test',
+  'textField2': 1234,
+  'checkboxField1': true,
+  'checkboxField2': false,
+  'radioButton1': 'Yes',
+  'radioButton2': 'No'
+});
+```
+
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
