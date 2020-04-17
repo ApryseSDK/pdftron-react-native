@@ -478,7 +478,7 @@ this._viewer.saveDocument().then((filePath) => {
 ##### setFlagForFields
 Set a field flag value on one or more form fields.
 
-Perameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -495,7 +495,7 @@ this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.Rea
 ##### setValueForFields
 Set field values on one or more form fields.
 
-Perameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -504,7 +504,7 @@ fieldsMap | object | map of field names and values which should be set
 Returns a Promise.
 
 ```js
-this._viewer.setFlagForFields({
+this._viewer.setValueForFields({
   'textField1': 'Test',
   'textField2': 1234,
   'checkboxField1': true,
