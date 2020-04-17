@@ -210,6 +210,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setValueForFields(int tag, ReadableMap map) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setValueForFields(map);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setValueForFields", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
