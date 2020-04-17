@@ -78,4 +78,6 @@
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
+- (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
+
 @end

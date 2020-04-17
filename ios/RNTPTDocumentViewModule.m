@@ -136,5 +136,20 @@ RCT_REMAP_METHOD(setFlagForFields,
     }
 }
 
+RCT_REMAP_METHOD(setValueForFields,
+                 setValueForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+                 map:(NSDictionary<NSString *, id> *)map
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setValueForFieldsForDocumentViewTag:tag map:map];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+    }
+}
+
 @end
   
