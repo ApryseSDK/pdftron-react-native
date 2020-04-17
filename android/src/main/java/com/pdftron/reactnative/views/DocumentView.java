@@ -10,12 +10,14 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -27,11 +29,10 @@ import com.pdftron.pdf.Field;
 import com.pdftron.pdf.FieldIterator;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
+import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.AnnotationToolbar;
-import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -735,6 +736,78 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public int getPageCount() throws PDFNetException {
         return getPdfDoc().getPageCount();
+    }
+
+    public void setValueForFields(ReadableMap readableMap) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String fieldName = iterator.nextKey();
+
+                if (fieldName == null) continue;
+
+                // loop through all fields looking for a matching name
+                // in case multiple form fields share the same name
+                FieldIterator itr = pdfDoc.getFieldIterator();
+                while (itr.hasNext()) {
+                    Field field = itr.next();
+                    if (field.getName().equals(fieldName)) {
+                        setFieldValue(field, fieldName, readableMap);
+                    }
+                }
+            }
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
+    }
+
+    // write lock required around this method
+    private void setFieldValue(@NonNull Field field, @NonNull String fieldName, @NonNull ReadableMap readableMap) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        int fieldType = field.getType();
+        switch (readableMap.getType(fieldName)) {
+            case Boolean: {
+                boolean fieldValue = readableMap.getBoolean(fieldName);
+                if (Field.e_check == fieldType) {
+                    ViewChangeCollection view_change = field.setValue(fieldValue);
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                } else if (Field.e_radio == fieldType) {
+                    // radio button has the same name for all in the same group
+                    
+                }
+            }
+            break;
+            case Number: {
+                if (Field.e_text == fieldType) {
+                    double fieldValue = readableMap.getDouble(fieldName);
+                    ViewChangeCollection view_change = field.setValue(String.valueOf(fieldValue));
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                }
+            }
+            break;
+            case String: {
+                String fieldValue = readableMap.getString(fieldName);
+                if (fieldValue != null &&
+                        Field.e_text == fieldType) {
+                    ViewChangeCollection view_change = field.setValue(fieldValue);
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                }
+            }
+            break;
+            case Null:
+            case Map:
+            case Array:
+                break;
+        }
     }
 
     public void setFlagForFields(ReadableArray fields, Integer flag, Boolean value) throws PDFNetException {

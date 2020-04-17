@@ -128,4 +128,19 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
             }
         });
     }
+
+    @ReactMethod
+    public void setValueForFields(final int tag, final ReadableMap map, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setValueForFields(tag, map);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
 }
