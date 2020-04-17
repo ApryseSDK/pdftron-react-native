@@ -780,9 +780,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 if (Field.e_check == fieldType) {
                     ViewChangeCollection view_change = field.setValue(fieldValue);
                     pdfViewCtrl.refreshAndUpdate(view_change);
-                } else if (Field.e_radio == fieldType) {
-                    // radio button has the same name for all in the same group
-                    
                 }
             }
             break;
@@ -797,7 +794,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             case String: {
                 String fieldValue = readableMap.getString(fieldName);
                 if (fieldValue != null &&
-                        Field.e_text == fieldType) {
+                        (Field.e_text == fieldType || Field.e_radio == fieldType)) {
                     ViewChangeCollection view_change = field.setValue(fieldValue);
                     pdfViewCtrl.refreshAndUpdate(view_change);
                 }
