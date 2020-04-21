@@ -787,17 +787,11 @@
         shouldUnlock = YES;
         
         PTPDFDoc *doc = [pdfViewCtrl GetDoc];
-
-        for (NSString * fieldName in fields) {
-            PTFieldIterator * fieldItr = [doc GetFieldIterator];
-
-            // loop through full iterator in case multiple fields match name
-            for(; [fieldItr HasNext]; [fieldItr Next]) {
-                PTField * field = [fieldItr Current];
-
-                if([[field GetName] isEqualToString:fieldName]) {
-                    [field SetFlag:(PTFieldFlag)flag value:value];
-                }
+        
+        for (NSString *fieldName in fields) {
+            PTField *field = [doc GetField:fieldName];
+            if ([field IsValid]) {
+                [field SetFlag:flag value:value];
             }
         }
 
@@ -821,14 +815,10 @@
         PTPDFDoc *doc = [pdfViewCtrl GetDoc];
         
         for (NSString *fieldName in map) {
-            // loop through full iterator in case multiple fields match name
-            for (PTFieldIterator *fieldItr = [doc GetFieldIterator]; [fieldItr HasNext]; [fieldItr Next]) {
-                PTField *field = [fieldItr Current];
-                
-                if ([[field GetName] isEqualToString:fieldName]) {
-                    id value = map[fieldName];
-                    [self setFieldValue:field value:value];
-                }
+            PTField *field = [doc GetField:fieldName];
+            if ([field IsValid]) {
+                id value = map[fieldName];
+                [self setFieldValue:field value:value];
             }
         }
     }
