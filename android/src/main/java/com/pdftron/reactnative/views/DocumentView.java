@@ -84,6 +84,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private int mInitialPageNumber = -1;
 
     private boolean mTopToolbarEnabled = true;
+    private boolean mPadStatusBar;
 
     public DocumentView(Context context) {
         super(context);
@@ -220,6 +221,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mode != null && context != null) {
             PdfViewCtrlSettingsManager.updateViewMode(context, mode);
         }
+    }
+
+    public void setPadStatusBar(boolean padStatusBar) {
+        mPadStatusBar = padStatusBar;
     }
 
     public void setContinuousAnnotationEditing(boolean contEditing) {
@@ -428,22 +433,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         super.onAttachedToWindow();
 
         // since we are using this component as an individual component,
-        // we don't want to fit system window
-        View host = findViewById(R.id.pdfviewctrl_tab_host);
-        if (host != null) {
-            host.setFitsSystemWindows(false);
-        }
-        View tabContent = findViewById(R.id.realtabcontent);
-        if (tabContent != null) {
-            tabContent.setFitsSystemWindows(false);
-        }
-        View appBar = findViewById(R.id.app_bar_layout);
-        if (appBar != null) {
-            appBar.setFitsSystemWindows(false);
-        }
-        View annotToolbar = findViewById(R.id.annotationToolbar);
-        if (annotToolbar != null) {
-            annotToolbar.setFitsSystemWindows(false);
+        // we don't want to fit system window, unless user specifies
+        if (!mPadStatusBar) {
+            View host = findViewById(R.id.pdfviewctrl_tab_host);
+            if (host != null) {
+                host.setFitsSystemWindows(false);
+            }
+            View tabContent = findViewById(R.id.realtabcontent);
+            if (tabContent != null) {
+                tabContent.setFitsSystemWindows(false);
+            }
+            View appBar = findViewById(R.id.app_bar_layout);
+            if (appBar != null) {
+                appBar.setFitsSystemWindows(false);
+            }
+            View annotToolbar = findViewById(R.id.annotationToolbar);
+            if (annotToolbar != null) {
+                annotToolbar.setFitsSystemWindows(false);
+            }
         }
 
         if (!mTopToolbarEnabled) {

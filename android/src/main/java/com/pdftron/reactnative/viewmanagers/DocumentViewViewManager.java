@@ -127,6 +127,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setLayoutMode(layoutMode);
     }
 
+    @ReactProp(name = "padStatusBar")
+    public void setPadStatusBar(DocumentView documentView, boolean padStatusBar) {
+        documentView.setPadStatusBar(padStatusBar);
+    }
+
     @ReactProp(name = "continuousAnnotationEditing")
     public void setContinuousAnnotationEditing(DocumentView documentView, boolean contEditing) {
         documentView.setContinuousAnnotationEditing(contEditing);
