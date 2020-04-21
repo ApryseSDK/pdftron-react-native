@@ -26,7 +26,6 @@ import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.Field;
-import com.pdftron.pdf.FieldIterator;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.ViewChangeCollection;
@@ -755,12 +754,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
                 // loop through all fields looking for a matching name
                 // in case multiple form fields share the same name
-                FieldIterator itr = pdfDoc.getFieldIterator();
-                while (itr.hasNext()) {
-                    Field field = itr.next();
-                    if (field.getName().equals(fieldName)) {
-                        setFieldValue(field, fieldName, readableMap);
-                    }
+                Field field = pdfDoc.getField(fieldName);
+                if (field != null && field.isValid()) {
+                    setFieldValue(field, fieldName, readableMap);
                 }
             }
         } finally {
@@ -822,14 +818,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 String fieldName = fields.getString(i);
                 if (fieldName == null) continue;
 
-                // loop through all fields looking for a matching name
-                // in case multiple form fields share the same name
-                FieldIterator itr = pdfDoc.getFieldIterator();
-                while (itr.hasNext()) {
-                    Field field = itr.next();
-                    if (field.getName().equals(fieldName)) {
-                        field.setFlag(flag, value);
-                    }
+                Field field = pdfDoc.getField(fieldName);
+                if (field != null && field.isValid()) {
+                    field.setFlag(flag, value);
                 }
             }
 
