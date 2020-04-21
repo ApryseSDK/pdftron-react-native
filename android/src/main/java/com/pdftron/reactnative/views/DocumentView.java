@@ -10,8 +10,8 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.Arguments;
