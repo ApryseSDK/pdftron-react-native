@@ -354,6 +354,9 @@ bool, optional
 ##### isBase64String
 bool, optional
 If true, `document` prop will be treated as a base64 string.
+##### padStatusBar
+bool, optional, android only
+If true, the viewer will add padding to take account of status bar. Default to false.
 ##### onAnnotationChanged
 function, optional
 
@@ -398,6 +401,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [flattenAnnotations](#flattenannotations)
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
+- [setValueForFields](#setValueForFields)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -477,7 +481,7 @@ this._viewer.saveDocument().then((filePath) => {
 ##### setFlagForFields
 Set a field flag value on one or more form fields.
 
-Perameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -490,6 +494,29 @@ Returns a Promise.
 ```js
 this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
+
+##### setValueForFields
+Set field values on one or more form fields.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldsMap | object | map of field names and values which should be set
+
+Returns a Promise.
+
+```js
+this._viewer.setValueForFields({
+  'textField1': 'Test',
+  'textField2': 1234,
+  'checkboxField1': true,
+  'checkboxField2': false,
+  'radioButton1': 'Yes',
+  'radioButton2': 'No'
+});
+```
+
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

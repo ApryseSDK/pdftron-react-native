@@ -787,17 +787,11 @@
         shouldUnlock = YES;
         
         PTPDFDoc *doc = [pdfViewCtrl GetDoc];
-
-        for (NSString * fieldName in fields) {
-            PTFieldIterator * fieldItr = [doc GetFieldIterator];
-
-            // loop through full iterator in case multiple fields match name
-            for(; [fieldItr HasNext]; [fieldItr Next]) {
-                PTField * field = [fieldItr Current];
-
-                if([[field GetName] isEqualToString:fieldName]) {
-                    [field SetFlag:(PTFieldFlag)flag value:value];
-                }
+        
+        for (NSString *fieldName in fields) {
+            PTField *field = [doc GetField:fieldName];
+            if ([field IsValid]) {
+                [field SetFlag:flag value:value];
             }
         }
 
@@ -806,6 +800,66 @@
     @finally {
         if (shouldUnlock) {
             [pdfViewCtrl DocUnlock];
+        }
+    }
+}
+
+- (void)setValueForFields:(NSDictionary<NSString *, id> *)map
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+        
+        for (NSString *fieldName in map) {
+            PTField *field = [doc GetField:fieldName];
+            if ([field IsValid]) {
+                id value = map[fieldName];
+                [self setFieldValue:field value:value];
+            }
+        }
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+}
+
+// write-lock acquired around this method
+- (void)setFieldValue:(PTField *)field value:(id)value
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+
+    const PTFieldType fieldType = [field GetType];
+    
+    // boolean or number
+    if ([value isKindOfClass:[NSNumber class]]) {
+        NSNumber *numberValue = (NSNumber *)value;
+        
+        if (fieldType == e_ptcheck) {
+            const BOOL fieldValue = numberValue.boolValue;
+            PTViewChangeCollection *changeCollection = [field SetValueWithBool:fieldValue];
+            [pdfViewCtrl RefreshAndUpdate:changeCollection];
+        }
+        else if (fieldType == e_pttext) {
+            NSString *fieldValue = numberValue.stringValue;
+            
+            PTViewChangeCollection *changeCollection = [field SetValueWithString:fieldValue];
+            [pdfViewCtrl RefreshAndUpdate:changeCollection];
+        }
+    }
+    // string
+    else if ([value isKindOfClass:[NSString class]]) {
+        NSString *fieldValue = (NSString *)value;
+        
+        if (fieldValue &&
+            (fieldType == e_pttext || fieldType == e_ptradio)) {
+            PTViewChangeCollection *changeCollection = [field SetValueWithString:fieldValue];
+            [pdfViewCtrl RefreshAndUpdate:changeCollection];
         }
     }
 }

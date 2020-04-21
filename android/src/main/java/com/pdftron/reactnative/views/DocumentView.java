@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -30,9 +32,9 @@ import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.Field;
-import com.pdftron.pdf.FieldIterator;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
+import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
@@ -91,6 +93,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private int mInitialPageNumber = -1;
 
     private boolean mTopToolbarEnabled = true;
+    private boolean mPadStatusBar;
 
     // collab
     private CollabManager mCollabManager;
@@ -252,6 +255,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mode != null && context != null) {
             PdfViewCtrlSettingsManager.updateViewMode(context, mode);
         }
+    }
+
+    public void setPadStatusBar(boolean padStatusBar) {
+        mPadStatusBar = padStatusBar;
     }
 
     public void setContinuousAnnotationEditing(boolean contEditing) {
@@ -483,22 +490,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         super.onAttachedToWindow();
 
         // since we are using this component as an individual component,
-        // we don't want to fit system window
-        View host = findViewById(R.id.pdfviewctrl_tab_host);
-        if (host != null) {
-            host.setFitsSystemWindows(false);
-        }
-        View tabContent = findViewById(R.id.realtabcontent);
-        if (tabContent != null) {
-            tabContent.setFitsSystemWindows(false);
-        }
-        View appBar = findViewById(R.id.app_bar_layout);
-        if (appBar != null) {
-            appBar.setFitsSystemWindows(false);
-        }
-        View annotToolbar = findViewById(R.id.annotationToolbar);
-        if (annotToolbar != null) {
-            annotToolbar.setFitsSystemWindows(false);
+        // we don't want to fit system window, unless user specifies
+        if (!mPadStatusBar) {
+            View host = findViewById(R.id.pdfviewctrl_tab_host);
+            if (host != null) {
+                host.setFitsSystemWindows(false);
+            }
+            View tabContent = findViewById(R.id.realtabcontent);
+            if (tabContent != null) {
+                tabContent.setFitsSystemWindows(false);
+            }
+            View appBar = findViewById(R.id.app_bar_layout);
+            if (appBar != null) {
+                appBar.setFitsSystemWindows(false);
+            }
+            View annotToolbar = findViewById(R.id.annotationToolbar);
+            if (annotToolbar != null) {
+                annotToolbar.setFitsSystemWindows(false);
+            }
         }
 
         if (!mTopToolbarEnabled) {
@@ -832,6 +841,72 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return getPdfDoc().getPageCount();
     }
 
+    public void setValueForFields(ReadableMap readableMap) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+            while (iterator.hasNextKey()) {
+                String fieldName = iterator.nextKey();
+
+                if (fieldName == null) continue;
+
+                // loop through all fields looking for a matching name
+                // in case multiple form fields share the same name
+                Field field = pdfDoc.getField(fieldName);
+                if (field != null && field.isValid()) {
+                    setFieldValue(field, fieldName, readableMap);
+                }
+            }
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
+    }
+
+    // write lock required around this method
+    private void setFieldValue(@NonNull Field field, @NonNull String fieldName, @NonNull ReadableMap readableMap) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        int fieldType = field.getType();
+        switch (readableMap.getType(fieldName)) {
+            case Boolean: {
+                boolean fieldValue = readableMap.getBoolean(fieldName);
+                if (Field.e_check == fieldType) {
+                    ViewChangeCollection view_change = field.setValue(fieldValue);
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                }
+            }
+            break;
+            case Number: {
+                if (Field.e_text == fieldType) {
+                    double fieldValue = readableMap.getDouble(fieldName);
+                    ViewChangeCollection view_change = field.setValue(String.valueOf(fieldValue));
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                }
+            }
+            break;
+            case String: {
+                String fieldValue = readableMap.getString(fieldName);
+                if (fieldValue != null &&
+                        (Field.e_text == fieldType || Field.e_radio == fieldType)) {
+                    ViewChangeCollection view_change = field.setValue(fieldValue);
+                    pdfViewCtrl.refreshAndUpdate(view_change);
+                }
+            }
+            break;
+            case Null:
+            case Map:
+            case Array:
+                break;
+        }
+    }
+
     public void setFlagForFields(ReadableArray fields, Integer flag, Boolean value) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -847,14 +922,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 String fieldName = fields.getString(i);
                 if (fieldName == null) continue;
 
-                // loop through all fields looking for a matching name
-                // in case multiple form fields share the same name
-                FieldIterator itr = pdfDoc.getFieldIterator();
-                while (itr.hasNext()) {
-                    Field field = itr.next();
-                    if (field.getName().equals(fieldName)) {
-                        field.setFlag(flag, value);
-                    }
+                Field field = pdfDoc.getField(fieldName);
+                if (field != null && field.isValid()) {
+                    field.setFlag(flag, value);
                 }
             }
 

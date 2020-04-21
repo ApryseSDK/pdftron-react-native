@@ -127,6 +127,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setLayoutMode(layoutMode);
     }
 
+    @ReactProp(name = "padStatusBar")
+    public void setPadStatusBar(DocumentView documentView, boolean padStatusBar) {
+        documentView.setPadStatusBar(padStatusBar);
+    }
+
     @ReactProp(name = "continuousAnnotationEditing")
     public void setContinuousAnnotationEditing(DocumentView documentView, boolean contEditing) {
         documentView.setContinuousAnnotationEditing(contEditing);
@@ -241,6 +246,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setFlagForFields(fields, flag, value);
         } else {
             throw new PDFNetException("", 0L, getName(), "setFlagForFields", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setValueForFields(int tag, ReadableMap map) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setValueForFields(map);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setValueForFields", "Unable to find DocumentView.");
         }
     }
 

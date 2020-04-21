@@ -32,6 +32,7 @@ export default class DocumentView extends PureComponent {
     readOnly: PropTypes.bool,
     fitMode: PropTypes.string,
     layoutMode: PropTypes.string,
+    padStatusBar: PropTypes.bool,
     continuousAnnotationEditing: PropTypes.bool,
     annotationAuthor: PropTypes.string,
     showSavedSignatures: PropTypes.bool,
@@ -143,6 +144,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
+    }
+    return Promise.resolve();
+  }
+
+  setValueForFields = (fieldsMap) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.setValueForFields(tag, fieldsMap);
     }
     return Promise.resolve();
   }
