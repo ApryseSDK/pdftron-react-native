@@ -752,6 +752,8 @@
     [pdfViewCtrl Update:YES];
 }
 
+#pragma mark - Saving
+
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
     if (![self isBase64String]) {
@@ -777,6 +779,8 @@
         }
     }
 }
+
+#pragma mark - Fields
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
 {
@@ -861,6 +865,18 @@
             PTViewChangeCollection *changeCollection = [field SetValueWithString:fieldValue];
             [pdfViewCtrl RefreshAndUpdate:changeCollection];
         }
+    }
+}
+
+#pragma mark - Collaboration
+
+- (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
+{
+    if (self.collabManager) {
+        [self.collabManager importAnnotationsWithXFDFCommand:xfdfCommand
+                                                   isInitial:initialLoad];
+    } else {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"set collabEnabled to true is required" userInfo:nil];
     }
 }
 

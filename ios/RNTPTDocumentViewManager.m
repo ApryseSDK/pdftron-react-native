@@ -186,6 +186,27 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.collabEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(currentUser, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.currentUser = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.currentUserName = [RCTConvert NSString:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -272,6 +293,16 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;
+    }
+}
+
+- (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView importAnnotationCommand:xfdfCommand initialLoad:initialLoad];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
 

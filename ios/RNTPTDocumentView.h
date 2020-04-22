@@ -9,6 +9,8 @@
 #import <Tools/Tools.h>
 #import <React/RCTComponent.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -18,7 +20,7 @@
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
-- (void)documentError:(RNTPTDocumentView *)sender error:(NSString *)error;
+- (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
@@ -30,7 +32,7 @@
 
 @interface RNTPTDocumentView : UIView
 
-@property (nonatomic, readonly) RNTPTDocumentViewController *documentViewController;
+@property (nonatomic, readonly, nullable) RNTPTDocumentViewController *documentViewController;
 
 - (void)setToolMode:(NSString *)toolMode;
 
@@ -42,13 +44,13 @@
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 
-@property NSString *password;
-@property NSString *document;
+@property (nonatomic, copy, nullable) NSString *password;
+@property (nonatomic, copy, nullable) NSString *document;
 @property (nonatomic, getter=isBase64String) BOOL base64String;
 @property (nonatomic) int initialPageNumber;
 @property (nonatomic) int pageNumber;
-@property BOOL showNavButton;
-@property NSString *navButtonPath;
+@property (nonatomic, assign) BOOL showNavButton;
+@property (nonatomic, copy, nullable) NSString *navButtonPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
@@ -61,15 +63,24 @@
 
 @property (nonatomic) BOOL showSavedSignatures;
 
-@property (nonatomic, copy) RCTBubblingEventBlock onChange;
+@property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
-@property (nonatomic, weak) id <RNTPTDocumentViewDelegate> delegate;
+@property (nonatomic, copy, nullable) NSString *currentUser;
 
+@property (nonatomic, copy, nullable) NSString *currentUserName;
 
--(void)disableElements:(NSArray<NSString*>*)disabledElements;
--(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value;
+@property (nonatomic, strong, nullable) PTCollaborationManager *collabManager;
 
-- (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
+@property (nonatomic, copy, nullable) RCTBubblingEventBlock onChange;
+
+@property (nonatomic, weak, nullable) id <RNTPTDocumentViewDelegate> delegate;
+
+#pragma mark - Methods
+
+- (void)disableElements:(NSArray<NSString *> *)disabledElements;
+- (void)setToolsPermission:(NSArray<NSString *> *) stringsArray toValue:(BOOL)value;
+
+- (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
@@ -80,4 +91,8 @@
 
 - (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
 
+- (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
 @end
+
+NS_ASSUME_NONNULL_END
