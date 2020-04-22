@@ -148,10 +148,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             // Create the Fragment using CollabViewerBuilder
             return CollabViewerBuilder.withUri(mDocumentUri, mPassword)
                     .usingConfig(mViewerConfig)
+                    .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
+                    .usingCustomHeaders(mCustomHeaders)
                     .build(getContext());
-            // sgong todo add missing param after updating collab builder
-//                            .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
-//                            .usingCustomHeaders(mCustomHeaders);
         }
         return super.getViewer();
     }
