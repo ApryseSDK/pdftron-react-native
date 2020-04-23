@@ -62,12 +62,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     private static final String ON_PAGE_CHANGED = "onPageChanged";
+    private static final String ON_ZOOM_CHANGED = "onZoomChanged";
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
+
+    private static final String ZOOM_KEY = "zoom";
 
     private static final String KEY_annotList = "annotList";
     private static final String KEY_annotId = "id";
@@ -523,6 +526,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     protected void onDetachedFromWindow() {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
+            getPdfViewCtrl().removeOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
@@ -571,6 +575,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 params.putInt(PAGE_CURRENT_KEY, cur_page);
                 onReceiveNativeEvent(params);
             }
+        }
+    };
+
+    private PDFViewCtrl.OnCanvasSizeChangeListener mOnCanvasSizeChangeListener = new PDFViewCtrl.OnCanvasSizeChangeListener() {
+        @Override
+        public void onCanvasSizeChanged() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_ZOOM_CHANGED, ON_ZOOM_CHANGED);
+            params.putDouble(ZOOM_KEY, getPdfViewCtrl().getZoom());
+            onReceiveNativeEvent(params);
         }
     };
 
@@ -654,6 +668,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
+        getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
 
