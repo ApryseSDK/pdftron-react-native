@@ -335,6 +335,8 @@ number, optional
 number, optional
 ##### onPageChanged
 function, optional
+##### onZoomChanged
+function, optional
 
 Perameters:
 

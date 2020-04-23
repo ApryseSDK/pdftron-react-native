@@ -61,6 +61,10 @@ export default class App extends Component<Props> {
     // }
   }
 
+  onZoomChanged = ({zoom}) => {
+    console.log('zoom', zoom);
+  }
+
   onExportAnnotationCommand = ({action, xfdfCommand}) => {
     console.log('action', action);
     console.log('xfdfCommand', xfdfCommand);
@@ -70,26 +74,25 @@ export default class App extends Component<Props> {
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/Report_2011.pdf";
 
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar hidden={true} />
-        <DocumentView
+      <DocumentView
           ref={(c) => this._viewer = c}
           document={path}
           collabEnabled={true}
           shareId={'NXl2UI0prfTp'}
           webViewerServerRoot={'https://demo.pdftron.com/'}
+          padStatusBar={true}
           showLeadingNavButton={true}
           leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
           onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
           onDocumentLoaded={this.onDocumentLoaded}
           onAnnotationChanged={this.onAnnotationChanged}
+          onZoomChanged={this.onZoomChanged}
           readOnly={false}
           disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.userBookmarkListButton]}
           disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
           fitMode={Config.FitMode.FitPage}
           layoutMode={Config.LayoutMode.Continuous}
         />
-      </SafeAreaView>
     );
   }
 }
