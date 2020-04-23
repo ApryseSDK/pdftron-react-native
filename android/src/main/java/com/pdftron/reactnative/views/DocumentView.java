@@ -333,7 +333,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mBuilder = mBuilder.showSaveCopyOption(false);
             } else if ("formToolsButton".equals(item)) {
                 mBuilder = mBuilder.showFormToolbarOption(false);
-            } else if ("moreItemsButton".equals(item)) {
+            } else if ("fillSignToolsButton".equals(item)) {
+                mBuilder = mBuilder.showFillAndSignToolbarOption(false);
+            } if ("moreItemsButton".equals(item)) {
                 mBuilder = mBuilder
                         .showEditPagesOption(false)
                         .showPrintOption(false)

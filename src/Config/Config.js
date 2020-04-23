@@ -26,6 +26,7 @@ export default {
     closeButton: 'closeButton',
     saveCopyButton: 'saveCopyButton',
     formToolsButton: 'formToolsButton',
+    fillSignToolsButton: 'fillSignToolsButton',
     moreItemsButton: 'moreItemsButton',
     thumbnailsButton : 'thumbnailsButton',
     listsButton : 'listsButton',
