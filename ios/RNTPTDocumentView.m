@@ -1,151 +1,52 @@
-//
-//  RNTPTDocumentView.m
-//  RNPdftron
-//
-//  Copyright © 2018 PDFTron. All rights reserved.
-//
-
 #import "RNTPTDocumentView.h"
 
-@class RNTPTDocumentViewController;
+#import "RNTPTDocumentViewController.h"
+#import "RNTPTCollaborationDocumentViewController.h"
 
-@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate>
-@optional
+NS_ASSUME_NONNULL_BEGIN
 
-- (void)rnt_documentViewControllerDocumentLoaded:(RNTPTDocumentViewController *)documentViewController;
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication>
 
-@end
+@property (nonatomic, nullable) PTDocumentViewController *documentViewController;
 
-@interface RNTPTDocumentViewController ()
+@property (nonatomic, readonly, nullable) PTPDFViewCtrl *pdfViewCtrl;
 
-@property (nonatomic) BOOL local;
-@property (nonatomic) BOOL needsDocumentLoaded;
-@property (nonatomic) BOOL needsRemoteDocumentLoaded;
-@property (nonatomic) BOOL documentLoaded;
+@property (nonatomic, readonly, nullable) RNTPTDocumentViewController *rnt_documentViewController;
 
-@property (nonatomic) BOOL continuousAnnotationEditing;
+@property (nonatomic, readonly, nullable) RNTPTCollaborationDocumentViewController *rnt_collabDocumentViewController;
 
-@property (nonatomic) BOOL topToolbarEnabled;
-
-@property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
+@property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
 
 @end
 
-@implementation RNTPTDocumentViewController
-
-@dynamic delegate;
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _topToolbarEnabled = YES;
-    }
-    return self;
-}
-
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    
-    if (self.needsDocumentLoaded) {
-        self.needsDocumentLoaded = NO;
-        self.needsRemoteDocumentLoaded = NO;
-        self.documentLoaded = YES;
-        
-        if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDocumentLoaded:)]) {
-            [self.delegate rnt_documentViewControllerDocumentLoaded:self];
-        }
-    }
-}
-
-- (void)openDocumentWithURL:(NSURL *)url password:(NSString *)password
-{
-    if ([url isFileURL]) {
-        self.local = YES;
-    } else {
-        self.local = NO;
-    }
-    self.documentLoaded = NO;
-    self.needsDocumentLoaded = NO;
-    self.needsRemoteDocumentLoaded = NO;
-    
-    [super openDocumentWithURL:url password:password];
-}
-
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
-{
-    if (!hidden && !self.topToolbarEnabled){
-        return;
-    }
-    
-    [super setControlsHidden:hidden animated:animated];
-}
-
-#pragma mark - <PTAnnotationToolbarDelegate>
-
-- (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
-{
-    return !self.continuousAnnotationEditing;
-}
-
-#pragma mark - <PTPDFViewCtrlDelegate>
-
-- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
-{
-    [super pdfViewCtrl:pdfViewCtrl onSetDoc:doc];
-    
-    if (self.local && !self.documentLoaded) {
-        self.needsDocumentLoaded = YES;
-    }
-    else if (!self.local && !self.documentLoaded && self.needsRemoteDocumentLoaded) {
-        self.needsDocumentLoaded = YES;
-    }
-}
-
-- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum
-{
-    if (type == e_ptdownloadedtype_finished && !self.documentLoaded) {
-        self.needsRemoteDocumentLoaded = YES;
-    }
-    
-    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
-}
-
-- (void)outlineViewControllerDidCancel:(PTOutlineViewController *)outlineViewController
-{
-    [outlineViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)annotationViewControllerDidCancel:(PTAnnotationViewController *)annotationViewController
-{
-    [annotationViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)bookmarkViewControllerDidCancel:(PTBookmarkViewController *)bookmarkViewController
-{
-    [bookmarkViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-@end
-
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate>
-
-@end
+NS_ASSUME_NONNULL_END
 
 @implementation RNTPTDocumentView
-@synthesize delegate;
+
+- (void)RNTPTDocumentView_commonInit
+{
+    _topToolbarEnabled = YES;
+    _bottomToolbarEnabled = YES;
+    
+    _pageIndicatorEnabled = YES;
+    _pageIndicatorShowsOnPageChange = YES;
+    _pageIndicatorShowsWithControls = YES;
+}
 
 -(instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _documentViewController = [[RNTPTDocumentViewController alloc] init];
-        _documentViewController.delegate = self;
-        
-        _topToolbarEnabled = YES;
-        _bottomToolbarEnabled = YES;
-        _pageIndicatorEnabled = YES;
+        [self RNTPTDocumentView_commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self RNTPTDocumentView_commonInit];
     }
     return self;
 }
@@ -174,10 +75,44 @@
     }
 }
 
+#pragma mark - DocumentViewController
+
+- (RNTPTDocumentViewController *)rnt_documentViewController
+{
+    if ([self.documentViewController isKindOfClass:[RNTPTDocumentViewController class]]) {
+        return (RNTPTDocumentViewController *)self.documentViewController;
+    }
+    return nil;
+}
+
+- (RNTPTCollaborationDocumentViewController *)rnt_collabDocumentViewController
+{
+    if ([self.documentViewController isKindOfClass:[RNTPTCollaborationDocumentViewController class]]) {
+        return (RNTPTCollaborationDocumentViewController *)self.documentViewController;
+    }
+    return nil;
+}
+
+#pragma mark - PDFViewCtrl
+
+- (nullable PTPDFViewCtrl *)pdfViewCtrl
+{
+    return self.documentViewController.pdfViewCtrl;
+}
+
 #pragma mark - DocumentViewController loading
 
 - (void)loadDocumentViewController
 {
+    if (!self.documentViewController) {
+        if ([self isCollabEnabled]) {
+            self.documentViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
+        } else {
+            self.documentViewController = [[RNTPTDocumentViewController alloc] init];
+        }
+        self.documentViewController.delegate = self;
+    }
+    
     [self registerForDocumentViewControllerNotifications];
     [self registerForPDFViewCtrlNotifications];
     
@@ -255,7 +190,7 @@
     if (navigationController) {
         // Clear navigation stack (PTDocumentViewController).
         navigationController.viewControllers = @[];
-
+        
         // Remove from parent view controller.
         [navigationController willMoveToParentViewController:nil];
         [navigationController.view removeFromSuperview];
@@ -268,7 +203,7 @@
 - (void)registerForDocumentViewControllerNotifications
 {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
-
+    
     [center addObserver:self
                selector:@selector(documentViewControllerDidOpenDocumentWithNotification:)
                    name:PTDocumentViewControllerDidOpenDocumentNotification
@@ -303,7 +238,7 @@
 - (void)deregisterForPDFViewCtrlNotifications
 {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
-
+    
     [center removeObserver:self
                       name:PTPDFViewCtrlPageDidChangeNotification
                     object:self.documentViewController.pdfViewCtrl];
@@ -322,6 +257,11 @@
 }
 
 #pragma mark - Disabling elements
+
+- (int)getPageCount
+{
+    return self.documentViewController.pdfViewCtrl.pageCount;
+}
 
 -(void)disableElements:(NSArray<NSString*>*)disabledElements
 {
@@ -362,7 +302,7 @@
             ^{
                 self.documentViewController.moreItemsButtonHidden = YES;
             },
-
+        
         @"thumbnailSlider":
             ^{
                 self.documentViewController.thumbnailSliderHidden = YES;
@@ -591,7 +531,7 @@
     {
         toolClass = [PTCloudCreate class];
     }
-
+    
     if (toolClass) {
         [self.documentViewController.toolManager changeTool:toolClass];
     }
@@ -798,7 +738,7 @@
                 [field SetFlag:flag value:value];
             }
         }
-
+        
         [pdfViewCtrl Update:YES];
     }
     @finally {
@@ -837,7 +777,7 @@
 - (void)setFieldValue:(PTField *)field value:(id)value
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
-
+    
     const PTFieldType fieldType = [field GetType];
     
     // boolean or number
@@ -872,9 +812,9 @@
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
 {
-    if (self.collabManager) {
-        [self.collabManager importAnnotationsWithXFDFCommand:xfdfCommand
-                                                   isInitial:initialLoad];
+    if (self.collaborationManager) {
+        [self.collaborationManager importAnnotationsWithXFDFCommand:xfdfCommand
+                                                          isInitial:initialLoad];
     } else {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"set collabEnabled to true is required" userInfo:nil];
     }
@@ -884,15 +824,59 @@
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
 {
-    self.documentViewController.nightModeEnabled = nightModeEnabled;
     _nightModeEnabled = nightModeEnabled;
+    
+    [self applyViewerSettings];
 }
+
+#pragma mark - Top/bottom toolbar
 
 -(void)setTopToolbarEnabled:(BOOL)topToolbarEnabled
 {
-    self.documentViewController.topToolbarEnabled = topToolbarEnabled;
+    _topToolbarEnabled = topToolbarEnabled;
     
-    if (!topToolbarEnabled) {
+    [self applyViewerSettings];
+}
+
+-(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
+{
+    _bottomToolbarEnabled = bottomToolbarEnabled;
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Page indicator
+
+-(void)setPageIndicatorEnabled:(BOOL)pageIndicatorEnabled
+{
+    _pageIndicatorEnabled = pageIndicatorEnabled;
+    
+    [self applyViewerSettings];
+}
+
+-(void)setPageIndicatorShowsOnPageChange:(BOOL)pageIndicatorShowsOnPageChange
+{
+    _pageIndicatorShowsOnPageChange = pageIndicatorShowsOnPageChange;
+    
+    [self applyViewerSettings];
+}
+
+-(void)setPageIndicatorShowsWithControls:(BOOL)pageIndicatorShowsWithControls
+{
+    _pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark -
+
+- (void)applyViewerSettings
+{
+    // Night mode.
+    self.documentViewController.nightModeEnabled = self.nightModeEnabled;
+    
+    // Top toolbar.
+    if (!self.topToolbarEnabled) {
         self.documentViewController.hidesControlsOnTap = NO;
         self.documentViewController.controlsHidden = YES;
     } else {
@@ -903,114 +887,161 @@
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
     
-    _topToolbarEnabled = topToolbarEnabled;
+    // Bottom toolbar.
+    self.documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    
+    // Page indicator.
+    self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
+    self.documentViewController.pageIndicatorShowsOnPageChange = self.pageIndicatorShowsOnPageChange;
+    self.documentViewController.pageIndicatorShowsWithControls = self.pageIndicatorShowsWithControls;
+    
+    // Fit mode.
+    if ([self.fitMode isEqualToString:@"FitPage"]) {
+        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
+    }
+    else if ([self.fitMode isEqualToString:@"FitWidth"]) {
+        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
+    }
+    else if ([self.fitMode isEqualToString:@"FitHeight"]) {
+        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
+    }
+    else if ([self.fitMode isEqualToString:@"Zoom"]) {
+        [self.pdfViewCtrl SetPageViewMode:e_trn_zoom];
+        [self.pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
+    }
+    
+    // Layout mode.
+    if ([self.layoutMode isEqualToString:@"Single"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
+    }
+    else if ([self.layoutMode isEqualToString:@"Continuous"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
+    }
+    else if ([self.layoutMode isEqualToString:@"Facing"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
+    }
+    else if ([self.layoutMode isEqualToString:@"FacingContinuous"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
+    }
+    else if ([self.layoutMode isEqualToString:@"FacingCover"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
+    }
+    else if ([self.layoutMode isEqualToString:@"FacingCoverContinuous"]) {
+        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+    
+    // Annotation author.
+    self.documentViewController.toolManager.annotationAuthor = self.annotationAuthor;
+    
+    // Shows saved signatures.
+    self.documentViewController.toolManager.showDefaultSignature = self.showSavedSignatures;
 }
 
--(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
-{
-    self.documentViewController.bottomToolbarEnabled = bottomToolbarEnabled;
-    _bottomToolbarEnabled = bottomToolbarEnabled;
-}
-
--(void)setPageIndicatorEnabled:(BOOL)pageIndicatorEnabled
-{
-    self.documentViewController.pageIndicatorEnabled = pageIndicatorEnabled;
-    _pageIndicatorEnabled = pageIndicatorEnabled;
-}
-
--(void)setPageIndicatorShowsOnPageChange:(BOOL)pageIndicatorShowsOnPageChange
-{
-    self.documentViewController.pageIndicatorShowsOnPageChange = pageIndicatorShowsOnPageChange;
-    _pageIndicatorShowsOnPageChange = pageIndicatorShowsOnPageChange;
-}
-
--(void)setPageIndicatorShowsWithControls:(BOOL)pageIndicatorShowsWithControls
-{
-    self.documentViewController.pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
-    _pageIndicatorShowsWithControls = pageIndicatorShowsWithControls;
-}
+#pragma mark - Custom headers
 
 - (void)setCustomHeaders:(NSDictionary<NSString *,NSString *> *)customHeaders
 {
+    _customHeaders = [customHeaders copy];
+    
+    self.needsCustomHeadersUpdate = YES;
+    
+    if (self.documentViewController) {
+        [self applyCustomHeaders];
+    }
+}
+
+- (void)applyCustomHeaders
+{
+    if (!self.needsCustomHeadersUpdate) {
+        return;
+    }
+    
     PTHTTPRequestOptions *options = self.documentViewController.httpRequestOptions;
-    [customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+    [self.customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
         [options AddHeader:key val:value];
     }];
-    _customHeaders = customHeaders;
+    
+    self.needsCustomHeadersUpdate = NO;
 }
+
+#pragma mark - Readonly
 
 - (void)setReadOnly:(BOOL)readOnly
 {
     _readOnly = readOnly;
     
+    if (self.documentViewController) {
+        [self applyReadonly];
+    }
+}
+
+- (void)applyReadonly
+{
     // Enable readonly flag on tool manager *only* when not already readonly.
     // If the document is being streamed or converted, we don't want to accidentally allow editing by
     // disabling the readonly flag.
     if (![self.documentViewController.toolManager isReadonly]) {
-        self.documentViewController.toolManager.readonly = YES;
+        self.documentViewController.toolManager.readonly = self.readOnly;
     }
     
-    self.documentViewController.thumbnailsViewController.editingEnabled = !readOnly;
+    self.documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
 }
+
+#pragma mark - Fit mode
 
 - (void)setFitMode:(NSString *)fitMode
 {
-    if ([fitMode isEqualToString:@"FitPage"]) {
-        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
-        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
-    }
-    else if ([fitMode isEqualToString:@"FitWidth"]) {
-        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
-        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
-    }
-    else if ([fitMode isEqualToString:@"FitHeight"]) {
-        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
-        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
-    }
-    else if ([fitMode isEqualToString:@"Zoom"]) {
-        [self.documentViewController.pdfViewCtrl SetPageViewMode:e_trn_zoom];
-        [self.documentViewController.pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
+    _fitMode = [fitMode copy];
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
     }
 }
 
+#pragma mark - Layout mode
+
 - (void)setLayoutMode:(NSString *)layoutMode
 {
-    if ([layoutMode isEqualToString:@"Single"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
-    }
-    else if ([layoutMode isEqualToString:@"Continuous"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
-    }
-    else if ([layoutMode isEqualToString:@"Facing"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
-    }
-    else if ([layoutMode isEqualToString:@"FacingContinuous"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
-    }
-    else if ([layoutMode isEqualToString:@"FacingCover"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
-    }
-    else if ([layoutMode isEqualToString:@"FacingCoverContinuous"]) {
-        [self.documentViewController.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    _layoutMode = [layoutMode copy];
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
     }
 }
+
+#pragma mark - Continuous annotation editing
 
 - (void)setContinuousAnnotationEditing:(BOOL)continuousAnnotationEditing
 {
     _continuousAnnotationEditing = continuousAnnotationEditing;
-    
-    self.documentViewController.continuousAnnotationEditing = continuousAnnotationEditing;
 }
+
+#pragma mark - Annotation author
 
 - (void)setAnnotationAuthor:(NSString *)annotationAuthor
 {
-    self.documentViewController.toolManager.annotationAuthor = annotationAuthor;
+    _annotationAuthor = [annotationAuthor copy];
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
 }
+
+#pragma mark - Show saved signatures
 
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
-    self.documentViewController.toolManager.showDefaultSignature = showSavedSignatures;
+    _showSavedSignatures = showSavedSignatures;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
 }
+
+#pragma mark - Actions
 
 - (void)navButtonClicked
 {
@@ -1018,6 +1049,8 @@
         [self.delegate navButtonClicked:self];
     }
 }
+
+#pragma mark - Convenience
 
 - (UIViewController *)findParentViewController
 {
@@ -1047,7 +1080,7 @@
 
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
-- (void)rnt_documentViewControllerDocumentLoaded:(RNTPTDocumentViewController *)documentViewController
+- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController
 {
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
@@ -1062,10 +1095,58 @@
     }
 }
 
+- (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
+{
+    return !self.continuousAnnotationEditing;
+}
+
+- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentViewController *)documentViewController
+{
+    return self.topToolbarEnabled;
+}
+
+#pragma mark - <PTDocumentViewControllerDelegate>
+
 - (void)documentViewController:(PTDocumentViewController *)documentViewController didFailToOpenDocumentWithError:(NSError *)error
 {
     if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
         [self.delegate documentError:self error:error.localizedFailureReason];
+    }
+}
+
+#pragma mark - <PTCollaborationServerCommunication>
+
+//@synthesize collaborationManager = _collaborationManager;
+@synthesize documentID = _documentID;
+@synthesize userID = _userID;
+
+- (void)documentLoaded
+{
+    // Use rnt_documentViewControllerDocumentLoaded
+}
+
+- (void)localAnnotationAdded:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self rnt_sendExportAnnotationCommandWithAction:@"add"
+                                        xfdfCommand:collaborationAnnotation.xfdf];
+}
+
+- (void)localAnnotationModified:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self rnt_sendExportAnnotationCommandWithAction:@"modify"
+                                        xfdfCommand:collaborationAnnotation.xfdf];
+}
+
+- (void)localAnnotationRemoved:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self rnt_sendExportAnnotationCommandWithAction:@"delete"
+                                        xfdfCommand:collaborationAnnotation.xfdf];
+}
+
+- (void)rnt_sendExportAnnotationCommandWithAction:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
+{
+    if ([self.delegate respondsToSelector:@selector(exportAnnotationCommand:action:xfdfCommand:)]) {
+        [self.delegate exportAnnotationCommand:self action:action xfdfCommand:xfdfCommand];
     }
 }
 

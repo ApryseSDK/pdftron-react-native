@@ -1,13 +1,7 @@
-//
-//  RNTPTDocumentView.h
-//  RNPdftron
-//
-//  Copyright © 2018 PDFTron. All rights reserved.
-//
-
-#import <UIKit/UIKit.h>
 #import <Tools/Tools.h>
 #import <React/RCTComponent.h>
+
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,14 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
 
-@end
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand;
 
-@interface RNTPTDocumentViewController : PTDocumentViewController
 @end
 
 @interface RNTPTDocumentView : UIView
-
-@property (nonatomic, readonly, nullable) RNTPTDocumentViewController *documentViewController;
 
 - (void)setToolMode:(NSString *)toolMode;
 
@@ -51,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int pageNumber;
 @property (nonatomic, assign) BOOL showNavButton;
 @property (nonatomic, copy, nullable) NSString *navButtonPath;
-@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) NSString *fitMode;
@@ -69,13 +60,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
-@property (nonatomic, strong, nullable) PTCollaborationManager *collabManager;
+@property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
 @property (nonatomic, copy, nullable) RCTBubblingEventBlock onChange;
 
 @property (nonatomic, weak, nullable) id <RNTPTDocumentViewDelegate> delegate;
 
 #pragma mark - Methods
+
+- (int)getPageCount;
 
 - (void)disableElements:(NSArray<NSString *> *)disabledElements;
 - (void)setToolsPermission:(NSArray<NSString *> *) stringsArray toValue:(BOOL)value;

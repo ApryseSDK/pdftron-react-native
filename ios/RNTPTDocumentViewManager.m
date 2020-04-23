@@ -219,7 +219,9 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
 - (void)navButtonClicked: (RNTPTDocumentView *) sender
 {
     if (sender.onChange) {
-        sender.onChange(@{@"onLeadingNavButtonPressed": @(true)});
+        sender.onChange(@{
+            @"onLeadingNavButtonPressed": @YES,
+        });
     }
 }
 
@@ -227,8 +229,8 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-                          @"onDocumentLoaded": (sender.document ?: @""),
-                          });
+            @"onDocumentLoaded": (sender.document ?: @""),
+        });
     }
 }
 
@@ -245,11 +247,11 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-                          @"onPageChanged": @{
-                                  @"previousPageNumber": @(previousPageNumber),
-                                  @"pageNumber": @(sender.pageNumber),
-                                  },
-                          });
+            @"onPageChanged": @{
+                    @"previousPageNumber": @(previousPageNumber),
+                    @"pageNumber": @(sender.pageNumber),
+            },
+        });
     }
 }
 
@@ -260,6 +262,17 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
             @"onAnnotationChanged" : @"onAnnotationChanged",
             @"action": action,
             @"annotations": @[annotation],
+        });
+    }
+}
+
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+            @"action": action,
+            @"xfdfCommand": xfdfCommand,
         });
     }
 }
@@ -278,7 +291,7 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return documentView.documentViewController.pdfViewCtrl.pageCount;
+        return [documentView getPageCount];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return 0;
