@@ -23,6 +23,7 @@ export default class DocumentView extends PureComponent {
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     topToolbarEnabled: PropTypes.bool,
@@ -58,6 +59,12 @@ export default class DocumentView extends PureComponent {
         this.props.onPageChanged({
         	'previousPageNumber': event.nativeEvent.previousPageNumber,
         	'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
+    } else if (event.nativeEvent.onZoomChanged) {
+      if (this.props.onZoomChanged) {
+        this.props.onZoomChanged({
+        	'zoom': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
