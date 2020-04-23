@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setToolMode:(NSString *)toolMode;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
+
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
 @property (nonatomic, assign) BOOL topToolbarEnabled;
@@ -69,9 +72,6 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Methods
 
 - (int)getPageCount;
-
-- (void)disableElements:(NSArray<NSString *> *)disabledElements;
-- (void)setToolsPermission:(NSArray<NSString *> *) stringsArray toValue:(BOOL)value;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;

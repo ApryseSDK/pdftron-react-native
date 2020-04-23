@@ -79,18 +79,17 @@ RCT_CUSTOM_VIEW_PROPERTY(leadingNavButtonIcon, NSString, RNTPTDocumentView)
 RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
 {
     if (json) {
-        NSArray* disabledElements = [RCTConvert NSArray:json];
-        [view disableElements:disabledElements];
+        NSArray *disabledElements = [RCTConvert NSArray:json];
+        view.disabledElements = disabledElements;
     }
     
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
 {
-    
-    if( json ) {
-        NSArray* disabledTools = [RCTConvert NSArray:json];
-        [view setToolsPermission:disabledTools toValue:NO];
+    if (json) {
+        NSArray *disabledTools = [RCTConvert NSArray:json];
+        view.disabledTools = disabledTools;
     }
 }
 

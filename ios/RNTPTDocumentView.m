@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) PTDocumentViewController *documentViewController;
 
 @property (nonatomic, readonly, nullable) PTPDFViewCtrl *pdfViewCtrl;
+@property (nonatomic, readonly, nullable) PTToolManager *toolManager;
 
 @property (nonatomic, readonly, nullable) RNTPTDocumentViewController *rnt_documentViewController;
 
@@ -93,11 +94,16 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-#pragma mark - PDFViewCtrl
+#pragma mark - Convenience
 
 - (nullable PTPDFViewCtrl *)pdfViewCtrl
 {
     return self.documentViewController.pdfViewCtrl;
+}
+
+- (nullable PTToolManager *)toolManager
+{
+    return self.documentViewController.toolManager;
 }
 
 #pragma mark - DocumentViewController loading
@@ -111,6 +117,8 @@ NS_ASSUME_NONNULL_END
             self.documentViewController = [[RNTPTDocumentViewController alloc] init];
         }
         self.documentViewController.delegate = self;
+        
+        [self applyViewerSettings];
     }
     
     [self registerForDocumentViewControllerNotifications];
@@ -165,7 +173,8 @@ NS_ASSUME_NONNULL_END
             fileURL = [NSURL fileURLWithPath:self.document];
         }
         
-        [self.documentViewController openDocumentWithURL:fileURL password:self.password];
+        [self.documentViewController openDocumentWithURL:fileURL
+                                                password:self.password];
     } else {
         NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
         
@@ -263,14 +272,17 @@ NS_ASSUME_NONNULL_END
     return self.documentViewController.pdfViewCtrl.pageCount;
 }
 
--(void)disableElements:(NSArray<NSString*>*)disabledElements
+- (void)setDisabledElements:(NSArray<NSString *> *)disabledElements
 {
-    [self disableElementsInternal:disabledElements];
+    _disabledElements = [disabledElements copy];
+    
+    if (self.documentViewController) {
+        [self disableElementsInternal:disabledElements];
+    }
 }
 
--(void)disableElementsInternal:(NSArray<NSString*> *)disabledElements
+- (void)disableElementsInternal:(NSArray<NSString*> *)disabledElements
 {
-    
     typedef void (^HideElementBlock)(void);
     
     NSDictionary *hideElementActions = @{
@@ -322,125 +334,116 @@ NS_ASSUME_NONNULL_END
             },
     };
     
-    
-    for(NSObject* item in disabledElements)
-    {
-        if( [item isKindOfClass:[NSString class]])
-        {
+    for (NSObject *item in disabledElements) {
+        if ([item isKindOfClass:[NSString class]]) {
             HideElementBlock block = hideElementActions[item];
-            if (block)
-            {
+            if (block) {
                 block();
             }
         }
     }
     
+    // Disable the elements' corresponding tools/annotation types creation.
     [self setToolsPermission:disabledElements toValue:NO];
-    
 }
 
--(void)setToolsPermission:(NSArray<NSString*>*) stringsArray toValue:(BOOL)value
+#pragma mark - Disabled tools
+
+- (void)setDisabledTools:(NSArray<NSString *> *)disabledTools
+{
+    _disabledTools = [disabledTools copy];
+    
+    if (self.documentViewController) {
+        [self setToolsPermission:disabledTools toValue:NO];
+    }
+}
+
+- (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value
 {
     // TODO: AnnotationCreateDistanceMeasurement
     // AnnotationCreatePerimeterMeasurement
     // AnnotationCreateAreaMeasurement
     
-    
-    for(NSObject* item in stringsArray)
-    {
-        if( [item isKindOfClass:[NSString class]])
-        {
-            NSString* string = (NSString*)item;
+    for (NSObject *item in stringsArray) {
+        if ([item isKindOfClass:[NSString class]]) {
+            NSString *string = (NSString *)item;
             
-            if( [string isEqualToString:@"AnnotationEdit"] )
-            {
+            if ([string isEqualToString:@"AnnotationEdit"]) {
                 // multi-select not implemented
             }
-            else if( [string isEqualToString:@"AnnotationCreateSticky"] || [string isEqualToString:@"stickyToolButton"] )
-            {
-                self.documentViewController.toolManager.textAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateSticky"] ||
+                     [string isEqualToString:@"stickyToolButton"]) {
+                self.toolManager.textAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateFreeHand"] || [string isEqualToString:@"freeHandToolButton"] )
-            {
-                self.documentViewController.toolManager.inkAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateFreeHand"] ||
+                     [string isEqualToString:@"freeHandToolButton"]) {
+                self.toolManager.inkAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"TextSelect"] )
-            {
-                self.documentViewController.toolManager.textSelectionEnabled = value;
+            else if ([string isEqualToString:@"TextSelect"]) {
+                self.toolManager.textSelectionEnabled = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateTextHighlight"] || [string isEqualToString:@"highlightToolButton"] )
-            {
-                self.documentViewController.toolManager.highlightAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateTextHighlight"] ||
+                     [string isEqualToString:@"highlightToolButton"]) {
+                self.toolManager.highlightAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateTextUnderline"] || [string isEqualToString:@"underlineToolButton"] )
-            {
-                self.documentViewController.toolManager.underlineAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateTextUnderline"] ||
+                     [string isEqualToString:@"underlineToolButton"]) {
+                self.toolManager.underlineAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateTextSquiggly"] || [string isEqualToString:@"squigglyToolButton"] )
-            {
-                self.documentViewController.toolManager.squigglyAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateTextSquiggly"] ||
+                     [string isEqualToString:@"squigglyToolButton"]) {
+                self.toolManager.squigglyAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateTextStrikeout"] || [string isEqualToString:@"strikeoutToolButton"] )
-            {
-                self.documentViewController.toolManager.strikeOutAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateTextStrikeout"] ||
+                     [string isEqualToString:@"strikeoutToolButton"]) {
+                self.toolManager.strikeOutAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateFreeText"] || [string isEqualToString:@"freeTextToolButton"] )
-            {
-                self.documentViewController.toolManager.freeTextAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateFreeText"] ||
+                     [string isEqualToString:@"freeTextToolButton"]) {
+                self.toolManager.freeTextAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateCallout"] || [string isEqualToString:@"calloutToolButton"] )
-            {
+            else if ([string isEqualToString:@"AnnotationCreateCallout"] ||
+                     [string isEqualToString:@"calloutToolButton"]) {
                 // not supported
             }
-            else if ( [string isEqualToString:@"AnnotationCreateSignature"] || [string isEqualToString:@"signatureToolButton"] )
-            {
-                self.documentViewController.toolManager.signatureAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateSignature"] ||
+                     [string isEqualToString:@"signatureToolButton"]) {
+                self.toolManager.signatureAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateLine"] || [string isEqualToString:@"lineToolButton"] )
-            {
-                self.documentViewController.toolManager.lineAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateLine"] ||
+                     [string isEqualToString:@"lineToolButton"]) {
+                self.toolManager.lineAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateArrow"] || [string isEqualToString:@"arrowToolButton"] )
-            {
-                self.documentViewController.toolManager.arrowAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateArrow"] ||
+                     [string isEqualToString:@"arrowToolButton"]) {
+                self.toolManager.arrowAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreatePolyline"] || [string isEqualToString:@"polylineToolButton"] )
-            {
-                self.documentViewController.toolManager.polylineAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreatePolyline"] ||
+                     [string isEqualToString:@"polylineToolButton"]) {
+                self.toolManager.polylineAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateStamp"] || [string isEqualToString:@"stampToolButton"] )
-            {
-                self.documentViewController.toolManager.stampAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateStamp"] ||
+                     [string isEqualToString:@"stampToolButton"]) {
+                self.toolManager.stampAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateRectangle"] || [string isEqualToString:@"rectangleToolButton"] )
-            {
-                self.documentViewController.toolManager.squareAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateRectangle"] ||
+                     [string isEqualToString:@"rectangleToolButton"]) {
+                self.toolManager.squareAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreateEllipse"] || [string isEqualToString:@"ellipseToolButton"] )
-            {
-                self.documentViewController.toolManager.circleAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreateEllipse"] ||
+                     [string isEqualToString:@"ellipseToolButton"]) {
+                self.toolManager.circleAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreatePolygon"] || [string isEqualToString:@"polygonToolButton"] )
-            {
-                self.documentViewController.toolManager.polygonAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreatePolygon"] ||
+                     [string isEqualToString:@"polygonToolButton"]) {
+                self.toolManager.polygonAnnotationOptions.canCreate = value;
             }
-            else if ( [string isEqualToString:@"AnnotationCreatePolygonCloud"] || [string isEqualToString:@"cloudToolButton"] )
-            {
-                self.documentViewController.toolManager.cloudyAnnotationOptions.canCreate = value;
+            else if ([string isEqualToString:@"AnnotationCreatePolygonCloud"] ||
+                     [string isEqualToString:@"cloudToolButton"]) {
+                self.toolManager.cloudyAnnotationOptions.canCreate = value;
             }
-            
         }
     }
-}
-
--(void)enableTools:(NSArray<NSString*>*)enabledTools
-{
-    [self setToolsPermission:enabledTools toValue:YES];
-}
-
--(void)disableTools:(NSArray<NSString*>*)disabledTools
-{
-    [self setToolsPermission:disabledTools toValue:NO];
 }
 
 - (void)setToolMode:(NSString *)toolMode
@@ -602,7 +605,6 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-
 - (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
@@ -649,7 +651,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)importAnnotations:(NSString *)xfdfString
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLockRead];
@@ -671,9 +673,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)flattenAnnotations:(BOOL)formsOnly
 {
-    [self.documentViewController.toolManager changeTool:[PTPanTool class]];
+    [self.toolManager changeTool:[PTPanTool class]];
     
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -708,7 +710,7 @@ NS_ASSUME_NONNULL_END
         __block NSString *base64String = nil;
         __block BOOL success = NO;
         NSError *error = nil;
-        [self.documentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             NSData *data = [doc SaveToBuf:0];
             
             base64String = [data base64EncodedStringWithOptions:0];
@@ -724,7 +726,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -750,7 +752,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)setValueForFields:(NSDictionary<NSString *, id> *)map
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -776,7 +778,7 @@ NS_ASSUME_NONNULL_END
 // write-lock acquired around this method
 - (void)setFieldValue:(PTField *)field value:(id)value
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     
     const PTFieldType fieldType = [field GetType];
     
@@ -934,15 +936,24 @@ NS_ASSUME_NONNULL_END
     }
     
     // Annotation author.
-    self.documentViewController.toolManager.annotationAuthor = self.annotationAuthor;
+    self.toolManager.annotationAuthor = self.annotationAuthor;
     
     // Shows saved signatures.
-    self.documentViewController.toolManager.showDefaultSignature = self.showSavedSignatures;
+    self.toolManager.showDefaultSignature = self.showSavedSignatures;
+    
+    // Disable UI elements.
+    [self disableElementsInternal:self.disabledElements];
+    
+    // Disable tools.
+    [self setToolsPermission:self.disabledTools toValue:NO];
+    
+    // Custom HTTP request headers.
+    [self applyCustomHeaders];
 }
 
 #pragma mark - Custom headers
 
-- (void)setCustomHeaders:(NSDictionary<NSString *,NSString *> *)customHeaders
+- (void)setCustomHeaders:(NSDictionary<NSString *, NSString *> *)customHeaders
 {
     _customHeaders = [customHeaders copy];
     
@@ -1116,9 +1127,15 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - <PTCollaborationServerCommunication>
 
-//@synthesize collaborationManager = _collaborationManager;
-@synthesize documentID = _documentID;
-@synthesize userID = _userID;
+- (NSString *)documentID
+{
+    return self.document;
+}
+
+- (NSString *)userID
+{
+    return self.currentUser;
+}
 
 - (void)documentLoaded
 {
