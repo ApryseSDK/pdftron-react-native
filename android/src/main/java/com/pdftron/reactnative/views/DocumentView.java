@@ -288,7 +288,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         .showPrintOption(false)
                         .showCloseTabOption(false)
                         .showSaveCopyOption(false)
-                        .showFormToolbarOption(false);
+                        .showFormToolbarOption(false)
+                        .showFillAndSignToolbarOption(false);
             } else if ("outlineListButton".equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
             } else if ("annotationListButton".equals(item)) {
