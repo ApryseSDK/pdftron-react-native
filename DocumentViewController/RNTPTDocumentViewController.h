@@ -9,6 +9,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController;
 
+- (void)rnt_documentViewControllerDidZoom:(PTDocumentViewController *)documentViewController;
+
 - (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentViewController *)documentViewController;
 
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController;

@@ -97,6 +97,13 @@ NS_ASSUME_NONNULL_END
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
 }
 
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidZoom:(UIScrollView *)scrollView
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidZoom:)]) {
+        [self.delegate rnt_documentViewControllerDidZoom:self];
+    }
+}
+
 - (void)outlineViewControllerDidCancel:(PTOutlineViewController *)outlineViewController
 {
     [outlineViewController dismissViewControllerAnimated:YES completion:nil];

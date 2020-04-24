@@ -1103,6 +1103,15 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerDidZoom:(PTDocumentViewController *)documentViewController
+{
+    const double zoom = self.pdfViewCtrl.zoom * self.pdfViewCtrl.zoomScale;
+    
+    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+        [self.delegate zoomChanged:self zoom:zoom];
+    }
+}
+
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
 {
     return !self.continuousAnnotationEditing;

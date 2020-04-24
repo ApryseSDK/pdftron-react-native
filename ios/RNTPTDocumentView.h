@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+- (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
 

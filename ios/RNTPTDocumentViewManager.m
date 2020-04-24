@@ -254,6 +254,16 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onZoomChanged" : @"onZoomChanged",
+            @"zoom": @(zoom),
+        });
+    }
+}
+
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action
 {
     if (sender.onChange) {
