@@ -874,8 +874,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyViewerSettings
 {
-    // Night mode.
-    self.documentViewController.nightModeEnabled = self.nightModeEnabled;
+    [self applyReadonly];
     
     // Top toolbar.
     if (!self.topToolbarEnabled) {
@@ -894,8 +893,6 @@ NS_ASSUME_NONNULL_END
     
     // Page indicator.
     self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
-    self.documentViewController.pageIndicatorShowsOnPageChange = self.pageIndicatorShowsOnPageChange;
-    self.documentViewController.pageIndicatorShowsWithControls = self.pageIndicatorShowsWithControls;
     
     // Fit mode.
     if ([self.fitMode isEqualToString:@"FitPage"]) {
