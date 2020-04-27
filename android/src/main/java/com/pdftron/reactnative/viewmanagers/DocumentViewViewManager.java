@@ -151,6 +151,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setIsBase64String(isBase64);
     }
 
+    @ReactProp(name = "autoSaveEnabled")
+    public void setAutoSaveEnabled(DocumentView documentView, boolean autoSaveEnabled) {
+        documentView.setAutoSaveEnabled(autoSaveEnabled);
+    }
+
     @ReactProp(name = "collabEnabled")
     public void setCollabEnabled(DocumentView documentView, boolean collabEnabled) {
         documentView.setCollabEnabled(collabEnabled);
