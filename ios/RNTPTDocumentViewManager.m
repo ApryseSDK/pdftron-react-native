@@ -79,18 +79,17 @@ RCT_CUSTOM_VIEW_PROPERTY(leadingNavButtonIcon, NSString, RNTPTDocumentView)
 RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
 {
     if (json) {
-        NSArray* disabledElements = [RCTConvert NSArray:json];
-        [view disableElements:disabledElements];
+        NSArray *disabledElements = [RCTConvert NSArray:json];
+        view.disabledElements = disabledElements;
     }
     
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
 {
-    
-    if( json ) {
-        NSArray* disabledTools = [RCTConvert NSArray:json];
-        [view setToolsPermission:disabledTools toValue:NO];
+    if (json) {
+        NSArray *disabledTools = [RCTConvert NSArray:json];
+        view.disabledTools = disabledTools;
     }
 }
 
@@ -186,6 +185,27 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.collabEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(currentUser, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.currentUser = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.currentUserName = [RCTConvert NSString:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -198,7 +218,9 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 - (void)navButtonClicked: (RNTPTDocumentView *) sender
 {
     if (sender.onChange) {
-        sender.onChange(@{@"onLeadingNavButtonPressed": @(true)});
+        sender.onChange(@{
+            @"onLeadingNavButtonPressed": @YES,
+        });
     }
 }
 
@@ -206,8 +228,8 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-                          @"onDocumentLoaded": (sender.document ?: @""),
-                          });
+            @"onDocumentLoaded": (sender.document ?: @""),
+        });
     }
 }
 
@@ -224,11 +246,21 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-                          @"onPageChanged": @{
-                                  @"previousPageNumber": @(previousPageNumber),
-                                  @"pageNumber": @(sender.pageNumber),
-                                  },
-                          });
+            @"onPageChanged": @{
+                    @"previousPageNumber": @(previousPageNumber),
+                    @"pageNumber": @(sender.pageNumber),
+            },
+        });
+    }
+}
+
+- (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onZoomChanged" : @"onZoomChanged",
+            @"zoom": @(zoom),
+        });
     }
 }
 
@@ -239,6 +271,17 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
             @"onAnnotationChanged" : @"onAnnotationChanged",
             @"action": action,
             @"annotations": @[annotation],
+        });
+    }
+}
+
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+            @"action": action,
+            @"xfdfCommand": xfdfCommand,
         });
     }
 }
@@ -257,7 +300,7 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return documentView.documentViewController.pdfViewCtrl.pageCount;
+        return [documentView getPageCount];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return 0;
@@ -272,6 +315,16 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;
+    }
+}
+
+- (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView importAnnotationCommand:xfdfCommand initialLoad:initialLoad];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
 

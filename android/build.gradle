@@ -15,7 +15,7 @@ rootProject.allprojects {
         google()
         jcenter()
         maven {
-            url "https://pdftron-maven.s3.amazonaws.com/release"
+            url "https://pdftron-maven.s3.amazonaws.com/snapshot"
         }
     }
 }
@@ -27,11 +27,15 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     lintOptions {
         abortOnError false
@@ -51,6 +55,7 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"
 
-    implementation "com.pdftron:pdftron:7.1.1"
-    implementation "com.pdftron:tools:7.1.1"
+    implementation "com.pdftron:pdftron:7.1.2-alpha7"
+    implementation "com.pdftron:tools:7.1.2-alpha7"
+    implementation "com.pdftron:collab:7.1.2-alpha7"
 }

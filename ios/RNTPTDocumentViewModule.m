@@ -151,5 +151,23 @@ RCT_REMAP_METHOD(setValueForFields,
     }
 }
 
+#pragma mark - Collaboration
+
+RCT_REMAP_METHOD(importAnnotationCommand,
+                 importAnnotationCommandForDocumentViewTag:(nonnull NSNumber *)tag
+                 xfdf:(NSString *)xfdfCommand
+                 initialLoad:(BOOL)initialLoad
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] importAnnotationCommandForDocumentViewTag:tag xfdfCommand:xfdfCommand initialLoad:initialLoad];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"import_failed", @"Failed to import annotation command", [self errorFromException:exception]);
+    }
+}
+
 @end
   

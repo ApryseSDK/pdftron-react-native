@@ -3,6 +3,8 @@ package com.pdftron.reactnative.viewmanagers;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -11,9 +13,6 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.views.DocumentView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
@@ -150,6 +149,30 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "isBase64String")
     public void setIsBase64String(DocumentView documentView, boolean isBase64) {
         documentView.setIsBase64String(isBase64);
+    }
+
+    @ReactProp(name = "collabEnabled")
+    public void setCollabEnabled(DocumentView documentView, boolean collabEnabled) {
+        documentView.setCollabEnabled(collabEnabled);
+    }
+
+    @ReactProp(name = "currentUser")
+    public void setCurrentUser(DocumentView documentView, String currentUser) {
+        documentView.setCurrentUser(currentUser);
+    }
+
+    @ReactProp(name = "currentUserName")
+    public void setCurrentUserName(DocumentView documentView, String currentUserName) {
+        documentView.setCurrentUserName(currentUserName);
+    }
+
+    public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.importAnnotationCommand(xfdfCommand, initialLoad);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "importAnnotationCommand", "set collabEnabled to true is required.");
+        }
     }
 
     public void importAnnotations(int tag, String xfdf) throws PDFNetException {

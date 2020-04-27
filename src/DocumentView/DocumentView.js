@@ -23,6 +23,7 @@ export default class DocumentView extends PureComponent {
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     topToolbarEnabled: PropTypes.bool,
@@ -37,6 +38,10 @@ export default class DocumentView extends PureComponent {
     annotationAuthor: PropTypes.string,
     showSavedSignatures: PropTypes.bool,
     isBase64String: PropTypes.bool,
+    collabEnabled: PropTypes.bool,
+    currentUser: PropTypes.string,
+    currentUserName: PropTypes.string,
+    onExportAnnotationCommand: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -56,6 +61,12 @@ export default class DocumentView extends PureComponent {
         	'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onZoomChanged) {
+      if (this.props.onZoomChanged) {
+        this.props.onZoomChanged({
+        	'zoom': event.nativeEvent.zoom,
+        });
+      }
     } else if (event.nativeEvent.onAnnotationChanged) {
       if (this.props.onAnnotationChanged) {
         this.props.onAnnotationChanged({
@@ -67,7 +78,14 @@ export default class DocumentView extends PureComponent {
       if (this.props.onDocumentError) {
         this.props.onDocumentError();
       }
-    } 
+    } else if (event.nativeEvent.onExportAnnotationCommand) {
+      if (this.props.onExportAnnotationCommand) {
+        this.props.onExportAnnotationCommand({
+          'action': event.nativeEvent.action,
+          'xfdfCommand': event.nativeEvent.xfdfCommand,
+        });
+      }
+    }
   }
 
   setToolMode = (toolMode) => {
@@ -81,6 +99,18 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
+  }
+
+  importAnnotationCommand = (xfdfCommand, initialLoad) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.importAnnotationCommand(
+        tag,
+        xfdfCommand,
+        initialLoad,
+      );
     }
     return Promise.resolve();
   }
