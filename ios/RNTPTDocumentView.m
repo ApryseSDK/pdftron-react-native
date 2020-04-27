@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_END
     _pageIndicatorEnabled = YES;
     _pageIndicatorShowsOnPageChange = YES;
     _pageIndicatorShowsWithControls = YES;
+    
+    _autoSaveEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -874,11 +876,23 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoSaveEnabled:(BOOL)autoSaveEnabled
+{
+    _autoSaveEnabled = autoSaveEnabled;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings
 {
     [self applyReadonly];
+    
+    // Auto save.
+    self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
     if (!self.topToolbarEnabled) {
