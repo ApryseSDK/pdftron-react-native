@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController;
 
+- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController;
+
 @end
 
 @interface RNTPTDocumentViewController : PTDocumentViewController

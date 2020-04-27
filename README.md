@@ -330,6 +330,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
 - [autoSaveEnabled](#autosaveenabled)
+- [annotationMenuItems](#annotationMenuItems)
 
 ##### document
 string, required
@@ -391,12 +392,14 @@ If true, `document` prop will be treated as a base64 string.
 ##### padStatusBar
 bool, optional, android only
 If true, the viewer will add padding to take account of status bar. Default to false.
-##### onAnnotationChanged
-function, optional
 ##### autoSaveEnabled
 bool, optional
+##### annotationMenuItems
+array of `Config.AnnotationMenu` string constants, optional
+##### onAnnotationChanged
+function, optional
 
-Perameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---

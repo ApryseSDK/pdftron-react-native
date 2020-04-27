@@ -63,6 +63,23 @@ NS_ASSUME_NONNULL_END
     [super setControlsHidden:hidden animated:animated];
 }
 
+#pragma mark - <PTToolManagerDelegate>
+
+- (BOOL)toolManager:(PTToolManager *)toolManager shouldShowMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
+{
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        if (![annotation IsValid]) {
+            return;
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:filterMenuItemsForAnnotationSelectionMenu:)]) {
+            [self.delegate rnt_documentViewController:self filterMenuItemsForAnnotationSelectionMenu:menuController];
+        }
+    } error:nil];
+    
+    return [super toolManager:toolManager shouldShowMenu:menuController forAnnotation:annotation onPageNumber:pageNumber];
+}
+
 #pragma mark - <PTAnnotationToolbarDelegate>
 
 - (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
