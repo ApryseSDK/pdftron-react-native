@@ -380,6 +380,10 @@
             ^{
                 self.documentViewController.bookmarkListHidden = YES;
             },
+        @"reflowButton":
+            ^{
+                self.documentViewController.readerModeButtonHidden = YES;
+            },
     };
     
     
