@@ -279,9 +279,17 @@ initialize(string)
 enableJavaScript(bool)
 
 #### encryptDocument
-encryptDocument(string, string, Promise)
+encryptDocument(string, string, string, Promise)
 
 This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
+
+Example:
+
+```js
+RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
+  console.log("done password");
+});
+```
 
 Parameters:
 
