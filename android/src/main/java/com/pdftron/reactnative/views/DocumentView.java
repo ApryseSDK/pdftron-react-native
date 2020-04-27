@@ -37,6 +37,7 @@ import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
+import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
@@ -96,6 +97,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private boolean mTopToolbarEnabled = true;
     private boolean mPadStatusBar;
+
+    private boolean mAutoSaveEnabled = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -190,9 +193,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setPageNumber(int pageNumber) {
-        if (mPdfViewCtrlTabHostFragment != null &&
-                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null &&
-                mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().isDocumentReady()) {
+        if (getPdfViewCtrlTabFragment() != null &&
+                getPdfViewCtrlTabFragment().isDocumentReady()) {
             try {
                 getPdfViewCtrl().setCurrentPage(pageNumber);
             } catch (Exception ex) {
@@ -281,6 +283,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setIsBase64String(boolean isBase64String) {
         mIsBase64 = isBase64String;
+    }
+
+    public void setAutoSaveEnabled(boolean autoSaveEnabled) {
+        mAutoSaveEnabled = autoSaveEnabled;
     }
 
     public void setCollabEnabled(boolean collabEnabled) {
@@ -511,9 +517,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             }
         }
 
-        if (!mTopToolbarEnabled) {
-            mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
-            mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
+        if (mPdfViewCtrlTabHostFragment != null) {
+            if (!mTopToolbarEnabled) {
+                mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
+                if (mPdfViewCtrlTabHostFragment.getToolbar() != null) {
+                    mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
+                }
+            }
         }
 
         getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
@@ -658,6 +668,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             }
         }
 
+        if (!mAutoSaveEnabled) {
+            getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
+        }
+
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
@@ -695,9 +709,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         super.onOpenDocError();
 
         String error = "Unknown error";
-        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
+        if (getPdfViewCtrlTabFragment() != null) {
             int messageId = com.pdftron.pdf.tools.R.string.error_opening_doc_message;
-            int errorCode = mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getTabErrorCode();
+            int errorCode = getPdfViewCtrlTabFragment().getTabErrorCode();
             switch (errorCode) {
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_ZERO_PAGE:
                     messageId = R.string.error_empty_file_message;
@@ -802,8 +816,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public String saveDocument() {
-        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
-            mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().save(false, true, true);
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().setSavingEnabled(true);
+            getPdfViewCtrlTabFragment().save(false, true, true);
+            getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
             if (mIsBase64 && mTempFile != null) {
                 try {
                     byte[] data = FileUtils.readFileToByteArray(mTempFile);
@@ -813,7 +829,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     return "";
                 }
             } else {
-                return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getFilePath();
+                return getPdfViewCtrlTabFragment().getFilePath();
             }
         }
         return null;
@@ -948,23 +964,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
+        }
+        return null;
+    }
+
     public PDFViewCtrl getPdfViewCtrl() {
-        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
-            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPDFViewCtrl();
+        if (getPdfViewCtrlTabFragment() != null) {
+            return getPdfViewCtrlTabFragment().getPDFViewCtrl();
         }
         return null;
     }
 
     public PDFDoc getPdfDoc() {
-        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
-            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getPdfDoc();
+        if (getPdfViewCtrlTabFragment() != null) {
+            return getPdfViewCtrlTabFragment().getPdfDoc();
         }
         return null;
     }
 
     public ToolManager getToolManager() {
-        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment() != null) {
-            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        if (getPdfViewCtrlTabFragment() != null) {
+            return getPdfViewCtrlTabFragment().getToolManager();
         }
         return null;
     }

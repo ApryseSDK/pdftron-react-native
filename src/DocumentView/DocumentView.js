@@ -43,6 +43,7 @@ export default class DocumentView extends PureComponent {
     currentUser: PropTypes.string,
     currentUserName: PropTypes.string,
     onExportAnnotationCommand: PropTypes.func,
+    autoSaveEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
