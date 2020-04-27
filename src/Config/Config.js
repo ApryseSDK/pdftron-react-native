@@ -79,5 +79,19 @@ export default {
   FieldFlags: {
     ReadOnly: 0,
     Required: 1
+  },
+  AnnotationMenu: {
+    style: 'style',
+    note: 'note',
+    copy: 'copy',
+    delete: 'delete',
+    flatten: 'flatten',
+    editText: 'editText',
+    editInk: 'editInk',
+    search: 'search',
+    share: 'share',
+    markupType: 'markupType',
+    textToSpeech: 'textToSpeech',
+    screenCapture: 'screenCapture',
   }
 };

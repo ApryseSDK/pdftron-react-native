@@ -39,6 +39,8 @@ import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
+import com.pdftron.pdf.tools.QuickMenu;
+import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -52,6 +54,7 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
@@ -377,6 +380,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    @Nullable
     private ToolManager.ToolMode convStringToToolMode(String item) {
         ToolManager.ToolMode mode = null;
         if ("freeHandToolButton".equals(item) || "AnnotationCreateFreeHand".equals(item)) {
@@ -427,6 +431,47 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
         }
         return mode;
+    }
+
+    private void checkQuickMenu(List<QuickMenuItem> menuItems, ArrayList<Object> keepList, List<QuickMenuItem> removeList) {
+        for (QuickMenuItem item : menuItems) {
+            int menuId = item.getItemId();
+            String menuStr = convQuickMenuIdToString(menuId);
+            if (!keepList.contains(menuStr)) {
+                removeList.add(item);
+            }
+        }
+    }
+
+    @Nullable
+    private String convQuickMenuIdToString(int id) {
+        String menuStr = null;
+        if (id == R.id.qm_appearance) {
+            menuStr = "style";
+        } else if (id == R.id.qm_note) {
+            menuStr = "note";
+        } else if (id == R.id.qm_copy) {
+            menuStr = "copy";
+        } else if (id == R.id.qm_delete) {
+            menuStr = "delete";
+        } else if (id == R.id.qm_flatten) {
+            menuStr = "flatten";
+        } else if (id == R.id.qm_text) {
+            menuStr = "editText";
+        } else if (id == R.id.qm_edit) {
+            menuStr = "editInk";
+        } else if (id == R.id.qm_search) {
+            menuStr = "search";
+        } else if (id == R.id.qm_share) {
+            menuStr = "share";
+        } else if (id == R.id.qm_type) {
+            menuStr = "markupType";
+        } else if (id == R.id.qm_tts) {
+            menuStr = "textToSpeech";
+        } else if (id == R.id.qm_screencap_create) {
+            menuStr = "screenCapture";
+        }
+        return menuStr;
     }
 
     private ViewerConfig getConfig() {
@@ -538,6 +583,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
         }
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
+        }
 
         super.onDetachedFromWindow();
 
@@ -567,6 +615,37 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public boolean canRecreateActivity() {
         return false;
     }
+
+    private ToolManager.QuickMenuListener mQuickMenuListener = new ToolManager.QuickMenuListener() {
+        @Override
+        public boolean onQuickMenuClicked(QuickMenuItem quickMenuItem) {
+            return false;
+        }
+
+        @Override
+        public boolean onShowQuickMenu(QuickMenu quickMenu, Annot annot) {
+            // remove unwanted items
+            if (mAnnotMenuItems != null && annot != null) {
+                ArrayList<Object> keepList = mAnnotMenuItems.toArrayList();
+                List<QuickMenuItem> removeList = new ArrayList<>();
+                checkQuickMenu(quickMenu.getFirstRowMenuItems(), keepList, removeList);
+                checkQuickMenu(quickMenu.getSecondRowMenuItems(), keepList, removeList);
+                checkQuickMenu(quickMenu.getOverflowMenuItems(), keepList, removeList);
+                quickMenu.removeMenuEntries(removeList);
+            }
+            return false;
+        }
+
+        @Override
+        public void onQuickMenuShown() {
+
+        }
+
+        @Override
+        public void onQuickMenuDismissed() {
+
+        }
+    };
 
     private PDFViewCtrl.PageChangeListener mPageChangeListener = new PDFViewCtrl.PageChangeListener() {
         @Override
@@ -678,6 +757,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
+
+        getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
         // collab
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {
