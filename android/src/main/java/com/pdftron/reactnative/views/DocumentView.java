@@ -632,6 +632,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), keepList, removeList);
                 checkQuickMenu(quickMenu.getOverflowMenuItems(), keepList, removeList);
                 quickMenu.removeMenuEntries(removeList);
+
+                if (quickMenu.getFirstRowMenuItems().size() == 0) {
+                    quickMenu.setDividerVisibility(View.GONE);
+                }
             }
             return false;
         }
