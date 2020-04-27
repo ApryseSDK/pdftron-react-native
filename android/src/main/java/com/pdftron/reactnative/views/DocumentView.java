@@ -340,6 +340,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mBuilder = mBuilder.showAnnotationsList(false);
             } else if ("userBookmarkListButton".equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
+            } else if ("reflowButton".equals(item)) {
+                mBuilder = mBuilder.showReflowOption(false);
+            } else if ("editMenuButton".equals(item)) {
+                mBuilder = mBuilder.showEditMenuOption(false);
             }
         }
         disableTools(args);
