@@ -166,6 +166,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setCurrentUserName(currentUserName);
     }
 
+    @ReactProp(name = "annotationMenuItems")
+    public void setAnnotationMenuItems(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setAnnotationMenuItems(items);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

@@ -103,6 +103,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private String mCurrentUser;
     private String mCurrentUserName;
 
+    // quick menu
+    private ReadableArray mAnnotMenuItems;
+
     public DocumentView(Context context) {
         super(context);
     }
@@ -290,6 +293,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setCurrentUserName(String currentUserName) {
         mCurrentUserName = currentUserName;
+    }
+
+    public void setAnnotationMenuItems(ReadableArray items) {
+        mAnnotMenuItems = items;
     }
 
     private void disableElements(ReadableArray args) {

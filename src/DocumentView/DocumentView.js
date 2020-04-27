@@ -26,6 +26,7 @@ export default class DocumentView extends PureComponent {
     onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
+    annotationMenuItems: PropTypes.array,
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
