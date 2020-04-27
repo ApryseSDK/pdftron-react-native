@@ -246,10 +246,9 @@ RCT_CUSTOM_VIEW_PROPERTY(currentUserName, NSString, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-            @"onPageChanged": @{
-                    @"previousPageNumber": @(previousPageNumber),
-                    @"pageNumber": @(sender.pageNumber),
-            },
+            @"onPageChanged": @"onPageChanged",
+            @"previousPageNumber": @(previousPageNumber),
+            @"pageNumber": @(sender.pageNumber),
         });
     }
 }
