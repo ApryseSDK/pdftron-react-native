@@ -4,8 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  StatusBar,
   PermissionsAndroid,
   BackHandler,
   Alert
@@ -71,7 +69,7 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/Report_2011.pdf";
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
     return (
       <DocumentView
