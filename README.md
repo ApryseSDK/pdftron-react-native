@@ -287,7 +287,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-filePath | string | the local file path to the file
+file path | string | the local file path to the file
 password | string | the password
 
 ## Components
