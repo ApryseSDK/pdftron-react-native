@@ -11,6 +11,7 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.sdf.SDFDoc;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 
@@ -48,6 +49,9 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
         try {
             PDFDoc pdfDoc = new PDFDoc(filePath);
             ViewerUtils.passwordDoc(pdfDoc, password);
+            pdfDoc.lock();
+            pdfDoc.save(filePath, SDFDoc.SaveMode.REMOVE_UNUSED, null);
+            pdfDoc.unlock();
             promise.resolve(null);
         } catch (Exception ex) {
             promise.reject(ex);
