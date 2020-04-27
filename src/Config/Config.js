@@ -34,6 +34,7 @@ export default {
     outlineListButton: 'outlineListButton',
     annotationListButton: 'annotationListButton',
     userBookmarkListButton: 'userBookmarkListButton',
+    reflowButton: 'reflowButton',
   },
   Tools: {
     annotationEdit : 'AnnotationEdit',
