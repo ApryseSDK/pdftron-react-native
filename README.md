@@ -289,7 +289,7 @@ Name | Type | Description
 --- | --- | ---
 file path | string | the local file path to the file
 password | string | the password
-current password | string | the current password (optional)
+current password | string | the current password, use empty string if no password
 
 ## Components
 
