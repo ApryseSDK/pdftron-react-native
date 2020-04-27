@@ -53,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *fitMode;
 @property (nonatomic, copy) NSString *layoutMode;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *annotationMenuItems;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;

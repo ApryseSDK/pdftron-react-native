@@ -1151,6 +1151,44 @@ NS_ASSUME_NONNULL_END
     return self.topToolbarEnabled;
 }
 
+- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController
+{
+    if (self.annotationMenuItems.count == 0) {
+        return;
+    }
+    
+    NSDictionary<NSString *, NSString *> *map = @{
+        @"Style": @"style",
+        @"Note": @"note",
+        @"Copy": @"copy",
+        @"Delete": @"delete",
+        @"Type": @"markupType",
+        @"Search": @"search",
+        @"Edit": @"editInk",
+        @"Edit Text": @"editText",
+        @"Flatten": @"flatten",
+    };
+    NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
+    for (NSString *key in map) {
+        NSString *localizedKey = PTLocalizedString(key, nil);
+        if (!localizedKey) {
+            localizedKey = key;
+        }
+        localizedMap[localizedKey] = map[key];
+    }
+    
+    NSMutableArray<UIMenuItem *> *permittedItems = [NSMutableArray array];
+    
+    for (UIMenuItem *menuItem in menuController.menuItems) {
+        NSString *menuItemId = localizedMap[menuItem.title];
+        if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
+            [permittedItems addObject:menuItem];
+        }
+    }
+    
+    menuController.menuItems = [permittedItems copy];
+}
+
 #pragma mark - <PTDocumentViewControllerDelegate>
 
 - (void)documentViewController:(PTDocumentViewController *)documentViewController didFailToOpenDocumentWithError:(NSError *)error
