@@ -77,9 +77,6 @@ export default class App extends Component<Props> {
       <DocumentView
           ref={(c) => this._viewer = c}
           document={path}
-          collabEnabled={true}
-          shareId={'NXl2UI0prfTp'}
-          webViewerServerRoot={'https://demo.pdftron.com/'}
           padStatusBar={true}
           showLeadingNavButton={true}
           leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
