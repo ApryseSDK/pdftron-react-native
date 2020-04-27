@@ -268,6 +268,28 @@ document="android.resource://mypackagename/raw/sample.pdf"
 document="content://..."
 ```
 
+## API
+
+### RNPdftron
+
+#### initialize
+initialize(string)
+
+#### enableJavaScript
+enableJavaScript(bool)
+
+#### encryptDocument
+encryptDocument(string, string, Promise)
+
+This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+filePath | string | the local file path to the file
+password | string | the password
+
 ## Components
 
 ### DocumentView
