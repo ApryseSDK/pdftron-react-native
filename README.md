@@ -329,6 +329,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [showSavedSignatures](#showsavedsignatures)
 - [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
+- [autoSaveEnabled](#autosaveenabled)
 
 ##### document
 string, required
@@ -392,6 +393,8 @@ bool, optional, android only
 If true, the viewer will add padding to take account of status bar. Default to false.
 ##### onAnnotationChanged
 function, optional
+##### autoSaveEnabled
+bool, optional
 
 Perameters:
 
