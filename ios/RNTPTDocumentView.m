@@ -177,6 +177,8 @@ NS_ASSUME_NONNULL_END
         
         [self.documentViewController openDocumentWithURL:fileURL
                                                 password:self.password];
+        
+        [self applyLayoutMode];
     } else {
         NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
         
@@ -190,6 +192,8 @@ NS_ASSUME_NONNULL_END
         }
         
         [self.documentViewController openDocumentWithPDFDoc:doc];
+        
+        [self applyLayoutMode];
     }
 }
 
@@ -931,6 +935,26 @@ NS_ASSUME_NONNULL_END
     }
     
     // Layout mode.
+    [self applyLayoutMode];
+    
+    // Annotation author.
+    self.toolManager.annotationAuthor = self.annotationAuthor;
+    
+    // Shows saved signatures.
+    self.toolManager.showDefaultSignature = self.showSavedSignatures;
+    
+    // Disable UI elements.
+    [self disableElementsInternal:self.disabledElements];
+    
+    // Disable tools.
+    [self setToolsPermission:self.disabledTools toValue:NO];
+    
+    // Custom HTTP request headers.
+    [self applyCustomHeaders];
+}
+
+- (void)applyLayoutMode
+{
     if ([self.layoutMode isEqualToString:@"Single"]) {
         [self.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
     }
@@ -949,21 +973,6 @@ NS_ASSUME_NONNULL_END
     else if ([self.layoutMode isEqualToString:@"FacingCoverContinuous"]) {
         [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
     }
-    
-    // Annotation author.
-    self.toolManager.annotationAuthor = self.annotationAuthor;
-    
-    // Shows saved signatures.
-    self.toolManager.showDefaultSignature = self.showSavedSignatures;
-    
-    // Disable UI elements.
-    [self disableElementsInternal:self.disabledElements];
-    
-    // Disable tools.
-    [self setToolsPermission:self.disabledTools toValue:NO];
-    
-    // Custom HTTP request headers.
-    [self applyCustomHeaders];
 }
 
 #pragma mark - Custom headers
@@ -1115,6 +1124,8 @@ NS_ASSUME_NONNULL_END
     if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
         self.documentViewController.toolManager.readonly = YES;
     }
+    
+    [self applyLayoutMode];
     
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
