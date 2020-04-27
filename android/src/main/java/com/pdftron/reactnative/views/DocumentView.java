@@ -27,7 +27,6 @@ import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
-import com.pdftron.collab.webviewerserver.BlackBoxConnection;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Annot;
@@ -103,11 +102,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private boolean mCollabEnabled;
     private String mCurrentUser;
     private String mCurrentUserName;
-
-    // collab wvs
-    private BlackBoxConnection mBlackBoxConnection;
-    private String mWebViewerServerRoot;
-    private String mShareId;
 
     public DocumentView(Context context) {
         super(context);
@@ -298,14 +292,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mCurrentUserName = currentUserName;
     }
 
-    public void setWebViewerServerRoot(String wvsRoot) {
-        mWebViewerServerRoot = wvsRoot;
-    }
-
-    public void setShareId(String shareId) {
-        mShareId = shareId;
-    }
-
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -338,7 +324,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mBuilder = mBuilder.showFormToolbarOption(false);
             } else if ("fillSignToolsButton".equals(item)) {
                 mBuilder = mBuilder.showFillAndSignToolbarOption(false);
-            } if ("moreItemsButton".equals(item)) {
+            } else if ("moreItemsButton".equals(item)) {
                 mBuilder = mBuilder
                         .showEditPagesOption(false)
                         .showPrintOption(false)
@@ -539,10 +525,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mTempFile != null && mTempFile.exists()) {
             mTempFile.delete();
         }
-
-        if (mBlackBoxConnection != null) {
-            mBlackBoxConnection.stop();
-        }
     }
 
     @Override
@@ -677,11 +659,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             CollabViewerTabHostFragment collabHost = (CollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment;
             mCollabManager = collabHost.getCollabManager();
             if (mCollabManager != null) {
-                if (!Utils.isNullOrEmpty(mWebViewerServerRoot) && !Utils.isNullOrEmpty(mShareId)) {
-                    mBlackBoxConnection = new BlackBoxConnection();
-                    mBlackBoxConnection.setCollabManager(mCollabManager);
-                    mBlackBoxConnection.start(mWebViewerServerRoot, mDocumentPath, mShareId);
-                } else if (mCurrentUser != null) {
+                if (mCurrentUser != null) {
                     mCollabManager.setCurrentUser(mCurrentUser, mCurrentUserName);
                     mCollabManager.setCurrentDocument(mDocumentPath);
                     mCollabManager.setCollabManagerListener(new CollabManager.CollabManagerListener() {

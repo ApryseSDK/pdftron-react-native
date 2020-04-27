@@ -58,5 +58,4 @@ dependencies {
     implementation "com.pdftron:pdftron:7.1.2-alpha7"
     implementation "com.pdftron:tools:7.1.2-alpha7"
     implementation "com.pdftron:collab:7.1.2-alpha7"
-    implementation "com.pdftron:collab-wvs:7.1.2-alpha7"
 }

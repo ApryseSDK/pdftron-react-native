@@ -3,6 +3,8 @@ package com.pdftron.reactnative.viewmanagers;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -11,9 +13,6 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.reactnative.views.DocumentView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
@@ -165,16 +164,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "currentUserName")
     public void setCurrentUserName(DocumentView documentView, String currentUserName) {
         documentView.setCurrentUserName(currentUserName);
-    }
-
-    @ReactProp(name = "webViewerServerRoot")
-    public void setWebViewerServerRoot(DocumentView documentView, String wvsRoot) {
-        documentView.setWebViewerServerRoot(wvsRoot);
-    }
-
-    @ReactProp(name = "shareId")
-    public void setShareId(DocumentView documentView, String shareId) {
-        documentView.setShareId(shareId);
     }
 
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
