@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.utils.AppUtils;
+import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.sdf.SDFDoc;
 
@@ -45,14 +46,22 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void encryptDocument(String filePath, String password, final Promise promise) {
+    public void encryptDocument(final String filePath, final String password, final String currentPassword, final Promise promise) {
         try {
+            String oldPassword = currentPassword;
+            if (Utils.isNullOrEmpty(currentPassword)) {
+                oldPassword = "";
+            }
             PDFDoc pdfDoc = new PDFDoc(filePath);
-            ViewerUtils.passwordDoc(pdfDoc, password);
-            pdfDoc.lock();
-            pdfDoc.save(filePath, SDFDoc.SaveMode.REMOVE_UNUSED, null);
-            pdfDoc.unlock();
-            promise.resolve(null);
+            if (pdfDoc.initStdSecurityHandler(oldPassword)) {
+                ViewerUtils.passwordDoc(pdfDoc, password);
+                pdfDoc.lock();
+                pdfDoc.save(filePath, SDFDoc.SaveMode.REMOVE_UNUSED, null);
+                pdfDoc.unlock();
+                promise.resolve(null);
+            } else {
+                promise.reject("password", "Current password is incorrect.");
+            }
         } catch (Exception ex) {
             promise.reject(ex);
         }
