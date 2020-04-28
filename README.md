@@ -331,6 +331,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [onAnnotationChanged](#onannotationchanged)
 - [autoSaveEnabled](#autosaveenabled)
 - [annotationMenuItems](#annotationMenuItems)
+- [pageChangeOnTap](#pagechangeontap)
 
 ##### document
 string, required
@@ -396,6 +397,8 @@ If true, the viewer will add padding to take account of status bar. Default to f
 bool, optional
 ##### annotationMenuItems
 array of `Config.AnnotationMenu` string constants, optional
+##### pageChangeOnTap
+bool, optional, default to true
 ##### onAnnotationChanged
 function, optional
 
