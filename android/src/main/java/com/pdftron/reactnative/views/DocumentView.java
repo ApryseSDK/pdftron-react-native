@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -91,6 +92,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private boolean mIsBase64;
     private File mTempFile;
 
+    private FragmentManager mFragmentManagerSave; // used to deal with lifecycle issue
+
     private PDFViewCtrlConfig mPDFViewCtrlConfig;
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
@@ -132,7 +135,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         Activity currentActivity = reactContext.getCurrentActivity();
         if (currentActivity instanceof AppCompatActivity) {
-            setSupportFragmentManager(((AppCompatActivity) reactContext.getCurrentActivity()).getSupportFragmentManager());
+            FragmentManager fragmentManager = ((AppCompatActivity) reactContext.getCurrentActivity()).getSupportFragmentManager();
+            setSupportFragmentManager(fragmentManager);
+            mFragmentManagerSave = fragmentManager;
             mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
             mPDFViewCtrlConfig = PDFViewCtrlConfig.getDefaultConfig(currentActivity);
         } else {
@@ -530,6 +535,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     @Override
     protected void onAttachedToWindow() {
+        if (null == mFragmentManager) {
+            setSupportFragmentManager(mFragmentManagerSave);
+        }
         // TODO, update base64 when ViewerBuilder supports byte array
         Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath, mIsBase64);
         if (fileUri != null) {
