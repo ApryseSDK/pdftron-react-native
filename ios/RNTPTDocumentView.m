@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_END
     _pageIndicatorShowsWithControls = YES;
     
     _autoSaveEnabled = YES;
+    
+    _pageChangeOnTap = NO;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -889,6 +891,15 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
+{
+    _pageChangeOnTap = pageChangeOnTap;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -915,6 +926,9 @@ NS_ASSUME_NONNULL_END
     
     // Page indicator.
     self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
+    
+    // Page change on tap.
+    self.documentViewController.changesPageOnTap = self.pageChangeOnTap;
     
     // Fit mode.
     if ([self.fitMode isEqualToString:@"FitPage"]) {
