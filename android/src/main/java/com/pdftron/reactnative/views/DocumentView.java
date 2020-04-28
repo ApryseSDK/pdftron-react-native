@@ -313,6 +313,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mAnnotMenuItems = items;
     }
 
+    public void setPageChangeOnTap(boolean pageChangeOnTap) {
+        Context context = getContext();
+        if (context != null) {
+            PdfViewCtrlSettingsManager.setAllowPageChangeOnTap(context, pageChangeOnTap);
+        }
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);

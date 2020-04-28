@@ -176,6 +176,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationMenuItems(items);
     }
 
+    @ReactProp(name = "pageChangeOnTap")
+    public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
+        documentView.setPageChangeOnTap(pageChangeOnTap);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
