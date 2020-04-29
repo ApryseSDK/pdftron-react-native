@@ -317,6 +317,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [disabledTools](#disabledtools)
 - [customHeaders](#customheaders)
 - [readOnly](#readonly)
+- [thumbnailViewEditingEnabled](#thumbnailvieweditingenabled)
 - [annotationAuthor](#annotationauthor)
 - [continuousAnnotationEditing](#continuousannotationediting)
 - [fitMode](#fitmode)
@@ -354,7 +355,9 @@ array of string, optional
 ##### customHeaders
 object, optional
 ##### readOnly
-bool, optional
+bool, optional, default to false
+##### thumbnailViewEditingEnabled
+bool, optional, default to true
 ##### annotationAuthor
 string, optional
 ##### continuousAnnotationEditing
