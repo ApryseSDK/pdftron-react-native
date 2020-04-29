@@ -57,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL pageChangeOnTap;
 
+@property (nonatomic, assign, getter=isThumbnailViewEditingEnabled) BOOL thumbnailViewEditingEnabled;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;

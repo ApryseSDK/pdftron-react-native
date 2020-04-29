@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_END
     _autoSaveEnabled = YES;
     
     _pageChangeOnTap = NO;
+    _thumbnailViewEditingEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -900,11 +901,23 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setThumbnailViewEditingEnabled:(BOOL)enabled
+{
+    _thumbnailViewEditingEnabled = enabled;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings
 {
     [self applyReadonly];
+    
+    // Thumbnail editing enabled.
+    self.documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
     
     // Auto save.
     self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
