@@ -320,6 +320,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public void setThumbnailViewEditingEnabled(boolean thumbnailViewEditingEnabled) {
+        mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
