@@ -181,6 +181,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageChangeOnTap(pageChangeOnTap);
     }
 
+    @ReactProp(name = "thumbnailViewEditingEnabled")
+    public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
+        documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
