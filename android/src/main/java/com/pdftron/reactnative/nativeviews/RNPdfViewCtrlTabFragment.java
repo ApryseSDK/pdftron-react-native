@@ -12,7 +12,7 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment {
     @Override
     public void imageStamperSelected(PointF targetPoint) {
         // in react native, intent must be sent from the activity
-        // to be able to receive
+        // to be able to receive by the activity
         FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
@@ -24,6 +24,8 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment {
 
     @Override
     public void imageSignatureSelected(PointF targetPoint, int targetPage, Long widget) {
+        // in react native, intent must be sent from the activity
+        // to be able to receive by the activity
         FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
@@ -37,6 +39,8 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment {
 
     @Override
     public void attachFileSelected(PointF targetPoint) {
+        // in react native, intent must be sent from the activity
+        // to be able to receive by the activity
         FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
