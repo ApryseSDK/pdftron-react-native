@@ -1,5 +1,9 @@
 package com.pdftron.reactnative.modules;
 
+import android.app.Activity;
+import android.content.Intent;
+
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -8,7 +12,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
-public class DocumentViewModule extends ReactContextBaseJavaModule {
+public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     private static final String REACT_CLASS = "DocumentViewManager";
 
@@ -16,6 +20,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
 
     public DocumentViewModule(ReactApplicationContext reactContext, DocumentViewViewManager viewManager) {
         super(reactContext);
+        reactContext.addActivityEventListener(this);
 
         mDocumentViewInstance = viewManager;
     }
@@ -157,5 +162,15 @@ public class DocumentViewModule extends ReactContextBaseJavaModule {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+
     }
 }

@@ -2,6 +2,7 @@ package com.pdftron.reactnative.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.R;
+import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import org.apache.commons.io.FileUtils;
@@ -164,6 +166,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     .build(getContext());
         }
         return super.getViewer();
+    }
+
+    @Override
+    protected void buildViewer() {
+        super.buildViewer();
+        mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
     }
 
     public void setDocument(String path) {
@@ -612,6 +620,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         if (mTempFile != null && mTempFile.exists()) {
             mTempFile.delete();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().onActivityResult(requestCode, resultCode, data);
         }
     }
 
