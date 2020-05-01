@@ -455,6 +455,9 @@ NS_ASSUME_NONNULL_END
                      [string isEqualToString:@"cloudToolButton"]) {
                 self.toolManager.cloudyAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:@"AnnotationCreateFileAttachment"]) {
+                self.toolManager.fileAttachmentAnnotationOptions.canCreate = value;
+            }
         }
     }
 }
@@ -1194,6 +1197,7 @@ NS_ASSUME_NONNULL_END
         @"Edit": @"editInk",
         @"Edit Text": @"editText",
         @"Flatten": @"flatten",
+        @"Open": @"openAttachment",
     };
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
