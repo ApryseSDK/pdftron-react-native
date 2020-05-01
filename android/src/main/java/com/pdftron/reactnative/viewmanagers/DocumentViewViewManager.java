@@ -1,5 +1,7 @@
 package com.pdftron.reactnative.viewmanagers;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -270,5 +272,13 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (int i = 0; i < mDocumentViews.size(); i++) {
+            int key = mDocumentViews.keyAt(i);
+            DocumentView documentView = mDocumentViews.get(key);
+            documentView.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

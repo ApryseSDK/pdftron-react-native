@@ -2,6 +2,7 @@ package com.pdftron.reactnative.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.R;
+import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import org.apache.commons.io.FileUtils;
@@ -98,6 +100,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
 
+    private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
+
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
@@ -144,7 +148,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             throw new IllegalStateException("FragmentActivity required.");
         }
 
-        mToolManagerBuilder = ToolManagerBuilder.from();
+        mToolManagerBuilder = ToolManagerBuilder.from().setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
         mBuilder
                 .fullscreenModeEnabled(false)
@@ -164,6 +168,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     .build(getContext());
         }
         return super.getViewer();
+    }
+
+    @Override
+    protected void buildViewer() {
+        super.buildViewer();
+        mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
     }
 
     public void setDocument(String path) {
@@ -382,17 +392,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     private void disableTools(ReadableArray args) {
-        ArrayList<ToolManager.ToolMode> modesArr = new ArrayList<>();
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
-                modesArr.add(mode);
+                mDisabledTools.add(mode);
             }
-        }
-        ToolManager.ToolMode[] modes = modesArr.toArray(new ToolManager.ToolMode[modesArr.size()]);
-        if (modes.length > 0) {
-            mToolManagerBuilder = mToolManagerBuilder.disableToolModes(modes);
         }
     }
 
@@ -439,12 +444,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.PERIMETER_MEASURE_CREATE;
         } else if ("AnnotationCreateAreaMeasurement".equals(item)) {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
+        } else if ("AnnotationCreateFileAttachment".equals(item)) {
+            mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
         } else if ("TextSelect".equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
         } else if ("Pan".equals(item)) {
             mode = ToolManager.ToolMode.PAN;
         } else if ("AnnotationEdit".equals(item)) {
             mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
+        } else if ("FormCreateTextField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_TEXT_FIELD_CREATE;
+        } else if ("FormCreateCheckboxField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_CHECKBOX_CREATE;
+        } else if ("FormCreateSignatureField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_SIGNATURE_CREATE;
+        } else if ("FormCreateRadioField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_RADIO_GROUP_CREATE;
+        } else if ("FormCreateComboBoxField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_COMBO_BOX_CREATE;
+        } else if ("FormCreateListBoxField".equals(item)) {
+            mode = ToolManager.ToolMode.FORM_LIST_BOX_CREATE;
         }
         return mode;
     }
@@ -486,6 +505,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             menuStr = "textToSpeech";
         } else if (id == R.id.qm_screencap_create) {
             menuStr = "screenCapture";
+        } else if (id == R.id.qm_play_sound) {
+            menuStr = "playSound";
+        } else if (id == R.id.qm_open_attachment) {
+            menuStr = "openAttachment";
         }
         return menuStr;
     }
@@ -494,6 +517,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mCacheDir != null) {
             mBuilder.openUrlCachePath(mCacheDir)
                     .saveCopyExportPath(mCacheDir);
+        }
+        if (mDisabledTools.size() > 0) {
+            ToolManager.ToolMode[] modes = mDisabledTools.toArray(new ToolManager.ToolMode[0]);
+            if (modes.length > 0) {
+                mToolManagerBuilder = mToolManagerBuilder.disableToolModes(modes);
+            }
         }
         return mBuilder
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)
@@ -612,6 +641,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         if (mTempFile != null && mTempFile.exists()) {
             mTempFile.delete();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().onActivityResult(requestCode, resultCode, data);
         }
     }
 
