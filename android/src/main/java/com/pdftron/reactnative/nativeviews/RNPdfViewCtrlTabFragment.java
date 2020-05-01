@@ -21,4 +21,27 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment {
         this.mAnnotTargetPoint = targetPoint;
         this.mOutputFileUri = ViewerUtils.openImageIntent(activity);
     }
+
+    @Override
+    public void imageSignatureSelected(PointF targetPoint, int targetPage, Long widget) {
+        FragmentActivity activity = getActivity();
+        if (null == activity) {
+            return;
+        }
+        mImageCreationMode = ToolManager.ToolMode.SIGNATURE;
+        mAnnotTargetPoint = targetPoint;
+        mAnnotTargetPage = targetPage;
+        mTargetWidget = widget;
+        mOutputFileUri = ViewerUtils.openImageIntent(activity);
+    }
+
+    @Override
+    public void attachFileSelected(PointF targetPoint) {
+        FragmentActivity activity = getActivity();
+        if (null == activity) {
+            return;
+        }
+        mAnnotTargetPoint = targetPoint;
+        ViewerUtils.openFileIntent(activity);
+    }
 }
