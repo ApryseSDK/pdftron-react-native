@@ -37,10 +37,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
         @Override
         public void onViewDetachedFromWindow(View v) {
-            DocumentView documentView = (DocumentView) v;
             Log.d(getName(), "remove from map: " + v.getId());
             mDocumentViews.remove(v.getId());
-            documentView.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
         }
     };
 
