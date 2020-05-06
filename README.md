@@ -402,6 +402,14 @@ bool, optional
 array of `Config.AnnotationMenu` string constants, optional
 ##### pageChangeOnTap
 bool, optional, default to true
+##### collabEnabled
+bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
+##### currentUser
+string, required if `collabEnabled` is set to true
+##### currentUserName
+string, optional
+##### onExportAnnotationCommand
+function, optional, annotation command will only be given if `collabEnabled` is set to true
 ##### onAnnotationChanged
 function, optional
 
@@ -447,6 +455,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
 - [setValueForFields](#setValueForFields)
+- [importAnnotationCommand](#importannotationcommand)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -562,6 +571,18 @@ this._viewer.setValueForFields({
 });
 ```
 
+##### importAnnotationCommand
+This is used only if `collabEnabled` is set to true.
+Import remote annotation command to local document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+xfdfCommand | string | the XFDF command string
+initialLoad | bool | whether this is for initial load
+
+Returns a Promise.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
