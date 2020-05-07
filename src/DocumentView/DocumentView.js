@@ -99,6 +99,14 @@ export default class DocumentView extends PureComponent {
     }
   }
 
+  commitTool = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.commitTool(tag);
+    }
+    return Promise.resolve();
+  }
+
   getPageCount = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

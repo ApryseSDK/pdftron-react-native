@@ -240,6 +240,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean commitTool(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.commitTool();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "commitTool", "Unable to find DocumentView.");
+        }
+    }
+
     public int getPageCount(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
