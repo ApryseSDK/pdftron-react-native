@@ -448,6 +448,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 
 #### Methods
 - [setToolMode](#settoolmode)
+- [commitTool](#committool)
 - [getPageCount](#getpagecount)
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
@@ -462,6 +463,17 @@ To set the current tool mode (`Config.Tools` constants).
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
+```
+
+##### commitTool
+Commits the current tool, only available for multi-stroke ink and poly-shape.
+
+Returns a Promise.
+
+```js
+this._viewer.commitTool().then((committed) => {
+  // committed: true if either ink or poly-shape tool is committed, false otherwise
+});
 ```
 
 ##### getPageCount

@@ -41,6 +41,8 @@ import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
+import com.pdftron.pdf.tools.AdvancedShapeCreate;
+import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.ToolManager;
@@ -1106,6 +1108,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             ToolManager.ToolMode mode = convStringToToolMode(item);
             getToolManager().setTool(getToolManager().createTool(mode, null));
         }
+    }
+
+    public boolean commitTool() {
+        if (getToolManager() != null) {
+            ToolManager.Tool currentTool = getToolManager().getTool();
+            if (currentTool instanceof FreehandCreate) {
+                ((FreehandCreate) currentTool).commitAnnotation();
+                getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+                return true;
+            } else if (currentTool instanceof AdvancedShapeCreate) {
+                ((AdvancedShapeCreate) currentTool).commit();
+                getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+                return true;
+            }
+        }
+        return false;
     }
 
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {

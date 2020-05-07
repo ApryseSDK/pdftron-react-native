@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView : UIView
 
-- (void)setToolMode:(NSString *)toolMode;
-
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
 
@@ -78,6 +76,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) id <RNTPTDocumentViewDelegate> delegate;
 
 #pragma mark - Methods
+
+- (void)setToolMode:(NSString *)toolMode;
+
+- (BOOL)commitTool;
 
 - (int)getPageCount;
 
