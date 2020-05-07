@@ -15,7 +15,7 @@
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode;
 
-- (void)commitToolForDocumentViewTag:(NSNumber *)tag;
+- (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 

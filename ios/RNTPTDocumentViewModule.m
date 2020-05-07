@@ -44,8 +44,8 @@ RCT_REMAP_METHOD(commitTool,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] commitToolForDocumentViewTag:tag];
-        resolve(nil);
+        BOOL committed = [[self documentViewManager] commitToolForDocumentViewTag:tag];
+        resolve(@(committed));
     }
     @catch (NSException *exception) {
         reject(@"commit_tool", @"Failed to commit tool", [self errorFromException:exception]);

@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setToolMode:(NSString *)toolMode;
 
-- (void)commitTool;
+- (BOOL)commitTool;
 
 - (int)getPageCount;
 

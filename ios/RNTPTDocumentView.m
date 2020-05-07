@@ -556,13 +556,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)commitTool
+- (BOOL)commitTool
 {
     if ([self.toolManager.tool respondsToSelector:@selector(commitAnnotation)]) {
         [self.toolManager.tool performSelector:@selector(commitAnnotation)];
         
         [self.toolManager changeTool:[PTPanTool class]];
+        
+        return YES;
     }
+    
+    return NO;
 }
 
 - (void)setPageNumber:(int)pageNumber
