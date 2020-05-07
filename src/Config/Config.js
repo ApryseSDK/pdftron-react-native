@@ -62,6 +62,7 @@ export default {
     annotationCreatePerimeterMeasurement: 'AnnotationCreatePerimeterMeasurement',
     annotationCreateAreaMeasurement: 'AnnotationCreateAreaMeasurement',
     annotationCreateFileAttachment: 'AnnotationCreateFileAttachment',
+    annotationCreateSound: 'AnnotationCreateSound',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',

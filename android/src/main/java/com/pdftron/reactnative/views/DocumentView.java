@@ -446,6 +446,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
         } else if ("AnnotationCreateFileAttachment".equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
+        }  else if ("AnnotationCreateSound".equals(item)) {
+            mode = ToolManager.ToolMode.SOUND_CREATE;
         } else if ("TextSelect".equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
         } else if ("Pan".equals(item)) {
