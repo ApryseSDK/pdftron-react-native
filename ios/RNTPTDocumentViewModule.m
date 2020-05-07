@@ -38,6 +38,20 @@ RCT_REMAP_METHOD(setToolMode,
     [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
 }
 
+RCT_REMAP_METHOD(commitTool,
+                 commitToolForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] commitToolForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"commit_tool", @"Failed to commit tool", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Methods (w/ promises)
 
 RCT_REMAP_METHOD(getPageCount,
