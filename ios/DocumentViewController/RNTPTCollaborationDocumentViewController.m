@@ -65,6 +65,19 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - <PTToolManagerDelegate>
 
+- (void)toolManagerToolChanged:(PTToolManager *)toolManager
+{
+    [super toolManagerToolChanged:toolManager];
+    
+    // If the top toolbar is disabled...
+    if (![self isTopToolbarEnabled] &&
+        // ...and the annotation toolbar is visible now...
+        ![self isAnnotationToolbarHidden]) {
+        // ...hide the toolbar.
+        self.annotationToolbar.hidden = YES;
+    }
+}
+
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldShowMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
 {
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
