@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand;
 
+- (void)annotationMenuPressed:(RNTPTDocumentView *)sender annotationMenu:(NSString *)annotationMenu annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -68,6 +70,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *currentUser;
 
 @property (nonatomic, copy, nullable) NSString *currentUserName;
+
+@property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 

@@ -3,6 +3,21 @@
 #import "RNTPTDocumentViewController.h"
 #import "RNTPTCollaborationDocumentViewController.h"
 
+#include <objc/runtime.h>
+
+static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
+{
+    const IMP implementation = imp_implementationWithBlock(block);
+    
+    const BOOL added = class_addMethod(cls, selector, implementation, "v@:");
+    if (!added) {
+        imp_removeBlock(implementation);
+        return NO;
+    }
+    
+    return YES;
+}
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication>
@@ -37,6 +52,7 @@ NS_ASSUME_NONNULL_END
     
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
+    _selectAnnotationAfterCreation = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -926,6 +942,15 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
+{
+    _selectAnnotationAfterCreation = selectAnnotationAfterCreation;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -934,6 +959,9 @@ NS_ASSUME_NONNULL_END
     
     // Thumbnail editing enabled.
     self.documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
+    
+    // Select after creation.
+    self.toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
     
     // Auto save.
     self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
@@ -1196,10 +1224,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController
 {
-    if (self.annotationMenuItems.count == 0) {
-        return;
-    }
-    
+    // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         @"Style": @"style",
         @"Note": @"note",
@@ -1212,6 +1237,7 @@ NS_ASSUME_NONNULL_END
         @"Flatten": @"flatten",
         @"Open": @"openAttachment",
     };
+    // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
         NSString *localizedKey = PTLocalizedString(key, nil);
@@ -1225,12 +1251,83 @@ NS_ASSUME_NONNULL_END
     
     for (UIMenuItem *menuItem in menuController.menuItems) {
         NSString *menuItemId = localizedMap[menuItem.title];
-        if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
+        
+        if (self.annotationMenuItems.count == 0) {
             [permittedItems addObject:menuItem];
+        }
+        else {
+            if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
+                [permittedItems addObject:menuItem];
+            }
+        }
+        
+        // Override action of of overridden annotation menu items.
+        if (menuItemId && [self.overrideAnnotationMenuBehavior containsObject:menuItemId]) {
+            NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
+                                    menuItemId];
+            const SEL selector = NSSelectorFromString(actionName);
+            
+            RNTPT_addMethod([self class], selector, ^(id self) {
+                [self overriddenMenuItemPressed:menuItemId];
+            });
+            
+            menuItem.action = selector;
         }
     }
     
     menuController.menuItems = [permittedItems copy];
+}
+
+- (void)overriddenMenuItemPressed:(NSString *)menuItemId
+{
+    NSMutableArray<PTAnnot *> *annotations = [NSMutableArray array];
+    
+    if ([self.toolManager.tool isKindOfClass:[PTAnnotEditTool class]]) {
+        PTAnnotEditTool *annotEdit = (PTAnnotEditTool *)self.toolManager.tool;
+        if (annotEdit.selectedAnnotations.count > 0) {
+            [annotations addObjectsFromArray:annotEdit.selectedAnnotations];
+        }
+    }
+    else if (self.toolManager.tool.currentAnnotation) {
+        [annotations addObject:self.toolManager.tool.currentAnnotation];
+    }
+    
+    const int pageNumber = self.toolManager.tool.annotationPageNumber;
+    
+    NSMutableArray<NSDictionary<NSString *, id> *> *annotationData = [NSMutableArray array];
+    
+    if (annotations.count > 0) {
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+            for (PTAnnot *annot in annotations) {
+                if (![annot IsValid]) {
+                    continue;
+                }
+                
+                NSString *uniqueId = nil;
+                
+                PTObj *uniqueIdObj = [annot GetUniqueID];
+                if ([uniqueIdObj IsValid] && [uniqueIdObj IsString]) {
+                    uniqueId = [uniqueIdObj GetAsPDFText];
+                }
+                
+                PTPDFRect *screenRect = [self.pdfViewCtrl GetScreenRectForAnnot:annot
+                                                                       page_num:pageNumber];
+                [annotationData addObject:@{
+                    @"id": (uniqueId ?: @""),
+                    @"rect": @{
+                        @"x1": @([screenRect GetX1]),
+                        @"y1": @([screenRect GetY1]),
+                        @"x2": @([screenRect GetX2]),
+                        @"y2": @([screenRect GetY2]),
+                    },
+                }];
+            }
+        } error:nil];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(annotationMenuPressed:annotationMenu:annotations:)]) {
+        [self.delegate annotationMenuPressed:self annotationMenu:menuItemId annotations:annotationData];
+    }
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>

@@ -45,6 +45,7 @@ import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -59,6 +60,7 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +76,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
+    private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -83,6 +86,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_annotList = "annotList";
     private static final String KEY_annotId = "id";
     private static final String KEY_annotPage = "pageNumber";
+    private static final String KEY_annotRect = "rect";
 
     private static final String KEY_action = "action";
     private static final String KEY_action_add = "add";
@@ -90,6 +94,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_action_delete = "delete";
     private static final String KEY_annotations = "annotations";
     private static final String KEY_xfdfCommand = "xfdfCommand";
+
+    private static final String KEY_annotationMenu = "annotationMenu";
+
+    private static final String KEY_x1 = "x1";
+    private static final String KEY_x2 = "x2";
+    private static final String KEY_y1 = "y1";
+    private static final String KEY_y2 = "y2";
+    private static final String KEY_width = "width";
+    private static final String KEY_height = "height";
     // EVENTS END
 
     private String mDocumentPath;
@@ -120,6 +133,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     // quick menu
     private ReadableArray mAnnotMenuItems;
+    private ReadableArray mAnnotMenuOverrideItems;
 
     public DocumentView(Context context) {
         super(context);
@@ -336,6 +350,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
+        mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
+    }
+
+    public void setOverrideAnnotationMenuBehavior(@NonNull ReadableArray items) {
+        mAnnotMenuOverrideItems = items;
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -448,7 +470,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
         } else if ("AnnotationCreateFileAttachment".equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
-        }  else if ("AnnotationCreateSound".equals(item)) {
+        } else if ("AnnotationCreateSound".equals(item)) {
             mode = ToolManager.ToolMode.SOUND_CREATE;
         } else if ("TextSelect".equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
@@ -634,6 +656,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
+            getToolManager().removeAnnotationsSelectionListener(mAnnotationsSelectionListener);
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
@@ -677,10 +700,70 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
+    private boolean hasAnnotationsSelected() {
+        return mSelectedAnnots != null && !mSelectedAnnots.isEmpty();
+    }
+
     private ToolManager.QuickMenuListener mQuickMenuListener = new ToolManager.QuickMenuListener() {
         @Override
         public boolean onQuickMenuClicked(QuickMenuItem quickMenuItem) {
-            return false;
+            int menuId = quickMenuItem.getItemId();
+            String menuStr = convQuickMenuIdToString(menuId);
+
+            // check if this is an override menu
+            boolean result = false;
+            if (mAnnotMenuOverrideItems != null) {
+                ArrayList<Object> overrideList = mAnnotMenuOverrideItems.toArrayList();
+                result = overrideList.contains(menuStr);
+            }
+
+            if (hasAnnotationsSelected() && getPdfViewCtrl() != null && getToolManager() != null) {
+                try {
+                    // notify event
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
+                    params.putString(KEY_annotationMenu, menuStr);
+
+                    WritableArray annots = Arguments.createArray();
+
+                    for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
+                        Annot key = entry.getKey();
+                        Integer value = entry.getValue();
+
+                        WritableMap annotPair = Arguments.createMap();
+
+                        // try to obtain id
+                        String uid = null;
+                        try {
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (uid != null) {
+                            annotPair.putString(KEY_annotId, uid);
+                            // try to obtain bbox
+                            com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(key, value);
+                            WritableMap bboxMap = Arguments.createMap();
+                            bboxMap.putDouble(KEY_x1, bbox.getX1());
+                            bboxMap.putDouble(KEY_y1, bbox.getY1());
+                            bboxMap.putDouble(KEY_x2, bbox.getX2());
+                            bboxMap.putDouble(KEY_y2, bbox.getY2());
+                            bboxMap.putDouble(KEY_width, bbox.getWidth());
+                            bboxMap.putDouble(KEY_height, bbox.getHeight());
+                            annotPair.putMap(KEY_annotRect, bboxMap);
+
+                            annots.pushMap(annotPair);
+                        }
+                    }
+                    params.putArray(KEY_annotations, annots);
+
+                    onReceiveNativeEvent(params);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            return result;
         }
 
         @Override
@@ -709,6 +792,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onQuickMenuDismissed() {
 
+        }
+    };
+
+    private HashMap<Annot, Integer> mSelectedAnnots;
+    private ToolManager.AnnotationsSelectionListener mAnnotationsSelectionListener = new ToolManager.AnnotationsSelectionListener() {
+        @Override
+        public void onAnnotationsSelectionChanged(HashMap<Annot, Integer> hashMap) {
+            mSelectedAnnots = new HashMap<>(hashMap);
         }
     };
 
@@ -822,6 +913,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
+        getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
@@ -1106,7 +1198,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void setToolMode(String item) {
         if (getToolManager() != null) {
             ToolManager.ToolMode mode = convStringToToolMode(item);
-            getToolManager().setTool(getToolManager().createTool(mode, null));
+            Tool tool = (Tool) getToolManager().createTool(mode, null);
+            boolean continuousAnnot = PdfViewCtrlSettingsManager.getContinuousAnnotationEdit(getContext());
+            tool.setForceSameNextToolMode(continuousAnnot);
+            getToolManager().setTool(tool);
         }
     }
 

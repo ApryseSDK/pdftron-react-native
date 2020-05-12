@@ -320,6 +320,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [thumbnailViewEditingEnabled](#thumbnailvieweditingenabled)
 - [annotationAuthor](#annotationauthor)
 - [continuousAnnotationEditing](#continuousannotationediting)
+- [selectAnnotationAfterCreation](#selectannotationaftercreation)
 - [fitMode](#fitmode)
 - [layoutMode](#layoutmode)
 - [initialPageNumber](#initialpagenumber)
@@ -332,6 +333,8 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [onAnnotationChanged](#onannotationchanged)
 - [autoSaveEnabled](#autosaveenabled)
 - [annotationMenuItems](#annotationMenuItems)
+- [overrideAnnotationMenuBehavior](#overrideannotationmenubehavior)
+- [onAnnotationMenuPress](#onannotationmenupress)
 - [pageChangeOnTap](#pagechangeontap)
 
 ##### document
@@ -362,6 +365,8 @@ bool, optional, default to true
 string, optional
 ##### continuousAnnotationEditing
 bool, optional
+##### selectAnnotationAfterCreation
+bool, optional, default to true
 ##### fitMode
 string, optional
 ##### layoutMode
@@ -400,6 +405,20 @@ If true, the viewer will add padding to take account of status bar. Default to f
 bool, optional
 ##### annotationMenuItems
 array of `Config.AnnotationMenu` string constants, optional
+Defines menu items that can show when an annotation is selected.
+##### overrideAnnotationMenuBehavior
+array of `Config.AnnotationMenu` string constants, optional
+Defines menu items that should skip default behaviour.
+##### onAnnotationMenuPress
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationMenu | string | One of `Config.AnnotationMenu` string constants
+annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
 ##### pageChangeOnTap
 bool, optional, default to true
 ##### collabEnabled

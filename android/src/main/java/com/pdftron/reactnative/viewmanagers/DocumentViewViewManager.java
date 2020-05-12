@@ -186,6 +186,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    @ReactProp(name = "selectAnnotationAfterCreation")
+    public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
+        documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
+    }
+
+    @ReactProp(name = "overrideAnnotationMenuBehavior")
+    public void setOverrideAnnotationMenuBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideAnnotationMenuBehavior(items);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
