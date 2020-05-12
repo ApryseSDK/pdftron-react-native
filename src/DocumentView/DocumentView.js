@@ -96,6 +96,7 @@ export default class DocumentView extends PureComponent {
       if (this.props.onAnnotationMenuPress) {
         this.props.onAnnotationMenuPress({
           'annotationMenu': event.nativeEvent.annotationMenu,
+          'annotations': event.nativeEvent.annotations,
         });
       }
     }
