@@ -417,6 +417,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of `Config.AnnotationMenu` string constants
+annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
 
 ##### pageChangeOnTap
 bool, optional, default to true
