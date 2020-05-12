@@ -104,6 +104,19 @@ NS_ASSUME_NONNULL_END
     return [super toolShouldGoBackToPan:annotationToolbar];
 }
 
+- (void)annotationToolbarDidCancel:(PTAnnotationToolbar *)annotationToolbar
+{
+    [super annotationToolbarDidCancel:annotationToolbar];
+    
+    // If the top toolbar is disabled...
+    if (![self isTopToolbarEnabled] &&
+        // ...and the annotation toolbar is visible now...
+        ![self isAnnotationToolbarHidden]) {
+        // ...hide the toolbar.
+        self.annotationToolbar.hidden = YES;
+    }
+}
+
 #pragma mark - <PTPDFViewCtrlDelegate>
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
