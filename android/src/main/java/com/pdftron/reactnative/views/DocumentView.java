@@ -45,6 +45,7 @@ import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
@@ -336,6 +337,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
+        mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -448,7 +453,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
         } else if ("AnnotationCreateFileAttachment".equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
-        }  else if ("AnnotationCreateSound".equals(item)) {
+        } else if ("AnnotationCreateSound".equals(item)) {
             mode = ToolManager.ToolMode.SOUND_CREATE;
         } else if ("TextSelect".equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
@@ -1106,7 +1111,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void setToolMode(String item) {
         if (getToolManager() != null) {
             ToolManager.ToolMode mode = convStringToToolMode(item);
-            getToolManager().setTool(getToolManager().createTool(mode, null));
+            Tool tool = (Tool) getToolManager().createTool(mode, null);
+            boolean continuousAnnot = PdfViewCtrlSettingsManager.getContinuousAnnotationEdit(getContext());
+            tool.setForceSameNextToolMode(continuousAnnot);
+            getToolManager().setTool(tool);
         }
     }
 
