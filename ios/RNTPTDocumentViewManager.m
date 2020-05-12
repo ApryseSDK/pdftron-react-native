@@ -234,6 +234,20 @@ RCT_CUSTOM_VIEW_PROPERTY(thumbnailViewEditingEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.selectAnnotationAfterCreation = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(overrideAnnotationMenuBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideAnnotationMenuBehavior = [RCTConvert NSArray:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -309,6 +323,17 @@ RCT_CUSTOM_VIEW_PROPERTY(thumbnailViewEditingEnabled, BOOL, RNTPTDocumentView)
             @"onExportAnnotationCommand": @"onExportAnnotationCommand",
             @"action": action,
             @"xfdfCommand": xfdfCommand,
+        });
+    }
+}
+
+- (void)annotationMenuPressed:(RNTPTDocumentView *)sender annotationMenu:(NSString *)annotationMenu annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationMenuPress": @"onAnnotationMenuPress",
+            @"annotationMenu": annotationMenu,
+            @"annotations": annotations,
         });
     }
 }
