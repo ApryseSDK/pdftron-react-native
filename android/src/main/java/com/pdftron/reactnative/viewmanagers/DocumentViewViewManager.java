@@ -191,6 +191,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
     }
 
+    @ReactProp(name = "overrideAnnotationMenuBehavior")
+    public void setOverrideAnnotationMenuBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideAnnotationMenuBehavior(items);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

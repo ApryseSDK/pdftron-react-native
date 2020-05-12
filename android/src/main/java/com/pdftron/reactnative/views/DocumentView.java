@@ -75,6 +75,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
+    private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -91,6 +92,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_action_delete = "delete";
     private static final String KEY_annotations = "annotations";
     private static final String KEY_xfdfCommand = "xfdfCommand";
+
+    private static final String KEY_annotationMenu = "annotationMenu";
     // EVENTS END
 
     private String mDocumentPath;
@@ -121,6 +124,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     // quick menu
     private ReadableArray mAnnotMenuItems;
+    private ReadableArray mAnnotMenuOverrideItems;
 
     public DocumentView(Context context) {
         super(context);
@@ -339,6 +343,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
+    }
+
+    public void setOverrideAnnotationMenuBehavior(@NonNull ReadableArray items) {
+        mAnnotMenuOverrideItems = items;
     }
 
     private void disableElements(ReadableArray args) {
@@ -685,7 +693,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private ToolManager.QuickMenuListener mQuickMenuListener = new ToolManager.QuickMenuListener() {
         @Override
         public boolean onQuickMenuClicked(QuickMenuItem quickMenuItem) {
-            return false;
+            int menuId = quickMenuItem.getItemId();
+            String menuStr = convQuickMenuIdToString(menuId);
+
+            // check if this is an override menu
+            boolean result = false;
+            if (mAnnotMenuOverrideItems != null) {
+                ArrayList<Object> overrideList = mAnnotMenuOverrideItems.toArrayList();
+                result = overrideList.contains(menuStr);
+            }
+
+            // notify event
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
+            params.putString(KEY_annotationMenu, menuStr);
+            onReceiveNativeEvent(params);
+            
+            return result;
         }
 
         @Override

@@ -27,6 +27,8 @@ export default class DocumentView extends PureComponent {
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     annotationMenuItems: PropTypes.array,
+    overrideAnnotationMenuBehavior: PropTypes.array,
+    onAnnotationMenuPress: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
@@ -37,6 +39,7 @@ export default class DocumentView extends PureComponent {
     layoutMode: PropTypes.string,
     padStatusBar: PropTypes.bool,
     continuousAnnotationEditing: PropTypes.bool,
+    selectAnnotationAfterCreation: PropTypes.bool,
     annotationAuthor: PropTypes.string,
     showSavedSignatures: PropTypes.bool,
     isBase64String: PropTypes.bool,
@@ -46,7 +49,6 @@ export default class DocumentView extends PureComponent {
     onExportAnnotationCommand: PropTypes.func,
     autoSaveEnabled: PropTypes.bool,
     pageChangeOnTap: PropTypes.bool,
-    selectAnnotationAfterCreation: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -88,6 +90,12 @@ export default class DocumentView extends PureComponent {
         this.props.onExportAnnotationCommand({
           'action': event.nativeEvent.action,
           'xfdfCommand': event.nativeEvent.xfdfCommand,
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationMenuPress) {
+      if (this.props.onAnnotationMenuPress) {
+        this.props.onAnnotationMenuPress({
+          'annotationMenu': event.nativeEvent.annotationMenu,
         });
       }
     }
