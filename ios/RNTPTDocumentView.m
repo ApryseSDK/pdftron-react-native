@@ -766,14 +766,14 @@ NS_ASSUME_NONNULL_END
             int pageNumberValue = pageNumber.intValue;
             
             PTAnnot *annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
-            if (!annot) {
+            if (![annot IsValid]) {
                 NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
                       annotId, pageNumberValue);
                 continue;
             }
             
             PTPage *page = [doc GetPage:pageNumberValue];
-            if (![page IsValid]) {
+            if ([page IsValid]) {
                 [page AnnotRemoveWithAnnot:annot];
             }
         }
