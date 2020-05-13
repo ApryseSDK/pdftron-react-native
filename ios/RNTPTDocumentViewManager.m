@@ -305,6 +305,16 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideAnnotationMenuBehavior, NSArray, RNTPTDocumentV
     }
 }
 
+- (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationsSelected": @"onAnnotationsSelected",
+            @"annotations": annotations,
+        });
+    }
+}
+
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action
 {
     if (sender.onChange) {

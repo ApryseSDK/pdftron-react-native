@@ -77,6 +77,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
     private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
+    private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -704,6 +705,46 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return mSelectedAnnots != null && !mSelectedAnnots.isEmpty();
     }
 
+    private WritableArray getAnnotationsData() {
+        WritableArray annots = Arguments.createArray();
+
+        for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
+            Annot key = entry.getKey();
+            Integer value = entry.getValue();
+
+            WritableMap annotPair = Arguments.createMap();
+
+            // try to obtain id
+            String uid = null;
+            try {
+                uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (uid != null) {
+                annotPair.putString(KEY_annotId, uid);
+                annotPair.putInt(KEY_annotPage, value);
+                // try to obtain bbox
+                try {
+                    com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(key, value);
+                    WritableMap bboxMap = Arguments.createMap();
+                    bboxMap.putDouble(KEY_x1, bbox.getX1());
+                    bboxMap.putDouble(KEY_y1, bbox.getY1());
+                    bboxMap.putDouble(KEY_x2, bbox.getX2());
+                    bboxMap.putDouble(KEY_y2, bbox.getY2());
+                    bboxMap.putDouble(KEY_width, bbox.getWidth());
+                    bboxMap.putDouble(KEY_height, bbox.getHeight());
+                    annotPair.putMap(KEY_annotRect, bboxMap);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                annots.pushMap(annotPair);
+            }
+        }
+        return annots;
+    }
+
     private ToolManager.QuickMenuListener mQuickMenuListener = new ToolManager.QuickMenuListener() {
         @Override
         public boolean onQuickMenuClicked(QuickMenuItem quickMenuItem) {
@@ -723,40 +764,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     WritableMap params = Arguments.createMap();
                     params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
                     params.putString(KEY_annotationMenu, menuStr);
-
-                    WritableArray annots = Arguments.createArray();
-
-                    for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
-                        Annot key = entry.getKey();
-                        Integer value = entry.getValue();
-
-                        WritableMap annotPair = Arguments.createMap();
-
-                        // try to obtain id
-                        String uid = null;
-                        try {
-                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (uid != null) {
-                            annotPair.putString(KEY_annotId, uid);
-                            // try to obtain bbox
-                            com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(key, value);
-                            WritableMap bboxMap = Arguments.createMap();
-                            bboxMap.putDouble(KEY_x1, bbox.getX1());
-                            bboxMap.putDouble(KEY_y1, bbox.getY1());
-                            bboxMap.putDouble(KEY_x2, bbox.getX2());
-                            bboxMap.putDouble(KEY_y2, bbox.getY2());
-                            bboxMap.putDouble(KEY_width, bbox.getWidth());
-                            bboxMap.putDouble(KEY_height, bbox.getHeight());
-                            annotPair.putMap(KEY_annotRect, bboxMap);
-
-                            annots.pushMap(annotPair);
-                        }
-                    }
-                    params.putArray(KEY_annotations, annots);
-
+                    params.putArray(KEY_annotations, getAnnotationsData());
                     onReceiveNativeEvent(params);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -800,6 +808,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsSelectionChanged(HashMap<Annot, Integer> hashMap) {
             mSelectedAnnots = new HashMap<>(hashMap);
+
+            if (hasAnnotationsSelected() && getPdfViewCtrl() != null && getToolManager() != null) {
+                try {
+                    // notify event
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATIONS_SELECTED, ON_ANNOTATIONS_SELECTED);
+                    params.putArray(KEY_annotations, getAnnotationsData());
+                    onReceiveNativeEvent(params);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     };
 
