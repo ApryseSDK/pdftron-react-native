@@ -32,6 +32,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
+    onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
     readOnly: PropTypes.bool,
     thumbnailViewEditingEnabled: PropTypes.bool,
@@ -81,6 +82,12 @@ export default class DocumentView extends PureComponent {
           'annotations': event.nativeEvent.annotations,
         });
       }
+    } else if (event.nativeEvent.onAnnotationsSelected) {
+    	if (this.props.onAnnotationsSelected) {
+    		this.props.onAnnotationsSelected({
+    			'annotations': event.nativeEvent.annotations,
+    		});
+    	}
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError) {
         this.props.onDocumentError();

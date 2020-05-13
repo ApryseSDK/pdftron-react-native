@@ -569,6 +569,11 @@ NS_ASSUME_NONNULL_END
     
     if (toolClass) {
         [self.documentViewController.toolManager changeTool:toolClass];
+        
+        if ([self.toolManager.tool isKindOfClass:[PTFreeHandCreate class]]
+            && ![self.toolManager.tool isKindOfClass:[PTFreeHandHighlightCreate class]]) {
+            ((PTFreeHandCreate *)self.toolManager.tool).multistrokeMode = self.continuousAnnotationEditing;
+        }
     }
 }
 
@@ -1008,6 +1013,9 @@ NS_ASSUME_NONNULL_END
     // Layout mode.
     [self applyLayoutMode];
     
+    // Continuous annotation editing.
+    self.toolManager.tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
+    
     // Annotation author.
     self.toolManager.annotationAuthor = self.annotationAuthor;
     
@@ -1123,6 +1131,10 @@ NS_ASSUME_NONNULL_END
 - (void)setContinuousAnnotationEditing:(BOOL)continuousAnnotationEditing
 {
     _continuousAnnotationEditing = continuousAnnotationEditing;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
 }
 
 #pragma mark - Annotation author
@@ -1222,6 +1234,52 @@ NS_ASSUME_NONNULL_END
     return self.topToolbarEnabled;
 }
 
+- (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber
+{
+    NSMutableArray<NSDictionary<NSString *, id> *> *annotationData = [NSMutableArray array];
+    
+    if (annotations.count > 0) {
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+            for (PTAnnot *annot in annotations) {
+                if (![annot IsValid]) {
+                    continue;
+                }
+                
+                NSString *uniqueId = nil;
+                
+                PTObj *uniqueIdObj = [annot GetUniqueID];
+                if ([uniqueIdObj IsValid] && [uniqueIdObj IsString]) {
+                    uniqueId = [uniqueIdObj GetAsPDFText];
+                }
+                
+                PTPDFRect *screenRect = [self.pdfViewCtrl GetScreenRectForAnnot:annot
+                                                                       page_num:pageNumber];
+                [annotationData addObject:@{
+                    @"id": (uniqueId ?: @""),
+                    @"pageNumber": @(pageNumber),
+                    @"rect": @{
+                            @"x1": @([screenRect GetX1]),
+                            @"y1": @([screenRect GetY1]),
+                            @"x2": @([screenRect GetX2]),
+                            @"y2": @([screenRect GetY2]),
+                    },
+                }];
+            }
+        } error:nil];
+    }
+
+    return [annotationData copy];
+}
+
+- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
+{
+    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
+    
+    if ([self.delegate respondsToSelector:@selector(annotationsSelected:annotations:)]) {
+        [self.delegate annotationsSelected:self annotations:annotationData];
+    }
+}
+
 - (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController
 {
     // Mapping from menu item title to identifier.
@@ -1294,37 +1352,8 @@ NS_ASSUME_NONNULL_END
     
     const int pageNumber = self.toolManager.tool.annotationPageNumber;
     
-    NSMutableArray<NSDictionary<NSString *, id> *> *annotationData = [NSMutableArray array];
-    
-    if (annotations.count > 0) {
-        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
-            for (PTAnnot *annot in annotations) {
-                if (![annot IsValid]) {
-                    continue;
-                }
-                
-                NSString *uniqueId = nil;
-                
-                PTObj *uniqueIdObj = [annot GetUniqueID];
-                if ([uniqueIdObj IsValid] && [uniqueIdObj IsString]) {
-                    uniqueId = [uniqueIdObj GetAsPDFText];
-                }
-                
-                PTPDFRect *screenRect = [self.pdfViewCtrl GetScreenRectForAnnot:annot
-                                                                       page_num:pageNumber];
-                [annotationData addObject:@{
-                    @"id": (uniqueId ?: @""),
-                    @"rect": @{
-                        @"x1": @([screenRect GetX1]),
-                        @"y1": @([screenRect GetY1]),
-                        @"x2": @([screenRect GetX2]),
-                        @"y2": @([screenRect GetY2]),
-                    },
-                }];
-            }
-        } error:nil];
-    }
-    
+    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
+        
     if ([self.delegate respondsToSelector:@selector(annotationMenuPressed:annotationMenu:annotations:)]) {
         [self.delegate annotationMenuPressed:self annotationMenu:menuItemId annotations:annotationData];
     }

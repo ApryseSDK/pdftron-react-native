@@ -331,6 +331,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [showSavedSignatures](#showsavedsignatures)
 - [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
+- [onAnnotationsSelected](#onannotationsselected)
 - [autoSaveEnabled](#autosaveenabled)
 - [annotationMenuItems](#annotationMenuItems)
 - [overrideAnnotationMenuBehavior](#overrideannotationmenubehavior)
@@ -429,6 +430,15 @@ string, required if `collabEnabled` is set to true
 string, optional
 ##### onExportAnnotationCommand
 function, optional, annotation command will only be given if `collabEnabled` is set to true
+##### onAnnotationsSelected
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`
+
 ##### onAnnotationChanged
 function, optional
 
@@ -437,7 +447,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format {id: string, pageNumber: int}
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
 
 Example:
 
