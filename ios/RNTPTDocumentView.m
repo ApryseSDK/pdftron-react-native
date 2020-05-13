@@ -569,6 +569,11 @@ NS_ASSUME_NONNULL_END
     
     if (toolClass) {
         [self.documentViewController.toolManager changeTool:toolClass];
+        
+        if ([self.toolManager.tool isKindOfClass:[PTFreeHandCreate class]]
+            && ![self.toolManager.tool isKindOfClass:[PTFreeHandHighlightCreate class]]) {
+            ((PTFreeHandCreate *)self.toolManager.tool).multistrokeMode = self.continuousAnnotationEditing;
+        }
     }
 }
 
@@ -1008,6 +1013,9 @@ NS_ASSUME_NONNULL_END
     // Layout mode.
     [self applyLayoutMode];
     
+    // Continuous annotation editing.
+    self.toolManager.tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
+    
     // Annotation author.
     self.toolManager.annotationAuthor = self.annotationAuthor;
     
@@ -1123,6 +1131,10 @@ NS_ASSUME_NONNULL_END
 - (void)setContinuousAnnotationEditing:(BOOL)continuousAnnotationEditing
 {
     _continuousAnnotationEditing = continuousAnnotationEditing;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
 }
 
 #pragma mark - Annotation author
