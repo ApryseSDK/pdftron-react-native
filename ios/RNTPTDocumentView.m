@@ -750,41 +750,47 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    NSError *error = nil;
-    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
-        for (id annotationData in annotations) {
-            if (![annotationData isKindOfClass:[NSDictionary class]]) {
-                continue;
-            }
-            NSDictionary *dict = (NSDictionary *)annotationData;
-
-            NSString *annotId = dict[@"id"];
-            NSNumber *pageNumber = dict[@"pageNumber"];
-            if (!annotId || !pageNumber) {
-                continue;
-            }
-            int pageNumberValue = pageNumber.intValue;
+    for (id annotationData in annotations) {
+        if (![annotationData isKindOfClass:[NSDictionary class]]) {
+            continue;
+        }
+        NSDictionary *dict = (NSDictionary *)annotationData;
+        
+        NSString *annotId = dict[@"id"];
+        NSNumber *pageNumber = dict[@"pageNumber"];
+        if (!annotId || !pageNumber) {
+            continue;
+        }
+        int pageNumberValue = pageNumber.intValue;
+        
+        __block PTAnnot *annot = nil;
+        NSError *error = nil;
+        [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
             
-            PTAnnot *annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
+            annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
             if (![annot IsValid]) {
                 NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
                       annotId, pageNumberValue);
-                continue;
+                annot = nil;
+                return;
             }
             
             PTPage *page = [doc GetPage:pageNumberValue];
             if ([page IsValid]) {
                 [page AnnotRemoveWithAnnot:annot];
             }
-        }
+            
+            [self.pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumberValue];
+        } error:&error];
         
-        [self.pdfViewCtrl Update:YES];
-    } error:&error];
-    
-    // Throw error as exception to reject promise.
-    if (error) {
-        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        } else if (annot) {
+            [self.toolManager annotationRemoved:annot onPageNumber:pageNumberValue];
+        }
     }
+    
 }
 
 #pragma mark - Saving
