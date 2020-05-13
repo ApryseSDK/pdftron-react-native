@@ -98,7 +98,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String KEY_annotationMenu = "annotationMenu";
 
-    private static final String KEY_page = "pageNumber";
     private static final String KEY_x1 = "x1";
     private static final String KEY_x2 = "x2";
     private static final String KEY_y1 = "y1";
@@ -724,7 +723,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             }
             if (uid != null) {
                 annotPair.putString(KEY_annotId, uid);
-                annotPair.putInt(KEY_page, value);
+                annotPair.putInt(KEY_annotPage, value);
                 // try to obtain bbox
                 try {
                     com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(key, value);
