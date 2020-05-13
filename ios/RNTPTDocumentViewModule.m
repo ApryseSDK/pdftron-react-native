@@ -114,6 +114,21 @@ RCT_REMAP_METHOD(flattenAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(deleteAnnotations,
+                 deleteAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotations:(NSArray *)annotations
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] deleteAnnotationsForDocumentViewTag:tag annotations:annotations];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"delete_failed", @"Failed to delete annotations", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(saveDocument,
                  saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
