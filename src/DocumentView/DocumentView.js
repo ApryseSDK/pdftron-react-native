@@ -106,12 +106,6 @@ export default class DocumentView extends PureComponent {
           'annotations': event.nativeEvent.annotations,
         });
       }
-    } else if (event.nativeEvent.onAnnotationsSelected) {
-      if (this.props.onAnnotationsSelected) {
-        this.props.onAnnotationsSelected({
-          'annotations': event.nativeEvent.annotations,
-        });
-      }
     }
   }
 
