@@ -286,6 +286,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.deleteAnnotations(annots);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "deleteAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

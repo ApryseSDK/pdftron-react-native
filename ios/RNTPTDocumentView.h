@@ -96,6 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 
+- (void)deleteAnnotations:(NSArray *)annotations;
+
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;

@@ -35,6 +35,7 @@ import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
+import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
@@ -1118,6 +1119,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public int getPageCount() throws PDFNetException {
         return getPdfDoc().getPageCount();
+    }
+
+    public void deleteAnnotations(ReadableArray annots) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        int annotCount = annots.size();
+
+        for (int i = 0; i < annotCount; i++) {
+            ReadableMap annotData = annots.getMap(i);
+            if (null == annotData) {
+                continue;
+            }
+            String annotId = annotData.getString(KEY_annotId);
+            int pageNum = annotData.getInt(KEY_annotPage);
+            Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
+            if (annot != null && annot.isValid()) {
+                boolean shouldUnlock = false;
+                try {
+                    pdfViewCtrl.docLock(true);
+                    shouldUnlock = true;
+
+                    ToolManager toolManager = (ToolManager) pdfViewCtrl.getToolManager();
+                    HashMap<Annot, Integer> map = new HashMap<>(1);
+                    map.put(annot, pageNum);
+                    toolManager.raiseAnnotationsPreRemoveEvent(map);
+
+                    Page page = pdfViewCtrl.getDoc().getPage(pageNum);
+                    page.annotRemove(annot);
+                    pdfViewCtrl.update(annot, pageNum);
+
+                    toolManager.raiseAnnotationsRemovedEvent(map);
+                } finally {
+                    if (shouldUnlock) {
+                        pdfViewCtrl.docUnlock();
+                    }
+                }
+            }
+        }
     }
 
     public void setValueForFields(ReadableMap readableMap) throws PDFNetException {

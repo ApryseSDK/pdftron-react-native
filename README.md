@@ -482,6 +482,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [importAnnotations](#importannotations)
 - [exportAnnotations](#exportannotations)
 - [flattenAnnotations](#flattenannotations)
+- [deleteAnnotations](#deleteannotations)
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
 - [setValueForFields](#setValueForFields)
@@ -560,6 +561,25 @@ Returns a Promise.
 ```js
 // flatten forms and annotations in the current document.
 this._viewer.flattenAnnotations(false);
+```
+
+##### deleteAnnotations
+To delete the specified annotations in the current document.
+
+Returns a Promise.
+
+```js
+// delete annotations in the current document.
+this._viewer.deleteAnnotations([
+    {
+        id: 'annotId1',
+        pageNumber: 1,
+    },
+    {
+        id: 'annotId2',
+        pageNumber: 2,
+    }
+]);
 ```
 
 ##### saveDocument

@@ -421,6 +421,16 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideAnnotationMenuBehavior, NSArray, RNTPTDocumentV
     }
 }
 
+- (void)deleteAnnotationsForDocumentViewTag:(NSNumber *)tag annotations:(NSArray *)annotations
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView deleteAnnotations:annotations];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
