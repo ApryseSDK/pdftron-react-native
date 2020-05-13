@@ -78,6 +78,23 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)toolManager:(PTToolManager *)toolManager didSelectAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
+{
+    NSMutableArray<PTAnnot *> *annotations = [NSMutableArray array];
+    if ([self.toolManager.tool isKindOfClass:[PTAnnotEditTool class]]) {
+        PTAnnotEditTool *annotEdit = (PTAnnotEditTool *)self.toolManager.tool;
+        if (annotEdit.selectedAnnotations.count > 0) {
+            [annotations addObjectsFromArray:annotEdit.selectedAnnotations];
+        }
+    } else if (self.toolManager.tool.currentAnnotation) {
+        [annotations addObject:self.toolManager.tool.currentAnnotation];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:didSelectAnnotations:onPageNumber:)]) {
+        [self.delegate rnt_documentViewController:self didSelectAnnotations:[annotations copy] onPageNumber:(int)pageNumber];
+    }
+}
+
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldShowMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
 {
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
