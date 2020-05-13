@@ -98,7 +98,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String KEY_annotationMenu = "annotationMenu";
 
-    private static final String KEY_page = "page";
+    private static final String KEY_page = "pageNumber";
     private static final String KEY_x1 = "x1";
     private static final String KEY_x2 = "x2";
     private static final String KEY_y1 = "y1";
