@@ -928,8 +928,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
 
-        onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
-
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
 
@@ -961,6 +959,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 }
             }
         }
+
+        onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
     }
 
     @Override
