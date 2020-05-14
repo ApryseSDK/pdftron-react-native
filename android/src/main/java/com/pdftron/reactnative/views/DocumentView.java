@@ -1124,6 +1124,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void deleteAnnotations(ReadableArray annots) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         int annotCount = annots.size();
+        ToolManager toolManager = (ToolManager) pdfViewCtrl.getToolManager();
 
         for (int i = 0; i < annotCount; i++) {
             ReadableMap annotData = annots.getMap(i);
@@ -1139,7 +1140,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     pdfViewCtrl.docLock(true);
                     shouldUnlock = true;
 
-                    ToolManager toolManager = (ToolManager) pdfViewCtrl.getToolManager();
                     HashMap<Annot, Integer> map = new HashMap<>(1);
                     map.put(annot, pageNum);
                     toolManager.raiseAnnotationsPreRemoveEvent(map);
@@ -1154,6 +1154,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         pdfViewCtrl.docUnlock();
                     }
                 }
+                toolManager.deselectAll();
             }
         }
     }

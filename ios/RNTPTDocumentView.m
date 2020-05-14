@@ -791,6 +791,7 @@ NS_ASSUME_NONNULL_END
         }
     }
     
+    [self.toolManager changeTool:[PTPanTool class]];
 }
 
 #pragma mark - Saving
