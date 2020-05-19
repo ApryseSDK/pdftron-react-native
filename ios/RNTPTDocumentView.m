@@ -20,6 +20,12 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface PTDocumentViewController (RNTPTHTTPHeaders)
+
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *additionalHTTPHeaders;
+
+@end
+
 @interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication>
 
 @property (nonatomic, nullable) PTDocumentViewController *documentViewController;
@@ -1121,10 +1127,15 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    PTHTTPRequestOptions *options = self.documentViewController.httpRequestOptions;
-    [self.customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
-        [options AddHeader:key val:value];
-    }];
+    if ([self.documentViewController respondsToSelector:@selector(setAdditionalHTTPHeaders:)]) {
+        self.documentViewController.additionalHTTPHeaders = self.customHeaders;
+    }
+    else {
+        PTHTTPRequestOptions *options = self.documentViewController.httpRequestOptions;
+        [self.customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            [options AddHeader:key val:value];
+        }];
+    }
     
     self.needsCustomHeadersUpdate = NO;
 }
