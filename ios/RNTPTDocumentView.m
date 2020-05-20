@@ -568,11 +568,13 @@ NS_ASSUME_NONNULL_END
     }
     
     if (toolClass) {
-        [self.documentViewController.toolManager changeTool:toolClass];
+        PTTool *tool = [self.documentViewController.toolManager changeTool:toolClass];
         
-        if ([self.toolManager.tool isKindOfClass:[PTFreeHandCreate class]]
-            && ![self.toolManager.tool isKindOfClass:[PTFreeHandHighlightCreate class]]) {
-            ((PTFreeHandCreate *)self.toolManager.tool).multistrokeMode = self.continuousAnnotationEditing;
+        tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
+        
+        if ([tool isKindOfClass:[PTFreeHandCreate class]]
+            && ![tool isKindOfClass:[PTFreeHandHighlightCreate class]]) {
+            ((PTFreeHandCreate *)tool).multistrokeMode = self.continuousAnnotationEditing;
         }
     }
 }
