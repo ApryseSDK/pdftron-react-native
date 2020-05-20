@@ -97,6 +97,11 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldShowMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
 {
+    BOOL result = [super toolManager:toolManager shouldShowMenu:menuController forAnnotation:annotation onPageNumber:pageNumber];
+    if (!result) {
+        return NO;
+    }
+    
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         if (![annotation IsValid]) {
             return;
@@ -107,7 +112,7 @@ NS_ASSUME_NONNULL_END
         }
     } error:nil];
     
-    return [super toolManager:toolManager shouldShowMenu:menuController forAnnotation:annotation onPageNumber:pageNumber];
+    return YES;
 }
 
 #pragma mark - <PTAnnotationToolbarDelegate>
