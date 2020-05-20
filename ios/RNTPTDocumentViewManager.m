@@ -332,7 +332,7 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideAnnotationMenuBehavior, NSArray, RNTPTDocumentV
         sender.onChange(@{
             @"onExportAnnotationCommand": @"onExportAnnotationCommand",
             @"action": action,
-            @"xfdfCommand": xfdfCommand,
+            @"xfdfCommand": (xfdfCommand ?: @""),
         });
     }
 }
