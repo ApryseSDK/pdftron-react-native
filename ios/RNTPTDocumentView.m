@@ -976,42 +976,38 @@ NS_ASSUME_NONNULL_END
 {
     _autoSaveEnabled = autoSaveEnabled;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 - (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
 {
     _pageChangeOnTap = pageChangeOnTap;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 - (void)setThumbnailViewEditingEnabled:(BOOL)enabled
 {
     _thumbnailViewEditingEnabled = enabled;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
 {
     _selectAnnotationAfterCreation = selectAnnotationAfterCreation;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark -
 
 - (void)applyViewerSettings
 {
+    if (!self.documentViewController) {
+        return;
+    }
+    
     [self applyReadonly];
     
     // Thumbnail editing enabled.
@@ -1139,9 +1135,7 @@ NS_ASSUME_NONNULL_END
 {
     _readOnly = readOnly;
     
-    if (self.documentViewController) {
-        [self applyReadonly];
-    }
+    [self applyViewerSettings];
 }
 
 - (void)applyReadonly
@@ -1162,9 +1156,7 @@ NS_ASSUME_NONNULL_END
 {
     _fitMode = [fitMode copy];
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark - Layout mode
@@ -1173,9 +1165,7 @@ NS_ASSUME_NONNULL_END
 {
     _layoutMode = [layoutMode copy];
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark - Continuous annotation editing
@@ -1184,9 +1174,7 @@ NS_ASSUME_NONNULL_END
 {
     _continuousAnnotationEditing = continuousAnnotationEditing;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark - Annotation author
@@ -1195,9 +1183,7 @@ NS_ASSUME_NONNULL_END
 {
     _annotationAuthor = [annotationAuthor copy];
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark - Show saved signatures
@@ -1206,9 +1192,7 @@ NS_ASSUME_NONNULL_END
 {
     _showSavedSignatures = showSavedSignatures;
     
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    [self applyViewerSettings];
 }
 
 #pragma mark - Actions
