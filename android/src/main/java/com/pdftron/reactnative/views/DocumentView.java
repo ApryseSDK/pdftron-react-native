@@ -31,6 +31,8 @@ import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
+import com.pdftron.pdf.Action;
+import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
@@ -48,6 +50,7 @@ import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
+import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -55,6 +58,7 @@ import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
+import com.pdftron.sdf.Obj;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -79,11 +83,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
     private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
     private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
+    private static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
 
     private static final String ZOOM_KEY = "zoom";
+
+    private static final String KEY_LINK_BEHAVIOR_DATA = "url";
 
     private static final String KEY_annotList = "annotList";
     private static final String KEY_annotId = "id";
@@ -99,6 +106,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String KEY_annotationMenu = "annotationMenu";
 
+    private static final String KEY_data = "data";
+
     private static final String KEY_x1 = "x1";
     private static final String KEY_x2 = "x2";
     private static final String KEY_y1 = "y1";
@@ -106,6 +115,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_width = "width";
     private static final String KEY_height = "height";
     // EVENTS END
+
+    // Config keys
+    private static final String KEY_Config_linkPress = "linkPress";
 
     private String mDocumentPath;
     private boolean mIsBase64;
@@ -136,6 +148,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // quick menu
     private ReadableArray mAnnotMenuItems;
     private ReadableArray mAnnotMenuOverrideItems;
+
+    // custom behaviour
+    private ReadableArray mActionOverrideItems;
 
     public DocumentView(Context context) {
         super(context);
@@ -358,6 +373,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setOverrideAnnotationMenuBehavior(@NonNull ReadableArray items) {
         mAnnotMenuOverrideItems = items;
+    }
+
+    public void setOverrideBehavior(@NonNull ReadableArray items) {
+        mActionOverrideItems = items;
     }
 
     private void disableElements(ReadableArray args) {
@@ -664,6 +683,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
         }
 
+        ActionUtils.getInstance().setActionInterceptCallback(null);
+
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
@@ -824,6 +845,55 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     };
 
+    private boolean isOverrideAction(String action) {
+        return mActionOverrideItems != null && mActionOverrideItems.toArrayList().contains(action);
+    }
+
+    private ActionUtils.ActionInterceptCallback mActionInterceptCallback = new ActionUtils.ActionInterceptCallback() {
+        @Override
+        public boolean onInterceptExecuteAction(ActionParameter actionParameter, PDFViewCtrl pdfViewCtrl) {
+            if (!isOverrideAction(KEY_Config_linkPress)) {
+                return false;
+            }
+            String url = null;
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+
+                Action action = actionParameter.getAction();
+                int action_type = action.getType();
+                if (action_type == Action.e_URI) {
+                    Obj o = action.getSDFObj();
+                    o = o.findObj("URI");
+                    if (o != null) {
+                        url = o.getAsPDFText();
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+            if (url != null) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
+                params.putString(KEY_action, KEY_Config_linkPress);
+
+                WritableMap data = Arguments.createMap();
+                data.putString(KEY_LINK_BEHAVIOR_DATA, url);
+                params.putMap(KEY_data, data);
+
+                onReceiveNativeEvent(params);
+
+                return true;
+            }
+            return false;
+        }
+    };
+
     private PDFViewCtrl.PageChangeListener mPageChangeListener = new PDFViewCtrl.PageChangeListener() {
         @Override
         public void onPageChange(int old_page, int cur_page, PDFViewCtrl.PageChangeState pageChangeState) {
@@ -935,6 +1005,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
+
+        ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {

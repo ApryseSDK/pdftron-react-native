@@ -409,7 +409,7 @@ array of `Config.AnnotationMenu` string constants, optional
 Defines menu items that can show when an annotation is selected.
 ##### overrideAnnotationMenuBehavior
 array of `Config.AnnotationMenu` string constants, optional
-Defines menu items that should skip default behaviour.
+Defines menu items that should skip default behavior.
 ##### onAnnotationMenuPress
 function, optional
 
@@ -419,6 +419,25 @@ Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of `Config.AnnotationMenu` string constants
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
+##### overrideBehavior
+array of `Config.Actions` string constants, optional
+Defines actions that should skip default behavior, such as external link click.
+##### onBehaviorActivated
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+action | string | One of `Config.Actions` string constants
+data | object | A JSON object that varies depending on the action
+
+data param table:
+
+Action | Param
+--- | ---
+`Config.Actions.linkPress` | key: `url`, value: the link pressed
 
 ##### pageChangeOnTap
 bool, optional, default to true
