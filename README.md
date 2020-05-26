@@ -412,6 +412,7 @@ array of `Config.AnnotationMenu` string constants, optional
 Defines menu items that should skip default behavior.
 ##### onAnnotationMenuPress
 function, optional
+Defines what happens on annotation menu press if it is passed in to `overrideAnnotationMenuBehavior`
 
 Parameters:
 
@@ -425,6 +426,7 @@ array of `Config.Actions` string constants, optional
 Defines actions that should skip default behavior, such as external link click.
 ##### onBehaviorActivated
 function, optional
+Defines what happens on certain behavior if it is passed in to `overrideBehavior`
 
 Parameters:
 
