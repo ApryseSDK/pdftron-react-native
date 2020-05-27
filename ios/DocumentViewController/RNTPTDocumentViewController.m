@@ -67,7 +67,15 @@ NS_ASSUME_NONNULL_END
 
 - (void)toolManagerToolChanged:(PTToolManager *)toolManager
 {
+    PTTool *tool = toolManager.tool;
+    
+    const BOOL backToPan = tool.backToPanToolAfterUse;
+    
     [super toolManagerToolChanged:toolManager];
+    
+    if (tool.backToPanToolAfterUse != backToPan) {
+        tool.backToPanToolAfterUse = backToPan;
+    }
     
     // If the top toolbar is disabled...
     if (![self isTopToolbarEnabled] &&
