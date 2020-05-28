@@ -77,6 +77,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideBehavior;
+
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
 @property (nonatomic, copy, nullable) RCTBubblingEventBlock onChange;

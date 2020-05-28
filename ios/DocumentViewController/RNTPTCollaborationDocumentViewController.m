@@ -123,6 +123,20 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
+- (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber
+{
+    BOOL result = [super toolManager:toolManager shouldHandleLinkAnnotation:annotation orLinkInfo:linkInfo onPageNumber:pageNumber];
+    if (!result) {
+        return NO;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(toolManager:shouldHandleLinkAnnotation:orLinkInfo:onPageNumber:)]) {
+        return [self.delegate toolManager:toolManager shouldHandleLinkAnnotation:annotation orLinkInfo:linkInfo onPageNumber:pageNumber];
+    }
+    
+    return YES;
+}
+
 #pragma mark - <PTAnnotationToolbarDelegate>
 
 - (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
