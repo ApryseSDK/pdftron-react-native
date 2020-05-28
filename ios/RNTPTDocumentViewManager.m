@@ -248,6 +248,13 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideAnnotationMenuBehavior, NSArray, RNTPTDocumentV
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overrideBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideBehavior = [RCTConvert NSStringArray:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];

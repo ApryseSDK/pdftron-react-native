@@ -1232,6 +1232,68 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+#pragma mark - <PTToolManagerDelegate>
+
+- (UIViewController *)viewControllerForToolManager:(PTToolManager *)toolManager
+{
+    return self.documentViewController;
+}
+
+- (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber
+{
+    if (![self.overrideBehavior containsObject:@"linkPress"]) {
+        return YES;
+    }
+    
+    __block NSString *url = nil;
+    
+    NSError *error = nil;
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        // Check for a valid link annotation.
+        if (![annotation IsValid] ||
+            annotation.extendedAnnotType != PTExtendedAnnotTypeLink) {
+            return;
+        }
+        
+        PTLink *linkAnnot = [[PTLink alloc] initWithAnn:annotation];
+        
+        // Check for a valid URI action.
+        PTAction *action = [linkAnnot GetAction];
+        if (![action IsValid] ||
+            [action GetType] != e_ptURI) {
+            return;
+        }
+        
+        PTObj *actionObj = [action GetSDFObj];
+        if (![actionObj IsValid]) {
+            return;
+        }
+        
+        // Get the action's URI.
+        PTObj *uriObj = [actionObj FindObj:@"URI"];
+        if ([uriObj IsValid] && [uriObj IsString]) {
+            url = [uriObj GetAsPDFText];
+        }
+    } error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    if (url) {
+        self.onChange(@{
+            @"onBehaviorActivated": @"onBehaviorActivated",
+            @"action": @"linkPress",
+            @"data": @{
+                @"url": url,
+            },
+        });
+        
+        // Link handled.
+        return NO;
+    }
+    
+    return YES;
+}
+
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController
