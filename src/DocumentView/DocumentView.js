@@ -29,6 +29,8 @@ export default class DocumentView extends PureComponent {
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
+    overrideBehavior: PropTypes.array,
+    onBehaviorActivated: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
@@ -104,6 +106,13 @@ export default class DocumentView extends PureComponent {
         this.props.onAnnotationMenuPress({
           'annotationMenu': event.nativeEvent.annotationMenu,
           'annotations': event.nativeEvent.annotations,
+        });
+      }
+    } else if (event.nativeEvent.onBehaviorActivated) {
+      if (this.props.onBehaviorActivated) {
+        this.props.onBehaviorActivated({
+          'action': event.nativeEvent.action,
+          'data': event.nativeEvent.data,
         });
       }
     }

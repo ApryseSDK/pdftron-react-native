@@ -104,4 +104,7 @@ export default {
     playSound: 'playSound',
     openAttachment: 'openAttachment',
   },
+  Actions: {
+    linkPress: 'linkPress',
+  },
 };

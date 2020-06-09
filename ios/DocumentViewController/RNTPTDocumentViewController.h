@@ -4,7 +4,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class RNTPTDocumentViewController;
 
-@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate>
+@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate, PTToolManagerDelegate>
 @required
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController;
