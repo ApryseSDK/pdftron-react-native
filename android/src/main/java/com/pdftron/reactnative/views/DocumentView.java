@@ -44,6 +44,7 @@ import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
+import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
@@ -431,6 +432,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mBuilder = mBuilder.showReflowOption(false);
             } else if ("editMenuButton".equals(item)) {
                 mBuilder = mBuilder.showEditMenuOption(false);
+            } else if ("cropPageButton".equals(item)) {
+                mBuilder = mBuilder.hideViewModeItems(new ViewModePickerDialogFragment.ViewModePickerItems[]{
+                        ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP
+                });
             }
         }
         disableTools(args);

@@ -36,6 +36,7 @@ export default {
     userBookmarkListButton: 'userBookmarkListButton',
     reflowButton: 'reflowButton',
     editMenuButton: 'editMenuButton',
+    cropPageButton: 'cropPageButton',
   },
   Tools: {
     annotationEdit: 'AnnotationEdit',
