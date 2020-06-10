@@ -404,6 +404,9 @@ bool, optional, android only
 If true, the viewer will add padding to take account of status bar. Default to false.
 ##### autoSaveEnabled
 bool, optional
+##### hideAnnotationMenu
+array of `Config.Tools` string constants, optional
+Defines annotation types that will not show the default annotation menu
 ##### annotationMenuItems
 array of `Config.AnnotationMenu` string constants, optional
 Defines menu items that can show when an annotation is selected.
