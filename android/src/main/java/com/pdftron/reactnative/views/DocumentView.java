@@ -45,6 +45,7 @@ import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
+import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
@@ -52,6 +53,7 @@ import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.ActionUtils;
+import com.pdftron.pdf.utils.AnnotUtils;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -147,8 +149,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private String mCurrentUserName;
 
     // quick menu
-    private ReadableArray mAnnotMenuItems;
-    private ReadableArray mAnnotMenuOverrideItems;
+    private ArrayList<Object> mAnnotMenuItems;
+    private ArrayList<Object> mAnnotMenuOverrideItems;
+    private ArrayList<Object> mHideAnnotMenuTools;
 
     // custom behaviour
     private ReadableArray mActionOverrideItems;
@@ -354,7 +357,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setAnnotationMenuItems(ReadableArray items) {
-        mAnnotMenuItems = items;
+        mAnnotMenuItems = items != null ? items.toArrayList() : null;
+    }
+
+    public void setHideAnnotationMenu(ReadableArray tools) {
+        mHideAnnotMenuTools = tools != null ? tools.toArrayList() : null;
     }
 
     public void setPageChangeOnTap(boolean pageChangeOnTap) {
@@ -372,8 +379,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
     }
 
-    public void setOverrideAnnotationMenuBehavior(@NonNull ReadableArray items) {
-        mAnnotMenuOverrideItems = items;
+    public void setOverrideAnnotationMenuBehavior(ReadableArray items) {
+        mAnnotMenuOverrideItems = items != null ? items.toArrayList() : null;
     }
 
     public void setOverrideBehavior(@NonNull ReadableArray items) {
@@ -449,6 +456,75 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mDisabledTools.add(mode);
             }
         }
+    }
+
+    @Nullable
+    private int convStringToAnnotType(String item) {
+        int annotType = Annot.e_Unknown;
+        if ("freeHandToolButton".equals(item) || "AnnotationCreateFreeHand".equals(item)) {
+            annotType = Annot.e_Ink;
+        } else if ("highlightToolButton".equals(item) || "AnnotationCreateTextHighlight".equals(item)) {
+            annotType = Annot.e_Highlight;
+        } else if ("underlineToolButton".equals(item) || "AnnotationCreateTextUnderline".equals(item)) {
+            annotType = Annot.e_Underline;
+        } else if ("squigglyToolButton".equals(item) || "AnnotationCreateTextSquiggly".equals(item)) {
+            annotType = Annot.e_Squiggly;
+        } else if ("strikeoutToolButton".equals(item) || "AnnotationCreateTextStrikeout".equals(item)) {
+            annotType = Annot.e_StrikeOut;
+        } else if ("rectangleToolButton".equals(item) || "AnnotationCreateRectangle".equals(item)) {
+            annotType = Annot.e_Square;
+        } else if ("ellipseToolButton".equals(item) || "AnnotationCreateEllipse".equals(item)) {
+            annotType = Annot.e_Circle;
+        } else if ("lineToolButton".equals(item) || "AnnotationCreateLine".equals(item)) {
+            annotType = Annot.e_Line;
+        } else if ("arrowToolButton".equals(item) || "AnnotationCreateArrow".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_ARROW;
+        } else if ("polylineToolButton".equals(item) || "AnnotationCreatePolyline".equals(item)) {
+            annotType = Annot.e_Polyline;
+        } else if ("polygonToolButton".equals(item) || "AnnotationCreatePolygon".equals(item)) {
+            annotType = Annot.e_Polygon;
+        } else if ("cloudToolButton".equals(item) || "AnnotationCreatePolygonCloud".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CLOUD;
+        } else if ("signatureToolButton".equals(item) || "AnnotationCreateSignature".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_SIGNATURE;
+        } else if ("freeTextToolButton".equals(item) || "AnnotationCreateFreeText".equals(item)) {
+            annotType = Annot.e_FreeText;
+        } else if ("stickyToolButton".equals(item) || "AnnotationCreateSticky".equals(item)) {
+            annotType = Annot.e_Text;
+        } else if ("calloutToolButton".equals(item) || "AnnotationCreateCallout".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CALLOUT;
+        } else if ("stampToolButton".equals(item) || "AnnotationCreateStamp".equals(item)) {
+            annotType = Annot.e_Stamp;
+        } else if ("AnnotationCreateDistanceMeasurement".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_RULER;
+        } else if ("AnnotationCreatePerimeterMeasurement".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_PERIMETER_MEASURE;
+        } else if ("AnnotationCreateAreaMeasurement".equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_AREA_MEASURE;
+        } else if ("AnnotationCreateFileAttachment".equals(item)) {
+            annotType = Annot.e_FileAttachment;
+        } else if ("AnnotationCreateSound".equals(item)) {
+            annotType = Annot.e_Sound;
+        } else if ("TextSelect".equals(item)) {
+            annotType = Annot.e_Unknown;
+        } else if ("Pan".equals(item)) {
+            annotType = Annot.e_Unknown;
+        } else if ("AnnotationEdit".equals(item)) {
+            annotType = Annot.e_Unknown;
+        } else if ("FormCreateTextField".equals(item)) {
+            annotType = Annot.e_Widget;
+        } else if ("FormCreateCheckboxField".equals(item)) {
+            annotType = Annot.e_Widget;
+        } else if ("FormCreateSignatureField".equals(item)) {
+            annotType = Annot.e_Widget;
+        } else if ("FormCreateRadioField".equals(item)) {
+            annotType = Annot.e_Widget;
+        } else if ("FormCreateComboBoxField".equals(item)) {
+            annotType = Annot.e_Widget;
+        } else if ("FormCreateListBoxField".equals(item)) {
+            annotType = Annot.e_Widget;
+        }
+        return annotType;
     }
 
     @Nullable
@@ -781,8 +857,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             // check if this is an override menu
             boolean result = false;
             if (mAnnotMenuOverrideItems != null) {
-                ArrayList<Object> overrideList = mAnnotMenuOverrideItems.toArrayList();
-                result = overrideList.contains(menuStr);
+                result = mAnnotMenuOverrideItems.contains(menuStr);
             }
 
             if (hasAnnotationsSelected() && getPdfViewCtrl() != null && getToolManager() != null) {
@@ -803,13 +878,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         @Override
         public boolean onShowQuickMenu(QuickMenu quickMenu, Annot annot) {
+            // first check if we need to show at all
+            if (mHideAnnotMenuTools != null && annot != null && getPdfViewCtrl() != null) {
+                for (Object item : mHideAnnotMenuTools) {
+                    if (item instanceof String) {
+                        String mode = (String) item;
+                        int type = convStringToAnnotType(mode);
+                        boolean shouldUnlockRead = false;
+                        try {
+                            getPdfViewCtrl().docLockRead();
+                            shouldUnlockRead = true;
+
+                            int annotType = AnnotUtils.getAnnotType(annot);
+                            if (annotType == type) {
+                                return true;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        } finally {
+                            if (shouldUnlockRead) {
+                                getPdfViewCtrl().docUnlockRead();
+                            }
+                        }
+                    }
+                }
+            }
+
             // remove unwanted items
             if (mAnnotMenuItems != null && annot != null) {
-                ArrayList<Object> keepList = mAnnotMenuItems.toArrayList();
                 List<QuickMenuItem> removeList = new ArrayList<>();
-                checkQuickMenu(quickMenu.getFirstRowMenuItems(), keepList, removeList);
-                checkQuickMenu(quickMenu.getSecondRowMenuItems(), keepList, removeList);
-                checkQuickMenu(quickMenu.getOverflowMenuItems(), keepList, removeList);
+                checkQuickMenu(quickMenu.getFirstRowMenuItems(), mAnnotMenuItems, removeList);
+                checkQuickMenu(quickMenu.getSecondRowMenuItems(), mAnnotMenuItems, removeList);
+                checkQuickMenu(quickMenu.getOverflowMenuItems(), mAnnotMenuItems, removeList);
                 quickMenu.removeMenuEntries(removeList);
 
                 if (quickMenu.getFirstRowMenuItems().size() == 0) {
