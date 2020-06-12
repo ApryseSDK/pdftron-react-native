@@ -214,6 +214,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (Utils.isNullOrEmpty(path)) {
             return;
         }
+        if (mDocumentPath != null) {
+            // we are switching document
+            Uri fileUri = ReactUtils.getUri(getContext(), path, mIsBase64);
+            if (fileUri != null) {
+                setDocumentUri(fileUri);
+                setViewerConfig(getConfig());
+                prepView();
+            }
+        }
         mDocumentPath = path;
     }
 
