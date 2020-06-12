@@ -1121,10 +1121,7 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    PTHTTPRequestOptions *options = self.documentViewController.httpRequestOptions;
-    [self.customHeaders enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
-        [options AddHeader:key val:value];
-    }];
+    self.documentViewController.additionalHTTPHeaders = self.customHeaders;
     
     self.needsCustomHeadersUpdate = NO;
 }
