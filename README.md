@@ -23,7 +23,7 @@
 
 0. If using yarn, do: `yarn global add react-native-cli`
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://facebook.github.io/react-native/docs/getting-started.html#the-react-native-cli-1), [setting up the iOS environment](https://facebook.github.io/react-native/docs/getting-started.html#xcode), [setting up the Android environment](https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment), and [creating a React Native project](https://facebook.github.io/react-native/docs/getting-started.html#creating-a-new-application-1), the following steps will assume your app is created through `react-native init MyApp`.
+1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup), the following steps will assume your app is created through `react-native init MyApp`.
 
 2. In `MyApp` folder, install `react-native-pdftron` by calling:
     ```shell
@@ -71,7 +71,19 @@
     }
     ```
 
-2. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+2. Add the following to your `android/build.gradle` file:
+	```diff
+	buildscript {
+	    ext {
+		buildToolsVersion = "28.0.3"
+	+	minSdkVersion = 21
+		compileSdkVersion = 28
+		targetSdkVersion = 28
+	    }
+	    // ...
+	}
+	```
+3. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -105,7 +117,7 @@
     </manifest>
     ```
 
-3. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+4. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import androidx.multidex.MultiDexApplication;
@@ -114,8 +126,8 @@
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-4. Replace `App.js` with what is shown [here](#usage)
-5. Finally in the root project directory, run `react-native run-android`.
+5. Replace `App.js` with what is shown [here](#usage)
+6. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
