@@ -175,13 +175,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum message:(NSString *)message
 {
     if (type == e_ptdownloadedtype_finished && !self.documentLoaded) {
         self.needsRemoteDocumentLoaded = YES;
     }
 
-    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum];
+    [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidZoom:(UIScrollView *)scrollView
