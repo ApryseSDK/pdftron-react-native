@@ -1,10 +1,10 @@
-platform :ios, '9.0'
+platform :ios, '11.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'example' do
   # PDFTron
   use_frameworks!
-  pod 'PDFNet', podspec: 'http://nightly.pdftron.com.s3.amazonaws.com/stable/2020-04-20/7.1/cocoapods/pdfnet/2020-04-20_stable_rev74664.podspec'
+  pod 'PDFNet', podspec: 'http://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
 
   # Pods for example
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
