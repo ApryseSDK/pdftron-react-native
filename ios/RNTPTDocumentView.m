@@ -131,7 +131,6 @@ NS_ASSUME_NONNULL_END
 
 -(void)openDocument
 {
-    NSLog(@"IT WAS COMPILED");
     if (![self isBase64String]) {
         // Open a file URL.
         NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
