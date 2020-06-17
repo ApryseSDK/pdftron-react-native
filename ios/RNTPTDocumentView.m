@@ -127,6 +127,53 @@ NS_ASSUME_NONNULL_END
     return self.documentViewController.toolManager;
 }
 
+#pragma mark - Document Openining
+
+-(void)openDocument
+{
+    if( self.documentViewController == Nil )
+    {
+        return;
+    }
+    
+    if (![self isBase64String]) {
+        // Open a file URL.
+        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
+        if ([self.document containsString:@"://"]) {
+            fileURL = [NSURL URLWithString:self.document];
+        } else if ([self.document hasPrefix:@"/"]) {
+            fileURL = [NSURL fileURLWithPath:self.document];
+        }
+        
+        [self.documentViewController openDocumentWithURL:fileURL
+                                                password:self.password];
+        
+        [self applyLayoutMode];
+    } else {
+        NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
+        
+        PTPDFDoc *doc = nil;
+        @try {
+            doc = [[PTPDFDoc alloc] initWithBuf:data buf_size:data.length];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+            return;
+        }
+        
+        [self.documentViewController openDocumentWithPDFDoc:doc];
+        
+        [self applyLayoutMode];
+    }
+}
+
+-(void)setDocument:(NSString *)document
+{
+    _document = document;
+    [self openDocument];
+
+}
+
 #pragma mark - DocumentViewController loading
 
 - (void)loadDocumentViewController
@@ -185,35 +232,7 @@ NS_ASSUME_NONNULL_END
     
     navigationController.navigationBarHidden = !self.topToolbarEnabled;
     
-    if (![self isBase64String]) {
-        // Open a file URL.
-        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
-        if ([self.document containsString:@"://"]) {
-            fileURL = [NSURL URLWithString:self.document];
-        } else if ([self.document hasPrefix:@"/"]) {
-            fileURL = [NSURL fileURLWithPath:self.document];
-        }
-        
-        [self.documentViewController openDocumentWithURL:fileURL
-                                                password:self.password];
-        
-        [self applyLayoutMode];
-    } else {
-        NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
-        
-        PTPDFDoc *doc = nil;
-        @try {
-            doc = [[PTPDFDoc alloc] initWithBuf:data buf_size:data.length];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
-            return;
-        }
-        
-        [self.documentViewController openDocumentWithPDFDoc:doc];
-        
-        [self applyLayoutMode];
-    }
+    [self openDocument];
 }
 
 - (void)unloadDocumentViewController
