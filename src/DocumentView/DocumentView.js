@@ -116,6 +116,7 @@ export default class DocumentView extends PureComponent {
       if (this.props.onLongPressMenuPress) {
         this.props.onLongPressMenuPress({
           'longPressMenu': event.nativeEvent.longPressMenu,
+          'longPressText': event.nativeEvent.longPressText,
         });
       }
     } else if (event.nativeEvent.onBehaviorActivated) {
