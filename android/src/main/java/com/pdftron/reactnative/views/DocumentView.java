@@ -110,6 +110,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String KEY_annotationMenu = "annotationMenu";
     private static final String KEY_longPressMenu = "longPressMenu";
+    private static final String KEY_longPressText = "longPressText";
 
     private static final String KEY_data = "data";
 
@@ -912,6 +913,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         WritableMap params = Arguments.createMap();
                         params.putString(ON_LONG_PRESS_MENU_PRESS, ON_LONG_PRESS_MENU_PRESS);
                         params.putString(KEY_longPressMenu, menuStr);
+                        params.putString(KEY_longPressText, ViewerUtils.getSelectedString(getPdfViewCtrl()));
                         onReceiveNativeEvent(params);
                     } catch (Exception ex) {
                         ex.printStackTrace();
