@@ -1252,10 +1252,35 @@ NS_ASSUME_NONNULL_END
 
 -(PTExtendedAnnotType)reactAnnotationNameToAnnotType:(NSString*)reactString
 {
-    
     NSDictionary* typeMap = @{
         @"AnnotationCreateSticky" : @(PTExtendedAnnotTypeText),
-        @"stickyToolButton" : @(PTExtendedAnnotTypeText)
+        @"stickyToolButton" : @(PTExtendedAnnotTypeText),
+        @"AnnotationCreateFreeHand" : @(PTExtendedAnnotTypeInk),
+        @"AnnotationCreateTextHighlight" : @(PTExtendedAnnotTypeHighlight),
+        @"AnnotationCreateTextUnderline" : @(PTExtendedAnnotTypeUnderline),
+        @"AnnotationCreateTextSquiggly" : @(PTExtendedAnnotTypeSquiggly),
+        @"AnnotationCreateTextStrikeout" : @(PTExtendedAnnotTypeStrikeOut),
+        @"AnnotationCreateFreeText" : @(PTExtendedAnnotTypeFreeText),
+        @"AnnotationCreateCallout" : @(PTExtendedAnnotTypeCallout),
+        @"AnnotationCreateSignature" : @(PTExtendedAnnotTypeSignature),
+        @"AnnotationCreateLine" : @(PTExtendedAnnotTypeLine),
+        @"AnnotationCreateArrow" : @(PTExtendedAnnotTypeArrow),
+        @"AnnotationCreatePolyline" : @(PTExtendedAnnotTypePolyline),
+        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeStamp),
+        @"AnnotationCreateRectangle" : @(PTExtendedAnnotTypeSquare),
+        @"AnnotationCreateEllipse" : @(PTExtendedAnnotTypeCircle),
+        @"AnnotationCreatePolygon" : @(PTExtendedAnnotTypePolygon),
+        @"AnnotationCreatePolygonCloud" : @(PTExtendedAnnotTypeCloudy),
+//        @"AnnotationCreateDistanceMeasurement" : @(),
+//        @"AnnotationCreatePerimeterMeasurement" : @(),
+//        @"AnnotationCreateAreaMeasurement" : @(),
+        @"AnnotationCreateFileAttachment" : @(PTExtendedAnnotTypeFileAttachment),
+        @"AnnotationCreateSound" : @(PTExtendedAnnotTypeSound),
+//        @"FormCreateTextField" : @(),
+//        @"FormCreateCheckboxField" : @(),
+//        @"FormCreateRadioField" : @(),
+//        @"FormCreateComboBoxField" : @(),
+//        @"FormCreateListBoxField" : @()
     };
     
     
@@ -1263,7 +1288,7 @@ NS_ASSUME_NONNULL_END
     
     if( typeMap[reactString] )
     {
-        annotType = [typeMap[typeMap] unsignedIntValue];
+        annotType = [typeMap[reactString] unsignedIntValue];
     }
 
     return annotType;
