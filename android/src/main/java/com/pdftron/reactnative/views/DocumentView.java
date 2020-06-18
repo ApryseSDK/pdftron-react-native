@@ -83,6 +83,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_DOCUMENT_ERROR = "onDocumentError";
     private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
     private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
+    private static final String ON_LONG_PRESS_MENU_PRESS = "onLongPressMenuPress";
     private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
     private static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
 
@@ -364,6 +365,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setAnnotationMenuItems(ReadableArray items) {
         mAnnotMenuItems = items;
+    }
+
+    public void setLongPressMenuItems(ReadableArray items) {
+
     }
 
     public void setPageChangeOnTap(boolean pageChangeOnTap) {

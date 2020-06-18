@@ -26,6 +26,9 @@ export default class DocumentView extends PureComponent {
     onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
+    longPressMenuItems: PropTypes.array,
+    overrideLongPressMenuBehavior: PropTypes.array,
+    onLongPressMenuPress: PropTypes.func,
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
@@ -106,6 +109,12 @@ export default class DocumentView extends PureComponent {
         this.props.onAnnotationMenuPress({
           'annotationMenu': event.nativeEvent.annotationMenu,
           'annotations': event.nativeEvent.annotations,
+        });
+      }
+    } else if (event.nativeEvent.onLongPressMenuPress) {
+      if (this.props.onLongPressMenuPress) {
+        this.props.onLongPressMenuPress({
+          'longPressMenu': event.nativeEvent.longPressMenu,
         });
       }
     } else if (event.nativeEvent.onBehaviorActivated) {
