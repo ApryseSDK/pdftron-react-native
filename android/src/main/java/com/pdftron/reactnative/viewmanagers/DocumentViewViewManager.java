@@ -206,6 +206,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setOverrideAnnotationMenuBehavior(items);
     }
 
+    @ReactProp(name = "overrideLongPressMenuBehavior")
+    public void setOverrideLongPressMenuBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideLongPressMenuBehavior(items);
+    }
+
     @ReactProp(name = "overrideBehavior")
     public void setOverrideBehavior(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setOverrideBehavior(items);

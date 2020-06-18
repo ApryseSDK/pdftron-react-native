@@ -64,6 +64,8 @@ export default {
     annotationCreateAreaMeasurement: 'AnnotationCreateAreaMeasurement',
     annotationCreateFileAttachment: 'AnnotationCreateFileAttachment',
     annotationCreateSound: 'AnnotationCreateSound',
+    annotationCreateRedaction: 'AnnotationCreateRedaction',
+    annotationCreateLink: 'AnnotationCreateLink',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',
@@ -104,6 +106,12 @@ export default {
     screenCapture: 'screenCapture',
     playSound: 'playSound',
     openAttachment: 'openAttachment',
+  },
+  LongPressMenu: {
+    copy: 'copy',
+    search: 'search',
+    share: 'share',
+    read: 'read',
   },
   Actions: {
     linkPress: 'linkPress',

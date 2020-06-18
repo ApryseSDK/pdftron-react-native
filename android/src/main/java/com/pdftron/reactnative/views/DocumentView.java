@@ -109,6 +109,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_xfdfCommand = "xfdfCommand";
 
     private static final String KEY_annotationMenu = "annotationMenu";
+    private static final String KEY_longPressMenu = "longPressMenu";
 
     private static final String KEY_data = "data";
 
@@ -153,6 +154,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private ArrayList<Object> mAnnotMenuItems;
     private ArrayList<Object> mAnnotMenuOverrideItems;
     private ArrayList<Object> mHideAnnotMenuTools;
+    private ArrayList<Object> mLongPressMenuItems;
+    private ArrayList<Object> mLongPressMenuOverrideItems;
 
     // custom behaviour
     private ReadableArray mActionOverrideItems;
@@ -375,7 +378,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setLongPressMenuItems(ReadableArray items) {
-
+        mLongPressMenuItems = items != null ? items.toArrayList() : null;
     }
 
     public void setPageChangeOnTap(boolean pageChangeOnTap) {
@@ -395,6 +398,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setOverrideAnnotationMenuBehavior(ReadableArray items) {
         mAnnotMenuOverrideItems = items != null ? items.toArrayList() : null;
+    }
+
+    public void setOverrideLongPressMenuBehavior(ReadableArray items) {
+        mLongPressMenuOverrideItems = items != null ? items.toArrayList() : null;
     }
 
     public void setOverrideBehavior(@NonNull ReadableArray items) {
@@ -519,6 +526,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             annotType = Annot.e_FileAttachment;
         } else if ("AnnotationCreateSound".equals(item)) {
             annotType = Annot.e_Sound;
+        } else if ("AnnotationCreateRedaction".equals(item)) {
+            annotType = Annot.e_Redact;
+        } else if ("AnnotationCreateLink".equals(item)) {
+            annotType = Annot.e_Link;
         } else if ("TextSelect".equals(item)) {
             annotType = Annot.e_Unknown;
         } else if ("Pan".equals(item)) {
@@ -651,6 +662,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             menuStr = "playSound";
         } else if (id == R.id.qm_open_attachment) {
             menuStr = "openAttachment";
+        } else if (id == R.id.qm_tts) {
+            menuStr = "read";
+        } else if (id == R.id.qm_share) {
+            menuStr = "share";
+        } else if (id == R.id.qm_search) {
+            menuStr = "search";
         }
         return menuStr;
     }
@@ -870,20 +887,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
             // check if this is an override menu
             boolean result = false;
-            if (mAnnotMenuOverrideItems != null) {
-                result = mAnnotMenuOverrideItems.contains(menuStr);
-            }
 
-            if (hasAnnotationsSelected() && getPdfViewCtrl() != null && getToolManager() != null) {
-                try {
-                    // notify event
-                    WritableMap params = Arguments.createMap();
-                    params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
-                    params.putString(KEY_annotationMenu, menuStr);
-                    params.putArray(KEY_annotations, getAnnotationsData());
-                    onReceiveNativeEvent(params);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            if (getPdfViewCtrl() != null && getToolManager() != null) {
+                if (hasAnnotationsSelected()) {
+                    if (mAnnotMenuOverrideItems != null) {
+                        result = mAnnotMenuOverrideItems.contains(menuStr);
+                    }
+                    try {
+                        // notify event
+                        WritableMap params = Arguments.createMap();
+                        params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
+                        params.putString(KEY_annotationMenu, menuStr);
+                        params.putArray(KEY_annotations, getAnnotationsData());
+                        onReceiveNativeEvent(params);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    if (mLongPressMenuOverrideItems != null) {
+                        result = mLongPressMenuOverrideItems.contains(menuStr);
+                    }
+                    try {
+                        // notify event
+                        WritableMap params = Arguments.createMap();
+                        params.putString(ON_LONG_PRESS_MENU_PRESS, ON_LONG_PRESS_MENU_PRESS);
+                        params.putString(KEY_longPressMenu, menuStr);
+                        onReceiveNativeEvent(params);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
 
@@ -924,6 +956,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 checkQuickMenu(quickMenu.getFirstRowMenuItems(), mAnnotMenuItems, removeList);
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), mAnnotMenuItems, removeList);
                 checkQuickMenu(quickMenu.getOverflowMenuItems(), mAnnotMenuItems, removeList);
+                quickMenu.removeMenuEntries(removeList);
+
+                if (quickMenu.getFirstRowMenuItems().size() == 0) {
+                    quickMenu.setDividerVisibility(View.GONE);
+                }
+            }
+            if (mLongPressMenuItems != null && null == annot) {
+                List<QuickMenuItem> removeList = new ArrayList<>();
+                checkQuickMenu(quickMenu.getFirstRowMenuItems(), mLongPressMenuItems, removeList);
+                checkQuickMenu(quickMenu.getSecondRowMenuItems(), mLongPressMenuItems, removeList);
+                checkQuickMenu(quickMenu.getOverflowMenuItems(), mLongPressMenuItems, removeList);
                 quickMenu.removeMenuEntries(removeList);
 
                 if (quickMenu.getFirstRowMenuItems().size() == 0) {
