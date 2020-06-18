@@ -32,6 +32,7 @@ export default class DocumentView extends PureComponent {
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
+    hideAnnotationMenu: PropTypes.array,
     overrideBehavior: PropTypes.array,
     onBehaviorActivated: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
