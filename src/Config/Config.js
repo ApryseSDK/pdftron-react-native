@@ -66,6 +66,8 @@ export default {
     annotationCreateSound: 'AnnotationCreateSound',
     annotationCreateRedaction: 'AnnotationCreateRedaction',
     annotationCreateLink: 'AnnotationCreateLink',
+    annotationCreateRedactionText: 'AnnotationCreateRedactionText',
+    annotationCreateLinkText: 'AnnotationCreateLinkText',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',
