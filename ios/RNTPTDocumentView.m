@@ -1436,11 +1436,9 @@ NS_ASSUME_NONNULL_END
     
     PTExtendedAnnotType annotType = [annot extendedAnnotType];
     
-    for (NSNumber* type in self.hideAnnotMenuToolsAnnotTypes) {
-        if( [type intValue] == annotType )
-        {
-            return NO;
-        }
+    if( [self.hideAnnotMenuToolsAnnotTypes containsObject:@(annotType)] )
+    {
+        return NO;
     }
         
     // Mapping from menu item title to identifier.
