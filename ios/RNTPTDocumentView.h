@@ -33,6 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
 
+
+// long press menu customization
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideBehavior;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideAnnotMenuTools;
+
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
 @property (nonatomic, assign) BOOL topToolbarEnabled;
@@ -74,10 +80,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
 @property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
-
-@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;
-
-@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideBehavior;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 

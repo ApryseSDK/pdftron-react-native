@@ -1233,6 +1233,8 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
+
+
 #pragma mark - <PTDocumentViewControllerDelegate>
 
 //- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
@@ -1394,8 +1396,9 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController
+- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot*)annot
 {
+    
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         @"Style": @"style",
@@ -1448,6 +1451,8 @@ NS_ASSUME_NONNULL_END
     }
     
     menuController.menuItems = [permittedItems copy];
+    
+    return YES;
 }
 
 - (void)overriddenMenuItemPressed:(NSString *)menuItemId
