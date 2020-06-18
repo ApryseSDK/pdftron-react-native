@@ -527,9 +527,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             annotType = Annot.e_FileAttachment;
         } else if ("AnnotationCreateSound".equals(item)) {
             annotType = Annot.e_Sound;
-        } else if ("AnnotationCreateRedaction".equals(item)) {
+        } else if ("AnnotationCreateRedaction".equals(item) || "AnnotationCreateRedactionText".equals(item)) {
             annotType = Annot.e_Redact;
-        } else if ("AnnotationCreateLink".equals(item)) {
+        } else if ("AnnotationCreateLink".equals(item) || "AnnotationCreateLinkText".equals(item)) {
             annotType = Annot.e_Link;
         } else if ("TextSelect".equals(item)) {
             annotType = Annot.e_Unknown;
@@ -600,6 +600,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
         } else if ("AnnotationCreateSound".equals(item)) {
             mode = ToolManager.ToolMode.SOUND_CREATE;
+        } else if ("AnnotationCreateRedaction".equals(item)) {
+            mode = ToolManager.ToolMode.RECT_REDACTION;
+        } else if ("AnnotationCreateLink".equals(item)) {
+            mode = ToolManager.ToolMode.RECT_LINK;
+        } else if ("AnnotationCreateRedactionText".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_REDACTION;
+        } else if ("AnnotationCreateLinkText".equals(item)) {
+            mode = ToolManager.ToolMode.TEXT_LINK_CREATE;
         } else if ("TextSelect".equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
         } else if ("Pan".equals(item)) {
