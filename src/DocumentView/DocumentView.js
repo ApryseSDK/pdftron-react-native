@@ -26,9 +26,13 @@ export default class DocumentView extends PureComponent {
     onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
+    longPressMenuItems: PropTypes.array,
+    overrideLongPressMenuBehavior: PropTypes.array,
+    onLongPressMenuPress: PropTypes.func,
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
+    hideAnnotationMenu: PropTypes.array,
     overrideBehavior: PropTypes.array,
     onBehaviorActivated: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
@@ -106,6 +110,13 @@ export default class DocumentView extends PureComponent {
         this.props.onAnnotationMenuPress({
           'annotationMenu': event.nativeEvent.annotationMenu,
           'annotations': event.nativeEvent.annotations,
+        });
+      }
+    } else if (event.nativeEvent.onLongPressMenuPress) {
+      if (this.props.onLongPressMenuPress) {
+        this.props.onLongPressMenuPress({
+          'longPressMenu': event.nativeEvent.longPressMenu,
+          'longPressText': event.nativeEvent.longPressText,
         });
       }
     } else if (event.nativeEvent.onBehaviorActivated) {

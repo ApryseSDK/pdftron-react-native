@@ -110,17 +110,19 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
     
+    __block BOOL showMenu = YES;
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         if (![annotation IsValid]) {
             return;
         }
         
-        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:filterMenuItemsForAnnotationSelectionMenu:)]) {
-            [self.delegate rnt_documentViewController:self filterMenuItemsForAnnotationSelectionMenu:menuController];
+        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:filterMenuItemsForAnnotationSelectionMenu:forAnnotation:)]) {
+            showMenu = [self.delegate rnt_documentViewController:self filterMenuItemsForAnnotationSelectionMenu:menuController
+                                                        forAnnotation:annotation];
         }
     } error:nil];
     
-    return YES;
+    return showMenu;
 }
 
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber

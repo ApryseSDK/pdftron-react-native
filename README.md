@@ -416,6 +416,9 @@ bool, optional, android only
 If true, the viewer will add padding to take account of status bar. Default to false.
 ##### autoSaveEnabled
 bool, optional
+##### hideAnnotationMenu
+array of `Config.Tools` string constants, optional
+Defines annotation types that will not show the default annotation menu
 ##### annotationMenuItems
 array of `Config.AnnotationMenu` string constants, optional
 Defines menu items that can show when an annotation is selected.
@@ -432,6 +435,23 @@ Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of `Config.AnnotationMenu` string constants
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
+##### longPressMenuItems
+array of `Config.LongPressMenu` string constants, optional
+Defines menu items that can show when long press on text or blank space.
+##### overrideLongPressMenuBehavior
+array of `Config.LongPressMenu` string constants, optional
+Defines menu items that should skip default behavior.
+##### onLongPressMenuPress
+function, optional
+Defines what happens on long press menu press if it is passed in to `overrideLongPressMenuBehavior`
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+longPressMenu | string | One of `Config.LongPressMenu` string constants
+longPressText | string | the selected text if pressed on text, empty otherwise
 
 ##### overrideBehavior
 array of `Config.Actions` string constants, optional

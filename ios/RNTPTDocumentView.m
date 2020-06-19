@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
 
+@property (nonatomic, strong, nullable) NSArray<NSNumber*>* hideAnnotMenuToolsAnnotTypes;
+
 @end
 
 NS_ASSUME_NONNULL_END
@@ -1019,6 +1021,21 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
+{
+    _hideAnnotMenuTools = hideAnnotMenuTools;
+    
+    NSMutableArray* hideMenuTools = [[NSMutableArray alloc] init];
+    
+    for (NSString* hideMenuTool in hideAnnotMenuTools) {
+        PTExtendedAnnotType toolTypeToHide = [self reactAnnotationNameToAnnotType:hideMenuTool];
+        [hideMenuTools addObject:@(toolTypeToHide)];
+    }
+    
+    self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
+    
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -1233,6 +1250,51 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
+-(PTExtendedAnnotType)reactAnnotationNameToAnnotType:(NSString*)reactString
+{
+    NSDictionary* typeMap = @{
+        @"AnnotationCreateSticky" : @(PTExtendedAnnotTypeText),
+        @"stickyToolButton" : @(PTExtendedAnnotTypeText),
+        @"AnnotationCreateFreeHand" : @(PTExtendedAnnotTypeInk),
+        @"AnnotationCreateTextHighlight" : @(PTExtendedAnnotTypeHighlight),
+        @"AnnotationCreateTextUnderline" : @(PTExtendedAnnotTypeUnderline),
+        @"AnnotationCreateTextSquiggly" : @(PTExtendedAnnotTypeSquiggly),
+        @"AnnotationCreateTextStrikeout" : @(PTExtendedAnnotTypeStrikeOut),
+        @"AnnotationCreateFreeText" : @(PTExtendedAnnotTypeFreeText),
+        @"AnnotationCreateCallout" : @(PTExtendedAnnotTypeCallout),
+        @"AnnotationCreateSignature" : @(PTExtendedAnnotTypeSignature),
+        @"AnnotationCreateLine" : @(PTExtendedAnnotTypeLine),
+        @"AnnotationCreateArrow" : @(PTExtendedAnnotTypeArrow),
+        @"AnnotationCreatePolyline" : @(PTExtendedAnnotTypePolyline),
+        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeStamp),
+        @"AnnotationCreateRectangle" : @(PTExtendedAnnotTypeSquare),
+        @"AnnotationCreateEllipse" : @(PTExtendedAnnotTypeCircle),
+        @"AnnotationCreatePolygon" : @(PTExtendedAnnotTypePolygon),
+        @"AnnotationCreatePolygonCloud" : @(PTExtendedAnnotTypeCloudy),
+//        @"AnnotationCreateDistanceMeasurement" : @(),
+//        @"AnnotationCreatePerimeterMeasurement" : @(),
+//        @"AnnotationCreateAreaMeasurement" : @(),
+        @"AnnotationCreateFileAttachment" : @(PTExtendedAnnotTypeFileAttachment),
+        @"AnnotationCreateSound" : @(PTExtendedAnnotTypeSound),
+//        @"FormCreateTextField" : @(),
+//        @"FormCreateCheckboxField" : @(),
+//        @"FormCreateRadioField" : @(),
+//        @"FormCreateComboBoxField" : @(),
+//        @"FormCreateListBoxField" : @()
+    };
+    
+    
+    PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
+    
+    if( typeMap[reactString] )
+    {
+        annotType = [typeMap[reactString] unsignedIntValue];
+    }
+
+    return annotType;
+    
+}
+
 #pragma mark - <PTDocumentViewControllerDelegate>
 
 //- (BOOL)documentViewController:(PTDocumentViewController *)documentViewController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
@@ -1394,8 +1456,16 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController
+- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot*)annot
 {
+    
+    PTExtendedAnnotType annotType = [annot extendedAnnotType];
+    
+    if( [self.hideAnnotMenuToolsAnnotTypes containsObject:@(annotType)] )
+    {
+        return NO;
+    }
+        
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         @"Style": @"style",
@@ -1448,6 +1518,8 @@ NS_ASSUME_NONNULL_END
     }
     
     menuController.menuItems = [permittedItems copy];
+    
+    return YES;
 }
 
 - (void)overriddenMenuItemPressed:(NSString *)menuItemId

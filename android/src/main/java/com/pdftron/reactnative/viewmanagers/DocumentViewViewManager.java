@@ -176,6 +176,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationMenuItems(items);
     }
 
+    @ReactProp(name = "longPressMenuItems")
+    public void setLongPressMenuItems(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setLongPressMenuItems(items);
+    }
+    
+    @ReactProp(name = "hideAnnotationMenu")
+    public void setHideAnnotationMenu(DocumentView documentView, @NonNull ReadableArray tools) {
+        documentView.setHideAnnotationMenu(tools);
+    }
+
     @ReactProp(name = "pageChangeOnTap")
     public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
         documentView.setPageChangeOnTap(pageChangeOnTap);
@@ -194,6 +204,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "overrideAnnotationMenuBehavior")
     public void setOverrideAnnotationMenuBehavior(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setOverrideAnnotationMenuBehavior(items);
+    }
+
+    @ReactProp(name = "overrideLongPressMenuBehavior")
+    public void setOverrideLongPressMenuBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideLongPressMenuBehavior(items);
     }
 
     @ReactProp(name = "overrideBehavior")
