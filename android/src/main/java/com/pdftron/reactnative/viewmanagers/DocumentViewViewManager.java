@@ -14,6 +14,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
@@ -214,6 +215,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "overrideBehavior")
     public void setOverrideBehavior(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setOverrideBehavior(items);
+    }
+
+    @ReactProp(name = "followSystemDarkMode")
+    public void setFollowSystemDarkMode(DocumentView documentView, boolean followSystem) {
+        PdfViewCtrlSettingsManager.setFollowSystemDarkMode(documentView.getContext(), followSystem);
     }
 
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {

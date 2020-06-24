@@ -475,6 +475,9 @@ Action | Param
 
 ##### pageChangeOnTap
 bool, optional, default to true
+##### followSystemDarkMode
+bool, optional, Android only, default to true
+If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 ##### collabEnabled
 bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
 ##### currentUser
