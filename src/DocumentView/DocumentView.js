@@ -56,6 +56,7 @@ export default class DocumentView extends PureComponent {
     onExportAnnotationCommand: PropTypes.func,
     autoSaveEnabled: PropTypes.bool,
     pageChangeOnTap: PropTypes.bool,
+    followSystemDarkMode: PropTypes.bool,
     ...ViewPropTypes,
   };
 
