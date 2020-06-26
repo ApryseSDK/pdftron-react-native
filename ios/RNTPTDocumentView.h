@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)annotationMenuPressed:(RNTPTDocumentView *)sender annotationMenu:(NSString *)annotationMenu annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
+- (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -34,10 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
 
 
-// long press menu customization
+// annotation selection menu customization
 @property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *overrideBehavior;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideAnnotMenuTools;
+
+// long-press menu customization
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideLongPressMenuBehavior;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *longPressMenuItems;
 
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;

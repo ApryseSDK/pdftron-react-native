@@ -33,7 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
 
-@property (nonatomic, strong, nullable) NSArray<NSNumber*>* hideAnnotMenuToolsAnnotTypes;
+// Array of wrapped PTExtendedAnnotTypes.
+@property (nonatomic, strong, nullable) NSArray<NSNumber *> *hideAnnotMenuToolsAnnotTypes;
 
 @end
 
@@ -1033,7 +1034,6 @@ NS_ASSUME_NONNULL_END
     }
     
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
-    
 }
 
 #pragma mark -
@@ -1252,7 +1252,7 @@ NS_ASSUME_NONNULL_END
 
 -(PTExtendedAnnotType)reactAnnotationNameToAnnotType:(NSString*)reactString
 {
-    NSDictionary* typeMap = @{
+    NSDictionary<NSString *, NSNumber *>* typeMap = @{
         @"AnnotationCreateSticky" : @(PTExtendedAnnotTypeText),
         @"stickyToolButton" : @(PTExtendedAnnotTypeText),
         @"AnnotationCreateFreeHand" : @(PTExtendedAnnotTypeInk),
@@ -1271,9 +1271,9 @@ NS_ASSUME_NONNULL_END
         @"AnnotationCreateEllipse" : @(PTExtendedAnnotTypeCircle),
         @"AnnotationCreatePolygon" : @(PTExtendedAnnotTypePolygon),
         @"AnnotationCreatePolygonCloud" : @(PTExtendedAnnotTypeCloudy),
-//        @"AnnotationCreateDistanceMeasurement" : @(),
-//        @"AnnotationCreatePerimeterMeasurement" : @(),
-//        @"AnnotationCreateAreaMeasurement" : @(),
+        @"AnnotationCreateDistanceMeasurement" : @(PTExtendedAnnotTypeRuler),
+        @"AnnotationCreatePerimeterMeasurement" : @(PTExtendedAnnotTypePerimeter),
+        @"AnnotationCreateAreaMeasurement" : @(PTExtendedAnnotTypeArea),
         @"AnnotationCreateFileAttachment" : @(PTExtendedAnnotTypeFileAttachment),
         @"AnnotationCreateSound" : @(PTExtendedAnnotTypeSound),
 //        @"FormCreateTextField" : @(),
@@ -1282,7 +1282,6 @@ NS_ASSUME_NONNULL_END
 //        @"FormCreateComboBoxField" : @(),
 //        @"FormCreateListBoxField" : @()
     };
-    
     
     PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
     
@@ -1456,13 +1455,21 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot*)annot
+- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
 {
+    __block PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
     
-    PTExtendedAnnotType annotType = [annot extendedAnnotType];
-    
-    if( [self.hideAnnotMenuToolsAnnotTypes containsObject:@(annotType)] )
-    {
+    NSError *error = nil;
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        if ([annot IsValid]) {
+            annotType = annot.extendedAnnotType;
+        }
+    } error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
+        
+    if ([self.hideAnnotMenuToolsAnnotTypes containsObject:@(annotType)]) {
         return NO;
     }
         
@@ -1510,7 +1517,7 @@ NS_ASSUME_NONNULL_END
             const SEL selector = NSSelectorFromString(actionName);
             
             RNTPT_addMethod([self class], selector, ^(id self) {
-                [self overriddenMenuItemPressed:menuItemId];
+                [self overriddenAnnotationMenuItemPressed:menuItemId];
             });
             
             menuItem.action = selector;
@@ -1522,7 +1529,58 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (void)overriddenMenuItemPressed:(NSString *)menuItemId
+- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
+{
+    // Mapping from menu item title to identifier.
+    NSDictionary<NSString *, NSString *> *map = @{
+        @"Copy": @"copy",
+        @"Search": @"search",
+        @"Share": @"share",
+        @"Read": @"read",
+    };
+    // Get the localized title for each menu item.
+    NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
+    for (NSString *key in map) {
+        NSString *localizedKey = PTLocalizedString(key, nil);
+        if (!localizedKey) {
+            localizedKey = key;
+        }
+        localizedMap[localizedKey] = map[key];
+    }
+    
+    NSMutableArray<UIMenuItem *> *permittedItems = [NSMutableArray array];
+    for (UIMenuItem *menuItem in menuController.menuItems) {
+        NSString *menuItemId = localizedMap[menuItem.title];
+        
+        if (self.longPressMenuItems.count == 0) {
+            [permittedItems addObject:menuItem];
+        }
+        else {
+            if (menuItemId && [self.longPressMenuItems containsObject:menuItemId]) {
+                [permittedItems addObject:menuItem];
+            }
+        }
+        
+        // Override action of of overridden annotation menu items.
+        if (menuItemId && [self.overrideLongPressMenuBehavior containsObject:menuItemId]) {
+            NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
+                                    menuItemId];
+            const SEL selector = NSSelectorFromString(actionName);
+            
+            RNTPT_addMethod([self class], selector, ^(id self) {
+                [self overriddenLongPressMenuItemPressed:menuItemId];
+            });
+            
+            menuItem.action = selector;
+        }
+    }
+    
+    menuController.menuItems = [permittedItems copy];
+    
+    return YES;
+}
+
+- (void)overriddenAnnotationMenuItemPressed:(NSString *)menuItemId
 {
     NSMutableArray<PTAnnot *> *annotations = [NSMutableArray array];
     
@@ -1542,6 +1600,41 @@ NS_ASSUME_NONNULL_END
         
     if ([self.delegate respondsToSelector:@selector(annotationMenuPressed:annotationMenu:annotations:)]) {
         [self.delegate annotationMenuPressed:self annotationMenu:menuItemId annotations:annotationData];
+    }
+}
+
+- (void)overriddenLongPressMenuItemPressed:(NSString *)menuItemId
+{
+    NSMutableString *selectedText = [NSMutableString string];
+    
+    NSError *error = nil;
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        if (![self.pdfViewCtrl HasSelection]) {
+            return;
+        }
+        
+        const int selectionBeginPage = self.pdfViewCtrl.selectionBeginPage;
+        const int selectionEndPage = self.pdfViewCtrl.selectionEndPage;
+        
+        for (int pageNumber = selectionBeginPage; pageNumber <= selectionEndPage; pageNumber++) {
+            if ([self.pdfViewCtrl HasSelectionOnPage:pageNumber]) {
+                PTSelection *selection = [self.pdfViewCtrl GetSelection:pageNumber];
+                NSString *selectionText = [selection GetAsUnicode];
+                
+                [selectedText appendString:selectionText];
+            }
+        }
+    } error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(longPressMenuPressed:
+                                                    longPressMenu:
+                                                    longPressText:)]) {
+        [self.delegate longPressMenuPressed:self
+                              longPressMenu:menuItemId
+                              longPressText:[selectedText copy]];
     }
 }
 

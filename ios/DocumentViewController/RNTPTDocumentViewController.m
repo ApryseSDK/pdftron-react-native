@@ -109,16 +109,23 @@ NS_ASSUME_NONNULL_END
     if (!result) {
         return NO;
     }
-    __block BOOL showMenu = YES;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-        if (![annotation IsValid]) {
-            return;
+    
+    BOOL showMenu = YES;
+    if (annotation) {
+        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:
+                                                        filterMenuItemsForAnnotationSelectionMenu:
+                                                        forAnnotation:)]) {
+            showMenu = [self.delegate rnt_documentViewController:self
+                       filterMenuItemsForAnnotationSelectionMenu:menuController
+                                                   forAnnotation:annotation];
         }
-        
-        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:filterMenuItemsForAnnotationSelectionMenu:forAnnotation:)]) {
-            showMenu = [self.delegate rnt_documentViewController:self filterMenuItemsForAnnotationSelectionMenu:menuController forAnnotation:annotation];
+    } else {
+        if ([self.delegate respondsToSelector:@selector(rnt_documentViewController:
+                                                        filterMenuItemsForLongPressMenu:)]) {
+            showMenu = [self.delegate rnt_documentViewController:self
+                                 filterMenuItemsForLongPressMenu:menuController];
         }
-    } error:nil];
+    }
     
     return showMenu;
 }
