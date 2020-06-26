@@ -262,7 +262,19 @@ RCT_CUSTOM_VIEW_PROPERTY(hideAnnotationMenu, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(longPressMenuItems, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.longPressMenuItems = [RCTConvert NSArray:json];
+    }
+}
 
+RCT_CUSTOM_VIEW_PROPERTY(overrideLongPressMenuBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideLongPressMenuBehavior = [RCTConvert NSStringArray:json];
+    }
+}
 
 - (UIView *)view
 {
@@ -360,6 +372,17 @@ RCT_CUSTOM_VIEW_PROPERTY(hideAnnotationMenu, NSArray, RNTPTDocumentView)
             @"onAnnotationMenuPress": @"onAnnotationMenuPress",
             @"annotationMenu": annotationMenu,
             @"annotations": annotations,
+        });
+    }
+}
+
+- (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onLongPressMenuPress": @"onLongPressMenuPress",
+            @"longPressMenu": longPressMenu,
+            @"longPressText": longPressText,
         });
     }
 }
