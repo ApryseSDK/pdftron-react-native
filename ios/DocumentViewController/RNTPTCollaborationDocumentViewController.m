@@ -175,6 +175,9 @@ NS_ASSUME_NONNULL_END
     else if (!self.local && !self.documentLoaded && self.needsRemoteDocumentLoaded) {
         self.needsDocumentLoaded = YES;
     }
+    else if (!self.local && !self.documentLoaded && self.coordinatedDocument.fileURL) {
+        self.needsDocumentLoaded = YES;
+    }
 }
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl downloadEventType:(PTDownloadedType)type pageNumber:(int)pageNum message:(NSString *)message
