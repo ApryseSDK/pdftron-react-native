@@ -411,9 +411,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value
 {
-    // TODO: AnnotationCreateDistanceMeasurement
-    // AnnotationCreatePerimeterMeasurement
-    // AnnotationCreateAreaMeasurement
     
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
@@ -455,7 +452,7 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:@"AnnotationCreateCallout"] ||
                      [string isEqualToString:@"calloutToolButton"]) {
-                // not supported
+                self.toolManager.calloutAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:@"AnnotationCreateSignature"] ||
                      [string isEqualToString:@"signatureToolButton"]) {
@@ -495,6 +492,15 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:@"AnnotationCreateFileAttachment"]) {
                 self.toolManager.fileAttachmentAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:@"AnnotationCreateDistanceMeasurement"]) {
+                self.toolManager.rulerAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:@"AnnotationCreatePerimeterMeasurement"]) {
+                self.toolManager.perimeterAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:@"AnnotationCreateAreaMeasurement"]) {
+                self.toolManager.areaAnnotationOptions.canCreate = value;
             }
         }
     }
