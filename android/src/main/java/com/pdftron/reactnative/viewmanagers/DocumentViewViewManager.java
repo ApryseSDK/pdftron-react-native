@@ -157,6 +157,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAutoSaveEnabled(autoSaveEnabled);
     }
 
+    @ReactProp(name = "useStylusAsPen")
+    public void setUseStylusAsPen(DocumentView documentView, boolean useStylusAsPen) {
+        documentView.setUseStylusAsPen(useStylusAsPen);
+    }
+
     @ReactProp(name = "collabEnabled")
     public void setCollabEnabled(DocumentView documentView, boolean collabEnabled) {
         documentView.setCollabEnabled(collabEnabled);
