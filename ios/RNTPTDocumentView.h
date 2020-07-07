@@ -78,6 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
+@property (nonatomic) BOOL useStylusAsPen;
+
 @property (nonatomic) BOOL showSavedSignatures;
 
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;

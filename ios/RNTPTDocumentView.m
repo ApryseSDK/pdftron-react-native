@@ -56,6 +56,8 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+
+    _useStylusAsPen = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1112,6 +1114,13 @@ NS_ASSUME_NONNULL_END
     // Shows saved signatures.
     self.toolManager.showDefaultSignature = self.showSavedSignatures;
     
+    // Use Apple Pencil as a pen
+    Class pencilTool = [PTFreeHandCreate class];
+    if (@available(iOS 13.0, *)) {
+        pencilTool = [PTPencilDrawingCreate class];
+    }
+    self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
+
     // Disable UI elements.
     [self disableElementsInternal:self.disabledElements];
     
@@ -1231,6 +1240,15 @@ NS_ASSUME_NONNULL_END
 {
     _showSavedSignatures = showSavedSignatures;
     
+    [self applyViewerSettings];
+}
+
+#pragma mark - Stylus
+
+- (void)setUseStylusAsPen:(BOOL)useStylusAsPen
+{
+    _useStylusAsPen = useStylusAsPen;
+
     [self applyViewerSettings];
 }
 
