@@ -40,6 +40,7 @@ import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
+import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
@@ -639,6 +640,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private void checkQuickMenu(List<QuickMenuItem> menuItems, ArrayList<Object> keepList, List<QuickMenuItem> removeList) {
         for (QuickMenuItem item : menuItems) {
             int menuId = item.getItemId();
+            if (ToolConfig.getInstance().getToolModeByQMItemId(menuId) != null) {
+                // skip real annotation tools
+                return;
+            }
             String menuStr = convQuickMenuIdToString(menuId);
             if (!keepList.contains(menuStr)) {
                 removeList.add(item);
