@@ -1562,6 +1562,12 @@ NS_ASSUME_NONNULL_END
         @"Share": @"share",
         @"Read": @"read",
     };
+    NSArray<NSString *> *whitelist = @[
+        PTLocalizedString(@"Highlight", nil),
+        PTLocalizedString(@"Strikeout", nil),
+        PTLocalizedString(@"Underline", nil),
+        PTLocalizedString(@"Squiggly", nil),
+    ];
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
@@ -1580,7 +1586,10 @@ NS_ASSUME_NONNULL_END
             [permittedItems addObject:menuItem];
         }
         else {
-            if (menuItemId && [self.longPressMenuItems containsObject:menuItemId]) {
+            if ([whitelist containsObject:menuItem.title]) {
+                [permittedItems addObject:menuItem];
+            }
+            else if (menuItemId && [self.longPressMenuItems containsObject:menuItemId]) {
                 [permittedItems addObject:menuItem];
             }
         }
