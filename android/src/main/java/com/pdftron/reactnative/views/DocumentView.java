@@ -1182,7 +1182,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
 
-        getToolManager().setUseStylusAsPen(mUseStylusAsPen);
+        getToolManager().setStylusAsPen(mUseStylusAsPen);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
