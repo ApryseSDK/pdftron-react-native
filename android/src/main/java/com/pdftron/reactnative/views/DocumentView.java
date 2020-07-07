@@ -145,6 +145,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private boolean mAutoSaveEnabled = true;
 
+    private boolean mUseStylusAsPen = false;
+
     // collab
     private CollabManager mCollabManager;
     private boolean mCollabEnabled;
@@ -356,6 +358,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setAutoSaveEnabled(boolean autoSaveEnabled) {
         mAutoSaveEnabled = autoSaveEnabled;
+    }
+
+    public void setUseStylusAsPen(boolean useStylusAsPen) {
+        mUseStylusAsPen = useStylusAsPen;
     }
 
     public void setCollabEnabled(boolean collabEnabled) {
@@ -1175,6 +1181,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
+
+        getToolManager().setStylusAsPen(mUseStylusAsPen);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 

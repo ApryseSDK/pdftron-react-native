@@ -349,6 +349,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [overrideAnnotationMenuBehavior](#overrideannotationmenubehavior)
 - [onAnnotationMenuPress](#onannotationmenupress)
 - [pageChangeOnTap](#pagechangeontap)
+- [useStylusAsPen](#usestylusaspen)
 
 ##### document
 string, required
@@ -475,6 +476,9 @@ Action | Param
 
 ##### pageChangeOnTap
 bool, optional, default to true
+##### useStylusAsPen
+bool, optional, default to false
+If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
 If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
