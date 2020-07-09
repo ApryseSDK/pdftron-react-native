@@ -597,6 +597,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.CALLOUT_CREATE;
         } else if ("stampToolButton".equals(item) || "AnnotationCreateStamp".equals(item)) {
             mode = ToolManager.ToolMode.STAMPER;
+        } else if ("AnnotationCreateRubberStamp".equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
         } else if ("AnnotationCreateDistanceMeasurement".equals(item)) {
             mode = ToolManager.ToolMode.RULER_CREATE;
         } else if ("AnnotationCreatePerimeterMeasurement".equals(item)) {
@@ -1535,6 +1537,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             }
         }
         return false;
+    }
+
+    public boolean canExitViewer() {
+        PdfViewCtrlTabFragment currentFragment = getPdfViewCtrlTabFragment();
+        if (currentFragment.isAnnotationMode()) {
+            return false;
+        }
+        if (currentFragment.isSearchMode()) {
+            return false;
+        }
+        return true;
     }
 
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
