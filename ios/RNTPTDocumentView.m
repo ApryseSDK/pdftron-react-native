@@ -474,7 +474,7 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:@"AnnotationCreateStamp"] ||
                      [string isEqualToString:@"stampToolButton"]) {
-                self.toolManager.stampAnnotationOptions.canCreate = value;
+                self.toolManager.imageStampAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:@"AnnotationCreateRectangle"] ||
                      [string isEqualToString:@"rectangleToolButton"]) {
@@ -558,7 +558,7 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:@"AnnotationCreateCallout"])
     {
-        // not supported
+        toolClass = [PTCalloutCreate class];
     }
     else if ( [toolMode isEqualToString:@"AnnotationCreateSignature"])
     {
@@ -578,7 +578,7 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:@"AnnotationCreateStamp"])
     {
-        // not implemented
+        toolClass = [PTImageStampCreate class];
     }
     else if ( [toolMode isEqualToString:@"AnnotationCreateRectangle"])
     {
@@ -595,6 +595,15 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:@"AnnotationCreatePolygonCloud"])
     {
         toolClass = [PTCloudCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateDistanceMeasurement"]) {
+        toolClass = [PTRulerCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreatePerimeterMeasurement"]) {
+        toolClass = [PTPerimeterCreate class];
+    }
+    else if ( [toolMode isEqualToString:@"AnnotationCreateAreaMeasurement"]) {
+        toolClass = [PTAreaCreate class];
     }
     
     if (toolClass) {
@@ -1290,7 +1299,7 @@ NS_ASSUME_NONNULL_END
         @"AnnotationCreateLine" : @(PTExtendedAnnotTypeLine),
         @"AnnotationCreateArrow" : @(PTExtendedAnnotTypeArrow),
         @"AnnotationCreatePolyline" : @(PTExtendedAnnotTypePolyline),
-        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeStamp),
+        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeImageStamp),
         @"AnnotationCreateRectangle" : @(PTExtendedAnnotTypeSquare),
         @"AnnotationCreateEllipse" : @(PTExtendedAnnotTypeCircle),
         @"AnnotationCreatePolygon" : @(PTExtendedAnnotTypePolygon),
