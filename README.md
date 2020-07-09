@@ -411,23 +411,29 @@ bool, optional
 bool, optional
 ##### isBase64String
 bool, optional
+
 If true, `document` prop will be treated as a base64 string.
 ##### padStatusBar
 bool, optional, android only
+
 If true, the viewer will add padding to take account of status bar. Default to false.
 ##### autoSaveEnabled
 bool, optional
 ##### hideAnnotationMenu
 array of `Config.Tools` string constants, optional
+
 Defines annotation types that will not show the default annotation menu
 ##### annotationMenuItems
 array of `Config.AnnotationMenu` string constants, optional
+
 Defines menu items that can show when an annotation is selected.
 ##### overrideAnnotationMenuBehavior
 array of `Config.AnnotationMenu` string constants, optional
+
 Defines menu items that should skip default behavior.
 ##### onAnnotationMenuPress
 function, optional
+
 Defines what happens on annotation menu press if it is passed in to `overrideAnnotationMenuBehavior`
 
 Parameters:
@@ -439,12 +445,15 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
 
 ##### longPressMenuItems
 array of `Config.LongPressMenu` string constants, optional
+
 Defines menu items that can show when long press on text or blank space.
 ##### overrideLongPressMenuBehavior
 array of `Config.LongPressMenu` string constants, optional
+
 Defines menu items that should skip default behavior.
 ##### onLongPressMenuPress
 function, optional
+
 Defines what happens on long press menu press if it is passed in to `overrideLongPressMenuBehavior`
 
 Parameters:
@@ -456,9 +465,11 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 
 ##### overrideBehavior
 array of `Config.Actions` string constants, optional
+
 Defines actions that should skip default behavior, such as external link click.
 ##### onBehaviorActivated
 function, optional
+
 Defines what happens on certain behavior if it is passed in to `overrideBehavior`
 
 Parameters:
@@ -477,10 +488,12 @@ Action | Param
 ##### pageChangeOnTap
 bool, optional, default to true
 ##### useStylusAsPen
-bool, optional, default to false
+bool, optional, default to false on Android, true on iOS
+
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
+
 If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 ##### collabEnabled
 bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
