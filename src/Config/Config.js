@@ -55,6 +55,7 @@ export default {
     annotationCreateArrow: 'AnnotationCreateArrow',
     annotationCreatePolyline: 'AnnotationCreatePolyline',
     annotationCreateStamp: 'AnnotationCreateStamp',
+    annotationCreateRubberStamp: 'AnnotationCreateRubberStamp',
     annotationCreateRectangle: 'AnnotationCreateRectangle',
     annotationCreateEllipse: 'AnnotationCreateEllipse',
     annotationCreatePolygon: 'AnnotationCreatePolygon',

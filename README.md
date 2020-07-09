@@ -560,6 +560,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [setFlagForFields](#setFlagForFields)
 - [setValueForFields](#setValueForFields)
 - [importAnnotationCommand](#importannotationcommand)
+- [canExitViewer](#canexitviewer)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -717,6 +718,11 @@ xfdfCommand | string | the XFDF command string
 initialLoad | bool | whether this is for initial load
 
 Returns a Promise.
+
+##### canExitViewer
+Android only.
+This is useful for custom back button handling on Android.
+This method will indicate whether you can do your custom handling or the viewer is still not done yet.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
