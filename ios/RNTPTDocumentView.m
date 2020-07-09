@@ -474,10 +474,6 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:@"AnnotationCreateStamp"] ||
                      [string isEqualToString:@"stampToolButton"]) {
-                self.toolManager.stampAnnotationOptions.canCreate = value;
-            }
-            else if ([string isEqualToString:@"AnnotationCreateImageStamp"] ||
-                     [string isEqualToString:@"imageStampToolButton"]) {
                 self.toolManager.imageStampAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:@"AnnotationCreateRectangle"] ||
@@ -581,10 +577,6 @@ NS_ASSUME_NONNULL_END
         toolClass = [PTPolylineCreate class];
     }
     else if ( [toolMode isEqualToString:@"AnnotationCreateStamp"])
-    {
-        // not implemented
-    }
-    else if ( [toolMode isEqualToString:@"AnnotationCreateImageStamp"])
     {
         toolClass = [PTImageStampCreate class];
     }
@@ -1307,8 +1299,7 @@ NS_ASSUME_NONNULL_END
         @"AnnotationCreateLine" : @(PTExtendedAnnotTypeLine),
         @"AnnotationCreateArrow" : @(PTExtendedAnnotTypeArrow),
         @"AnnotationCreatePolyline" : @(PTExtendedAnnotTypePolyline),
-        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeStamp),
-        @"AnnotationCreateImageStamp" : @(PTExtendedAnnotTypeImageStamp),
+        @"AnnotationCreateStamp" : @(PTExtendedAnnotTypeImageStamp),
         @"AnnotationCreateRectangle" : @(PTExtendedAnnotTypeSquare),
         @"AnnotationCreateEllipse" : @(PTExtendedAnnotTypeCircle),
         @"AnnotationCreatePolygon" : @(PTExtendedAnnotTypePolygon),
