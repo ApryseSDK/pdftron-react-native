@@ -4,6 +4,7 @@ import {
   requireNativeComponent,
   ViewPropTypes,
   Platform,
+  Alert,
   NativeModules,
   findNodeHandle
 } from 'react-native';
@@ -98,7 +99,17 @@ export default class DocumentView extends PureComponent {
     	}
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError) {
-        this.props.onDocumentError();
+        this.props.onDocumentError(event.nativeEvent.onDocumentError);
+      } else {
+        const msg = event.nativeEvent.onDocumentError ? event.nativeEvent.onDocumentError : 'Unknown error';
+        Alert.alert(
+          'Alert',
+          msg,
+          [
+            { text: 'OK' }
+          ],
+          { cancelable: true }
+        );
       }
     } else if (event.nativeEvent.onExportAnnotationCommand) {
       if (this.props.onExportAnnotationCommand) {
