@@ -1223,7 +1223,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     @Override
-    public void onOpenDocError() {
+    public boolean onOpenDocError() {
         super.onOpenDocError();
 
         String error = "Unknown error";
@@ -1250,6 +1250,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             error = mPdfViewCtrlTabHostFragment.getString(messageId);
         }
         onReceiveNativeEvent(ON_DOCUMENT_ERROR, error);
+        return true;
     }
 
     public void importAnnotationCommand(String xfdfCommand, boolean initialLoad) throws PDFNetException {
