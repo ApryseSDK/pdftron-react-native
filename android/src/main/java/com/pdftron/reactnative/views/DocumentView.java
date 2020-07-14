@@ -395,6 +395,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             PdfViewCtrlSettingsManager.setAllowPageChangeOnTap(context, pageChangeOnTap);
         }
     }
+    
+    public void setMultiTabEnabled(boolean multiTab) {
+        mBuilder = mBuilder.multiTabEnabled(multiTab);
+    }
 
     public void setThumbnailViewEditingEnabled(boolean thumbnailViewEditingEnabled) {
         mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);

@@ -350,6 +350,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [onAnnotationMenuPress](#onannotationmenupress)
 - [pageChangeOnTap](#pagechangeontap)
 - [useStylusAsPen](#usestylusaspen)
+- [multiTabEnabled](#multiTabEnabled)
 
 ##### document
 string, required
@@ -491,6 +492,10 @@ bool, optional, default to true
 bool, optional, default to false on Android, true on iOS
 
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
+##### multiTabEnabled
+bool, optional, default to false
+
+If true, viewer will show multiple tabs for documents opened.
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
 

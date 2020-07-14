@@ -196,6 +196,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
         documentView.setPageChangeOnTap(pageChangeOnTap);
     }
+    
+    @ReactProp(name = "multiTabEnabled")
+    public void setMultiTabEnabled(DocumentView documentView, boolean multiTab) {
+        documentView.setMultiTabEnabled(multiTab);
+    }
 
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {

@@ -59,6 +59,7 @@ export default class DocumentView extends PureComponent {
     pageChangeOnTap: PropTypes.bool,
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
+    multiTabEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
