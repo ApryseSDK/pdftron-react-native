@@ -389,6 +389,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mLongPressMenuItems = items != null ? items.toArrayList() : null;
     }
 
+    public void setLongPressMenuEnabled(boolean longPressMenuEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setDisableQuickMenu(!longPressMenuEnabled);
+    }
+
     public void setPageChangeOnTap(boolean pageChangeOnTap) {
         Context context = getContext();
         if (context != null) {
