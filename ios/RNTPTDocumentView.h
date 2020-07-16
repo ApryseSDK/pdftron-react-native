@@ -96,6 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, nullable) id <RNTPTDocumentViewDelegate> delegate;
 
+@property (nonatomic, assign, getter=isLongPressMenuEnabled) BOOL longPressMenuEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
