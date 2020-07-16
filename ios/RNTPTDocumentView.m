@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_END
     _selectAnnotationAfterCreation = YES;
 
     _useStylusAsPen = YES;
+    _longPressMenuEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1564,6 +1565,10 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
 {
+    if (!self.longPressMenuEnabled) {
+        menuController.menuItems = nil;
+        return NO;
+    }
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         @"Copy": @"copy",

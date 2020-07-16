@@ -1,6 +1,5 @@
 package com.pdftron.reactnative.viewmanagers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
@@ -186,7 +185,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setLongPressMenuItems(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setLongPressMenuItems(items);
     }
-    
+
+    @ReactProp(name = "longPressMenuEnabled")
+    public void setLongPressMenuEnabled(DocumentView documentView, boolean longPressMenuEnabled) {
+        documentView.setLongPressMenuEnabled(longPressMenuEnabled);
+    }
+
     @ReactProp(name = "hideAnnotationMenu")
     public void setHideAnnotationMenu(DocumentView documentView, @NonNull ReadableArray tools) {
         documentView.setHideAnnotationMenu(tools);
