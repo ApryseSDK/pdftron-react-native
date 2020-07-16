@@ -350,6 +350,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [onAnnotationMenuPress](#onannotationmenupress)
 - [pageChangeOnTap](#pagechangeontap)
 - [useStylusAsPen](#usestylusaspen)
+- [longPressMenuEnabled](#longPressMenuEnabled)
 
 ##### document
 string, required
@@ -442,6 +443,11 @@ Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of `Config.AnnotationMenu` string constants
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
+##### longPressMenuEnabled
+bool, optional, default to true
+
+If true, the viewer will show the default menu on long press.
 
 ##### longPressMenuItems
 array of `Config.LongPressMenu` string constants, optional
