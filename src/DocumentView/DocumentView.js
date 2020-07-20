@@ -41,6 +41,7 @@ export default class DocumentView extends PureComponent {
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
+    onFormFieldValueChanged: PropTypes.func,
     readOnly: PropTypes.bool,
     thumbnailViewEditingEnabled: PropTypes.bool,
     fitMode: PropTypes.string,
@@ -97,6 +98,13 @@ export default class DocumentView extends PureComponent {
     			'annotations': event.nativeEvent.annotations,
     		});
     	}
+    } else if (event.nativeEvent.onFormFieldValueChanged) {
+      if (this.props.onFormFieldValueChanged) {
+        this.props.onFormFieldValueChanged({
+          'action': event.nativeEvent.action,
+          'annotations': event.nativeEvent.annotations,
+        });
+      }
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError) {
         this.props.onDocumentError(event.nativeEvent.onDocumentError);

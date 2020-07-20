@@ -292,6 +292,11 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
                    name:PTToolManagerAnnotationRemovedNotification
                  object:self.documentViewController.toolManager];
+
+    [center addObserver:self
+    selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:)
+        name:PTToolManagerFormFieldDataModifiedNotification
+      object:self.documentViewController.toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications
@@ -312,6 +317,10 @@ NS_ASSUME_NONNULL_END
     
     [center removeObserver:self
                       name:PTToolManagerAnnotationRemovedNotification
+                    object:self.documentViewController.toolManager];
+
+    [center removeObserver:self
+                      name:PTToolManagerFormFieldDataModifiedNotification
                     object:self.documentViewController.toolManager];
 }
 
@@ -1839,6 +1848,27 @@ NS_ASSUME_NONNULL_END
             @"id": annotId,
             @"pageNumber": @(pageNumber),
         } action:@"remove"];
+    }
+}
+
+- (void)toolManagerDidModifyFormFieldDataWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.documentViewController.toolManager) {
+        return;
+    }
+
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+
+    PTWidget *widget = [[PTWidget alloc] initWithAnn:annot];
+    PTField *field = [widget GetField];
+    NSString *fieldName = [field IsValid] ? [field GetName] : @"";
+    NSString *fieldValue = [field IsValid] ? [field GetValueAsString] : @"";
+
+    if ([self.delegate respondsToSelector:@selector(formFieldValueChanged:annotation:action:)]) {
+        [self.delegate formFieldValueChanged:self annotation:@{
+            @"fieldName": fieldName,
+            @"fieldValue": fieldValue,
+        } action:@"modify"];
     }
 }
 
