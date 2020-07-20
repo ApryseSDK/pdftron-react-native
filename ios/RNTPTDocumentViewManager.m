@@ -368,6 +368,16 @@ RCT_CUSTOM_VIEW_PROPERTY(longPressMenuEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+- (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onFormFieldValueChanged" : @"onFormFieldValueChanged",
+            @"fields": @[fields],
+        });
+    }
+}
+
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
 {
     if (sender.onChange) {

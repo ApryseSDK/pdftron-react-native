@@ -343,6 +343,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [showSavedSignatures](#showsavedsignatures)
 - [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
+- [onFormFieldValueChanged](#onformfieldvaluechanged)
 - [onAnnotationsSelected](#onannotationsselected)
 - [autoSaveEnabled](#autosaveenabled)
 - [annotationMenuItems](#annotationMenuItems)
@@ -553,6 +554,16 @@ import { DocumentView, Config } from 'react-native-pdftron';
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
 />
 ```
+
+##### onFormFieldValueChanged
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`
+
 
 #### Methods
 - [setToolMode](#settoolmode)

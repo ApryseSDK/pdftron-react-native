@@ -39,6 +39,7 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
+import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
@@ -89,6 +90,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_LONG_PRESS_MENU_PRESS = "onLongPressMenuPress";
     private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
     private static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
+    private static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -108,6 +110,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_action_delete = "delete";
     private static final String KEY_annotations = "annotations";
     private static final String KEY_xfdfCommand = "xfdfCommand";
+    private static final String Key_fields = "fields";
+    private static final String Key_fieldName = "fieldName";
+    private static final String Key_fieldValue = "fieldValue";
 
     private static final String KEY_annotationMenu = "annotationMenu";
     private static final String KEY_longPressMenu = "longPressMenu";
@@ -1120,6 +1125,33 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsModified(Map<Annot, Integer> map, Bundle bundle) {
             handleAnnotationChanged(KEY_action_modify, map);
+
+            // handle form fields change
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_FORM_FIELD_VALUE_CHANGED, ON_FORM_FIELD_VALUE_CHANGED);
+            WritableArray fieldsArray = Arguments.createArray();
+            for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                Annot annot = entry.getKey();
+                try {
+                    if (annot != null && annot.isValid()) {
+                        if (annot.getType() == Annot.e_Widget) {
+                            WritableMap resultMap = Arguments.createMap();
+
+                            Widget widget = new Widget(annot);
+                            Field field = widget.getField();
+                            String name = field.getName();
+
+                            resultMap.putString(Key_fieldName, name);
+                            resultMap.putString(Key_fieldValue, field.getValueAsString());
+                            fieldsArray.pushMap(resultMap);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            params.putArray(Key_fields, fieldsArray);
+            onReceiveNativeEvent(params);
         }
 
         @Override
