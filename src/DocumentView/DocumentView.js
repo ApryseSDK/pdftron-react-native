@@ -101,8 +101,7 @@ export default class DocumentView extends PureComponent {
     } else if (event.nativeEvent.onFormFieldValueChanged) {
       if (this.props.onFormFieldValueChanged) {
         this.props.onFormFieldValueChanged({
-          'action': event.nativeEvent.action,
-          'annotations': event.nativeEvent.annotations,
+          'fields': event.nativeEvent.fields,
         });
       }
     } else if (event.nativeEvent.onDocumentError) {
