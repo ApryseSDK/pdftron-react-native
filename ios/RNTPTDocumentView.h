@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
 
-- (void)formFieldValueChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+- (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand;
 
