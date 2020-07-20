@@ -30,6 +30,7 @@ export default class DocumentView extends PureComponent {
     longPressMenuItems: PropTypes.array,
     overrideLongPressMenuBehavior: PropTypes.array,
     onLongPressMenuPress: PropTypes.func,
+    longPressMenuEnabled: PropTypes.bool,
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
