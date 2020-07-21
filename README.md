@@ -566,6 +566,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [setValueForFields](#setValueForFields)
 - [importAnnotationCommand](#importannotationcommand)
 - [canExitViewer](#canexitviewer)
+- [closeAllTabs](#closealltabs)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -728,6 +729,9 @@ Returns a Promise.
 Android only.
 This is useful for custom back button handling on Android.
 This method will indicate whether you can do your custom handling or the viewer is still not done yet.
+
+##### closeAllTabs
+Closes all tabs in multi-tab environment.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

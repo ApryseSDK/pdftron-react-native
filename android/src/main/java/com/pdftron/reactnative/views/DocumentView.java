@@ -1555,6 +1555,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return true;
     }
 
+    public void closeAllTabs() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.closeAllTabs();
+        }
+    }
+
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
