@@ -241,10 +241,10 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  canExitViewer = () => {
+  handleBackButton = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.canExitViewer(tag);
+      return DocumentViewManager.handleBackButton(tag);
     }
     return Promise.resolve();
   }

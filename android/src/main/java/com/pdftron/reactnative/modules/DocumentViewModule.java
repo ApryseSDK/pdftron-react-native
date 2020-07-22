@@ -195,12 +195,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void canExitViewer(final int tag, final Promise promise) {
+    public void handleBackButton(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    boolean result = mDocumentViewInstance.canExitViewer(tag);
+                    boolean result = mDocumentViewInstance.handleBackButton(tag);
                     promise.resolve(result);
                 } catch (Exception ex) {
                     promise.reject(ex);

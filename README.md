@@ -577,7 +577,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [setFlagForFields](#setFlagForFields)
 - [setValueForFields](#setValueForFields)
 - [importAnnotationCommand](#importannotationcommand)
-- [canExitViewer](#canexitviewer)
+- [handleBackButton](#handlebackbutton)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -736,10 +736,16 @@ initialLoad | bool | whether this is for initial load
 
 Returns a Promise.
 
-##### canExitViewer
+##### handleBackButton
 Android only.
-This is useful for custom back button handling on Android.
-This method will indicate whether you can do your custom handling or the viewer is still not done yet.
+
+```js
+this._viewer.handleBackButton().then((handled) => {
+  if (!handled) {
+    BackHandler.exitApp();
+  }
+});
+```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
