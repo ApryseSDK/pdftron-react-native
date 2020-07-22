@@ -330,12 +330,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public boolean canExitViewer(int tag) throws PDFNetException {
+    public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.canExitViewer();
+            return documentView.handleBackButton();
         } else {
-            throw new PDFNetException("", 0L, getName(), "canExitViewer", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "handleBackButton", "Unable to find DocumentView.");
         }
     }
 

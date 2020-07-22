@@ -1576,15 +1576,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
-    public boolean canExitViewer() {
-        PdfViewCtrlTabFragment currentFragment = getPdfViewCtrlTabFragment();
-        if (currentFragment.isAnnotationMode()) {
-            return false;
+    public boolean handleBackButton() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            return mPdfViewCtrlTabHostFragment.handleBackPressed();
         }
-        if (currentFragment.isSearchMode()) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
