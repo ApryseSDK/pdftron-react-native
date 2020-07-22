@@ -351,6 +351,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [onAnnotationMenuPress](#onannotationmenupress)
 - [pageChangeOnTap](#pagechangeontap)
 - [useStylusAsPen](#usestylusaspen)
+- [signSignatureFieldsWithStamps](#signsignaturefieldswithstamps)
 - [longPressMenuEnabled](#longPressMenuEnabled)
 
 ##### document
@@ -495,12 +496,16 @@ Action | Param
 ##### pageChangeOnTap
 bool, optional, default to true
 ##### useStylusAsPen
-bool, optional, default to false on Android, true on iOS
-
+bool, optional, default to true
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
+
+##### signSignatureFieldsWithStamps
+bool, optional, default to false
+If true, signature field will be signed with image stamp.
+This is useful if you are saving XFDF to remote source.
+
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
-
 If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 ##### collabEnabled
 bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
