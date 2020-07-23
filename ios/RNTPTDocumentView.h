@@ -100,6 +100,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, getter=isLongPressMenuEnabled) BOOL longPressMenuEnabled;
 
+@property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

@@ -61,6 +61,7 @@ export default class DocumentView extends PureComponent {
     pageChangeOnTap: PropTypes.bool,
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
+    signSignatureFieldsWithStamps: PropTypes.bool,
     ...ViewPropTypes,
   };
 

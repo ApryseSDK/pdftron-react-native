@@ -151,7 +151,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private boolean mAutoSaveEnabled = true;
 
-    private boolean mUseStylusAsPen = false;
+    private boolean mUseStylusAsPen = true;
+    private boolean mSignWithStamps;
 
     // collab
     private CollabManager mCollabManager;
@@ -423,6 +424,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setOverrideBehavior(@NonNull ReadableArray items) {
         mActionOverrideItems = items;
+    }
+
+    public void setSignSignatureFieldsWithStamps(boolean signWithStamps) {
+        mSignWithStamps = signWithStamps;
     }
 
     private void disableElements(ReadableArray args) {
@@ -1226,6 +1231,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
+        getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 

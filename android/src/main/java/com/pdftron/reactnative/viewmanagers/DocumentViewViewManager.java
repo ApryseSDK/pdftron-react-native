@@ -231,6 +231,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         PdfViewCtrlSettingsManager.setFollowSystemDarkMode(documentView.getContext(), followSystem);
     }
 
+    @ReactProp(name = "signSignatureFieldsWithStamps")
+    public void setSignSignatureFieldsWithStamps(DocumentView documentView, boolean signWithStamp) {
+        documentView.setSignSignatureFieldsWithStamps(signWithStamp);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

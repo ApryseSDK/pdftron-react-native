@@ -1133,6 +1133,8 @@ NS_ASSUME_NONNULL_END
     // Shows saved signatures.
     self.toolManager.showDefaultSignature = self.showSavedSignatures;
     
+    self.toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
+    
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.0, *)) {
@@ -1278,6 +1280,15 @@ NS_ASSUME_NONNULL_END
     if([self.delegate respondsToSelector:@selector(navButtonClicked:)]) {
         [self.delegate navButtonClicked:self];
     }
+}
+
+#pragma mark - signSignatureFieldsWithStamps
+
+-(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
+{
+    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
+    
+    [self applyViewerSettings];
 }
 
 #pragma mark - Convenience
