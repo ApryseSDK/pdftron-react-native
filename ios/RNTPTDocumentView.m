@@ -615,6 +615,9 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:@"AnnotationCreateAreaMeasurement"]) {
         toolClass = [PTAreaCreate class];
     }
+    else if ( [toolMode isEqualToString:@"AnnotationEraserTool"]) {
+        toolClass = [PTEraser class];
+    }
     
     if (toolClass) {
         PTTool *tool = [self.documentViewController.toolManager changeTool:toolClass];
