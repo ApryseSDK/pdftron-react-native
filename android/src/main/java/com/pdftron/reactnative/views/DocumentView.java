@@ -649,6 +649,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             mode = ToolManager.ToolMode.FORM_COMBO_BOX_CREATE;
         } else if ("FormCreateListBoxField".equals(item)) {
             mode = ToolManager.ToolMode.FORM_LIST_BOX_CREATE;
+        } else if ("AnnotationEraserTool".equals(item)) {
+            mode = ToolManager.ToolMode.INK_ERASER;
         }
         return mode;
     }

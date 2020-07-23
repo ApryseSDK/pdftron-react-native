@@ -42,6 +42,7 @@ export default {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
     pan: 'Pan',
+    annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
     annotationCreateFreeHand: 'AnnotationCreateFreeHand',
     annotationCreateTextHighlight: 'AnnotationCreateTextHighlight',
