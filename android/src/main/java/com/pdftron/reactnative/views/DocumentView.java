@@ -170,6 +170,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
+
     public DocumentView(Context context) {
         super(context);
     }
@@ -480,12 +482,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 mBuilder = mBuilder.showUserBookmarksList(false);
             } else if ("reflowButton".equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
+                mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
             } else if ("editMenuButton".equals(item)) {
                 mBuilder = mBuilder.showEditMenuOption(false);
             } else if ("cropPageButton".equals(item)) {
-                mBuilder = mBuilder.hideViewModeItems(new ViewModePickerDialogFragment.ViewModePickerItems[]{
-                        ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP
-                });
+                mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
             }
         }
         disableTools(args);
@@ -720,6 +721,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             if (modes.length > 0) {
                 mToolManagerBuilder = mToolManagerBuilder.disableToolModes(modes);
             }
+        }
+        if (mViewModePickerItems.size() > 0) {
+            mBuilder = mBuilder.hideViewModeItems(mViewModePickerItems.toArray(new ViewModePickerDialogFragment.ViewModePickerItems[0]));
         }
         return mBuilder
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)
