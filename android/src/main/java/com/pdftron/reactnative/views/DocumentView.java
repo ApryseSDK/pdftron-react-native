@@ -856,6 +856,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     @Override
     public void onNavButtonPressed() {
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
+
+        if (getPdfViewCtrlTabFragment()!=null) {
+            getPdfViewCtrlTabFragment().setSearchNavButtonsVisible(true);
+            getPdfViewCtrlTabFragment().queryTextSubmit("the");
+        }
     }
 
     @Override
