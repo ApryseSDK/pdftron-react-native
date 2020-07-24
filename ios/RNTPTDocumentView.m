@@ -972,7 +972,37 @@ NS_ASSUME_NONNULL_END
         [self.collaborationManager importAnnotationsWithXFDFCommand:xfdfCommand
                                                           isInitial:initialLoad];
     } else {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"set collabEnabled to true is required" userInfo:nil];
+        PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+        PTPDFDoc *pdfDoc = [pdfViewCtrl GetDoc];
+        BOOL shouldUnlockRead = NO;
+        @try {
+            [pdfViewCtrl DocLockRead];
+            shouldUnlockRead = YES;
+            if (pdfDoc.HasDownloader) {
+                return;
+            }
+        }
+        @finally {
+            if (shouldUnlockRead) {
+                [pdfViewCtrl DocUnlockRead];
+            }
+        }
+
+        BOOL shouldUnlock = NO;
+        @try {
+            [pdfViewCtrl DocLock:YES];
+            shouldUnlock = YES;
+
+            PTFDFDoc *fdfDoc = [pdfDoc FDFExtract:e_ptboth];
+            [fdfDoc MergeAnnots:xfdfCommand permitted_user:@""];
+            [pdfDoc FDFUpdate:fdfDoc];
+            [pdfViewCtrl Update:YES];
+        }
+        @finally {
+            if (shouldUnlock) {
+                [pdfViewCtrl DocUnlock];
+            }
+        }
     }
 }
 
