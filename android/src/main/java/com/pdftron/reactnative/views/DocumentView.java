@@ -1122,6 +1122,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsAdded(Map<Annot, Integer> map) {
             handleAnnotationChanged(KEY_action_add, map);
+
+            handleExportAnnotationCommand(KEY_action_add, map);
         }
 
         @Override
@@ -1132,6 +1134,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsModified(Map<Annot, Integer> map, Bundle bundle) {
             handleAnnotationChanged(KEY_action_modify, map);
+            handleExportAnnotationCommand(KEY_action_modify, map);
 
             // handle form fields change
             WritableMap params = Arguments.createMap();
@@ -1164,6 +1167,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsPreRemove(Map<Annot, Integer> map) {
             handleAnnotationChanged(KEY_action_delete, map);
+            handleExportAnnotationCommand(KEY_action_delete, map);
         }
 
         @Override
@@ -1208,6 +1212,46 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         params.putArray(KEY_annotations, annotList);
         onReceiveNativeEvent(params);
+    }
+
+    private void handleExportAnnotationCommand(String action, Map<Annot, Integer> map) {
+        if (mCollabManager == null) {
+            // fallback for export annotations when collab not present
+            ArrayList<Annot> annots = new ArrayList<>(map.keySet());
+            String xfdfCommand = null;
+            try {
+                if (KEY_action_add.equals(action)) {
+                    xfdfCommand = generateXfdfCommand(annots, null, null);
+                } else if (KEY_action_modify.equals(action)) {
+                    xfdfCommand = generateXfdfCommand(null, annots, null);
+                } else {
+                    xfdfCommand = generateXfdfCommand(null, null, annots);
+                }
+            } catch (PDFNetException e) {
+                e.printStackTrace();
+            }
+
+            if (xfdfCommand != null) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
+                params.putString(KEY_action, action);
+                params.putString(KEY_xfdfCommand, xfdfCommand);
+                onReceiveNativeEvent(params);
+            }
+        }
+    }
+
+    // helper
+    @Nullable
+    private String generateXfdfCommand(@Nullable ArrayList<Annot> added,
+            @Nullable ArrayList<Annot> modified,
+            @Nullable ArrayList<Annot> removed) throws PDFNetException {
+        PDFDoc pdfDoc = getPdfDoc();
+        if (pdfDoc != null) {
+            FDFDoc fdfDoc = pdfDoc.fdfExtract(added, modified, removed);
+            return fdfDoc.saveAsXFDF();
+        }
+        return null;
     }
 
     @Override
