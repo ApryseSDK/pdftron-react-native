@@ -1134,6 +1134,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsModified(Map<Annot, Integer> map, Bundle bundle) {
             handleAnnotationChanged(KEY_action_modify, map);
+
             handleExportAnnotationCommand(KEY_action_modify, map);
 
             // handle form fields change
@@ -1167,6 +1168,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         @Override
         public void onAnnotationsPreRemove(Map<Annot, Integer> map) {
             handleAnnotationChanged(KEY_action_delete, map);
+
             handleExportAnnotationCommand(KEY_action_delete, map);
         }
 
