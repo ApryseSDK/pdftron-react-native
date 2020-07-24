@@ -1855,6 +1855,11 @@ NS_ASSUME_NONNULL_END
             @"pageNumber": @(pageNumber),
         } action:@"add"];
     }
+    if (!self.collaborationManager) {
+        PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+        [annots add:annot];
+        [self rnt_sendExportAnnotationCommandWithAction:@"add" xfdfCommand:[self generateXfdfCommand:annots modified:[[PTVectorAnnot alloc] init] deleted:[[PTVectorAnnot alloc] init]]];
+    }
 }
 
 - (void)toolManagerDidModifyAnnotationWithNotification:(NSNotification *)notification
@@ -1874,6 +1879,11 @@ NS_ASSUME_NONNULL_END
             @"pageNumber": @(pageNumber),
         } action:@"modify"];
     }
+    if (!self.collaborationManager) {
+        PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+        [annots add:annot];
+        [self rnt_sendExportAnnotationCommandWithAction:@"modify" xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init]]];
+    }
 }
 
 - (void)toolManagerDidRemoveAnnotationWithNotification:(NSNotification *)notification
@@ -1892,6 +1902,11 @@ NS_ASSUME_NONNULL_END
             @"id": annotId,
             @"pageNumber": @(pageNumber),
         } action:@"remove"];
+    }
+    if (!self.collaborationManager) {
+        PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+        [annots add:annot];
+        [self rnt_sendExportAnnotationCommandWithAction:@"delete" xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:[[PTVectorAnnot alloc] init] deleted:annots]];
     }
 }
 
@@ -1928,7 +1943,18 @@ NS_ASSUME_NONNULL_END
                 @"fieldValue": fieldValue,
             }];
         }
+        if (!self.collaborationManager) {
+            PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
+            [annots add:annot];
+            [self rnt_sendExportAnnotationCommandWithAction:@"modify" xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init]]];
+        }
     }
+}
+
+-(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted {
+    PTPDFDoc *pdfDoc = [self.pdfViewCtrl GetDoc];
+    PTFDFDoc *fdfDoc = [pdfDoc FDFExtractCommand:added annot_modified:modified annot_deleted:deleted];
+    return [fdfDoc SaveAsXFDFToString];
 }
 
 @end
