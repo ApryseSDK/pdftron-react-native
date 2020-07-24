@@ -60,7 +60,7 @@ export default class App extends Component<Props> {
   }
 
   onZoomChanged = ({zoom}) => {
-    console.log('zoom', zoom);
+    // console.log('zoom', zoom);
   }
 
   onExportAnnotationCommand = ({action, xfdfCommand}) => {
@@ -83,7 +83,7 @@ export default class App extends Component<Props> {
           onAnnotationChanged={this.onAnnotationChanged}
           onZoomChanged={this.onZoomChanged}
           readOnly={false}
-          disabledElements={[Config.Buttons.moreItemsButton, Config.Buttons.userBookmarkListButton]}
+          disabledElements={[Config.Buttons.userBookmarkListButton]}
           disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
           fitMode={Config.FitMode.FitPage}
           layoutMode={Config.LayoutMode.Continuous}
