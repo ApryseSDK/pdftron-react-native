@@ -177,6 +177,9 @@ export default class DocumentView extends PureComponent {
   importAnnotationCommand = (xfdfCommand, initialLoad) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
+      if (initialLoad === undefined) {
+        initialLoad = false;
+      }
       return DocumentViewManager.importAnnotationCommand(
         tag,
         xfdfCommand,

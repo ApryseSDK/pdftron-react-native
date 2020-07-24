@@ -514,7 +514,7 @@ string, required if `collabEnabled` is set to true
 ##### currentUserName
 string, optional
 ##### onExportAnnotationCommand
-function, optional, annotation command will only be given if `collabEnabled` is set to true
+function, optional, annotation command will be given on each edit
 ##### onAnnotationsSelected
 function, optional
 
@@ -729,7 +729,6 @@ this._viewer.setValueForFields({
 ```
 
 ##### importAnnotationCommand
-This is used only if `collabEnabled` is set to true.
 Import remote annotation command to local document.
 
 Parameters:

@@ -81,6 +81,7 @@ export default class App extends Component<Props> {
           onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
           onDocumentLoaded={this.onDocumentLoaded}
           onAnnotationChanged={this.onAnnotationChanged}
+          onExportAnnotationCommand={this.onExportAnnotationCommand}
           onZoomChanged={this.onZoomChanged}
           readOnly={false}
           disabledElements={[Config.Buttons.userBookmarkListButton]}
