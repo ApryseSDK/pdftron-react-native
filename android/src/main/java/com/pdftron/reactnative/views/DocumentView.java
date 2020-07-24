@@ -1301,7 +1301,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (mCollabManager != null) {
             mCollabManager.importAnnotationCommand(xfdfCommand, initialLoad);
         } else {
-            throw new PDFNetException("", 0L, TAG, "importAnnotationCommand", "set collabEnabled to true is required.");
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+            PDFDoc pdfDoc = getPdfDoc();
+            if (null == pdfViewCtrl || null == pdfDoc || null == xfdfCommand) {
+                return;
+            }
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+
+                if (pdfDoc.hasDownloader()) {
+                    // still downloading file, let's wait for next call
+                    return;
+                }
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+
+            boolean shouldUnlock = false;
+            try {
+                pdfViewCtrl.docLock(true);
+                shouldUnlock = true;
+
+                FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
+                fdfDoc.mergeAnnots(xfdfCommand);
+
+                pdfDoc.fdfUpdate(fdfDoc);
+                pdfViewCtrl.update(true);
+            } finally {
+                if (shouldUnlock) {
+                    pdfViewCtrl.docUnlock();
+                }
+            }
         }
     }
 
