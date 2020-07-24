@@ -1952,9 +1952,22 @@ NS_ASSUME_NONNULL_END
 }
 
 -(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted {
-    PTPDFDoc *pdfDoc = [self.pdfViewCtrl GetDoc];
-    PTFDFDoc *fdfDoc = [pdfDoc FDFExtractCommand:added annot_modified:modified annot_deleted:deleted];
-    return [fdfDoc SaveAsXFDFToString];
+    NSString *fdfCommand = @"";
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    BOOL shouldUnlockRead = NO;
+    @try {
+        [pdfViewCtrl DocLockRead];
+        shouldUnlockRead = YES;
+        PTPDFDoc *pdfDoc = [self.pdfViewCtrl GetDoc];
+        PTFDFDoc *fdfDoc = [pdfDoc FDFExtractCommand:added annot_modified:modified annot_deleted:deleted];
+        fdfCommand = [fdfDoc SaveAsXFDFToString];
+    }
+    @finally {
+        if (shouldUnlockRead) {
+            [pdfViewCtrl DocUnlockRead];
+        }
+    }
+    return fdfCommand;
 }
 
 @end
