@@ -56,8 +56,13 @@ NS_ASSUME_NONNULL_END
 
 - (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
 {
-    if (!hidden && ![self isTopToolbarEnabled]){
-        return;
+    if (![self isTopToolbarEnabled]) {
+        if ([self isBottomToolbarEnabled]) {
+            [self setThumbnailSliderHidden:hidden animated:animated];
+        }
+        if (!hidden) {
+            return;
+        }
     }
     
     [super setControlsHidden:hidden animated:animated];
