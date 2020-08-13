@@ -1560,6 +1560,8 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
         
+    NSString *editString = ([annot GetType] == e_ptFreeText) ? @"editText" : @"editInk";
+
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         @"Style": @"style",
@@ -1568,8 +1570,7 @@ NS_ASSUME_NONNULL_END
         @"Delete": @"delete",
         @"Type": @"markupType",
         @"Search": @"search",
-        @"Edit": @"editInk",
-        @"Edit Text": @"editText",
+        @"Edit": editString,
         @"Flatten": @"flatten",
         @"Open": @"openAttachment",
     };
