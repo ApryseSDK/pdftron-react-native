@@ -27,8 +27,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
-import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
-import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
+import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
+import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
@@ -44,8 +44,8 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
-import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
+import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
+import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
@@ -74,7 +74,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
+public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private static final String TAG = DocumentView.class.getSimpleName();
 
@@ -146,7 +146,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
-    private boolean mTopToolbarEnabled = true;
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -201,6 +200,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             throw new IllegalStateException("FragmentActivity required.");
         }
 
+        PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
+
         mToolManagerBuilder = ToolManagerBuilder.from().setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
         mBuilder
@@ -211,10 +212,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     @Override
-    protected PdfViewCtrlTabHostFragment getViewer() {
+    protected PdfViewCtrlTabHostFragment2 getViewer() {
         if (mCollabEnabled) {
             // Create the Fragment using CollabViewerBuilder
-            return CollabViewerBuilder.withUri(mDocumentUri, mPassword)
+            return CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
@@ -284,11 +285,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setTopToolbarEnabled(boolean topToolbarEnabled) {
-        mTopToolbarEnabled = topToolbarEnabled;
+        mBuilder = mBuilder.showTopToolbar(topToolbarEnabled);
     }
 
     public void setBottomToolbarEnabled(boolean bottomToolbarEnabled) {
-        mBuilder = mBuilder.showBottomNavBar(bottomToolbarEnabled);
+        mBuilder = mBuilder.showBottomToolbar(bottomToolbarEnabled);
     }
 
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
@@ -811,15 +812,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             }
         }
 
-        if (mPdfViewCtrlTabHostFragment != null) {
-            if (!mTopToolbarEnabled) {
-                mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
-                if (mPdfViewCtrlTabHostFragment.getToolbar() != null) {
-                    mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
-                }
-            }
-        }
-
         getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
     }
 
@@ -851,7 +843,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     @Override
     protected void cleanup() {
         if (mFragmentManager != null) {
-            PdfViewCtrlTabHostFragment fragment = (PdfViewCtrlTabHostFragment) mFragmentManager.findFragmentByTag(String.valueOf(getId()));
+            PdfViewCtrlTabHostFragment2 fragment = (PdfViewCtrlTabHostFragment2) mFragmentManager.findFragmentByTag(String.valueOf(getId()));
             if (fragment != null) {
                 mFragmentManager.beginTransaction()
                         .remove(fragment)
@@ -1304,8 +1296,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
-        if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {
-            CollabViewerTabHostFragment collabHost = (CollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment;
+        if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment2) {
+            CollabViewerTabHostFragment2 collabHost = (CollabViewerTabHostFragment2) mPdfViewCtrlTabHostFragment;
             mCollabManager = collabHost.getCollabManager();
             if (mCollabManager != null) {
                 if (mCurrentUser != null) {
@@ -1689,7 +1681,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
-    public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
+    public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
         }
