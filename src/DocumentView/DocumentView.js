@@ -253,6 +253,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  selectAnnotation = (annotId, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.selectAnnotation(tag, annotId, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
