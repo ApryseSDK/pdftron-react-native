@@ -236,6 +236,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setSignSignatureFieldsWithStamps(signWithStamp);
     }
 
+    @ReactProp(name = "annotationPermissionCheckEnabled")
+    public void setAnnotationPermissionCheckEnabled(DocumentView documentView, boolean annotPermissionCheckEnabled) {
+        documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
