@@ -102,6 +102,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
+@property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

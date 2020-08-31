@@ -297,6 +297,13 @@ RCT_CUSTOM_VIEW_PROPERTY(longPressMenuEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.annotationPermissionCheckEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
