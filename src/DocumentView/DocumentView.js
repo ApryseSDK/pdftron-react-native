@@ -253,6 +253,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setFlagForAnnotations = (annotationFlagList) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

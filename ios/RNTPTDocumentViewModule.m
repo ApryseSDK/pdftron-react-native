@@ -180,6 +180,21 @@ RCT_REMAP_METHOD(setValueForFields,
     }
 }
 
+RCT_REMAP_METHOD(setFlagForAnnotations,
+                 setFlagForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationFlagList:(NSArray *)annotationFlagList
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setFlagForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_flag_for_annotations", @"Failed to set flag on annotations", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,

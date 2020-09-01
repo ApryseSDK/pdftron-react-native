@@ -876,6 +876,92 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Annotation Flag
+
+- (void)setFlagForAnnotations:(NSArray *)annotationFlagList
+{
+    if (annotationFlagList.count == 0) {
+        return;
+    }
+    
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    BOOL shouldUnlock = NO;
+    @try {
+        [pdfViewCtrl DocLock:YES];
+        shouldUnlock = YES;
+        
+        for (id annotationFlag in annotationFlagList) {
+            if (![annotationFlag isKindOfClass:[NSDictionary class]]) {
+                continue;
+            }
+            NSDictionary *dict = (NSDictionary *)annotationFlag;
+            
+            NSString *annotId = dict[@"id"];
+            NSNumber *pageNumber = dict[@"pageNumber"];
+            NSString *flag = dict[@"flag"];
+            NSNumber *flagValue = dict[@"flagValue"];
+            if (!annotId || !pageNumber || !flag) {
+                continue;
+            }
+            
+            int pageNumberValue = pageNumber.intValue;
+            
+            __block PTAnnot *annot = nil;
+            NSError *error = nil;
+            
+            [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+                
+                annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
+                if (![annot IsValid]) {
+                    NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                          annotId, pageNumberValue);
+                    annot = nil;
+                    return;
+                }
+
+                int annotFlag = -1;
+                if ([flag isEqualToString:@"hidden"]) {
+                    annotFlag = e_pthidden;
+                } else if ([flag isEqualToString:@"invisible"]) {
+                    annotFlag = e_ptinvisible;
+                } else if ([flag isEqualToString:@"locked"]) {
+                    annotFlag = e_ptlocked;
+                } else if ([flag isEqualToString:@"locked_contents"]) {
+                    annotFlag = e_ptlocked_contents;
+                } else if ([flag isEqualToString:@"no_rotate"]) {
+                    annotFlag = e_ptno_rotate;
+                } else if ([flag isEqualToString:@"no_view"]) {
+                    annotFlag = e_ptno_view;
+                } else if ([flag isEqualToString:@"no_zoom"]) {
+                    annotFlag = e_ptno_zoom;
+                } else if ([flag isEqualToString:@"print"]) {
+                    annotFlag = e_ptprint;
+                } else if ([flag isEqualToString:@"read_only"]) {
+                    annotFlag = e_ptread_only;
+                } else if ([flag isEqualToString:@"toggle_no_view"]) {
+                    annotFlag = e_pttoggle_no_view;
+                }
+                
+                if (annotFlag != -1) {
+                    [annot SetFlag:annotFlag value:flagValue];
+                }
+                
+            } error:&error];
+            
+            // Throw error as exception to reject promise.
+            if (error) {
+                @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+            }
+        }
+    }
+    @finally {
+        if (shouldUnlock) {
+            [pdfViewCtrl DocUnlock];
+        }
+    }
+}
+
+
 #pragma mark - Fields
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
