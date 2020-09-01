@@ -1971,4 +1971,14 @@ NS_ASSUME_NONNULL_END
     return fdfCommand;
 }
 
+
+#pragma mark - Select Annotation
+
+-(void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber {
+    PTAnnot *annotation = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber];
+    if (annotation) {
+        [self.toolManager selectAnnotation:annotation onPageNumber:(unsigned long)pageNumber];
+    }
+}
+
 @end

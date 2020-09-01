@@ -123,6 +123,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
 
+- (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end
