@@ -128,6 +128,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_y2 = "y2";
     private static final String KEY_width = "width";
     private static final String KEY_height = "height";
+
+    private static final String KEY_annotFlagHidden = "hidden";
+    private static final String KEY_annotFlagInvisible = "invisible";
+    private static final String KEY_annotFlagLocked = "locked";
+    private static final String KEY_annotFlagLockedContents = "lockedContents";
+    private static final String KEY_annotFlagNoRotate = "noRotate";
+    private static final String KEY_flagNoView = "noView";
+    private static final String KEY_flagNoZoom = "noZoom";
+    private static final String kEY_flagPrint = "print";
+    private static final String KEY_flagReadOnly = "readOnly";
+    private static final String KEY_flagToggleNoView = "toggleNoView";
     // EVENTS END
 
     // Config keys
@@ -1710,42 +1721,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 boolean flagValue = annotFlagData.getBoolean(KEY_annotFlagValue);
 
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
-                int flagVal = -1;
                 if (annot != null && annot.isValid() && flag != null) {
+                    int flagVal = -1;
                     switch (flag) {
-                        case "hidden":
+                        case KEY_annotFlagHidden:
                             flagVal = Annot.e_hidden;
                             break;
-                        case "invisible":
+                        case KEY_annotFlagInvisible:
                             flagVal = Annot.e_invisible;
                             break;
-                        case "locked":
+                        case KEY_annotFlagLocked:
                             flagVal = Annot.e_locked;
                             break;
-                        case "locked_contents":
+                        case KEY_annotFlagLockedContents:
                             flagVal = Annot.e_locked_contents;
                             break;
-                        case "no_rotate":
+                        case KEY_annotFlagNoRotate:
                             flagVal = Annot.e_no_rotate;
                             break;
-                        case "no_view":
+                        case KEY_flagNoView:
                             flagVal = Annot.e_no_view;
                             break;
-                        case "no_zoom":
+                        case KEY_flagNoZoom:
                             flagVal = Annot.e_no_zoom;
                             break;
-                        case "print":
+                        case kEY_flagPrint:
                             flagVal = Annot.e_print;
                             break;
-                        case "read_only":
+                        case KEY_flagReadOnly:
                             flagVal = Annot.e_read_only;
                             break;
-                        case "toggle_no_view":
+                        case KEY_flagToggleNoView:
                             flagVal = Annot.e_toggle_no_view;
                     }
-                    if (flagVal != -1) {
                         annot.setFlag(flagVal, flagValue);
-                    }
                 }
             }
         } finally {
