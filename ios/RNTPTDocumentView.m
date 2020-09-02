@@ -926,19 +926,19 @@ NS_ASSUME_NONNULL_END
                     annotFlag = e_ptinvisible;
                 } else if ([flag isEqualToString:@"locked"]) {
                     annotFlag = e_ptlocked;
-                } else if ([flag isEqualToString:@"locked_contents"]) {
+                } else if ([flag isEqualToString:@"lockedContents"]) {
                     annotFlag = e_ptlocked_contents;
-                } else if ([flag isEqualToString:@"no_rotate"]) {
+                } else if ([flag isEqualToString:@"noRotate"]) {
                     annotFlag = e_ptno_rotate;
-                } else if ([flag isEqualToString:@"no_view"]) {
+                } else if ([flag isEqualToString:@"noView"]) {
                     annotFlag = e_ptno_view;
-                } else if ([flag isEqualToString:@"no_zoom"]) {
+                } else if ([flag isEqualToString:@"noZoom"]) {
                     annotFlag = e_ptno_zoom;
                 } else if ([flag isEqualToString:@"print"]) {
                     annotFlag = e_ptprint_annot;
-                } else if ([flag isEqualToString:@"read_only"]) {
+                } else if ([flag isEqualToString:@"readOnly"]) {
                     annotFlag = e_ptannot_read_only;
-                } else if ([flag isEqualToString:@"toggle_no_view"]) {
+                } else if ([flag isEqualToString:@"toggleNoView"]) {
                     annotFlag = e_pttoggle_no_view;
                 }
                 
