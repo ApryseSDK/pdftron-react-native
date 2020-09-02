@@ -131,7 +131,7 @@
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add:
+1. Open `Podfile` in the `ios` folder, add the 3 middle lines to the `target 'MyApp' do / end` block:
 
     ```
     target 'MyApp' do
@@ -139,6 +139,14 @@
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
         pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
+    ```
+    **and**
+    remove or comment out the Flipper section:
+    ```
+    # use_flipper!
+    # post_install do |installer|
+    #   flipper_post_install(installer)
+    # end
     ```
 
 2. In the `ios` folder, run `pod install`.
