@@ -939,7 +939,7 @@ NS_ASSUME_NONNULL_END
                 } else if ([flag isEqualToString:@"read_only"]) {
                     annotFlag = e_ptannot_read_only;
                 } else if ([flag isEqualToString:@"toggle_no_view"]) {
-                    annotFlag = e_pttoggle_ptno_view;
+                    annotFlag = e_pttoggle_no_view;
                 }
                 
                 if (annotFlag != -1) {
