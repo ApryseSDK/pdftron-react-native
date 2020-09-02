@@ -943,7 +943,7 @@ NS_ASSUME_NONNULL_END
                 }
                 
                 if (annotFlag != -1) {
-                    [annot SetFlag:annotFlag value:flagValue];
+                    [annot SetFlag:annotFlag value:[flagValue boolValue]];
                 }
                 
             } error:&error];
