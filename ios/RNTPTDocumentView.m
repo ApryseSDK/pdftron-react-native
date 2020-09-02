@@ -935,11 +935,11 @@ NS_ASSUME_NONNULL_END
                 } else if ([flag isEqualToString:@"no_zoom"]) {
                     annotFlag = e_ptno_zoom;
                 } else if ([flag isEqualToString:@"print"]) {
-                    annotFlag = e_ptprint;
+                    annotFlag = e_ptprint_annot;
                 } else if ([flag isEqualToString:@"read_only"]) {
-                    annotFlag = e_ptread_only;
+                    annotFlag = e_ptannot_read_only;
                 } else if ([flag isEqualToString:@"toggle_no_view"]) {
-                    annotFlag = e_pttoggle_no_view;
+                    annotFlag = e_pttoggle_ptno_view;
                 }
                 
                 if (annotFlag != -1) {
