@@ -497,15 +497,18 @@ Action | Param
 bool, optional, default to true
 ##### useStylusAsPen
 bool, optional, default to true
+
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
+
 If true, signature field will be signed with image stamp.
 This is useful if you are saving XFDF to remote source.
 
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
+
 If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 ##### collabEnabled
 bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
@@ -535,7 +538,9 @@ action | string | the action that occurred (add, delete, modify)
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
 
 ##### annotationPermissionCheckEnabled
-bool, optional, default to false If true, annotation created by user A cannot be modified by user B, else anyone can modify any annotation.
+bool, optional, default to false
+
+If true, annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
 
 Example:
 
@@ -765,7 +770,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 id | string | the id of the target annotation
-pageNumber | int | the page number where the targe annotation is located
+pageNumber | integer | the page number where the targe annotation is located. It is 1-indexed
 
 Return a Promise.
 

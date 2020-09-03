@@ -1722,39 +1722,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
                 if (annot != null && annot.isValid() && flag != null) {
-                    int flagVal = -1;
+                    int flagNum = -1;
                     switch (flag) {
                         case KEY_annotFlagHidden:
-                            flagVal = Annot.e_hidden;
+                            flagNum = Annot.e_hidden;
                             break;
                         case KEY_annotFlagInvisible:
-                            flagVal = Annot.e_invisible;
+                            flagNum = Annot.e_invisible;
                             break;
                         case KEY_annotFlagLocked:
-                            flagVal = Annot.e_locked;
+                            flagNum = Annot.e_locked;
                             break;
                         case KEY_annotFlagLockedContents:
-                            flagVal = Annot.e_locked_contents;
+                            flagNum = Annot.e_locked_contents;
                             break;
                         case KEY_annotFlagNoRotate:
-                            flagVal = Annot.e_no_rotate;
+                            flagNum = Annot.e_no_rotate;
                             break;
                         case KEY_flagNoView:
-                            flagVal = Annot.e_no_view;
+                            flagNum = Annot.e_no_view;
                             break;
                         case KEY_flagNoZoom:
-                            flagVal = Annot.e_no_zoom;
+                            flagNum = Annot.e_no_zoom;
                             break;
                         case kEY_flagPrint:
-                            flagVal = Annot.e_print;
+                            flagNum = Annot.e_print;
                             break;
                         case KEY_flagReadOnly:
-                            flagVal = Annot.e_read_only;
+                            flagNum = Annot.e_read_only;
                             break;
                         case KEY_flagToggleNoView:
-                            flagVal = Annot.e_toggle_no_view;
+                            flagNum = Annot.e_toggle_no_view;
                     }
-                    annot.setFlag(flagVal, flagValue);
+                    if (flagNum != -1) {
+                        annot.setFlag(flagNum, flagValue);
+                        pdfViewCtrl.update(annot, pageNum);
+                    }
                 }
             }
         } finally {
