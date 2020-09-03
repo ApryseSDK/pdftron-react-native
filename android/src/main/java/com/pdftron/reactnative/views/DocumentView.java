@@ -1702,7 +1702,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
-    public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException{
+    public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         int flagCount = annotationFlagList.size();
 
@@ -1754,7 +1754,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         case KEY_flagToggleNoView:
                             flagVal = Annot.e_toggle_no_view;
                     }
-                        annot.setFlag(flagVal, flagValue);
+                    annot.setFlag(flagVal, flagValue);
                 }
             }
         } finally {
