@@ -534,6 +534,9 @@ Name | Type | Description
 action | string | the action that occurred (add, delete, modify)
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
 
+##### annotationPermissionCheckEnabled
+bool, optional, default to false If true, annotation created by user A cannot be modified by user B, else anyone can modify any annotation.
+
 Example:
 
 ```js
@@ -557,6 +560,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
+  annotationPermissionCheckEnabled={false}
 />
 ```
 
@@ -583,6 +587,8 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [setValueForFields](#setValueForFields)
 - [importAnnotationCommand](#importannotationcommand)
 - [handleBackButton](#handlebackbutton)
+- [selectAnnotation](#selectAnnotation)
+- [setFlagForAnnotations](#setFlagForAnnotations)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -749,6 +755,52 @@ this._viewer.handleBackButton().then((handled) => {
     BackHandler.exitApp();
   }
 });
+```
+
+##### selectAnnotation
+To select the specified annotation in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | the id of the target annotation
+pageNumber | int | the page number where the targe annotation is located
+
+Return a Promise.
+
+```js
+// select annotation in the current document.
+this._viewer.selectAnnotation('annotId1', 1);
+```
+
+##### setFlagForAnnotations
+To set flag for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationFlagList | array | A list of annotation flag operations
+
+Return a Promise.
+
+```js
+//  Set flag for annotations in the current document.
+this._viewer.setFlagForAnnotations([
+    {
+        id: 'annotId1',
+        pageNumber: 1,
+        flag: Config.AnnotationFlags.noView,
+        flagValue: true
+    },
+    {
+        id: 'annotId2',
+        pageNumber: 5,
+        flag: Config.AnnotationFlags.lockedContents,
+        flagValue: false
+    }
+]);
 ```
 
 ## Contributing
