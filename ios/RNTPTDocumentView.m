@@ -884,79 +884,64 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
-    BOOL shouldUnlock = NO;
-    @try {
-        [pdfViewCtrl DocLock:YES];
-        shouldUnlock = YES;
+    for (id annotationFlagEntry in annotationFlagList) {
+        if (![annotationFlagEntry isKindOfClass:[NSDictionary class]]) {
+            continue;
+        }
+        NSDictionary *dict = (NSDictionary *)annotationFlagEntry;
         
-        for (id annotationFlag in annotationFlagList) {
-            if (![annotationFlag isKindOfClass:[NSDictionary class]]) {
-                continue;
-            }
-            NSDictionary *dict = (NSDictionary *)annotationFlag;
-            
-            NSString *annotId = dict[@"id"];
-            NSNumber *pageNumber = dict[@"pageNumber"];
-            NSString *flag = dict[@"flag"];
-            NSNumber *flagValue = dict[@"flagValue"];
-            if (!annotId || !pageNumber || !flag) {
-                continue;
-            }
-            
-            int pageNumberValue = pageNumber.intValue;
-            
-            __block PTAnnot *annot = nil;
-            NSError *error = nil;
-            
+        NSString *annotId = dict[@"id"];
+        NSNumber *pageNumber = dict[@"pageNumber"];
+        NSString *flag = dict[@"flag"];
+        NSNumber *flagValue = dict[@"flagValue"];
+        if (!annotId || !pageNumber || !flag) {
+            continue;
+        }
+        
+        int pageNumberValue = pageNumber.intValue;
+        
+        __block PTAnnot *annot = nil;
+        NSError *error = nil;
+        int annotFlag = -1;
+        
+        if ([flag isEqualToString:@"hidden"]) {
+            annotFlag = e_pthidden;
+        } else if ([flag isEqualToString:@"invisible"]) {
+            annotFlag = e_ptinvisible;
+        } else if ([flag isEqualToString:@"locked"]) {
+            annotFlag = e_ptlocked;
+        } else if ([flag isEqualToString:@"lockedContents"]) {
+            annotFlag = e_ptlocked_contents;
+        } else if ([flag isEqualToString:@"noRotate"]) {
+            annotFlag = e_ptno_rotate;
+        } else if ([flag isEqualToString:@"noView"]) {
+            annotFlag = e_ptno_view;
+        } else if ([flag isEqualToString:@"noZoom"]) {
+            annotFlag = e_ptno_zoom;
+        } else if ([flag isEqualToString:@"print"]) {
+            annotFlag = e_ptprint_annot;
+        } else if ([flag isEqualToString:@"readOnly"]) {
+            annotFlag = e_ptannot_read_only;
+        } else if ([flag isEqualToString:@"toggleNoView"]) {
+            annotFlag = e_pttoggle_no_view;
+        }
+        if (annotFlag != -1) {
             [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
                 
                 annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
                 if (![annot IsValid]) {
                     NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
-                          annotId, pageNumberValue);
+                            annotId, pageNumberValue);
                     annot = nil;
                     return;
                 }
-
-                int annotFlag = -1;
-                if ([flag isEqualToString:@"hidden"]) {
-                    annotFlag = e_pthidden;
-                } else if ([flag isEqualToString:@"invisible"]) {
-                    annotFlag = e_ptinvisible;
-                } else if ([flag isEqualToString:@"locked"]) {
-                    annotFlag = e_ptlocked;
-                } else if ([flag isEqualToString:@"lockedContents"]) {
-                    annotFlag = e_ptlocked_contents;
-                } else if ([flag isEqualToString:@"noRotate"]) {
-                    annotFlag = e_ptno_rotate;
-                } else if ([flag isEqualToString:@"noView"]) {
-                    annotFlag = e_ptno_view;
-                } else if ([flag isEqualToString:@"noZoom"]) {
-                    annotFlag = e_ptno_zoom;
-                } else if ([flag isEqualToString:@"print"]) {
-                    annotFlag = e_ptprint_annot;
-                } else if ([flag isEqualToString:@"readOnly"]) {
-                    annotFlag = e_ptannot_read_only;
-                } else if ([flag isEqualToString:@"toggleNoView"]) {
-                    annotFlag = e_pttoggle_no_view;
-                }
-                
-                if (annotFlag != -1) {
-                    [annot SetFlag:annotFlag value:[flagValue boolValue]];
-                }
-                
+                    
+                [annot SetFlag:annotFlag value:[flagValue boolValue]];
             } error:&error];
-            
-            // Throw error as exception to reject promise.
-            if (error) {
-                @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
-            }
         }
-    }
-    @finally {
-        if (shouldUnlock) {
-            [pdfViewCtrl DocUnlock];
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
         }
     }
 }
