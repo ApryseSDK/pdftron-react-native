@@ -1050,6 +1050,16 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+-(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
+{
+    self.documentViewController.toolManager.annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
+}
+
+-(BOOL)annotationPermissionCheckEnabled
+{
+    return self.documentViewController.toolManager.annotationPermissionCheckEnabled;
+}
+
 #pragma mark - Collaboration
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
