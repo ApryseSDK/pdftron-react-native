@@ -357,6 +357,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
         }
     }
+  
+    public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.selectAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectAnnotation", "Unable to find DocumentView.");
+        }
+    }
 
     @Override
     public boolean needsCustomLayoutForChildren() {

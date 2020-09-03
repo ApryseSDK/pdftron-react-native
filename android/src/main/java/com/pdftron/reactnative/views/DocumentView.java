@@ -1699,6 +1699,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
+    public void selectAnnotation(String annotId, int pageNumber) {
+        if (getToolManager() != null) {
+            getToolManager().selectAnnot(annotId, pageNumber);
+        }
+    }
+
     public boolean handleBackButton() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.handleBackPressed();

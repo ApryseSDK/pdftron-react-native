@@ -195,6 +195,22 @@ RCT_REMAP_METHOD(setFlagForAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(selectAnnotation,
+                 selectAnnotationForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] selectAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_annotation", @"Failed to select annotation", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,
