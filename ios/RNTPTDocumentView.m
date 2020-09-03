@@ -876,6 +876,77 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Annotation Flag
+
+- (void)setFlagForAnnotations:(NSArray *)annotationFlagList
+{
+    if (annotationFlagList.count == 0) {
+        return;
+    }
+    
+    for (id annotationFlagEntry in annotationFlagList) {
+        if (![annotationFlagEntry isKindOfClass:[NSDictionary class]]) {
+            continue;
+        }
+        NSDictionary *dict = (NSDictionary *)annotationFlagEntry;
+        
+        NSString *annotId = dict[@"id"];
+        NSNumber *pageNumber = dict[@"pageNumber"];
+        NSString *flag = dict[@"flag"];
+        NSNumber *flagValue = dict[@"flagValue"];
+        if (!annotId || !pageNumber || !flag) {
+            continue;
+        }
+        
+        int pageNumberValue = pageNumber.intValue;
+        
+        __block PTAnnot *annot = nil;
+        NSError *error = nil;
+        int annotFlag = -1;
+        
+        if ([flag isEqualToString:@"hidden"]) {
+            annotFlag = e_pthidden;
+        } else if ([flag isEqualToString:@"invisible"]) {
+            annotFlag = e_ptinvisible;
+        } else if ([flag isEqualToString:@"locked"]) {
+            annotFlag = e_ptlocked;
+        } else if ([flag isEqualToString:@"lockedContents"]) {
+            annotFlag = e_ptlocked_contents;
+        } else if ([flag isEqualToString:@"noRotate"]) {
+            annotFlag = e_ptno_rotate;
+        } else if ([flag isEqualToString:@"noView"]) {
+            annotFlag = e_ptno_view;
+        } else if ([flag isEqualToString:@"noZoom"]) {
+            annotFlag = e_ptno_zoom;
+        } else if ([flag isEqualToString:@"print"]) {
+            annotFlag = e_ptprint_annot;
+        } else if ([flag isEqualToString:@"readOnly"]) {
+            annotFlag = e_ptannot_read_only;
+        } else if ([flag isEqualToString:@"toggleNoView"]) {
+            annotFlag = e_pttoggle_no_view;
+        }
+        if (annotFlag != -1) {
+            [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+                
+                annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
+                if (![annot IsValid]) {
+                    NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                            annotId, pageNumberValue);
+                    annot = nil;
+                    return;
+                }
+                    
+                [annot SetFlag:annotFlag value:[flagValue boolValue]];
+            } error:&error];
+        }
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+}
+
+
 #pragma mark - Fields
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value

@@ -349,6 +349,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setFlagForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setFlagForAnnotations(annotationFlagList);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+  
     public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

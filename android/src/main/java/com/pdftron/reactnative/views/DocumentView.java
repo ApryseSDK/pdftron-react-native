@@ -103,6 +103,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_annotId = "id";
     private static final String KEY_annotPage = "pageNumber";
     private static final String KEY_annotRect = "rect";
+    private static final String KEY_annotFlag = "flag";
+    private static final String KEY_annotFlagValue = "flagValue";
 
     private static final String KEY_action = "action";
     private static final String KEY_action_add = "add";
@@ -126,6 +128,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_y2 = "y2";
     private static final String KEY_width = "width";
     private static final String KEY_height = "height";
+
+    private static final String KEY_annotFlagHidden = "hidden";
+    private static final String KEY_annotFlagInvisible = "invisible";
+    private static final String KEY_annotFlagLocked = "locked";
+    private static final String KEY_annotFlagLockedContents = "lockedContents";
+    private static final String KEY_annotFlagNoRotate = "noRotate";
+    private static final String KEY_flagNoView = "noView";
+    private static final String KEY_flagNoZoom = "noZoom";
+    private static final String kEY_flagPrint = "print";
+    private static final String KEY_flagReadOnly = "readOnly";
+    private static final String KEY_flagToggleNoView = "toggleNoView";
     // EVENTS END
 
     // Config keys
@@ -1697,6 +1710,71 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             return mPdfViewCtrlTabHostFragment.handleBackPressed();
         }
         return false;
+    }
+
+    public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        int flagCount = annotationFlagList.size();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+            for (int i = 0; i < flagCount; i++) {
+                ReadableMap annotFlagData = annotationFlagList.getMap(i);
+                if (null == annotFlagData) {
+                    continue;
+                }
+                String annotId = annotFlagData.getString(KEY_annotId);
+                int pageNum = annotFlagData.getInt(KEY_annotPage);
+                String flag = annotFlagData.getString(KEY_annotFlag);
+                boolean flagValue = annotFlagData.getBoolean(KEY_annotFlagValue);
+
+                Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
+                if (annot != null && annot.isValid() && flag != null) {
+                    int flagNum = -1;
+                    switch (flag) {
+                        case KEY_annotFlagHidden:
+                            flagNum = Annot.e_hidden;
+                            break;
+                        case KEY_annotFlagInvisible:
+                            flagNum = Annot.e_invisible;
+                            break;
+                        case KEY_annotFlagLocked:
+                            flagNum = Annot.e_locked;
+                            break;
+                        case KEY_annotFlagLockedContents:
+                            flagNum = Annot.e_locked_contents;
+                            break;
+                        case KEY_annotFlagNoRotate:
+                            flagNum = Annot.e_no_rotate;
+                            break;
+                        case KEY_flagNoView:
+                            flagNum = Annot.e_no_view;
+                            break;
+                        case KEY_flagNoZoom:
+                            flagNum = Annot.e_no_zoom;
+                            break;
+                        case kEY_flagPrint:
+                            flagNum = Annot.e_print;
+                            break;
+                        case KEY_flagReadOnly:
+                            flagNum = Annot.e_read_only;
+                            break;
+                        case KEY_flagToggleNoView:
+                            flagNum = Annot.e_toggle_no_view;
+                    }
+                    if (flagNum != -1) {
+                        annot.setFlag(flagNum, flagValue);
+                        pdfViewCtrl.update(annot, pageNum);
+                    }
+                }
+            }
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
