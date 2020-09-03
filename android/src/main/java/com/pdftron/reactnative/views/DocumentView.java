@@ -445,6 +445,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mSignWithStamps = signWithStamps;
     }
 
+    public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
+    }
+    
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
