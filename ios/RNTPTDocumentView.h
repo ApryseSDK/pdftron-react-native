@@ -102,6 +102,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
+@property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -122,6 +124,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
 - (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
+
+- (void)setFlagForAnnotations:(NSArray *)annotationFlagList;
+
+- (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

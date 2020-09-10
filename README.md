@@ -131,7 +131,7 @@
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add:
+1. Open `Podfile` in the `ios` folder, add the 3 middle lines to the `target 'MyApp' do / end` block:
 
     ```
     target 'MyApp' do
@@ -139,6 +139,14 @@
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
         pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
+    ```
+    **and**
+    remove or comment out the Flipper section:
+    ```
+    # use_flipper!
+    # post_install do |installer|
+    #   flipper_post_install(installer)
+    # end
     ```
 
 2. In the `ios` folder, run `pod install`.
@@ -497,15 +505,18 @@ Action | Param
 bool, optional, default to true
 ##### useStylusAsPen
 bool, optional, default to true
+
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
+
 If true, signature field will be signed with image stamp.
 This is useful if you are saving XFDF to remote source.
 
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
+
 If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 ##### collabEnabled
 bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
@@ -534,6 +545,11 @@ Name | Type | Description
 action | string | the action that occurred (add, delete, modify)
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
 
+##### annotationPermissionCheckEnabled
+bool, optional, default to false
+
+If true, annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
+
 Example:
 
 ```js
@@ -557,6 +573,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
+  annotationPermissionCheckEnabled={false}
 />
 ```
 
@@ -583,6 +600,8 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [setValueForFields](#setValueForFields)
 - [importAnnotationCommand](#importannotationcommand)
 - [handleBackButton](#handlebackbutton)
+- [selectAnnotation](#selectAnnotation)
+- [setFlagForAnnotations](#setFlagForAnnotations)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -749,6 +768,52 @@ this._viewer.handleBackButton().then((handled) => {
     BackHandler.exitApp();
   }
 });
+```
+
+##### selectAnnotation
+To select the specified annotation in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | the id of the target annotation
+pageNumber | integer | the page number where the targe annotation is located. It is 1-indexed
+
+Return a Promise.
+
+```js
+// select annotation in the current document.
+this._viewer.selectAnnotation('annotId1', 1);
+```
+
+##### setFlagForAnnotations
+To set flag for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationFlagList | array | A list of annotation flag operations
+
+Return a Promise.
+
+```js
+//  Set flag for annotations in the current document.
+this._viewer.setFlagForAnnotations([
+    {
+        id: 'annotId1',
+        pageNumber: 1,
+        flag: Config.AnnotationFlags.noView,
+        flagValue: true
+    },
+    {
+        id: 'annotId2',
+        pageNumber: 5,
+        flag: Config.AnnotationFlags.lockedContents,
+        flagValue: false
+    }
+]);
 ```
 
 ## Contributing

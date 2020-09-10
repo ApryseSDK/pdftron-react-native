@@ -62,6 +62,7 @@ export default class DocumentView extends PureComponent {
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
     signSignatureFieldsWithStamps: PropTypes.bool,
+    annotationPermissionCheckEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -249,6 +250,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.handleBackButton(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setFlagForAnnotations = (annotationFlagList) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+    }
+    return Promise.resolve();
+  }
+
+  selectAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.selectAnnotation(tag, id, pageNumber);
     }
     return Promise.resolve();
   }

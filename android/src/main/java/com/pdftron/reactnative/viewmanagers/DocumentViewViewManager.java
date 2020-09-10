@@ -236,6 +236,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setSignSignatureFieldsWithStamps(signWithStamp);
     }
 
+    @ReactProp(name = "annotationPermissionCheckEnabled")
+    public void setAnnotationPermissionCheckEnabled(DocumentView documentView, boolean annotPermissionCheckEnabled) {
+        documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -341,6 +346,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.handleBackButton();
         } else {
             throw new PDFNetException("", 0L, getName(), "handleBackButton", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setFlagForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setFlagForAnnotations(annotationFlagList);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+  
+    public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.selectAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectAnnotation", "Unable to find DocumentView.");
         }
     }
 
