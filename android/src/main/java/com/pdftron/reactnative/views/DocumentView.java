@@ -857,20 +857,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    @Override
-    protected void cleanup() {
-        if (mFragmentManager != null) {
-            PdfViewCtrlTabHostFragment2 fragment = (PdfViewCtrlTabHostFragment2) mFragmentManager.findFragmentByTag(String.valueOf(getId()));
-            if (fragment != null) {
-                mFragmentManager.beginTransaction()
-                        .remove(fragment)
-                        .commitAllowingStateLoss();
-            }
-        }
-        mPdfViewCtrlTabHostFragment = null;
-        mFragmentManager = null;
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.onActivityResult(requestCode, resultCode, data);
