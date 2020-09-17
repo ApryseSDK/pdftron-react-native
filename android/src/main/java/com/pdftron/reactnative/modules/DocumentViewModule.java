@@ -224,6 +224,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
     public void selectAnnotation(final int tag, final String annotId, final int pageNumber, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
