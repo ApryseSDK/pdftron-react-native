@@ -2062,4 +2062,39 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+
+#pragma mark Get Crop Box
+
+- (NSString *)getPageCropBox:(NSNumber *)pageNumber {
+    
+    __block NSString *cropBox;
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        
+        PTPage *page = [doc GetPage:[pageNumber intValue]];
+        if (page) {
+            PTPDFRect *rect = [page GetCropBox];
+            if (rect) {
+                NSDictionary<NSString *, NSNumber *> *map = @{
+                    @"x1": @([rect GetX1]),
+                    @"y1": @([rect GetY1]),
+                    @"x2": @([rect GetX2]),
+                    @"y2": @([rect GetY2]),
+                    @"width": @([rect Width]),
+                    @"height": @([rect Height]),
+                };
+                
+                NSError *jsonError = nil;
+                NSData *data = [NSJSONSerialization dataWithJSONObject:map options:0 error:&jsonError];
+                if (!jsonError) {
+                    cropBox = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                }
+            }
+            
+        }
+    } error:nil];
+    
+    return cropBox;
+}
+
+
 @end

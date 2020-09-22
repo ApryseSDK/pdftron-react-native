@@ -36,6 +36,8 @@
 
 - (void)selectAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
+- (NSString *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSNumber *)pageNumber;
+
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

@@ -67,6 +67,7 @@ import com.pdftron.sdf.Obj;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -1761,6 +1762,25 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                 pdfViewCtrl.docUnlock();
             }
         }
+    }
+
+    public String getPageCropBox(int pageNumber) throws PDFNetException {
+        com.pdftron.pdf.Rect rect = getPdfDoc().getPage(pageNumber).getCropBox();
+
+        JSONObject map = new JSONObject();
+
+        try {
+            map.put(KEY_x1, rect.getX1());
+            map.put(KEY_y1, rect.getY1());
+            map.put(KEY_x2, rect.getX2());
+            map.put(KEY_y2, rect.getY2());
+            map.put(KEY_width, rect.getWidth());
+            map.put(KEY_height, rect.getHeight());
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+
+        return map.toString();
     }
 
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {

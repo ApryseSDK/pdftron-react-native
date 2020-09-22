@@ -367,6 +367,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public String getPageCropBox(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageCropBox(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageCropBox", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

@@ -211,6 +211,21 @@ RCT_REMAP_METHOD(selectAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(getPageCropBox,
+                 getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(nonnull NSNumber *)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *cropBox = [[self documentViewManager] getPageCropBoxForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(cropBox);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_crop_box", @"Failed to get page cropbox", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,
