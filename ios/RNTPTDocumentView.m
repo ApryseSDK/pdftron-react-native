@@ -2063,14 +2063,14 @@ NS_ASSUME_NONNULL_END
 }
 
 
-#pragma mark Get Crop Box
+#pragma mark - Get Crop Box
 
-- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSNumber *)pageNumber {
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber {
     
     __block NSDictionary<NSString *, NSNumber *> *map;
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
         
-        PTPage *page = [doc GetPage:[pageNumber intValue]];
+        PTPage *page = [doc GetPage:(int)pageNumber];
         if (page) {
             PTPDFRect *rect = [page GetCropBox];
             if (rect) {

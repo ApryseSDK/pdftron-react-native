@@ -213,7 +213,7 @@ RCT_REMAP_METHOD(selectAnnotation,
 
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
-                 pageNumber:(nonnull NSNumber *)pageNumber
+                 pageNumber:(NSInteger)pageNumber
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejector:(RCTPromiseRejectBlock)reject)
 {

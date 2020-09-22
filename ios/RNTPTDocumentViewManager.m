@@ -564,7 +564,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentVi
     }
 }
 
-- (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSNumber *)pageNumber
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
