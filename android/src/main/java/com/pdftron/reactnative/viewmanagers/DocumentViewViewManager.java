@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -364,6 +365,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.selectAnnotation(annotId, pageNumber);
         } else {
             throw new PDFNetException("", 0L, getName(), "selectAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getPageCropBox(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageCropBox(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageCropBox", "Unable to find DocumentView.");
         }
     }
 

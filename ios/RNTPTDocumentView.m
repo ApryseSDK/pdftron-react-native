@@ -2062,4 +2062,33 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+
+#pragma mark - Get Crop Box
+
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber {
+    
+    __block NSDictionary<NSString *, NSNumber *> *map;
+    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        
+        PTPage *page = [doc GetPage:(int)pageNumber];
+        if (page) {
+            PTPDFRect *rect = [page GetCropBox];
+            if (rect) {
+                map = @{
+                    @"x1": @([rect GetX1]),
+                    @"y1": @([rect GetY1]),
+                    @"x2": @([rect GetX2]),
+                    @"y2": @([rect GetY2]),
+                    @"width": @([rect Width]),
+                    @"height": @([rect Height]),
+                };
+            }
+            
+        }
+    } error:nil];
+    
+    return map;
+}
+
+
 @end
