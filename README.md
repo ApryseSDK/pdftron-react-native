@@ -830,8 +830,8 @@ Return a Promise.
 
 ```js
 this._viewer.getPageCropBox(1).then((cropBox) => {
-  console.log('top-left coordinate:', cropBox.x1, cropBox.y1);
-  console.log('bottom-right coordinate:', cropBox.x2, cropBox.y2);
+  console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
+  console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
 });
 ```
