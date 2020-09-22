@@ -2065,16 +2065,16 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark Get Crop Box
 
-- (NSString *)getPageCropBox:(NSNumber *)pageNumber {
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSNumber *)pageNumber {
     
-    __block NSString *cropBox;
+    __block NSDictionary<NSString *, NSNumber *> *map;
     [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
         
         PTPage *page = [doc GetPage:[pageNumber intValue]];
         if (page) {
             PTPDFRect *rect = [page GetCropBox];
             if (rect) {
-                NSDictionary<NSString *, NSNumber *> *map = @{
+                map = @{
                     @"x1": @([rect GetX1]),
                     @"y1": @([rect GetY1]),
                     @"x2": @([rect GetX2]),
@@ -2082,18 +2082,12 @@ NS_ASSUME_NONNULL_END
                     @"width": @([rect Width]),
                     @"height": @([rect Height]),
                 };
-                
-                NSError *jsonError = nil;
-                NSData *data = [NSJSONSerialization dataWithJSONObject:map options:0 error:&jsonError];
-                if (!jsonError) {
-                    cropBox = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                }
             }
             
         }
     } error:nil];
     
-    return cropBox;
+    return map;
 }
 
 

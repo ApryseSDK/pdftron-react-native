@@ -23,10 +23,14 @@ export default class App extends Component<Props> {
   onLeadingNavButtonPressed = () => {
     console.log('leading nav button pressed');
     if (this._viewer) {
-      this._viewer.exportAnnotations().then((xfdf) => {
-        console.log('xfdf', xfdf);
-      });
+      // this._viewer.exportAnnotations().then((xfdf) => {
+      //   console.log('xfdf', xfdf);
+      // });
+      this._viewer.getPageCropBox(1).then((box) => {
+        console.log(box);
+      })
     }
+
 
     if (Platform.OS === 'ios') {
       Alert.alert(
@@ -38,7 +42,7 @@ export default class App extends Component<Props> {
         { cancelable: true }
       )
     } else {
-      BackHandler.exitApp();
+      // BackHandler.exitApp();
     }
   }
 

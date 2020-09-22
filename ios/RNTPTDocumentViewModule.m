@@ -218,7 +218,7 @@ RCT_REMAP_METHOD(getPageCropBox,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *cropBox = [[self documentViewManager] getPageCropBoxForDocumentViewTag:tag pageNumber:pageNumber];
+        NSDictionary<NSString *, NSNumber *> *cropBox = [[self documentViewManager] getPageCropBoxForDocumentViewTag:tag pageNumber:pageNumber];
         resolve(cropBox);
     }
     @catch (NSException *exception) {
@@ -245,4 +245,3 @@ RCT_REMAP_METHOD(importAnnotationCommand,
 }
 
 @end
-  

@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -245,7 +246,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             @Override
             public void run() {
                 try {
-                    String box = mDocumentViewInstance.getPageCropBox(tag, pageNumber);
+                    WritableMap box = mDocumentViewInstance.getPageCropBox(tag, pageNumber);
                     promise.resolve(box);
                 } catch (Exception ex) {
                     promise.reject(ex);

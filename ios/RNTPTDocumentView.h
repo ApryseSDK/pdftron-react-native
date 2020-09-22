@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
-- (NSString *)getPageCropBox:(NSNumber *)pageNumber;
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSNumber *)pageNumber;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
