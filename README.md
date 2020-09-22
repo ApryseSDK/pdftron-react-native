@@ -602,6 +602,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
+- [getPageCropBox](#getPageCropBox)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -817,13 +818,13 @@ this._viewer.setFlagForAnnotations([
 ```
 
 ##### getPageCropBox
-Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the cropped box for specified page.
+Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | integer | the page number for the target cropped box. It is 1-indexed
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
 Return a Promise.
 
