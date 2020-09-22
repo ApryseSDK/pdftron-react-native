@@ -816,6 +816,25 @@ this._viewer.setFlagForAnnotations([
 ]);
 ```
 
+##### getPageCropBox
+Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the cropped box for specified page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target cropped box. It is 1-indexed
+
+Return a Promise.
+
+```js
+this._viewer.getPageCropBox(1).then((cropBox) => {
+  console.log('top-left coordinate:', cropBox.x1, cropBox.y1);
+  console.log('bottom-right coordinate:', cropBox.x2, cropBox.y2);
+  console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
 
