@@ -1754,6 +1754,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
     }
+    
+    public WritableMap getPageCropBox(int pageNumber) throws PDFNetException {
+        com.pdftron.pdf.Rect rect = getPdfDoc().getPage(pageNumber).getCropBox();
+
+        WritableMap map = Arguments.createMap();
+
+        map.putDouble(KEY_x1, rect.getX1());
+        map.putDouble(KEY_y1, rect.getY1());
+        map.putDouble(KEY_x2, rect.getX2());
+        map.putDouble(KEY_y2, rect.getY2());
+        map.putDouble(KEY_width, rect.getWidth());
+        map.putDouble(KEY_height, rect.getHeight());
+
+        return map;
+    }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {

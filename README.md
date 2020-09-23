@@ -602,6 +602,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
+- [getPageCropBox](#getPageCropBox)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -814,6 +815,25 @@ this._viewer.setFlagForAnnotations([
         flagValue: false
     }
 ]);
+```
+
+##### getPageCropBox
+Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise.
+
+```js
+this._viewer.getPageCropBox(1).then((cropBox) => {
+  console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
+  console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
+  console.log('width and height:', cropBox.width, cropBox.height);
+});
 ```
 
 ## Contributing
