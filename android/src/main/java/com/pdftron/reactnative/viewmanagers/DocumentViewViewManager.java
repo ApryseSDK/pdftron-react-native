@@ -242,6 +242,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
     }
 
+    public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.importBookmarkJson(bookmarkJson);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "importBookmarkJson", "Unable to find DocumentView.");
+        }
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

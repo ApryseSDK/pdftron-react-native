@@ -56,6 +56,7 @@ import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.AnnotUtils;
+import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -91,6 +92,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
     private static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
     private static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
+    private static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
 
     private static final String PREV_PAGE_KEY = "previousPageNumber";
     private static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -139,6 +141,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String kEY_flagPrint = "print";
     private static final String KEY_flagReadOnly = "readOnly";
     private static final String KEY_flagToggleNoView = "toggleNoView";
+
+    private static final String KEY_bookmark_json = "bookmarkJson";
     // EVENTS END
 
     // Config keys
@@ -849,6 +853,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
             getToolManager().removeAnnotationsSelectionListener(mAnnotationsSelectionListener);
+            getToolManager().removePdfDocModificationListener(mPdfDocModificationListener);
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
@@ -1209,6 +1214,64 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     };
 
+    private ToolManager.PdfDocModificationListener mPdfDocModificationListener = new ToolManager.PdfDocModificationListener() {
+        @Override
+        public void onBookmarkModified() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_BOOKMARK_CHANGED, ON_BOOKMARK_CHANGED);
+            String bookmarkJson = null;
+            if (getPdfDoc() != null) {
+                try {
+                    bookmarkJson = BookmarkManager.exportPdfBookmarks(getPdfDoc());
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            params.putString(KEY_bookmark_json, bookmarkJson);
+            onReceiveNativeEvent(params);
+        }
+
+        @Override
+        public void onPagesCropped() {
+
+        }
+
+        @Override
+        public void onPagesAdded(List<Integer> list) {
+
+        }
+
+        @Override
+        public void onPagesDeleted(List<Integer> list) {
+
+        }
+
+        @Override
+        public void onPagesRotated(List<Integer> list) {
+
+        }
+
+        @Override
+        public void onPageMoved(int i, int i1) {
+
+        }
+
+        @Override
+        public void onPageLabelsChanged() {
+
+        }
+
+        @Override
+        public void onAllAnnotationsRemoved() {
+
+        }
+
+        @Override
+        public void onAnnotationAction() {
+
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -1298,6 +1361,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
+        getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
@@ -1362,6 +1426,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
         onReceiveNativeEvent(ON_DOCUMENT_ERROR, error);
         return true;
+    }
+
+    public void importBookmarkJson(String bookmarkJson) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            if (pdfDoc.hasDownloader()) {
+                // still downloading file, let's wait for next call
+                return;
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            BookmarkManager.importPdfBookmarks(pdfViewCtrl, bookmarkJson);
+            pdfViewCtrl.update(true);
+        } catch (JSONException ex) {
+            throw new PDFNetException("", 0L, TAG, "importBookmarkJson", "Unable to parse bookmark json.");
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     public void importAnnotationCommand(String xfdfCommand, boolean initialLoad) throws PDFNetException {

@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText;
 
+- (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -112,7 +114,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (int)getPageCount;
 
+- (void)importBookmarkJson:(NSString *)bookmarkJson;
+
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
+
 - (void)importAnnotations:(NSString *)xfdfString;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;

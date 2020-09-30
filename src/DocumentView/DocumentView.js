@@ -63,6 +63,7 @@ export default class DocumentView extends PureComponent {
     useStylusAsPen: PropTypes.bool,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
+    onBookmarkChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -89,7 +90,9 @@ export default class DocumentView extends PureComponent {
         });
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
+      console.log("1");
       if (this.props.onAnnotationChanged) {
+        console.log("2");
         this.props.onAnnotationChanged({
           'action': event.nativeEvent.action,
           'annotations': event.nativeEvent.annotations,
@@ -149,7 +152,29 @@ export default class DocumentView extends PureComponent {
           'data': event.nativeEvent.data,
         });
       }
+    } else if (event.nativeEvent.onBookmarkChanged) {
+      if (this.props.onBookmarkChanged) {
+        this.props.onBookmarkChanged({
+          'bookmarkJson': event.nativeEvent.bookmarkJson,
+        });
+      }
     }
+  }
+
+  getVersion = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getVersion(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getPlatformVersion = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPlatformVersion(tag);
+    }
+    return Promise.resolve();
   }
 
   setToolMode = (toolMode) => {
@@ -171,6 +196,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
+  }
+
+  importBookmarkJson = (bookmarkJson) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }
