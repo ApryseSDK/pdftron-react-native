@@ -85,12 +85,12 @@
 	}
 	```
 3. In your `android/gradle.properties` file. Add the following line to it:
-  ``` diff
-  # Add the PDFTRON_LICENSE_KEY variable here. 
-  # For trial purposes leave it blank.
-  # For production add a valid commercial license key.
-  PDFTRON_LICENSE_KEY=
-  ```
+    ``` diff
+    # Add the PDFTRON_LICENSE_KEY variable here. 
+    # For trial purposes leave it blank.
+    # For production add a valid commercial license key.
+    PDFTRON_LICENSE_KEY=
+    ```
 4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
