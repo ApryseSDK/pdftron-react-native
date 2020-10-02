@@ -161,22 +161,6 @@ export default class DocumentView extends PureComponent {
     }
   }
 
-  getVersion = () => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-      return DocumentViewManager.getVersion(tag);
-    }
-    return Promise.resolve();
-  }
-
-  getPlatformVersion = () => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-      return DocumentViewManager.getPlatformVersion(tag);
-    }
-    return Promise.resolve();
-  }
-
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

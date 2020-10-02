@@ -54,32 +54,6 @@ RCT_REMAP_METHOD(commitTool,
 
 #pragma mark - Methods (w/ promises)
 
-RCT_REMAP_METHOD(getVersion,
-                 getVersionForDocumentViewTag:(nonnull NSNumber *)tag
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        resolve([@"PDFNet " stringByAppendingFormat:@"%f", [PTPDFNet GetVersion]]);
-    }
-    @catch (NSException *exception) {
-        reject(@"get_failed", @"Failed to get PDFNet version", [self errorFromException:exception]);
-    }
-}
-
-RCT_REMAP_METHOD(getPlatformVersion,
-                 getPlatformVersionForDocumentViewTag:(nonnull NSNumber *)tag
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        resolve([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-    }
-    @catch (NSException *exception) {
-        reject(@"get_failed", @"Failed to get platform version", [self errorFromException:exception]);
-    }
-}
-
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
