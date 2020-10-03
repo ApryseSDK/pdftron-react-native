@@ -2090,5 +2090,25 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
+#pragma mark - Set Current Page
+
+- (bool)setCurrentPage:(NSInteger)pageNumber {
+    
+    NSError *error = nil;
+    
+    __block bool setResult;
+    
+    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        setResult = [self.pdfViewCtrl SetCurrentPage:(int)pageNumber];
+    } error:&error];
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    }
+    
+    return setResult;
+}
+
 
 @end

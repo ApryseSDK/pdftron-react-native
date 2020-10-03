@@ -1778,6 +1778,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return map;
     }
 
+    public boolean setCurrentPage(int pageNumber) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.setCurrentPage(pageNumber);
+    }
+
     public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
