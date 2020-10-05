@@ -859,10 +859,14 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
-Return a Promise (will be rejected if provided page number is out of bound).
+Return a Promise (with a boolean that tells whether the setting process is successful).
 
 ```js
-this._viewer.setCurrentPage(4);
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
+});
 ```
 
 ## Contributing
