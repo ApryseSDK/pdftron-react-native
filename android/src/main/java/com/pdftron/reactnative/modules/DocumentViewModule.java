@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.pdftron.pdf.PDFNet;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
