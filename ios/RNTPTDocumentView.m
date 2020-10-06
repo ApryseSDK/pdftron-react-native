@@ -936,7 +936,12 @@ NS_ASSUME_NONNULL_END
                     return;
                 }
                     
+                [self.toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
+                
                 [annot SetFlag:annotFlag value:[flagValue boolValue]];
+                [self.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+                
+                [self.toolManager annotationModified:annot onPageNumber:(int)pageNumber];
             } error:&error];
         }
         // Throw error as exception to reject promise.
@@ -2079,6 +2084,8 @@ NS_ASSUME_NONNULL_END
             return;
         }
         
+        [self.toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
+        
         NSString* annotContents = [RNTPTDocumentView PT_idAsNSString:propertyMap[@"contents"]];
         if (annotContents) {
             [annot SetContents:annotContents];
@@ -2123,14 +2130,16 @@ NS_ASSUME_NONNULL_END
         }
         
         [self.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+        
+        [self.toolManager annotationModified:annot onPageNumber:(int)pageNumber];
     } error:&error];
     
     // Throw error as exception to reject promise.
     if (error) {
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
-    
 }
+
 #pragma mark - Get Crop Box
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber {

@@ -1705,6 +1705,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setPropertyForAnnotation(String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        ToolManager toolManager = getToolManager();
 
         boolean shouldUnlock = false;
         try {
@@ -1713,6 +1714,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
             Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
             if (annot != null && annot.isValid()) {
+
+                HashMap<Annot, Integer> map = new HashMap<>(1);
+                map.put(annot, pageNumber);
+                toolManager.raiseAnnotationsPreModifyEvent(map);
 
                 if (propertyMap.hasKey(KEY_annotContents)) {
                     String contents = propertyMap.getString(KEY_annotContents);
@@ -1765,6 +1770,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         }
                     }
                 }
+
+                pdfViewCtrl.update(annot, pageNumber);
+
+                toolManager.raiseAnnotationsModifiedEvent(map, Tool.getAnnotationModificationBundle(null));
             }
         }
         finally {
@@ -1776,6 +1785,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        ToolManager toolManager = getToolManager();
         int flagCount = annotationFlagList.size();
 
         boolean shouldUnlock = false;
@@ -1827,8 +1837,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                             flagNum = Annot.e_toggle_no_view;
                     }
                     if (flagNum != -1) {
+
+                        HashMap<Annot, Integer> map = new HashMap<>(1);
+                        map.put(annot, pageNum);
+                        toolManager.raiseAnnotationsPreModifyEvent(map);
+
                         annot.setFlag(flagNum, flagValue);
                         pdfViewCtrl.update(annot, pageNum);
+
+                        toolManager.raiseAnnotationsModifiedEvent(map, Tool.getAnnotationModificationBundle(null));
                     }
                 }
             }

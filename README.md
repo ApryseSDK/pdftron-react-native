@@ -831,7 +831,7 @@ this._viewer.setFlagForAnnotations([
 ]);
 ```
 ##### setPropertyForAnnotation
-To set properties for specified annotation in the current document, if it is valid. For available properties, please check out `AnnotationProperties` located in `src/Confg.js`, and the example below for reference.
+To set properties for specified annotation in the current document, if it is valid. For available properties, please check out `AnnotationProperties` located in `src/Confg.js`.
 
 Parameters:
 
@@ -854,13 +854,7 @@ this._viewer.setPropertyForAnnotation('Pdftron', 1, {
   },
   contents: 'Hello World',
   subject: 'Sample',
-  title: 'set-prop-for-annot',
-  contentRect: {
-    x1: 10.1,   // left
-    y1: 13,     // bottom
-    x2: 90.9,   // right
-    y2: 89.8    // top
-  }
+  title: 'set-prop-for-annot'
 });
 ```
 
