@@ -61,6 +61,7 @@
             versionCode 1
             versionName "1.0"
     +       multiDexEnabled true
+    +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         }
 
         dependencies {
@@ -83,7 +84,14 @@
 	    // ...
 	}
 	```
-3. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+3. In your `android/gradle.properties` file. Add the following line to it:
+    ``` diff
+    # Add the PDFTRON_LICENSE_KEY variable here. 
+    # For trial purposes leave it blank.
+    # For production add a valid commercial license key.
+    PDFTRON_LICENSE_KEY=
+    ```
+4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -99,6 +107,11 @@
         ...
     +   android:largeHeap="true"
     +   android:usesCleartextTraffic="true">
+
+        <!-- Add license key in meta-data tag here. This should be inside the application tag. -->
+    +   <meta-data
+    +       android:name="pdftron_license_key"
+    +       android:value="${pdftronLicenseKey}"/>
 
         <activity
           android:name=".MainActivity"
@@ -117,7 +130,7 @@
     </manifest>
     ```
 
-4. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import androidx.multidex.MultiDexApplication;
@@ -126,8 +139,8 @@
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-5. Replace `App.js` with what is shown [here](#usage)
-6. Finally in the root project directory, run `react-native run-android`.
+6. Replace `App.js` with what is shown [here](#usage)
+7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
