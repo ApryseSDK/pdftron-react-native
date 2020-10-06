@@ -1217,18 +1217,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private ToolManager.PdfDocModificationListener mPdfDocModificationListener = new ToolManager.PdfDocModificationListener() {
         @Override
         public void onBookmarkModified() {
-            WritableMap params = Arguments.createMap();
-            params.putString(ON_BOOKMARK_CHANGED, ON_BOOKMARK_CHANGED);
-            String bookmarkJson = null;
             if (getPdfDoc() != null) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_BOOKMARK_CHANGED, ON_BOOKMARK_CHANGED);
+                String bookmarkJson = null;
                 try {
                     bookmarkJson = BookmarkManager.exportPdfBookmarks(getPdfDoc());
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
+                params.putString(KEY_bookmark_json, bookmarkJson);
+                onReceiveNativeEvent(params);
             }
-            params.putString(KEY_bookmark_json, bookmarkJson);
-            onReceiveNativeEvent(params);
         }
 
         @Override
