@@ -90,9 +90,7 @@ export default class DocumentView extends PureComponent {
         });
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
-      console.log("1");
       if (this.props.onAnnotationChanged) {
-        console.log("2");
         this.props.onAnnotationChanged({
           'action': event.nativeEvent.action,
           'annotations': event.nativeEvent.annotations,

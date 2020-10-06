@@ -73,7 +73,6 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 try {
-                    double version = PDFNet.getVersion();
                     promise.resolve(Double.toString(PDFNet.getVersion()));
                 } catch (Exception ex) {
                     promise.reject(ex);
