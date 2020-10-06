@@ -829,6 +829,40 @@ this._viewer.setFlagForAnnotations([
     }
 ]);
 ```
+##### setPropertyForAnnotation
+To set properties for specified annotation in the current document, if it is valid. For available properties, please check out `AnnotationProperties` located in `src/Confg.js`, and the example below for reference.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+propertyMap | object | an object containing properties to be set
+
+Return a promise.
+
+```js
+// Set properties for annotation in the current document.
+this._viewer.setPropertyForAnnotation('Pdftron', 1, {
+  rect: {
+    x1: 1.1,    // left
+    y1: 3,      // bottom
+    x2: 100.9,  // right
+    y2: 99.8    // top
+  },
+  contents: 'Hello World',
+  subject: 'Sample',
+  title: 'set-prop-for-annot',
+  contentRect: {
+    x1: 10.1,   // left
+    y1: 13,     // bottom
+    x2: 90.9,   // right
+    y2: 89.8    // top
+  }
+});
+```
+
 
 ##### getPageCropBox
 Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.

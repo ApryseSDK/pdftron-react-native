@@ -133,10 +133,12 @@ export default {
     toggleNoView: "toggleNoView"
   },
   AnnotationProperties: {
-    subject: "subject",
-    title: "title",
+    // apply for all annotations
     rect: "rect",
     contents: "contents",
+    // markup annotations only
+    subject: "subject",
+    title: "title",
     contentRect: "contentRect",
   }
 };

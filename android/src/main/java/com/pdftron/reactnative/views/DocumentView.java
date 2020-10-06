@@ -1723,31 +1723,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
                 if (propertyMap.hasKey(KEY_annotRect)) {
                     ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
-                    if (rectMap != null) {
-                        double rectX1 = 0, rectY1 = 0, rectX2 = 0, rectY2 = 0;
 
-                        // to count how many keys exist
-                        int successCounter = 0;
-                        if (rectMap.hasKey(KEY_x1)) {
-                            rectX1 = rectMap.getDouble(KEY_x1);
-                            successCounter ++;
-                        }
-                        if (rectMap.hasKey(KEY_y1)) {
-                            rectX1 = rectMap.getDouble(KEY_y1);
-                            successCounter ++;
-                        }
-                        if (rectMap.hasKey(KEY_x2)) {
-                            rectX1 = rectMap.getDouble(KEY_x2);
-                            successCounter ++;
-                        }
-                        if (rectMap.hasKey(KEY_y2)) {
-                            rectX1 = rectMap.getDouble(KEY_y2);
-                            successCounter ++;
-                        }
-                        if (successCounter == 4) {
-                            com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
-                            annot.setRect(rect);
-                        }
+                    if (rectMap != null && rectMap.hasKey(KEY_x1) && rectMap.hasKey(KEY_y1) &&
+                                rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
+                        double rectX1 = rectMap.getDouble(KEY_x1);
+                        double rectY1 = rectMap.getDouble(KEY_y1);
+                        double rectX2 = rectMap.getDouble(KEY_x2);
+                        double rectY2 = rectMap.getDouble(KEY_y2);
+                        com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                        annot.setRect(rect);
                     }
                 }
 
@@ -1770,31 +1754,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
                     if (propertyMap.hasKey(KEY_annotContentRect)) {
                         ReadableMap contentRectMap = propertyMap.getMap(KEY_annotContentRect);
-                        if (contentRectMap != null) {
-                            double rectX1 = 0, rectY1 = 0, rectX2 = 0, rectY2 = 0;
-
-                            // to count how many keys exist
-                            int successCounter = 0;
-                            if (contentRectMap.hasKey(KEY_x1)) {
-                                rectX1 = contentRectMap.getDouble(KEY_x1);
-                                successCounter ++;
-                            }
-                            if (contentRectMap.hasKey(KEY_y1)) {
-                                rectX1 = contentRectMap.getDouble(KEY_y1);
-                                successCounter ++;
-                            }
-                            if (contentRectMap.hasKey(KEY_x2)) {
-                                rectX1 = contentRectMap.getDouble(KEY_x2);
-                                successCounter ++;
-                            }
-                            if (contentRectMap.hasKey(KEY_y2)) {
-                                rectX1 = contentRectMap.getDouble(KEY_y2);
-                                successCounter ++;
-                            }
-                            if (successCounter == 4) {
-                                com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
-                                markupAnnot.setContentRect(rect);
-                            }
+                        if (contentRectMap != null && contentRectMap.hasKey(KEY_x1) && contentRectMap.hasKey(KEY_y1) &&
+                                contentRectMap.hasKey(KEY_x2) && contentRectMap.hasKey(KEY_y2)) {
+                            double rectX1 = contentRectMap.getDouble(KEY_x1);
+                            double rectY1 = contentRectMap.getDouble(KEY_y1);
+                            double rectX2 = contentRectMap.getDouble(KEY_x2);
+                            double rectY2 = contentRectMap.getDouble(KEY_y2);
+                            com.pdftron.pdf.Rect contentRect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                            markupAnnot.setContentRect(contentRect);
                         }
                     }
                 }
