@@ -2063,6 +2063,74 @@ NS_ASSUME_NONNULL_END
 }
 
 
+#pragma mark - Set Property for Annotation
+
+- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
+    
+    NSError *error;
+    
+    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        
+        PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber];
+        if (![annot IsValid]) {
+            NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                  annotationId, (int)pageNumber);
+            annot = nil;
+            return;
+        }
+        
+        NSString* annotContents = [RNTPTDocumentView PT_idAsNSString:propertyMap[@"contents"]];
+        if (annotContents) {
+            [annot SetContents:annotContents];
+        }
+        
+        NSDictionary *annotRect = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[@"rect"]];
+        if (annotRect) {
+            NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:annotRect[@"x1"]];
+            NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:annotRect[@"y1"]];
+            NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:annotRect[@"x2"]];
+            NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:annotRect[@"y2"]];
+            if (rectX1 && rectY1 && rectX2 && rectY2) {
+                PTPDFRect *rect = [[PTPDFRect alloc] initWithX1:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+                [annot SetRect:rect];
+            }
+        }
+        
+        if ([annot IsMarkup]) {
+            PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
+            
+            NSString *annotSubject = [RNTPTDocumentView PT_idAsNSString:propertyMap[@"subject"]];
+            if (annotSubject) {
+                [markupAnnot SetSubject:annotSubject];
+            }
+            
+            NSString *annotTitle = [RNTPTDocumentView PT_idAsNSString:propertyMap[@"title"]];
+            if (annotTitle) {
+                [markupAnnot SetTitle:annotTitle];
+            }
+            
+            NSDictionary *annotContentRect = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[@"contentRect"]];
+            if (annotRect) {
+                NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:annotContentRect[@"x1"]];
+                NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:annotContentRect[@"y1"]];
+                NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:annotContentRect[@"x2"]];
+                NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:annotContentRect[@"y2"]];
+                if (rectX1 && rectY1 && rectX2 && rectY2) {
+                    PTPDFRect *contentRect = [[PTPDFRect alloc] initWithX1:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+                    [markupAnnot SetContentRect:contentRect];
+                }
+            }
+        }
+        
+        [self.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+    } error:&error];
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    }
+    
+}
 #pragma mark - Get Crop Box
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber {
@@ -2091,4 +2159,31 @@ NS_ASSUME_NONNULL_END
 }
 
 
+#pragma mark - Helper
+
++ (NSString *)PT_idAsNSString:(id)value
+{
+    if ([value isKindOfClass:[NSString class]]) {
+        return (NSString *)value;
+    }
+    return nil;
+}
+
++ (NSNumber *)PT_idAsNSNumber:(id)value
+{
+    if ([value isKindOfClass:[NSNumber class]]) {
+        return (NSNumber *)value;
+    }
+    return nil;
+}
+
++ (NSDictionary *)PT_idAsNSDictionary:(id)value
+{
+    if ([value isKindOfClass:[NSDictionary class]]) {
+        return (NSDictionary *)value;
+    }
+    return nil;
+}
+
 @end
+

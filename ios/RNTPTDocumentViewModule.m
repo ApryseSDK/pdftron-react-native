@@ -211,6 +211,23 @@ RCT_REMAP_METHOD(selectAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(setPropertyForAnnotation,
+                 setPropertyForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 propertyMap:(NSDictionary *)propertyMap
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPropertyForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber

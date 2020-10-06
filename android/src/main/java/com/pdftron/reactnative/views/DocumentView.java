@@ -109,7 +109,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_annotSubject = "subject";
     private static final String KEY_annotTitle = "title";
     private static final String KEY_annotContents = "contents";
-    private static final String KEY_annotUniqueID = "uniqueID";
     private static final String KEY_annotContentRect = "contentRect";
 
     private static final String KEY_action = "action";
@@ -1722,26 +1721,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     }
                 }
 
-                if (propertyMap.hasKey(KEY_annotUniqueID)) {
-                    String uniqueID = propertyMap.getString(KEY_annotUniqueID);
-                    if (uniqueID != null) {
-                        annot.setUniqueID(uniqueID);
-                    }
-                }
                 if (propertyMap.hasKey(KEY_annotRect)) {
                     ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
                     if (rectMap != null) {
-                        double rectX1 = rectMap.getDouble(KEY_x1);
-                        double rectY1 = rectMap.getDouble(KEY_y1);
-                        double rectX2 = rectMap.getDouble(KEY_x2);
-                        double rectY2 = rectMap.getDouble(KEY_y2);
-                        com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
-                        annot.setRect(rect);
+                        double rectX1 = 0, rectY1 = 0, rectX2 = 0, rectY2 = 0;
+
+                        // to count how many keys exist
+                        int successCounter = 0;
+                        if (rectMap.hasKey(KEY_x1)) {
+                            rectX1 = rectMap.getDouble(KEY_x1);
+                            successCounter ++;
+                        }
+                        if (rectMap.hasKey(KEY_y1)) {
+                            rectX1 = rectMap.getDouble(KEY_y1);
+                            successCounter ++;
+                        }
+                        if (rectMap.hasKey(KEY_x2)) {
+                            rectX1 = rectMap.getDouble(KEY_x2);
+                            successCounter ++;
+                        }
+                        if (rectMap.hasKey(KEY_y2)) {
+                            rectX1 = rectMap.getDouble(KEY_y2);
+                            successCounter ++;
+                        }
+                        if (successCounter == 4) {
+                            com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                            annot.setRect(rect);
+                        }
                     }
                 }
 
                 if (annot.isMarkup()) {
-                    Markup markupAnnot = (Markup)annot;
+                    Markup markupAnnot = new Markup(annot);
 
                     if (propertyMap.hasKey(KEY_annotSubject)) {
                         String subject = propertyMap.getString(KEY_annotSubject);
@@ -1760,12 +1771,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     if (propertyMap.hasKey(KEY_annotContentRect)) {
                         ReadableMap contentRectMap = propertyMap.getMap(KEY_annotContentRect);
                         if (contentRectMap != null) {
-                            double rectX1 = contentRectMap.getDouble(KEY_x1);
-                            double rectY1 = contentRectMap.getDouble(KEY_y1);
-                            double rectX2 = contentRectMap.getDouble(KEY_x2);
-                            double rectY2 = contentRectMap.getDouble(KEY_y2);
-                            com.pdftron.pdf.Rect contentRect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
-                            markupAnnot.setContentRect(contentRect);
+                            double rectX1 = 0, rectY1 = 0, rectX2 = 0, rectY2 = 0;
+
+                            // to count how many keys exist
+                            int successCounter = 0;
+                            if (contentRectMap.hasKey(KEY_x1)) {
+                                rectX1 = contentRectMap.getDouble(KEY_x1);
+                                successCounter ++;
+                            }
+                            if (contentRectMap.hasKey(KEY_y1)) {
+                                rectX1 = contentRectMap.getDouble(KEY_y1);
+                                successCounter ++;
+                            }
+                            if (contentRectMap.hasKey(KEY_x2)) {
+                                rectX1 = contentRectMap.getDouble(KEY_x2);
+                                successCounter ++;
+                            }
+                            if (contentRectMap.hasKey(KEY_y2)) {
+                                rectX1 = contentRectMap.getDouble(KEY_y2);
+                                successCounter ++;
+                            }
+                            if (successCounter == 4) {
+                                com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                                markupAnnot.setContentRect(rect);
+                            }
                         }
                     }
                 }
