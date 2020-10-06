@@ -132,4 +132,11 @@ export default {
     readOnly: "readOnly",
     toggleNoView: "toggleNoView"
   },
+  AnnotationProperties: {
+    subject: "subject",
+    title: "title",
+    rect: "rect",
+    contents: "contents",
+    contentRect: "contentRect",
+  }
 };

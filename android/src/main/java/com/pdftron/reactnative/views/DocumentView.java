@@ -39,6 +39,7 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
+import com.pdftron.pdf.annots.Markup;
 import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
@@ -105,6 +106,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_annotRect = "rect";
     private static final String KEY_annotFlag = "flag";
     private static final String KEY_annotFlagValue = "flagValue";
+    private static final String KEY_annotSubject = "subject";
+    private static final String KEY_annotTitle = "title";
+    private static final String KEY_annotContents = "contents";
+    private static final String KEY_annotUniqueID = "uniqueID";
+    private static final String KEY_annotContentRect = "contentRect";
 
     private static final String KEY_action = "action";
     private static final String KEY_action_add = "add";
@@ -1696,6 +1702,80 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             return mPdfViewCtrlTabHostFragment.handleBackPressed();
         }
         return false;
+    }
+
+    public void setPropertyForAnnotation(String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        boolean shouldUnlock = false;
+        try {
+            pdfViewCtrl.docLock(true);
+            shouldUnlock = true;
+
+            Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
+            if (annot != null && annot.isValid()) {
+
+                if (propertyMap.hasKey(KEY_annotContents)) {
+                    String contents = propertyMap.getString(KEY_annotContents);
+                    if (contents != null) {
+                        annot.setContents(contents);
+                    }
+                }
+
+                if (propertyMap.hasKey(KEY_annotUniqueID)) {
+                    String uniqueID = propertyMap.getString(KEY_annotUniqueID);
+                    if (uniqueID != null) {
+                        annot.setUniqueID(uniqueID);
+                    }
+                }
+                if (propertyMap.hasKey(KEY_annotRect)) {
+                    ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
+                    if (rectMap != null) {
+                        double rectX1 = rectMap.getDouble(KEY_x1);
+                        double rectY1 = rectMap.getDouble(KEY_y1);
+                        double rectX2 = rectMap.getDouble(KEY_x2);
+                        double rectY2 = rectMap.getDouble(KEY_y2);
+                        com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                        annot.setRect(rect);
+                    }
+                }
+
+                if (annot.isMarkup()) {
+                    Markup markupAnnot = (Markup)annot;
+
+                    if (propertyMap.hasKey(KEY_annotSubject)) {
+                        String subject = propertyMap.getString(KEY_annotSubject);
+                        if (subject != null) {
+                            markupAnnot.setSubject(subject);
+                        }
+                    }
+
+                    if (propertyMap.hasKey(KEY_annotTitle)) {
+                        String title = propertyMap.getString(KEY_annotTitle);
+                        if (title != null) {
+                            markupAnnot.setTitle(title);
+                        }
+                    }
+
+                    if (propertyMap.hasKey(KEY_annotContentRect)) {
+                        ReadableMap contentRectMap = propertyMap.getMap(KEY_annotContentRect);
+                        if (contentRectMap != null) {
+                            double rectX1 = contentRectMap.getDouble(KEY_x1);
+                            double rectY1 = contentRectMap.getDouble(KEY_y1);
+                            double rectX2 = contentRectMap.getDouble(KEY_x2);
+                            double rectY2 = contentRectMap.getDouble(KEY_y2);
+                            com.pdftron.pdf.Rect contentRect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                            markupAnnot.setContentRect(contentRect);
+                        }
+                    }
+                }
+            }
+        }
+        finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlock();
+            }
+        }
     }
 
     public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
