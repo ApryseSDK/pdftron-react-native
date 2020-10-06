@@ -185,7 +185,7 @@ export default class DocumentView extends PureComponent {
   importBookmarkJson = (bookmarkJson) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
+      return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }
