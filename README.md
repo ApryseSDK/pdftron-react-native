@@ -615,6 +615,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
+- [setPropertyForAnnotation](#setPropertyForAnnotation)
 - [getPageCropBox](#getPageCropBox)
 
 ##### setToolMode
