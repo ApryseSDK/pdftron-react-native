@@ -202,7 +202,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {
             @Override
             public boolean canShowToast(int res, @Nullable CharSequence charSequence) {
-                if (res == R.string.download_finished_message || res == R.string.document_saved_toast_message) {
+                if (res == R.string.download_finished_message ||
+                        res == R.string.document_saved_toast_message ||
+                        res == R.string.download_failed_message) {
                     return false;
                 }
                 return true;
