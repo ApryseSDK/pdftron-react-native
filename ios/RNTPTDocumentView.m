@@ -829,6 +829,8 @@ NS_ASSUME_NONNULL_END
                 return;
             }
             
+            [self.toolManager willRemoveAnnotation:annot onPageNumber:pageNumberValue];
+
             PTPage *page = [doc GetPage:pageNumberValue];
             if ([page IsValid]) {
                 [page AnnotRemoveWithAnnot:annot];
