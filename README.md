@@ -831,7 +831,7 @@ this._viewer.setFlagForAnnotations([
 ]);
 ```
 ##### setPropertyForAnnotation
-To set properties for specified annotation in the current document, if it is valid. For available properties, please check out `AnnotationProperties` located in `src/Confg.js`.
+To set properties for specified annotation in the current document, if it is valid. 
 
 Parameters:
 
@@ -839,7 +839,17 @@ Name | Type | Description
 --- | --- | ---
 annotationId | string | the unique id of the annotation
 pageNumber | integer | the page number where annotation is located. It is 1-indexed
-propertyMap | object | an object containing properties to be set
+propertyMap | object | an object containing properties to be set. Available properties are listed below
+
+Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 2, x2: 3, y2: 4}
+contents | string | no | "contents"
+subject | string | yes | "subject"
+title | string | yes | "title"
+contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
 
 Return a promise.
 

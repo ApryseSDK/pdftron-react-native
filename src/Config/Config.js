@@ -131,14 +131,5 @@ export default {
     print: "print",
     readOnly: "readOnly",
     toggleNoView: "toggleNoView"
-  },
-  AnnotationProperties: {
-    // apply for all annotations
-    rect: "rect",
-    contents: "contents",
-    // markup annotations only
-    subject: "subject",
-    title: "title",
-    contentRect: "contentRect",
   }
 };
