@@ -1623,7 +1623,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             case String: {
                 String fieldValue = readableMap.getString(fieldName);
                 if (fieldValue != null &&
-                        (Field.e_text == fieldType || Field.e_radio == fieldType)) {
+                        (Field.e_text == fieldType ||
+                                Field.e_radio == fieldType ||
+                                Field.e_choice == fieldType)) {
                     ViewChangeCollection view_change = field.setValue(fieldValue);
                     pdfViewCtrl.refreshAndUpdate(view_change);
                 }
