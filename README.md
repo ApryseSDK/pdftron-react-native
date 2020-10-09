@@ -436,7 +436,8 @@ bool, optional
 ##### isBase64String
 bool, optional
 
-If true, `document` prop will be treated as a base64 string.
+If true, `document` prop will be treated as a base64 string. 
+When viewing a document initialized with a base64 string (ie a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
 ##### padStatusBar
 bool, optional, android only
 

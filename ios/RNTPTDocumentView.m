@@ -2103,7 +2103,7 @@ NS_ASSUME_NONNULL_END
     if (![self isBase64String]) {
         return self.documentViewController.coordinatedDocument.fileURL.path;
     } else {
-        return @"";
+        return nil;
     }
 }
 
