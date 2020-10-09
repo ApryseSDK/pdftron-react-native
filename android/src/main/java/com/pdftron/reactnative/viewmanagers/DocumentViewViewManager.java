@@ -368,6 +368,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setPropertyForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPropertyForAnnotation(annotId, pageNumber, propertyMap);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPropertyForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
     public WritableMap getPageCropBox(int tag, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -377,6 +386,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean setCurrentPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.setCurrentPage(pageNumber);
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
+        }
+    }
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

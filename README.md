@@ -615,7 +615,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
+- [setPropertyForAnnotation](#setPropertyForAnnotation)
 - [getPageCropBox](#getPageCropBox)
+- [setCurrentPage](#setCurrentPage)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -829,6 +831,44 @@ this._viewer.setFlagForAnnotations([
     }
 ]);
 ```
+##### setPropertyForAnnotation
+To set properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+propertyMap | object | an object containing properties to be set. Available properties are listed below
+
+Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 2, x2: 3, y2: 4}
+contents | string | no | "contents"
+subject | string | yes | "subject"
+title | string | yes | "title"
+contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+
+Return a promise.
+
+```js
+// Set properties for annotation in the current document.
+this._viewer.setPropertyForAnnotation('Pdftron', 1, {
+  rect: {
+    x1: 1.1,    // left
+    y1: 3,      // bottom
+    x2: 100.9,  // right
+    y2: 99.8    // top
+  },
+  contents: 'Hello World',
+  subject: 'Sample',
+  title: 'set-prop-for-annot'
+});
+```
+
 
 ##### getPageCropBox
 Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.
@@ -846,6 +886,25 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+##### setCurrentPage
+Set current page of the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise (with a boolean that tells whether the setting process is successful).
+
+```js
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
 });
 ```
 

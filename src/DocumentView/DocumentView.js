@@ -270,10 +270,26 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setPropertyForAnnotation(tag, id, pageNumber, propertyMap);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCropBox(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  setCurrentPage = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setCurrentPage(tag, pageNumber);
     }
     return Promise.resolve();
   }

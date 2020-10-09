@@ -131,5 +131,5 @@ export default {
     print: "print",
     readOnly: "readOnly",
     toggleNoView: "toggleNoView"
-  },
+  }
 };
