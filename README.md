@@ -616,6 +616,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
 - [getPageCropBox](#getPageCropBox)
+- [setCurrentPage](#setCurrentPage)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -846,6 +847,25 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+##### setCurrentPage
+Set current page of the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise (with a boolean that tells whether the setting process is successful).
+
+```js
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
 });
 ```
 

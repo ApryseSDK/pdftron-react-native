@@ -2090,5 +2090,11 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
+#pragma mark - Set Current Page
+
+- (bool)setCurrentPage:(NSInteger)pageNumber {
+    return [self.pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
 
 @end
