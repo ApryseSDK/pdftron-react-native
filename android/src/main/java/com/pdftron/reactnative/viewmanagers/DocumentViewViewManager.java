@@ -386,6 +386,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean setCurrentPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.setCurrentPage(pageNumber);
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
+        }
+    }
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

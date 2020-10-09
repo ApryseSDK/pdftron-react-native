@@ -616,6 +616,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
 - [getPageCropBox](#getPageCropBox)
+- [setCurrentPage](#setCurrentPage)
 - [getDocumentPath](#getDocumentPath)
 
 ##### setToolMode
@@ -850,6 +851,25 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 });
 ```
 
+##### setCurrentPage
+Set current page of the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise (with a boolean that tells whether the setting process is successful).
+
+```js
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
+});
+```
+
 ##### getDocumentPath
 Return the path of the current document.
 
@@ -858,7 +878,6 @@ Return a Promise.
 ```js
 this._viewer.getDocumentPath((path) => {
   console.log('The path to current document is: ', path);
-});
 ```
 
 ## Contributing

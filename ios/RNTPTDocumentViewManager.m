@@ -586,6 +586,19 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentVi
     }
 }
 
+- (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView setCurrentPage:pageNumber];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+
+
 #pragma mark - DocumentView attached/detached
 
 - (void)documentViewAttachedToWindow:(RNTPTDocumentView *)documentView

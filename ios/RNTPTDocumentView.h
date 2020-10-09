@@ -133,6 +133,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
+- (bool)setCurrentPage:(NSInteger)pageNumber;
+
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end
