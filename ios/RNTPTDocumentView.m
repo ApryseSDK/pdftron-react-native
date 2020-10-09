@@ -723,7 +723,7 @@ NS_ASSUME_NONNULL_END
         } else {
             PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
             
-            NSArray *arr = options[PTAnnotationIdKey];
+            NSArray *arr = options[PTAnnotListArgumentKey];
             for (NSDictionary *annotation in arr) {
                 NSString *annotationId = annotation[PTAnnotationIdKey];
                 int pageNumber = ((NSNumber *)annotation[PTAnnotationPageNumberKey]).intValue;
