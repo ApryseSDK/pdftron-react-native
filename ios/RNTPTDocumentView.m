@@ -1028,7 +1028,7 @@ NS_ASSUME_NONNULL_END
         NSString *fieldValue = (NSString *)value;
         
         if (fieldValue &&
-            (fieldType == e_pttext || fieldType == e_ptradio)) {
+            (fieldType == e_pttext || fieldType == e_ptradio || fieldType == e_ptchoice)) {
             PTViewChangeCollection *changeCollection = [field SetValueWithString:fieldValue];
             [pdfViewCtrl RefreshAndUpdate:changeCollection];
         }
