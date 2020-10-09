@@ -878,8 +878,9 @@ Return the path of the current document.
 Return a Promise.
 
 ```js
-this._viewer.getDocumentPath((path) => {
-  console.log('The path to current document is: ', path);
+this._viewer.getDocumentPath().then((path) => {
+  console.log('The path to current document is: ' + path);
+});
 ```
 
 ## Contributing
