@@ -112,6 +112,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (int)getPageCount;
 
+- (NSString *)getDocumentPath;
+
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 

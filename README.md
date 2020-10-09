@@ -616,6 +616,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [selectAnnotation](#selectAnnotation)
 - [setFlagForAnnotations](#setFlagForAnnotations)
 - [getPageCropBox](#getPageCropBox)
+- [getDocumentPath](#getDocumentPath)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -846,6 +847,17 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+##### getDocumentPath
+Return the path of the current document.
+
+Return a Promise.
+
+```js
+this._viewer.getDocumentPath((path) => {
+  console.log('The path to current document is: ', path);
 });
 ```
 

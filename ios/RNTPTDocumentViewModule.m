@@ -54,6 +54,19 @@ RCT_REMAP_METHOD(commitTool,
 
 #pragma mark - Methods (w/ promises)
 
+RCT_REMAP_METHOD(getDocumentPath,
+                 getDocumentPathForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *path = [[self documentViewManager] getDocumentPathForDocumentViewTag:tag];
+        resolve(path);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

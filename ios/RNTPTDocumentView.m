@@ -518,7 +518,8 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setToolMode:(NSString *)toolMode
+- (void)
+:(NSString *)toolMode
 {
     if (toolMode.length == 0) {
         return;
@@ -2088,6 +2089,16 @@ NS_ASSUME_NONNULL_END
     } error:nil];
     
     return map;
+}
+
+#pragma mark - Get Document Path
+
+- (NSString *) getDocumentPath {
+    if (![self isBase64String]) {
+        return self.documentViewController.coordinatedDocument.fileURL.path;
+    } else {
+        return @"";
+    }
 }
 
 
