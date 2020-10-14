@@ -2085,18 +2085,18 @@ NS_ASSUME_NONNULL_END
 }
 
 - (void)bookmarksModified {
-    __block NSString* json;
-    NSError* error;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-        json = [PTBookmarkManager.defaultManager exportBookmarksFromDoc:doc];
-    } error:&error];
-    
-    if(error)
-    {
-        NSLog(@"Error: There was an error while trying to export the bookmark json on events triggered. %@", error.localizedDescription);
-    }
-    
     if ([self.delegate respondsToSelector:@selector(bookmarkChanged:bookmarkJson:)]) {
+
+        __block NSString* json;
+        NSError* error;
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            json = [PTBookmarkManager.defaultManager exportBookmarksFromDoc:doc];
+        } error:&error];
+    
+        if(error)
+        {
+            NSLog(@"Error: There was an error while trying to export the bookmark json on events triggered. %@", error.localizedDescription);
+        }
         [self.delegate bookmarkChanged:self bookmarkJson:json];
     }
 }
