@@ -257,6 +257,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (int)getPageCount;
 
+- (NSString *)getDocumentPath;
+
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;
 

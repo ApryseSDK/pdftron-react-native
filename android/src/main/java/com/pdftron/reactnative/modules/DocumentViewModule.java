@@ -107,6 +107,20 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getDocumentPath(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String path = mDocumentViewInstance.getDocumentPath(tag);
+                    promise.resolve(path);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+    @ReactMethod
     public void setToolMode(final int tag, final String item) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

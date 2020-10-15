@@ -1680,6 +1680,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
+    public String getDocumentPath() {
+        if (mIsBase64 && mTempFile != null) {
+            return mTempFile.getAbsolutePath();
+        } else {
+            return getPdfViewCtrlTabFragment().getFilePath();
+        }
+    }
+
     public void setToolMode(String item) {
         if (getToolManager() != null) {
             ToolManager.ToolMode mode = convStringToToolMode(item);

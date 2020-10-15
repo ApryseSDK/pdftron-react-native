@@ -152,6 +152,14 @@ export default class DocumentView extends PureComponent {
     }
   }
 
+  getDocumentPath = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getDocumentPath(tag);
+    }
+    return Promise.resolve();
+  }
+  
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
