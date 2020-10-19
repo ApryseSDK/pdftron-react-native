@@ -185,6 +185,13 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(signSignatureFieldsWithStamps, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.signSignatureFieldsWithStamps = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(useStylusAsPen, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -283,6 +290,20 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideLongPressMenuBehavior, NSArray, RNTPTDocumentVi
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(longPressMenuEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.longPressMenuEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.annotationPermissionCheckEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -361,6 +382,16 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideLongPressMenuBehavior, NSArray, RNTPTDocumentVi
     }
 }
 
+- (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onFormFieldValueChanged" : @"onFormFieldValueChanged",
+            @"fields": @[fields],
+        });
+    }
+}
+
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
 {
     if (sender.onChange) {
@@ -412,6 +443,17 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideLongPressMenuBehavior, NSArray, RNTPTDocumentVi
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return NO;
+    }
+}
+
+- (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView getDocumentPath];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+        return nil;
     }
 }
 
@@ -512,6 +554,60 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideLongPressMenuBehavior, NSArray, RNTPTDocumentVi
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
+
+- (void)setFlagForAnnotationsForDocumentViewTag:(NSNumber *)tag annotationFlagList:(NSArray *)annotationFlagList
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setFlagForAnnotations:annotationFlagList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)selectAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView selectAnnotation:annotationId pageNumber:pageNumber];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setPropertyForAnnotation:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setPropertyForAnnotation:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSDictionary<NSString *, NSNumber *> *cropBox = [documentView getPageCropBox:pageNumber];
+        return cropBox;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView setCurrentPage:pageNumber];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+
 
 #pragma mark - DocumentView attached/detached
 

@@ -54,6 +54,19 @@ RCT_REMAP_METHOD(commitTool,
 
 #pragma mark - Methods (w/ promises)
 
+RCT_REMAP_METHOD(getDocumentPath,
+                 getDocumentPathForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *path = [[self documentViewManager] getDocumentPathForDocumentViewTag:tag];
+        resolve(path);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -180,6 +193,84 @@ RCT_REMAP_METHOD(setValueForFields,
     }
 }
 
+RCT_REMAP_METHOD(setFlagForAnnotations,
+                 setFlagForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationFlagList:(NSArray *)annotationFlagList
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setFlagForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_flag_for_annotations", @"Failed to set flag on annotations", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(selectAnnotation,
+                 selectAnnotationForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] selectAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_annotation", @"Failed to select annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setPropertyForAnnotation,
+                 setPropertyForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 propertyMap:(NSDictionary *)propertyMap
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPropertyForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getPageCropBox,
+                 getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *cropBox = [[self documentViewManager] getPageCropBoxForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(cropBox);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_crop_box", @"Failed to get page cropbox", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setCurrentPage,
+                 setCurrentPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] setCurrentPageForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_page", @"Failed to set current page", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,
@@ -199,4 +290,3 @@ RCT_REMAP_METHOD(importAnnotationCommand,
 }
 
 @end
-  

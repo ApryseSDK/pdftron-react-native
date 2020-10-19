@@ -1,6 +1,5 @@
 package com.pdftron.reactnative.viewmanagers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
@@ -10,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -186,7 +186,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setLongPressMenuItems(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setLongPressMenuItems(items);
     }
-    
+
+    @ReactProp(name = "longPressMenuEnabled")
+    public void setLongPressMenuEnabled(DocumentView documentView, boolean longPressMenuEnabled) {
+        documentView.setLongPressMenuEnabled(longPressMenuEnabled);
+    }
+
     @ReactProp(name = "hideAnnotationMenu")
     public void setHideAnnotationMenu(DocumentView documentView, @NonNull ReadableArray tools) {
         documentView.setHideAnnotationMenu(tools);
@@ -232,6 +237,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         PdfViewCtrlSettingsManager.setFollowSystemDarkMode(documentView.getContext(), followSystem);
     }
 
+    @ReactProp(name = "signSignatureFieldsWithStamps")
+    public void setSignSignatureFieldsWithStamps(DocumentView documentView, boolean signWithStamp) {
+        documentView.setSignSignatureFieldsWithStamps(signWithStamp);
+    }
+
+    @ReactProp(name = "annotationPermissionCheckEnabled")
+    public void setAnnotationPermissionCheckEnabled(DocumentView documentView, boolean annotPermissionCheckEnabled) {
+        documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -274,6 +289,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.flattenAnnotations(formsOnly);
         } else {
             throw new PDFNetException("", 0L, getName(), "flattenAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public String getDocumentPath(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getDocumentPath();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setToolMode", "Unable to find DocumentView.");
         }
     }
 
@@ -331,12 +355,39 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public boolean canExitViewer(int tag) throws PDFNetException {
+    public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.canExitViewer();
+            return documentView.handleBackButton();
         } else {
-            throw new PDFNetException("", 0L, getName(), "canExitViewer", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "handleBackButton", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setFlagForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setFlagForAnnotations(annotationFlagList);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+  
+    public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.selectAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setPropertyForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPropertyForAnnotation(annotId, pageNumber, propertyMap);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPropertyForAnnotation", "Unable to find DocumentView.");
         }
     }
 
@@ -349,6 +400,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableMap getPageCropBox(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageCropBox(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageCropBox", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean setCurrentPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.setCurrentPage(pageNumber);
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
+        }
+    }
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

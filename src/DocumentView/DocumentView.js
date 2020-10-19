@@ -30,6 +30,7 @@ export default class DocumentView extends PureComponent {
     longPressMenuItems: PropTypes.array,
     overrideLongPressMenuBehavior: PropTypes.array,
     onLongPressMenuPress: PropTypes.func,
+    longPressMenuEnabled: PropTypes.bool,
     annotationMenuItems: PropTypes.array,
     overrideAnnotationMenuBehavior: PropTypes.array,
     onAnnotationMenuPress: PropTypes.func,
@@ -41,6 +42,7 @@ export default class DocumentView extends PureComponent {
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
+    onFormFieldValueChanged: PropTypes.func,
     readOnly: PropTypes.bool,
     thumbnailViewEditingEnabled: PropTypes.bool,
     fitMode: PropTypes.string,
@@ -60,6 +62,8 @@ export default class DocumentView extends PureComponent {
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
     multiTabEnabled: PropTypes.bool,
+    signSignatureFieldsWithStamps: PropTypes.bool,
+    annotationPermissionCheckEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -98,6 +102,12 @@ export default class DocumentView extends PureComponent {
     			'annotations': event.nativeEvent.annotations,
     		});
     	}
+    } else if (event.nativeEvent.onFormFieldValueChanged) {
+      if (this.props.onFormFieldValueChanged) {
+        this.props.onFormFieldValueChanged({
+          'fields': event.nativeEvent.fields,
+        });
+      }
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError) {
         this.props.onDocumentError(event.nativeEvent.onDocumentError);
@@ -143,6 +153,14 @@ export default class DocumentView extends PureComponent {
     }
   }
 
+  getDocumentPath = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getDocumentPath(tag);
+    }
+    return Promise.resolve();
+  }
+  
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -169,6 +187,9 @@ export default class DocumentView extends PureComponent {
   importAnnotationCommand = (xfdfCommand, initialLoad) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
+      if (initialLoad === undefined) {
+        initialLoad = false;
+      }
       return DocumentViewManager.importAnnotationCommand(
         tag,
         xfdfCommand,
@@ -234,10 +255,50 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  canExitViewer = () => {
+  handleBackButton = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.canExitViewer(tag);
+      return DocumentViewManager.handleBackButton(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setFlagForAnnotations = (annotationFlagList) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+    }
+    return Promise.resolve();
+  }
+
+  selectAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.selectAnnotation(tag, id, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setPropertyForAnnotation(tag, id, pageNumber, propertyMap);
+    }
+    return Promise.resolve();
+  }
+
+  getPageCropBox = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageCropBox(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  setCurrentPage = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setCurrentPage(tag, pageNumber);
     }
     return Promise.resolve();
   }

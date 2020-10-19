@@ -61,6 +61,7 @@
             versionCode 1
             versionName "1.0"
     +       multiDexEnabled true
+    +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         }
 
         dependencies {
@@ -83,7 +84,14 @@
 	    // ...
 	}
 	```
-3. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+3. In your `android/gradle.properties` file. Add the following line to it:
+    ``` diff
+    # Add the PDFTRON_LICENSE_KEY variable here. 
+    # For trial purposes leave it blank.
+    # For production add a valid commercial license key.
+    PDFTRON_LICENSE_KEY=
+    ```
+4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
     ```diff
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -99,6 +107,11 @@
         ...
     +   android:largeHeap="true"
     +   android:usesCleartextTraffic="true">
+
+        <!-- Add license key in meta-data tag here. This should be inside the application tag. -->
+    +   <meta-data
+    +       android:name="pdftron_license_key"
+    +       android:value="${pdftronLicenseKey}"/>
 
         <activity
           android:name=".MainActivity"
@@ -117,7 +130,7 @@
     </manifest>
     ```
 
-4. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import androidx.multidex.MultiDexApplication;
@@ -126,12 +139,12 @@
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-5. Replace `App.js` with what is shown [here](#usage)
-6. Finally in the root project directory, run `react-native run-android`.
+6. Replace `App.js` with what is shown [here](#usage)
+7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add:
+1. Open `Podfile` in the `ios` folder, add the 3 middle lines to the `target 'MyApp' do / end` block:
 
     ```
     target 'MyApp' do
@@ -139,6 +152,14 @@
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
         pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
+    ```
+    **and**
+    remove or comment out the Flipper section:
+    ```
+    # use_flipper!
+    # post_install do |installer|
+    #   flipper_post_install(installer)
+    # end
     ```
 
 2. In the `ios` folder, run `pod install`.
@@ -343,6 +364,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [showSavedSignatures](#showsavedsignatures)
 - [isBase64String](#isbase64string)
 - [onAnnotationChanged](#onannotationchanged)
+- [onFormFieldValueChanged](#onformfieldvaluechanged)
 - [onAnnotationsSelected](#onannotationsselected)
 - [autoSaveEnabled](#autosaveenabled)
 - [annotationMenuItems](#annotationMenuItems)
@@ -351,6 +373,8 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [pageChangeOnTap](#pagechangeontap)
 - [useStylusAsPen](#usestylusaspen)
 - [multiTabEnabled](#multiTabEnabled)
+- [signSignatureFieldsWithStamps](#signsignaturefieldswithstamps)
+- [longPressMenuEnabled](#longPressMenuEnabled)
 
 ##### document
 string, required
@@ -413,7 +437,9 @@ bool, optional
 ##### isBase64String
 bool, optional
 
-If true, `document` prop will be treated as a base64 string.
+If true, `document` prop will be treated as a base64 string. 
+
+When viewing a document initialized with a base64 string (ie a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
 ##### padStatusBar
 bool, optional, android only
 
@@ -443,6 +469,11 @@ Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of `Config.AnnotationMenu` string constants
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
+##### longPressMenuEnabled
+bool, optional, default to true
+
+If true, the viewer will show the default menu on long press.
 
 ##### longPressMenuItems
 array of `Config.LongPressMenu` string constants, optional
@@ -489,13 +520,21 @@ Action | Param
 ##### pageChangeOnTap
 bool, optional, default to true
 ##### useStylusAsPen
-bool, optional, default to false on Android, true on iOS
+bool, optional, default to true
 
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
+
 ##### multiTabEnabled
 bool, optional, default to false
 
 If true, viewer will show multiple tabs for documents opened.
+
+##### signSignatureFieldsWithStamps
+bool, optional, default to false
+
+If true, signature field will be signed with image stamp.
+This is useful if you are saving XFDF to remote source.
+
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
 
@@ -507,7 +546,7 @@ string, required if `collabEnabled` is set to true
 ##### currentUserName
 string, optional
 ##### onExportAnnotationCommand
-function, optional, annotation command will only be given if `collabEnabled` is set to true
+function, optional, annotation command will be given on each edit
 ##### onAnnotationsSelected
 function, optional
 
@@ -526,6 +565,11 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
+
+##### annotationPermissionCheckEnabled
+bool, optional, default to false
+
+If true, annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
 
 Example:
 
@@ -550,8 +594,19 @@ import { DocumentView, Config } from 'react-native-pdftron';
   layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
+  annotationPermissionCheckEnabled={false}
 />
 ```
+
+##### onFormFieldValueChanged
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`
+
 
 #### Methods
 - [setToolMode](#settoolmode)
@@ -567,6 +622,13 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [importAnnotationCommand](#importannotationcommand)
 - [canExitViewer](#canexitviewer)
 - [closeAllTabs](#closealltabs)
+- [handleBackButton](#handlebackbutton)
+- [selectAnnotation](#selectAnnotation)
+- [setFlagForAnnotations](#setFlagForAnnotations)
+- [setPropertyForAnnotation](#setPropertyForAnnotation)
+- [getPageCropBox](#getPageCropBox)
+- [setCurrentPage](#setCurrentPage)
+- [getDocumentPath](#getDocumentPath)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -713,7 +775,6 @@ this._viewer.setValueForFields({
 ```
 
 ##### importAnnotationCommand
-This is used only if `collabEnabled` is set to true.
 Import remote annotation command to local document.
 
 Parameters:
@@ -725,10 +786,149 @@ initialLoad | bool | whether this is for initial load
 
 Returns a Promise.
 
-##### canExitViewer
+##### handleBackButton
 Android only.
-This is useful for custom back button handling on Android.
-This method will indicate whether you can do your custom handling or the viewer is still not done yet.
+
+```js
+this._viewer.handleBackButton().then((handled) => {
+  if (!handled) {
+    BackHandler.exitApp();
+  }
+});
+```
+
+##### selectAnnotation
+To select the specified annotation in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | the id of the target annotation
+pageNumber | integer | the page number where the targe annotation is located. It is 1-indexed
+
+Return a Promise.
+
+```js
+// select annotation in the current document.
+this._viewer.selectAnnotation('annotId1', 1);
+```
+
+##### setFlagForAnnotations
+To set flag for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationFlagList | array | A list of annotation flag operations
+
+Return a Promise.
+
+```js
+//  Set flag for annotations in the current document.
+this._viewer.setFlagForAnnotations([
+    {
+        id: 'annotId1',
+        pageNumber: 1,
+        flag: Config.AnnotationFlags.noView,
+        flagValue: true
+    },
+    {
+        id: 'annotId2',
+        pageNumber: 5,
+        flag: Config.AnnotationFlags.lockedContents,
+        flagValue: false
+    }
+]);
+```
+##### setPropertyForAnnotation
+To set properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+propertyMap | object | an object containing properties to be set. Available properties are listed below
+
+Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 2, x2: 3, y2: 4}
+contents | string | no | "contents"
+subject | string | yes | "subject"
+title | string | yes | "title"
+contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+
+Return a promise.
+
+```js
+// Set properties for annotation in the current document.
+this._viewer.setPropertyForAnnotation('Pdftron', 1, {
+  rect: {
+    x1: 1.1,    // left
+    y1: 3,      // bottom
+    x2: 100.9,  // right
+    y2: 99.8    // top
+  },
+  contents: 'Hello World',
+  subject: 'Sample',
+  title: 'set-prop-for-annot'
+});
+```
+
+
+##### getPageCropBox
+Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise.
+
+```js
+this._viewer.getPageCropBox(1).then((cropBox) => {
+  console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
+  console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
+  console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+##### setCurrentPage
+Set current page of the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Return a Promise (with a boolean that tells whether the setting process is successful).
+
+```js
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
+});
+```
+
+##### getDocumentPath
+Return the path of the current document.
+
+Return a Promise.
+
+```js
+this._viewer.getDocumentPath().then((path) => {
+  console.log('The path to current document is: ' + path);
+});
+```
 
 ##### closeAllTabs
 Closes all tabs in multi-tab environment.

@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -106,6 +107,20 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getDocumentPath(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String path = mDocumentViewInstance.getDocumentPath(tag);
+                    promise.resolve(path);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+    @ReactMethod
     public void setToolMode(final int tag, final String item) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -195,12 +210,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void canExitViewer(final int tag, final Promise promise) {
+    public void handleBackButton(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    boolean result = mDocumentViewInstance.canExitViewer(tag);
+                    boolean result = mDocumentViewInstance.handleBackButton(tag);
                     promise.resolve(result);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -224,6 +239,80 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
+    public void setFlagForAnnotations(final int tag, final ReadableArray annotationFlaglist, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setFlagForAnnotations(tag, annotationFlaglist);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void selectAnnotation(final int tag, final String annotId, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.selectAnnotation(tag, annotId, pageNumber);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setPropertyForAnnotation(final int tag, final String annotId, final int pageNumber, final ReadableMap propertyMap, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setPropertyForAnnotation(tag, annotId, pageNumber, propertyMap);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPageCropBox(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap box = mDocumentViewInstance.getPageCropBox(tag, pageNumber);
+                    promise.resolve(box);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setCurrentPage(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.setCurrentPage(tag, pageNumber);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);

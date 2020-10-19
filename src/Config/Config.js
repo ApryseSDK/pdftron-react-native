@@ -42,6 +42,7 @@ export default {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
     pan: 'Pan',
+    annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
     annotationCreateFreeHand: 'AnnotationCreateFreeHand',
     annotationCreateTextHighlight: 'AnnotationCreateTextHighlight',
@@ -119,4 +120,16 @@ export default {
   Actions: {
     linkPress: 'linkPress',
   },
+  AnnotationFlags: {
+    hidden: "hidden",
+    invisible: "invisible",
+    locked: "locked",
+    lockedContents: "lockedContents",
+    noRotate: "noRotate",
+    noView: "noView",
+    noZoom: "noZoom",
+    print: "print",
+    readOnly: "readOnly",
+    toggleNoView: "toggleNoView"
+  }
 };
