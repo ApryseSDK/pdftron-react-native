@@ -207,6 +207,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setMultiTabEnabled(multiTab);
     }
 
+    @ReactProp(name = "tabTitle")
+    public void setTabTitle(DocumentView documentView, String tabTitle) {
+        documentView.setTabTitle(tabTitle);
+    }
+
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);

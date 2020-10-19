@@ -151,6 +151,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private static final String KEY_Config_linkPress = "linkPress";
 
     private String mDocumentPath;
+    private String mTabTitle;
     private boolean mIsBase64;
     private File mTempFile;
 
@@ -259,6 +260,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     protected void buildViewer() {
         super.buildViewer();
         mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+        if (!Utils.isNullOrEmpty(mTabTitle)) {
+            mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+        }
     }
 
     public void setDocument(String path) {
@@ -442,6 +446,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     
     public void setMultiTabEnabled(boolean multiTab) {
         mBuilder = mBuilder.multiTabEnabled(multiTab);
+    }
+
+    public void setTabTitle(String tabTitle) {
+        mTabTitle = tabTitle;
     }
 
     public void setThumbnailViewEditingEnabled(boolean thumbnailViewEditingEnabled) {

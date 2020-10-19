@@ -62,6 +62,7 @@ export default class DocumentView extends PureComponent {
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
     multiTabEnabled: PropTypes.bool,
+    tabTitle: PropTypes.string,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
     ...ViewPropTypes,

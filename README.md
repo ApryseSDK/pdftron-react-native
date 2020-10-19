@@ -373,6 +373,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [pageChangeOnTap](#pagechangeontap)
 - [useStylusAsPen](#usestylusaspen)
 - [multiTabEnabled](#multiTabEnabled)
+- [tabTitle](#tabtitle)
 - [signSignatureFieldsWithStamps](#signsignaturefieldswithstamps)
 - [longPressMenuEnabled](#longPressMenuEnabled)
 
@@ -528,6 +529,9 @@ If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 bool, optional, default to false
 
 If true, viewer will show multiple tabs for documents opened.
+
+##### tabTitle
+string, optional, default to file name, takes effect when multiTabEnabled is true.
 
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
