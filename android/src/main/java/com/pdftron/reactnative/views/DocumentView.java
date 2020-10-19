@@ -65,6 +65,7 @@ import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
+import static com.pdftron.reactnative.utils.Constants.*;
 import com.pdftron.sdf.Obj;
 
 import org.apache.commons.io.FileUtils;
@@ -79,76 +80,6 @@ import java.util.Map;
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     private static final String TAG = DocumentView.class.getSimpleName();
-
-    // EVENTS
-    private static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
-    private static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
-    private static final String ON_PAGE_CHANGED = "onPageChanged";
-    private static final String ON_ZOOM_CHANGED = "onZoomChanged";
-    private static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
-    private static final String ON_DOCUMENT_ERROR = "onDocumentError";
-    private static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
-    private static final String ON_ANNOTATION_MENU_PRESS = "onAnnotationMenuPress";
-    private static final String ON_LONG_PRESS_MENU_PRESS = "onLongPressMenuPress";
-    private static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
-    private static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
-    private static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
-
-    private static final String PREV_PAGE_KEY = "previousPageNumber";
-    private static final String PAGE_CURRENT_KEY = "pageNumber";
-
-    private static final String ZOOM_KEY = "zoom";
-
-    private static final String KEY_LINK_BEHAVIOR_DATA = "url";
-
-    private static final String KEY_annotList = "annotList";
-    private static final String KEY_annotId = "id";
-    private static final String KEY_annotPage = "pageNumber";
-    private static final String KEY_annotRect = "rect";
-    private static final String KEY_annotFlag = "flag";
-    private static final String KEY_annotFlagValue = "flagValue";
-    private static final String KEY_annotSubject = "subject";
-    private static final String KEY_annotTitle = "title";
-    private static final String KEY_annotContents = "contents";
-    private static final String KEY_annotContentRect = "contentRect";
-
-    private static final String KEY_action = "action";
-    private static final String KEY_action_add = "add";
-    private static final String KEY_action_modify = "modify";
-    private static final String KEY_action_delete = "delete";
-    private static final String KEY_annotations = "annotations";
-    private static final String KEY_xfdfCommand = "xfdfCommand";
-    private static final String Key_fields = "fields";
-    private static final String Key_fieldName = "fieldName";
-    private static final String Key_fieldValue = "fieldValue";
-
-    private static final String KEY_annotationMenu = "annotationMenu";
-    private static final String KEY_longPressMenu = "longPressMenu";
-    private static final String KEY_longPressText = "longPressText";
-
-    private static final String KEY_data = "data";
-
-    private static final String KEY_x1 = "x1";
-    private static final String KEY_x2 = "x2";
-    private static final String KEY_y1 = "y1";
-    private static final String KEY_y2 = "y2";
-    private static final String KEY_width = "width";
-    private static final String KEY_height = "height";
-
-    private static final String KEY_annotFlagHidden = "hidden";
-    private static final String KEY_annotFlagInvisible = "invisible";
-    private static final String KEY_annotFlagLocked = "locked";
-    private static final String KEY_annotFlagLockedContents = "lockedContents";
-    private static final String KEY_annotFlagNoRotate = "noRotate";
-    private static final String KEY_flagNoView = "noView";
-    private static final String KEY_flagNoZoom = "noZoom";
-    private static final String kEY_flagPrint = "print";
-    private static final String KEY_flagReadOnly = "readOnly";
-    private static final String KEY_flagToggleNoView = "toggleNoView";
-    // EVENTS END
-
-    // Config keys
-    private static final String KEY_Config_linkPress = "linkPress";
 
     private String mDocumentPath;
     private boolean mIsBase64;
@@ -334,13 +265,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void setFitMode(String fitMode) {
         if (mPDFViewCtrlConfig != null) {
             PDFViewCtrl.PageViewMode mode = null;
-            if ("FitPage".equals(fitMode)) {
+            if (FIT_MODE_FIT_PAGE.equals(fitMode)) {
                 mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
-            } else if ("FitWidth".equals(fitMode)) {
+            } else if (FIT_MODE_FIT_WIDTH.equals(fitMode)) {
                 mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
-            } else if ("FitHeight".equals(fitMode)) {
+            } else if (FIT_MODE_FIT_HEIGHT.equals(fitMode)) {
                 mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
-            } else if ("Zoom".equals(fitMode)) {
+            } else if (FIT_MODE_ZOOM.equals(fitMode)) {
                 mode = PDFViewCtrl.PageViewMode.ZOOM;
             }
             if (mode != null) {
@@ -351,17 +282,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
     public void setLayoutMode(String layoutMode) {
         String mode = null;
-        if ("Single".equals(layoutMode)) {
+        if (LAYOUT_MODE_SINGLE.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_SINGLEPAGE_VALUE;
-        } else if ("Continuous".equals(layoutMode)) {
+        } else if (LAYOUT_MODE_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_CONTINUOUS_VALUE;
-        } else if ("Facing".equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_VALUE;
-        } else if ("FacingContinuous".equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_CONT_VALUE;
-        } else if ("FacingCover".equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING_OVER.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_VALUE;
-        } else if ("FacingCoverContinuous".equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING_OVER_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_CONT_VALUE;
         }
         Context context = getContext();
@@ -471,36 +402,36 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
-            if ("toolsButton".equals(item)) {
+            if (BUTTON_TOOLS.equals(item)) {
                 mBuilder = mBuilder.showAnnotationToolbarOption(false);
-            } else if ("searchButton".equals(item)) {
+            } else if (BUTTON_SEARCH.equals(item)) {
                 mBuilder = mBuilder.showSearchView(false);
-            } else if ("shareButton".equals(item)) {
+            } else if (BUTTON_SHARE.equals(item)) {
                 mBuilder = mBuilder.showShareOption(false);
-            } else if ("viewControlsButton".equals(item)) {
+            } else if (BUTTON_VIEW_CONTROLS.equals(item)) {
                 mBuilder = mBuilder.showDocumentSettingsOption(false);
-            } else if ("thumbnailsButton".equals(item)) {
+            } else if (BUTTON_THUMBNAILS.equals(item)) {
                 mBuilder = mBuilder.showThumbnailView(false);
-            } else if ("listsButton".equals(item)) {
+            } else if (BUTTON_LISTS.equals(item)) {
                 mBuilder = mBuilder
                         .showAnnotationsList(false)
                         .showOutlineList(false)
                         .showUserBookmarksList(false);
-            } else if ("thumbnailSlider".equals(item)) {
+            } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
-            } else if ("editPagesButton".equals(item)) {
+            } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
-            } else if ("printButton".equals(item)) {
+            } else if (BUTTON_PRINT.equals(item)) {
                 mBuilder = mBuilder.showPrintOption(false);
-            } else if ("closeButton".equals(item)) {
+            } else if (BUTTON_CLOSE.equals(item)) {
                 mBuilder = mBuilder.showCloseTabOption(false);
-            } else if ("saveCopyButton".equals(item)) {
+            } else if (BUTTON_SAVE_COPY.equals(item)) {
                 mBuilder = mBuilder.showSaveCopyOption(false);
-            } else if ("formToolsButton".equals(item)) {
+            } else if (BUTTON_FORM_TOOLS.equals(item)) {
                 mBuilder = mBuilder.showFormToolbarOption(false);
-            } else if ("fillSignToolsButton".equals(item)) {
+            } else if (BUTTON_FILL_SIGN_TOOLS.equals(item)) {
                 mBuilder = mBuilder.showFillAndSignToolbarOption(false);
-            } else if ("moreItemsButton".equals(item)) {
+            } else if (BUTTON_MORE_ITEMS.equals(item)) {
                 mBuilder = mBuilder
                         .showEditPagesOption(false)
                         .showPrintOption(false)
@@ -510,18 +441,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                         .showFillAndSignToolbarOption(false)
                         .showEditMenuOption(false)
                         .showReflowOption(false);
-            } else if ("outlineListButton".equals(item)) {
+            } else if (BUTTON_OUTLINE_LIST.equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
-            } else if ("annotationListButton".equals(item)) {
+            } else if (BUTTON_ANNOTATION_LIST.equals(item)) {
                 mBuilder = mBuilder.showAnnotationsList(false);
-            } else if ("userBookmarkListButton".equals(item)) {
+            } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
-            } else if ("reflowButton".equals(item)) {
+            } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
-            } else if ("editMenuButton".equals(item)) {
+            } else if (BUTTON_EDIT_MENU.equals(item)) {
                 mBuilder = mBuilder.showEditMenuOption(false);
-            } else if ("cropPageButton".equals(item)) {
+            } else if (BUTTON_CROP_PAGE.equals(item)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
             }
         }
@@ -541,71 +472,71 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     @Nullable
     private int convStringToAnnotType(String item) {
         int annotType = Annot.e_Unknown;
-        if ("freeHandToolButton".equals(item) || "AnnotationCreateFreeHand".equals(item)) {
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             annotType = Annot.e_Ink;
-        } else if ("highlightToolButton".equals(item) || "AnnotationCreateTextHighlight".equals(item)) {
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             annotType = Annot.e_Highlight;
-        } else if ("underlineToolButton".equals(item) || "AnnotationCreateTextUnderline".equals(item)) {
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             annotType = Annot.e_Underline;
-        } else if ("squigglyToolButton".equals(item) || "AnnotationCreateTextSquiggly".equals(item)) {
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
             annotType = Annot.e_Squiggly;
-        } else if ("strikeoutToolButton".equals(item) || "AnnotationCreateTextStrikeout".equals(item)) {
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
             annotType = Annot.e_StrikeOut;
-        } else if ("rectangleToolButton".equals(item) || "AnnotationCreateRectangle".equals(item)) {
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
             annotType = Annot.e_Square;
-        } else if ("ellipseToolButton".equals(item) || "AnnotationCreateEllipse".equals(item)) {
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
             annotType = Annot.e_Circle;
-        } else if ("lineToolButton".equals(item) || "AnnotationCreateLine".equals(item)) {
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
             annotType = Annot.e_Line;
-        } else if ("arrowToolButton".equals(item) || "AnnotationCreateArrow".equals(item)) {
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_ARROW;
-        } else if ("polylineToolButton".equals(item) || "AnnotationCreatePolyline".equals(item)) {
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
             annotType = Annot.e_Polyline;
-        } else if ("polygonToolButton".equals(item) || "AnnotationCreatePolygon".equals(item)) {
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
             annotType = Annot.e_Polygon;
-        } else if ("cloudToolButton".equals(item) || "AnnotationCreatePolygonCloud".equals(item)) {
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CLOUD;
-        } else if ("signatureToolButton".equals(item) || "AnnotationCreateSignature".equals(item)) {
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_SIGNATURE;
-        } else if ("freeTextToolButton".equals(item) || "AnnotationCreateFreeText".equals(item)) {
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
             annotType = Annot.e_FreeText;
-        } else if ("stickyToolButton".equals(item) || "AnnotationCreateSticky".equals(item)) {
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
             annotType = Annot.e_Text;
-        } else if ("calloutToolButton".equals(item) || "AnnotationCreateCallout".equals(item)) {
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CALLOUT;
-        } else if ("stampToolButton".equals(item) || "AnnotationCreateStamp".equals(item)) {
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
             annotType = Annot.e_Stamp;
-        } else if ("AnnotationCreateDistanceMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_RULER;
-        } else if ("AnnotationCreatePerimeterMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_PERIMETER_MEASURE;
-        } else if ("AnnotationCreateAreaMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_AREA_MEASURE;
-        } else if ("AnnotationCreateFileAttachment".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             annotType = Annot.e_FileAttachment;
-        } else if ("AnnotationCreateSound".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
             annotType = Annot.e_Sound;
-        } else if ("AnnotationCreateRedaction".equals(item) || "AnnotationCreateRedactionText".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item) || TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
             annotType = Annot.e_Redact;
-        } else if ("AnnotationCreateLink".equals(item) || "AnnotationCreateLinkText".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item) || TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             annotType = Annot.e_Link;
-        } else if ("TextSelect".equals(item)) {
+        } else if (TOOL_TEXT_SELECT.equals(item)) {
             annotType = Annot.e_Unknown;
-        } else if ("Pan".equals(item)) {
+        } else if (TOOL_PAN.equals(item)) {
             annotType = Annot.e_Unknown;
-        } else if ("AnnotationEdit".equals(item)) {
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
             annotType = Annot.e_Unknown;
-        } else if ("FormCreateTextField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
-        } else if ("FormCreateCheckboxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
-        } else if ("FormCreateSignatureField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
-        } else if ("FormCreateRadioField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
-        } else if ("FormCreateComboBoxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
-        } else if ("FormCreateListBoxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_TOOL_BOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
         }
         return annotType;
@@ -614,79 +545,79 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     @Nullable
     private ToolManager.ToolMode convStringToToolMode(String item) {
         ToolManager.ToolMode mode = null;
-        if ("freeHandToolButton".equals(item) || "AnnotationCreateFreeHand".equals(item)) {
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             mode = ToolManager.ToolMode.INK_CREATE;
-        } else if ("highlightToolButton".equals(item) || "AnnotationCreateTextHighlight".equals(item)) {
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_HIGHLIGHT;
-        } else if ("underlineToolButton".equals(item) || "AnnotationCreateTextUnderline".equals(item)) {
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_UNDERLINE;
-        } else if ("squigglyToolButton".equals(item) || "AnnotationCreateTextSquiggly".equals(item)) {
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SQUIGGLY;
-        } else if ("strikeoutToolButton".equals(item) || "AnnotationCreateTextStrikeout".equals(item)) {
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_STRIKEOUT;
-        } else if ("rectangleToolButton".equals(item) || "AnnotationCreateRectangle".equals(item)) {
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
             mode = ToolManager.ToolMode.RECT_CREATE;
-        } else if ("ellipseToolButton".equals(item) || "AnnotationCreateEllipse".equals(item)) {
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
             mode = ToolManager.ToolMode.OVAL_CREATE;
-        } else if ("lineToolButton".equals(item) || "AnnotationCreateLine".equals(item)) {
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
             mode = ToolManager.ToolMode.LINE_CREATE;
-        } else if ("arrowToolButton".equals(item) || "AnnotationCreateArrow".equals(item)) {
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
             mode = ToolManager.ToolMode.ARROW_CREATE;
-        } else if ("polylineToolButton".equals(item) || "AnnotationCreatePolyline".equals(item)) {
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
             mode = ToolManager.ToolMode.POLYLINE_CREATE;
-        } else if ("polygonToolButton".equals(item) || "AnnotationCreatePolygon".equals(item)) {
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
             mode = ToolManager.ToolMode.POLYGON_CREATE;
-        } else if ("cloudToolButton".equals(item) || "AnnotationCreatePolygonCloud".equals(item)) {
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
             mode = ToolManager.ToolMode.CLOUD_CREATE;
-        } else if ("signatureToolButton".equals(item) || "AnnotationCreateSignature".equals(item)) {
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
             mode = ToolManager.ToolMode.SIGNATURE;
-        } else if ("freeTextToolButton".equals(item) || "AnnotationCreateFreeText".equals(item)) {
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_CREATE;
-        } else if ("stickyToolButton".equals(item) || "AnnotationCreateSticky".equals(item)) {
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_ANNOT_CREATE;
-        } else if ("calloutToolButton".equals(item) || "AnnotationCreateCallout".equals(item)) {
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
             mode = ToolManager.ToolMode.CALLOUT_CREATE;
-        } else if ("stampToolButton".equals(item) || "AnnotationCreateStamp".equals(item)) {
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
             mode = ToolManager.ToolMode.STAMPER;
-        } else if ("AnnotationCreateRubberStamp".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
             mode = ToolManager.ToolMode.RUBBER_STAMPER;
-        } else if ("AnnotationCreateDistanceMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
             mode = ToolManager.ToolMode.RULER_CREATE;
-        } else if ("AnnotationCreatePerimeterMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
             mode = ToolManager.ToolMode.PERIMETER_MEASURE_CREATE;
-        } else if ("AnnotationCreateAreaMeasurement".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
-        } else if ("AnnotationCreateFileAttachment".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
-        } else if ("AnnotationCreateSound".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
             mode = ToolManager.ToolMode.SOUND_CREATE;
-        } else if ("AnnotationCreateRedaction".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
             mode = ToolManager.ToolMode.RECT_REDACTION;
-        } else if ("AnnotationCreateLink".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
             mode = ToolManager.ToolMode.RECT_LINK;
-        } else if ("AnnotationCreateRedactionText".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_REDACTION;
-        } else if ("AnnotationCreateLinkText".equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_LINK_CREATE;
-        } else if ("TextSelect".equals(item)) {
+        } else if (TOOL_TEXT_SELECT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_SELECT;
-        } else if ("Pan".equals(item)) {
+        } else if (TOOL_PAN.equals(item)) {
             mode = ToolManager.ToolMode.PAN;
-        } else if ("AnnotationEdit".equals(item)) {
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
             mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
-        } else if ("FormCreateTextField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_TEXT_FIELD_CREATE;
-        } else if ("FormCreateCheckboxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_CHECKBOX_CREATE;
-        } else if ("FormCreateSignatureField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_SIGNATURE_CREATE;
-        } else if ("FormCreateRadioField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_RADIO_GROUP_CREATE;
-        } else if ("FormCreateComboBoxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_COMBO_BOX_CREATE;
-        } else if ("FormCreateListBoxField".equals(item)) {
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_LIST_BOX_CREATE;
-        } else if ("AnnotationEraserTool".equals(item)) {
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             mode = ToolManager.ToolMode.INK_ERASER;
         }
         return mode;
@@ -710,39 +641,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private String convQuickMenuIdToString(int id) {
         String menuStr = null;
         if (id == R.id.qm_appearance) {
-            menuStr = "style";
+            menuStr = MENU_ID_STRING_STYLE;
         } else if (id == R.id.qm_note) {
-            menuStr = "note";
+            menuStr = MENU_ID_STRING_NOTE;
         } else if (id == R.id.qm_copy) {
-            menuStr = "copy";
+            menuStr = MENU_ID_STRING_COPY;
         } else if (id == R.id.qm_delete) {
-            menuStr = "delete";
+            menuStr = MENU_ID_STRING_DELETE;
         } else if (id == R.id.qm_flatten) {
-            menuStr = "flatten";
+            menuStr = MENU_ID_STRING_FLATTEN;
         } else if (id == R.id.qm_text) {
-            menuStr = "editText";
+            menuStr = MENU_ID_STRING_TEXT;
         } else if (id == R.id.qm_edit) {
-            menuStr = "editInk";
+            menuStr = MENU_ID_STRING_EDIT_INK;
         } else if (id == R.id.qm_search) {
-            menuStr = "search";
+            menuStr = MENU_ID_STRING_SEARCH;
         } else if (id == R.id.qm_share) {
-            menuStr = "share";
+            menuStr = MENU_ID_STRING_SHARE;
         } else if (id == R.id.qm_type) {
-            menuStr = "markupType";
-        } else if (id == R.id.qm_tts) {
-            menuStr = "textToSpeech";
+            menuStr = MENU_ID_STRING_MARKUP_TYPE;
         } else if (id == R.id.qm_screencap_create) {
-            menuStr = "screenCapture";
+            menuStr = MENU_ID_STRING_SCREEN_CAPTURE;
         } else if (id == R.id.qm_play_sound) {
-            menuStr = "playSound";
+            menuStr = MENU_ID_STRING_PLAY_SOUND;
         } else if (id == R.id.qm_open_attachment) {
-            menuStr = "openAttachment";
+            menuStr = MENU_ID_STRING_OPEN_ATTACHMENT;
         } else if (id == R.id.qm_tts) {
-            menuStr = "read";
-        } else if (id == R.id.qm_share) {
-            menuStr = "share";
-        } else if (id == R.id.qm_search) {
-            menuStr = "search";
+            menuStr = MENU_ID_STRING_READ;
+        } else if (id == R.id.qm_calibrate) {
+            menuStr = MENU_ID_STRING_CALIBRATE;
         }
         return menuStr;
     }
