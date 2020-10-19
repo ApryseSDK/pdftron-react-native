@@ -518,8 +518,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)
-:(NSString *)toolMode
+- (void)setToolMode:(NSString *)toolMode
 {
     if (toolMode.length == 0) {
         return;
@@ -1662,6 +1661,7 @@ NS_ASSUME_NONNULL_END
         PTEditMenuItemTitleKey: editString,
         PTFlattenMenuItemTitleKey: PTFlattenMenuItemIdentifierKey,
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
+        PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
