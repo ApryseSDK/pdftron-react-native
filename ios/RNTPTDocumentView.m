@@ -1678,7 +1678,7 @@ NS_ASSUME_NONNULL_END
     for (UIMenuItem *menuItem in menuController.menuItems) {
         NSString *menuItemId = localizedMap[menuItem.title];
         
-        if (self.annotationMenuItems.count == 0) {
+        if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
         else {
