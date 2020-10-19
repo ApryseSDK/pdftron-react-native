@@ -46,6 +46,16 @@ NS_ASSUME_NONNULL_END
     [super openDocumentWithURL:url password:password];
 }
 
+- (void)openDocumentWithPDFDoc:(PTPDFDoc *)document
+{
+    self.local = YES;
+    self.documentLoaded = NO;
+    self.needsDocumentLoaded = NO;
+    self.needsRemoteDocumentLoaded = NO;
+
+    [super openDocumentWithPDFDoc:document];
+}
+
 - (BOOL)isTopToolbarEnabled
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerIsTopToolbarEnabled:)]) {
