@@ -1672,6 +1672,7 @@ NS_ASSUME_NONNULL_END
         PTEditMenuItemTitleKey: editString,
         PTFlattenMenuItemTitleKey: PTFlattenMenuItemIdentifierKey,
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
+        PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
@@ -1688,7 +1689,7 @@ NS_ASSUME_NONNULL_END
     for (UIMenuItem *menuItem in menuController.menuItems) {
         NSString *menuItemId = localizedMap[menuItem.title];
         
-        if (self.annotationMenuItems.count == 0) {
+        if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
         else {
@@ -2216,6 +2217,15 @@ NS_ASSUME_NONNULL_END
     return [self.pdfViewCtrl SetCurrentPage:(int)pageNumber];
 }
 
+#pragma mark - Get Document Path
+
+- (NSString *) getDocumentPath {
+    if (![self isBase64String]) {
+        return self.documentViewController.coordinatedDocument.fileURL.path;
+    } else {
+        return nil;
+    }
+}
 
 #pragma mark - Helper
 

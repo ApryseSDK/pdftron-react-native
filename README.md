@@ -448,7 +448,9 @@ bool, optional
 ##### isBase64String
 bool, optional
 
-If true, `document` prop will be treated as a base64 string.
+If true, `document` prop will be treated as a base64 string. 
+
+When viewing a document initialized with a base64 string (ie a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
 ##### padStatusBar
 bool, optional, android only
 
@@ -642,6 +644,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [getPageCropBox](#getPageCropBox)
 - [importBookmarkJson](#importBookmarkJson)
 - [setCurrentPage](#setCurrentPage)
+- [getDocumentPath](#getDocumentPath)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -944,6 +947,17 @@ this._viewer.setCurrentPage(4).then((success) => {
   if (success) {
     console.log("Current page is set to 4.");
   }
+});
+```
+
+##### getDocumentPath
+Return the path of the current document.
+
+Return a Promise.
+
+```js
+this._viewer.getDocumentPath().then((path) => {
+  console.log('The path to current document is: ' + path);
 });
 ```
 
