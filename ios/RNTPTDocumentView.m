@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_END
 {
     _topToolbarEnabled = YES;
     _bottomToolbarEnabled = YES;
+    _hideToolbarsOnTap = YES;
     
     _pageIndicatorEnabled = YES;
     _pageIndicatorShowsOnPageChange = YES;
@@ -1119,6 +1120,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHideToolbarsOnTap:(BOOL)hideToolbarsOnTap
+{
+    _hideToolbarsOnTap = hideToolbarsOnTap;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Page indicator
 
 -(void)setPageIndicatorEnabled:(BOOL)pageIndicatorEnabled
@@ -1211,12 +1219,20 @@ NS_ASSUME_NONNULL_END
         self.documentViewController.hidesControlsOnTap = YES;
         self.documentViewController.controlsHidden = NO;
     }
-    const BOOL translucent = self.documentViewController.hidesControlsOnTap;
+    if (self.topToolbarEnabled) {
+        self.documentViewController.controlsHidden = NO;
+    } else {
+        self.documentViewController.controlsHidden = YES;
+    }
+    const BOOL translucent = self.topToolbarEnabled;
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
     
     // Bottom toolbar.
     self.documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    
+    self.documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
+    self.documentViewController.pageFitsBetweenBars = !self.hideToolbarsOnTap;
     
     // Page indicator.
     self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;

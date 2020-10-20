@@ -360,6 +360,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [pageNumber](#pagenumber)
 - [topToolbarEnabled](#toptoolbarenabled)
 - [bottomToolbarEnabled](#bottomtoolbarenabled)
+- [hideToolbarsOnTap](#hidetoolbarsontap)
 - [pageIndicatorEnabled](#pageindicatorenabled)
 - [showSavedSignatures](#showsavedsignatures)
 - [isBase64String](#isbase64string)
@@ -429,6 +430,11 @@ pageNumber | int | the current page number
 bool, optional
 ##### bottomToolbarEnabled
 bool, optional
+##### hideToolbarsOnTap
+bool, optional
+
+Whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. The default value is `true`. When `false`, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
+
 ##### pageIndicatorEnabled
 bool, optional
 ##### showSavedSignatures
