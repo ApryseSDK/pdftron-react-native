@@ -200,6 +200,7 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 @property (nonatomic, assign) BOOL topToolbarEnabled;
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
+@property (nonatomic, assign) BOOL hideToolbarsOnTap;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;

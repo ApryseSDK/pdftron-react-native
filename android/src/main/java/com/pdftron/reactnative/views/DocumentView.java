@@ -258,6 +258,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
     }
 
+    public void setHideToolbarsOnTap(boolean hideToolbarsOnTap) {
+        mBuilder = mBuilder.permanentTopToolbar(!hideToolbarsOnTap);
+    }
+
     public void setReadOnly(boolean readOnly) {
         mBuilder = mBuilder.documentEditingEnabled(!readOnly);
     }
