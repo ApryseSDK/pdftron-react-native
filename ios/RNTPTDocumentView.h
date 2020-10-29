@@ -289,4 +289,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 @end
 
+
+@interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
 NS_ASSUME_NONNULL_END
