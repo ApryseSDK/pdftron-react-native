@@ -881,7 +881,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Annotation Flag
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList
 {
     if (annotationFlagList.count == 0) {
         return;
@@ -983,7 +983,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map
 {
     PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
@@ -2089,7 +2089,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Set Property for Annotation
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
     
     NSError *error;
     

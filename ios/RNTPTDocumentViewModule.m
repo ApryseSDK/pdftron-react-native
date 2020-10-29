@@ -178,14 +178,14 @@ RCT_REMAP_METHOD(setFlagForFields,
     }
 }
 
-RCT_REMAP_METHOD(setValueForFields,
-                 setValueForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setValuesForFields,
+                 setValuesForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
                  map:(NSDictionary<NSString *, id> *)map
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setValueForFieldsForDocumentViewTag:tag map:map];
+        [[self documentViewManager] setValuesForFieldsForDocumentViewTag:tag map:map];
         resolve(nil);
     }
     @catch (NSException *exception) {
@@ -193,14 +193,14 @@ RCT_REMAP_METHOD(setValueForFields,
     }
 }
 
-RCT_REMAP_METHOD(setFlagForAnnotations,
-                 setFlagForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setFlagsForAnnotations,
+                 setFlagsForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  annotationFlagList:(NSArray *)annotationFlagList
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setFlagForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
+        [[self documentViewManager] setFlagsForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
         resolve(nil);
     }
     @catch (NSException *exception) {
@@ -224,8 +224,8 @@ RCT_REMAP_METHOD(selectAnnotation,
     }
 }
 
-RCT_REMAP_METHOD(setPropertyForAnnotation,
-                 setPropertyForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setPropertiesForAnnotation,
+                 setPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
                  annotationId:(NSString *)annotationId
                  pageNumber:(NSInteger)pageNumber
                  propertyMap:(NSDictionary *)propertyMap
@@ -233,7 +233,7 @@ RCT_REMAP_METHOD(setPropertyForAnnotation,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setPropertyForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        [[self documentViewManager] setPropertiesForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
         resolve(nil);
     }
     @catch (NSException *exception) {

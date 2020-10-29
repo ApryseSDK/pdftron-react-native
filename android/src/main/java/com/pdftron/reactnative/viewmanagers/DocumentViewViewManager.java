@@ -337,12 +337,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setValueForFields(int tag, ReadableMap map) throws PDFNetException {
+    public void setValuesForFields(int tag, ReadableMap map) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setValueForFields(map);
+            documentView.setValuesForFields(map);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setValueForFields", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setValuesForFields", "Unable to find DocumentView.");
         }
     }
 
@@ -364,12 +364,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setFlagForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
+    public void setFlagsForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setFlagForAnnotations(annotationFlagList);
+            documentView.setFlagsForAnnotations(annotationFlagList);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setFlagsForAnnotation", "Unable to find DocumentView.");
         }
     }
   
@@ -382,12 +382,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setPropertyForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+    public void setPropertiesForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setPropertyForAnnotation(annotId, pageNumber, propertyMap);
+            documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setPropertyForAnnotation", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
         }
     }
 

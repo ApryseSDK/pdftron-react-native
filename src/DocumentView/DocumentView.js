@@ -247,10 +247,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setValuesForFields.
+  * 
+  */
   setValueForFields = (fieldsMap) => {
+    return this.setValuesForFields(fieldsMap);
+  }
+
+  setValuesForFields = (fieldsMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
-      return DocumentViewManager.setValueForFields(tag, fieldsMap);
+      return DocumentViewManager.setValuesForFields(tag, fieldsMap);
     }
     return Promise.resolve();
   }
@@ -263,10 +271,19 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  
+  /**
+  * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
+  * 
+  */
   setFlagForAnnotations = (annotationFlagList) => {
+    return this.setFlagsForAnnotations(annotationFlagList);  
+  }
+  
+  setFlagsForAnnotations = (annotationFlagList) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+      return DocumentViewManager.setFlagsForAnnotations(tag, annotationFlagList);
     }
     return Promise.resolve();
   }
@@ -279,10 +296,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
+  * 
+  */
   setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
+    return setPropertiesForAnnotation(id, pageNumber, propertyMap);
+  }
+
+  setPropertiesForAnnotation = (id, pageNumber, propertyMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setPropertyForAnnotation(tag, id, pageNumber, propertyMap);
+      return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
     }
     return Promise.resolve();
   }

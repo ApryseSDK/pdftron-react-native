@@ -1514,7 +1514,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
-    public void setValueForFields(ReadableMap readableMap) throws PDFNetException {
+    public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
 
@@ -1658,7 +1658,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return false;
     }
 
-    public void setPropertyForAnnotation(String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+    public void setPropertiesForAnnotation(String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         ToolManager toolManager = getToolManager();
 
@@ -1738,7 +1738,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         }
     }
 
-    public void setFlagForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
+    public void setFlagsForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         ToolManager toolManager = getToolManager();
         int flagCount = annotationFlagList.size();

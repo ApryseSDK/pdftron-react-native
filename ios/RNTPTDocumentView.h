@@ -273,13 +273,13 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList;
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
