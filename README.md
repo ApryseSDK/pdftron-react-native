@@ -753,6 +753,8 @@ this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.Rea
 ##### setValuesForFields
 Set field values on one or more form fields.
 
+Note: the old function `setValueForFields` is deprecated. Please use this one.
+
 Parameters:
 
 Name | Type | Description
@@ -815,6 +817,8 @@ this._viewer.selectAnnotation('annotId1', 1);
 ##### setFlagsForAnnotations
 To set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
 
+Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
+
 Parameters:
 
 Name | Type | Description
@@ -842,6 +846,8 @@ this._viewer.setFlagsForAnnotations([
 ```
 ##### setPropertiesForAnnotation
 To set properties for specified annotation in the current document, if it is valid. 
+
+Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
 Parameters:
 
