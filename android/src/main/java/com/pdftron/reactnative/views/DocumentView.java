@@ -164,13 +164,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             throw new IllegalStateException("FragmentActivity required.");
         }
 
-        mToolManagerBuilder = ToolManagerBuilder.from().setOpenToolbar(true);
+        mToolManagerBuilder = ToolManagerBuilder.from()
+                .setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
         mBuilder
                 .fullscreenModeEnabled(false)
                 .multiTabEnabled(false)
                 .showCloseTabOption(false)
-                .useSupportActionBar(false);
+                .useSupportActionBar(false)
+                .skipReadOnlyCheck(true);
     }
 
     @Override
