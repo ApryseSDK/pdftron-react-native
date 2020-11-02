@@ -39,6 +39,7 @@ export default class DocumentView extends PureComponent {
     onBehaviorActivated: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
+    hideToolbarsOnTap: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
@@ -152,6 +153,14 @@ export default class DocumentView extends PureComponent {
     }
   }
 
+  getDocumentPath = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getDocumentPath(tag);
+    }
+    return Promise.resolve();
+  }
+  
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

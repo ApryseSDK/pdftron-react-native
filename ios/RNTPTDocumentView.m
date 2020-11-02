@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_END
 {
     _topToolbarEnabled = YES;
     _bottomToolbarEnabled = YES;
+    _hideToolbarsOnTap = YES;
     
     _pageIndicatorEnabled = YES;
     _pageIndicatorShowsOnPageChange = YES;
@@ -1119,6 +1120,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHideToolbarsOnTap:(BOOL)hideToolbarsOnTap
+{
+    _hideToolbarsOnTap = hideToolbarsOnTap;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Page indicator
 
 -(void)setPageIndicatorEnabled:(BOOL)pageIndicatorEnabled
@@ -1211,12 +1219,20 @@ NS_ASSUME_NONNULL_END
         self.documentViewController.hidesControlsOnTap = YES;
         self.documentViewController.controlsHidden = NO;
     }
-    const BOOL translucent = self.documentViewController.hidesControlsOnTap;
+    if (self.topToolbarEnabled) {
+        self.documentViewController.controlsHidden = NO;
+    } else {
+        self.documentViewController.controlsHidden = YES;
+    }
+    const BOOL translucent = self.topToolbarEnabled;
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
     
     // Bottom toolbar.
     self.documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    
+    self.documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
+    self.documentViewController.pageFitsBetweenBars = !self.hideToolbarsOnTap;
     
     // Page indicator.
     self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
@@ -1661,6 +1677,7 @@ NS_ASSUME_NONNULL_END
         PTEditMenuItemTitleKey: editString,
         PTFlattenMenuItemTitleKey: PTFlattenMenuItemIdentifierKey,
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
+        PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
@@ -1677,7 +1694,7 @@ NS_ASSUME_NONNULL_END
     for (UIMenuItem *menuItem in menuController.menuItems) {
         NSString *menuItemId = localizedMap[menuItem.title];
         
-        if (self.annotationMenuItems.count == 0) {
+        if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
         else {
@@ -2175,6 +2192,15 @@ NS_ASSUME_NONNULL_END
     return [self.pdfViewCtrl SetCurrentPage:(int)pageNumber];
 }
 
+#pragma mark - Get Document Path
+
+- (NSString *) getDocumentPath {
+    if (![self isBase64String]) {
+        return self.documentViewController.coordinatedDocument.fileURL.path;
+    } else {
+        return nil;
+    }
+}
 
 #pragma mark - Helper
 

@@ -107,6 +107,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setBottomToolbarEnabled(bottomToolbarEnabled);
     }
 
+    @ReactProp(name = "hideToolbarsOnTap")
+    public void setHideToolbarsOnTap(DocumentView documentView, boolean hideToolbarsOnTap) {
+        documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
+    }
+
     @ReactProp(name = "pageIndicatorEnabled")
     public void setPageIndicatorEnabled(DocumentView documentView, boolean pageIndicatorEnabled) {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
@@ -284,6 +289,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.flattenAnnotations(formsOnly);
         } else {
             throw new PDFNetException("", 0L, getName(), "flattenAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public String getDocumentPath(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getDocumentPath();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setToolMode", "Unable to find DocumentView.");
         }
     }
 

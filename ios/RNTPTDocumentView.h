@@ -119,6 +119,7 @@ static NSString * const PTFlattenMenuItemTitleKey = @"Flatten";
 static NSString * const PTOpenMenuItemTitleKey = @"Open";
 static NSString * const PTShareMenuItemTitleKey = @"Share";
 static NSString * const PTReadMenuItemTitleKey = @"Read";
+static NSString * const PTCalibrateMenuItemTitleKey = @"Calibrate";
 
 static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
@@ -132,6 +133,7 @@ static NSString * const PTFlattenMenuItemIdentifierKey = @"flatten";
 static NSString * const PTOpenMenuItemIdentifierKey = @"OpenAttachment";
 static NSString * const PTShareMenuItemIdentifierKey = @"share";
 static NSString * const PTReadMenuItemIdentifierKey = @"read";
+static NSString * const PTCalibrateMenuItemIdentifierKey = @"calibrate";
 
 static NSString * const PTHighlightWhiteListKey = @"Highlight";
 static NSString * const PTStrikeoutWhiteListKey = @"Strikeout";
@@ -198,6 +200,7 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 @property (nonatomic, assign) BOOL topToolbarEnabled;
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
+@property (nonatomic, assign) BOOL hideToolbarsOnTap;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
@@ -256,6 +259,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 - (BOOL)commitTool;
 
 - (int)getPageCount;
+
+- (NSString *)getDocumentPath;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 - (void)importAnnotations:(NSString *)xfdfString;

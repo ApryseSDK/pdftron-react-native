@@ -106,10 +106,11 @@ export default {
     search: 'search',
     share: 'share',
     markupType: 'markupType',
-    textToSpeech: 'textToSpeech',
+    read: 'read',
     screenCapture: 'screenCapture',
     playSound: 'playSound',
     openAttachment: 'openAttachment',
+    calibrate: 'calibrate',
   },
   LongPressMenu: {
     copy: 'copy',

@@ -17,6 +17,8 @@
 
 - (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
+- (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
+
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
