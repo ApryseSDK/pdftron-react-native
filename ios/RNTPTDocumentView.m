@@ -2,6 +2,7 @@
 
 #import "RNTPTDocumentViewController.h"
 #import "RNTPTCollaborationDocumentViewController.h"
+#import "RNTPTDocumentController.h"
 
 #include <objc/runtime.h>
 
@@ -20,9 +21,9 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication>
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication>
 
-@property (nonatomic, nullable) PTDocumentViewController *documentViewController;
+@property (nonatomic, nullable) PTDocumentBaseViewController *documentViewController;
 
 @property (nonatomic, readonly, nullable) PTPDFViewCtrl *pdfViewCtrl;
 @property (nonatomic, readonly, nullable) PTToolManager *toolManager;
@@ -30,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) RNTPTDocumentViewController *rnt_documentViewController;
 
 @property (nonatomic, readonly, nullable) RNTPTCollaborationDocumentViewController *rnt_collabDocumentViewController;
+
+@property (nonatomic, readonly, nullable) RNTPTDocumentController *rnt_documentController;
 
 @property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
 
@@ -185,13 +188,26 @@ NS_ASSUME_NONNULL_END
 
 - (void)loadDocumentViewController
 {
+    BOOL isNewUIEnabled = YES;
     if (!self.documentViewController) {
-        if ([self isCollabEnabled]) {
-            self.documentViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
+        if (isNewUIEnabled) {
+            RNTPTDocumentController *viewController = [[RNTPTDocumentController alloc] init];
+            viewController.delegate = self;
+            
+            self.documentViewController = viewController;
         } else {
-            self.documentViewController = [[RNTPTDocumentViewController alloc] init];
+            if ([self isCollabEnabled]) {
+                RNTPTCollaborationDocumentViewController *collaborationViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
+                collaborationViewController.delegate = self;
+                
+                self.documentViewController = collaborationViewController;
+            } else {
+                RNTPTDocumentViewController *viewController = [[RNTPTDocumentViewController alloc] init];
+                viewController.delegate = self;
+                
+                self.documentViewController = viewController;
+            }
         }
-        self.documentViewController.delegate = self;
         
         [self applyViewerSettings];
     }
@@ -348,7 +364,8 @@ NS_ASSUME_NONNULL_END
     NSDictionary *hideElementActions = @{
         PTToolsButtonKey:
             ^{
-                self.documentViewController.annotationToolbarButtonHidden = YES;
+                self.rnt_documentViewController.annotationToolbarButtonHidden = YES;
+                self.rnt_collabDocumentViewController.annotationToolbarButtonHidden = YES;
             },
         PTSearchButtonKey:
             ^{
@@ -1274,7 +1291,7 @@ NS_ASSUME_NONNULL_END
     
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
-    if (@available(iOS 13.0, *)) {
+    if (@available(iOS 13.1, *)) {
         pencilTool = [PTPencilDrawingCreate class];
     }
     self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
@@ -1500,6 +1517,21 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+#pragma mark - <PTDocumentControllerDelegate>
+
+//- (BOOL)documentController:(PTDocumentController *)documentController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+//{
+//    // Don't export the downloaded file (ie. keep using the cache file).
+//    return NO;
+//}
+
+- (BOOL)documentController:(PTDocumentController *)documentController shouldDeleteCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+{
+    // Don't delete the cache file.
+    // (This will only be called if -documentController:shouldExportCachedDocumentAtURL: returns YES)
+    return NO;
+}
+
 #pragma mark - <PTToolManagerDelegate>
 
 - (UIViewController *)viewControllerForToolManager:(PTToolManager *)toolManager
@@ -1564,7 +1596,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
-- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController
+- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController
 {
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
@@ -1581,7 +1613,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)rnt_documentViewControllerDidZoom:(PTDocumentViewController *)documentViewController
+- (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController
 {
     const double zoom = self.pdfViewCtrl.zoom * self.pdfViewCtrl.zoomScale;
     
@@ -1595,7 +1627,7 @@ NS_ASSUME_NONNULL_END
     return !self.continuousAnnotationEditing;
 }
 
-- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentViewController *)documentViewController
+- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentBaseViewController *)documentViewController
 {
     return self.topToolbarEnabled;
 }
@@ -1637,7 +1669,7 @@ NS_ASSUME_NONNULL_END
     return [annotationData copy];
 }
 
-- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
+- (void)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
 {
     NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
     
@@ -1646,7 +1678,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
 {
     __block PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
     
@@ -1722,7 +1754,7 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
 {
     if (!self.longPressMenuEnabled) {
         menuController.menuItems = nil;
@@ -1847,6 +1879,15 @@ NS_ASSUME_NONNULL_END
 #pragma mark - <PTDocumentViewControllerDelegate>
 
 - (void)documentViewController:(PTDocumentViewController *)documentViewController didFailToOpenDocumentWithError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
+        [self.delegate documentError:self error:error.localizedFailureReason];
+    }
+}
+
+#pragma mark - <PTDocumentControllerDelegate>
+
+- (void)documentController:(PTDocumentController *)documentController didFailToOpenDocumentWithError:(NSError *)error
 {
     if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
         [self.delegate documentError:self error:error.localizedFailureReason];
