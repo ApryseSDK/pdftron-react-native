@@ -258,6 +258,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (BOOL)commitTool;
 
+- (void)setToolColor:(NSString *)color toolType:(NSString*)toolType;
+
 - (int)getPageCount;
 
 - (NSString *)getDocumentPath;
