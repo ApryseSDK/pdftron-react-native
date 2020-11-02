@@ -17,6 +17,8 @@
 
 - (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
+- (void)setToolThicknessForDocumentViewTag:(NSNumber *)tag thickness:(double)thickness toolType:(NSString*)toolType;
+
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;

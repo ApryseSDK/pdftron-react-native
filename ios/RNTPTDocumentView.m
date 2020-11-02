@@ -645,6 +645,12 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+- (void)setToolThickness:(double)thickness toolType:(NSString*)toolType
+{
+    PTExtendedAnnotType annotationType = [self reactAnnotationNameToAnnotType:toolType];
+    [PTColorDefaults setDefaultBorderThickness:thickness forAnnotType:annotationType];
+}
+
 - (void)setPageNumber:(int)pageNumber
 {
     if (_pageNumber == pageNumber) {

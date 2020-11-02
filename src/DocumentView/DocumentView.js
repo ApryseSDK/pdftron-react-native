@@ -176,6 +176,13 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setToolThickness = (thickness, toolType) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setToolThickness(tag, thickness, toolType);
+    }
+  }
+
   getPageCount = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
