@@ -96,6 +96,17 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_RUBBER_STAMP = "AnnotationCreateRubberStamp";
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
 
+    // Toolbars
+    public static final String TAG_VIEW_TOOLBAR = "PDFTron_View";
+    public static final String TAG_ANNOTATE_TOOLBAR = "PDFTron_Annotate";
+    public static final String TAG_DRAW_TOOLBAR = "PDFTron_Draw";
+    public static final String TAG_INSERT_TOOLBAR = "PDFTron_Insert";
+    public static final String TAG_FILL_AND_SIGN_TOOLBAR = "PDFTron_Fill_and_Sign";
+    public static final String TAG_PREPARE_FORM_TOOLBAR = "PDFTron_Prepare_Form";
+    public static final String TAG_MEASURE_TOOLBAR = "PDFTron_Measure";
+    public static final String TAG_PENS_TOOLBAR = "PDFTron_Pens";
+    public static final String TAG_FAVORITE_TOOLBAR = "PDFTron_Favorite";
+
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
     public static final String FIT_MODE_FIT_WIDTH = "FitWidth";
