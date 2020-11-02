@@ -21,6 +21,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -62,6 +63,9 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
+import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
+import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
@@ -408,7 +412,59 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
+        for (int i = 0; i < toolbars.size(); i++) {
+            ReadableType type = toolbars.getType(i);
+            if (type == ReadableType.String) {
+                String tag = toolbars.getString(i);
+                if (isValidToolbarTag(tag)) {
+                    mBuilder = mBuilder.addToolbarBuilder(
+                            DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag)
+                    );
+                }
+            } else if (type == ReadableType.Map) {
+                // custom toolbars
+                ReadableMap map = toolbars.getMap(i);
+                if (map != null) {
+                    ReadableMapKeySetIterator iterator = map.keySetIterator();
+                    while (iterator.hasNextKey()) {
+                        String toolbarName = iterator.nextKey();
 
+                        if (Utils.isNullOrEmpty(toolbarName)) continue;
+
+                        ReadableArray tools = map.getArray(toolbarName);
+
+                        if (tools != null && tools.size() > 0) {
+                            AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(toolbarName);
+                            for (int j = 0; j < tools.size(); j++) {
+                                String toolStr = tools.getString(j);
+                                ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
+                                int buttonId = convStringToButtonId(toolStr);
+                                if (buttonType != null && buttonId != 0) {
+                                    toolbarBuilder.addToolButton(buttonType, buttonId);
+                                }
+                            }
+                            mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isValidToolbarTag(String tag) {
+        if (tag != null) {
+            if (TAG_VIEW_TOOLBAR.equals(tag) ||
+                    TAG_ANNOTATE_TOOLBAR.equals(tag) ||
+                    TAG_DRAW_TOOLBAR.equals(tag) ||
+                    TAG_INSERT_TOOLBAR.equals(tag) ||
+                    TAG_FILL_AND_SIGN_TOOLBAR.equals(tag) ||
+                    TAG_PREPARE_FORM_TOOLBAR.equals(tag) ||
+                    TAG_MEASURE_TOOLBAR.equals(tag) ||
+                    TAG_PENS_TOOLBAR.equals(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setHideDefaultAnnotationToolbars(ReadableArray tags) {
@@ -656,6 +712,159 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.INK_ERASER;
         }
         return mode;
+    }
+
+    private int convStringToButtonId(String item) {
+        int buttonId = 0;
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.INK.value();
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_HIGHLIGHT.value();
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_UNDERLINE.value();
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_SQUIGGLY.value();
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_STRIKEOUT.value();
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SQUARE.value();
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CIRCLE.value();
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LINE.value();
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ARROW.value();
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLYLINE.value();
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLYGON.value();
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLY_CLOUD.value();
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SIGNATURE.value();
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.FREE_TEXT.value();
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STICKY_NOTE.value();
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CALLOUT.value();
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STAMP.value();
+        } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STAMP.value();
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RULER.value();
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.PERIMETER.value();
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.AREA.value();
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ATTACHMENT.value();
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SOUND.value();
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LINK.value();
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.MULTI_SELECT.value();
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_FIELD.value();
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CHECKBOX.value();
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SIGNATURE_FIELD.value();
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RADIO_BUTTON.value();
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.COMBO_BOX.value();
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LIST_BOX.value();
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ERASER.value();
+        }
+        return buttonId;
+    }
+
+    @Nullable
+    private ToolbarButtonType convStringToToolbarType(String item) {
+        ToolbarButtonType buttonType = null;
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
+            buttonType = ToolbarButtonType.INK;
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_HIGHLIGHT;
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_UNDERLINE;
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_SQUIGGLY;
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_STRIKEOUT;
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
+            buttonType = ToolbarButtonType.SQUARE;
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
+            buttonType = ToolbarButtonType.CIRCLE;
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
+            buttonType = ToolbarButtonType.LINE;
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
+            buttonType = ToolbarButtonType.ARROW;
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
+            buttonType = ToolbarButtonType.POLYLINE;
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
+            buttonType = ToolbarButtonType.POLYGON;
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
+            buttonType = ToolbarButtonType.POLY_CLOUD;
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
+            buttonType = ToolbarButtonType.SIGNATURE;
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
+            buttonType = ToolbarButtonType.FREE_TEXT;
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
+            buttonType = ToolbarButtonType.STICKY_NOTE;
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
+            buttonType = ToolbarButtonType.CALLOUT;
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.RULER;
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.PERIMETER;
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.AREA;
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
+            buttonType = ToolbarButtonType.ATTACHMENT;
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
+            buttonType = ToolbarButtonType.SOUND;
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
+            buttonType = ToolbarButtonType.LINK;
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
+            buttonType = ToolbarButtonType.MULTI_SELECT;
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_FIELD;
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.CHECKBOX;
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.SIGNATURE_FIELD;
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.RADIO_BUTTON;
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.COMBO_BOX;
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.LIST_BOX;
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
+            buttonType = ToolbarButtonType.ERASER;
+        }
+        return buttonType;
     }
 
     private void checkQuickMenu(List<QuickMenuItem> menuItems, ArrayList<Object> keepList, List<QuickMenuItem> removeList) {
