@@ -65,7 +65,6 @@ import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
-import static com.pdftron.reactnative.utils.Constants.*;
 import com.pdftron.sdf.Obj;
 
 import org.apache.commons.io.FileUtils;
@@ -76,6 +75,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.pdftron.reactnative.utils.Constants.*;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
@@ -405,7 +406,34 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
     }
-    
+
+    public void setAnnotationToolbars(ReadableArray toolbars) {
+
+    }
+
+    public void setHideDefaultAnnotationToolbars(ReadableArray tags) {
+        ArrayList<String> tagList = new ArrayList<>();
+        for (int i = 0; i < tags.size(); i++) {
+            String tag = tags.getString(i);
+            if (!Utils.isNullOrEmpty(tag)) {
+                tagList.add(tag);
+            }
+        }
+        mBuilder = mBuilder.hideToolbars(tagList.toArray(new String[tagList.size()]));
+    }
+
+    public void setHideAnnotationToolbarSwitcher(boolean hideToolbarSwitcher) {
+        mBuilder = mBuilder.showToolbarSwitcher(!hideToolbarSwitcher);
+    }
+
+    public void setHideTopToolbars(boolean hideTopToolbars) {
+        mBuilder = mBuilder.showAppBar(!hideTopToolbars);
+    }
+
+    public void setHideTopAppNavBar(boolean hideTopAppNavBar) {
+        mBuilder = mBuilder.showTopToolbar(!hideTopAppNavBar);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -1679,7 +1707,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
 
                     if (rectMap != null && rectMap.hasKey(KEY_x1) && rectMap.hasKey(KEY_y1) &&
-                                rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
+                            rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
                         double rectX1 = rectMap.getDouble(KEY_x1);
                         double rectY1 = rectMap.getDouble(KEY_y1);
                         double rectX2 = rectMap.getDouble(KEY_x2);
@@ -1724,8 +1752,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                 toolManager.raiseAnnotationsModifiedEvent(map, Tool.getAnnotationModificationBundle(null));
             }
-        }
-        finally {
+        } finally {
             if (shouldUnlock) {
                 pdfViewCtrl.docUnlock();
             }
@@ -1804,7 +1831,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
     }
-    
+
     public WritableMap getPageCropBox(int pageNumber) throws PDFNetException {
         com.pdftron.pdf.Rect rect = getPdfDoc().getPage(pageNumber).getCropBox();
 

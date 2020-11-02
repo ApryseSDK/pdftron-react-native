@@ -247,6 +247,31 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
     }
 
+    @ReactProp(name = "annotationToolbars")
+    public void setAnnotationToolbars(DocumentView documentView, ReadableArray toolbars) {
+        documentView.setAnnotationToolbars(toolbars);
+    }
+
+    @ReactProp(name = "hideDefaultAnnotationToolbars")
+    public void setHideDefaultAnnotationToolbars(DocumentView documentView, ReadableArray tags) {
+        documentView.setHideDefaultAnnotationToolbars(tags);
+    }
+
+    @ReactProp(name = "hideAnnotationToolbarSwitcher")
+    public void setHideAnnotationToolbarSwitcher(DocumentView documentView, boolean hide) {
+        documentView.setHideAnnotationToolbarSwitcher(hide);
+    }
+
+    @ReactProp(name = "hideTopToolbars")
+    public void setHideTopToolbars(DocumentView documentView, boolean hide) {
+        documentView.setHideTopToolbars(hide);
+    }
+
+    @ReactProp(name = "hideTopAppNavBar")
+    public void setHideTopAppNavBar(DocumentView documentView, boolean hide) {
+        documentView.setHideTopAppNavBar(hide);
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
