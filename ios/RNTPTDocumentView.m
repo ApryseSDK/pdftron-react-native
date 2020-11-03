@@ -215,10 +215,15 @@ NS_ASSUME_NONNULL_END
     
     if (self.showNavButton) {
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
-        UIBarButtonItem *navButton = [[UIBarButtonItem alloc] initWithImage:navImage
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(navButtonClicked)];
+        UIBarButtonItem *navButton;
+        if (navImage == nil) {
+            navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(navButtonClicked)];
+        }else{
+            navButton = [[UIBarButtonItem alloc] initWithImage:navImage
+                                                         style:UIBarButtonItemStylePlain
+                                                        target:self
+                                                        action:@selector(navButtonClicked)];
+        }
         self.documentViewController.navigationItem.leftBarButtonItem = navButton;
     }
     
