@@ -182,6 +182,13 @@ export default class DocumentView extends PureComponent {
       DocumentViewManager.setToolThickness(tag, thickness, toolType);
     }
   }
+  
+  setToolColor = (toolColor, toolType) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setToolColor(tag, toolColor, toolType);
+    }
+  }
 
   getPageCount = () => {
     const tag = findNodeHandle(this._viewerRef);

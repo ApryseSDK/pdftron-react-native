@@ -260,6 +260,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)setToolThickness:(double)thickness toolType:(NSString*)toolType;
 
+- (void)setToolColor:(NSString *)color toolType:(NSString*)toolType;
+
 - (int)getPageCount;
 
 - (NSString *)getDocumentPath;

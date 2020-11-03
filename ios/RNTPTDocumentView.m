@@ -651,6 +651,15 @@ NS_ASSUME_NONNULL_END
     [PTColorDefaults setDefaultBorderThickness:thickness forAnnotType:annotationType];
 }
 
+- (void)setToolColor:(NSString *)color toolType:(NSString*)toolType
+{
+    UIColor *newColor = [[RNTPTDocumentView colorFromHexString:color] colorWithAlphaComponent:0.8];
+    
+    PTExtendedAnnotType annotationType = [self reactAnnotationNameToAnnotType:toolType];
+    
+    [PTColorDefaults setDefaultColor:newColor forAnnotType:annotationType attribute:ATTRIBUTE_STROKE_COLOR colorPostProcessMode:e_ptpostprocess_none];
+}
+
 - (void)setPageNumber:(int)pageNumber
 {
     if (_pageNumber == pageNumber) {
