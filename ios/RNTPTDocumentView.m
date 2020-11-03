@@ -1231,18 +1231,8 @@ NS_ASSUME_NONNULL_END
     self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    if (!self.topToolbarEnabled) {
-        self.documentViewController.hidesControlsOnTap = NO;
-        self.documentViewController.controlsHidden = YES;
-    } else {
-        self.documentViewController.hidesControlsOnTap = YES;
-        self.documentViewController.controlsHidden = NO;
-    }
-    if (self.topToolbarEnabled) {
-        self.documentViewController.controlsHidden = NO;
-    } else {
-        self.documentViewController.controlsHidden = YES;
-    }
+    self.documentViewController.controlsHidden = !self.topToolbarEnabled;
+    
     const BOOL translucent = self.topToolbarEnabled;
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
@@ -1939,6 +1929,14 @@ NS_ASSUME_NONNULL_END
 }
 
 #pragma mark - <RNTPTNavigationController>
+
+- (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated
+{
+    if (!navigationBarHidden) {
+        return self.topToolbarEnabled;
+    }
+    return YES;
+}
 
 - (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetToolbarHidden:(BOOL)toolbarHidden animated:(BOOL)animated
 {
