@@ -217,7 +217,7 @@ NS_ASSUME_NONNULL_END
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
         UIBarButtonItem *navButton;
         if (navImage == nil) {
-            navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(navButtonClicked)];
+            navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(navButtonClicked)];
         }else{
             navButton = [[UIBarButtonItem alloc] initWithImage:navImage
                                                          style:UIBarButtonItemStylePlain
