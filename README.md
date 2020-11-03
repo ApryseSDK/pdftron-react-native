@@ -641,12 +641,12 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [deleteAnnotations](#deleteannotations)
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
-- [setValueForFields](#setValueForFields)
+- [setValuesForFields](#setValuesForFields)
 - [importAnnotationCommand](#importannotationcommand)
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
-- [setFlagForAnnotations](#setFlagForAnnotations)
-- [setPropertyForAnnotation](#setPropertyForAnnotation)
+- [setFlagsForAnnotations](#setFlagsForAnnotations)
+- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
 - [getPageCropBox](#getPageCropBox)
 - [importBookmarkJson](#importBookmarkJson)
 - [setCurrentPage](#setCurrentPage)
@@ -774,8 +774,10 @@ Returns a Promise.
 this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
 
-##### setValueForFields
+##### setValuesForFields
 Set field values on one or more form fields.
+
+Note: the old function `setValueForFields` is deprecated. Please use this one.
 
 Parameters:
 
@@ -786,7 +788,7 @@ fieldsMap | object | map of field names and values which should be set
 Returns a Promise.
 
 ```js
-this._viewer.setValueForFields({
+this._viewer.setValuesForFields({
   'textField1': 'Test',
   'textField2': 1234,
   'checkboxField1': true,
@@ -836,8 +838,10 @@ Return a Promise.
 this._viewer.selectAnnotation('annotId1', 1);
 ```
 
-##### setFlagForAnnotations
-To set flag for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+##### setFlagsForAnnotations
+To set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+
+Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
 
 Parameters:
 
@@ -849,7 +853,7 @@ Return a Promise.
 
 ```js
 //  Set flag for annotations in the current document.
-this._viewer.setFlagForAnnotations([
+this._viewer.setFlagsForAnnotations([
     {
         id: 'annotId1',
         pageNumber: 1,
@@ -864,8 +868,10 @@ this._viewer.setFlagForAnnotations([
     }
 ]);
 ```
-##### setPropertyForAnnotation
+##### setPropertiesForAnnotation
 To set properties for specified annotation in the current document, if it is valid. 
+
+Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
 Parameters:
 
@@ -889,7 +895,7 @@ Return a promise.
 
 ```js
 // Set properties for annotation in the current document.
-this._viewer.setPropertyForAnnotation('Pdftron', 1, {
+this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   rect: {
     x1: 1.1,    // left
     y1: 3,      // bottom

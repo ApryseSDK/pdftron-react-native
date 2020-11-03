@@ -193,6 +193,8 @@ NS_ASSUME_NONNULL_END
         }
         self.documentViewController.delegate = self;
         
+        [PTOverrides overrideClass:[PTThumbnailsViewController class] withClass:[RNTPTThumbnailsViewController class]];
+        
         self.documentViewController.navigationListsViewController.bookmarkViewController.delegate = self;
         [self applyViewerSettings];
     }
@@ -768,20 +770,26 @@ NS_ASSUME_NONNULL_END
 - (void)importAnnotations:(NSString *)xfdfString
 {
     PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
-    BOOL shouldUnlock = NO;
-    @try {
-        [pdfViewCtrl DocLockRead];
-        shouldUnlock = YES;
-        
+
+    NSError *error;
+    __block BOOL hasDownloader = false;
+    
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        hasDownloader = [[pdfViewCtrl GetDoc] HasDownloader];
+    } error:&error];
+    
+    if (hasDownloader || error) {
+        return;
+    }
+    
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
         PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
-        
         [[pdfViewCtrl GetDoc] FDFUpdate:fdfDoc];
         [pdfViewCtrl Update:YES];
-    }
-    @finally {
-        if (shouldUnlock) {
-            [pdfViewCtrl DocUnlockRead];
-        }
+    } error:&error];
+    
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
 
@@ -892,7 +900,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Annotation Flag
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList
 {
     if (annotationFlagList.count == 0) {
         return;
@@ -994,7 +1002,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map
 {
     PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
@@ -1215,6 +1223,7 @@ NS_ASSUME_NONNULL_END
     
     // Thumbnail editing enabled.
     self.documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
+    self.documentViewController.thumbnailsViewController.navigationController.toolbarHidden = !self.thumbnailViewEditingEnabled;
     
     // Select after creation.
     self.toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
@@ -2130,7 +2139,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Set Property for Annotation
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
     
     NSError *error;
     
@@ -2271,3 +2280,13 @@ NS_ASSUME_NONNULL_END
 
 @end
 
+#pragma mark - RNTPTThumbnailsViewController
+
+@implementation RNTPTThumbnailsViewController
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.toolbarHidden = !self.editingEnabled;
+}
+@end
