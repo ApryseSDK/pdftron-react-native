@@ -153,15 +153,23 @@ static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 // Default annotation toolbar names.
-static NSString * const PTAnnotationToolbarView = @"PDFTron_View";
-static NSString * const PTAnnotationToolbarAnnotate = @"PDFTron_Annotate";
-static NSString * const PTAnnotationToolbarDraw = @"PDFTron_Draw";
-static NSString * const PTAnnotationToolbarInsert = @"PDFTron_Insert";
-static NSString * const PTAnnotationToolbarFillAndSign = @"PDFTron_Fill_and_Sign";
-static NSString * const PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
-static NSString * const PTAnnotationToolbarMeasure = @"PDFTron_Measure";
-static NSString * const PTAnnotationToolbarPens = @"PDFTron_Pens";
-static NSString * const PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
+typedef NSString * PTDefaultAnnotationToolbarKey;
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarAnnotate = @"PDFTron_Annotate";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarDraw = @"PDFTron_Draw";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarInsert = @"PDFTron_Insert";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFillAndSign = @"PDFTron_Fill_and_Sign";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarMeasure = @"PDFTron_Measure";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPens = @"PDFTron_Pens";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
+
+// Custom annotation toolbar keys.
+typedef NSString * PTAnnotationToolbarKey;
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @class RNTPTDocumentView;
 

@@ -1351,31 +1351,43 @@ NS_ASSUME_NONNULL_END
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
+        // Handle annotationToolbars.
         if (self.annotationToolbars.count > 0) {
+            // Clear default/previous tool groups.
+            [toolGroups removeAllObjects];
             
+            for (id annotationToolbarValue in self.annotationToolbars) {
+                if ([annotationToolbarValue isKindOfClass:[NSString class]]) {
+                    // Default annotation toolbar key.
+                    PTDefaultAnnotationToolbarKey annotationToolbar = (NSString *)annotationToolbarValue;
+                    
+                    PTToolGroup *toolGroup = [self toolGroupForKey:annotationToolbar
+                                                  toolGroupManager:toolGroupManager];
+                    if (toolGroup) {
+                        [toolGroups addObject:toolGroup];
+                    }
+                }
+                else if ([annotationToolbarValue isKindOfClass:[NSDictionary class]]) {
+                    // Custom annotation toolbar dictionary.
+                    NSDictionary<NSString *, id> *annotationToolbar = (NSDictionary *)annotationToolbarValue;
+                    
+                    PTToolGroup *toolGroup = [self createToolGroupWithDictionary:annotationToolbar
+                                                                toolGroupManager:toolGroupManager];
+                    [toolGroups addObject:toolGroup];
+                }
+            }
         }
         
         // Handle hideDefaultAnnotationToolbars.
         if (self.hideDefaultAnnotationToolbars.count > 0) {
-            NSDictionary<NSString *, PTToolGroup *> *toolGroupMap = @{
-                PTAnnotationToolbarView: toolGroupManager.viewItemGroup,
-                PTAnnotationToolbarAnnotate: toolGroupManager.annotateItemGroup,
-                PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
-                PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
-                PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
-                PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
-                PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
-                PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
-                PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
-            };
-            
             NSMutableArray<PTToolGroup *> *toolGroupsToRemove = [NSMutableArray array];
             for (NSString *defaultAnnotationToolbar in self.hideDefaultAnnotationToolbars) {
                 if (![defaultAnnotationToolbar isKindOfClass:[NSString class]]) {
                     continue;
                 }
-                PTToolGroup *matchingGroup = toolGroupMap[defaultAnnotationToolbar];
-                if (matchingGroup && matchingGroup != [NSNull null]) {
+                PTToolGroup *matchingGroup = [self toolGroupForKey:defaultAnnotationToolbar
+                                                  toolGroupManager:toolGroupManager];
+                if (matchingGroup) {
                     [toolGroupsToRemove addObject:matchingGroup];
                 }
             }
@@ -1399,6 +1411,63 @@ NS_ASSUME_NONNULL_END
             documentController.navigationItem.titleView = nil;
         }
     }
+}
+
+- (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
+{
+    NSDictionary<PTDefaultAnnotationToolbarKey, PTToolGroup *> *toolGroupMap = @{
+        PTAnnotationToolbarView: toolGroupManager.viewItemGroup,
+        PTAnnotationToolbarAnnotate: toolGroupManager.annotateItemGroup,
+        PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
+        PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
+        //PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
+        //PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
+        PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
+        PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
+        PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
+    };
+
+    return toolGroupMap[key];
+}
+
+- (PTToolGroup *)createToolGroupWithDictionary:(NSDictionary<NSString *, id> *)dictionary toolGroupManager:(PTToolGroupManager *)toolGroupManager
+{
+    NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
+    NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
+    NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
+    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    
+    UIImage *toolbarImage = nil;
+    if (toolbarIcon) {
+        PTToolGroup *defaultGroup = [self toolGroupForKey:toolbarIcon
+                                         toolGroupManager:toolGroupManager];
+        toolbarImage = defaultGroup.image;
+    }
+    
+    NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
+    
+    for (NSString *toolbarItem in toolbarItems) {
+        if (![toolbarItem isKindOfClass:[NSString class]]) {
+            continue;
+        }
+        
+        Class toolClass = [[self class] toolClassForKey:toolbarItem];
+        if (!toolClass) {
+            continue;
+        }
+        
+        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+        if (item) {
+            [barButtonItems addObject:item];
+        }
+    }
+    
+    PTToolGroup *toolGroup = [PTToolGroup groupWithTitle:toolbarName
+                                                   image:toolbarImage
+                                          barButtonItems:[barButtonItems copy]];
+    toolGroup.identifier = toolbarId;
+
+    return toolGroup;
 }
 
 - (void)applyLayoutMode
@@ -2036,7 +2105,7 @@ NS_ASSUME_NONNULL_END
 - (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated
 {
     if (!navigationBarHidden) {
-        return (self.hideTopAppNavBar || self.hideTopToolbars);
+        return !(self.hideTopAppNavBar || self.hideTopToolbars);
     }
     return YES;
 }
@@ -2380,6 +2449,98 @@ NS_ASSUME_NONNULL_END
         return (NSDictionary *)value;
     }
     return nil;
+}
+
++ (Class)toolClassForKey:(NSString *)key
+{
+    if ([key isEqualToString:PTAnnotationEditToolKey]) {
+        return [PTAnnotSelectTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateStickyToolKey] ||
+             [key isEqualToString:PTStickyToolButtonKey]) {
+        return [PTStickyNoteCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeHandToolKey] ||
+             [key isEqualToString:PTFreeHandToolButtonKey]) {
+        return [PTFreeHandCreate class];
+    }
+    else if ([key isEqualToString:PTTextSelectToolKey]) {
+        return [PTTextSelectTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextHighlightToolKey] ||
+             [key isEqualToString:PTHighlightToolButtonKey]) {
+        return [PTTextHighlightCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextUnderlineToolKey] ||
+             [key isEqualToString:PTUnderlineToolButtonKey]) {
+        return [PTTextUnderlineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextSquigglyToolKey] ||
+             [key isEqualToString:PTSquigglyToolButtonKey]) {
+        return [PTTextSquigglyCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextStrikeoutToolKey] ||
+             [key isEqualToString:PTStrikeoutToolButtonKey]) {
+        return [PTTextStrikeoutCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeTextToolKey] ||
+             [key isEqualToString:PTFreeTextToolButtonKey]) {
+        return [PTFreeTextCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateCalloutToolKey] ||
+             [key isEqualToString:PTCalloutToolButtonKey]) {
+        return [PTCalloutCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateSignatureToolKey] ||
+             [key isEqualToString:PTSignatureToolButtonKey]) {
+        return [PTDigitalSignatureTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateLineToolKey] ||
+             [key isEqualToString:PTLineToolButtonKey]) {
+        return [PTLineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateArrowToolKey] ||
+             [key isEqualToString:PTArrowToolButtonKey]) {
+        return [PTArrowCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolylineToolKey] ||
+             [key isEqualToString:PTPolylineToolButtonKey]) {
+        return [PTPolylineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateStampToolKey] ||
+             [key isEqualToString:PTStampToolButtonKey]) {
+        return [PTImageStampCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateRectangleToolKey] ||
+             [key isEqualToString:PTRectangleToolButtonKey]) {
+        return [PTRectangleCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateEllipseToolKey] ||
+             [key isEqualToString:PTEllipseToolButtonKey]) {
+        return [PTEllipseCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolygonToolKey] ||
+             [key isEqualToString:PTPolygonToolButtonKey]) {
+        return [PTPolygonCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolygonCloudToolKey] ||
+             [key isEqualToString:PTCloudToolButtonKey]) {
+        return [PTCloudCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
+        return [PTFileAttachmentCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateDistanceMeasurementToolKey]) {
+        return [PTRulerCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePerimeterMeasurementToolKey]) {
+        return [PTPerimeterCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateAreaMeasurementToolKey]) {
+        return [PTAreaCreate class];
+    }
+    
+    return Nil;
 }
 
 @end
