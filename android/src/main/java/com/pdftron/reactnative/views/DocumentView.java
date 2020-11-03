@@ -440,7 +440,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                                 ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
                                 int buttonId = convStringToButtonId(toolStr);
                                 if (buttonType != null && buttonId != 0) {
-                                    toolbarBuilder.addToolButton(buttonType, buttonId);
+                                    if (buttonType == ToolbarButtonType.UNDO ||
+                                            buttonType == ToolbarButtonType.REDO) {
+                                        toolbarBuilder.addToolStickyButton(buttonType, buttonId);
+                                    } else {
+                                        toolbarBuilder.addToolButton(buttonType, buttonId);
+                                    }
                                 }
                             }
                             mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
