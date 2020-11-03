@@ -3,6 +3,7 @@
 #import "RNTPTDocumentViewController.h"
 #import "RNTPTCollaborationDocumentViewController.h"
 #import "RNTPTDocumentController.h"
+#import "RNTPTNavigationController.h"
 
 #include <objc/runtime.h>
 
@@ -21,7 +22,7 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication>
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate>
 
 @property (nonatomic, nullable) PTDocumentBaseViewController *documentViewController;
 
@@ -235,7 +236,8 @@ NS_ASSUME_NONNULL_END
         self.documentViewController.navigationItem.leftBarButtonItem = navButton;
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController];
+    RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.documentViewController];
+    navigationController.delegate = self;
     
     const BOOL translucent = self.documentViewController.hidesControlsOnTap;
     navigationController.navigationBar.translucent = translucent;
@@ -1934,6 +1936,16 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(exportAnnotationCommand:action:xfdfCommand:)]) {
         [self.delegate exportAnnotationCommand:self action:action xfdfCommand:xfdfCommand];
     }
+}
+
+#pragma mark - <RNTPTNavigationController>
+
+- (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetToolbarHidden:(BOOL)toolbarHidden animated:(BOOL)animated
+{
+    if (!toolbarHidden) {
+        return self.bottomToolbarEnabled;
+    }
+    return YES;
 }
 
 #pragma mark - Notifications
