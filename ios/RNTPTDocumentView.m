@@ -645,6 +645,12 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+- (void)setToolThickness:(double)thickness toolType:(NSString*)toolType
+{
+    PTExtendedAnnotType annotationType = [self reactAnnotationNameToAnnotType:toolType];
+    [PTColorDefaults setDefaultBorderThickness:thickness forAnnotType:annotationType];
+}
+
 - (void)setToolColor:(NSString *)color toolType:(NSString*)toolType
 {
     UIColor *newColor = [[RNTPTDocumentView colorFromHexString:color] colorWithAlphaComponent:0.8];

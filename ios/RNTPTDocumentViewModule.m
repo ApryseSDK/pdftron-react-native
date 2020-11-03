@@ -52,6 +52,15 @@ RCT_REMAP_METHOD(commitTool,
     }
 }
 
+
+RCT_REMAP_METHOD(setToolThickness,
+                 setToolThicknessForDocumentViewTag:(nonnull NSNumber *)tag
+                 thickness:(double)thickness
+                 toolType:(NSString*)toolType)
+{
+    [[self documentViewManager] setToolThicknessForDocumentViewTag:tag thickness:thickness toolType:toolType];
+}
+
 RCT_REMAP_METHOD(setToolColor,
                  setToolColorForDocumentViewTag:(nonnull NSNumber *)tag
                  toolColor:(NSString *)toolColor

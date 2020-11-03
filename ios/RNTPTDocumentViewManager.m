@@ -453,6 +453,14 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentVi
     }
 }
 
+- (void)setToolThicknessForDocumentViewTag:(NSNumber *)tag thickness:(double)thickness toolType:(NSString*)toolType
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setToolThickness:thickness toolType:toolType];
+    }
+}
+      
 - (void)setToolColorForDocumentViewTag:(NSNumber *)tag toolColor:(NSString *)toolColor toolType:(NSString*)toolType
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
