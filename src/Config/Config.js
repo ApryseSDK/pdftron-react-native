@@ -145,5 +145,16 @@ export default {
     Measure: "PDFTron_Measure",
     Pens: "PDFTron_Pens",
     Favorite: "PDFTron_Favorite"
+  },
+  ToolbarIcons: {
+    View: "PDFTron_View",
+    Annotate: "PDFTron_Annotate",
+    Draw: "PDFTron_Draw",
+    Insert: "PDFTron_Insert",
+    FillAndSign: "PDFTron_Fill_and_Sign",
+    PrepareForm: "PDFTron_Prepare_Form",
+    Measure: "PDFTron_Measure",
+    Pens: "PDFTron_Pens",
+    Favorite: "PDFTron_Favorite"
   }
 };
