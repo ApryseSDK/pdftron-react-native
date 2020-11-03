@@ -156,5 +156,11 @@ export default {
     Measure: "PDFTron_Measure",
     Pens: "PDFTron_Pens",
     Favorite: "PDFTron_Favorite"
+  },
+  CustomToolbarKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon",
+    Items: "items"
   }
 };
