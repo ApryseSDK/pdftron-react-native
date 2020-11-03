@@ -52,6 +52,23 @@ RCT_REMAP_METHOD(commitTool,
     }
 }
 
+RCT_REMAP_METHOD(setToolColor,
+                 setToolColorForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolColor:(NSString *)toolColor
+                 toolType:(NSString*)toolType)
+
+{
+    /*
+     Available attributes:
+         ATTRIBUTE_STROKE_COLOR,
+         ATTRIBUTE_FILL_COLOR,
+         ATTRIBUTE_OPACITY,
+         ATTRIBUTE_BORDER_THICKNESS
+     */
+
+    [[self documentViewManager] setToolColorForDocumentViewTag:tag toolColor:toolColor toolType:toolType];
+}
+
 #pragma mark - Methods (w/ promises)
 
 RCT_REMAP_METHOD(getDocumentPath,

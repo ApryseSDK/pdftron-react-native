@@ -17,6 +17,8 @@
 
 - (BOOL)commitToolForDocumentViewTag:(NSNumber *)tag;
 
+- (void)setToolColorForDocumentViewTag:(NSNumber *)tag toolColor:(NSString *)toolColor toolType:(NSString*)toolType;
+
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
