@@ -152,6 +152,17 @@ static NSString * const PTRectHeightKey = @"height";
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 
+// Default annotation toolbar names.
+static NSString * const PTAnnotationToolbarView = @"PDFTron_View";
+static NSString * const PTAnnotationToolbarAnnotate = @"PDFTron_Annotate";
+static NSString * const PTAnnotationToolbarDraw = @"PDFTron_Draw";
+static NSString * const PTAnnotationToolbarInsert = @"PDFTron_Insert";
+static NSString * const PTAnnotationToolbarFillAndSign = @"PDFTron_Fill_and_Sign";
+static NSString * const PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
+static NSString * const PTAnnotationToolbarMeasure = @"PDFTron_Measure";
+static NSString * const PTAnnotationToolbarPens = @"PDFTron_Pens";
+static NSString * const PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -197,7 +208,7 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
-@property (nonatomic, assign) BOOL topToolbarEnabled;
+@property (nonatomic, assign) BOOL topToolbarEnabled DEPRECATED_MSG_ATTRIBUTE("Use hideTopAppNavBar instead");
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
@@ -251,6 +262,12 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
+
+@property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
+@property (nonatomic) BOOL hideTopToolbars;
+@property (nonatomic) BOOL hideTopAppNavBar;
 
 #pragma mark - Methods
 

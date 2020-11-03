@@ -48,7 +48,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)RNTPTDocumentView_commonInit
 {
-    _topToolbarEnabled = YES;
+    _hideTopAppNavBar = NO;
+    _hideTopToolbars = NO;
+    
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
     
@@ -255,7 +257,7 @@ NS_ASSUME_NONNULL_END
     
     [navigationController didMoveToParentViewController:parentController];
     
-    navigationController.navigationBarHidden = !self.topToolbarEnabled;
+    navigationController.navigationBarHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
     
     [self openDocument];
 }
@@ -1114,6 +1116,41 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setAnnotationToolbars:(NSArray<id> *)annotationToolbars
+{
+    _annotationToolbars = [annotationToolbars copy];
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideDefaultAnnotationToolbars:(NSArray<NSString *> *)hideDefaultAnnotationToolbars
+{
+    _hideDefaultAnnotationToolbars = [hideDefaultAnnotationToolbars copy];
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideAnnotationToolbarSwitcher:(BOOL)hideAnnotationToolbarSwitcher
+{
+    _hideAnnotationToolbarSwitcher = hideAnnotationToolbarSwitcher;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideTopToolbars:(BOOL)hideTopToolbars
+{
+    _hideTopToolbars = hideTopToolbars;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideTopAppNavBar:(BOOL)hideTopAppNavBar
+{
+    _hideTopAppNavBar = hideTopAppNavBar;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
@@ -1125,11 +1162,14 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Top/bottom toolbar
 
+- (BOOL)isTopToolbarEnabled
+{
+    return !self.hideTopAppNavBar;
+}
+
 -(void)setTopToolbarEnabled:(BOOL)topToolbarEnabled
 {
-    _topToolbarEnabled = topToolbarEnabled;
-    
-    [self applyViewerSettings];
+    self.hideTopAppNavBar = !topToolbarEnabled;
 }
 
 -(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
@@ -1231,9 +1271,9 @@ NS_ASSUME_NONNULL_END
     self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    self.documentViewController.controlsHidden = !self.topToolbarEnabled;
+    self.documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
     
-    const BOOL translucent = self.topToolbarEnabled;
+    const BOOL translucent = (self.hideTopAppNavBar || self.hideTopToolbars);
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
     
@@ -1294,8 +1334,71 @@ NS_ASSUME_NONNULL_END
     // Disable tools.
     [self setToolsPermission:self.disabledTools toValue:NO];
     
+    PTDocumentController *documentController = self.rnt_documentController;
+    if (documentController) {
+        [self applyDocumentControllerSettings:documentController];
+    }
+        
     // Custom HTTP request headers.
     [self applyCustomHeaders];
+}
+
+- (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
+{
+    PTToolGroupManager *toolGroupManager = documentController.toolGroupManager;
+    
+    documentController.toolGroupsEnabled = !self.hideTopToolbars;
+    if ([documentController areToolGroupsEnabled]) {
+        NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
+        
+        if (self.annotationToolbars.count > 0) {
+            
+        }
+        
+        // Handle hideDefaultAnnotationToolbars.
+        if (self.hideDefaultAnnotationToolbars.count > 0) {
+            NSDictionary<NSString *, PTToolGroup *> *toolGroupMap = @{
+                PTAnnotationToolbarView: toolGroupManager.viewItemGroup,
+                PTAnnotationToolbarAnnotate: toolGroupManager.annotateItemGroup,
+                PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
+                PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
+                PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
+                PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
+                PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
+                PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
+                PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
+            };
+            
+            NSMutableArray<PTToolGroup *> *toolGroupsToRemove = [NSMutableArray array];
+            for (NSString *defaultAnnotationToolbar in self.hideDefaultAnnotationToolbars) {
+                if (![defaultAnnotationToolbar isKindOfClass:[NSString class]]) {
+                    continue;
+                }
+                PTToolGroup *matchingGroup = toolGroupMap[defaultAnnotationToolbar];
+                if (matchingGroup && matchingGroup != [NSNull null]) {
+                    [toolGroupsToRemove addObject:matchingGroup];
+                }
+            }
+            // Remove the indicated tool group(s).
+            if (toolGroupsToRemove.count > 0) {
+                [toolGroups removeObjectsInArray:toolGroupsToRemove];
+            }
+        }
+        
+        if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
+            toolGroupManager.groups = toolGroups;
+        }
+    }
+    
+    if (self.hideAnnotationToolbarSwitcher) {
+        documentController.navigationItem.titleView = [[UIView alloc] init];
+    } else {
+        if ([documentController areToolGroupsEnabled] && toolGroupManager.groups.count > 0) {
+            documentController.navigationItem.titleView = documentController.toolGroupIndicatorView;
+        } else {
+            documentController.navigationItem.titleView = nil;
+        }
+    }
 }
 
 - (void)applyLayoutMode
@@ -1621,7 +1724,7 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentBaseViewController *)documentViewController
 {
-    return self.topToolbarEnabled;
+    return (!self.hideTopAppNavBar && !self.hideTopToolbars);
 }
 
 - (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber
@@ -1933,7 +2036,7 @@ NS_ASSUME_NONNULL_END
 - (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated
 {
     if (!navigationBarHidden) {
-        return self.topToolbarEnabled;
+        return (self.hideTopAppNavBar || self.hideTopToolbars);
     }
     return YES;
 }
