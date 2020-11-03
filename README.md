@@ -358,7 +358,6 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [layoutMode](#layoutmode)
 - [initialPageNumber](#initialpagenumber)
 - [pageNumber](#pagenumber)
-- [topToolbarEnabled](#toptoolbarenabled)
 - [bottomToolbarEnabled](#bottomtoolbarenabled)
 - [hideToolbarsOnTap](#hidetoolbarsontap)
 - [pageIndicatorEnabled](#pageindicatorenabled)
@@ -427,9 +426,29 @@ previousPageNumber | int | the previous page number
 pageNumber | int | the current page number
 
 ##### topToolbarEnabled
+Deprecated. Use `hideTopAppNavBar` prop instead.
+
 bool, optional
 ##### bottomToolbarEnabled
 bool, optional
+##### annotationToolbars
+TODO
+##### hideDefaultAnnotationToolbars
+array of `Config.DefaultToolbars` tags, optional
+
+Defines which default toolbars should be hidden. Default to none.
+##### hideAnnotationToolbarSwitcher
+bool, optional
+
+Defines whether to show the toolbar switcher in the top toolbar. Default to true.
+##### hideTopToolbars
+bool, optional
+
+Defines whether to show both the top nav app bar and the annotation toolbar. Default to true.
+##### hideTopAppNavBar
+bool, optional
+
+Defines whether to show the top nav app bar. Default to true.
 ##### hideToolbarsOnTap
 bool, optional
 
