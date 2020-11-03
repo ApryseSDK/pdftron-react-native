@@ -786,6 +786,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.LIST_BOX.value();
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.ERASER.value();
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.UNDO.value();
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.REDO.value();
         }
         return buttonId;
     }
@@ -863,6 +867,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.LIST_BOX;
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonType = ToolbarButtonType.ERASER;
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonType = ToolbarButtonType.UNDO;
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonType = ToolbarButtonType.REDO;
         }
         return buttonType;
     }

@@ -37,6 +37,8 @@ export default {
     reflowButton: 'reflowButton',
     editMenuButton: 'editMenuButton',
     cropPageButton: 'cropPageButton',
+    undo: 'undo',
+    redo: 'redo'
   },
   Tools: {
     annotationEdit: 'AnnotationEdit',

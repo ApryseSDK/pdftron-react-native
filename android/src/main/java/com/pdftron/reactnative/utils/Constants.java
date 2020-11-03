@@ -36,6 +36,8 @@ public final class Constants {
     public static final String BUTTON_REFLOW = "reflowButton";
     public static final String BUTTON_EDIT_MENU = "editMenuButton";
     public static final String BUTTON_CROP_PAGE = "cropPageButton";
+    public static final String BUTTON_UNDO = "undo";
+    public static final String BUTTON_REDO = "redo";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
