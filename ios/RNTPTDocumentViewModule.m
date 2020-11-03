@@ -77,7 +77,22 @@ RCT_REMAP_METHOD(getPageCount,
         resolve(@(pageCount));
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to get page count", [self errorFromException:exception]);
+        reject(@"get_failed", @"Failed to get page count", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(importBookmarkJson,
+                 importBookmarkJsonForDocumentViewTag:(nonnull NSNumber *)tag
+                 bookmarkJson:(NSString *)bookmarkJson
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] importBookmarkJsonForDocumentViewTag:tag bookmarkJson:bookmarkJson];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"import_failed", @"Failed to import bookmark json", [self errorFromException:exception]);
     }
 }
 

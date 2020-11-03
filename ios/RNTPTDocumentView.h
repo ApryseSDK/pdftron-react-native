@@ -177,6 +177,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText;
 
+- (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -260,9 +262,12 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (int)getPageCount;
 
+- (void)importBookmarkJson:(NSString *)bookmarkJson;
+
 - (NSString *)getDocumentPath;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
+
 - (void)importAnnotations:(NSString *)xfdfString;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
