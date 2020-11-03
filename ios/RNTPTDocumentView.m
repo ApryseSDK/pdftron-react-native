@@ -20,7 +20,7 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication>
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication, PTBookmarkViewControllerDelegate>
 
 @property (nonatomic, nullable) PTDocumentViewController *documentViewController;
 
@@ -195,6 +195,7 @@ NS_ASSUME_NONNULL_END
         
         [PTOverrides overrideClass:[PTThumbnailsViewController class] withClass:[RNTPTThumbnailsViewController class]];
         
+        self.documentViewController.navigationListsViewController.bookmarkViewController.delegate = self;
         [self applyViewerSettings];
     }
     
@@ -295,11 +296,6 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
                    name:PTToolManagerAnnotationRemovedNotification
                  object:self.documentViewController.toolManager];
-
-    [center addObserver:self
-    selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:)
-        name:PTToolManagerFormFieldDataModifiedNotification
-      object:self.documentViewController.toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications
@@ -666,6 +662,21 @@ NS_ASSUME_NONNULL_END
         _pageNumber = pageNumber;
     } else {
         NSLog(@"Failed to set current page number");
+    }
+}
+
+#pragma mark - Bookmark import
+
+- (void)importBookmarkJson:(NSString *)bookmarkJson
+{
+    NSError *error = nil;
+    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        [PTBookmarkManager.defaultManager importBookmarksForDoc:doc fromJSONString:bookmarkJson];
+        [self.documentViewController.pdfViewCtrl Update:YES];
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to import bookmark json. %@", error.localizedDescription);
     }
 }
 
@@ -2085,6 +2096,36 @@ NS_ASSUME_NONNULL_END
     return fdfCommand;
 }
 
+#pragma mark - PTBookmarkViewControllerDelegate
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didModifyBookmark:(PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didAddBookmark:(PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didRemoveBookmark:(nonnull PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarksModified {
+    if ([self.delegate respondsToSelector:@selector(bookmarkChanged:bookmarkJson:)]) {
+
+        __block NSString* json;
+        NSError* error;
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            json = [PTBookmarkManager.defaultManager exportBookmarksFromDoc:doc];
+        } error:&error];
+    
+        if(error)
+        {
+            NSLog(@"Error: There was an error while trying to export the bookmark json on events triggered. %@", error.localizedDescription);
+        }
+        [self.delegate bookmarkChanged:self bookmarkJson:json];
+    }
+}
 
 #pragma mark - Select Annotation
 

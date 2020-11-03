@@ -64,6 +64,7 @@ export default class DocumentView extends PureComponent {
     useStylusAsPen: PropTypes.bool,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
+    onBookmarkChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -150,6 +151,12 @@ export default class DocumentView extends PureComponent {
           'data': event.nativeEvent.data,
         });
       }
+    } else if (event.nativeEvent.onBookmarkChanged) {
+      if (this.props.onBookmarkChanged) {
+        this.props.onBookmarkChanged({
+          'bookmarkJson': event.nativeEvent.bookmarkJson,
+        });
+      }
     }
   }
 
@@ -180,6 +187,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
+  }
+
+  importBookmarkJson = (bookmarkJson) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }

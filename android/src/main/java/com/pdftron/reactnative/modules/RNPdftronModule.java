@@ -66,4 +66,32 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             promise.reject(ex);
         }
     }
+
+    @ReactMethod
+    public void getVersion(final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    promise.resolve(Double.toString(PDFNet.getVersion()));
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPlatformVersion(final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    promise.resolve("Android " + android.os.Build.VERSION.RELEASE);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
 }
