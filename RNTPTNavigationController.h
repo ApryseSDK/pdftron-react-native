@@ -7,6 +7,8 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol RNTPTNavigationControllerDelegate <UINavigationControllerDelegate>
 @required
 
+- (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated;
+
 - (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetToolbarHidden:(BOOL)toolbarHidden animated:(BOOL)animated;
 
 @end
