@@ -69,11 +69,22 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
+    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf";
+    const myToolbar = {
+      [Config.CustomToolbarKey.Id]: 'myToolbar',
+      [Config.CustomToolbarKey.Name]: 'myToolbar', 
+      [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
+      [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+    };
 
     return (
       <DocumentView
           ref={(c) => this._viewer = c}
+          // hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate]}
+          // annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+          hideAnnotationToolbarSwitcher={false}
+          hideTopToolbars={false}
+          hideTopAppNavBar={false}
           document={path}
           padStatusBar={true}
           showLeadingNavButton={true}
