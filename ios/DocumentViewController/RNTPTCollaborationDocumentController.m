@@ -1,8 +1,6 @@
-#import "RNTPTCollaborationDocumentViewController.h"
+#import "RNTPTCollaborationDocumentController.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface RNTPTCollaborationDocumentViewController ()
+@interface RNTPTCollaborationDocumentController ()
 
 @property (nonatomic) BOOL local;
 @property (nonatomic) BOOL needsDocumentLoaded;
@@ -11,9 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
-
-@implementation RNTPTCollaborationDocumentViewController
+@implementation RNTPTCollaborationDocumentController
 
 @dynamic delegate;
 
@@ -64,13 +60,17 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
+- (BOOL)controlsHidden
 {
-    if (!hidden && ![self isTopToolbarEnabled]){
-        return;
+    if (self.navigationController) {
+        if ([self isTopToolbarEnabled]) {
+            return [self.navigationController isNavigationBarHidden];
+        }
+        if ([self isBottomToolbarEnabled]) {
+            return [self.navigationController isToolbarHidden];
+        }
     }
-    
-    [super setControlsHidden:hidden animated:animated];
+    return [super controlsHidden];
 }
 
 #pragma mark - <PTToolManagerDelegate>
@@ -90,9 +90,9 @@ NS_ASSUME_NONNULL_END
     // If the top toolbar is disabled...
     if (![self isTopToolbarEnabled] &&
         // ...and the annotation toolbar is visible now...
-        ![self isAnnotationToolbarHidden]) {
+        ![self isToolGroupToolbarHidden]) {
         // ...hide the toolbar.
-        self.annotationToolbar.hidden = YES;
+        self.toolGroupToolbar.hidden = YES;
     }
 }
 
@@ -154,30 +154,6 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-#pragma mark - <PTAnnotationToolbarDelegate>
-
-- (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
-{
-    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerShouldGoBackToPan:)]) {
-        return [self.delegate rnt_documentViewControllerShouldGoBackToPan:self];
-    }
-    
-    return [super toolShouldGoBackToPan:annotationToolbar];
-}
-
-- (void)annotationToolbarDidCancel:(PTAnnotationToolbar *)annotationToolbar
-{
-    [super annotationToolbarDidCancel:annotationToolbar];
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isAnnotationToolbarHidden]) {
-        // ...hide the toolbar.
-        self.annotationToolbar.hidden = YES;
-    }
-}
-
 #pragma mark - <PTPDFViewCtrlDelegate>
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
@@ -200,7 +176,7 @@ NS_ASSUME_NONNULL_END
     if (type == e_ptdownloadedtype_finished && !self.documentLoaded) {
         self.needsRemoteDocumentLoaded = YES;
     }
-
+    
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 
