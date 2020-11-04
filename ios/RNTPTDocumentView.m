@@ -374,57 +374,45 @@ NS_ASSUME_NONNULL_END
     typedef void (^HideElementBlock)(void);
     
     NSDictionary *hideElementActions = @{
-        PTToolsButtonKey:
-            ^{
-                self.rnt_documentViewController.annotationToolbarButtonHidden = YES;
-                self.rnt_collabDocumentViewController.annotationToolbarButtonHidden = YES;
-            },
-        PTSearchButtonKey:
-            ^{
-                self.documentViewController.searchButtonHidden = YES;
-            },
-        PTShareButtonKey:
-            ^{
-                self.documentViewController.shareButtonHidden = YES;
-            },
-        PTViewControlsButtonKey:
-            ^{
-                self.documentViewController.viewerSettingsButtonHidden = YES;
-            },
-        PTThumbNailsButtonKey:
-            ^{
-                self.documentViewController.thumbnailBrowserButtonHidden = YES;
-            },
-        PTListsButtonKey:
-            ^{
-                self.documentViewController.navigationListsButtonHidden = YES;
-            },
-        PTMoreItemsButtonKey:
-            ^{
-                self.documentViewController.moreItemsButtonHidden = YES;
-            },
-        
-        PTThumbnailSliderButtonKey:
-            ^{
-                self.documentViewController.thumbnailSliderHidden = YES;
-            },
-        
-        PTOutlineListButtonKey:
-            ^{
-                self.documentViewController.outlineListHidden = YES;
-            },
-        PTAnnotationListButtonKey:
-            ^{
-                self.documentViewController.annotationListHidden = YES;
-            },
-        PTUserBookmarkListButtonKey:
-            ^{
-                self.documentViewController.bookmarkListHidden = YES;
-            },
-        PTReflowButtonKey:
-            ^{
-                self.documentViewController.readerModeButtonHidden = YES;
-            },
+        PTToolsButtonKey: ^{
+            if ([self.documentViewController isKindOfClass:[PTDocumentViewController class]]) {
+                PTDocumentViewController *viewController = (PTDocumentViewController *)self.documentViewController;
+                viewController.annotationToolbarButtonHidden = YES;
+            }
+        },
+        PTSearchButtonKey: ^{
+            self.documentViewController.searchButtonHidden = YES;
+        },
+        PTShareButtonKey: ^{
+            self.documentViewController.shareButtonHidden = YES;
+        },
+        PTViewControlsButtonKey: ^{
+            self.documentViewController.viewerSettingsButtonHidden = YES;
+        },
+        PTThumbNailsButtonKey: ^{
+            self.documentViewController.thumbnailBrowserButtonHidden = YES;
+        },
+        PTListsButtonKey: ^{
+            self.documentViewController.navigationListsButtonHidden = YES;
+        },
+        PTMoreItemsButtonKey: ^{
+            self.documentViewController.moreItemsButtonHidden = YES;
+        },
+        PTThumbnailSliderButtonKey: ^{
+            self.documentViewController.thumbnailSliderHidden = YES;
+        },
+        PTOutlineListButtonKey: ^{
+            self.documentViewController.outlineListHidden = YES;
+        },
+        PTAnnotationListButtonKey: ^{
+            self.documentViewController.annotationListHidden = YES;
+        },
+        PTUserBookmarkListButtonKey: ^{
+            self.documentViewController.bookmarkListHidden = YES;
+        },
+        PTReflowButtonKey: ^{
+            self.documentViewController.readerModeButtonHidden = YES;
+        },
     };
     
     for (NSObject *item in disabledElements) {
@@ -453,7 +441,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value
 {
-    
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
