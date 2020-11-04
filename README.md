@@ -432,7 +432,21 @@ bool, optional
 ##### bottomToolbarEnabled
 bool, optional
 ##### annotationToolbars
-TODO
+array of object, options
+
+Defines custom toolbars. If passed in, default toolbars will no longer appear.
+It is possible to mix and match with default toolbars. See example below:
+
+```js
+const myToolbar = {
+  [Config.CustomToolbarKey.Id]: 'myToolbar',
+  [Config.CustomToolbarKey.Name]: 'myToolbar', 
+  [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
+  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+};
+
+annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+```
 ##### hideDefaultAnnotationToolbars
 array of `Config.DefaultToolbars` tags, optional
 
