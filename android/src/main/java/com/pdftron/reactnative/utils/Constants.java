@@ -109,6 +109,12 @@ public final class Constants {
     public static final String TAG_PENS_TOOLBAR = "PDFTron_Pens";
     public static final String TAG_FAVORITE_TOOLBAR = "PDFTron_Favorite";
 
+    // Custom toolbars
+    public static final String TOOLBAR_KEY_ID = "id";
+    public static final String TOOLBAR_KEY_NAME = "name";
+    public static final String TOOLBAR_KEY_ICON = "icon";
+    public static final String TOOLBAR_KEY_ITEMS = "items";
+
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
     public static final String FIT_MODE_FIT_WIDTH = "FitWidth";
@@ -139,7 +145,6 @@ public final class Constants {
     public static final String MENU_ID_STRING_OPEN_ATTACHMENT = "openAttachment";
     public static final String MENU_ID_STRING_READ = "read";
     public static final String MENU_ID_STRING_CALIBRATE = "calibrate";
-
 
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
