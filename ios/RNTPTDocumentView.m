@@ -1069,12 +1069,9 @@ NS_ASSUME_NONNULL_END
 
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
-    self.documentViewController.toolManager.annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
-}
+    _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
 
--(BOOL)annotationPermissionCheckEnabled
-{
-    return self.documentViewController.toolManager.annotationPermissionCheckEnabled;
+    [self applyViewerSettings];
 }
 
 #pragma mark - Collaboration
@@ -1296,7 +1293,10 @@ NS_ASSUME_NONNULL_END
     self.toolManager.showDefaultSignature = self.showSavedSignatures;
     
     self.toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
-    
+
+    // Annotation permission check
+    self.toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.0, *)) {
