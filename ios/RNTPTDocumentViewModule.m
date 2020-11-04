@@ -78,6 +78,16 @@ RCT_REMAP_METHOD(setToolColor,
     [[self documentViewManager] setToolColorForDocumentViewTag:tag toolColor:toolColor toolType:toolType];
 }
 
+RCT_REMAP_METHOD(openTextSearch, openTextSearchForDocumentViewTag:(nonnull NSNumber *)tag)
+{
+    [[self documentViewManager] openTextSearchForDocumentViewTag:tag];
+}
+
+RCT_REMAP_METHOD(openThumbnails, openThumbnailsForDocumentViewTag:(nonnull NSNumber *)tag)
+{
+    [[self documentViewManager] openThumbnailsForDocumentViewTag:tag];
+}
+
 #pragma mark - Methods (w/ promises)
 
 RCT_REMAP_METHOD(getDocumentPath,
