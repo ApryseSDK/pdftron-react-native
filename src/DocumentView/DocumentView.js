@@ -190,6 +190,20 @@ export default class DocumentView extends PureComponent {
     }
   }
 
+  openThumbnails = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.openThumbnails(tag);
+    }
+  }
+
+  openTextSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.openTextSearch(tag);
+    }
+  }
+
   getPageCount = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

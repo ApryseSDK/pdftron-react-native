@@ -263,6 +263,10 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)setToolColor:(NSString *)color toolType:(NSString*)toolType;
 
+- (void)openTextSearch;
+
+- (void)openThumbnails;
+
 - (int)getPageCount;
 
 - (NSString *)getDocumentPath;

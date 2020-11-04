@@ -664,6 +664,27 @@ NS_ASSUME_NONNULL_END
     [PTColorDefaults setDefaultColor:newColor forAnnotType:annotationType attribute:ATTRIBUTE_STROKE_COLOR colorPostProcessMode:e_ptpostprocess_none];
 }
 
+- (void)openTextSearch
+{
+    PTTextSearchViewController* searchViewController = [[PTTextSearchViewController alloc] initWithPDFViewCtrl: [self pdfViewCtrl]];
+    
+    searchViewController.delegate = [self documentViewController];
+
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+    navigationController.modalPresentationStyle = UIModalPresentationCustom;
+    
+    [[self documentViewController] presentViewController:navigationController animated:YES completion:NULL];
+}
+
+- (void)openThumbnails
+{
+    PTThumbnailsViewController* thumbnailsViewController = [[PTThumbnailsViewController alloc] initWithPDFViewCtrl: [self pdfViewCtrl]];
+    
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:thumbnailsViewController];
+    
+    [[self documentViewController] presentViewController:navigationController animated:true completion:NULL];
+}
+
 - (void)setPageNumber:(int)pageNumber
 {
     if (_pageNumber == pageNumber) {

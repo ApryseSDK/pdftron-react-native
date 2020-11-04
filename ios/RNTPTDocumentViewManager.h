@@ -21,6 +21,10 @@
 
 - (void)setToolColorForDocumentViewTag:(NSNumber *)tag toolColor:(NSString *)toolColor toolType:(NSString*)toolType;
 
+- (void)openTextSearchForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openThumbnailsForDocumentViewTag:(NSNumber *)tag;
+
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
