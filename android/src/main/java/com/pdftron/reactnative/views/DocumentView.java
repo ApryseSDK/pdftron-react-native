@@ -426,25 +426,39 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 ReadableMap map = toolbars.getMap(i);
                 if (map != null) {
                     ReadableMapKeySetIterator iterator = map.keySetIterator();
+                    String tag = null, toolbarName = null, toolbarIcon = null;
+                    ReadableArray toolbarItems = null;
                     while (iterator.hasNextKey()) {
-                        String toolbarName = iterator.nextKey();
-
-                        if (Utils.isNullOrEmpty(toolbarName)) continue;
-
-                        ReadableArray tools = map.getArray(toolbarName);
-
-                        if (tools != null && tools.size() > 0) {
-                            AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(toolbarName);
-                            for (int j = 0; j < tools.size(); j++) {
-                                String toolStr = tools.getString(j);
-                                ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
-                                int buttonId = convStringToButtonId(toolStr);
-                                if (buttonType != null && buttonId != 0) {
+                        String toolbarKey = iterator.nextKey();
+                        if (TOOLBAR_KEY_ID.equals(toolbarKey)) {
+                            tag = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_NAME.equals(toolbarKey)) {
+                            toolbarName = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_ICON.equals(toolbarKey)) {
+                            toolbarIcon = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_ITEMS.equals(toolbarKey)) {
+                            toolbarItems = map.getArray(toolbarKey);
+                        }
+                    }
+                    if (!Utils.isNullOrEmpty(tag) && !Utils.isNullOrEmpty(toolbarName) &&
+                            toolbarItems != null && toolbarItems.size() > 0) {
+                        AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
+                                .setToolbarName(toolbarName)
+                                .setIcon(convStringToToolbarDefaultIconRes(toolbarIcon));
+                        for (int j = 0; j < toolbarItems.size(); j++) {
+                            String toolStr = toolbarItems.getString(j);
+                            ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
+                            int buttonId = convStringToButtonId(toolStr);
+                            if (buttonType != null && buttonId != 0) {
+                                if (buttonType == ToolbarButtonType.UNDO ||
+                                        buttonType == ToolbarButtonType.REDO) {
+                                    toolbarBuilder.addToolStickyButton(buttonType, buttonId);
+                                } else {
                                     toolbarBuilder.addToolButton(buttonType, buttonId);
                                 }
                             }
-                            mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
                         }
+                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
                     }
                 }
             }
@@ -786,6 +800,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.LIST_BOX.value();
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.ERASER.value();
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.UNDO.value();
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.REDO.value();
         }
         return buttonId;
     }
@@ -863,8 +881,33 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.LIST_BOX;
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonType = ToolbarButtonType.ERASER;
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonType = ToolbarButtonType.UNDO;
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonType = ToolbarButtonType.REDO;
         }
         return buttonType;
+    }
+
+    private int convStringToToolbarDefaultIconRes(String item) {
+        if (TAG_VIEW_TOOLBAR.equals(item)) {
+            return R.drawable.ic_view;
+        } else if (TAG_ANNOTATE_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_underline_black_24dp;
+        } else if (TAG_DRAW_TOOLBAR.equals(item)) {
+            return R.drawable.ic_pens_and_shapes;
+        } else if (TAG_INSERT_TOOLBAR.equals(item)) {
+            return R.drawable.ic_add_image_white;
+        } else if (TAG_FILL_AND_SIGN_TOOLBAR.equals(item)) {
+            return R.drawable.ic_fill_and_sign;
+        } else if (TAG_PREPARE_FORM_TOOLBAR.equals(item)) {
+            return R.drawable.ic_prepare_form;
+        } else if (TAG_MEASURE_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_distance_black_24dp;
+        } else if (TAG_PENS_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_freehand_black_24dp;
+        }
+        return 0;
     }
 
     private void checkQuickMenu(List<QuickMenuItem> menuItems, ArrayList<Object> keepList, List<QuickMenuItem> removeList) {
