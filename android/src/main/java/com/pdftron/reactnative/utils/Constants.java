@@ -14,6 +14,7 @@ public final class Constants {
     public static final String ON_ANNOTATIONS_SELECTED = "onAnnotationsSelected";
     public static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
     public static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
+    public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -179,6 +180,9 @@ public final class Constants {
     public static final String kEY_flagPrint = "print";
     public static final String KEY_flagReadOnly = "readOnly";
     public static final String KEY_flagToggleNoView = "toggleNoView";
+
+    public static final String KEY_bookmark_json = "bookmarkJson";
+    // EVENTS END
 
     // Config keys
     public static final String KEY_Config_linkPress = "linkPress";
