@@ -314,14 +314,14 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentVi
 RCT_CUSTOM_VIEW_PROPERTY(annotationToolbars, NSArray, RNTPTDocumentView)
 {
     if (json) {
-        view.annotationToolbars = [RCTConvert NSStringArray:json];
+        view.annotationToolbars = [RCTConvert NSArray:json];
     }
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentView)
 {
     if (json) {
-        view.hideDefaultAnnotationToolbars = [RCTConvert NSStringArray:json];
+        view.hideDefaultAnnotationToolbars = [RCTConvert NSArray:json];
     }
 }
 
