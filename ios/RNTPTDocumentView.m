@@ -128,6 +128,14 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
+- (RNTPTDocumentController *)rnt_documentController
+{
+    if ([self.documentViewController isKindOfClass:[RNTPTDocumentController class]]) {
+        return (RNTPTDocumentController *)self.documentViewController;
+    }
+    return nil;
+}
+
 #pragma mark - Convenience
 
 - (nullable PTPDFViewCtrl *)pdfViewCtrl
