@@ -276,6 +276,8 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 
+- (void)deleteCurrentPageAnnotations;
+
 - (void)deleteAnnotations:(NSArray *)annotations;
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;

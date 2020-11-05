@@ -251,6 +251,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  deleteCurrentPageAnnotations = (annotations) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.deleteCurrentPageAnnotations(tag);
+    }
+    return Promise.resolve();
+  }
+
   deleteAnnotations = (annotations) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

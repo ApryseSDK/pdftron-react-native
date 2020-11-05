@@ -34,6 +34,8 @@
 
 - (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly;
 
+- (void)deleteCurrentPageAnnotationsForDocumentViewTag:(NSNumber *)tag;
+
 - (void)deleteAnnotationsForDocumentViewTag:(NSNumber *)tag annotations:(NSArray *)annotations;
 
 - (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
