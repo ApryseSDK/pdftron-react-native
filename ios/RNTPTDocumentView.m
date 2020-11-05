@@ -839,6 +839,36 @@ NS_ASSUME_NONNULL_END
     [pdfViewCtrl Update:YES];
 }
 
+- (void)deleteCurrentPageAnnotations
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    int pageNumber = [pdfViewCtrl GetCurrentPage];
+    
+    NSArray<PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:pageNumber];
+    
+    NSError *error = nil;
+    for (id annot in annots) {
+        [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+            [self.toolManager willRemoveAnnotation:annot onPageNumber:pageNumber];
+
+            PTPage *page = [doc GetPage:pageNumber];
+            if ([page IsValid]) {
+                [page AnnotRemoveWithAnnot:annot];
+            }
+            
+            [self.pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumber];
+        } error:&error];
+        
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        } else if (annot) {
+            [self.toolManager annotationRemoved:annot onPageNumber:pageNumber];
+        }
+    }
+    
+    [self.toolManager changeTool:[PTPanTool class]];
+}
+
 - (void)deleteAnnotations:(NSArray *)annotations
 {
     if (annotations.count == 0) {
