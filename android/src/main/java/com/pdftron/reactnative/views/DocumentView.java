@@ -267,7 +267,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setHideToolbarsOnTap(boolean hideToolbarsOnTap) {
-        mBuilder = mBuilder.permanentTopToolbar(!hideToolbarsOnTap);
+        mBuilder = mBuilder.permanentToolbars(!hideToolbarsOnTap);
     }
 
     public void setReadOnly(boolean readOnly) {
