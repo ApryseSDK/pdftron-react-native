@@ -220,6 +220,9 @@ NS_ASSUME_NONNULL_END
             }
         }
         
+        [PTOverrides overrideClass:[PTThumbnailsViewController class] withClass:[RNTPTThumbnailsViewController class]];
+        
+        self.documentViewController.navigationListsViewController.bookmarkViewController.delegate = self;
         [self applyViewerSettings];
     }
     
@@ -239,10 +242,15 @@ NS_ASSUME_NONNULL_END
     
     if (self.showNavButton) {
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
-        UIBarButtonItem *navButton = [[UIBarButtonItem alloc] initWithImage:navImage
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(navButtonClicked)];
+        UIBarButtonItem *navButton;
+        if (navImage == nil) {
+            navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(navButtonClicked)];
+        }else{
+            navButton = [[UIBarButtonItem alloc] initWithImage:navImage
+                                                         style:UIBarButtonItemStylePlain
+                                                        target:self
+                                                        action:@selector(navButtonClicked)];
+        }
         self.documentViewController.navigationItem.leftBarButtonItem = navButton;
     }
     
@@ -321,11 +329,6 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
                    name:PTToolManagerAnnotationRemovedNotification
                  object:self.documentViewController.toolManager];
-
-    [center addObserver:self
-    selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:)
-        name:PTToolManagerFormFieldDataModifiedNotification
-      object:self.documentViewController.toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications
@@ -683,6 +686,21 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Bookmark import
+
+- (void)importBookmarkJson:(NSString *)bookmarkJson
+{
+    NSError *error = nil;
+    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        [PTBookmarkManager.defaultManager importBookmarksForDoc:doc fromJSONString:bookmarkJson];
+        [self.documentViewController.pdfViewCtrl Update:YES];
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to import bookmark json. %@", error.localizedDescription);
+    }
+}
+
 #pragma mark - Annotation import/export
 
 - (PTAnnot *)findAnnotWithUniqueID:(NSString *)uniqueID onPageNumber:(int)pageNumber
@@ -773,20 +791,26 @@ NS_ASSUME_NONNULL_END
 - (void)importAnnotations:(NSString *)xfdfString
 {
     PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
-    BOOL shouldUnlock = NO;
-    @try {
-        [pdfViewCtrl DocLockRead];
-        shouldUnlock = YES;
-        
+
+    NSError *error;
+    __block BOOL hasDownloader = false;
+    
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        hasDownloader = [[pdfViewCtrl GetDoc] HasDownloader];
+    } error:&error];
+    
+    if (hasDownloader || error) {
+        return;
+    }
+    
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
         PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
-        
         [[pdfViewCtrl GetDoc] FDFUpdate:fdfDoc];
         [pdfViewCtrl Update:YES];
-    }
-    @finally {
-        if (shouldUnlock) {
-            [pdfViewCtrl DocUnlockRead];
-        }
+    } error:&error];
+    
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
 
@@ -897,7 +921,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Annotation Flag
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList
 {
     if (annotationFlagList.count == 0) {
         return;
@@ -999,7 +1023,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map
 {
     PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
@@ -1061,12 +1085,9 @@ NS_ASSUME_NONNULL_END
 
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
-    self.documentViewController.toolManager.annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
-}
+    _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
 
--(BOOL)annotationPermissionCheckEnabled
-{
-    return self.documentViewController.toolManager.annotationPermissionCheckEnabled;
+    [self applyViewerSettings];
 }
 
 #pragma mark - Collaboration
@@ -1258,6 +1279,7 @@ NS_ASSUME_NONNULL_END
     
     // Thumbnail editing enabled.
     self.documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
+    self.documentViewController.thumbnailsViewController.navigationController.toolbarHidden = !self.thumbnailViewEditingEnabled;
     
     // Select after creation.
     self.toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
@@ -1315,7 +1337,10 @@ NS_ASSUME_NONNULL_END
     self.toolManager.showDefaultSignature = self.showSavedSignatures;
     
     self.toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
-    
+
+    // Annotation permission check
+    self.toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.1, *)) {
@@ -2294,6 +2319,36 @@ NS_ASSUME_NONNULL_END
     return fdfCommand;
 }
 
+#pragma mark - PTBookmarkViewControllerDelegate
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didModifyBookmark:(PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didAddBookmark:(PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didRemoveBookmark:(nonnull PTUserBookmark *)bookmark {
+    [self bookmarksModified];
+}
+
+- (void)bookmarksModified {
+    if ([self.delegate respondsToSelector:@selector(bookmarkChanged:bookmarkJson:)]) {
+
+        __block NSString* json;
+        NSError* error;
+        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            json = [PTBookmarkManager.defaultManager exportBookmarksFromDoc:doc];
+        } error:&error];
+    
+        if(error)
+        {
+            NSLog(@"Error: There was an error while trying to export the bookmark json on events triggered. %@", error.localizedDescription);
+        }
+        [self.delegate bookmarkChanged:self bookmarkJson:json];
+    }
+}
 
 #pragma mark - Select Annotation
 
@@ -2307,7 +2362,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Set Property for Annotation
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
     
     NSError *error;
     
@@ -2540,3 +2595,13 @@ NS_ASSUME_NONNULL_END
 
 @end
 
+#pragma mark - RNTPTThumbnailsViewController
+
+@implementation RNTPTThumbnailsViewController
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.toolbarHidden = !self.editingEnabled;
+}
+@end

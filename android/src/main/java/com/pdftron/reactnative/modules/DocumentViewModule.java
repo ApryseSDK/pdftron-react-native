@@ -32,6 +32,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void importBookmarkJson(final int tag, final String bookmarkJson, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.importBookmarkJson(tag, bookmarkJson);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void importAnnotationCommand(final int tag, final String xfdfCommand, final boolean initialLoad, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -180,12 +195,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setValueForFields(final int tag, final ReadableMap map, final Promise promise) {
+    public void setValuesForFields(final int tag, final ReadableMap map, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setValueForFields(tag, map);
+                    mDocumentViewInstance.setValuesForFields(tag, map);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -225,12 +240,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setFlagForAnnotations(final int tag, final ReadableArray annotationFlaglist, final Promise promise) {
+    public void setFlagsForAnnotations(final int tag, final ReadableArray annotationFlaglist, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setFlagForAnnotations(tag, annotationFlaglist);
+                    mDocumentViewInstance.setFlagsForAnnotations(tag, annotationFlaglist);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -255,12 +270,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setPropertyForAnnotation(final int tag, final String annotId, final int pageNumber, final ReadableMap propertyMap, final Promise promise) {
+    public void setPropertiesForAnnotation(final int tag, final String annotId, final int pageNumber, final ReadableMap propertyMap, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setPropertyForAnnotation(tag, annotId, pageNumber, propertyMap);
+                    mDocumentViewInstance.setPropertiesForAnnotation(tag, annotId, pageNumber, propertyMap);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

@@ -52,6 +52,28 @@ RCT_REMAP_METHOD(encryptDocument,
     }
 }
 
+RCT_EXPORT_METHOD(getVersion:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        resolve([@"PDFNet " stringByAppendingFormat:@"%f", [PTPDFNet GetVersion]]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_failed", @"Failed to get PDFNet version", [self errorFromException:exception]);
+    }
+}
+
+RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        resolve([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_failed", @"Failed to get platform version", [self errorFromException:exception]);
+    }
+}
+
 - (void)setPassword:(NSString *)password onPDFDoc:(PTPDFDoc *)pdfDoc
 {
     if (!pdfDoc) {

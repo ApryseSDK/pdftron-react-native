@@ -311,10 +311,22 @@ initialize(string)
 #### enableJavaScript
 enableJavaScript(bool)
 
+#### getVersion
+getVersion()
+
+Return a promise with the version of the PDFNet version used.
+
+### getPlatformVersion
+getPlatformVersion()
+
+Return a promise with the version of current platform (Android/iOS).
+
 #### encryptDocument
-encryptDocument(string, string, string, Promise)
+encryptDocument(string, string, string)
 
 This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
+
+Return a promise.
 
 Example:
 
@@ -331,7 +343,6 @@ Name | Type | Description
 file path | string | the local file path to the file
 password | string | the password
 current password | string | the current password, use empty string if no password
-
 ## Components
 
 ### DocumentView
@@ -374,6 +385,7 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [useStylusAsPen](#usestylusaspen)
 - [signSignatureFieldsWithStamps](#signsignaturefieldswithstamps)
 - [longPressMenuEnabled](#longPressMenuEnabled)
+- [onBookmarkChanged](#onBookmarkChanged)
 
 ##### document
 string, required
@@ -604,6 +616,26 @@ bool, optional, default to false
 
 If true, annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
 
+##### onFormFieldValueChanged
+function, optional
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`
+
+##### onBookmarkChanged
+function, optional
+
+Defines what happens if a change has been made to bookmarks
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+bookmarkJson | string | the list of current bookmarks in JSON format
+
 Example:
 
 ```js
@@ -628,18 +660,9 @@ import { DocumentView, Config } from 'react-native-pdftron';
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
   annotationPermissionCheckEnabled={false}
+  onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
 />
 ```
-
-##### onFormFieldValueChanged
-function, optional
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`
-
 
 #### Methods
 - [setToolMode](#settoolmode)
@@ -651,13 +674,14 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 - [deleteAnnotations](#deleteannotations)
 - [saveDocument](#savedocument)
 - [setFlagForFields](#setFlagForFields)
-- [setValueForFields](#setValueForFields)
+- [setValuesForFields](#setValuesForFields)
 - [importAnnotationCommand](#importannotationcommand)
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
-- [setFlagForAnnotations](#setFlagForAnnotations)
-- [setPropertyForAnnotation](#setPropertyForAnnotation)
+- [setFlagsForAnnotations](#setFlagsForAnnotations)
+- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
 - [getPageCropBox](#getPageCropBox)
+- [importBookmarkJson](#importBookmarkJson)
 - [setCurrentPage](#setCurrentPage)
 - [getDocumentPath](#getDocumentPath)
 
@@ -783,8 +807,10 @@ Returns a Promise.
 this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
 
-##### setValueForFields
+##### setValuesForFields
 Set field values on one or more form fields.
+
+Note: the old function `setValueForFields` is deprecated. Please use this one.
 
 Parameters:
 
@@ -795,7 +821,7 @@ fieldsMap | object | map of field names and values which should be set
 Returns a Promise.
 
 ```js
-this._viewer.setValueForFields({
+this._viewer.setValuesForFields({
   'textField1': 'Test',
   'textField2': 1234,
   'checkboxField1': true,
@@ -845,8 +871,10 @@ Return a Promise.
 this._viewer.selectAnnotation('annotId1', 1);
 ```
 
-##### setFlagForAnnotations
-To set flag for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+##### setFlagsForAnnotations
+To set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+
+Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
 
 Parameters:
 
@@ -858,7 +886,7 @@ Return a Promise.
 
 ```js
 //  Set flag for annotations in the current document.
-this._viewer.setFlagForAnnotations([
+this._viewer.setFlagsForAnnotations([
     {
         id: 'annotId1',
         pageNumber: 1,
@@ -873,8 +901,10 @@ this._viewer.setFlagForAnnotations([
     }
 ]);
 ```
-##### setPropertyForAnnotation
+##### setPropertiesForAnnotation
 To set properties for specified annotation in the current document, if it is valid. 
+
+Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
 Parameters:
 
@@ -898,7 +928,7 @@ Return a promise.
 
 ```js
 // Set properties for annotation in the current document.
-this._viewer.setPropertyForAnnotation('Pdftron', 1, {
+this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   rect: {
     x1: 1.1,    // left
     y1: 3,      // bottom
@@ -929,6 +959,21 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
 });
+```
+
+##### importBookmarkJson
+Imports user bookmarks to the document. The input needs to be a valid bookmark JSON format, for example {"0":"Page 1"}.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+bookmarkJson | String | needs to be in valid bookmark JSON format, for example {"0": "Page 1"}. The page numbers are 1-indexed
+
+Return a Promise.
+
+```js
+this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
 ##### setCurrentPage

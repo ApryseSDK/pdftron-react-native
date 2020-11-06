@@ -69,6 +69,7 @@ export default class DocumentView extends PureComponent {
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
+    onBookmarkChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -155,6 +156,12 @@ export default class DocumentView extends PureComponent {
           'data': event.nativeEvent.data,
         });
       }
+    } else if (event.nativeEvent.onBookmarkChanged) {
+      if (this.props.onBookmarkChanged) {
+        this.props.onBookmarkChanged({
+          'bookmarkJson': event.nativeEvent.bookmarkJson,
+        });
+      }
     }
   }
 
@@ -185,6 +192,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
+  }
+
+  importBookmarkJson = (bookmarkJson) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }
@@ -252,10 +267,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setValuesForFields.
+  * 
+  */
   setValueForFields = (fieldsMap) => {
+    return this.setValuesForFields(fieldsMap);
+  }
+
+  setValuesForFields = (fieldsMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
-      return DocumentViewManager.setValueForFields(tag, fieldsMap);
+      return DocumentViewManager.setValuesForFields(tag, fieldsMap);
     }
     return Promise.resolve();
   }
@@ -268,10 +291,19 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  
+  /**
+  * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
+  * 
+  */
   setFlagForAnnotations = (annotationFlagList) => {
+    return this.setFlagsForAnnotations(annotationFlagList);  
+  }
+  
+  setFlagsForAnnotations = (annotationFlagList) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+      return DocumentViewManager.setFlagsForAnnotations(tag, annotationFlagList);
     }
     return Promise.resolve();
   }
@@ -284,10 +316,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
+  * 
+  */
   setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
+    return setPropertiesForAnnotation(id, pageNumber, propertyMap);
+  }
+
+  setPropertiesForAnnotation = (id, pageNumber, propertyMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setPropertyForAnnotation(tag, id, pageNumber, propertyMap);
+      return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
     }
     return Promise.resolve();
   }

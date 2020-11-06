@@ -196,6 +196,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText;
 
+- (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -285,9 +287,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (int)getPageCount;
 
+- (void)importBookmarkJson:(NSString *)bookmarkJson;
+
 - (NSString *)getDocumentPath;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
+
 - (void)importAnnotations:(NSString *)xfdfString;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
@@ -298,13 +303,13 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList;
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
@@ -314,4 +319,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @end
 
+
+@interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
 NS_ASSUME_NONNULL_END
