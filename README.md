@@ -19,6 +19,12 @@
 :--:|:--:
 ![demo](./react-native-pdftron-demo-android.gif) | ![demo](./react-native-pdftron-demo-ios.gif)
 
+## Legacy UI
+
+Version `2.0.2` is the last stable release for the legacy UI.
+
+The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/legacy-ui.
+
 ## Installation
 
 0. If using yarn, do: `yarn global add react-native-cli`
