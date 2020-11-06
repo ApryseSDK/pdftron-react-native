@@ -17,7 +17,7 @@
 
 **Android** |  **iOS**
 :--:|:--:
-<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/android/7-1-5/annotation-toolbar.gif' style='width:80%' /> | <img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/react-native-ui-demo.gif' style='width:80%' />
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/android/react-native-ui-demo.gif' style='width:80%' /> | <img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/react-native-ui-demo.gif' style='width:80%' />
 
 ## Legacy UI
 
