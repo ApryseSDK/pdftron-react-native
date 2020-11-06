@@ -17,7 +17,7 @@
 
 **Android** |  **iOS**
 :--:|:--:
-![demo](./react-native-pdftron-demo-android.gif) | <img alt='demo' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/new-ui/Annotate-Toolbar.gif' style='width:80%' />
+<img alt='demo' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/android/7-1-5/annotation-toolbar.gif' style='width:80%' /> | <img alt='demo' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/new-ui/Annotate-Toolbar.gif' style='width:80%' />
 
 ## Legacy UI
 
