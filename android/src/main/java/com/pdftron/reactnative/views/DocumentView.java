@@ -21,14 +21,15 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
-import com.pdftron.collab.ui.viewer.CollabViewerBuilder;
-import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment;
+import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
+import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
@@ -45,8 +46,8 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
-import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment;
+import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
+import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
@@ -63,10 +64,12 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
+import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
+import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
-import static com.pdftron.reactnative.utils.Constants.*;
 import com.pdftron.sdf.Obj;
 
 import org.apache.commons.io.FileUtils;
@@ -78,7 +81,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
+import static com.pdftron.reactnative.utils.Constants.*;
+
+public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private static final String TAG = DocumentView.class.getSimpleName();
 
@@ -97,7 +102,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
-    private boolean mTopToolbarEnabled = true;
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -165,6 +169,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             throw new IllegalStateException("FragmentActivity required.");
         }
 
+        PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
+
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
@@ -177,10 +183,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     @Override
-    protected PdfViewCtrlTabHostFragment getViewer() {
+    protected PdfViewCtrlTabHostFragment2 getViewer() {
         if (mCollabEnabled) {
             // Create the Fragment using CollabViewerBuilder
-            return CollabViewerBuilder.withUri(mDocumentUri, mPassword)
+            return CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
@@ -250,11 +256,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setTopToolbarEnabled(boolean topToolbarEnabled) {
-        mTopToolbarEnabled = topToolbarEnabled;
+        mBuilder = mBuilder.showTopToolbar(topToolbarEnabled);
     }
 
     public void setBottomToolbarEnabled(boolean bottomToolbarEnabled) {
-        mBuilder = mBuilder.showBottomNavBar(bottomToolbarEnabled);
+        mBuilder = mBuilder.showBottomToolbar(bottomToolbarEnabled);
     }
 
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
@@ -262,7 +268,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     }
 
     public void setHideToolbarsOnTap(boolean hideToolbarsOnTap) {
-        mBuilder = mBuilder.permanentTopToolbar(!hideToolbarsOnTap);
+        mBuilder = mBuilder.permanentToolbars(!hideToolbarsOnTap);
     }
 
     public void setReadOnly(boolean readOnly) {
@@ -405,7 +411,101 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
     }
-    
+
+    public void setAnnotationToolbars(ReadableArray toolbars) {
+        for (int i = 0; i < toolbars.size(); i++) {
+            ReadableType type = toolbars.getType(i);
+            if (type == ReadableType.String) {
+                String tag = toolbars.getString(i);
+                if (isValidToolbarTag(tag)) {
+                    mBuilder = mBuilder.addToolbarBuilder(
+                            DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag)
+                    );
+                }
+            } else if (type == ReadableType.Map) {
+                // custom toolbars
+                ReadableMap map = toolbars.getMap(i);
+                if (map != null) {
+                    ReadableMapKeySetIterator iterator = map.keySetIterator();
+                    String tag = null, toolbarName = null, toolbarIcon = null;
+                    ReadableArray toolbarItems = null;
+                    while (iterator.hasNextKey()) {
+                        String toolbarKey = iterator.nextKey();
+                        if (TOOLBAR_KEY_ID.equals(toolbarKey)) {
+                            tag = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_NAME.equals(toolbarKey)) {
+                            toolbarName = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_ICON.equals(toolbarKey)) {
+                            toolbarIcon = map.getString(toolbarKey);
+                        } else if (TOOLBAR_KEY_ITEMS.equals(toolbarKey)) {
+                            toolbarItems = map.getArray(toolbarKey);
+                        }
+                    }
+                    if (!Utils.isNullOrEmpty(tag) && !Utils.isNullOrEmpty(toolbarName) &&
+                            toolbarItems != null && toolbarItems.size() > 0) {
+                        AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
+                                .setToolbarName(toolbarName)
+                                .setIcon(convStringToToolbarDefaultIconRes(toolbarIcon));
+                        for (int j = 0; j < toolbarItems.size(); j++) {
+                            String toolStr = toolbarItems.getString(j);
+                            ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
+                            int buttonId = convStringToButtonId(toolStr);
+                            if (buttonType != null && buttonId != 0) {
+                                if (buttonType == ToolbarButtonType.UNDO ||
+                                        buttonType == ToolbarButtonType.REDO) {
+                                    toolbarBuilder.addToolStickyButton(buttonType, buttonId);
+                                } else {
+                                    toolbarBuilder.addToolButton(buttonType, buttonId);
+                                }
+                            }
+                        }
+                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isValidToolbarTag(String tag) {
+        if (tag != null) {
+            if (TAG_VIEW_TOOLBAR.equals(tag) ||
+                    TAG_ANNOTATE_TOOLBAR.equals(tag) ||
+                    TAG_DRAW_TOOLBAR.equals(tag) ||
+                    TAG_INSERT_TOOLBAR.equals(tag) ||
+                    TAG_FILL_AND_SIGN_TOOLBAR.equals(tag) ||
+                    TAG_PREPARE_FORM_TOOLBAR.equals(tag) ||
+                    TAG_MEASURE_TOOLBAR.equals(tag) ||
+                    TAG_PENS_TOOLBAR.equals(tag) ||
+                    TAG_FAVORITE_TOOLBAR.equals(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setHideDefaultAnnotationToolbars(ReadableArray tags) {
+        ArrayList<String> tagList = new ArrayList<>();
+        for (int i = 0; i < tags.size(); i++) {
+            String tag = tags.getString(i);
+            if (!Utils.isNullOrEmpty(tag)) {
+                tagList.add(tag);
+            }
+        }
+        mBuilder = mBuilder.hideToolbars(tagList.toArray(new String[tagList.size()]));
+    }
+
+    public void setHideAnnotationToolbarSwitcher(boolean hideToolbarSwitcher) {
+        mBuilder = mBuilder.showToolbarSwitcher(!hideToolbarSwitcher);
+    }
+
+    public void setHideTopToolbars(boolean hideTopToolbars) {
+        mBuilder = mBuilder.showAppBar(!hideTopToolbars);
+    }
+
+    public void setHideTopAppNavBar(boolean hideTopAppNavBar) {
+        mBuilder = mBuilder.showTopToolbar(!hideTopAppNavBar);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -630,6 +730,190 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return mode;
     }
 
+    private int convStringToButtonId(String item) {
+        int buttonId = 0;
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.INK.value();
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_HIGHLIGHT.value();
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_UNDERLINE.value();
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_SQUIGGLY.value();
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_STRIKEOUT.value();
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SQUARE.value();
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CIRCLE.value();
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LINE.value();
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ARROW.value();
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLYLINE.value();
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLYGON.value();
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.POLY_CLOUD.value();
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SIGNATURE.value();
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.FREE_TEXT.value();
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STICKY_NOTE.value();
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CALLOUT.value();
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STAMP.value();
+        } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.STAMP.value();
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RULER.value();
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.PERIMETER.value();
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.AREA.value();
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ATTACHMENT.value();
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SOUND.value();
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LINK.value();
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.MULTI_SELECT.value();
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.TEXT_FIELD.value();
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CHECKBOX.value();
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.SIGNATURE_FIELD.value();
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RADIO_BUTTON.value();
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.COMBO_BOX.value();
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.LIST_BOX.value();
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.ERASER.value();
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.UNDO.value();
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.REDO.value();
+        }
+        return buttonId;
+    }
+
+    @Nullable
+    private ToolbarButtonType convStringToToolbarType(String item) {
+        ToolbarButtonType buttonType = null;
+        if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
+            buttonType = ToolbarButtonType.INK;
+        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_HIGHLIGHT;
+        } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_UNDERLINE;
+        } else if (TOOL_BUTTON_SQUIGGLY.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_SQUIGGLY;
+        } else if (TOOL_BUTTON_STRIKEOUT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_STRIKEOUT;
+        } else if (TOOL_BUTTON_RECTANGLE.equals(item) || TOOL_ANNOTATION_CREATE_RECTANGLE.equals(item)) {
+            buttonType = ToolbarButtonType.SQUARE;
+        } else if (TOOL_BUTTON_ELLIPSE.equals(item) || TOOL_ANNOTATION_CREATE_ELLIPSE.equals(item)) {
+            buttonType = ToolbarButtonType.CIRCLE;
+        } else if (TOOL_BUTTON_LINE.equals(item) || TOOL_ANNOTATION_CREATE_LINE.equals(item)) {
+            buttonType = ToolbarButtonType.LINE;
+        } else if (TOOL_BUTTON_ARROW.equals(item) || TOOL_ANNOTATION_CREATE_ARROW.equals(item)) {
+            buttonType = ToolbarButtonType.ARROW;
+        } else if (TOOL_BUTTON_POLYLINE.equals(item) || TOOL_ANNOTATION_CREATE_POLYLINE.equals(item)) {
+            buttonType = ToolbarButtonType.POLYLINE;
+        } else if (TOOL_BUTTON_POLYGON.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON.equals(item)) {
+            buttonType = ToolbarButtonType.POLYGON;
+        } else if (TOOL_BUTTON_CLOUD.equals(item) || TOOL_ANNOTATION_CREATE_POLYGON_CLOUD.equals(item)) {
+            buttonType = ToolbarButtonType.POLY_CLOUD;
+        } else if (TOOL_BUTTON_SIGNATURE.equals(item) || TOOL_ANNOTATION_CREATE_SIGNATURE.equals(item)) {
+            buttonType = ToolbarButtonType.SIGNATURE;
+        } else if (TOOL_BUTTON_FREE_TEXT.equals(item) || TOOL_ANNOTATION_CREATE_FREE_TEXT.equals(item)) {
+            buttonType = ToolbarButtonType.FREE_TEXT;
+        } else if (TOOL_BUTTON_STICKY.equals(item) || TOOL_ANNOTATION_CREATE_STICKY.equals(item)) {
+            buttonType = ToolbarButtonType.STICKY_NOTE;
+        } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
+            buttonType = ToolbarButtonType.CALLOUT;
+        } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.RULER;
+        } else if (TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.PERIMETER;
+        } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.AREA;
+        } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
+            buttonType = ToolbarButtonType.ATTACHMENT;
+        } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
+            buttonType = ToolbarButtonType.SOUND;
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
+            buttonType = ToolbarButtonType.LINK;
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
+            // TODO
+        } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
+            buttonType = ToolbarButtonType.MULTI_SELECT;
+        } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.TEXT_FIELD;
+        } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.CHECKBOX;
+        } else if (TOOL_FORM_CREATE_SIGNATURE_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.SIGNATURE_FIELD;
+        } else if (TOOL_FORM_CREATE_RADIO_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.RADIO_BUTTON;
+        } else if (TOOL_FORM_CREATE_COMBO_BOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.COMBO_BOX;
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            buttonType = ToolbarButtonType.LIST_BOX;
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
+            buttonType = ToolbarButtonType.ERASER;
+        } else if (BUTTON_UNDO.equals(item)) {
+            buttonType = ToolbarButtonType.UNDO;
+        } else if (BUTTON_REDO.equals(item)) {
+            buttonType = ToolbarButtonType.REDO;
+        }
+        return buttonType;
+    }
+
+    private int convStringToToolbarDefaultIconRes(String item) {
+        if (TAG_VIEW_TOOLBAR.equals(item)) {
+            return R.drawable.ic_view;
+        } else if (TAG_ANNOTATE_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_underline_black_24dp;
+        } else if (TAG_DRAW_TOOLBAR.equals(item)) {
+            return R.drawable.ic_pens_and_shapes;
+        } else if (TAG_INSERT_TOOLBAR.equals(item)) {
+            return R.drawable.ic_add_image_white;
+        } else if (TAG_FILL_AND_SIGN_TOOLBAR.equals(item)) {
+            return R.drawable.ic_fill_and_sign;
+        } else if (TAG_PREPARE_FORM_TOOLBAR.equals(item)) {
+            return R.drawable.ic_prepare_form;
+        } else if (TAG_MEASURE_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_distance_black_24dp;
+        } else if (TAG_PENS_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_freehand_black_24dp;
+        } else if (TAG_FAVORITE_TOOLBAR.equals(item)) {
+            return R.drawable.ic_star_white_24dp;
+        }
+        return 0;
+    }
+
     private void checkQuickMenu(List<QuickMenuItem> menuItems, ArrayList<Object> keepList, List<QuickMenuItem> removeList) {
         for (QuickMenuItem item : menuItems) {
             int menuId = item.getItemId();
@@ -778,15 +1062,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
             View annotToolbar = findViewById(R.id.annotationToolbar);
             if (annotToolbar != null) {
                 annotToolbar.setFitsSystemWindows(false);
-            }
-        }
-
-        if (mPdfViewCtrlTabHostFragment != null) {
-            if (!mTopToolbarEnabled) {
-                mPdfViewCtrlTabHostFragment.setToolbarTimerDisabled(true);
-                if (mPdfViewCtrlTabHostFragment.getToolbar() != null) {
-                    mPdfViewCtrlTabHostFragment.getToolbar().setVisibility(GONE);
-                }
             }
         }
 
@@ -1320,8 +1595,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
-        if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment) {
-            CollabViewerTabHostFragment collabHost = (CollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment;
+        if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment2) {
+            CollabViewerTabHostFragment2 collabHost = (CollabViewerTabHostFragment2) mPdfViewCtrlTabHostFragment;
             mCollabManager = collabHost.getCollabManager();
             if (mCollabManager != null) {
                 if (mCurrentUser != null) {
@@ -1784,7 +2059,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
                     ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
 
                     if (rectMap != null && rectMap.hasKey(KEY_x1) && rectMap.hasKey(KEY_y1) &&
-                                rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
+                            rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
                         double rectX1 = rectMap.getDouble(KEY_x1);
                         double rectY1 = rectMap.getDouble(KEY_y1);
                         double rectX2 = rectMap.getDouble(KEY_x2);
@@ -1829,8 +2104,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
 
                 toolManager.raiseAnnotationsModifiedEvent(map, Tool.getAnnotationModificationBundle(null));
             }
-        }
-        finally {
+        } finally {
             if (shouldUnlock) {
                 pdfViewCtrl.docUnlock();
             }
@@ -1930,7 +2204,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView {
         return pdfViewCtrl.setCurrentPage(pageNumber);
     }
 
-    public PdfViewCtrlTabFragment getPdfViewCtrlTabFragment() {
+    public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
         }

@@ -311,6 +311,41 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentVi
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(annotationToolbars, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.annotationToolbars = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideDefaultAnnotationToolbars = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideAnnotationToolbarSwitcher, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideAnnotationToolbarSwitcher = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideTopToolbars, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideTopToolbars = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideTopAppNavBar, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideTopAppNavBar = [RCTConvert BOOL:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];

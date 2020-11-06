@@ -152,6 +152,25 @@ static NSString * const PTRectHeightKey = @"height";
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 
+// Default annotation toolbar names.
+typedef NSString * PTDefaultAnnotationToolbarKey;
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarAnnotate = @"PDFTron_Annotate";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarDraw = @"PDFTron_Draw";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarInsert = @"PDFTron_Insert";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFillAndSign = @"PDFTron_Fill_and_Sign";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarMeasure = @"PDFTron_Measure";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPens = @"PDFTron_Pens";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
+
+// Custom annotation toolbar keys.
+typedef NSString * PTAnnotationToolbarKey;
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -199,7 +218,7 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
-@property (nonatomic, assign) BOOL topToolbarEnabled;
+@property (nonatomic, assign) BOOL topToolbarEnabled DEPRECATED_MSG_ATTRIBUTE("Use hideTopAppNavBar instead");
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
@@ -253,6 +272,12 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
+
+@property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
+@property (nonatomic) BOOL hideTopToolbars;
+@property (nonatomic) BOOL hideTopAppNavBar;
 
 #pragma mark - Methods
 

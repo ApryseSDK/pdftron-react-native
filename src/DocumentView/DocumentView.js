@@ -64,6 +64,11 @@ export default class DocumentView extends PureComponent {
     useStylusAsPen: PropTypes.bool,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
+    annotationToolbars: PropTypes.array,
+    hideDefaultAnnotationToolbars: PropTypes.array,
+    hideAnnotationToolbarSwitcher: PropTypes.bool,
+    hideTopToolbars: PropTypes.bool,
+    hideTopAppNavBar: PropTypes.bool,
     onBookmarkChanged: PropTypes.func,
     ...ViewPropTypes,
   };

@@ -2,6 +2,8 @@
 
 #import "RNTPTDocumentViewController.h"
 #import "RNTPTCollaborationDocumentViewController.h"
+#import "RNTPTDocumentController.h"
+#import "RNTPTNavigationController.h"
 
 #include <objc/runtime.h>
 
@@ -20,9 +22,9 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, PTCollaborationServerCommunication, PTBookmarkViewControllerDelegate>
+@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate>
 
-@property (nonatomic, nullable) PTDocumentViewController *documentViewController;
+@property (nonatomic, nullable) PTDocumentBaseViewController *documentViewController;
 
 @property (nonatomic, readonly, nullable) PTPDFViewCtrl *pdfViewCtrl;
 @property (nonatomic, readonly, nullable) PTToolManager *toolManager;
@@ -30,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) RNTPTDocumentViewController *rnt_documentViewController;
 
 @property (nonatomic, readonly, nullable) RNTPTCollaborationDocumentViewController *rnt_collabDocumentViewController;
+
+@property (nonatomic, readonly, nullable) RNTPTDocumentController *rnt_documentController;
 
 @property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
 
@@ -44,7 +48,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)RNTPTDocumentView_commonInit
 {
-    _topToolbarEnabled = YES;
+    _hideTopAppNavBar = NO;
+    _hideTopToolbars = NO;
+    
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
     
@@ -122,6 +128,14 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
+- (RNTPTDocumentController *)rnt_documentController
+{
+    if ([self.documentViewController isKindOfClass:[RNTPTDocumentController class]]) {
+        return (RNTPTDocumentController *)self.documentViewController;
+    }
+    return nil;
+}
+
 #pragma mark - Convenience
 
 - (nullable PTPDFViewCtrl *)pdfViewCtrl
@@ -185,13 +199,26 @@ NS_ASSUME_NONNULL_END
 
 - (void)loadDocumentViewController
 {
+    BOOL isNewUIEnabled = YES;
     if (!self.documentViewController) {
-        if ([self isCollabEnabled]) {
-            self.documentViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
+        if (isNewUIEnabled) {
+            RNTPTDocumentController *viewController = [[RNTPTDocumentController alloc] init];
+            viewController.delegate = self;
+            
+            self.documentViewController = viewController;
         } else {
-            self.documentViewController = [[RNTPTDocumentViewController alloc] init];
+            if ([self isCollabEnabled]) {
+                RNTPTCollaborationDocumentViewController *collaborationViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
+                collaborationViewController.delegate = self;
+                
+                self.documentViewController = collaborationViewController;
+            } else {
+                RNTPTDocumentViewController *viewController = [[RNTPTDocumentViewController alloc] init];
+                viewController.delegate = self;
+                
+                self.documentViewController = viewController;
+            }
         }
-        self.documentViewController.delegate = self;
         
         [PTOverrides overrideClass:[PTThumbnailsViewController class] withClass:[RNTPTThumbnailsViewController class]];
         
@@ -227,7 +254,8 @@ NS_ASSUME_NONNULL_END
         self.documentViewController.navigationItem.leftBarButtonItem = navButton;
     }
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController];
+    RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.documentViewController];
+    navigationController.delegate = self;
     
     const BOOL translucent = self.documentViewController.hidesControlsOnTap;
     navigationController.navigationBar.translucent = translucent;
@@ -245,7 +273,7 @@ NS_ASSUME_NONNULL_END
     
     [navigationController didMoveToParentViewController:parentController];
     
-    navigationController.navigationBarHidden = !self.topToolbarEnabled;
+    navigationController.navigationBarHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
     
     [self openDocument];
 }
@@ -349,56 +377,45 @@ NS_ASSUME_NONNULL_END
     typedef void (^HideElementBlock)(void);
     
     NSDictionary *hideElementActions = @{
-        PTToolsButtonKey:
-            ^{
-                self.documentViewController.annotationToolbarButtonHidden = YES;
-            },
-        PTSearchButtonKey:
-            ^{
-                self.documentViewController.searchButtonHidden = YES;
-            },
-        PTShareButtonKey:
-            ^{
-                self.documentViewController.shareButtonHidden = YES;
-            },
-        PTViewControlsButtonKey:
-            ^{
-                self.documentViewController.viewerSettingsButtonHidden = YES;
-            },
-        PTThumbNailsButtonKey:
-            ^{
-                self.documentViewController.thumbnailBrowserButtonHidden = YES;
-            },
-        PTListsButtonKey:
-            ^{
-                self.documentViewController.navigationListsButtonHidden = YES;
-            },
-        PTMoreItemsButtonKey:
-            ^{
-                self.documentViewController.moreItemsButtonHidden = YES;
-            },
-        
-        PTThumbnailSliderButtonKey:
-            ^{
-                self.documentViewController.thumbnailSliderHidden = YES;
-            },
-        
-        PTOutlineListButtonKey:
-            ^{
-                self.documentViewController.outlineListHidden = YES;
-            },
-        PTAnnotationListButtonKey:
-            ^{
-                self.documentViewController.annotationListHidden = YES;
-            },
-        PTUserBookmarkListButtonKey:
-            ^{
-                self.documentViewController.bookmarkListHidden = YES;
-            },
-        PTReflowButtonKey:
-            ^{
-                self.documentViewController.readerModeButtonHidden = YES;
-            },
+        PTToolsButtonKey: ^{
+            if ([self.documentViewController isKindOfClass:[PTDocumentViewController class]]) {
+                PTDocumentViewController *viewController = (PTDocumentViewController *)self.documentViewController;
+                viewController.annotationToolbarButtonHidden = YES;
+            }
+        },
+        PTSearchButtonKey: ^{
+            self.documentViewController.searchButtonHidden = YES;
+        },
+        PTShareButtonKey: ^{
+            self.documentViewController.shareButtonHidden = YES;
+        },
+        PTViewControlsButtonKey: ^{
+            self.documentViewController.viewerSettingsButtonHidden = YES;
+        },
+        PTThumbNailsButtonKey: ^{
+            self.documentViewController.thumbnailBrowserButtonHidden = YES;
+        },
+        PTListsButtonKey: ^{
+            self.documentViewController.navigationListsButtonHidden = YES;
+        },
+        PTMoreItemsButtonKey: ^{
+            self.documentViewController.moreItemsButtonHidden = YES;
+        },
+        PTThumbnailSliderButtonKey: ^{
+            self.documentViewController.thumbnailSliderHidden = YES;
+        },
+        PTOutlineListButtonKey: ^{
+            self.documentViewController.outlineListHidden = YES;
+        },
+        PTAnnotationListButtonKey: ^{
+            self.documentViewController.annotationListHidden = YES;
+        },
+        PTUserBookmarkListButtonKey: ^{
+            self.documentViewController.bookmarkListHidden = YES;
+        },
+        PTReflowButtonKey: ^{
+            self.documentViewController.readerModeButtonHidden = YES;
+        },
     };
     
     for (NSObject *item in disabledElements) {
@@ -427,7 +444,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value
 {
-    
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
@@ -1116,6 +1132,41 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setAnnotationToolbars:(NSArray<id> *)annotationToolbars
+{
+    _annotationToolbars = [annotationToolbars copy];
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideDefaultAnnotationToolbars:(NSArray<NSString *> *)hideDefaultAnnotationToolbars
+{
+    _hideDefaultAnnotationToolbars = [hideDefaultAnnotationToolbars copy];
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideAnnotationToolbarSwitcher:(BOOL)hideAnnotationToolbarSwitcher
+{
+    _hideAnnotationToolbarSwitcher = hideAnnotationToolbarSwitcher;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideTopToolbars:(BOOL)hideTopToolbars
+{
+    _hideTopToolbars = hideTopToolbars;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setHideTopAppNavBar:(BOOL)hideTopAppNavBar
+{
+    _hideTopAppNavBar = hideTopAppNavBar;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
@@ -1127,11 +1178,14 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Top/bottom toolbar
 
+- (BOOL)isTopToolbarEnabled
+{
+    return !self.hideTopAppNavBar;
+}
+
 -(void)setTopToolbarEnabled:(BOOL)topToolbarEnabled
 {
-    _topToolbarEnabled = topToolbarEnabled;
-    
-    [self applyViewerSettings];
+    self.hideTopAppNavBar = !topToolbarEnabled;
 }
 
 -(void)setBottomToolbarEnabled:(BOOL)bottomToolbarEnabled
@@ -1234,19 +1288,9 @@ NS_ASSUME_NONNULL_END
     self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    if (!self.topToolbarEnabled) {
-        self.documentViewController.hidesControlsOnTap = NO;
-        self.documentViewController.controlsHidden = YES;
-    } else {
-        self.documentViewController.hidesControlsOnTap = YES;
-        self.documentViewController.controlsHidden = NO;
-    }
-    if (self.topToolbarEnabled) {
-        self.documentViewController.controlsHidden = NO;
-    } else {
-        self.documentViewController.controlsHidden = YES;
-    }
-    const BOOL translucent = self.topToolbarEnabled;
+    self.documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
+    
+    const BOOL translucent = (self.hideTopAppNavBar || self.hideTopToolbars);
     self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
     self.documentViewController.navigationController.navigationBar.translucent = translucent;
     
@@ -1299,7 +1343,7 @@ NS_ASSUME_NONNULL_END
 
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
-    if (@available(iOS 13.0, *)) {
+    if (@available(iOS 13.1, *)) {
         pencilTool = [PTPencilDrawingCreate class];
     }
     self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
@@ -1310,8 +1354,140 @@ NS_ASSUME_NONNULL_END
     // Disable tools.
     [self setToolsPermission:self.disabledTools toValue:NO];
     
+    PTDocumentController *documentController = self.rnt_documentController;
+    if (documentController) {
+        [self applyDocumentControllerSettings:documentController];
+    }
+        
     // Custom HTTP request headers.
     [self applyCustomHeaders];
+}
+
+- (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
+{
+    PTToolGroupManager *toolGroupManager = documentController.toolGroupManager;
+    
+    documentController.toolGroupsEnabled = !self.hideTopToolbars;
+    if ([documentController areToolGroupsEnabled]) {
+        NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
+        
+        // Handle annotationToolbars.
+        if (self.annotationToolbars.count > 0) {
+            // Clear default/previous tool groups.
+            [toolGroups removeAllObjects];
+            
+            for (id annotationToolbarValue in self.annotationToolbars) {
+                if ([annotationToolbarValue isKindOfClass:[NSString class]]) {
+                    // Default annotation toolbar key.
+                    PTDefaultAnnotationToolbarKey annotationToolbar = (NSString *)annotationToolbarValue;
+                    
+                    PTToolGroup *toolGroup = [self toolGroupForKey:annotationToolbar
+                                                  toolGroupManager:toolGroupManager];
+                    if (toolGroup) {
+                        [toolGroups addObject:toolGroup];
+                    }
+                }
+                else if ([annotationToolbarValue isKindOfClass:[NSDictionary class]]) {
+                    // Custom annotation toolbar dictionary.
+                    NSDictionary<NSString *, id> *annotationToolbar = (NSDictionary *)annotationToolbarValue;
+                    
+                    PTToolGroup *toolGroup = [self createToolGroupWithDictionary:annotationToolbar
+                                                                toolGroupManager:toolGroupManager];
+                    [toolGroups addObject:toolGroup];
+                }
+            }
+        }
+        
+        // Handle hideDefaultAnnotationToolbars.
+        if (self.hideDefaultAnnotationToolbars.count > 0) {
+            NSMutableArray<PTToolGroup *> *toolGroupsToRemove = [NSMutableArray array];
+            for (NSString *defaultAnnotationToolbar in self.hideDefaultAnnotationToolbars) {
+                if (![defaultAnnotationToolbar isKindOfClass:[NSString class]]) {
+                    continue;
+                }
+                PTToolGroup *matchingGroup = [self toolGroupForKey:defaultAnnotationToolbar
+                                                  toolGroupManager:toolGroupManager];
+                if (matchingGroup) {
+                    [toolGroupsToRemove addObject:matchingGroup];
+                }
+            }
+            // Remove the indicated tool group(s).
+            if (toolGroupsToRemove.count > 0) {
+                [toolGroups removeObjectsInArray:toolGroupsToRemove];
+            }
+        }
+        
+        if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
+            toolGroupManager.groups = toolGroups;
+        }
+    }
+    
+    if (self.hideAnnotationToolbarSwitcher) {
+        documentController.navigationItem.titleView = [[UIView alloc] init];
+    } else {
+        if ([documentController areToolGroupsEnabled] && toolGroupManager.groups.count > 0) {
+            documentController.navigationItem.titleView = documentController.toolGroupIndicatorView;
+        } else {
+            documentController.navigationItem.titleView = nil;
+        }
+    }
+}
+
+- (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
+{
+    NSDictionary<PTDefaultAnnotationToolbarKey, PTToolGroup *> *toolGroupMap = @{
+        PTAnnotationToolbarView: toolGroupManager.viewItemGroup,
+        PTAnnotationToolbarAnnotate: toolGroupManager.annotateItemGroup,
+        PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
+        PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
+        //PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
+        //PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
+        PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
+        PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
+        PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
+    };
+
+    return toolGroupMap[key];
+}
+
+- (PTToolGroup *)createToolGroupWithDictionary:(NSDictionary<NSString *, id> *)dictionary toolGroupManager:(PTToolGroupManager *)toolGroupManager
+{
+    NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
+    NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
+    NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
+    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    
+    UIImage *toolbarImage = nil;
+    if (toolbarIcon) {
+        PTToolGroup *defaultGroup = [self toolGroupForKey:toolbarIcon
+                                         toolGroupManager:toolGroupManager];
+        toolbarImage = defaultGroup.image;
+    }
+    
+    NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
+    
+    for (NSString *toolbarItem in toolbarItems) {
+        if (![toolbarItem isKindOfClass:[NSString class]]) {
+            continue;
+        }
+        
+        Class toolClass = [[self class] toolClassForKey:toolbarItem];
+        if (!toolClass) {
+            continue;
+        }
+        
+        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+        if (item) {
+            [barButtonItems addObject:item];
+        }
+    }
+    
+    PTToolGroup *toolGroup = [PTToolGroup groupWithTitle:toolbarName
+                                                   image:toolbarImage
+                                          barButtonItems:[barButtonItems copy]];
+    toolGroup.identifier = toolbarId;
+
+    return toolGroup;
 }
 
 - (void)applyLayoutMode
@@ -1525,6 +1701,21 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+#pragma mark - <PTDocumentControllerDelegate>
+
+//- (BOOL)documentController:(PTDocumentController *)documentController shouldExportCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+//{
+//    // Don't export the downloaded file (ie. keep using the cache file).
+//    return NO;
+//}
+
+- (BOOL)documentController:(PTDocumentController *)documentController shouldDeleteCachedDocumentAtURL:(NSURL *)cachedDocumentUrl
+{
+    // Don't delete the cache file.
+    // (This will only be called if -documentController:shouldExportCachedDocumentAtURL: returns YES)
+    return NO;
+}
+
 #pragma mark - <PTToolManagerDelegate>
 
 - (UIViewController *)viewControllerForToolManager:(PTToolManager *)toolManager
@@ -1589,7 +1780,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
-- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController
+- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController
 {
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
@@ -1606,7 +1797,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)rnt_documentViewControllerDidZoom:(PTDocumentViewController *)documentViewController
+- (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController
 {
     const double zoom = self.pdfViewCtrl.zoom * self.pdfViewCtrl.zoomScale;
     
@@ -1620,9 +1811,9 @@ NS_ASSUME_NONNULL_END
     return !self.continuousAnnotationEditing;
 }
 
-- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentViewController *)documentViewController
+- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentBaseViewController *)documentViewController
 {
-    return self.topToolbarEnabled;
+    return (!self.hideTopAppNavBar && !self.hideTopToolbars);
 }
 
 - (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber
@@ -1662,7 +1853,7 @@ NS_ASSUME_NONNULL_END
     return [annotationData copy];
 }
 
-- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
+- (void)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
 {
     NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
     
@@ -1671,7 +1862,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
 {
     __block PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
     
@@ -1747,7 +1938,7 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController
 {
     if (!self.longPressMenuEnabled) {
         menuController.menuItems = nil;
@@ -1878,6 +2069,15 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - <PTDocumentControllerDelegate>
+
+- (void)documentController:(PTDocumentController *)documentController didFailToOpenDocumentWithError:(NSError *)error
+{
+    if ([self.delegate respondsToSelector:@selector(documentError:error:)]) {
+        [self.delegate documentError:self error:error.localizedFailureReason];
+    }
+}
+
 #pragma mark - <PTCollaborationServerCommunication>
 
 - (NSString *)documentID
@@ -1918,6 +2118,24 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(exportAnnotationCommand:action:xfdfCommand:)]) {
         [self.delegate exportAnnotationCommand:self action:action xfdfCommand:xfdfCommand];
     }
+}
+
+#pragma mark - <RNTPTNavigationController>
+
+- (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetNavigationBarHidden:(BOOL)navigationBarHidden animated:(BOOL)animated
+{
+    if (!navigationBarHidden) {
+        return !(self.hideTopAppNavBar || self.hideTopToolbars);
+    }
+    return YES;
+}
+
+- (BOOL)navigationController:(RNTPTNavigationController *)navigationController shouldSetToolbarHidden:(BOOL)toolbarHidden animated:(BOOL)animated
+{
+    if (!toolbarHidden) {
+        return self.bottomToolbarEnabled;
+    }
+    return YES;
 }
 
 #pragma mark - Notifications
@@ -2281,6 +2499,98 @@ NS_ASSUME_NONNULL_END
         return (NSDictionary *)value;
     }
     return nil;
+}
+
++ (Class)toolClassForKey:(NSString *)key
+{
+    if ([key isEqualToString:PTAnnotationEditToolKey]) {
+        return [PTAnnotSelectTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateStickyToolKey] ||
+             [key isEqualToString:PTStickyToolButtonKey]) {
+        return [PTStickyNoteCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeHandToolKey] ||
+             [key isEqualToString:PTFreeHandToolButtonKey]) {
+        return [PTFreeHandCreate class];
+    }
+    else if ([key isEqualToString:PTTextSelectToolKey]) {
+        return [PTTextSelectTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextHighlightToolKey] ||
+             [key isEqualToString:PTHighlightToolButtonKey]) {
+        return [PTTextHighlightCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextUnderlineToolKey] ||
+             [key isEqualToString:PTUnderlineToolButtonKey]) {
+        return [PTTextUnderlineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextSquigglyToolKey] ||
+             [key isEqualToString:PTSquigglyToolButtonKey]) {
+        return [PTTextSquigglyCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateTextStrikeoutToolKey] ||
+             [key isEqualToString:PTStrikeoutToolButtonKey]) {
+        return [PTTextStrikeoutCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeTextToolKey] ||
+             [key isEqualToString:PTFreeTextToolButtonKey]) {
+        return [PTFreeTextCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateCalloutToolKey] ||
+             [key isEqualToString:PTCalloutToolButtonKey]) {
+        return [PTCalloutCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateSignatureToolKey] ||
+             [key isEqualToString:PTSignatureToolButtonKey]) {
+        return [PTDigitalSignatureTool class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateLineToolKey] ||
+             [key isEqualToString:PTLineToolButtonKey]) {
+        return [PTLineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateArrowToolKey] ||
+             [key isEqualToString:PTArrowToolButtonKey]) {
+        return [PTArrowCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolylineToolKey] ||
+             [key isEqualToString:PTPolylineToolButtonKey]) {
+        return [PTPolylineCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateStampToolKey] ||
+             [key isEqualToString:PTStampToolButtonKey]) {
+        return [PTImageStampCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateRectangleToolKey] ||
+             [key isEqualToString:PTRectangleToolButtonKey]) {
+        return [PTRectangleCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateEllipseToolKey] ||
+             [key isEqualToString:PTEllipseToolButtonKey]) {
+        return [PTEllipseCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolygonToolKey] ||
+             [key isEqualToString:PTPolygonToolButtonKey]) {
+        return [PTPolygonCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePolygonCloudToolKey] ||
+             [key isEqualToString:PTCloudToolButtonKey]) {
+        return [PTCloudCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
+        return [PTFileAttachmentCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateDistanceMeasurementToolKey]) {
+        return [PTRulerCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreatePerimeterMeasurementToolKey]) {
+        return [PTPerimeterCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateAreaMeasurementToolKey]) {
+        return [PTAreaCreate class];
+    }
+    
+    return Nil;
 }
 
 @end

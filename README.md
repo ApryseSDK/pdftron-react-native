@@ -17,7 +17,13 @@
 
 **Android** |  **iOS**
 :--:|:--:
-<img alt='demo' src='http://pdftron.s3.amazonaws.com/custom/websitefiles/react-native-pdftron-demo-android.gif' style='width:80%' /> | ![demo](./react-native-pdftron-demo-ios.gif)
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/android/react-native-ui-demo.gif' height="800" /> | <img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/react-native-ui-demo.gif' height="800" />
+
+## Legacy UI
+
+Version `2.0.2` is the last stable release for the legacy UI.
+
+The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/legacy-ui.
 
 ## Installation
 
@@ -149,7 +155,7 @@
     ```
     target 'MyApp' do
         use_frameworks!
-        pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
+        pod 'PDFNet', podspec: 'http://nightly.pdftron.com.s3.amazonaws.com/stable/2020-11-04/8.0/cocoapods/pdfnet/2020-11-04_stable_rev30518.podspec'
         pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
     ```
@@ -369,7 +375,6 @@ A component for displaying documents of different types such as PDF, docx, pptx,
 - [layoutMode](#layoutmode)
 - [initialPageNumber](#initialpagenumber)
 - [pageNumber](#pagenumber)
-- [topToolbarEnabled](#toptoolbarenabled)
 - [bottomToolbarEnabled](#bottomtoolbarenabled)
 - [hideToolbarsOnTap](#hidetoolbarsontap)
 - [pageIndicatorEnabled](#pageindicatorenabled)
@@ -439,9 +444,43 @@ previousPageNumber | int | the previous page number
 pageNumber | int | the current page number
 
 ##### topToolbarEnabled
+Deprecated. Use `hideTopAppNavBar` prop instead.
+
 bool, optional
 ##### bottomToolbarEnabled
 bool, optional
+##### annotationToolbars
+array of object, options
+
+Defines custom toolbars. If passed in, default toolbars will no longer appear.
+It is possible to mix and match with default toolbars. See example below:
+
+```js
+const myToolbar = {
+  [Config.CustomToolbarKey.Id]: 'myToolbar',
+  [Config.CustomToolbarKey.Name]: 'myToolbar', 
+  [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
+  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+};
+
+annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+```
+##### hideDefaultAnnotationToolbars
+array of `Config.DefaultToolbars` tags, optional
+
+Defines which default toolbars should be hidden. Default to none.
+##### hideAnnotationToolbarSwitcher
+bool, optional
+
+Defines whether to show the toolbar switcher in the top toolbar. Default to true.
+##### hideTopToolbars
+bool, optional
+
+Defines whether to show both the top nav app bar and the annotation toolbar. Default to true.
+##### hideTopAppNavBar
+bool, optional
+
+Defines whether to show the top nav app bar. Default to true.
 ##### hideToolbarsOnTap
 bool, optional
 

@@ -37,6 +37,8 @@ public final class Constants {
     public static final String BUTTON_REFLOW = "reflowButton";
     public static final String BUTTON_EDIT_MENU = "editMenuButton";
     public static final String BUTTON_CROP_PAGE = "cropPageButton";
+    public static final String BUTTON_UNDO = "undo";
+    public static final String BUTTON_REDO = "redo";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
@@ -97,6 +99,23 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_RUBBER_STAMP = "AnnotationCreateRubberStamp";
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
 
+    // Toolbars
+    public static final String TAG_VIEW_TOOLBAR = "PDFTron_View";
+    public static final String TAG_ANNOTATE_TOOLBAR = "PDFTron_Annotate";
+    public static final String TAG_DRAW_TOOLBAR = "PDFTron_Draw";
+    public static final String TAG_INSERT_TOOLBAR = "PDFTron_Insert";
+    public static final String TAG_FILL_AND_SIGN_TOOLBAR = "PDFTron_Fill_and_Sign";
+    public static final String TAG_PREPARE_FORM_TOOLBAR = "PDFTron_Prepare_Form";
+    public static final String TAG_MEASURE_TOOLBAR = "PDFTron_Measure";
+    public static final String TAG_PENS_TOOLBAR = "PDFTron_Pens";
+    public static final String TAG_FAVORITE_TOOLBAR = "PDFTron_Favorite";
+
+    // Custom toolbars
+    public static final String TOOLBAR_KEY_ID = "id";
+    public static final String TOOLBAR_KEY_NAME = "name";
+    public static final String TOOLBAR_KEY_ICON = "icon";
+    public static final String TOOLBAR_KEY_ITEMS = "items";
+
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
     public static final String FIT_MODE_FIT_WIDTH = "FitWidth";
@@ -127,7 +146,6 @@ public final class Constants {
     public static final String MENU_ID_STRING_OPEN_ATTACHMENT = "openAttachment";
     public static final String MENU_ID_STRING_READ = "read";
     public static final String MENU_ID_STRING_CALIBRATE = "calibrate";
-
 
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
