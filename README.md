@@ -322,7 +322,7 @@ getVersion()
 
 Return a promise with the version of the PDFNet version used.
 
-### getPlatformVersion
+#### getPlatformVersion
 getPlatformVersion()
 
 Return a promise with the version of current platform (Android/iOS).
