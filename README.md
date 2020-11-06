@@ -17,7 +17,7 @@
 
 **Android** |  **iOS**
 :--:|:--:
-![demo-android](https://pdftron.s3.amazonaws.com/custom/websitefiles/android/react-native-ui-demo.gif | width=100) | ![demo-ios](https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/react-native-ui-demo.gif | width=100)
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/android/react-native-ui-demo.gif' width="200" /> | <img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/ios/react-native-ui-demo.gif' width="200" />
 
 ## Legacy UI
 
