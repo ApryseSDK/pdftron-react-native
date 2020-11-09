@@ -1347,7 +1347,9 @@ NS_ASSUME_NONNULL_END
     if (@available(iOS 13.0, *)) {
         pencilTool = [PTPencilDrawingCreate class];
     }
-    self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
+
+    self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTFreeHandCreate class];
+    // self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
 
     // Disable UI elements.
     [self disableElementsInternal:self.disabledElements];
