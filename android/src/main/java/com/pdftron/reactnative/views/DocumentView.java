@@ -961,7 +961,124 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             menuStr = MENU_ID_STRING_READ;
         } else if (id == R.id.qm_calibrate) {
             menuStr = MENU_ID_STRING_CALIBRATE;
+        } else if (id == R.id.qm_underline) {
+            menuStr = MENU_ID_STRING_UNDERLINE;
+        } else if (id == R.id.qm_redact) {
+            menuStr = MENU_ID_STRING_REDACT;
+        } else if (id == R.id.qm_redaction) {
+            menuStr = MENU_ID_STRING_REDACTION;
+        } else if (id == R.id.qm_strikeout) {
+            menuStr = MENU_ID_STRING_STRIKEOUT;
+        } else if (id == R.id.qm_squiggly) {
+            menuStr = MENU_ID_STRING_SQUIGGLY;
+        } else if (id == R.id.qm_link) {
+            menuStr = MENU_ID_STRING_LINK;
+        } else if (id == R.id.qm_highlight) {
+            menuStr = MENU_ID_STRING_HIGHLIGHT;
+        } else if (id == R.id.qm_floating_sig) {
+            menuStr = MENU_ID_STRING_SIGNATURE;
+        } else if (id == R.id.qm_rectangle) {
+            menuStr = MENU_ID_STRING_RECTANGLE;
+        } else if (id == R.id.qm_line) {
+            menuStr = MENU_ID_STRING_LINE;
+        } else if (id == R.id.qm_free_hand) {
+            menuStr = MENU_ID_STRING_FREE_HAND;
+        } else if (id == R.id.qm_image_stamper) {
+            menuStr = MENU_ID_STRING_IMAGE;
+        } else if (id == R.id.qm_form_text) {
+            menuStr = MENU_ID_STRING_FORM_TEXT;
+        } else if (id == R.id.qm_sticky_note) {
+            menuStr = MENU_ID_STRING_STICKY_NOTE;
+        } else if (id == R.id.qm_overflow) {
+            menuStr = MENU_ID_STRING_OVERFLOW;
+        } else if (id == R.id.qm_ink_eraser) {
+            menuStr = MENU_ID_STRING_ERASER;
+        } else if (id == R.id.qm_rubber_stamper) {
+            menuStr = MENU_ID_STRING_STAMP;
+        } else if (id == R.id.qm_page_redaction) {
+            menuStr = MENU_ID_STRING_PAGE_REDACTION;
+        } else if (id == R.id.qm_rect_redaction) {
+            menuStr = MENU_ID_STRING_RECT_REDACTION;
+        } else if (id == R.id.qm_search_redaction) {
+            menuStr = MENU_ID_STRING_SEARCH_REDACTION;
+        } else if (id == R.id.qm_shape) {
+            menuStr = MENU_ID_STRING_SHAPE;
+        } else if (id == R.id.qm_cloud) {
+            menuStr = MENU_ID_STRING_CLOUD;
+        } else if (id == R.id.qm_polygon) {
+            menuStr = MENU_ID_STRING_POLYGON;
+        } else if (id == R.id.qm_polyline) {
+            menuStr = MENU_ID_STRING_POLYLINE;
+        } else if (id == R.id.qm_free_highlighter) {
+            menuStr = MENU_ID_STRING_FREE_HIGHLIGHTER;
+        } else if (id == R.id.qm_arrow) {
+            menuStr = MENU_ID_STRING_ARROW;
+        } else if (id == R.id.qm_oval) {
+            menuStr = MENU_ID_STRING_OVAL;
+        } else if (id == R.id.qm_callout) {
+            menuStr = MENU_ID_STRING_CALLOUT;
+        } else if (id == R.id.qm_measurement) {
+            menuStr = MENU_ID_STRING_MEASUREMENT;
+        } else if (id == R.id.qm_area_measure) {
+            menuStr = MENU_ID_STRING_AREA_MEASUREMENT;
+        } else if (id == R.id.qm_perimeter_measure) {
+            menuStr = MENU_ID_STRING_PERIMETER_MEASUREMENT;
+        } else if (id == R.id.qm_rect_area_measure) {
+            menuStr = MENU_ID_STRING_RECT_AREA_MEASUREMENT;
+        } else if (id == R.id.qm_ruler) {
+            menuStr = MENU_ID_STRING_RULER;
+        } else if (id == R.id.qm_form) {
+            menuStr = MENU_ID_STRING_FORM;
+        } else if (id == R.id.qm_form_combo_box) {
+            menuStr = MENU_ID_STRING_FORM_COMBO_BOX;
+        } else if (id == R.id.qm_form_list_box) {
+            menuStr = MENU_ID_STRING_FORM_LIST_BOX;
+        } else if (id == R.id.qm_form_check_box) {
+            menuStr = MENU_ID_STRING_FORM_CHECK_BOX;
+        } else if (id == R.id.qm_form_signature) {
+            menuStr = MENU_ID_STRING_FORM_SIGNATURE;
+        } else if (id == R.id.qm_form_radio_group) {
+            menuStr = MENU_ID_STRING_FORM_RADIO_GROUP;
+        } else if (id == R.id.qm_attach) {
+            menuStr = MENU_ID_STRING_ATTACH;
+        } else if (id == R.id.qm_file_attachment) {
+            menuStr = MENU_ID_STRING_FILE_ATTACHMENT;
+        } else if (id == R.id.qm_sound) {
+            menuStr = MENU_ID_STRING_SOUND;
+        } else if (id == R.id.qm_free_text) {
+            menuStr = MENU_ID_STRING_FREE_TEXT;
+        } else if (id == R.id.qm_crop) {
+            menuStr = MENU_ID_STRING_CROP;
+        } else if (id == R.id.qm_crop_ok) {
+            menuStr = MENU_ID_STRING_CROP_OK;
+        } else if (id == R.id.qm_crop_cancel) {
+            menuStr = MENU_ID_STRING_CROP_CANCEL;
+        } else if (id == R.id.qm_define) {
+            menuStr = MENU_ID_STRING_DEFINE;
+        } else if (id == R.id.qm_field_signed) {
+            menuStr = MENU_ID_STRING_FIELD_SIGNED;
+        } else if (id == R.id.qm_first_row_group) {
+            menuStr = MENU_ID_STRING_FIRST_ROW_GROUP;
+        } else if (id == R.id.qm_second_row_group) {
+            menuStr = MENU_ID_STRING_SECOND_ROW_GROUP;
+        } else if (id == R.id.qm_group) {
+            menuStr = MENU_ID_STRING_GROUP;
+        } else if (id == R.id.qm_paste) {
+            menuStr = MENU_ID_STRING_PASTE;
+        } else if (id == R.id.qm_rect_group_select) {
+            menuStr = MENU_ID_STRING_RECT_GROUP_SELECT;
+        } else if (id == R.id.qm_sign_and_save) {
+            menuStr = MENU_ID_STRING_SIGN_AND_SAVE;
+        } else if (id == R.id.qm_thickness) {
+            menuStr = MENU_ID_STRING_THICKNESS;
+        } else if (id == R.id.qm_translate) {
+            menuStr = MENU_ID_STRING_TRANSLATE;
+        } else if (id == R.id.qm_type) {
+            menuStr = MENU_ID_STRING_TYPE;
+        } else if (id == R.id.qm_ungroup) {
+            menuStr = MENU_ID_STRING_UNGROUP;
         }
+
         return menuStr;
     }
 
