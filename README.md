@@ -155,7 +155,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     ```
     target 'MyApp' do
         use_frameworks!
-        pod 'PDFNet', podspec: 'http://nightly.pdftron.com.s3.amazonaws.com/stable/2020-11-04/8.0/cocoapods/pdfnet/2020-11-04_stable_rev30518.podspec'
+        pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
         pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
     end
     ```
