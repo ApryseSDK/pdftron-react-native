@@ -42,7 +42,7 @@ public final class Constants {
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
-    public static final String TOOL_BUTTON_HIGHTLIGHT = "hightlightToolButton";
+    public static final String TOOL_BUTTON_HIGHLIGHT = "highlightToolButton";
     public static final String TOOL_BUTTON_UNDERLINE = "underlineToolButton";
     public static final String TOOL_BUTTON_SQUIGGLY = "squigglyToolButton";
     public static final String TOOL_BUTTON_STRIKEOUT = "strikeoutToolButton";

@@ -581,7 +581,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         int annotType = Annot.e_Unknown;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             annotType = Annot.e_Ink;
-        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+        } else if (TOOL_BUTTON_HIGHLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             annotType = Annot.e_Highlight;
         } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             annotType = Annot.e_Underline;
@@ -654,7 +654,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         ToolManager.ToolMode mode = null;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             mode = ToolManager.ToolMode.INK_CREATE;
-        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+        } else if (TOOL_BUTTON_HIGHLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_HIGHLIGHT;
         } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             mode = ToolManager.ToolMode.TEXT_UNDERLINE;
@@ -734,7 +734,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         int buttonId = 0;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.INK.value();
-        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+        } else if (TOOL_BUTTON_HIGHLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.TEXT_HIGHLIGHT.value();
         } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.TEXT_UNDERLINE.value();
@@ -815,7 +815,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         ToolbarButtonType buttonType = null;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
             buttonType = ToolbarButtonType.INK;
-        } else if (TOOL_BUTTON_HIGHTLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
+        } else if (TOOL_BUTTON_HIGHLIGHT.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT.equals(item)) {
             buttonType = ToolbarButtonType.TEXT_HIGHLIGHT;
         } else if (TOOL_BUTTON_UNDERLINE.equals(item) || TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE.equals(item)) {
             buttonType = ToolbarButtonType.TEXT_UNDERLINE;
