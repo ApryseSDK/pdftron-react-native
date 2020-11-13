@@ -436,15 +436,15 @@ Defines which default toolbars should be hidden. Default to none.
 ##### hideAnnotationToolbarSwitcher
 bool, optional
 
-Defines whether to show the toolbar switcher in the top toolbar. Default to true.
+Defines whether to show the toolbar switcher in the top toolbar. Default to false.
 ##### hideTopToolbars
 bool, optional
 
-Defines whether to show both the top nav app bar and the annotation toolbar. Default to true.
+Defines whether to show both the top nav app bar and the annotation toolbar. Default to false.
 ##### hideTopAppNavBar
 bool, optional
 
-Defines whether to show the top nav app bar. Default to true.
+Defines whether to show the top nav app bar. Default to false.
 ##### hideToolbarsOnTap
 bool, optional
 
