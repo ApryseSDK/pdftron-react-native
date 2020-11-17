@@ -543,6 +543,10 @@ bool, optional, default to true
 bool, optional, default to true
 
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
+##### multiTabEnabled
+bool, optional, default to false
+
+If true, viewer will show multiple tabs for documents opened.
 
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
