@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_END
 
 - (void)RNTPTDocumentView_commonInit
 {
+    _multiTabEnabled = YES;
+    
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
     
@@ -108,18 +110,6 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Convenience
-
-//- (nullable PTPDFViewCtrl *)pdfViewCtrl
-//{
-//    return self.documentViewController.pdfViewCtrl;
-//}
-//
-//- (nullable PTToolManager *)toolManager
-//{
-//    return self.documentViewController.toolManager;
-//}
-
 #pragma mark - Document Openining
 
 - (void)openDocument
@@ -175,7 +165,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)loadViewController
 {
-    if (!self.documentViewController) {
+    if (!self.documentViewController && !self.tabbedDocumentViewController) {
         if ([self isCollabEnabled]) {
             RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self];
             collaborationViewController.delegate = self;
@@ -361,15 +351,15 @@ NS_ASSUME_NONNULL_END
 
 - (int)getPageCount
 {
-    return self.documentViewController.pdfViewCtrl.pageCount;
+    return self.currentDocumentViewController.pdfViewCtrl.pageCount;
 }
 
 - (void)setDisabledElements:(NSArray<NSString *> *)disabledElements
 {
     _disabledElements = [disabledElements copy];
     
-    if (self.documentViewController) {
-        [self disableElementsInternal:disabledElements documentViewController:self.documentViewController];
+    if (self.currentDocumentViewController) {
+        [self disableElementsInternal:disabledElements documentViewController:self.currentDocumentViewController];
     }
 }
 
@@ -444,8 +434,8 @@ NS_ASSUME_NONNULL_END
 {
     _disabledTools = [disabledTools copy];
     
-    if (self.documentViewController) {
-        [self setToolsPermission:disabledTools toValue:NO documentViewController:self.documentViewController];
+    if (self.currentDocumentViewController) {
+        [self setToolsPermission:disabledTools toValue:NO documentViewController:self.currentDocumentViewController];
     }
 }
 
@@ -649,7 +639,7 @@ NS_ASSUME_NONNULL_END
     }
     
     if (toolClass) {
-        PTTool *tool = [self.documentViewController.toolManager changeTool:toolClass];
+        PTTool *tool = [self.currentDocumentViewController.toolManager changeTool:toolClass];
         
         tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
         
@@ -693,9 +683,12 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
     BOOL success = NO;
     @try {
-        success = [self.documentViewController.pdfViewCtrl SetCurrentPage:pageNumber];
+        success = [pdfViewCtrl SetCurrentPage:pageNumber];
     } @catch (NSException *exception) {
         NSLog(@"Exception: %@, %@", exception.name, exception.reason);
         success = NO;
@@ -710,8 +703,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Bookmark import
 
-- (void)importBookmarkJson:(NSString *)bookmarkJson pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
+- (void)importBookmarkJson:(NSString *)bookmarkJson
 {
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     NSError *error = nil;
     [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
         [PTBookmarkManager.defaultManager importBookmarksForDoc:doc fromJSONString:bookmarkJson];
@@ -767,7 +763,8 @@ NS_ASSUME_NONNULL_END
 
 - (NSString *)exportAnnotationsWithOptions:(NSDictionary *)options
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLockRead];
@@ -1322,7 +1319,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyViewerSettings
 {
-    [self applyViewerSettings:self.documentViewController];
+    [self applyViewerSettings:self.currentDocumentViewController];
 }
 
 - (void)applyViewerSettings:(PTDocumentBaseViewController *)documentViewController
@@ -1600,7 +1597,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyReadonly:(PTDocumentBaseViewController *)documentViewController
 {
-    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
 
     // Enable readonly flag on tool manager *only* when not already readonly.
@@ -1797,7 +1793,7 @@ NS_ASSUME_NONNULL_END
 
 - (UIViewController *)viewControllerForToolManager:(PTToolManager *)toolManager
 {
-    return self.documentViewController;
+    return self.currentDocumentViewController;
 }
 
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber
@@ -2310,7 +2306,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)toolManagerDidModifyAnnotationWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController.toolManager) {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
     }
     
@@ -2337,7 +2333,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)toolManagerDidRemoveAnnotationWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController.toolManager) {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
     }
     
@@ -2368,7 +2364,6 @@ NS_ASSUME_NONNULL_END
         return;
     }
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
-    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
 
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     if ([annot GetType] == e_ptWidget) {
@@ -2548,9 +2543,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Get Crop Box
 
-- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber
 {
-    
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     __block NSDictionary<NSString *, NSNumber *> *map;
     [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
         
