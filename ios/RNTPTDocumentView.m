@@ -1,7 +1,7 @@
 #import "RNTPTDocumentView.h"
 
 #import "RNTPTDocumentViewController.h"
-#import "RNTPTCollaborationDocumentViewController.h"
+#import "RNTPTCollaborationDocumentController.h"
 #import "RNTPTDocumentController.h"
 #import "RNTPTNavigationController.h"
 
@@ -22,20 +22,15 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate>
+@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate>
+
+@property (nonatomic, strong, nullable) UIViewController *viewController;
+
+@property (nonatomic, strong, nullable) PTTabbedDocumentViewController *tabbedDocumentViewController;
 
 @property (nonatomic, nullable) PTDocumentBaseViewController *documentViewController;
 
-@property (nonatomic, readonly, nullable) PTPDFViewCtrl *pdfViewCtrl;
-@property (nonatomic, readonly, nullable) PTToolManager *toolManager;
-
-@property (nonatomic, readonly, nullable) RNTPTDocumentViewController *rnt_documentViewController;
-
-@property (nonatomic, readonly, nullable) RNTPTCollaborationDocumentViewController *rnt_collabDocumentViewController;
-
-@property (nonatomic, readonly, nullable) RNTPTDocumentController *rnt_documentController;
-
-@property (nonatomic, assign) BOOL needsCustomHeadersUpdate;
+@property (nonatomic, readonly, nullable) PTDocumentBaseViewController *currentDocumentViewController;
 
 // Array of wrapped PTExtendedAnnotTypes.
 @property (nonatomic, strong, nullable) NSArray<NSNumber *> *hideAnnotMenuToolsAnnotTypes;
@@ -66,6 +61,9 @@ NS_ASSUME_NONNULL_END
 
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
+    
+    [PTOverrides overrideClass:[PTThumbnailsViewController class]
+                     withClass:[RNTPTThumbnailsViewController class]];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -95,7 +93,7 @@ NS_ASSUME_NONNULL_END
             [self.delegate documentViewAttachedToWindow:self];
         }
         
-        [self loadDocumentViewController];
+        [self loadViewController];
     } else {
         if ([self.delegate respondsToSelector:@selector(documentViewDetachedFromWindow:)]) {
             [self.delegate documentViewDetachedFromWindow:self];
@@ -106,54 +104,27 @@ NS_ASSUME_NONNULL_END
 - (void)didMoveToSuperview
 {
     if (!self.superview) {
-        [self unloadDocumentViewController];
+        [self unloadViewController];
     }
-}
-
-#pragma mark - DocumentViewController
-
-- (RNTPTDocumentViewController *)rnt_documentViewController
-{
-    if ([self.documentViewController isKindOfClass:[RNTPTDocumentViewController class]]) {
-        return (RNTPTDocumentViewController *)self.documentViewController;
-    }
-    return nil;
-}
-
-- (RNTPTCollaborationDocumentViewController *)rnt_collabDocumentViewController
-{
-    if ([self.documentViewController isKindOfClass:[RNTPTCollaborationDocumentViewController class]]) {
-        return (RNTPTCollaborationDocumentViewController *)self.documentViewController;
-    }
-    return nil;
-}
-
-- (RNTPTDocumentController *)rnt_documentController
-{
-    if ([self.documentViewController isKindOfClass:[RNTPTDocumentController class]]) {
-        return (RNTPTDocumentController *)self.documentViewController;
-    }
-    return nil;
 }
 
 #pragma mark - Convenience
 
-- (nullable PTPDFViewCtrl *)pdfViewCtrl
-{
-    return self.documentViewController.pdfViewCtrl;
-}
-
-- (nullable PTToolManager *)toolManager
-{
-    return self.documentViewController.toolManager;
-}
+//- (nullable PTPDFViewCtrl *)pdfViewCtrl
+//{
+//    return self.documentViewController.pdfViewCtrl;
+//}
+//
+//- (nullable PTToolManager *)toolManager
+//{
+//    return self.documentViewController.toolManager;
+//}
 
 #pragma mark - Document Openining
 
--(void)openDocument
+- (void)openDocument
 {
-    if( self.documentViewController == Nil )
-    {
+    if (!self.documentViewController && !self.tabbedDocumentViewController) {
         return;
     }
     
@@ -166,10 +137,15 @@ NS_ASSUME_NONNULL_END
             fileURL = [NSURL fileURLWithPath:self.document];
         }
         
-        [self.documentViewController openDocumentWithURL:fileURL
-                                                password:self.password];
-        
-        [self applyLayoutMode];
+        if (self.documentViewController) {
+            [self.documentViewController openDocumentWithURL:fileURL
+                                                    password:self.password];
+            
+            [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
+        } else {
+            [self.tabbedDocumentViewController openDocumentWithURL:fileURL
+                                                          password:self.password];
+        }
     } else {
         NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
         
@@ -184,53 +160,59 @@ NS_ASSUME_NONNULL_END
         
         [self.documentViewController openDocumentWithPDFDoc:doc];
         
-        [self applyLayoutMode];
+        [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
     }
 }
 
--(void)setDocument:(NSString *)document
+- (void)setDocument:(NSString *)document
 {
-    _document = document;
+    _document = [document copy];
+    
     [self openDocument];
-
 }
 
 #pragma mark - DocumentViewController loading
 
-- (void)loadDocumentViewController
+- (void)loadViewController
 {
-    BOOL isNewUIEnabled = YES;
     if (!self.documentViewController) {
-        if (isNewUIEnabled) {
-            RNTPTDocumentController *viewController = [[RNTPTDocumentController alloc] init];
-            viewController.delegate = self;
+        if ([self isCollabEnabled]) {
+            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self];
+            collaborationViewController.delegate = self;
             
-            self.documentViewController = viewController;
+            self.viewController = collaborationViewController;
+            self.documentViewController = collaborationViewController;
         } else {
-            if ([self isCollabEnabled]) {
-                RNTPTCollaborationDocumentViewController *collaborationViewController = [[RNTPTCollaborationDocumentViewController alloc] initWithCollaborationService:self];
-                collaborationViewController.delegate = self;
+            if ([self isMultiTabEnabled]) {
+                PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
+                tabbedDocumentViewController.delegate = self;
                 
-                self.documentViewController = collaborationViewController;
+                // Use the RNTPTDocumentController class inside the tabbed viewer.
+                tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
+                
+                self.viewController = tabbedDocumentViewController;
+                self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
-                RNTPTDocumentViewController *viewController = [[RNTPTDocumentViewController alloc] init];
-                viewController.delegate = self;
+                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController alloc] init];
+                documentViewController.delegate = self;
                 
-                self.documentViewController = viewController;
+                self.viewController = documentViewController;
+                self.documentViewController = documentViewController;
             }
         }
         
-        [PTOverrides overrideClass:[PTThumbnailsViewController class] withClass:[RNTPTThumbnailsViewController class]];
-        
-        self.documentViewController.navigationListsViewController.bookmarkViewController.delegate = self;
-        [self applyViewerSettings];
+        if (self.documentViewController) {
+            [self applyViewerSettings:self.documentViewController];
+            
+            [self registerForDocumentViewControllerNotifications:self.documentViewController];
+            [self registerForPDFViewCtrlNotifications:self.documentViewController];
+        } else {
+            // Using tabbed viewer.
+        }
     }
     
-    [self registerForDocumentViewControllerNotifications];
-    [self registerForPDFViewCtrlNotifications];
-    
     // Check if document view controller has already been added to a navigation controller.
-    if (self.documentViewController.navigationController) {
+    if (self.viewController.navigationController) {
         return;
     }
     
@@ -251,16 +233,13 @@ NS_ASSUME_NONNULL_END
                                                         target:self
                                                         action:@selector(navButtonClicked)];
         }
-        self.documentViewController.navigationItem.leftBarButtonItem = navButton;
+        
+        self.viewController.navigationItem.leftBarButtonItem = navButton;
     }
     
-    RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.documentViewController];
+    RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
     navigationController.delegate = self;
-    
-    const BOOL translucent = self.documentViewController.hidesControlsOnTap;
-    navigationController.navigationBar.translucent = translucent;
-    self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
-    
+        
     UIView *controllerView = navigationController.view;
     
     // View controller containment.
@@ -278,11 +257,27 @@ NS_ASSUME_NONNULL_END
     [self openDocument];
 }
 
-- (void)unloadDocumentViewController
+- (PTDocumentBaseViewController *)currentDocumentViewController
 {
-    [self deregisterForPDFViewCtrlNotifications];
+    if (self.documentViewController) {
+        return self.documentViewController;
+    } else if (self.tabbedDocumentViewController) {
+        return self.tabbedDocumentViewController.selectedViewController;
+    }
+    return nil;
+}
+
+- (void)unloadViewController
+{
+    if (!self.viewController) {
+        return;
+    }
     
-    UINavigationController *navigationController = self.documentViewController.navigationController;
+    if (self.documentViewController) {
+        [self deregisterForPDFViewCtrlNotifications:self.documentViewController];
+    }
+    
+    UINavigationController *navigationController = self.viewController.navigationController;
     if (navigationController) {
         // Clear navigation stack (PTDocumentViewController).
         navigationController.viewControllers = @[];
@@ -296,64 +291,70 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark Notifications
 
-- (void)registerForDocumentViewControllerNotifications
+- (void)registerForDocumentViewControllerNotifications:(PTDocumentBaseViewController *)documentViewController
 {
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
     [center addObserver:self
                selector:@selector(documentViewControllerDidOpenDocumentWithNotification:)
                    name:PTDocumentViewControllerDidOpenDocumentNotification
-                 object:self.documentViewController];
+                 object:documentViewController];
 }
 
-- (void)registerForPDFViewCtrlNotifications
+- (void)registerForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
 {
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
     [center addObserver:self
                selector:@selector(pdfViewCtrlDidChangePageWithNotification:)
                    name:PTPDFViewCtrlPageDidChangeNotification
-                 object:self.documentViewController.pdfViewCtrl];
+                 object:pdfViewCtrl];
     
     [center addObserver:self
                selector:@selector(toolManagerDidAddAnnotationWithNotification:)
                    name:PTToolManagerAnnotationAddedNotification
-                 object:self.documentViewController.toolManager];
+                 object:toolManager];
     
     [center addObserver:self
                selector:@selector(toolManagerDidModifyAnnotationWithNotification:)
                    name:PTToolManagerAnnotationModifiedNotification
-                 object:self.documentViewController.toolManager];
+                 object:toolManager];
     
     [center addObserver:self
                selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
                    name:PTToolManagerAnnotationRemovedNotification
-                 object:self.documentViewController.toolManager];
+                 object:toolManager];
 }
 
-- (void)deregisterForPDFViewCtrlNotifications
+- (void)deregisterForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
 {
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
     [center removeObserver:self
                       name:PTPDFViewCtrlPageDidChangeNotification
-                    object:self.documentViewController.pdfViewCtrl];
+                    object:pdfViewCtrl];
     
     [center removeObserver:self
                       name:PTToolManagerAnnotationAddedNotification
-                    object:self.documentViewController.toolManager];
+                    object:toolManager];
     
     [center removeObserver:self
                       name:PTToolManagerAnnotationModifiedNotification
-                    object:self.documentViewController.toolManager];
+                    object:toolManager];
     
     [center removeObserver:self
                       name:PTToolManagerAnnotationRemovedNotification
-                    object:self.documentViewController.toolManager];
+                    object:toolManager];
 
     [center removeObserver:self
                       name:PTToolManagerFormFieldDataModifiedNotification
-                    object:self.documentViewController.toolManager];
+                    object:toolManager];
 }
 
 #pragma mark - Disabling elements
@@ -368,53 +369,53 @@ NS_ASSUME_NONNULL_END
     _disabledElements = [disabledElements copy];
     
     if (self.documentViewController) {
-        [self disableElementsInternal:disabledElements];
+        [self disableElementsInternal:disabledElements documentViewController:self.documentViewController];
     }
 }
 
-- (void)disableElementsInternal:(NSArray<NSString*> *)disabledElements
+- (void)disableElementsInternal:(NSArray<NSString*> *)disabledElements documentViewController:(PTDocumentBaseViewController *)documentViewController
 {
     typedef void (^HideElementBlock)(void);
     
     NSDictionary *hideElementActions = @{
         PTToolsButtonKey: ^{
-            if ([self.documentViewController isKindOfClass:[PTDocumentViewController class]]) {
-                PTDocumentViewController *viewController = (PTDocumentViewController *)self.documentViewController;
+            if ([documentViewController isKindOfClass:[PTDocumentViewController class]]) {
+                PTDocumentViewController *viewController = (PTDocumentViewController *)documentViewController;
                 viewController.annotationToolbarButtonHidden = YES;
             }
         },
         PTSearchButtonKey: ^{
-            self.documentViewController.searchButtonHidden = YES;
+            documentViewController.searchButtonHidden = YES;
         },
         PTShareButtonKey: ^{
-            self.documentViewController.shareButtonHidden = YES;
+            documentViewController.shareButtonHidden = YES;
         },
         PTViewControlsButtonKey: ^{
-            self.documentViewController.viewerSettingsButtonHidden = YES;
+            documentViewController.viewerSettingsButtonHidden = YES;
         },
         PTThumbNailsButtonKey: ^{
-            self.documentViewController.thumbnailBrowserButtonHidden = YES;
+            documentViewController.thumbnailBrowserButtonHidden = YES;
         },
         PTListsButtonKey: ^{
-            self.documentViewController.navigationListsButtonHidden = YES;
+            documentViewController.navigationListsButtonHidden = YES;
         },
         PTMoreItemsButtonKey: ^{
-            self.documentViewController.moreItemsButtonHidden = YES;
+            documentViewController.moreItemsButtonHidden = YES;
         },
         PTThumbnailSliderButtonKey: ^{
-            self.documentViewController.thumbnailSliderHidden = YES;
+            documentViewController.thumbnailSliderHidden = YES;
         },
         PTOutlineListButtonKey: ^{
-            self.documentViewController.outlineListHidden = YES;
+            documentViewController.outlineListHidden = YES;
         },
         PTAnnotationListButtonKey: ^{
-            self.documentViewController.annotationListHidden = YES;
+            documentViewController.annotationListHidden = YES;
         },
         PTUserBookmarkListButtonKey: ^{
-            self.documentViewController.bookmarkListHidden = YES;
+            documentViewController.bookmarkListHidden = YES;
         },
         PTReflowButtonKey: ^{
-            self.documentViewController.readerModeButtonHidden = YES;
+            documentViewController.readerModeButtonHidden = YES;
         },
     };
     
@@ -428,7 +429,13 @@ NS_ASSUME_NONNULL_END
     }
     
     // Disable the elements' corresponding tools/annotation types creation.
-    [self setToolsPermission:disabledElements toValue:NO];
+    [self setToolsPermission:disabledElements toValue:NO documentViewController:documentViewController];
+}
+
+- (void)setMultiTabEnabled:(BOOL)enabled
+{
+    _multiTabEnabled = enabled;
+    
 }
 
 #pragma mark - Disabled tools
@@ -438,12 +445,14 @@ NS_ASSUME_NONNULL_END
     _disabledTools = [disabledTools copy];
     
     if (self.documentViewController) {
-        [self setToolsPermission:disabledTools toValue:NO];
+        [self setToolsPermission:disabledTools toValue:NO documentViewController:self.documentViewController];
     }
 }
 
-- (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value
+- (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value documentViewController:(PTDocumentBaseViewController *)documentViewController
 {
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
@@ -453,86 +462,86 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:PTAnnotationCreateStickyToolKey] ||
                      [string isEqualToString:PTStickyToolButtonKey]) {
-                self.toolManager.textAnnotationOptions.canCreate = value;
+                toolManager.textAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateFreeHandToolKey] ||
                      [string isEqualToString:PTFreeHandToolButtonKey]) {
-                self.toolManager.inkAnnotationOptions.canCreate = value;
+                toolManager.inkAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTTextSelectToolKey]) {
-                self.toolManager.textSelectionEnabled = value;
+                toolManager.textSelectionEnabled = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateTextHighlightToolKey] ||
                      [string isEqualToString:PTHighlightToolButtonKey]) {
-                self.toolManager.highlightAnnotationOptions.canCreate = value;
+                toolManager.highlightAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateTextUnderlineToolKey] ||
                      [string isEqualToString:PTUnderlineToolButtonKey]) {
-                self.toolManager.underlineAnnotationOptions.canCreate = value;
+                toolManager.underlineAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateTextSquigglyToolKey] ||
                      [string isEqualToString:PTSquigglyToolButtonKey]) {
-                self.toolManager.squigglyAnnotationOptions.canCreate = value;
+                toolManager.squigglyAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateTextStrikeoutToolKey] ||
                      [string isEqualToString:PTStrikeoutToolButtonKey]) {
-                self.toolManager.strikeOutAnnotationOptions.canCreate = value;
+                toolManager.strikeOutAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateFreeTextToolKey] ||
                      [string isEqualToString:PTFreeTextToolButtonKey]) {
-                self.toolManager.freeTextAnnotationOptions.canCreate = value;
+                toolManager.freeTextAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateCalloutToolKey] ||
                      [string isEqualToString:PTCalloutToolButtonKey]) {
-                self.toolManager.calloutAnnotationOptions.canCreate = value;
+                toolManager.calloutAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateSignatureToolKey] ||
                      [string isEqualToString:PTSignatureToolButtonKey]) {
-                self.toolManager.signatureAnnotationOptions.canCreate = value;
+                toolManager.signatureAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateLineToolKey] ||
                      [string isEqualToString:PTLineToolButtonKey]) {
-                self.toolManager.lineAnnotationOptions.canCreate = value;
+                toolManager.lineAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateArrowToolKey] ||
                      [string isEqualToString:PTArrowToolButtonKey]) {
-                self.toolManager.arrowAnnotationOptions.canCreate = value;
+                toolManager.arrowAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreatePolylineToolKey] ||
                      [string isEqualToString:PTPolylineToolButtonKey]) {
-                self.toolManager.polylineAnnotationOptions.canCreate = value;
+                toolManager.polylineAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateStampToolKey] ||
                      [string isEqualToString:PTStampToolButtonKey]) {
-                self.toolManager.imageStampAnnotationOptions.canCreate = value;
+                toolManager.imageStampAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateRectangleToolKey] ||
                      [string isEqualToString:PTRectangleToolButtonKey]) {
-                self.toolManager.squareAnnotationOptions.canCreate = value;
+                toolManager.squareAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateEllipseToolKey] ||
                      [string isEqualToString:PTEllipseToolButtonKey]) {
-                self.toolManager.circleAnnotationOptions.canCreate = value;
+                toolManager.circleAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreatePolygonToolKey] ||
                      [string isEqualToString:PTPolygonToolButtonKey]) {
-                self.toolManager.polygonAnnotationOptions.canCreate = value;
+                toolManager.polygonAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreatePolygonCloudToolKey] ||
                      [string isEqualToString:PTCloudToolButtonKey]) {
-                self.toolManager.cloudyAnnotationOptions.canCreate = value;
+                toolManager.cloudyAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
-                self.toolManager.fileAttachmentAnnotationOptions.canCreate = value;
+                toolManager.fileAttachmentAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateDistanceMeasurementToolKey]) {
-                self.toolManager.rulerAnnotationOptions.canCreate = value;
+                toolManager.rulerAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreatePerimeterMeasurementToolKey]) {
-                self.toolManager.perimeterAnnotationOptions.canCreate = value;
+                toolManager.perimeterAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateAreaMeasurementToolKey]) {
-                self.toolManager.areaAnnotationOptions.canCreate = value;
+                toolManager.areaAnnotationOptions.canCreate = value;
             }
         }
     }
@@ -653,10 +662,23 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)commitTool
 {
-    if ([self.toolManager.tool respondsToSelector:@selector(commitAnnotation)]) {
-        [self.toolManager.tool performSelector:@selector(commitAnnotation)];
+    PTDocumentBaseViewController *viewController = nil;
+    if (self.documentViewController) {
+        viewController = self.documentViewController;
+    } else if (self.tabbedDocumentViewController) {
+        viewController = self.tabbedDocumentViewController.selectedViewController;
+    }
+    
+    if (!viewController) {
+        return NO;
+    }
+    
+    PTToolManager *toolManager = viewController.toolManager;
+    
+    if ([toolManager.tool respondsToSelector:@selector(commitAnnotation)]) {
+        [toolManager.tool performSelector:@selector(commitAnnotation)];
         
-        [self.toolManager changeTool:[PTPanTool class]];
+        [toolManager changeTool:[PTPanTool class]];
         
         return YES;
     }
@@ -688,12 +710,12 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Bookmark import
 
-- (void)importBookmarkJson:(NSString *)bookmarkJson
+- (void)importBookmarkJson:(NSString *)bookmarkJson pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
 {
     NSError *error = nil;
-    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
         [PTBookmarkManager.defaultManager importBookmarksForDoc:doc fromJSONString:bookmarkJson];
-        [self.documentViewController.pdfViewCtrl Update:YES];
+        [pdfViewCtrl Update:YES];
     } error:&error];
     
     if (error) {
@@ -703,12 +725,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Annotation import/export
 
-- (PTAnnot *)findAnnotWithUniqueID:(NSString *)uniqueID onPageNumber:(int)pageNumber
+- (PTAnnot *)findAnnotWithUniqueID:(NSString *)uniqueID onPageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
 {
     if (uniqueID.length == 0 || pageNumber < 1) {
         return nil;
     }
-    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     
     BOOL shouldUnlock = NO;
     @try {
@@ -764,7 +785,8 @@ NS_ASSUME_NONNULL_END
                 int pageNumber = ((NSNumber *)annotation[PTAnnotationPageNumberKey]).intValue;
                 if (annotationId.length > 0) {
                     PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
-                                                    onPageNumber:pageNumber];
+                                                    onPageNumber:pageNumber
+                                                     pdfViewCtrl:pdfViewCtrl];
                     if ([annot IsValid]) {
                         [annots add:annot];
                     }
@@ -790,7 +812,8 @@ NS_ASSUME_NONNULL_END
 
 - (void)importAnnotations:(NSString *)xfdfString
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
 
     NSError *error;
     __block BOOL hasDownloader = false;
@@ -818,9 +841,11 @@ NS_ASSUME_NONNULL_END
 
 - (void)flattenAnnotations:(BOOL)formsOnly
 {
-    [self.toolManager changeTool:[PTPanTool class]];
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = self.currentDocumentViewController.toolManager;
+
+    [toolManager changeTool:[PTPanTool class]];
     
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -845,6 +870,10 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
     for (id annotationData in annotations) {
         if (![annotationData isKindOfClass:[NSDictionary class]]) {
             continue;
@@ -860,9 +889,9 @@ NS_ASSUME_NONNULL_END
         
         __block PTAnnot *annot = nil;
         NSError *error = nil;
-        [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
             
-            annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
+            annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue pdfViewCtrl:pdfViewCtrl];
             if (![annot IsValid]) {
                 NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
                       annotId, pageNumberValue);
@@ -870,35 +899,38 @@ NS_ASSUME_NONNULL_END
                 return;
             }
             
-            [self.toolManager willRemoveAnnotation:annot onPageNumber:pageNumberValue];
+            [toolManager willRemoveAnnotation:annot onPageNumber:pageNumberValue];
 
             PTPage *page = [doc GetPage:pageNumberValue];
             if ([page IsValid]) {
                 [page AnnotRemoveWithAnnot:annot];
             }
             
-            [self.pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumberValue];
+            [pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumberValue];
         } error:&error];
         
         // Throw error as exception to reject promise.
         if (error) {
             @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
         } else if (annot) {
-            [self.toolManager annotationRemoved:annot onPageNumber:pageNumberValue];
+            [toolManager annotationRemoved:annot onPageNumber:pageNumberValue];
         }
     }
     
-    [self.toolManager changeTool:[PTPanTool class]];
+    [toolManager changeTool:[PTPanTool class]];
 }
 
 #pragma mark - Saving
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
 {
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     if (![self isBase64String]) {
-        NSString *filePath = self.documentViewController.coordinatedDocument.fileURL.path;
+        NSString *filePath = documentViewController.coordinatedDocument.fileURL.path;
         
-        [self.documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
+        [documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
             if (completionHandler) {
                 completionHandler((success) ? filePath : nil);
             }
@@ -907,7 +939,7 @@ NS_ASSUME_NONNULL_END
         __block NSString *base64String = nil;
         __block BOOL success = NO;
         NSError *error = nil;
-        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             NSData *data = [doc SaveToBuf:0];
             
             base64String = [data base64EncodedStringWithOptions:0];
@@ -926,6 +958,10 @@ NS_ASSUME_NONNULL_END
     if (annotationFlagList.count == 0) {
         return;
     }
+    
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
     
     for (id annotationFlagEntry in annotationFlagList) {
         if (![annotationFlagEntry isKindOfClass:[NSDictionary class]]) {
@@ -969,9 +1005,9 @@ NS_ASSUME_NONNULL_END
             annotFlag = e_pttoggle_no_view;
         }
         if (annotFlag != -1) {
-            [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+            [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
                 
-                annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue];
+                annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue pdfViewCtrl:pdfViewCtrl];
                 if (![annot IsValid]) {
                     NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
                             annotId, pageNumberValue);
@@ -979,12 +1015,12 @@ NS_ASSUME_NONNULL_END
                     return;
                 }
                     
-                [self.toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
+                [toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
                 
                 [annot SetFlag:annotFlag value:[flagValue boolValue]];
-                [self.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+                [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
                 
-                [self.toolManager annotationModified:annot onPageNumber:(int)pageNumber];
+                [toolManager annotationModified:annot onPageNumber:(int)pageNumber];
             } error:&error];
         }
         // Throw error as exception to reject promise.
@@ -999,7 +1035,11 @@ NS_ASSUME_NONNULL_END
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return;
+    }
+    
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -1025,7 +1065,11 @@ NS_ASSUME_NONNULL_END
 
 - (void)setValuesForFields:(NSDictionary<NSString *, id> *)map
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return;
+    }
+
     BOOL shouldUnlock = NO;
     @try {
         [pdfViewCtrl DocLock:YES];
@@ -1051,8 +1095,11 @@ NS_ASSUME_NONNULL_END
 // write-lock acquired around this method
 - (void)setFieldValue:(PTField *)field value:(id)value
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
-    
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return;
+    }
+
     const PTFieldType fieldType = [field GetType];
     
     // boolean or number
@@ -1098,7 +1145,11 @@ NS_ASSUME_NONNULL_END
         [self.collaborationManager importAnnotationsWithXFDFCommand:xfdfCommand
                                                           isInitial:initialLoad];
     } else {
-        PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+        PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+        if (!pdfViewCtrl) {
+            return;
+        }
+        
         PTPDFDoc *pdfDoc = [pdfViewCtrl GetDoc];
         BOOL shouldUnlockRead = NO;
         @try {
@@ -1271,96 +1322,106 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyViewerSettings
 {
-    if (!self.documentViewController) {
+    [self applyViewerSettings:self.documentViewController];
+}
+
+- (void)applyViewerSettings:(PTDocumentBaseViewController *)documentViewController
+{
+    if (!documentViewController) {
         return;
     }
     
-    [self applyReadonly];
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    documentViewController.navigationListsViewController.bookmarkViewController.delegate = self;
+    
+    [self applyReadonly:documentViewController];
     
     // Thumbnail editing enabled.
-    self.documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
-    self.documentViewController.thumbnailsViewController.navigationController.toolbarHidden = !self.thumbnailViewEditingEnabled;
+    documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
+    documentViewController.thumbnailsViewController.navigationController.toolbarHidden = !self.thumbnailViewEditingEnabled;
     
     // Select after creation.
-    self.toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
+    toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
     
     // Auto save.
-    self.documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
+    documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    self.documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
+    documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
     
     const BOOL translucent = (self.hideTopAppNavBar || self.hideTopToolbars);
-    self.documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
-    self.documentViewController.navigationController.navigationBar.translucent = translucent;
+    documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
+    documentViewController.navigationController.navigationBar.translucent = translucent;
     
     // Bottom toolbar.
-    self.documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
     
-    self.documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
-    self.documentViewController.pageFitsBetweenBars = !self.hideToolbarsOnTap;
+    documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
+    documentViewController.pageFitsBetweenBars = !self.hideToolbarsOnTap;
     
     // Page indicator.
-    self.documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
+    documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
     
     // Page change on tap.
-    self.documentViewController.changesPageOnTap = self.pageChangeOnTap;
+    documentViewController.changesPageOnTap = self.pageChangeOnTap;
     
     // Fit mode.
     if ([self.fitMode isEqualToString:PTFitPageFitModeKey]) {
-        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_page];
-        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
+        [pdfViewCtrl SetPageViewMode:e_trn_fit_page];
+        [pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
     }
     else if ([self.fitMode isEqualToString:PTFitWidthFitModeKey]) {
-        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_width];
-        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
+        [pdfViewCtrl SetPageViewMode:e_trn_fit_width];
+        [pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
     }
     else if ([self.fitMode isEqualToString:PTFitHeightFitModeKey]) {
-        [self.pdfViewCtrl SetPageViewMode:e_trn_fit_height];
-        [self.pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
+        [pdfViewCtrl SetPageViewMode:e_trn_fit_height];
+        [pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
     }
     else if ([self.fitMode isEqualToString:PTZoomFitModeKey]) {
-        [self.pdfViewCtrl SetPageViewMode:e_trn_zoom];
-        [self.pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
+        [pdfViewCtrl SetPageViewMode:e_trn_zoom];
+        [pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
     }
     
     // Layout mode.
-    [self applyLayoutMode];
+    [self applyLayoutMode:pdfViewCtrl];
     
     // Continuous annotation editing.
-    self.toolManager.tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
+    toolManager.tool.backToPanToolAfterUse = !self.continuousAnnotationEditing;
     
     // Annotation author.
-    self.toolManager.annotationAuthor = self.annotationAuthor;
+    toolManager.annotationAuthor = self.annotationAuthor;
     
     // Shows saved signatures.
-    self.toolManager.showDefaultSignature = self.showSavedSignatures;
+    toolManager.showDefaultSignature = self.showSavedSignatures;
     
-    self.toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
+    toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
 
     // Annotation permission check
-    self.toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+    toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
 
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.1, *)) {
         pencilTool = [PTPencilDrawingCreate class];
     }
-    self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
+    toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
 
     // Disable UI elements.
-    [self disableElementsInternal:self.disabledElements];
+    [self disableElementsInternal:self.disabledElements documentViewController:documentViewController];
     
     // Disable tools.
-    [self setToolsPermission:self.disabledTools toValue:NO];
+    [self setToolsPermission:self.disabledTools toValue:NO documentViewController:documentViewController];
     
-    PTDocumentController *documentController = self.rnt_documentController;
-    if (documentController) {
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         [self applyDocumentControllerSettings:documentController];
     }
-        
+    
     // Custom HTTP request headers.
-    [self applyCustomHeaders];
+    [self applyCustomHeaders:documentViewController];
 }
 
 - (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
@@ -1490,25 +1551,25 @@ NS_ASSUME_NONNULL_END
     return toolGroup;
 }
 
-- (void)applyLayoutMode
+- (void)applyLayoutMode:(PTPDFViewCtrl *)pdfViewCtrl
 {
     if ([self.layoutMode isEqualToString:PTSingleLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_single_page];
     }
     else if ([self.layoutMode isEqualToString:PTContinuousLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_single_continuous];
     }
     else if ([self.layoutMode isEqualToString:PTFacingLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_facing];
     }
     else if ([self.layoutMode isEqualToString:PTFacingContinuousLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous];
     }
     else if ([self.layoutMode isEqualToString:PTFacingCoverLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_facing_cover];
     }
     else if ([self.layoutMode isEqualToString:PTFacingCoverContinuousLayoutModeKey]) {
-        [self.pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+        [pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
     }
 }
 
@@ -1518,22 +1579,14 @@ NS_ASSUME_NONNULL_END
 {
     _customHeaders = [customHeaders copy];
     
-    self.needsCustomHeadersUpdate = YES;
-    
-    if (self.documentViewController) {
-        [self applyCustomHeaders];
+    if (self.currentDocumentViewController) {
+        [self applyCustomHeaders:self.currentDocumentViewController];
     }
 }
 
-- (void)applyCustomHeaders
+- (void)applyCustomHeaders:(PTDocumentBaseViewController *)documentViewController
 {
-    if (!self.needsCustomHeadersUpdate) {
-        return;
-    }
-    
-    self.documentViewController.additionalHTTPHeaders = self.customHeaders;
-    
-    self.needsCustomHeadersUpdate = NO;
+    documentViewController.additionalHTTPHeaders = self.customHeaders;
 }
 
 #pragma mark - Readonly
@@ -1545,16 +1598,19 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)applyReadonly
+- (void)applyReadonly:(PTDocumentBaseViewController *)documentViewController
 {
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+
     // Enable readonly flag on tool manager *only* when not already readonly.
     // If the document is being streamed or converted, we don't want to accidentally allow editing by
     // disabling the readonly flag.
-    if (![self.documentViewController.toolManager isReadonly]) {
-        self.documentViewController.toolManager.readonly = self.readOnly;
+    if (![toolManager isReadonly]) {
+        toolManager.readonly = self.readOnly;
     }
     
-    self.documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
+    documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
 }
 
 #pragma mark - Fit mode
@@ -1683,7 +1739,28 @@ NS_ASSUME_NONNULL_END
     }
 
     return annotType;
+}
+
+#pragma mark - <PTTabbedDocumentViewControllerDelegate>
+
+- (void)tabbedDocumentViewController:(PTTabbedDocumentViewController *)tabbedDocumentViewController willAddDocumentViewController:(__kindof PTDocumentBaseViewController *)documentViewController
+{
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+        
+        documentController.delegate = self;
+    }
     
+    [self applyViewerSettings:documentViewController];
+    
+    [self registerForDocumentViewControllerNotifications:documentViewController];
+    [self registerForPDFViewCtrlNotifications:documentViewController];
+}
+
+- (BOOL)tabbedDocumentViewController:(PTTabbedDocumentViewController *)tabbedDocumentViewController shouldHideTabBarForTraitCollection:(UITraitCollection *)traitCollection
+{
+    // Always show tab bar when using tabbed viewer.
+    return NO;
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>
@@ -1729,10 +1806,13 @@ NS_ASSUME_NONNULL_END
         return YES;
     }
     
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
     __block NSString *url = nil;
     
     NSError *error = nil;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         // Check for a valid link annotation.
         if (![annotation IsValid] ||
             annotation.extendedAnnotType != PTExtendedAnnotTypeLink) {
@@ -1786,11 +1866,11 @@ NS_ASSUME_NONNULL_END
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
-    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
-        self.documentViewController.toolManager.readonly = YES;
+    if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
+        documentViewController.toolManager.readonly = YES;
     }
     
-    [self applyLayoutMode];
+    [self applyLayoutMode:documentViewController.pdfViewCtrl];
     
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
@@ -1799,7 +1879,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController
 {
-    const double zoom = self.pdfViewCtrl.zoom * self.pdfViewCtrl.zoomScale;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    const double zoom = pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
     
     if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
         [self.delegate zoomChanged:self zoom:zoom];
@@ -1816,12 +1898,12 @@ NS_ASSUME_NONNULL_END
     return (!self.hideTopAppNavBar && !self.hideTopToolbars);
 }
 
-- (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber
+- (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
 {
     NSMutableArray<NSDictionary<NSString *, id> *> *annotationData = [NSMutableArray array];
     
     if (annotations.count > 0) {
-        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
             for (PTAnnot *annot in annotations) {
                 if (![annot IsValid]) {
                     continue;
@@ -1834,8 +1916,8 @@ NS_ASSUME_NONNULL_END
                     uniqueId = [uniqueIdObj GetAsPDFText];
                 }
                 
-                PTPDFRect *screenRect = [self.pdfViewCtrl GetScreenRectForAnnot:annot
-                                                                       page_num:pageNumber];
+                PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot
+                                                                  page_num:pageNumber];
                 [annotationData addObject:@{
                     PTAnnotationIdKey: (uniqueId ?: @""),
                     PTAnnotationPageNumberKey: @(pageNumber),
@@ -1855,7 +1937,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber
 {
-    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
+    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl];
     
     if ([self.delegate respondsToSelector:@selector(annotationsSelected:annotations:)]) {
         [self.delegate annotationsSelected:self annotations:annotationData];
@@ -1864,10 +1948,12 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot
 {
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     __block PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
     
     NSError *error = nil;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
         if ([annot IsValid]) {
             annotType = annot.extendedAnnotType;
         }
@@ -2006,19 +2092,23 @@ NS_ASSUME_NONNULL_END
 {
     NSMutableArray<PTAnnot *> *annotations = [NSMutableArray array];
     
-    if ([self.toolManager.tool isKindOfClass:[PTAnnotEditTool class]]) {
-        PTAnnotEditTool *annotEdit = (PTAnnotEditTool *)self.toolManager.tool;
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([toolManager.tool isKindOfClass:[PTAnnotEditTool class]]) {
+        PTAnnotEditTool *annotEdit = (PTAnnotEditTool *)toolManager.tool;
         if (annotEdit.selectedAnnotations.count > 0) {
             [annotations addObjectsFromArray:annotEdit.selectedAnnotations];
         }
     }
-    else if (self.toolManager.tool.currentAnnotation) {
-        [annotations addObject:self.toolManager.tool.currentAnnotation];
+    else if (toolManager.tool.currentAnnotation) {
+        [annotations addObject:toolManager.tool.currentAnnotation];
     }
     
-    const int pageNumber = self.toolManager.tool.annotationPageNumber;
+    const int pageNumber = toolManager.tool.annotationPageNumber;
     
-    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber];
+    NSArray<NSDictionary<NSString *, id> *> *annotationData = [self annotationDataForAnnotations:annotations pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl];
         
     if ([self.delegate respondsToSelector:@selector(annotationMenuPressed:annotationMenu:annotations:)]) {
         [self.delegate annotationMenuPressed:self annotationMenu:menuItemId annotations:annotationData];
@@ -2027,20 +2117,22 @@ NS_ASSUME_NONNULL_END
 
 - (void)overriddenLongPressMenuItemPressed:(NSString *)menuItemId
 {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+
     NSMutableString *selectedText = [NSMutableString string];
     
     NSError *error = nil;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
-        if (![self.pdfViewCtrl HasSelection]) {
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        if (![pdfViewCtrl HasSelection]) {
             return;
         }
         
-        const int selectionBeginPage = self.pdfViewCtrl.selectionBeginPage;
-        const int selectionEndPage = self.pdfViewCtrl.selectionEndPage;
+        const int selectionBeginPage = pdfViewCtrl.selectionBeginPage;
+        const int selectionEndPage = pdfViewCtrl.selectionEndPage;
         
         for (int pageNumber = selectionBeginPage; pageNumber <= selectionEndPage; pageNumber++) {
-            if ([self.pdfViewCtrl HasSelectionOnPage:pageNumber]) {
-                PTSelection *selection = [self.pdfViewCtrl GetSelection:pageNumber];
+            if ([pdfViewCtrl HasSelectionOnPage:pageNumber]) {
+                PTSelection *selection = [pdfViewCtrl GetSelection:pageNumber];
                 NSString *selectionText = [selection GetAsUnicode];
                 
                 [selectedText appendString:selectionText];
@@ -2142,18 +2234,20 @@ NS_ASSUME_NONNULL_END
 
 - (void)documentViewControllerDidOpenDocumentWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController) {
+    PTDocumentBaseViewController *documentViewController = notification.object;
+
+    if (documentViewController != self.currentDocumentViewController) {
         return;
     }
     
-    if ([self isReadOnly] && ![self.documentViewController.toolManager isReadonly]) {
-        self.documentViewController.toolManager.readonly = YES;
+    if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
+        documentViewController.toolManager.readonly = YES;
     }
 }
 
 - (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController.pdfViewCtrl) {
+    if (notification.object != self.currentDocumentViewController.pdfViewCtrl) {
         return;
     }
     
@@ -2170,16 +2264,19 @@ NS_ASSUME_NONNULL_END
 
 - (void)toolManagerDidAddAnnotationWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController.toolManager) {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
     }
     
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
     
     NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
     if (annotId.length == 0) {
-        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+        PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
         BOOL shouldUnlock = NO;
         @try {
             [pdfViewCtrl DocLock:YES];
@@ -2207,7 +2304,7 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey xfdfCommand:[self generateXfdfCommand:annots modified:[[PTVectorAnnot alloc] init] deleted:[[PTVectorAnnot alloc] init]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey xfdfCommand:[self generateXfdfCommand:annots modified:[[PTVectorAnnot alloc] init] deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
     }
 }
 
@@ -2216,6 +2313,9 @@ NS_ASSUME_NONNULL_END
     if (notification.object != self.documentViewController.toolManager) {
         return;
     }
+    
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
@@ -2231,7 +2331,7 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
     }
 }
 
@@ -2240,6 +2340,9 @@ NS_ASSUME_NONNULL_END
     if (notification.object != self.documentViewController.toolManager) {
         return;
     }
+    
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
@@ -2255,19 +2358,21 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:[[PTVectorAnnot alloc] init] deleted:annots]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:[[PTVectorAnnot alloc] init] deleted:annots pdfViewCtrl:pdfViewCtrl]];
     }
 }
 
 - (void)toolManagerDidModifyFormFieldDataWithNotification:(NSNotification *)notification
 {
-    if (notification.object != self.documentViewController.toolManager) {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
     }
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
 
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     if ([annot GetType] == e_ptWidget) {
-        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+        PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
         NSError* error;
 
         __block PTWidget *widget;
@@ -2295,19 +2400,19 @@ NS_ASSUME_NONNULL_END
         if (!self.collaborationManager) {
             PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
             [annots add:annot];
-            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init]]];
+            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         }
     }
 }
 
--(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted {
+-(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl {
     NSString *fdfCommand = @"";
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    
     BOOL shouldUnlockRead = NO;
     @try {
         [pdfViewCtrl DocLockRead];
         shouldUnlockRead = YES;
-        PTPDFDoc *pdfDoc = [self.pdfViewCtrl GetDoc];
+        PTPDFDoc *pdfDoc = [pdfViewCtrl GetDoc];
         PTFDFDoc *fdfDoc = [pdfDoc FDFExtractCommand:added annot_modified:modified annot_deleted:deleted];
         fdfCommand = [fdfDoc SaveAsXFDFToString];
     }
@@ -2322,23 +2427,26 @@ NS_ASSUME_NONNULL_END
 #pragma mark - PTBookmarkViewControllerDelegate
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didModifyBookmark:(PTUserBookmark *)bookmark {
-    [self bookmarksModified];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    [self bookmarksModified:documentViewController.pdfViewCtrl];
 }
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didAddBookmark:(PTUserBookmark *)bookmark {
-    [self bookmarksModified];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    [self bookmarksModified:documentViewController.pdfViewCtrl];
 }
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didRemoveBookmark:(nonnull PTUserBookmark *)bookmark {
-    [self bookmarksModified];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    [self bookmarksModified:documentViewController.pdfViewCtrl];
 }
 
-- (void)bookmarksModified {
+- (void)bookmarksModified:(PTPDFViewCtrl *)pdfViewCtrl
+{
     if ([self.delegate respondsToSelector:@selector(bookmarkChanged:bookmarkJson:)]) {
-
         __block NSString* json;
         NSError* error;
-        [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             json = [PTBookmarkManager.defaultManager exportBookmarksFromDoc:doc];
         } error:&error];
     
@@ -2353,22 +2461,28 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Select Annotation
 
 -(void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber {
-    PTAnnot *annotation = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber];
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = self.currentDocumentViewController.toolManager;
+    
+    PTAnnot *annotation = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
     if (annotation) {
-        [self.toolManager selectAnnotation:annotation onPageNumber:(unsigned long)pageNumber];
+        [toolManager selectAnnotation:annotation onPageNumber:(unsigned long)pageNumber];
     }
 }
 
 
 #pragma mark - Set Property for Annotation
 
-- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap {
-    
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = self.currentDocumentViewController.toolManager;
+
     NSError *error;
     
-    [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
         
-        PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber];
+        PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
         if (![annot IsValid]) {
             NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
                   annotationId, (int)pageNumber);
@@ -2376,7 +2490,7 @@ NS_ASSUME_NONNULL_END
             return;
         }
         
-        [self.toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
+        [toolManager willModifyAnnotation:annot onPageNumber:(int)pageNumber];
         
         NSString* annotContents = [RNTPTDocumentView PT_idAsNSString:propertyMap[PTContentsAnnotationPropertyKey]];
         if (annotContents) {
@@ -2421,9 +2535,9 @@ NS_ASSUME_NONNULL_END
             }
         }
         
-        [self.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+        [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
         
-        [self.toolManager annotationModified:annot onPageNumber:(int)pageNumber];
+        [toolManager annotationModified:annot onPageNumber:(int)pageNumber];
     } error:&error];
     
     // Throw error as exception to reject promise.
@@ -2434,10 +2548,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Get Crop Box
 
-- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber {
+- (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
+{
     
     __block NSDictionary<NSString *, NSNumber *> *map;
-    [self.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
         
         PTPage *page = [doc GetPage:(int)pageNumber];
         if (page) {
@@ -2462,14 +2577,15 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Set Current Page
 
 - (bool)setCurrentPage:(NSInteger)pageNumber {
-    return [self.pdfViewCtrl SetCurrentPage:(int)pageNumber];
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
 }
 
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
     if (![self isBase64String]) {
-        return self.documentViewController.coordinatedDocument.fileURL.path;
+        return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
     } else {
         return nil;
     }
