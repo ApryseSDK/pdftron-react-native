@@ -548,6 +548,9 @@ bool, optional, default to false
 
 If true, viewer will show multiple tabs for documents opened.
 
+##### tabTitle
+string, optional, default to file name, takes effect when multiTabEnabled is true.
+
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
 
