@@ -658,6 +658,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [importBookmarkJson](#importBookmarkJson)
 - [setCurrentPage](#setCurrentPage)
 - [getDocumentPath](#getDocumentPath)
+- [closeAllTabs](#closealltabs)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -979,6 +980,9 @@ this._viewer.getDocumentPath().then((path) => {
   console.log('The path to current document is: ' + path);
 });
 ```
+
+##### closeAllTabs
+Closes all tabs in multi-tab environment.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

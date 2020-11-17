@@ -2588,6 +2588,29 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Close all tabs
+
+- (void)closeAllTabs
+{
+    if (!self.tabbedDocumentViewController) {
+        return;
+    }
+    
+    PTDocumentTabManager *tabManager = self.tabbedDocumentViewController.tabManager;
+    NSArray<PTDocumentTabItem *> *items = [tabManager.items copy];
+    
+    // Close all tabs except the selected tab, which is displaying a view controller.
+    for (PTDocumentTabItem *item in items) {
+        if (item != tabManager.selectedItem) {
+            [tabManager removeItem:item];
+        }
+    }
+    // Close the selected tab last.
+    if (tabManager.selectedItem) {
+        [tabManager removeItem:tabManager.selectedItem];
+    }
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value

@@ -317,6 +317,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (void)closeAllTabs;
+
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

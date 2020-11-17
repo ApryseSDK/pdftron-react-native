@@ -46,6 +46,8 @@
 
 - (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
+
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end
