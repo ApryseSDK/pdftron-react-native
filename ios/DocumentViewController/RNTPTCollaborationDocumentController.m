@@ -28,6 +28,14 @@
     }
 }
 
+- (void)setThumbnailSliderHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    if (!hidden) {
+        return;
+    }
+    [super setThumbnailSliderHidden:hidden animated:animated];
+}
+
 - (void)openDocumentWithURL:(NSURL *)url password:(NSString *)password
 {
     if ([url isFileURL]) {
@@ -85,15 +93,7 @@
     
     if (tool.backToPanToolAfterUse != backToPan) {
         tool.backToPanToolAfterUse = backToPan;
-    }
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isToolGroupToolbarHidden]) {
-        // ...hide the toolbar.
-        self.toolGroupToolbar.hidden = YES;
-    }
+    }    
 }
 
 - (void)toolManager:(PTToolManager *)toolManager didSelectAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber

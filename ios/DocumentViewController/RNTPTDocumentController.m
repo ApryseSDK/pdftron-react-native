@@ -19,28 +19,11 @@ NS_ASSUME_NONNULL_END
 
 @dynamic delegate;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-implementations"
-
-- (void)setBottomToolbarEnabled:(BOOL)enabled
-{
-    self.settingBottomToolbarsEnabled = YES;
-    [super setBottomToolbarEnabled:enabled];
-    self.settingBottomToolbarsEnabled = NO;
-}
-
-#pragma clang diagnostic pop
-
-- (void)setThumbnailSliderEnabled:(BOOL)thumbnailSliderEnabled
-{
-    if (self.settingBottomToolbarsEnabled) {
-        return;
-    }
-    [super setThumbnailSliderEnabled:thumbnailSliderEnabled];
-}
-
 - (void)setThumbnailSliderHidden:(BOOL)hidden animated:(BOOL)animated
 {
+    if (!hidden) {
+        return;
+    }
     [super setThumbnailSliderHidden:hidden animated:animated];
 }
 
@@ -116,14 +99,6 @@ NS_ASSUME_NONNULL_END
     
     if (tool.backToPanToolAfterUse != backToPan) {
         tool.backToPanToolAfterUse = backToPan;
-    }
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isToolGroupToolbarHidden]) {
-        // ...hide the toolbar.
-        self.toolGroupToolbar.hidden = YES;
     }
 }
 
