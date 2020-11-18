@@ -159,14 +159,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
         # ...
     end
     ```
-    **and**
-    remove or comment out the Flipper section:
-    ```
-    # use_flipper!
-    # post_install do |installer|
-    #   flipper_post_install(installer)
-    # end
-    ```
 
 2. In the `ios` folder, run `pod install`.
 3. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
