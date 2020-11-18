@@ -88,6 +88,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private static final String TAG = DocumentView.class.getSimpleName();
 
     private String mDocumentPath;
+    private String mTabTitle;
     private boolean mIsBase64;
     private File mTempFile;
 
@@ -199,6 +200,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void buildViewer() {
         super.buildViewer();
         mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+        if (!Utils.isNullOrEmpty(mTabTitle)) {
+            mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+        }
     }
 
     public void setDocument(String path) {
@@ -382,6 +386,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (context != null) {
             PdfViewCtrlSettingsManager.setAllowPageChangeOnTap(context, pageChangeOnTap);
         }
+    }
+    
+    public void setMultiTabEnabled(boolean multiTab) {
+        mBuilder = mBuilder.multiTabEnabled(multiTab);
+    }
+
+    public void setTabTitle(String tabTitle) {
+        mTabTitle = tabTitle;
     }
 
     public void setThumbnailViewEditingEnabled(boolean thumbnailViewEditingEnabled) {
@@ -2319,6 +2331,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean setCurrentPage(int pageNumber) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.setCurrentPage(pageNumber);
+    }
+
+    public void closeAllTabs() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.closeAllTabs();
+        }
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {

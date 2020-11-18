@@ -206,6 +206,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
         documentView.setPageChangeOnTap(pageChangeOnTap);
     }
+    
+    @ReactProp(name = "multiTabEnabled")
+    public void setMultiTabEnabled(DocumentView documentView, boolean multiTab) {
+        documentView.setMultiTabEnabled(multiTab);
+    }
+
+    @ReactProp(name = "tabTitle")
+    public void setTabTitle(DocumentView documentView, String tabTitle) {
+        documentView.setTabTitle(tabTitle);
+    }
 
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
@@ -422,6 +432,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
             throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void closeAllTabs(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.closeAllTabs();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "closeAllTabs", "Unable to find DocumentView.");
         }
     }
 
