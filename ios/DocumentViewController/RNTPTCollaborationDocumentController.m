@@ -77,6 +77,9 @@
         if ([self isBottomToolbarEnabled]) {
             return [self.navigationController isToolbarHidden];
         }
+        if ([self areToolGroupsEnabled]) {
+            return [self isToolGroupToolbarHidden];
+        }
     }
     return [super controlsHidden];
 }

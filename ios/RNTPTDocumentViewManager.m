@@ -213,6 +213,13 @@ RCT_CUSTOM_VIEW_PROPERTY(multiTabEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(tabTitle, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.tabTitle = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {

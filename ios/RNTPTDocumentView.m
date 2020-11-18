@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)RNTPTDocumentView_commonInit
 {
-    _multiTabEnabled = YES;
+    _multiTabEnabled = NO;
     
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
@@ -425,6 +425,12 @@ NS_ASSUME_NONNULL_END
 - (void)setMultiTabEnabled:(BOOL)enabled
 {
     _multiTabEnabled = enabled;
+    
+}
+
+- (void)setTabTitle:(NSString *)tabTitle
+{
+    _tabTitle = [tabTitle copy];
     
 }
 
@@ -1748,6 +1754,11 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyViewerSettings:documentViewController];
+    
+    if (self.tabTitle) {
+        PTDocumentTabItem *tabItem = documentViewController.documentTabItem;
+        tabItem.displayName = self.tabTitle;
+    }
     
     [self registerForDocumentViewControllerNotifications:documentViewController];
     [self registerForPDFViewCtrlNotifications:documentViewController];
