@@ -150,13 +150,13 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add the 3 middle lines to the `target 'MyApp' do / end` block:
+1. Open `Podfile` in the `ios` folder, add the followng line to the `target 'MyApp' do ... end` block:
 
     ```
     target 'MyApp' do
-        use_frameworks!
+        # ...
         pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
-        pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
+        # ...
     end
     ```
     **and**
