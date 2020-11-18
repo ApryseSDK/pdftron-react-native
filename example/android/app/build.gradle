@@ -134,6 +134,8 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+
+        manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
     }
     splits {
         abi {
