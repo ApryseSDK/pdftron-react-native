@@ -67,6 +67,7 @@ RCT_REMAP_METHOD(getDocumentPath,
         reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
     }
 }
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -283,6 +284,20 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
     @catch (NSException *exception) {
         reject(@"set_current_page", @"Failed to set current page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(closeAllTabs,
+                 closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] closeAllTabsForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
     }
 }
 

@@ -536,6 +536,14 @@ bool, optional, default to true
 
 If true, stylus will act as a pen in pan mode, otherwise it will act as finger
 
+##### multiTabEnabled
+bool, optional, default to false
+
+If true, viewer will show multiple tabs for documents opened.
+
+##### tabTitle
+string, optional, default to file name, takes effect when multiTabEnabled is true.
+
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
 
@@ -627,25 +635,6 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ```
 
 #### Methods
-- [setToolMode](#settoolmode)
-- [commitTool](#committool)
-- [getPageCount](#getpagecount)
-- [importAnnotations](#importannotations)
-- [exportAnnotations](#exportannotations)
-- [flattenAnnotations](#flattenannotations)
-- [deleteAnnotations](#deleteannotations)
-- [saveDocument](#savedocument)
-- [setFlagForFields](#setFlagForFields)
-- [setValuesForFields](#setValuesForFields)
-- [importAnnotationCommand](#importannotationcommand)
-- [handleBackButton](#handlebackbutton)
-- [selectAnnotation](#selectAnnotation)
-- [setFlagsForAnnotations](#setFlagsForAnnotations)
-- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
-- [getPageCropBox](#getPageCropBox)
-- [importBookmarkJson](#importBookmarkJson)
-- [setCurrentPage](#setCurrentPage)
-- [getDocumentPath](#getDocumentPath)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
@@ -967,6 +956,9 @@ this._viewer.getDocumentPath().then((path) => {
   console.log('The path to current document is: ' + path);
 });
 ```
+
+##### closeAllTabs
+Closes all tabs in multi-tab environment.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

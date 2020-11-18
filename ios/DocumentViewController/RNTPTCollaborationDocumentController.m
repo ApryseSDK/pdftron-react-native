@@ -28,6 +28,14 @@
     }
 }
 
+- (void)setThumbnailSliderHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    if (!hidden) {
+        return;
+    }
+    [super setThumbnailSliderHidden:hidden animated:animated];
+}
+
 - (void)openDocumentWithURL:(NSURL *)url password:(NSString *)password
 {
     if ([url isFileURL]) {
@@ -60,6 +68,22 @@
     return YES;
 }
 
+- (BOOL)areTopToolbarsEnabled
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerAreTopToolbarsEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerAreTopToolbarsEnabled:self];
+    }
+    return YES;
+}
+
+- (BOOL)isNavigationBarEnabled
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerIsNavigationBarEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerIsNavigationBarEnabled:self];
+    }
+    return YES;
+}
+
 - (BOOL)controlsHidden
 {
     if (self.navigationController) {
@@ -69,8 +93,22 @@
         if ([self isBottomToolbarEnabled]) {
             return [self.navigationController isToolbarHidden];
         }
+        if ([self areToolGroupsEnabled]) {
+            return [self isToolGroupToolbarHidden];
+        }
     }
     return [super controlsHidden];
+}
+
+- (void)setControlsHidden:(BOOL)controlsHidden animated:(BOOL)animated
+{
+    [super setControlsHidden:controlsHidden animated:animated];
+    
+    if ([self areTopToolbarsEnabled] &&
+        ![self isNavigationBarEnabled] &&
+        self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController setTabBarHidden:controlsHidden animated:animated];
+    }
 }
 
 #pragma mark - <PTToolManagerDelegate>
@@ -85,15 +123,7 @@
     
     if (tool.backToPanToolAfterUse != backToPan) {
         tool.backToPanToolAfterUse = backToPan;
-    }
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isToolGroupToolbarHidden]) {
-        // ...hide the toolbar.
-        self.toolGroupToolbar.hidden = YES;
-    }
+    }    
 }
 
 - (void)toolManager:(PTToolManager *)toolManager didSelectAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber

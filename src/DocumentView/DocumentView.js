@@ -62,6 +62,8 @@ export default class DocumentView extends PureComponent {
     pageChangeOnTap: PropTypes.bool,
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
+    multiTabEnabled: PropTypes.bool,
+    tabTitle: PropTypes.string,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
@@ -344,6 +346,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  closeAllTabs = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.closeAllTabs(tag);
     }
     return Promise.resolve();
   }

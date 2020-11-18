@@ -273,6 +273,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
 
+@property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
+@property (nonatomic, copy, nullable) NSString *tabTitle;
+
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
@@ -314,6 +317,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
+
+- (void)closeAllTabs;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
