@@ -643,28 +643,6 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ```
 
 #### Methods
-- [setToolMode](#settoolmode)
-- [commitTool](#committool)
-- [getPageCount](#getpagecount)
-- [importAnnotations](#importannotations)
-- [exportAnnotations](#exportannotations)
-- [flattenAnnotations](#flattenannotations)
-- [deleteAnnotations](#deleteannotations)
-- [saveDocument](#savedocument)
-- [setFlagForFields](#setFlagForFields)
-- [setValuesForFields](#setValuesForFields)
-- [importAnnotationCommand](#importannotationcommand)
-- [canExitViewer](#canexitviewer)
-- [closeAllTabs](#closealltabs)
-- [handleBackButton](#handlebackbutton)
-- [selectAnnotation](#selectAnnotation)
-- [setFlagsForAnnotations](#setFlagsForAnnotations)
-- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
-- [getPageCropBox](#getPageCropBox)
-- [importBookmarkJson](#importBookmarkJson)
-- [setCurrentPage](#setCurrentPage)
-- [getDocumentPath](#getDocumentPath)
-- [closeAllTabs](#closealltabs)
 
 ##### setToolMode
 To set the current tool mode (`Config.Tools` constants).
