@@ -1905,6 +1905,16 @@ NS_ASSUME_NONNULL_END
     return (!self.hideTopAppNavBar && !self.hideTopToolbars);
 }
 
+- (BOOL)rnt_documentViewControllerAreTopToolbarsEnabled:(PTDocumentBaseViewController *)documentViewController;
+{
+    return !self.hideTopToolbars;
+}
+
+- (BOOL)rnt_documentViewControllerIsNavigationBarEnabled:(PTDocumentBaseViewController *)documentViewController
+{
+    return !self.hideTopAppNavBar;
+}
+
 - (NSArray<NSDictionary<NSString *, id> *> *)annotationDataForAnnotations:(NSArray<PTAnnot *> *)annotations pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl
 {
     NSMutableArray<NSDictionary<NSString *, id> *> *annotationData = [NSMutableArray array];

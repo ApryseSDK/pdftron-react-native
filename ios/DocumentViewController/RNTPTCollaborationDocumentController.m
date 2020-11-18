@@ -68,6 +68,22 @@
     return YES;
 }
 
+- (BOOL)areTopToolbarsEnabled
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerAreTopToolbarsEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerAreTopToolbarsEnabled:self];
+    }
+    return YES;
+}
+
+- (BOOL)isNavigationBarEnabled
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerIsNavigationBarEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerIsNavigationBarEnabled:self];
+    }
+    return YES;
+}
+
 - (BOOL)controlsHidden
 {
     if (self.navigationController) {
@@ -82,6 +98,17 @@
         }
     }
     return [super controlsHidden];
+}
+
+- (void)setControlsHidden:(BOOL)controlsHidden animated:(BOOL)animated
+{
+    [super setControlsHidden:controlsHidden animated:animated];
+    
+    if ([self areTopToolbarsEnabled] &&
+        ![self isNavigationBarEnabled] &&
+        self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController setTabBarHidden:controlsHidden animated:animated];
+    }
 }
 
 #pragma mark - <PTToolManagerDelegate>
