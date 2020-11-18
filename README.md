@@ -551,6 +551,14 @@ If true, viewer will show multiple tabs for documents opened.
 ##### tabTitle
 string, optional, default to file name, takes effect when multiTabEnabled is true.
 
+##### multiTabEnabled
+bool, optional, default to false
+
+If true, viewer will show multiple tabs for documents opened.
+
+##### tabTitle
+string, optional, default to file name, takes effect when multiTabEnabled is true.
+
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
 
@@ -653,6 +661,8 @@ import { DocumentView, Config } from 'react-native-pdftron';
 - [setFlagForFields](#setFlagForFields)
 - [setValuesForFields](#setValuesForFields)
 - [importAnnotationCommand](#importannotationcommand)
+- [canExitViewer](#canexitviewer)
+- [closeAllTabs](#closealltabs)
 - [handleBackButton](#handlebackbutton)
 - [selectAnnotation](#selectAnnotation)
 - [setFlagsForAnnotations](#setFlagsForAnnotations)
