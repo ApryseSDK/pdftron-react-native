@@ -317,6 +317,10 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidRemoveAnnotationWithNotification:)
                    name:PTToolManagerAnnotationRemovedNotification
                  object:toolManager];
+    
+    [center addObserver:self
+               selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:) name:PTToolManagerFormFieldDataModifiedNotification
+                 object:toolManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
