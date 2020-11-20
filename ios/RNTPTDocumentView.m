@@ -212,6 +212,21 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
+    if (self.showNavButton) {
+         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
+         UIBarButtonItem *navButton;
+         if (navImage == nil) {
+             navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(navButtonClicked)];
+         }else{
+             navButton = [[UIBarButtonItem alloc] initWithImage:navImage
+                                                          style:UIBarButtonItemStylePlain
+                                                         target:self
+                                                         action:@selector(navButtonClicked)];
+         }
+
+         self.viewController.navigationItem.leftBarButtonItem = navButton;
+     }
+    
     RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
     navigationController.delegate = self;
         
