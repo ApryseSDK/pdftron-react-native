@@ -223,6 +223,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setNavResName(String resName) {
         setNavIconResName(resName);
+
+        if (mShowNavIcon && mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getToolbar() != null) {
+            int res = Utils.getResourceDrawable(this.getContext(), resName);
+            if (res != 0) {
+                mPdfViewCtrlTabHostFragment.getToolbar().setNavigationIcon(res);
+            }
+        }
     }
 
     public void setDisabledElements(ReadableArray array) {
