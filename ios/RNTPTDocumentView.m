@@ -1234,6 +1234,15 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Leading nav button
+
+- (void)setNavButtonPath:(NSString *)navButtonPath
+{
+    _navButtonPath = navButtonPath;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Top/bottom toolbar
 
 - (BOOL)isTopToolbarEnabled
@@ -1425,6 +1434,27 @@ NS_ASSUME_NONNULL_END
     if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         [self applyDocumentControllerSettings:documentController];
+    }
+    
+    // Leading Nav Icon.
+    if (self.showNavButton) {
+        UIBarButtonItem* navButton = self.viewController.navigationItem.leftBarButtonItem;
+        UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
+        if (!navButton) {
+            if (navImage == nil) {
+                navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(navButtonClicked)];
+            } else {
+                navButton = [[UIBarButtonItem alloc] initWithImage:navImage
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(navButtonClicked)];
+            }
+            self.viewController.navigationItem.leftBarButtonItem = navButton;
+        } else {
+            if (navImage) {
+                [navButton setImage:navImage];
+            }
+        }
     }
     
     // Custom HTTP request headers.
