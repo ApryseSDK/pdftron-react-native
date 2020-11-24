@@ -2,6 +2,9 @@ package com.pdftron.reactnative.modules;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
@@ -11,6 +14,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -331,6 +335,14 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);
+
+        // Handle onActivity result for digital signature using view model, which will
+        // be consumed by DigitalSignatureDialogFragment
+        if (activity instanceof AppCompatActivity) {
+            if (DigitalSignatureDialogFragment.isDigitalSignatureIntent(requestCode)) {
+                DigitalSignatureDialogFragment.getViewModel((AppCompatActivity) activity).setActivityResultIntent(requestCode, resultCode, data);
+            }
+        }
     }
 
     @Override
