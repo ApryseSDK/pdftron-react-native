@@ -173,6 +173,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
 
         mToolManagerBuilder = ToolManagerBuilder.from()
+                .setShowRichContentOption(false)
                 .setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
         mBuilder
