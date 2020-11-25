@@ -78,6 +78,9 @@ export default {
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+
+    // ios only
+    pencilDrawing: 'PencilDrawing',
   },
   FitMode: {
     FitPage: 'FitPage',
