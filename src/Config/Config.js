@@ -79,7 +79,7 @@ export default {
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
 
-    // ios only
+    // iOS only.
     pencilDrawing: 'PencilDrawing',
   },
   FitMode: {
