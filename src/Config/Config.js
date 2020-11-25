@@ -80,7 +80,7 @@ export default {
     formCreateListBoxField: 'FormCreateListBoxField',
 
     // iOS only.
-    pencilDrawing: 'PencilDrawing',
+    pencilKitDrawing: 'PencilKitDrawing',
   },
   FitMode: {
     FitPage: 'FitPage',
