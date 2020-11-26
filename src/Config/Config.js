@@ -72,6 +72,7 @@ export default {
     annotationCreateLink: 'AnnotationCreateLink',
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
     annotationCreateLinkText: 'AnnotationCreateLinkText',
+    annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',

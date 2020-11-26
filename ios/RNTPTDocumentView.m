@@ -552,6 +552,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTPencilKitDrawingToolKey]) {
                 toolManager.pencilDrawingAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+                toolManager.freehandHighlightAnnotationOptions.canCreate = value;
+            }
         }
     }
 }
@@ -658,6 +661,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTPencilKitDrawingToolKey]) {
         toolClass = [PTPencilDrawingCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        toolClass = [PTFreeHandHighlightCreate class];
     }
     
     if (toolClass) {
@@ -1773,6 +1779,7 @@ NS_ASSUME_NONNULL_END
         PTAnnotationCreateFileAttachmentToolKey : @(PTExtendedAnnotTypeFileAttachment),
         PTAnnotationCreateSoundToolKey : @(PTExtendedAnnotTypeSound),
         PTPencilKitDrawingToolKey: @(PTExtendedAnnotTypePencilDrawing),
+        PTAnnotationCreateFreeHighlighterToolKey: @(PTExtendedAnnotTypeFreehandHighlight),
 //        @"FormCreateTextField" : @(),
 //        @"FormCreateCheckboxField" : @(),
 //        @"FormCreateRadioField" : @(),
@@ -2799,6 +2806,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ([key isEqualToString:PTAnnotationEraserToolKey]) {
         return [PTEraser class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        return [PTFreeHandHighlightCreate class];
     }
     
     if (@available(iOS 13.1, *)) {
