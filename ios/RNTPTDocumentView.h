@@ -141,6 +141,9 @@ static NSString * const PTStrikeoutWhiteListKey = @"Strikeout";
 static NSString * const PTUnderlineWhiteListKey = @"Underline";
 static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 
+static NSString * const PTAllFilterModeKey = @"all";
+static NSString * const PTAnnotatedFilterModeKey = @"annotated";
+static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
 static NSString * const PTRectKey = @"rect";
 static NSString * const PTRectX1Key = @"x1";
@@ -282,6 +285,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *thumbnailFilterModes;
 
 #pragma mark - Methods
 

@@ -165,5 +165,10 @@ export default {
     Name: "name",
     Icon: "icon",
     Items: "items"
-  }
+  },
+  ThumbnailFilterMode: {
+    All: "all",
+    Annotated: "annotated",
+    Bookmarked: "bookmarked",
+  },
 };

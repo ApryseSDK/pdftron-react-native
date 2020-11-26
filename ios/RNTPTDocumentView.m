@@ -1340,6 +1340,26 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
+-(void)setThumbnailFilterModes:(NSArray<NSString *> *)thumbnailFilterModes
+{
+    _thumbnailFilterModes = thumbnailFilterModes;
+    
+    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
+    
+    for (NSString * filterModeString in thumbnailFilterModes) {
+        if ([filterModeString isEqualToString:PTAllFilterModeKey]) {
+            [filterModeArray addObject:PTThumbnailFilterAll];
+        } else if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
+            [filterModeArray addObject:PTThumbnailFilterAnnotated];
+        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
+            [filterModeArray addObject:PTThumbnailFilterBookmarked];
+        }
+    }
+    
+    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
+    self.currentDocumentViewController.thumbnailsViewController.filterModes = filterModeSet;
+}
+
 #pragma mark -
 
 - (void)applyViewerSettings

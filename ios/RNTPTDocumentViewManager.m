@@ -360,6 +360,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideTopAppNavBar, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(thumbnailFilterModes, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.thumbnailFilterModes = [RCTConvert NSArray:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
