@@ -669,6 +669,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Widget;
         } else if (TOOL_FORM_CREATE_TOOL_BOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
         }
         return annotType;
     }
@@ -750,6 +752,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FORM_LIST_BOX_CREATE;
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             mode = ToolManager.ToolMode.INK_ERASER;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
+            mode = ToolManager.ToolMode.FREE_HIGHLIGHTER;
         }
         return mode;
     }
@@ -826,6 +830,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.LIST_BOX.value();
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.ERASER.value();
+        } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.FREE_HIGHLIGHT.value();
         } else if (BUTTON_UNDO.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.UNDO.value();
         } else if (BUTTON_REDO.equals(item)) {
@@ -907,6 +913,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.LIST_BOX;
         } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
             buttonType = ToolbarButtonType.ERASER;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
+            buttonType = ToolbarButtonType.FREE_HIGHLIGHT;
         } else if (BUTTON_UNDO.equals(item)) {
             buttonType = ToolbarButtonType.UNDO;
         } else if (BUTTON_REDO.equals(item)) {
