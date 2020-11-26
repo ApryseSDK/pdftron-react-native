@@ -180,6 +180,8 @@ NS_ASSUME_NONNULL_END
                 // Use the RNTPTDocumentController class inside the tabbed viewer.
                 tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
                 
+                [tabbedDocumentViewController.tabManager restoreItems];
+                
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
@@ -265,6 +267,10 @@ NS_ASSUME_NONNULL_END
     
     if (self.documentViewController) {
         [self deregisterForPDFViewCtrlNotifications:self.documentViewController];
+    }
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager saveItems];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -1926,6 +1932,10 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager saveItems];
+    }
     
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
