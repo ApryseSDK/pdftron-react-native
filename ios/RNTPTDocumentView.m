@@ -1352,25 +1352,6 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
--(void)setThumbnailFilterModes:(NSArray<NSString *> *)thumbnailFilterModes
-{
-    _thumbnailFilterModes = thumbnailFilterModes;
-    
-    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
-    
-    for (NSString * filterModeString in thumbnailFilterModes) {
-        if ([filterModeString isEqualToString:PTAllFilterModeKey]) {
-            [filterModeArray addObject:PTThumbnailFilterAll];
-        } else if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
-            [filterModeArray addObject:PTThumbnailFilterAnnotated];
-        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
-            [filterModeArray addObject:PTThumbnailFilterBookmarked];
-        }
-    }
-    
-    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
-    self.currentDocumentViewController.thumbnailsViewController.filterModes = filterModeSet;
-}
 
 #pragma mark -
 
@@ -1494,6 +1475,25 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
+    
+    // Thumbnail Filter Mode
+    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
+    
+    [filterModeArray addObject:PTThumbnailFilterAll];
+    
+    for (NSString * filterModeString in self.thumbnailFilterModes) {
+        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
+            [filterModeArray addObject:PTThumbnailFilterAnnotated];
+        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
+            [filterModeArray addObject:PTThumbnailFilterBookmarked];
+        }
+    }
+    
+    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
+    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
+    
+    filterModeArray = nil;
+    filterModeSet = nil;
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];

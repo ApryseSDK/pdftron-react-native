@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
+import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
@@ -399,7 +401,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             PdfViewCtrlSettingsManager.setAllowPageChangeOnTap(context, pageChangeOnTap);
         }
     }
-    
+
     public void setMultiTabEnabled(boolean multiTab) {
         mBuilder = mBuilder.multiTabEnabled(multiTab);
     }
@@ -528,6 +530,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setHideTopAppNavBar(boolean hideTopAppNavBar) {
         mBuilder = mBuilder.showTopToolbar(!hideTopAppNavBar);
+    }
+
+    public void setThumbnailFilterModes(ReadableArray filterModes) {
+        ArrayList<ThumbnailsViewFragment.FilterModes> hideList = new ArrayList<>();
+
+        hideList.add(ThumbnailsViewFragment.FilterModes.ANNOTATED);
+        hideList.add(ThumbnailsViewFragment.FilterModes.BOOKMARKED);
+
+        for (int i = 0; i < filterModes.size(); i++) {
+            String mode = filterModes.getString(i);
+            if (THUMBNAIL_FILTER_MODE_ANNOTATED.equals(mode)) {
+                hideList.remove(ThumbnailsViewFragment.FilterModes.ANNOTATED);
+            } else if (THUMBNAIL_FILTER_MODE_BOOKMARKED.equals(mode)) {
+                hideList.remove(ThumbnailsViewFragment.FilterModes.BOOKMARKED);
+            }
+        }
+
+        mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
     }
 
     private void disableElements(ReadableArray args) {
@@ -1703,8 +1723,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // helper
     @Nullable
     private String generateXfdfCommand(@Nullable ArrayList<Annot> added,
-            @Nullable ArrayList<Annot> modified,
-            @Nullable ArrayList<Annot> removed) throws PDFNetException {
+                                       @Nullable ArrayList<Annot> modified,
+                                       @Nullable ArrayList<Annot> removed) throws PDFNetException {
         PDFDoc pdfDoc = getPdfDoc();
         if (pdfDoc != null) {
             FDFDoc fdfDoc = pdfDoc.fdfExtract(added, modified, removed);

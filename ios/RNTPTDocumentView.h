@@ -142,7 +142,6 @@ static NSString * const PTStrikeoutWhiteListKey = @"Strikeout";
 static NSString * const PTUnderlineWhiteListKey = @"Underline";
 static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 
-static NSString * const PTAllFilterModeKey = @"all";
 static NSString * const PTAnnotatedFilterModeKey = @"annotated";
 static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 

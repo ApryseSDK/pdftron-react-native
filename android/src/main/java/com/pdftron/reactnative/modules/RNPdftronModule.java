@@ -1,4 +1,3 @@
-
 package com.pdftron.reactnative.modules;
 
 import androidx.annotation.NonNull;

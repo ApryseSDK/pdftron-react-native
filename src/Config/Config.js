@@ -168,7 +168,6 @@ export default {
     Items: "items"
   },
   ThumbnailFilterMode: {
-    All: "all",
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },

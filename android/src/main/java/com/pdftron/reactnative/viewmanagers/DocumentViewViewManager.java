@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -206,7 +207,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
         documentView.setPageChangeOnTap(pageChangeOnTap);
     }
-    
+
     @ReactProp(name = "multiTabEnabled")
     public void setMultiTabEnabled(DocumentView documentView, boolean multiTab) {
         documentView.setMultiTabEnabled(multiTab);
@@ -281,7 +282,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setHideTopAppNavBar(DocumentView documentView, boolean hide) {
         documentView.setHideTopAppNavBar(hide);
     }
-    
+
+    @ReactProp(name = "thumbnailFilterModes")
+    public void setThumbnailFilterModes(DocumentView documentView, ReadableArray filterModes) {
+        documentView.setThumbnailFilterModes(filterModes);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -416,7 +422,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "setFlagsForAnnotation", "Unable to find DocumentView.");
         }
     }
-  
+
     public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -462,6 +468,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
         }
     }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
