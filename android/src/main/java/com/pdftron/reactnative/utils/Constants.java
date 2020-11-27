@@ -98,6 +98,7 @@ public final class Constants {
     public static final String TOOL_FORM_CREATE_LIST_BOX_FIELD = "FormCreateListBoxField";
     public static final String TOOL_ANNOTATION_CREATE_RUBBER_STAMP = "AnnotationCreateRubberStamp";
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
+    public static final String TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER = "AnnotationCreateFreeHighlighter";
 
     // Toolbars
     public static final String TAG_VIEW_TOOLBAR = "PDFTron_View";

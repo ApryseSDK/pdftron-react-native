@@ -63,6 +63,7 @@ static NSString * const PTPanToolKey = @"pan";
 static NSString * const PTAnnotationEraserToolKey = @"AnnotationEraserTool";
 static NSString * const PTAnnotationCreateSoundToolKey = @"AnnotationCreateSound";
 static NSString * const PTPencilKitDrawingToolKey = @"PencilKitDrawing";
+static NSString * const PTAnnotationCreateFreeHighlighterToolKey = @"AnnotationCreateFreeHighlighter";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";

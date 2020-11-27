@@ -180,6 +180,8 @@ NS_ASSUME_NONNULL_END
                 // Use the RNTPTDocumentController class inside the tabbed viewer.
                 tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
                 
+                [tabbedDocumentViewController.tabManager restoreItems];
+                
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
@@ -265,6 +267,10 @@ NS_ASSUME_NONNULL_END
     
     if (self.documentViewController) {
         [self deregisterForPDFViewCtrlNotifications:self.documentViewController];
+    }
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager saveItems];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -546,6 +552,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTPencilKitDrawingToolKey]) {
                 toolManager.pencilDrawingAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+                toolManager.freehandHighlightAnnotationOptions.canCreate = value;
+            }
         }
     }
 }
@@ -652,6 +661,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTPencilKitDrawingToolKey]) {
         toolClass = [PTPencilDrawingCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        toolClass = [PTFreeHandHighlightCreate class];
     }
     
     if (toolClass) {
@@ -1787,6 +1799,7 @@ NS_ASSUME_NONNULL_END
         PTAnnotationCreateFileAttachmentToolKey : @(PTExtendedAnnotTypeFileAttachment),
         PTAnnotationCreateSoundToolKey : @(PTExtendedAnnotTypeSound),
         PTPencilKitDrawingToolKey: @(PTExtendedAnnotTypePencilDrawing),
+        PTAnnotationCreateFreeHighlighterToolKey: @(PTExtendedAnnotTypeFreehandHighlight),
 //        @"FormCreateTextField" : @(),
 //        @"FormCreateCheckboxField" : @(),
 //        @"FormCreateRadioField" : @(),
@@ -1939,6 +1952,10 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager saveItems];
+    }
     
     if ([self.delegate respondsToSelector:@selector(documentLoaded:)]) {
         [self.delegate documentLoaded:self];
@@ -2809,6 +2826,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ([key isEqualToString:PTAnnotationEraserToolKey]) {
         return [PTEraser class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        return [PTFreeHandHighlightCreate class];
     }
     
     if (@available(iOS 13.1, *)) {
