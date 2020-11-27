@@ -532,18 +532,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showTopToolbar(!hideTopAppNavBar);
     }
 
-    public void setThumbnailFilterModes(ReadableArray filterModes) {
+    public void setHideThumbnailFilterModes(ReadableArray filterModes) {
         ArrayList<ThumbnailsViewFragment.FilterModes> hideList = new ArrayList<>();
-
-        hideList.add(ThumbnailsViewFragment.FilterModes.ANNOTATED);
-        hideList.add(ThumbnailsViewFragment.FilterModes.BOOKMARKED);
 
         for (int i = 0; i < filterModes.size(); i++) {
             String mode = filterModes.getString(i);
             if (THUMBNAIL_FILTER_MODE_ANNOTATED.equals(mode)) {
-                hideList.remove(ThumbnailsViewFragment.FilterModes.ANNOTATED);
+                hideList.add(ThumbnailsViewFragment.FilterModes.ANNOTATED);
             } else if (THUMBNAIL_FILTER_MODE_BOOKMARKED.equals(mode)) {
-                hideList.remove(ThumbnailsViewFragment.FilterModes.BOOKMARKED);
+                hideList.add(ThumbnailsViewFragment.FilterModes.BOOKMARKED);
             }
         }
 

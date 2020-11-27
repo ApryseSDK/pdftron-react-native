@@ -72,7 +72,7 @@ export default class DocumentView extends PureComponent {
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
     onBookmarkChanged: PropTypes.func,
-    thumbnailFilterModes: PropTypes.array,
+    hideThumbnailFilterModes: PropTypes.array,
     ...ViewPropTypes,
   };
 

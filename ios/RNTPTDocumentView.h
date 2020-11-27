@@ -286,7 +286,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
 
-@property (nonatomic, copy, nullable) NSArray<NSString *> *thumbnailFilterModes;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
 #pragma mark - Methods
 

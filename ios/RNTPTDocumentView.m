@@ -1477,15 +1477,18 @@ NS_ASSUME_NONNULL_END
     }
     
     // Thumbnail Filter Mode
+    
     NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
     
     [filterModeArray addObject:PTThumbnailFilterAll];
+    [filterModeArray addObject:PTThumbnailFilterAnnotated];
+    [filterModeArray addObject:PTThumbnailFilterBookmarked];
     
-    for (NSString * filterModeString in self.thumbnailFilterModes) {
+    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
         if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
-            [filterModeArray addObject:PTThumbnailFilterAnnotated];
+            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
         } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
-            [filterModeArray addObject:PTThumbnailFilterBookmarked];
+            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
         }
     }
     

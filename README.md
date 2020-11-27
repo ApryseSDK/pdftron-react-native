@@ -606,10 +606,10 @@ Name | Type | Description
 --- | --- | ---
 bookmarkJson | string | the list of current bookmarks in JSON format
 
-### thumbnailFilterModes
+### hideThumbnailFilterModes
 array of `Config.ThumbnailFilterMode` tags, optional
 
-Defines filter modes that can show on thumbnail view. If null, all modes will be displayed
+Defines filter modes that should be hidden on thumbnail view
 
 Example:
 
@@ -636,7 +636,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
   annotationPermissionCheckEnabled={false}
   onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
-  thumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
+  hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
 />
 ```
 

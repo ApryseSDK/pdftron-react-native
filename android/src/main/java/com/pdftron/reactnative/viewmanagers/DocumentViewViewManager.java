@@ -283,9 +283,9 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideTopAppNavBar(hide);
     }
 
-    @ReactProp(name = "thumbnailFilterModes")
-    public void setThumbnailFilterModes(DocumentView documentView, ReadableArray filterModes) {
-        documentView.setThumbnailFilterModes(filterModes);
+    @ReactProp(name = "hideThumbnailFilterModes")
+    public void setHideThumbnailFilterModes(DocumentView documentView, ReadableArray filterModes) {
+        documentView.setHideThumbnailFilterModes(filterModes);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
