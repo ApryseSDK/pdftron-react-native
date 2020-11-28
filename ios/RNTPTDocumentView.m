@@ -1495,9 +1495,6 @@ NS_ASSUME_NONNULL_END
     NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
     documentViewController.thumbnailsViewController.filterModes = filterModeSet;
     
-    filterModeArray = nil;
-    filterModeSet = nil;
-    
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
 }

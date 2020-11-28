@@ -83,7 +83,7 @@ public final class Constants {
     public static final String TOOL_TEXT_SELECT = "TextSelect";
     public static final String TOOL_ANNOTATION_EDIT = "AnnotationEdit";
     public static final String TOOL_ANNOTATION_CREATE_SOUND = "AnnotationCreateSound";
-    public static final String TOOL_PAN = "pan";
+    public static final String TOOL_PAN = "Pan";
     public static final String TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT = "AnnotationCreateFileAttachment";
     public static final String TOOL_ANNOTATION_CREATE_REDACTION = "AnnotationCreateRedaction";
     public static final String TOOL_ANNOTATION_CREATE_REDACTION_TEXT = "AnnotationCreateRedactionText";
@@ -126,10 +126,10 @@ public final class Constants {
     // LAYOUT MODES
     public static final String LAYOUT_MODE_SINGLE = "Single";
     public static final String LAYOUT_MODE_CONTINUOUS = "Continuous";
-    public static final String LAYOUT_MODE_FACING = "facing";
-    public static final String LAYOUT_MODE_FACING_CONTINUOUS = "facingContinuous";
-    public static final String LAYOUT_MODE_FACING_OVER = "facingOver";
-    public static final String LAYOUT_MODE_FACING_OVER_CONTINUOUS = "facingOverContinuous";
+    public static final String LAYOUT_MODE_FACING = "Facing";
+    public static final String LAYOUT_MODE_FACING_CONTINUOUS = "FacingContinuous";
+    public static final String LAYOUT_MODE_FACING_COVER = "FacingCover";
+    public static final String LAYOUT_MODE_FACING_COVER_CONTINUOUS = "FacingCoverContinuous";
 
     // MENU ID STRINGS
     public static final String MENU_ID_STRING_STYLE = "style";

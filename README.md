@@ -609,7 +609,7 @@ bookmarkJson | string | the list of current bookmarks in JSON format
 ### hideThumbnailFilterModes
 array of `Config.ThumbnailFilterMode` tags, optional
 
-Defines filter modes that should be hidden on thumbnail view
+Defines filter modes that should be hidden in the thumbnails browser
 
 Example:
 

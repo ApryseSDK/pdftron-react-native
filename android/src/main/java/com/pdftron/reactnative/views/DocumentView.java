@@ -321,9 +321,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_VALUE;
         } else if (LAYOUT_MODE_FACING_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_CONT_VALUE;
-        } else if (LAYOUT_MODE_FACING_OVER.equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING_COVER.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_VALUE;
-        } else if (LAYOUT_MODE_FACING_OVER_CONTINUOUS.equals(layoutMode)) {
+        } else if (LAYOUT_MODE_FACING_COVER_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_CONT_VALUE;
         }
         Context context = getContext();
@@ -604,6 +604,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
             }
         }
+        mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_ROTATION);
         disableTools(args);
     }
 
