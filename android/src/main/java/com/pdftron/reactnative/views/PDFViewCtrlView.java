@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
@@ -15,8 +17,6 @@ import com.pdftron.pdf.utils.Utils;
 import com.pdftron.reactnative.utils.ReactUtils;
 
 import javax.annotation.Nonnull;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class PDFViewCtrlView extends PDFViewCtrl {
 

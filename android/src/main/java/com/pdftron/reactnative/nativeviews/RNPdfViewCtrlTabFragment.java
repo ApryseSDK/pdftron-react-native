@@ -1,6 +1,7 @@
 package com.pdftron.reactnative.nativeviews;
 
 import android.graphics.PointF;
+
 import androidx.fragment.app.FragmentActivity;
 
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;

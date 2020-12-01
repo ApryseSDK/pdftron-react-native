@@ -1352,6 +1352,7 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
+
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -1474,6 +1475,25 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
+    
+    // Thumbnail Filter Mode
+    
+    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
+    
+    [filterModeArray addObject:PTThumbnailFilterAll];
+    [filterModeArray addObject:PTThumbnailFilterAnnotated];
+    [filterModeArray addObject:PTThumbnailFilterBookmarked];
+    
+    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
+        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
+        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
+        }
+    }
+    
+    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
+    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];

@@ -2,7 +2,6 @@ package com.pdftron.reactnative.modules;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -139,6 +138,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
     @ReactMethod
     public void setToolMode(final int tag, final String item) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
@@ -332,6 +332,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);

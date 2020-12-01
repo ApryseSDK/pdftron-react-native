@@ -59,7 +59,7 @@ static NSString * const PTAnnotationCreateFileAttachmentToolKey = @"AnnotationCr
 static NSString * const PTAnnotationCreateDistanceMeasurementToolKey = @"AnnotationCreateDistanceMeasurement";
 static NSString * const PTAnnotationCreatePerimeterMeasurementToolKey = @"AnnotationCreatePerimeterMeasurement";
 static NSString * const PTAnnotationCreateAreaMeasurementToolKey = @"AnnotationCreateAreaMeasurement";
-static NSString * const PTPanToolKey = @"pan";
+static NSString * const PTPanToolKey = @"Pan";
 static NSString * const PTAnnotationEraserToolKey = @"AnnotationEraserTool";
 static NSString * const PTAnnotationCreateSoundToolKey = @"AnnotationCreateSound";
 static NSString * const PTPencilKitDrawingToolKey = @"PencilKitDrawing";
@@ -132,7 +132,7 @@ static NSString * const PTSearchMenuItemIdentifierKey = @"search";
 static NSString * const PTEditTextMenuItemIdentifierKey = @"editText";
 static NSString * const PTEditInkMenuItemIdentifierKey = @"editInk";
 static NSString * const PTFlattenMenuItemIdentifierKey = @"flatten";
-static NSString * const PTOpenMenuItemIdentifierKey = @"OpenAttachment";
+static NSString * const PTOpenMenuItemIdentifierKey = @"openAttachment";
 static NSString * const PTShareMenuItemIdentifierKey = @"share";
 static NSString * const PTReadMenuItemIdentifierKey = @"read";
 static NSString * const PTCalibrateMenuItemIdentifierKey = @"calibrate";
@@ -142,6 +142,8 @@ static NSString * const PTStrikeoutWhiteListKey = @"Strikeout";
 static NSString * const PTUnderlineWhiteListKey = @"Underline";
 static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 
+static NSString * const PTAnnotatedFilterModeKey = @"annotated";
+static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
 static NSString * const PTRectKey = @"rect";
 static NSString * const PTRectX1Key = @"x1";
@@ -283,6 +285,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
 #pragma mark - Methods
 
