@@ -686,6 +686,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Widget;
         } else if (TOOL_FORM_CREATE_TOOL_BOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            annotType = Annot.e_Widget;
         } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
         }

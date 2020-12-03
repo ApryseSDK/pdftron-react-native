@@ -445,6 +445,30 @@ NS_ASSUME_NONNULL_END
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
         },
+//        PTEditPagesButtonKey: ^{
+//
+//        },
+//        PTPrintButtonKey: ^{
+//
+//        },
+//        PTCloseButtonKey: ^{
+//
+//        },
+//        PTSaveCopyButtonKey: ^{
+//
+//        },
+//        PTFormToolsButtonKey: ^{
+//
+//        },
+//        PTFillSignToolsButtonKey: ^{
+//
+//        },
+//        PTEditMenuButtonKey: ^{
+//
+//        },
+//        PTCropPageButtonKey: ^{
+//
+//        },
     };
     
     for (NSObject *item in disabledElements) {
@@ -583,6 +607,39 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
                 toolManager.freehandHighlightAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+                toolManager.redactAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+                toolManager.linkAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateSignatureFieldToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateRadioFieldToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
+                // TODO
+            }
+            else if ([string isEqualToString:PTFormCreateListBoxFieldToolKey]) {
+                // TODO
+            }
         }
     }
 }
@@ -692,6 +749,39 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
         toolClass = [PTFreeHandHighlightCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
+        toolClass = [PTRubberStampCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+        toolClass = [PTRectangleRedactionCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
+        toolClass = [PTTextRedactionCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateTextFieldToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateSignatureFieldToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateRadioFieldToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
+        // TODO
+    }
+    else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
+        // TODO
     }
     
     if (toolClass) {
@@ -1857,11 +1947,17 @@ NS_ASSUME_NONNULL_END
         PTAnnotationCreateSoundToolKey : @(PTExtendedAnnotTypeSound),
         PTPencilKitDrawingToolKey: @(PTExtendedAnnotTypePencilDrawing),
         PTAnnotationCreateFreeHighlighterToolKey: @(PTExtendedAnnotTypeFreehandHighlight),
-//        @"FormCreateTextField" : @(),
-//        @"FormCreateCheckboxField" : @(),
-//        @"FormCreateRadioField" : @(),
-//        @"FormCreateComboBoxField" : @(),
-//        @"FormCreateListBoxField" : @()
+//        PTAnnotationCreateRubberStampToolKey: @(),
+        PTAnnotationCreateRedactionToolKey : @(PTExtendedAnnotTypeRedact),
+        PTAnnotationCreateLinkToolKey : @(PTExtendedAnnotTypeLink),
+//        PTAnnotationCreateRedactionTextToolKey : @(),
+//        PTAnnotationCreateLinkTextToolKey : @(),
+//        PTFormCreateTextFieldToolKey : @(),
+//        PTFormCreateCheckboxFieldToolKey : @(),
+//        PTFormCreateSignatureFieldToolKey : @(),
+//        PTFormCreateRadioFieldToolKey : @(),
+//        PTFormCreateComboBoxFieldToolKey : @(),
+//        PTFormCreateListBoxFieldToolKey : @(),
     };
     
     PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
@@ -2886,6 +2982,39 @@ NS_ASSUME_NONNULL_END
     }
     else if ([key isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
         return [PTFreeHandHighlightCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
+        return [PTRubberStampCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+        return [PTRectangleRedactionCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateLinkToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
+        return [PTTextRedactionCreate class];
+    }
+    else if ([key isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateTextFieldToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateSignatureFieldToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateRadioFieldToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
+        // TODO
+    }
+    else if ([key isEqualToString:PTFormCreateListBoxFieldToolKey]) {
+        // TODO
     }
     
     if (@available(iOS 13.1, *)) {
