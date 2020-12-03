@@ -226,7 +226,35 @@ NS_ASSUME_NONNULL_END
                                                         action:@selector(navButtonClicked)];
         }
         
-        self.viewController.navigationItem.leftBarButtonItem = navButton;
+        if ([self.viewController isKindOfClass:[PTDocumentController class]]) {
+            PTDocumentController *controller = (PTDocumentController *)self.viewController;
+            
+            NSArray<UIBarButtonItem *> *compactItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+            if (compactItems) {
+                NSMutableArray<UIBarButtonItem *> *mutableItems = [compactItems mutableCopy];
+                [mutableItems insertObject:navButton atIndex:0];
+                compactItems = [mutableItems copy];
+            } else {
+                compactItems = @[navButton];
+            }
+            [controller.navigationItem setLeftBarButtonItems:compactItems
+                                                forSizeClass:UIUserInterfaceSizeClassCompact
+                                                    animated:NO];
+            
+            NSArray<UIBarButtonItem *> *regularItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+            if (regularItems) {
+                NSMutableArray<UIBarButtonItem *> *mutableItems = [regularItems mutableCopy];
+                [mutableItems insertObject:navButton atIndex:0];
+                regularItems = [mutableItems copy];
+            } else {
+                regularItems = @[navButton];
+            }
+            [controller.navigationItem setLeftBarButtonItems:regularItems
+                                                forSizeClass:UIUserInterfaceSizeClassCompact
+                                                    animated:NO];
+        } else {
+            self.viewController.navigationItem.leftBarButtonItem = navButton;
+        }
     }
     
     RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
@@ -1468,7 +1496,36 @@ NS_ASSUME_NONNULL_END
                                                             target:self
                                                             action:@selector(navButtonClicked)];
             }
-            self.viewController.navigationItem.leftBarButtonItem = navButton;
+            
+            if ([self.viewController isKindOfClass:[PTDocumentController class]]) {
+                PTDocumentController *controller = (PTDocumentController *)self.viewController;
+                
+                NSArray<UIBarButtonItem *> *compactItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+                if (compactItems) {
+                    NSMutableArray<UIBarButtonItem *> *mutableItems = [compactItems mutableCopy];
+                    [mutableItems insertObject:navButton atIndex:0];
+                    compactItems = [mutableItems copy];
+                } else {
+                    compactItems = @[navButton];
+                }
+                [controller.navigationItem setLeftBarButtonItems:compactItems
+                                                    forSizeClass:UIUserInterfaceSizeClassCompact
+                                                        animated:NO];
+                
+                NSArray<UIBarButtonItem *> *regularItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+                if (regularItems) {
+                    NSMutableArray<UIBarButtonItem *> *mutableItems = [regularItems mutableCopy];
+                    [mutableItems insertObject:navButton atIndex:0];
+                    regularItems = [mutableItems copy];
+                } else {
+                    regularItems = @[navButton];
+                }
+                [controller.navigationItem setLeftBarButtonItems:regularItems
+                                                    forSizeClass:UIUserInterfaceSizeClassCompact
+                                                        animated:NO];
+            } else {
+                self.viewController.navigationItem.leftBarButtonItem = navButton;
+            }
         } else {
             if (navImage) {
                 [navButton setImage:navImage];
