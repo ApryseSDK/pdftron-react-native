@@ -214,49 +214,6 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    if (self.showNavButton) {
-        UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
-        UIBarButtonItem *navButton;
-        if (navImage == nil) {
-            navButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemClose target:self action:@selector(navButtonClicked)];
-        }else{
-            navButton = [[UIBarButtonItem alloc] initWithImage:navImage
-                                                         style:UIBarButtonItemStylePlain
-                                                        target:self
-                                                        action:@selector(navButtonClicked)];
-        }
-        
-        if ([self.viewController isKindOfClass:[PTDocumentController class]]) {
-            PTDocumentController *controller = (PTDocumentController *)self.viewController;
-            
-            NSArray<UIBarButtonItem *> *compactItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
-            if (compactItems) {
-                NSMutableArray<UIBarButtonItem *> *mutableItems = [compactItems mutableCopy];
-                [mutableItems insertObject:navButton atIndex:0];
-                compactItems = [mutableItems copy];
-            } else {
-                compactItems = @[navButton];
-            }
-            [controller.navigationItem setLeftBarButtonItems:compactItems
-                                                forSizeClass:UIUserInterfaceSizeClassCompact
-                                                    animated:NO];
-            
-            NSArray<UIBarButtonItem *> *regularItems = [controller.navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
-            if (regularItems) {
-                NSMutableArray<UIBarButtonItem *> *mutableItems = [regularItems mutableCopy];
-                [mutableItems insertObject:navButton atIndex:0];
-                regularItems = [mutableItems copy];
-            } else {
-                regularItems = @[navButton];
-            }
-            [controller.navigationItem setLeftBarButtonItems:regularItems
-                                                forSizeClass:UIUserInterfaceSizeClassCompact
-                                                    animated:NO];
-        } else {
-            self.viewController.navigationItem.leftBarButtonItem = navButton;
-        }
-    }
-    
     RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
     navigationController.delegate = self;
         
@@ -1521,7 +1478,7 @@ NS_ASSUME_NONNULL_END
                     regularItems = @[navButton];
                 }
                 [controller.navigationItem setLeftBarButtonItems:regularItems
-                                                    forSizeClass:UIUserInterfaceSizeClassCompact
+                                                    forSizeClass:UIUserInterfaceSizeClassRegular
                                                         animated:NO];
             } else {
                 self.viewController.navigationItem.leftBarButtonItem = navButton;
