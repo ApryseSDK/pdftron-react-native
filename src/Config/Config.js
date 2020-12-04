@@ -148,6 +148,7 @@ export default {
     PrepareForm: "PDFTron_Prepare_Form",
     Measure: "PDFTron_Measure",
     Pens: "PDFTron_Pens",
+    Redaction: "PDFTron_Redact",
     Favorite: "PDFTron_Favorite"
   },
   ToolbarIcons: {
@@ -159,6 +160,7 @@ export default {
     PrepareForm: "PDFTron_Prepare_Form",
     Measure: "PDFTron_Measure",
     Pens: "PDFTron_Pens",
+    Redaction: "PDFTron_Redact",
     Favorite: "PDFTron_Favorite"
   },
   CustomToolbarKey: {
