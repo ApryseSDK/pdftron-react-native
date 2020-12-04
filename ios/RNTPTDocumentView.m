@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, nullable) PTDocumentBaseViewController *currentDocumentViewController;
 
+@property (nonatomic, strong, nullable) UIBarButtonItem *leadingNavButtonItem;
+
 // Array of wrapped PTExtendedAnnotTypes.
 @property (nonatomic, strong, nullable) NSArray<NSNumber *> *hideAnnotMenuToolsAnnotTypes;
 
@@ -1442,7 +1444,7 @@ NS_ASSUME_NONNULL_END
     
     // Leading Nav Icon.
     if (self.showNavButton) {
-        UIBarButtonItem* navButton = self.viewController.navigationItem.leftBarButtonItem;
+        UIBarButtonItem* navButton = self.leadingNavButtonItem;
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
         if (!navButton) {
             if (navImage == nil) {
@@ -1453,6 +1455,7 @@ NS_ASSUME_NONNULL_END
                                                             target:self
                                                             action:@selector(navButtonClicked)];
             }
+            self.leadingNavButtonItem = navButton;
             
             if ([self.viewController isKindOfClass:[PTDocumentController class]]) {
                 PTDocumentController *controller = (PTDocumentController *)self.viewController;
