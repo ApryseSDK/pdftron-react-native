@@ -502,6 +502,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     TAG_PREPARE_FORM_TOOLBAR.equals(tag) ||
                     TAG_MEASURE_TOOLBAR.equals(tag) ||
                     TAG_PENS_TOOLBAR.equals(tag) ||
+                    TAG_REDACTION_TOOLBAR.equals(tag) ||
                     TAG_FAVORITE_TOOLBAR.equals(tag)) {
                 return true;
             }
@@ -957,6 +958,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             return R.drawable.ic_annotation_distance_black_24dp;
         } else if (TAG_PENS_TOOLBAR.equals(item)) {
             return R.drawable.ic_annotation_freehand_black_24dp;
+        } else if (TAG_REDACTION_TOOLBAR.equals(item)) {
+            return R.drawable.ic_annotation_redact_black_24dp;
         } else if (TAG_FAVORITE_TOOLBAR.equals(item)) {
             return R.drawable.ic_star_white_24dp;
         }

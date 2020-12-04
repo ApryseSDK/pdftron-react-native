@@ -108,6 +108,7 @@ public final class Constants {
     public static final String TAG_FILL_AND_SIGN_TOOLBAR = "PDFTron_Fill_and_Sign";
     public static final String TAG_PREPARE_FORM_TOOLBAR = "PDFTron_Prepare_Form";
     public static final String TAG_MEASURE_TOOLBAR = "PDFTron_Measure";
+    public static final String TAG_REDACTION_TOOLBAR = "PDFTron_Redact";
     public static final String TAG_PENS_TOOLBAR = "PDFTron_Pens";
     public static final String TAG_FAVORITE_TOOLBAR = "PDFTron_Favorite";
 
