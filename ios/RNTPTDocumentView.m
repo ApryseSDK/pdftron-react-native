@@ -122,12 +122,7 @@ NS_ASSUME_NONNULL_END
     
     if (![self isBase64String]) {
         // Open a file URL.
-        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:self.document withExtension:@"pdf"];
-        if ([self.document containsString:@"://"]) {
-            fileURL = [NSURL URLWithString:self.document];
-        } else if ([self.document hasPrefix:@"/"]) {
-            fileURL = [NSURL fileURLWithPath:self.document];
-        }
+        NSURL *fileURL = [RNTPTDocumentView PT_getFileURL:self.document];
         
         if (self.documentViewController) {
             [self.documentViewController openDocumentWithURL:fileURL
@@ -1848,7 +1843,13 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabTitle) {
         PTDocumentTabItem *tabItem = documentViewController.documentTabItem;
-        tabItem.displayName = self.tabTitle;
+        
+        NSURL *fileURL = [RNTPTDocumentView PT_getFileURL:self.document];
+        
+        if ([tabItem.documentURL.absoluteString isEqualToString:fileURL.absoluteString] ||
+            [tabItem.sourceURL.absoluteString isEqualToString:fileURL.absoluteString]) {
+            tabItem.displayName = self.tabTitle;
+        }
     }
     
     [self registerForDocumentViewControllerNotifications:documentViewController];
@@ -2855,6 +2856,18 @@ NS_ASSUME_NONNULL_END
     }
     
     return Nil;
+}
+
++ (NSURL *)PT_getFileURL:(NSString *)document
+{
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:document withExtension:@"pdf"];
+    if ([document containsString:@"://"]) {
+        fileURL = [NSURL URLWithString:document];
+    } else if ([document hasPrefix:@"/"]) {
+        fileURL = [NSURL fileURLWithPath:document];
+    }
+    
+    return fileURL;
 }
 
 @end
