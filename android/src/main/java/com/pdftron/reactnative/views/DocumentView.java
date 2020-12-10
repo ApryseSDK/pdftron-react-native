@@ -112,6 +112,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
+    private boolean mHideToolbarSwitcher;
 
     // collab
     private CollabManager mCollabManager;
@@ -290,7 +291,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setReadOnly(boolean readOnly) {
+        if (readOnly) {
+            mBuilder = mBuilder.skipReadOnlyCheck(false);
+            if (getToolManager() != null) {
+                getToolManager().setSkipReadOnlyCheck(false);
+            }
+        } else {
+            mBuilder = mBuilder.skipReadOnlyCheck(true);
+            if (getToolManager() != null) {
+                getToolManager().setSkipReadOnlyCheck(true);
+            }
+        }
         mBuilder = mBuilder.documentEditingEnabled(!readOnly);
+        if (getToolManager() != null) {
+            getToolManager().setReadOnly(readOnly);
+        }
     }
 
     public void setFitMode(String fitMode) {
@@ -439,6 +454,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
+        if (toolbars.size() == 0) {
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(false);
+            }
+            return;
+        }
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(!mHideToolbarSwitcher);
+        }
         for (int i = 0; i < toolbars.size(); i++) {
             ReadableType type = toolbars.getType(i);
             if (type == ReadableType.String) {
@@ -522,7 +546,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setHideAnnotationToolbarSwitcher(boolean hideToolbarSwitcher) {
+        mHideToolbarSwitcher = hideToolbarSwitcher;
         mBuilder = mBuilder.showToolbarSwitcher(!hideToolbarSwitcher);
+
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(!hideToolbarSwitcher);
+        }
     }
 
     public void setHideTopToolbars(boolean hideTopToolbars) {
