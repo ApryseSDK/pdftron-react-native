@@ -1848,7 +1848,9 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabTitle) {
         PTDocumentTabItem *tabItem = documentViewController.documentTabItem;
-        tabItem.displayName = self.tabTitle;
+        if ([tabItem.sourceURL.absoluteString isEqualToString:self.document]) {
+            tabItem.displayName = self.tabTitle;
+        }
     }
     
     [self registerForDocumentViewControllerNotifications:documentViewController];
