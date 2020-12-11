@@ -1622,7 +1622,7 @@ NS_ASSUME_NONNULL_END
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
         // Handle annotationToolbars.
-        if (self.annotationToolbars.count > 0) {
+        if (self.annotationToolbars.count >= 0) {
             // Clear default/previous tool groups.
             [toolGroups removeAllObjects];
             
@@ -1666,9 +1666,18 @@ NS_ASSUME_NONNULL_END
                 [toolGroups removeObjectsInArray:toolGroupsToRemove];
             }
         }
-        
-        if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
-            toolGroupManager.groups = toolGroups;
+    
+        if (toolGroups.count > 0) {
+            if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
+                toolGroupManager.groups = toolGroups;
+            }
+            
+            if (toolGroups.count == 1) {
+                documentController.toolGroupIndicatorView.hidden = YES;
+            }
+        } else {
+            documentController.toolGroupManager.selectedGroup = documentController.toolGroupManager.viewItemGroup;
+            documentController.toolGroupIndicatorView.hidden = YES;
         }
     }
     
@@ -1794,7 +1803,15 @@ NS_ASSUME_NONNULL_END
     // Enable readonly flag on tool manager *only* when not already readonly.
     // If the document is being streamed or converted, we don't want to accidentally allow editing by
     // disabling the readonly flag.
-    if (![toolManager isReadonly]) {
+    if( [documentViewController.document HasDownloader] )
+    {
+        if( ![toolManager isReadonly] )
+         {
+            toolManager.readonly = self.readOnly;
+        }
+    }
+    else
+    {
         toolManager.readonly = self.readOnly;
     }
     

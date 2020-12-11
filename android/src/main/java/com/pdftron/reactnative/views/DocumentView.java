@@ -129,6 +129,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    private boolean mReadOnly;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -290,7 +292,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setReadOnly(boolean readOnly) {
-        mBuilder = mBuilder.documentEditingEnabled(!readOnly);
+        mReadOnly = readOnly;
+        if (readOnly) {
+            mBuilder = mBuilder.skipReadOnlyCheck(false);
+        } else {
+            mBuilder = mBuilder.skipReadOnlyCheck(true);
+        }
+        if (getToolManager() != null) {
+            getToolManager().setSkipReadOnlyCheck(false);
+            getToolManager().setReadOnly(readOnly);
+        }
     }
 
     public void setFitMode(String fitMode) {
@@ -439,14 +450,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
+        if (toolbars.size() == 0) {
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.setAnnotationToolbars(new ArrayList<>());
+            } else {
+                // turn back to view toolbar and hide the switcher to achieve the same effect
+                mBuilder = mBuilder
+                        .initialToolbarTag(DefaultToolbars.TAG_VIEW_TOOLBAR)
+                        .rememberLastUsedToolbar(false)
+                        .showToolbarSwitcher(false);
+            }
+            return;
+        }
+        ArrayList<AnnotationToolbarBuilder> annotationToolbarBuilders = new ArrayList<>();
         for (int i = 0; i < toolbars.size(); i++) {
             ReadableType type = toolbars.getType(i);
             if (type == ReadableType.String) {
                 String tag = toolbars.getString(i);
                 if (isValidToolbarTag(tag)) {
-                    mBuilder = mBuilder.addToolbarBuilder(
-                            DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag)
-                    );
+                    AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag);
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                    annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
                 // custom toolbars
@@ -486,9 +510,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             }
                         }
                         mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                        annotationToolbarBuilders.add(toolbarBuilder);
                     }
                 }
             }
+        }
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.setAnnotationToolbars(annotationToolbarBuilders);
         }
     }
 
@@ -523,6 +551,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setHideAnnotationToolbarSwitcher(boolean hideToolbarSwitcher) {
         mBuilder = mBuilder.showToolbarSwitcher(!hideToolbarSwitcher);
+
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(!hideToolbarSwitcher);
+        }
     }
 
     public void setHideTopToolbars(boolean hideTopToolbars) {
@@ -1892,6 +1924,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
+        }
+
+        if (mReadOnly) {
+            getToolManager().setReadOnly(true);
         }
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
