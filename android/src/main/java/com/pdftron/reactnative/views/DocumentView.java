@@ -687,6 +687,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Widget;
         } else if (TOOL_FORM_CREATE_TOOL_BOX_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
+        } else if (TOOL_FORM_CREATE_LIST_BOX_FIELD.equals(item)) {
+            annotType = Annot.e_Widget;
         } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
         }
@@ -774,6 +776,123 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FREE_HIGHLIGHTER;
         }
         return mode;
+    }
+
+    @Nullable
+    private String convToolModeToString(ToolManager.ToolMode toolMode) {
+        String toolModeString = null;
+        switch(toolMode) {
+            case INK_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_FREE_HAND;
+                break;
+            case TEXT_UNDERLINE:
+                toolModeString = TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE;
+                break;
+            case TEXT_SQUIGGLY:
+                toolModeString = TOOL_ANNOTATION_CREATE_TEXT_SQUIGGLY;
+                break;
+            case TEXT_STRIKEOUT:
+                toolModeString = TOOL_ANNOTATION_CREATE_TEXT_STRIKEOUT;
+                break;
+            case RECT_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_RECTANGLE;
+                break;
+            case OVAL_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_ELLIPSE;
+                break;
+            case LINE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_LINE;
+                break;
+            case ARROW_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_ARROW;
+                break;
+            case POLYLINE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_POLYLINE;
+                break;
+            case POLYGON_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_POLYGON;
+                break;
+            case CLOUD_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_POLYGON_CLOUD;
+                break;
+            case SIGNATURE:
+                toolModeString = TOOL_ANNOTATION_CREATE_SIGNATURE;
+                break;
+            case TEXT_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_FREE_TEXT;
+                break;
+            case TEXT_ANNOT_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_STICKY;
+                break;
+            case STAMPER:
+                toolModeString = TOOL_ANNOTATION_CREATE_STAMP;
+                break;
+            case RUBBER_STAMPER:
+                toolModeString = TOOL_ANNOTATION_CREATE_RUBBER_STAMP;
+                break;
+            case RULER_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT;
+                break;
+            case PERIMETER_MEASURE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT;
+                break;
+            case AREA_MEASURE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT;
+                break;
+            case FILE_ATTACHMENT_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT;
+                break;
+            case SOUND_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_SOUND;
+                break;
+            case RECT_REDACTION:
+                toolModeString = TOOL_ANNOTATION_CREATE_REDACTION;
+                break;
+            case RECT_LINK:
+                toolModeString = TOOL_ANNOTATION_CREATE_LINK;
+                break;
+            case TEXT_REDACTION:
+                toolModeString = TOOL_ANNOTATION_CREATE_REDACTION_TEXT;
+                break;
+            case TEXT_LINK_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_LINK_TEXT;
+                break;
+            case TEXT_SELECT:
+                toolModeString = TOOL_TEXT_SELECT;
+                break;
+            case PAN:
+                toolModeString = TOOL_PAN;
+                break;
+            case ANNOT_EDIT_RECT_GROUP:
+                toolModeString = TOOL_ANNOTATION_EDIT;
+                break;
+            case FORM_TEXT_FIELD_CREATE:
+                toolModeString = TOOL_FORM_CREATE_TEXT_FIELD;
+                break;
+            case FORM_CHECKBOX_CREATE:
+                toolModeString = TOOL_FORM_CREATE_CHECKBOX_FIELD;
+                break;
+            case FORM_SIGNATURE_CREATE:
+                toolModeString = TOOL_FORM_CREATE_SIGNATURE_FIELD;
+                break;
+            case FORM_RADIO_GROUP_CREATE:
+                toolModeString = TOOL_FORM_CREATE_RADIO_FIELD;
+                break;
+            case FORM_COMBO_BOX_CREATE:
+                toolModeString = TOOL_FORM_CREATE_COMBO_BOX_FIELD;
+                break;
+            case FORM_LIST_BOX_CREATE:
+                toolModeString = TOOL_FORM_CREATE_LIST_BOX_FIELD;
+                break;
+            case INK_ERASER:
+                toolModeString = TOOL_ANNOTATION_ERASER_TOOL;
+                break;
+            case FREE_HIGHLIGHTER:;
+                toolModeString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
+                break;
+        }
+
+        return toolModeString;
     }
 
     private int convStringToButtonId(String item) {
@@ -1247,6 +1366,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
             getToolManager().removeAnnotationsSelectionListener(mAnnotationsSelectionListener);
             getToolManager().removePdfDocModificationListener(mPdfDocModificationListener);
+            getToolManager().removeToolChangedListener(mToolChangedListener);
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
@@ -1665,6 +1785,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private ToolManager.ToolChangedListener mToolChangedListener = new ToolManager.ToolChangedListener() {
+        @Override
+        public void toolChanged(ToolManager.Tool newTool, @Nullable ToolManager.Tool oldTool) {
+
+            String newToolString = "";
+            if (newTool != null) {
+                String toolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
+                if (toolString != null) {
+                    newToolString = toolString;
+                }
+            }
+
+            String oldToolString = "";
+            if (oldTool != null) {
+                String toolString = convToolModeToString((ToolManager.ToolMode) oldTool.getToolMode());
+                if (toolString != null) {
+                    oldToolString = toolString;
+                }
+            }
+
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TOOL_CHANGED, ON_TOOL_CHANGED);
+            params.putString(KEY_previous_tool, oldToolString);
+            params.putString(KEY_tool, newToolString);
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -1755,6 +1904,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
         getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
+        getToolManager().addToolChangedListener(mToolChangedListener);
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
