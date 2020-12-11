@@ -1803,8 +1803,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
             WritableMap params = Arguments.createMap();
             params.putString(ON_TOOL_CHANGED, ON_TOOL_CHANGED);
-            params.putString(KEY_previous_tool, oldToolString == null ? oldToolString : unknownString);
-            params.putString(KEY_tool, newToolString == null ? newToolString : unknownString);
+            params.putString(KEY_previous_tool, oldToolString != null ? oldToolString : unknownString);
+            params.putString(KEY_tool, newToolString != null ? newToolString : unknownString);
 
             onReceiveNativeEvent(params);
         }
