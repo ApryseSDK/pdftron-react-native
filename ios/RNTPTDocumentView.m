@@ -1622,7 +1622,7 @@ NS_ASSUME_NONNULL_END
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
         // Handle annotationToolbars.
-        if (self.annotationToolbars.count >= 0) {
+        if (self.annotationToolbars && self.annotationToolbars.count >= 0) {
             // Clear default/previous tool groups.
             [toolGroups removeAllObjects];
             
