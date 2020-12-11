@@ -129,6 +129,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    private boolean mReadOnly;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -290,19 +292,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setReadOnly(boolean readOnly) {
+        mReadOnly = readOnly;
         if (readOnly) {
             mBuilder = mBuilder.skipReadOnlyCheck(false);
-            if (getToolManager() != null) {
-                getToolManager().setSkipReadOnlyCheck(false);
-            }
         } else {
             mBuilder = mBuilder.skipReadOnlyCheck(true);
-            if (getToolManager() != null) {
-                getToolManager().setSkipReadOnlyCheck(true);
-            }
         }
-        mBuilder = mBuilder.documentEditingEnabled(!readOnly);
         if (getToolManager() != null) {
+            getToolManager().setSkipReadOnlyCheck(false);
             getToolManager().setReadOnly(readOnly);
         }
     }
@@ -1782,6 +1779,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
+        }
+
+        if (mReadOnly) {
+            getToolManager().setReadOnly(true);
         }
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
