@@ -73,6 +73,7 @@ export default class DocumentView extends PureComponent {
     hideTopAppNavBar: PropTypes.bool,
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
+    onToolChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -163,6 +164,13 @@ export default class DocumentView extends PureComponent {
       if (this.props.onBookmarkChanged) {
         this.props.onBookmarkChanged({
           'bookmarkJson': event.nativeEvent.bookmarkJson,
+        });
+      }
+    } else if (event.nativeEvent.onToolChanged) {
+      if (this.props.onToolChanged) {
+        this.props.onToolChanged({
+          'previousTool': event.nativeEvent.previousTool,
+          'tool': event.nativeEvent.tool,
         });
       }
     }

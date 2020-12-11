@@ -15,6 +15,7 @@ public final class Constants {
     public static final String ON_BEHAVIOR_ACTIVATED = "onBehaviorActivated";
     public static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
     public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
+    public static final String ON_TOOL_CHANGED = "onToolChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -263,6 +264,9 @@ public final class Constants {
     public static final String KEY_flagToggleNoView = "toggleNoView";
 
     public static final String KEY_bookmark_json = "bookmarkJson";
+
+    public static final String KEY_previous_tool = "previousTool";
+    public static final String KEY_tool = "tool";
     // EVENTS END
 
     // Config keys
