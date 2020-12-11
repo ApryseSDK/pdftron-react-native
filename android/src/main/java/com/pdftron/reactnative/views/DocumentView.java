@@ -456,21 +456,25 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
             if (mPdfViewCtrlTabHostFragment != null) {
-                mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(false);
+                mPdfViewCtrlTabHostFragment.setAnnotationToolbars(new ArrayList<>());
+            } else {
+                // turn back to view toolbar and hide the switcher to achieve the same effect
+                mBuilder = mBuilder
+                        .initialToolbarTag(DefaultToolbars.TAG_VIEW_TOOLBAR)
+                        .rememberLastUsedToolbar(false)
+                        .showToolbarSwitcher(false);
             }
             return;
         }
-        if (mPdfViewCtrlTabHostFragment != null) {
-            mPdfViewCtrlTabHostFragment.setToolbarSwitcherVisible(!mHideToolbarSwitcher);
-        }
+        ArrayList<AnnotationToolbarBuilder> annotationToolbarBuilders = new ArrayList<>();
         for (int i = 0; i < toolbars.size(); i++) {
             ReadableType type = toolbars.getType(i);
             if (type == ReadableType.String) {
                 String tag = toolbars.getString(i);
                 if (isValidToolbarTag(tag)) {
-                    mBuilder = mBuilder.addToolbarBuilder(
-                            DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag)
-                    );
+                    AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag);
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                    annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
                 // custom toolbars
@@ -510,9 +514,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             }
                         }
                         mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                        annotationToolbarBuilders.add(toolbarBuilder);
                     }
                 }
             }
+        }
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.setAnnotationToolbars(annotationToolbarBuilders);
         }
     }
 
