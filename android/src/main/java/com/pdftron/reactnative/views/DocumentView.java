@@ -1789,26 +1789,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         @Override
         public void toolChanged(ToolManager.Tool newTool, @Nullable ToolManager.Tool oldTool) {
 
-            String newToolString = "";
+            String newToolString = null;
             if (newTool != null) {
-                String toolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
-                if (toolString != null) {
-                    newToolString = toolString;
-                }
+                newToolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
             }
 
-            String oldToolString = "";
+            String oldToolString = null;
             if (oldTool != null) {
-                String toolString = convToolModeToString((ToolManager.ToolMode) oldTool.getToolMode());
-                if (toolString != null) {
-                    oldToolString = toolString;
-                }
+                oldToolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
             }
+
+            String unknownString = "unknown tool";
 
             WritableMap params = Arguments.createMap();
             params.putString(ON_TOOL_CHANGED, ON_TOOL_CHANGED);
-            params.putString(KEY_previous_tool, oldToolString);
-            params.putString(KEY_tool, newToolString);
+            params.putString(KEY_previous_tool, oldToolString == null ? oldToolString : unknownString);
+            params.putString(KEY_tool, newToolString == null ? newToolString : unknownString);
 
             onReceiveNativeEvent(params);
         }

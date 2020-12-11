@@ -503,8 +503,8 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     if (sender.onChange) {
         sender.onChange(@{
             @"onToolChanged": @"onToolChanged",
-            @"previousTool": previousTool ?: @"",
-            @"tool": tool ?: @"",
+            @"previousTool": previousTool ?: @"unknown tool",
+            @"tool": tool ?: @"unknown tool",
         });
     }
 }
