@@ -112,7 +112,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
-    private boolean mHideToolbarSwitcher;
 
     // collab
     private CollabManager mCollabManager;
@@ -554,7 +553,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setHideAnnotationToolbarSwitcher(boolean hideToolbarSwitcher) {
-        mHideToolbarSwitcher = hideToolbarSwitcher;
         mBuilder = mBuilder.showToolbarSwitcher(!hideToolbarSwitcher);
 
         if (mPdfViewCtrlTabHostFragment != null) {
