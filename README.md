@@ -611,6 +611,18 @@ array of `Config.ThumbnailFilterMode` tags, optional
 
 Defines filter modes that should be hidden in the thumbnails browser
 
+##### onToolChanged
+function, optional
+
+Defines what happens if there is a change to the current tool
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+previousTool | string | the previous tool (one of the `Config.Tools` constants, or an empty string)
+tool | string | the current tool (one of the `Config.Tools` constants, or an empty string)
+
 Example:
 
 ```js
@@ -637,6 +649,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
   annotationPermissionCheckEnabled={false}
   onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
   hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
+  onToolChanged={({previousTool,tool}) => { console.log('tool changed'); }}
 />
 ```
 
