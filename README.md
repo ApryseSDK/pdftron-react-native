@@ -620,8 +620,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-previousTool | string | the previous tool (one of the `Config.Tools` constants, or an empty string)
-tool | string | the current tool (one of the `Config.Tools` constants, or an empty string)
+previousTool | string | the previous tool (one of the `Config.Tools` constants or "unknown tool")
+tool | string | the current tool (one of the `Config.Tools` constants or "unknown tool")
 
 Example:
 
