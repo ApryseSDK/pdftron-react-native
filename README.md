@@ -562,6 +562,15 @@ string, required if `collabEnabled` is set to true
 string, optional
 ##### onExportAnnotationCommand
 function, optional, annotation command will be given on each edit
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+action | string | the action for the annotation command
+xfdfCommand | string | the exported annotation command xfdf string
+error | string | the error when annotation command exportation failed
+
 ##### onAnnotationsSelected
 function, optional
 
@@ -605,6 +614,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 bookmarkJson | string | the list of current bookmarks in JSON format
+error | string | the error when bookmark exportation failed
 
 ##### hideThumbnailFilterModes
 array of `Config.ThumbnailFilterMode` tags, optional

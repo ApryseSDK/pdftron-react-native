@@ -1719,7 +1719,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             WritableMap params = Arguments.createMap();
             params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
             if (xfdfCommand != null) {
-                params.putString(KEY_ERROR, "xfdfCommand cannot be generated");
+                params.putString(KEY_ERROR, "XFDF command cannot be generated");
             } else {
                 params.putString(KEY_ACTION, action);
                 params.putString(KEY_XFDF_COMMAND, xfdfCommand);

@@ -467,7 +467,7 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
         } else {
             sender.onChange(@{
                 @"onExportAnnotationCommand": @"onExportAnnotationCommand",
-                @"error": @"xfdfCommand cannot be generated"
+                @"error": @"XFDF command cannot be generated"
             });
         }
     }
