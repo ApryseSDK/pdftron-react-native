@@ -458,11 +458,18 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
 {
     if (sender.onChange) {
-        sender.onChange(@{
-            @"onExportAnnotationCommand": @"onExportAnnotationCommand",
-            @"action": action,
-            @"xfdfCommand": (xfdfCommand ?: @""),
-        });
+        if (xfdfCommand) {
+            sender.onChange(@{
+                @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+                @"action": action,
+                @"xfdfCommand": (xfdfCommand ?: @""),
+            });
+        } else {
+            sender.onChange(@{
+                @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+                @"error": @"xfdfCommand cannot be generated"
+            });
+        }
     }
 }
 
@@ -491,10 +498,18 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
 - (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson
 {
     if (sender.onChange) {
-        sender.onChange(@{
-            @"onBookmarkChanged": @"onBookmarkChanged",
-            @"bookmarkJson": bookmarkJson,
-        });
+        if (bookmarkJson) {
+            sender.onChange(@{
+                @"onBookmarkChanged": @"onBookmarkChanged",
+                @"bookmarkJson": bookmarkJson,
+            });
+        } else {
+            sender.onChange(@{
+                @"onBookmarkChanged": @"onBookmarkChanged",
+                @"error": @"Bookmark cannot be exported"
+            });
+        }
+        
     }
 }
 

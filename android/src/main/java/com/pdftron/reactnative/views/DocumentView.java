@@ -1313,19 +1313,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 e.printStackTrace();
             }
             if (uid != null) {
-                annotPair.putString(KEY_annotId, uid);
-                annotPair.putInt(KEY_annotPage, value);
+                annotPair.putString(KEY_ANNOTATION_ID, uid);
+                annotPair.putInt(KEY_ANNOTATION_PAGE, value);
                 // try to obtain bbox
                 try {
                     com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(key, value);
                     WritableMap bboxMap = Arguments.createMap();
-                    bboxMap.putDouble(KEY_x1, bbox.getX1());
-                    bboxMap.putDouble(KEY_y1, bbox.getY1());
-                    bboxMap.putDouble(KEY_x2, bbox.getX2());
-                    bboxMap.putDouble(KEY_y2, bbox.getY2());
-                    bboxMap.putDouble(KEY_width, bbox.getWidth());
-                    bboxMap.putDouble(KEY_height, bbox.getHeight());
-                    annotPair.putMap(KEY_annotRect, bboxMap);
+                    bboxMap.putDouble(KEY_X1, bbox.getX1());
+                    bboxMap.putDouble(KEY_Y1, bbox.getY1());
+                    bboxMap.putDouble(KEY_X2, bbox.getX2());
+                    bboxMap.putDouble(KEY_Y2, bbox.getY2());
+                    bboxMap.putDouble(KEY_WIDTH, bbox.getWidth());
+                    bboxMap.putDouble(KEY_HEIGHT, bbox.getHeight());
+                    annotPair.putMap(KEY_ANNOTATION_RECT, bboxMap);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1354,8 +1354,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         // notify event
                         WritableMap params = Arguments.createMap();
                         params.putString(ON_ANNOTATION_MENU_PRESS, ON_ANNOTATION_MENU_PRESS);
-                        params.putString(KEY_annotationMenu, menuStr);
-                        params.putArray(KEY_annotations, getAnnotationsData());
+                        params.putString(KEY_ANNOTATION_MENU, menuStr);
+                        params.putArray(KEY_ANNOTATIONS, getAnnotationsData());
                         onReceiveNativeEvent(params);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1368,8 +1368,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         // notify event
                         WritableMap params = Arguments.createMap();
                         params.putString(ON_LONG_PRESS_MENU_PRESS, ON_LONG_PRESS_MENU_PRESS);
-                        params.putString(KEY_longPressMenu, menuStr);
-                        params.putString(KEY_longPressText, ViewerUtils.getSelectedString(getPdfViewCtrl()));
+                        params.putString(KEY_LONG_PRESS_MENU, menuStr);
+                        params.putString(KEY_LONG_PRESS_TEXT, ViewerUtils.getSelectedString(getPdfViewCtrl()));
                         onReceiveNativeEvent(params);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1456,7 +1456,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     // notify event
                     WritableMap params = Arguments.createMap();
                     params.putString(ON_ANNOTATIONS_SELECTED, ON_ANNOTATIONS_SELECTED);
-                    params.putArray(KEY_annotations, getAnnotationsData());
+                    params.putArray(KEY_ANNOTATIONS, getAnnotationsData());
                     onReceiveNativeEvent(params);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1472,7 +1472,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ActionUtils.ActionInterceptCallback mActionInterceptCallback = new ActionUtils.ActionInterceptCallback() {
         @Override
         public boolean onInterceptExecuteAction(ActionParameter actionParameter, PDFViewCtrl pdfViewCtrl) {
-            if (!isOverrideAction(KEY_Config_linkPress)) {
+            if (!isOverrideAction(KEY_CONFIG_LINK_PRESS)) {
                 return false;
             }
             String url = null;
@@ -1500,11 +1500,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (url != null) {
                 WritableMap params = Arguments.createMap();
                 params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
-                params.putString(KEY_action, KEY_Config_linkPress);
+                params.putString(KEY_ACTION, KEY_CONFIG_LINK_PRESS);
 
                 WritableMap data = Arguments.createMap();
                 data.putString(KEY_LINK_BEHAVIOR_DATA, url);
-                params.putMap(KEY_data, data);
+                params.putMap(KEY_DATA, data);
 
                 onReceiveNativeEvent(params);
 
@@ -1540,9 +1540,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ToolManager.AnnotationModificationListener mAnnotationModificationListener = new ToolManager.AnnotationModificationListener() {
         @Override
         public void onAnnotationsAdded(Map<Annot, Integer> map) {
-            handleAnnotationChanged(KEY_action_add, map);
+            handleAnnotationChanged(KEY_ACTION_ADD, map);
 
-            handleExportAnnotationCommand(KEY_action_add, map);
+            handleExportAnnotationCommand(KEY_ACTION_ADD, map);
         }
 
         @Override
@@ -1552,9 +1552,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onAnnotationsModified(Map<Annot, Integer> map, Bundle bundle) {
-            handleAnnotationChanged(KEY_action_modify, map);
+            handleAnnotationChanged(KEY_ACTION_MODIFY, map);
 
-            handleExportAnnotationCommand(KEY_action_modify, map);
+            handleExportAnnotationCommand(KEY_ACTION_MODIFY, map);
 
             // handle form fields change
             WritableMap params = Arguments.createMap();
@@ -1571,8 +1571,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             Field field = widget.getField();
                             String name = field.getName();
 
-                            resultMap.putString(Key_fieldName, name);
-                            resultMap.putString(Key_fieldValue, field.getValueAsString());
+                            resultMap.putString(KEY_FIELD_NAME, name);
+                            resultMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
                             fieldsArray.pushMap(resultMap);
                         }
                     }
@@ -1580,15 +1580,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     ex.printStackTrace();
                 }
             }
-            params.putArray(Key_fields, fieldsArray);
+            params.putArray(KEY_FIELDS, fieldsArray);
             onReceiveNativeEvent(params);
         }
 
         @Override
         public void onAnnotationsPreRemove(Map<Annot, Integer> map) {
-            handleAnnotationChanged(KEY_action_delete, map);
+            handleAnnotationChanged(KEY_ACTION_DELETE, map);
 
-            handleExportAnnotationCommand(KEY_action_delete, map);
+            handleExportAnnotationCommand(KEY_ACTION_DELETE, map);
         }
 
         @Override
@@ -1619,7 +1619,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 } catch (JSONException ex) {
                     ex.printStackTrace();
                 }
-                params.putString(KEY_bookmark_json, bookmarkJson);
+
+                if (bookmarkJson == null) {
+                    params.putString(KEY_ERROR, "Bookmark cannot be exported");
+                } else {
+                    params.putString(KEY_BOOKMARK_JSON, bookmarkJson);
+                }
+
                 onReceiveNativeEvent(params);
             }
         }
@@ -1668,7 +1674,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
-        params.putString(KEY_action, action);
+        params.putString(KEY_ACTION, action);
 
         WritableArray annotList = Arguments.createArray();
         for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
@@ -1683,13 +1689,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (uid != null) {
                 Integer value = entry.getValue();
                 WritableMap annotData = Arguments.createMap();
-                annotData.putString(KEY_annotId, uid);
-                annotData.putInt(KEY_annotPage, value);
+                annotData.putString(KEY_ANNOTATION_ID, uid);
+                annotData.putInt(KEY_ANNOTATION_PAGE, value);
                 annotList.pushMap(annotData);
             }
         }
 
-        params.putArray(KEY_annotations, annotList);
+        params.putArray(KEY_ANNOTATIONS, annotList);
         onReceiveNativeEvent(params);
     }
 
@@ -1699,9 +1705,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             ArrayList<Annot> annots = new ArrayList<>(map.keySet());
             String xfdfCommand = null;
             try {
-                if (KEY_action_add.equals(action)) {
+                if (KEY_ACTION_ADD.equals(action)) {
                     xfdfCommand = generateXfdfCommand(annots, null, null);
-                } else if (KEY_action_modify.equals(action)) {
+                } else if (KEY_ACTION_MODIFY.equals(action)) {
                     xfdfCommand = generateXfdfCommand(null, annots, null);
                 } else {
                     xfdfCommand = generateXfdfCommand(null, null, annots);
@@ -1710,13 +1716,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 e.printStackTrace();
             }
 
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
             if (xfdfCommand != null) {
-                WritableMap params = Arguments.createMap();
-                params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
-                params.putString(KEY_action, action);
-                params.putString(KEY_xfdfCommand, xfdfCommand);
-                onReceiveNativeEvent(params);
+                params.putString(KEY_ERROR, "xfdfCommand cannot be generated");
+            } else {
+                params.putString(KEY_ACTION, action);
+                params.putString(KEY_XFDF_COMMAND, xfdfCommand);
             }
+            onReceiveNativeEvent(params);
         }
     }
 
@@ -1777,8 +1785,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             if (mCollabManager != null) {
                                 WritableMap params = Arguments.createMap();
                                 params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
-                                params.putString(KEY_action, s);
-                                params.putString(KEY_xfdfCommand, mCollabManager.getLastXfdf());
+                                params.putString(KEY_ACTION, s);
+                                params.putString(KEY_XFDF_COMMAND, mCollabManager.getLastXfdf());
                                 onReceiveNativeEvent(params);
                             }
                         }
@@ -1942,16 +1950,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             shouldUnlockRead = true;
 
             PDFDoc pdfDoc = pdfViewCtrl.getDoc();
-            if (null == options || !options.hasKey(KEY_annotList)) {
+            if (null == options || !options.hasKey(KEY_ANNOTATION_LIST)) {
                 FDFDoc fdfDoc = pdfDoc.fdfExtract(PDFDoc.e_both);
                 return fdfDoc.saveAsXFDF();
             } else {
-                ReadableArray arr = options.getArray(KEY_annotList);
+                ReadableArray arr = options.getArray(KEY_ANNOTATION_LIST);
                 ArrayList<Annot> annots = new ArrayList<>(arr.size());
                 for (int i = 0; i < arr.size(); i++) {
                     ReadableMap annotData = arr.getMap(i);
-                    String id = annotData.getString(KEY_annotId);
-                    int page = annotData.getInt(KEY_annotPage);
+                    String id = annotData.getString(KEY_ANNOTATION_ID);
+                    int page = annotData.getInt(KEY_ANNOTATION_PAGE);
                     if (!Utils.isNullOrEmpty(id)) {
                         Annot ann = ViewerUtils.getAnnotById(getPdfViewCtrl(), id, page);
                         if (ann != null && ann.isValid()) {
@@ -2029,8 +2037,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (null == annotData) {
                 continue;
             }
-            String annotId = annotData.getString(KEY_annotId);
-            int pageNum = annotData.getInt(KEY_annotPage);
+            String annotId = annotData.getString(KEY_ANNOTATION_ID);
+            int pageNum = annotData.getInt(KEY_ANNOTATION_PAGE);
             Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
             if (annot != null && annot.isValid()) {
                 boolean shouldUnlock = false;
@@ -2217,22 +2225,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 map.put(annot, pageNumber);
                 toolManager.raiseAnnotationsPreModifyEvent(map);
 
-                if (propertyMap.hasKey(KEY_annotContents)) {
-                    String contents = propertyMap.getString(KEY_annotContents);
+                if (propertyMap.hasKey(KEY_ANNOTATION_CONTENTS)) {
+                    String contents = propertyMap.getString(KEY_ANNOTATION_CONTENTS);
                     if (contents != null) {
                         annot.setContents(contents);
                     }
                 }
 
-                if (propertyMap.hasKey(KEY_annotRect)) {
-                    ReadableMap rectMap = propertyMap.getMap(KEY_annotRect);
+                if (propertyMap.hasKey(KEY_ANNOTATION_RECT)) {
+                    ReadableMap rectMap = propertyMap.getMap(KEY_ANNOTATION_RECT);
 
-                    if (rectMap != null && rectMap.hasKey(KEY_x1) && rectMap.hasKey(KEY_y1) &&
-                            rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
-                        double rectX1 = rectMap.getDouble(KEY_x1);
-                        double rectY1 = rectMap.getDouble(KEY_y1);
-                        double rectX2 = rectMap.getDouble(KEY_x2);
-                        double rectY2 = rectMap.getDouble(KEY_y2);
+                    if (rectMap != null && rectMap.hasKey(KEY_X1) && rectMap.hasKey(KEY_Y1) &&
+                            rectMap.hasKey(KEY_X2) && rectMap.hasKey(KEY_Y2)) {
+                        double rectX1 = rectMap.getDouble(KEY_X1);
+                        double rectY1 = rectMap.getDouble(KEY_Y1);
+                        double rectX2 = rectMap.getDouble(KEY_X2);
+                        double rectY2 = rectMap.getDouble(KEY_Y2);
                         com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
                         annot.setRect(rect);
                     }
@@ -2241,28 +2249,28 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 if (annot.isMarkup()) {
                     Markup markupAnnot = new Markup(annot);
 
-                    if (propertyMap.hasKey(KEY_annotSubject)) {
-                        String subject = propertyMap.getString(KEY_annotSubject);
+                    if (propertyMap.hasKey(KEY_ANNOTATION_SUBJECT)) {
+                        String subject = propertyMap.getString(KEY_ANNOTATION_SUBJECT);
                         if (subject != null) {
                             markupAnnot.setSubject(subject);
                         }
                     }
 
-                    if (propertyMap.hasKey(KEY_annotTitle)) {
-                        String title = propertyMap.getString(KEY_annotTitle);
+                    if (propertyMap.hasKey(KEY_ANNOTATION_TITLE)) {
+                        String title = propertyMap.getString(KEY_ANNOTATION_TITLE);
                         if (title != null) {
                             markupAnnot.setTitle(title);
                         }
                     }
 
-                    if (propertyMap.hasKey(KEY_annotContentRect)) {
-                        ReadableMap contentRectMap = propertyMap.getMap(KEY_annotContentRect);
-                        if (contentRectMap != null && contentRectMap.hasKey(KEY_x1) && contentRectMap.hasKey(KEY_y1) &&
-                                contentRectMap.hasKey(KEY_x2) && contentRectMap.hasKey(KEY_y2)) {
-                            double rectX1 = contentRectMap.getDouble(KEY_x1);
-                            double rectY1 = contentRectMap.getDouble(KEY_y1);
-                            double rectX2 = contentRectMap.getDouble(KEY_x2);
-                            double rectY2 = contentRectMap.getDouble(KEY_y2);
+                    if (propertyMap.hasKey(KEY_ANNOTATION_CONTENT_RECT)) {
+                        ReadableMap contentRectMap = propertyMap.getMap(KEY_ANNOTATION_CONTENT_RECT);
+                        if (contentRectMap != null && contentRectMap.hasKey(KEY_X1) && contentRectMap.hasKey(KEY_Y1) &&
+                                contentRectMap.hasKey(KEY_X2) && contentRectMap.hasKey(KEY_Y2)) {
+                            double rectX1 = contentRectMap.getDouble(KEY_X1);
+                            double rectY1 = contentRectMap.getDouble(KEY_Y1);
+                            double rectX2 = contentRectMap.getDouble(KEY_X2);
+                            double rectY2 = contentRectMap.getDouble(KEY_Y2);
                             com.pdftron.pdf.Rect contentRect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
                             markupAnnot.setContentRect(contentRect);
                         }
@@ -2294,43 +2302,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 if (null == annotFlagData) {
                     continue;
                 }
-                String annotId = annotFlagData.getString(KEY_annotId);
-                int pageNum = annotFlagData.getInt(KEY_annotPage);
-                String flag = annotFlagData.getString(KEY_annotFlag);
-                boolean flagValue = annotFlagData.getBoolean(KEY_annotFlagValue);
+                String annotId = annotFlagData.getString(KEY_ANNOTATION_ID);
+                int pageNum = annotFlagData.getInt(KEY_ANNOTATION_PAGE);
+                String flag = annotFlagData.getString(KEY_ANNOTATION_FLAG);
+                boolean flagValue = annotFlagData.getBoolean(KEY_ANNOTATION_FLAG_VALUE);
 
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNum);
                 if (annot != null && annot.isValid() && flag != null) {
                     int flagNum = -1;
                     switch (flag) {
-                        case KEY_annotFlagHidden:
+                        case KEY_ANNOTATION_FLAG_HIDDEN:
                             flagNum = Annot.e_hidden;
                             break;
-                        case KEY_annotFlagInvisible:
+                        case KEY_ANNOTATION_FLAG_INVISIBLE:
                             flagNum = Annot.e_invisible;
                             break;
-                        case KEY_annotFlagLocked:
+                        case KEY_ANNOTATION_FLAG_LOCKED:
                             flagNum = Annot.e_locked;
                             break;
-                        case KEY_annotFlagLockedContents:
+                        case KEY_ANNOTATION_FLAG_LOCKED_CONTENTS:
                             flagNum = Annot.e_locked_contents;
                             break;
-                        case KEY_annotFlagNoRotate:
+                        case KEY_ANNOTATION_FLAG_NO_ROTATE:
                             flagNum = Annot.e_no_rotate;
                             break;
-                        case KEY_flagNoView:
+                        case KEY_ANNOTATION_FLAG_NO_VIEW:
                             flagNum = Annot.e_no_view;
                             break;
-                        case KEY_flagNoZoom:
+                        case KEY_ANNOTATION_FLAG_NO_ZOOM:
                             flagNum = Annot.e_no_zoom;
                             break;
-                        case kEY_flagPrint:
+                        case KEY_ANNOTATION_FLAG_PRINT:
                             flagNum = Annot.e_print;
                             break;
-                        case KEY_flagReadOnly:
+                        case KEY_ANNOTATION_FLAG_READ_ONLY:
                             flagNum = Annot.e_read_only;
                             break;
-                        case KEY_flagToggleNoView:
+                        case KEY_ANNOTATION_FLAG_TOGGLE_NO_VIEW:
                             flagNum = Annot.e_toggle_no_view;
                     }
                     if (flagNum != -1) {
@@ -2358,12 +2366,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         WritableMap map = Arguments.createMap();
 
-        map.putDouble(KEY_x1, rect.getX1());
-        map.putDouble(KEY_y1, rect.getY1());
-        map.putDouble(KEY_x2, rect.getX2());
-        map.putDouble(KEY_y2, rect.getY2());
-        map.putDouble(KEY_width, rect.getWidth());
-        map.putDouble(KEY_height, rect.getHeight());
+        map.putDouble(KEY_X1, rect.getX1());
+        map.putDouble(KEY_Y1, rect.getY1());
+        map.putDouble(KEY_X2, rect.getX2());
+        map.putDouble(KEY_Y2, rect.getY2());
+        map.putDouble(KEY_WIDTH, rect.getWidth());
+        map.putDouble(KEY_HEIGHT, rect.getHeight());
 
         return map;
     }
