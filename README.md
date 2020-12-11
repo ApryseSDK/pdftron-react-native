@@ -614,7 +614,7 @@ Defines filter modes that should be hidden in the thumbnails browser
 ##### onToolChanged
 function, optional
 
-Defines what happens if there is a change to the current tool
+This function is called when the current tool changes to a new tool
 
 Parameters:
 
