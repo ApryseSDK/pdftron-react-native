@@ -513,6 +513,17 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+- (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolChanged": @"onToolChanged",
+            @"previousTool": previousTool ?: @"unknown tool",
+            @"tool": tool ?: @"unknown tool",
+        });
+    }
+}
+
 #pragma mark - Methods
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
