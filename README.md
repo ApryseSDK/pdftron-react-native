@@ -303,28 +303,63 @@ document="content://..."
 
 ### RNPdftron
 
-#### initialize
-initialize(string)
+#### initialize(string)
 
-#### enableJavaScript
-enableJavaScript(bool)
+Initializes PDFTron SDK with your PDFTron license key.
 
-#### getVersion
-getVersion()
+Example:
+
+```js
+RNPdftron.initialize('your_license_key');
+```
+
+#### enableJavaScript(bool)
+
+Enable JavaScript for PDFTron SDK.
+
+Example:
+
+```js
+RNPdftron.enableJavaScript(true);
+```
+
+#### getVersion()
 
 Return a promise with the version of the PDFNet version used.
 
-#### getPlatformVersion
-getPlatformVersion()
+Example:
+
+```js
+RNPdftron.getVersion().then((version) => {
+  console.log("Current PDFNet version:", version);
+})
+```
+
+#### getPlatformVersion()
 
 Return a promise with the version of current platform (Android/iOS).
 
-#### encryptDocument
-encryptDocument(string, string, string)
+Example:
+
+```js
+RNPdftron.getPlatformVersion().then((platformVersion) => {
+  console.log("App currently running on:", platformVersion);
+})
+```
+
+#### encryptDocument(string, string, string)
 
 This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
 
 Return a promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+file path | string | the local file path to the file
+password | string | the password
+current password | string | the current password, use empty string if no password
 
 Example:
 
@@ -334,79 +369,289 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-file path | string | the local file path to the file
-password | string | the password
-current password | string | the current password, use empty string if no password
-## Components
-
 ### DocumentView
 
-A component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
+A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
 #### Props
 
 ##### document
 string, required
+
+The path to the document.
+
+Example:
+
+```jsx
+<DocumentView
+  document={'sample.pdf'}
+/>
+```
+
 ##### password
 string, optional
+
+The path to the document.
+
+Example:
+
+```jsx
+<DocumentView
+  password={'password'}
+/>
+```
+
 ##### leadingNavButtonIcon
 string, optional
+
+The icon path to the leading navigation button. The button would use the specified icon if it is a valid, or the default icon otherwise.
+
+Example:
+
+```jsx
+<DocumentView
+  leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
+/>
+```
+
+##### showLeadingNavButton
+bool, optional, default to true
+
+Defines whether to show the leading navigation button.
+
+```jsx
+<DocumentView
+  showLeadingNavButton={true}
+/>
+```
+
 ##### onLeadingNavButtonPressed
 function, optional
-##### showLeadingNavButton
-bool, optional
+
+This function is called when the leading navigation button is pressed.
+
+```jsx
+<DocumentView
+  onLeadingNavButtonPressed = {() => { 
+    console.log('The leading nav has been pressed'); 
+  }}
+/>
+```
+
 ##### onDocumentLoaded
 function, optional
+
+This function is called when the document finishes loading.
+
+```jsx
+<DocumentView
+  onDocumentLoaded = {(path) => { 
+    console.log('The document has finished loading:', path); 
+  }}
+/>
+```
+
 ##### onDocumentError
 function, optional
+
+This function is called when document opening encounters an error.
+
+```jsx
+<DocumentView
+  onDocumentError = {(error) => { 
+    console.log('Error occured during document opening:', error); 
+  }}
+/>
+```
+
 ##### disabledElements
-array of string, optional
+array of string, optional, default to none
+
+Defines buttons to be disabled for the viewer. Strings should be [Buttons](./src/Config/Config.js) constants.
+
+```jsx
+<DocumentView
+  disabledElements={[Config.Buttons.userBookmarkListButton]}
+/>
+```
+
 ##### disabledTools
-array of string, optional
+array of string, optional, default to none
+
+Defines tools to be disabled for the viewer. Strings should be [Tools](./src/Config/Config.js) constants.
+
+```jsx
+<DocumentView
+  disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+/>
+```
+
 ##### customHeaders
 object, optional
+
+Defines custom headers to use with HTTP/HTTPS requests.
+
+```jsx
+<DocumentView
+  customHeaders={{headerKey: 'headerValue'}}
+/>
+```
+
 ##### readOnly
 bool, optional, default to false
+
+Defines whether the viewer is read-only. If true, no change could be made to the presenting document.
+
+```jsx
+<DocumentView
+  readOnly={true}
+/>
+```
+
 ##### thumbnailViewEditingEnabled
 bool, optional, default to true
+
+Defines whether user could modify through thumbnail view.
+
+```jsx
+<DocumentView
+  thumbnailViewEditingEnabled={true}
+/>
+```
+
 ##### annotationAuthor
 string, optional
+
+Defines the author name for all annotations in the current document. Exported xfdfCommand would contain this information.
+
+```jsx
+<DocumentView
+  annotationAuthor={'PDFTron'}
+/>
+```
+
 ##### continuousAnnotationEditing
-bool, optional
+bool, optional, default to true
+
+Defines whether annotations could be continuously edited.
+
+```jsx
+<DocumentView
+  continuousAnnotationEditing={true}
+/>
+```
+
 ##### selectAnnotationAfterCreation
 bool, optional, default to true
+
+Defines whether an annotation should be selected after its creation.
+
+```jsx
+<DocumentView
+  selectAnnotationAfterCreation={true}
+/>
+```
 ##### fitMode
-string, optional
+string, optional, default value is 'FitWidth'
+
+Defines the fit mode of the viewer. String should be one of [FitMode](./src/Config/Config.js) constants.
+
+```jsx
+<DocumentView
+  fitMode={Config.FitMode.FitPage}
+/>
+```
+
 ##### layoutMode
-string, optional
+string, optional, default value is 'Continuous'
+
+Defines the layout mode of the viewer. String should be one of [LayoutMode](./src/Config/Config.js) constants.
+
+```jsx
+<DocumentView
+  layoutMode={Config.LayoutMode.FacingContinuous}
+/>
+```
+
 ##### initialPageNumber
 number, optional
+
+Defines the initial page number that viewer lands on when the document opens.
+
+```jsx
+<DocumentView
+  initialPageNumber={5}
+/>
+```
+
 ##### pageNumber
 number, optional
+
+Defines the page number that viewer lands on. Different from [`initialPageNumber`](#initialPageNumber), changing this prop value at runtime will change the page accordingly.
+
+```jsx
+<DocumentView
+  pageNumber={5}
+/>
+```
+
 ##### onPageChanged
 function, optional
-##### onZoomChanged
-function, optional
 
-Perameters:
+This function is called when the page number has been changed.
+
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
 previousPageNumber | int | the previous page number
 pageNumber | int | the current page number
 
-##### topToolbarEnabled
-Deprecated. Use `hideTopAppNavBar` prop instead.
+```jsx
+<DocumentView
+  onPageChanged = {(previousPageNumber, pageNumber) => {
+    console.log('Page number changes from', previousPageNumber, 'to', pageNumber); 
+  }}
+/>
+```
 
-bool, optional
+##### onZoomChanged
+function, optional
+
+This function is called when the zoom scale has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```jsx
+<DocumentView
+  onZoomChanged = {(zoom) => {
+    console.log('Current zoom ratio is', zoom); 
+  }}
+/>
+```
+
+##### topToolbarEnabled
+bool, optional, default to true
+
+Deprecated. Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
+
 ##### bottomToolbarEnabled
-bool, optional
+bool, optional, default to true
+
+Defines whether the bottom toolbar of the viewer is enabled.
+
+```jsx
+<DocumentView
+  bottomToolbarEnabled={false}
+/>
+```
+
 ##### annotationToolbars
-array of object, options
+array of object, options (one of [DefaultToolbars](./src/config/Config.js) constants or custom toolbar object)
 
 Defines custom toolbars. If passed in, default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -419,122 +664,297 @@ const myToolbar = {
   [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
 };
 
-annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+...
+<Documentview
+  annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+/>
 ```
 ##### hideDefaultAnnotationToolbars
-array of `Config.DefaultToolbars` tags, optional
+array of string, optional, default to none
 
-Defines which default toolbars should be hidden. Default to none.
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [DefaultToolbars](./src/config/Config.js) constants
+
+```jsx
+<DocumentView
+  hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
+/>
+```
+
 ##### hideAnnotationToolbarSwitcher
-bool, optional
+bool, optional, default to false
 
-Defines whether to show the toolbar switcher in the top toolbar. Default to false.
+Defines whether to show the toolbar switcher in the top toolbar.
+
+```jsx
+<DocumentView
+  hideAnnotationToolbarSwitcher={false}
+/>
+```
+
 ##### hideTopToolbars
-bool, optional
+bool, optional, default to false
 
-Defines whether to show both the top nav app bar and the annotation toolbar. Default to false.
+Defines whether to hide both the top app nav bar and the annotation toolbar.
+
+```jsx
+<DocumentView
+  hideTopToolbars={false}
+/>
+```
+
 ##### hideTopAppNavBar
-bool, optional
+bool, optional, default to false
 
-Defines whether to show the top nav app bar. Default to false.
+Defines whether to hide the top nav app bar.
+
+```jsx
+<DocumentView
+  hideAnnotationToolbarSwitcher={false}
+/>
+```
+
 ##### hideToolbarsOnTap
-bool, optional
+bool, optional, default to true
 
-Whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. The default value is `true`. When `false`, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
+Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
+
+```jsx
+<DocumentView
+  hideToolbarsOnTap={false}
+/>
+```
 
 ##### pageIndicatorEnabled
-bool, optional
+bool, optional, default to true
+
+Defines whether to show the page indicator for the viewer.
+
+```jsx
+<DocumentView
+  pageIndicatorEnabled={true}
+/>
+```
+
 ##### showSavedSignatures
-bool, optional
+bool, optional, default to true
+
+Defines whether to show saved signatures for reusing in signature mode.
+
+```jsx
+<DocumentView
+  showSavedSignatures={true}
+/>
+```
+
 ##### isBase64String
-bool, optional
+bool, optional, default to false
 
-If true, `document` prop will be treated as a base64 string. 
+If true, [`document`](#document) prop will be treated as a base64 string. 
 
-When viewing a document initialized with a base64 string (ie a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
+When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
+
+```jsx
+<DocumentView
+  isBase64String={true}
+  document={'...'} // base 64 string
+/>
+```
+
 ##### padStatusBar
-bool, optional, android only
+bool, optional, default to false, android only
 
-If true, the viewer will add padding to take account of status bar. Default to false.
+Defines whether the viewer will add padding to take account of status bar.
+
+```jsx
+<DocumentView
+  padStatusBar={true}
+/>
+```
+
 ##### autoSaveEnabled
-bool, optional
+bool, optional, default to true
+
+Defines whether document is automatically saved for the viewer.
+
+```jsx
+<DocumentView
+  autoSaveEnabled={true}
+/>
+```
+
 ##### hideAnnotationMenu
-array of `Config.Tools` string constants, optional
+array of string, optional, default to none
 
-Defines annotation types that will not show the default annotation menu
+Defines annotation types that will not show the default annotation menu. Strings should be [Tools](./src/config/Config.js) constants.
+
+```jsx
+<DocumentView
+  hideAnnotationMenu={[Config.Tools.annotationCreateArrow, Config.Tools.annotationEraserTool]}
+/>
+```
+
 ##### annotationMenuItems
-array of `Config.AnnotationMenu` string constants, optional
+array of string, optional, default to containing all the items
 
-Defines menu items that can show when an annotation is selected.
+Defines menu items that can show when an annotation is selected. Strings should be [AnnotationMenu](./src/config/Config.js) constants.
+
+```jsx
+<DocumentView
+  annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
+/>
+```
 ##### overrideAnnotationMenuBehavior
-array of `Config.AnnotationMenu` string constants, optional
+array of string, optional, default to none
 
-Defines menu items that should skip default behavior.
+Defines menu items that should skip default behavior. Strings should be [AnnotationMenu](./src/config/Config.js) constants.
+
+```jsx
+<DocumentView
+  overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
+/>
+```
+
 ##### onAnnotationMenuPress
 function, optional
 
-Defines what happens on annotation menu press if it is passed in to `overrideAnnotationMenuBehavior`
+This function is called if the pressed annotation menu item is passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior)
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationMenu | string | One of `Config.AnnotationMenu` string constants
+annotationMenu | string | One of [AnnotationMenu](./src/config/Config.js) constants, representing which item has been pressed
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+
+```jsx
+<DocumentView
+  onAnnotationMenuPress = {(annotationMenu, annotations) => {
+    console.log('Annotation menu item', annotationMenu, 'has been pressed');
+    annotations.forEach(annotation => {
+      console.log('The id of selected annotation is', annotation.id);
+      console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
+    });
+  }}
+/>
+```
 
 ##### longPressMenuEnabled
 bool, optional, default to true
 
-If true, the viewer will show the default menu on long press.
+Defines whether to show menu of options after long press on text or blank space in the viewer
+
+```jsx
+<DocumentView
+  longPressMenuEnabled={true}
+/>
+```
 
 ##### longPressMenuItems
-array of `Config.LongPressMenu` string constants, optional
+array of string, optional, default to containing all the items
 
-Defines menu items that can show when long press on text or blank space.
+Defines menu items that can show when long press on text or blank space. Strings should be [LongPressMenu](./src/config/Config.js) constants.
+
+```jsx
+<DocumentView
+  longPressMenuItems={[Config.LongPressMenu.copy, Config.LongPressMenu.read]}
+/>
+```
+
 ##### overrideLongPressMenuBehavior
-array of `Config.LongPressMenu` string constants, optional
+array of strings, optional, default to none
 
-Defines menu items that should skip default behavior.
+Defines menu items on long press that should skip default behavior.
+
+```jsx
+<DocumentView
+  overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
+/>
+```
+
 ##### onLongPressMenuPress
 function, optional
 
-Defines what happens on long press menu press if it is passed in to `overrideLongPressMenuBehavior`
+This function is called if the pressed long press menu item is passed in to [`overrideLongPressMenuBehavior`](#overrideLongPressMenuBehavior)
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-longPressMenu | string | One of `Config.LongPressMenu` string constants
+longPressMenu | string | One of [LongPressMenu](./src/config.Config.js) constants, representing which item has been pressed
 longPressText | string | the selected text if pressed on text, empty otherwise
 
-##### overrideBehavior
-array of `Config.Actions` string constants, optional
+```jsx
+<DocumentView
+  onLongPressMenuPress = {(longPressMenu, longPressText) => {
+    console.log('Long press menu item', longPressMenu, 'has been pressed');
+    if (longPressText !== '') {
+      console.log('The selected text is', longPressText);
+    }
+  }}
+/>
+```
 
-Defines actions that should skip default behavior, such as external link click.
+##### overrideBehavior
+array of string, optional, default to none
+
+Defines actions that should skip default behavior, such as external link click. Strings should be [Actions](./src/config/Config.js) constants.
+
+```jsx
+<DocumentView
+  overrideBehavior={[Config.Actions.linkPress]}
+/>
+```
+
 ##### onBehaviorActivated
 function, optional
 
-Defines what happens on certain behavior if it is passed in to `overrideBehavior`
+This function is called if the activated behavior is passed in to [`overrideBehavior`](#overrideBehavior)
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | One of `Config.Actions` string constants
+action | string | One of [Actions](./src/config/Config.js) constants, representing which action has been activated
 data | object | A JSON object that varies depending on the action
 
-data param table:
+Data param table:
 
 Action | Param
 --- | ---
-`Config.Actions.linkPress` | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/config/config.js) | key: `url`, value: the link pressed
+
+```jsx
+<DocumentView
+  onBehaviorActivated = {(action, data) => {
+    console.log('Activated action is', action);
+    if (action === Config.Actions.linkPress) {
+      console.log('The external link pressed is', data.url);
+    }
+  }}
+/>
+```
 
 ##### pageChangeOnTap
 bool, optional, default to true
+
+Defines whether page should change on tap when viewer is in horizontal viewing mode
+
+```jsx
+<DocumentView
+  pageChangeOnTap={true}
+/>
+```
+
 ##### useStylusAsPen
 bool, optional, default to true
 
-If true, stylus will act as a pen in pan mode, otherwise it will act as finger
+Defines whether stylus should act as a pen in pan mode. If false, it will act as a finger.
+
+```jsx
+<DocumentView
+  useStylusAsPen={true}
+/>
+```
 
 ##### multiTabEnabled
 bool, optional, default to false
