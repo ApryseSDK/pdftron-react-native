@@ -303,31 +303,44 @@ document="content://..."
 
 ### RNPdftron
 
-#### initialize(string)
+[initialize](#initialize(string))
 
+#### initialize
 Initializes PDFTron SDK with your PDFTron license key.
 
-Example:
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+licenseKey | string | your PDFTron license key
 
 ```js
 RNPdftron.initialize('your_license_key');
 ```
 
-#### enableJavaScript(bool)
+#### enableJavaScript
+To enable JavaScript for PDFTron SDK.
 
-Enable JavaScript for PDFTron SDK.
+Parameters:
 
-Example:
+Name | Type | Description
+--- | --- | ---
+enabled | bool | whether to enable or disable JavaScript
 
 ```js
 RNPdftron.enableJavaScript(true);
 ```
 
-#### getVersion()
+#### getVersion
+To get the current PDFNet version.
 
-Return a promise with the version of the PDFNet version used.
+Parameters:
 
-Example:
+Name | Type | Description
+--- | --- | ---
+version | string | current PDFNet version
+
+Return a promise.
 
 ```js
 RNPdftron.getVersion().then((version) => {
@@ -335,11 +348,16 @@ RNPdftron.getVersion().then((version) => {
 })
 ```
 
-#### getPlatformVersion()
+#### getPlatformVersion
+ To get the version of current platform (Android/iOS).
 
-Return a promise with the version of current platform (Android/iOS).
+Parameters:
 
-Example:
+Name | Type | Description
+--- | --- | ---
+platformVersion | string | current platform version (Android/iOS)
+
+Return a promise.
 
 ```js
 RNPdftron.getPlatformVersion().then((platformVersion) => {
@@ -347,19 +365,18 @@ RNPdftron.getPlatformVersion().then((platformVersion) => {
 })
 ```
 
-#### encryptDocument(string, string, string)
-
-This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
-
-Return a promise.
+#### encryptDocument
+To encript a document. This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
 file path | string | the local file path to the file
-password | string | the password
+password | string | the password you would like to set
 current password | string | the current password, use empty string if no password
+
+Return a promise.
 
 Example:
 
@@ -467,7 +484,7 @@ This function is called when document opening encounters an error.
 ##### disabledElements
 array of string, optional, default to none
 
-Defines buttons to be disabled for the viewer. Strings should be [Buttons](./src/Config/Config.js) constants.
+Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -478,7 +495,7 @@ Defines buttons to be disabled for the viewer. Strings should be [Buttons](./src
 ##### disabledTools
 array of string, optional, default to none
 
-Defines tools to be disabled for the viewer. Strings should be [Tools](./src/Config/Config.js) constants.
+Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -554,7 +571,7 @@ Defines whether an annotation should be selected after its creation.
 ##### fitMode
 string, optional, default value is 'FitWidth'
 
-Defines the fit mode of the viewer. String should be one of [FitMode](./src/Config/Config.js) constants.
+Defines the fit mode of the viewer. String should be one of [Config.FitMode](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -565,7 +582,7 @@ Defines the fit mode of the viewer. String should be one of [FitMode](./src/Conf
 ##### layoutMode
 string, optional, default value is 'Continuous'
 
-Defines the layout mode of the viewer. String should be one of [LayoutMode](./src/Config/Config.js) constants.
+Defines the layout mode of the viewer. String should be one of [Config.LayoutMode](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -609,7 +626,7 @@ pageNumber | int | the current page number
 
 ```jsx
 <DocumentView
-  onPageChanged = {(previousPageNumber, pageNumber) => {
+  onPageChanged = {({previousPageNumber, pageNumber}) => {
     console.log('Page number changes from', previousPageNumber, 'to', pageNumber); 
   }}
 />
@@ -651,7 +668,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 ##### annotationToolbars
-array of object, options (one of [DefaultToolbars](./src/config/Config.js) constants or custom toolbar object)
+array of object, options (one of [Config.DefaultToolbars](./src/config/Config.js) constants or custom toolbar object)
 
 Defines custom toolbars. If passed in, default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -672,7 +689,7 @@ const myToolbar = {
 ##### hideDefaultAnnotationToolbars
 array of string, optional, default to none
 
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [DefaultToolbars](./src/config/Config.js) constants
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/config/Config.js) constants
 
 ```jsx
 <DocumentView
@@ -785,7 +802,7 @@ Defines whether document is automatically saved for the viewer.
 ##### hideAnnotationMenu
 array of string, optional, default to none
 
-Defines annotation types that will not show the default annotation menu. Strings should be [Tools](./src/config/Config.js) constants.
+Defines annotation types that will not show the default annotation menu. Strings should be [Config.Tools](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -796,7 +813,7 @@ Defines annotation types that will not show the default annotation menu. Strings
 ##### annotationMenuItems
 array of string, optional, default to containing all the items
 
-Defines menu items that can show when an annotation is selected. Strings should be [AnnotationMenu](./src/config/Config.js) constants.
+Defines menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -806,7 +823,7 @@ Defines menu items that can show when an annotation is selected. Strings should 
 ##### overrideAnnotationMenuBehavior
 array of string, optional, default to none
 
-Defines menu items that should skip default behavior. Strings should be [AnnotationMenu](./src/config/Config.js) constants.
+Defines menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -823,12 +840,12 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationMenu | string | One of [AnnotationMenu](./src/config/Config.js) constants, representing which item has been pressed
+annotationMenu | string | One of [Config.AnnotationMenu](./src/config/Config.js) constants, representing which item has been pressed
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
 
 ```jsx
 <DocumentView
-  onAnnotationMenuPress = {(annotationMenu, annotations) => {
+  onAnnotationMenuPress = {({annotationMenu, annotations}) => {
     console.log('Annotation menu item', annotationMenu, 'has been pressed');
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
@@ -852,7 +869,7 @@ Defines whether to show menu of options after long press on text or blank space 
 ##### longPressMenuItems
 array of string, optional, default to containing all the items
 
-Defines menu items that can show when long press on text or blank space. Strings should be [LongPressMenu](./src/config/Config.js) constants.
+Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -885,7 +902,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 
 ```jsx
 <DocumentView
-  onLongPressMenuPress = {(longPressMenu, longPressText) => {
+  onLongPressMenuPress = {({longPressMenu, longPressText}) => {
     console.log('Long press menu item', longPressMenu, 'has been pressed');
     if (longPressText !== '') {
       console.log('The selected text is', longPressText);
@@ -897,7 +914,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ##### overrideBehavior
 array of string, optional, default to none
 
-Defines actions that should skip default behavior, such as external link click. Strings should be [Actions](./src/config/Config.js) constants.
+Defines actions that should skip default behavior, such as external link click. Strings should be [Config.Actions](./src/config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -914,18 +931,18 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | One of [Actions](./src/config/Config.js) constants, representing which action has been activated
+action | string | One of [Config.Actions](./src/config/Config.js) constants, representing which action has been activated
 data | object | A JSON object that varies depending on the action
 
 Data param table:
 
 Action | Param
 --- | ---
-[`Config.Actions.linkPress`](./src/config/config.js) | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/config/Config.js) | key: `url`, value: the link pressed
 
 ```jsx
 <DocumentView
-  onBehaviorActivated = {(action, data) => {
+  onBehaviorActivated = {({action, data}) => {
     console.log('Activated action is', action);
     if (action === Config.Actions.linkPress) {
       console.log('The external link pressed is', data.url);
@@ -959,66 +976,192 @@ Defines whether stylus should act as a pen in pan mode. If false, it will act as
 ##### multiTabEnabled
 bool, optional, default to false
 
-If true, viewer will show multiple tabs for documents opened.
+Defines whether viewer will show tabs for documents opened. Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
+
+```jsx
+<DocumentView
+  multiTabEnabled={true}
+/>
+```
 
 ##### tabTitle
-string, optional, default to file name, takes effect when multiTabEnabled is true.
+string, optional, default to file name
+
+Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
+
+```jsx
+<DocumentView
+  multiTabEnabled={true} // requirement
+  tabTitle={'tab1'}
+/>
+```
 
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
 
-If true, signature field will be signed with image stamp.
+Defines wether signature field will be signed with image stamp.
 This is useful if you are saving XFDF to remote source.
+
+```jsx
+<DocumentView
+  signSignatureFieldsWithStamps={true}
+/>
+```
 
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
 
-If true, UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
+Defines whether UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
+
+```jsx
+<DocumentView
+  signSignatureFieldsWithStamps={false}
+/>
+```
+
 ##### collabEnabled
-bool, optional, if set to true then `currentUser` must be set as well for collaboration mode to work
+bool, optional, default to false
+
+Defines whether to use the collaboration mode. If true then `currentUser` must be set as well for collaboration mode to work
+
+```jsx
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+/>
+```
+
 ##### currentUser
-string, required if `collabEnabled` is set to true
+string, required if [`collabEnabled`](#collabEnabled) is set to true
+
+Defines the current user. Annotations created will has its title matching this string.
+
+```jsx
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+/>
+```
+
 ##### currentUserName
 string, optional
+
+Defines the current user name. Will set the user name only if [`collabEnabled`](#collabEnabled) is true and [`currentUser`](#currentUser) is defined.
+
+```jsx
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  currentUserName={'Hello_World'}
+/>
+```
+
 ##### onExportAnnotationCommand
-function, optional, annotation command will be given on each edit
-##### onAnnotationsSelected
 function, optional
 
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`
-
-##### onAnnotationChanged
-function, optional
+This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has xfdfCommand as its parameter.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`
+xfdfCommand | string | an xfdf string containing info about the edit
 
-##### annotationPermissionCheckEnabled
-bool, optional, default to false
+```jsx
+<DocumentView
+  onExportAnnotationCommand = {({action, xfdfCommand}) => {
+    console.log('Annotation edit action is', action);
+    console.log('The exported xfdfCommand is', xfdfCommand);
+  }}
+/>
+```
 
-If true, annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
-
-##### onFormFieldValueChanged
+##### onAnnotationsSelected
 function, optional
+
+This function is called if annotations are selected.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations
+
+```jsx
+<DocumentView
+  onAnnotationsSelected = {({annotations}) => {
+    annotations.forEach(annotation => {
+      console.log('The id of selected annotation is', annotation.id);
+      console.log('It is in page', annotation.pageNumber);
+      console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
+    });
+  }}
+/>
+```
+
+##### onAnnotationChanged
+function, optional
+
+This function is called if a change has been made to annotations in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+action | string | the action that occurred (add, delete, modify)
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`, representing the annotations that have been changed
+
+```jsx
+<DocumentView
+  onAnnotationChanged = {({action, annotations}) => {
+    console.log('Annotation edit action is', action);
+    annotations.forEach(annotation => {
+      console.log('The id of changed annotation is', annotation.id);
+      console.log('It is in page', annotation.pageNumber);
+    });
+  }}
+/>
+```
+
+##### annotationPermissionCheckEnabled
+bool, optional, default to false
+
+Defines whether annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
+
+```jsx
+<DocumentView
+  annotationPermissionCheckEnabled={true}
+/>
+```
+
+##### onFormFieldValueChanged
+function, optional
+
+This function is called if a change has been made to form field values.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`, representing the fields that have been changed
+
+```jsx
+<DocumentView
+  onFormFieldValueChanged = {({fields}) => {
+    console.log('Annotation edit action is', action);
+    annotations.forEach(annotation => {
+      console.log('The id of changed annotation is', annotation.id);
+      console.log('It is in page', annotation.pageNumber);
+    });
+  }}
+/>
+```
 
 ##### onBookmarkChanged
 function, optional
 
-Defines what happens if a change has been made to bookmarks
+This function is called if a change has been made to bookmarks.
 
 Parameters:
 
@@ -1026,10 +1169,24 @@ Name | Type | Description
 --- | --- | ---
 bookmarkJson | string | the list of current bookmarks in JSON format
 
-##### hideThumbnailFilterModes
-array of `Config.ThumbnailFilterMode` tags, optional
+```jsx
+<DocumentView
+  onBookmarkChanged = {({bookmarkJson}) => {
+    console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
+  }}
+/>
+```
 
-Defines filter modes that should be hidden in the thumbnails browser
+##### hideThumbnailFilterModes
+array of string, optional
+
+Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/config/Config.js) constants
+
+```jsx
+<DocumentView
+  hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
+/>
+```
 
 ##### onToolChanged
 function, optional
@@ -1040,8 +1197,16 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-previousTool | string | the previous tool (one of the `Config.Tools` constants or "unknown tool")
-tool | string | the current tool (one of the `Config.Tools` constants or "unknown tool")
+previousTool | string | the previous tool (one of the [Config.Tools](./src/config/Config.js) constants or "unknown tool"), representing the tool before change
+tool | string | the current tool (one of the [Config.Tools](./src/config/Config.js) constants or "unknown tool"), representing the current tool
+
+```jsx
+<DocumentView
+  onToolChanged = {({previousTool, tool}) => {
+    console.log('Tool has been changed from', previousTool, 'to', tool);
+  }}
+/>
+```
 
 Example:
 
@@ -1053,17 +1218,10 @@ import { DocumentView, Config } from 'react-native-pdftron';
   showLeadingNavButton={true}
   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
   onLeadingNavButtonPressed={() => {}}
-  onDocumentLoaded={() => {}}
-  onDocumentError={() => {}}
+  onDocumentLoaded={(path) => { console.log('Document is loaded at', path); }}
   disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
   customHeaders={{Foo: bar}}
-  initialPageNumber={11}
-  readOnly={false}
-  annotationAuthor={'PDFTron'}
-  continuousAnnotationEditing={true}
-  fitMode={Config.FitMode.FitPage}
-  layoutMode={Config.LayoutMode.Continuous}
   onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
   onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
   annotationPermissionCheckEnabled={false}
@@ -1076,7 +1234,13 @@ import { DocumentView, Config } from 'react-native-pdftron';
 #### Methods
 
 ##### setToolMode
-To set the current tool mode (`Config.Tools` constants).
+To set the current tool mode.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolMode | string | One of [Config.Tools](./src/config/Config.js) string constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
@@ -1086,6 +1250,12 @@ this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
 Commits the current tool, only available for multi-stroke ink and poly-shape.
 
 Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+committed | bool | true if either ink or poly-shape tool is committed, false otherwise
 
 ```js
 this._viewer.commitTool().then((committed) => {
@@ -1098,6 +1268,12 @@ To get the current page count of the document.
 
 Returns a Promise.
 
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageCount | int | the current page count of the document
+
 ```js
 this._viewer.getPageCount().then((pageCount) => {
   console.log('pageCount', pageCount);
@@ -1105,29 +1281,43 @@ this._viewer.getPageCount().then((pageCount) => {
 ```
 
 ##### importAnnotations
-To import XFDF string to the current document.
+To import XFDF annotation string to the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+xfdf | string | annotation string in XFDF format for import
 
 Returns a Promise.
 
 ```js
-const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">...</xfdf>';
+const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">\n\t<annots>\n\t\t<circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20190729202215Z" flags="print" date="D:20190729202215Z" page="0" rect="138.824,653.226,236.28,725.159" title="" /></annots>\n\t<pages>\n\t\t<defmtx matrix="1.333333,0.000000,0.000000,-1.333333,0.000000,1056.000000" />\n\t</pages>\n\t<pdf-info version="2" xmlns="http://www.pdftron.com/pdfinfo" />\n</xfdf>';
 this._viewer.importAnnotations(xfdf);
 ```
 
 ##### exportAnnotations
 To extract XFDF from the current document.
 
-Perameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
-options | object | key: annotList, type: array
+options | object | key: annotList, type: array. If specified, annotations with the matching id and pageNumber will be exported; otherwise, export all annotations in the current document
 
 Returns a Promise.
 
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+xfdf | string | annotation string in XFDF format
+
+Without options:
+
 ```js
 this._viewer.exportAnnotations().then((xfdf) => {
-  console.log('xfdf', xfdf);
+  console.log('XFDF for all annotations:', xfdf);
 });
 ```
 
@@ -1135,13 +1325,20 @@ With options:
 
 ```js
 // annotList is an array of annotation data in the format {id: string, pageNumber: int}
+const annotations = [{id: 'annot1', pageNumber: 1}, {id: 'annot2', pageNumber: 3}];
 this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
-  console.log('xfdf for annotations', xfdf);
+  console.log('XFDF for 2 specified annotations', xfdf);
 });
 ```
 
 ##### flattenAnnotations
-To flatten the forms and (optionally) annotations in the current document. The `formsOnly` parameter controls whether only forms are flattened.
+To flatten the forms and (optionally) annotations in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+formsOnly | bool | Defines whether only forms are flattened. If false, all annotations will be flattened
 
 Returns a Promise.
 
@@ -1152,6 +1349,12 @@ this._viewer.flattenAnnotations(false);
 
 ##### deleteAnnotations
 To delete the specified annotations in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotations | array | Defines which annotation to be deleted. Each element is in the format {id: string, pageNumber: int}
 
 Returns a Promise.
 
@@ -1174,6 +1377,12 @@ To save the current document.
 
 Returns a Promise.
 
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+filePath | string | the location of the saved document
+
 ```js
 this._viewer.saveDocument().then((filePath) => {
   console.log('saveDocument:', filePath);
@@ -1181,14 +1390,14 @@ this._viewer.saveDocument().then((filePath) => {
 ```
 
 ##### setFlagForFields
-Set a field flag value on one or more form fields.
+To set a field flag value on one or more form fields.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
 fields | array | list of field names for which the flag should be set
-flag | integer | flag to be set (see https://www.pdftron.com/api/ios/Enums/PTFieldFlag.html)
+flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/config/Config.js) constant
 value | bool | value to set for flag
 
 Returns a Promise.
@@ -1200,7 +1409,7 @@ this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.Rea
 ##### setValuesForFields
 Set field values on one or more form fields.
 
-Note: the old function `setValueForFields` is deprecated. Please use this one.
+Note: the old function `setValueForFields` is deprecated. Please use this one instead.
 
 Parameters:
 
@@ -1229,12 +1438,26 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 xfdfCommand | string | the XFDF command string
-initialLoad | bool | whether this is for initial load
+initialLoad | bool | whether this is for initial load. Will be false by default
 
 Returns a Promise.
 
+```js
+const xfdfCommand = 'xfdfCommand <?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
+this._viewer.importAnnotationCommand(xfdf);
+
+```
+
 ##### handleBackButton
-Android only.
+To handle back button in search mode. Android only.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+handled | bool | whether the back button is handled successfully
 
 ```js
 this._viewer.handleBackButton().then((handled) => {
@@ -1270,7 +1493,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [Config.AnnotationFlags](./src/config/Config.js) constants, flagValue: bool}
 
 Return a Promise.
 
@@ -1291,6 +1514,7 @@ this._viewer.setFlagsForAnnotations([
     }
 ]);
 ```
+
 ##### setPropertiesForAnnotation
 To set properties for specified annotation in the current document, if it is valid. 
 
@@ -1304,7 +1528,7 @@ annotationId | string | the unique id of the annotation
 pageNumber | integer | the page number where annotation is located. It is 1-indexed
 propertyMap | object | an object containing properties to be set. Available properties are listed below
 
-Properties:
+Properties in propertyMap:
 
 Name | Type | Markup exclusive | Example
 --- | --- | --- | ---
@@ -1331,9 +1555,8 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
-
 ##### getPageCropBox
-Return a JSON object with properties for position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`) of the crop box for specified page.
+To get the crop box for specified page as a JSON object.
 
 Parameters:
 
@@ -1342,6 +1565,12 @@ Name | Type | Description
 pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
 Return a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+cropBox | object | an object with information about position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
 
 ```js
 this._viewer.getPageCropBox(1).then((cropBox) => {
@@ -1352,7 +1581,7 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 ```
 
 ##### importBookmarkJson
-Imports user bookmarks to the document. The input needs to be a valid bookmark JSON format, for example {"0":"Page 1"}.
+Imports user bookmarks to the document. The input needs to be a valid bookmark JSON format.
 
 Parameters:
 
@@ -1375,7 +1604,13 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
-Return a Promise (with a boolean that tells whether the setting process is successful).
+Return a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
 
 ```js
 this._viewer.setCurrentPage(4).then((success) => {
@@ -1390,6 +1625,12 @@ Return the path of the current document.
 
 Return a Promise.
 
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the document path
+
 ```js
 this._viewer.getDocumentPath().then((path) => {
   console.log('The path to current document is: ' + path);
@@ -1398,6 +1639,14 @@ this._viewer.getDocumentPath().then((path) => {
 
 ##### closeAllTabs
 Closes all tabs in multi-tab environment.
+
+Return a Promise.
+
+```js
+// Do this only when DocumentView has multiTabEnabled = true
+this._viewer.closeAllTabs();
+});
+```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
