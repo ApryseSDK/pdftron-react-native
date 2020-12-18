@@ -334,7 +334,7 @@ RNPdftron.enableJavaScript(true);
 #### getVersion
 To get the current PDFNet version.
 
-Parameters:
+Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -351,7 +351,7 @@ RNPdftron.getVersion().then((version) => {
 #### getPlatformVersion
  To get the version of current platform (Android/iOS).
 
-Parameters:
+Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
