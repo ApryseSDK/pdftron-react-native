@@ -484,7 +484,7 @@ This function is called when document opening encounters an error.
 ##### disabledElements
 array of string, optional, default to none
 
-Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/config/Config.js) constants.
+Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -495,7 +495,7 @@ Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons
 ##### disabledTools
 array of string, optional, default to none
 
-Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/config/Config.js) constants.
+Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -571,7 +571,7 @@ Defines whether an annotation should be selected after its creation.
 ##### fitMode
 string, optional, default value is 'FitWidth'
 
-Defines the fit mode of the viewer. String should be one of [Config.FitMode](./src/config/Config.js) constants.
+Defines the fit mode of the viewer. String should be one of [Config.FitMode](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -582,7 +582,7 @@ Defines the fit mode of the viewer. String should be one of [Config.FitMode](./s
 ##### layoutMode
 string, optional, default value is 'Continuous'
 
-Defines the layout mode of the viewer. String should be one of [Config.LayoutMode](./src/config/Config.js) constants.
+Defines the layout mode of the viewer. String should be one of [Config.LayoutMode](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -668,7 +668,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 ##### annotationToolbars
-array of object, options (one of [Config.DefaultToolbars](./src/config/Config.js) constants or custom toolbar object)
+array of object, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
 
 Defines custom toolbars. If passed in, default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -689,7 +689,7 @@ const myToolbar = {
 ##### hideDefaultAnnotationToolbars
 array of string, optional, default to none
 
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/config/Config.js) constants
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
 
 ```jsx
 <DocumentView
@@ -802,7 +802,7 @@ Defines whether document is automatically saved for the viewer.
 ##### hideAnnotationMenu
 array of string, optional, default to none
 
-Defines annotation types that will not show the default annotation menu. Strings should be [Config.Tools](./src/config/Config.js) constants.
+Defines annotation types that will not show the default annotation menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -813,7 +813,7 @@ Defines annotation types that will not show the default annotation menu. Strings
 ##### annotationMenuItems
 array of string, optional, default to containing all the items
 
-Defines menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/config/Config.js) constants.
+Defines menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -823,7 +823,7 @@ Defines menu items that can show when an annotation is selected. Strings should 
 ##### overrideAnnotationMenuBehavior
 array of string, optional, default to none
 
-Defines menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/config/Config.js) constants.
+Defines menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -840,7 +840,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationMenu | string | One of [Config.AnnotationMenu](./src/config/Config.js) constants, representing which item has been pressed
+annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
 
 ```jsx
@@ -869,7 +869,7 @@ Defines whether to show menu of options after long press on text or blank space 
 ##### longPressMenuItems
 array of string, optional, default to containing all the items
 
-Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/config/Config.js) constants.
+Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -897,7 +897,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-longPressMenu | string | One of [LongPressMenu](./src/config.Config.js) constants, representing which item has been pressed
+longPressMenu | string | One of [Config.LongPressMenu](./src/Config/Config.js) constants, representing which item has been pressed
 longPressText | string | the selected text if pressed on text, empty otherwise
 
 ```jsx
@@ -914,7 +914,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ##### overrideBehavior
 array of string, optional, default to none
 
-Defines actions that should skip default behavior, such as external link click. Strings should be [Config.Actions](./src/config/Config.js) constants.
+Defines actions that should skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants.
 
 ```jsx
 <DocumentView
@@ -931,14 +931,14 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | One of [Config.Actions](./src/config/Config.js) constants, representing which action has been activated
+action | string | One of [Config.Actions](./src/Config/Config.js) constants, representing which action has been activated
 data | object | A JSON object that varies depending on the action
 
 Data param table:
 
 Action | Param
 --- | ---
-[`Config.Actions.linkPress`](./src/config/Config.js) | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/Config/Config.js) | key: `url`, value: the link pressed
 
 ```jsx
 <DocumentView
@@ -1180,7 +1180,7 @@ bookmarkJson | string | the list of current bookmarks in JSON format
 ##### hideThumbnailFilterModes
 array of string, optional
 
-Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/config/Config.js) constants
+Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/Config/Config.js) constants
 
 ```jsx
 <DocumentView
@@ -1197,8 +1197,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-previousTool | string | the previous tool (one of the [Config.Tools](./src/config/Config.js) constants or "unknown tool"), representing the tool before change
-tool | string | the current tool (one of the [Config.Tools](./src/config/Config.js) constants or "unknown tool"), representing the current tool
+previousTool | string | the previous tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the tool before change
+tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the current tool
 
 ```jsx
 <DocumentView
@@ -1240,7 +1240,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolMode | string | One of [Config.Tools](./src/config/Config.js) string constants, representing to tool mode to set
+toolMode | string | One of [Config.Tools](./src/Config/Config.js) string constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
@@ -1397,7 +1397,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 fields | array | list of field names for which the flag should be set
-flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/config/Config.js) constant
+flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/Config/Config.js) constant
 value | bool | value to set for flag
 
 Returns a Promise.
@@ -1493,7 +1493,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [Config.AnnotationFlags](./src/config/Config.js) constants, flagValue: bool}
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [Config.AnnotationFlags](./src/Config/Config.js) constants, flagValue: bool}
 
 Return a Promise.
 
