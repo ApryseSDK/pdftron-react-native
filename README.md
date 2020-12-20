@@ -303,8 +303,6 @@ document="content://..."
 
 ### RNPdftron
 
-[initialize](#initialize(string))
-
 #### initialize
 Initializes PDFTron SDK with your PDFTron license key.
 
