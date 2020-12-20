@@ -302,9 +302,14 @@ document="content://..."
 ## API
 
 ### RNPdftron
+- [initialize](#initialize)
+- [enableJavaScript](#enableJavaScript)
+- [getVersion](#getVersion)
+- [getPlatformVersion](#getPlatformVersion)
+- [encryptDocument](#encryptDocument)
 
 #### initialize
-Initializes PDFTron SDK with your PDFTron license key.
+To initialize PDFTron SDK with your PDFTron license key.
 
 Parameters:
 
@@ -389,6 +394,67 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
 #### Props
+- [document](#document)
+- [password](#password)
+- [leadingNavButtonIcon](#leadingNavButtonIcon)
+- [showLeadingNavButton](#showLeadingNavButton)
+- [onLeadingNavButtonPressed](#onLeadingNavButtonPressed)
+- [onDocumentLoaded](#onDocumentLoaded)
+- [onDocumentError](#onDocumentError)
+- [disabledElements](#disabledElements)
+- [disabledTools](#disabledTools)
+- [customHeaders](#customHeaders)
+- [readOnly](#readOnly)
+- [thumbnailViewEditingEnabled](#thumbnailViewEditingEnabled)
+- [annotationAuthor](#annotationAuthor)
+- [continuousAnnotationEditing](#continuousAnnotationEditing)
+- [selectAnnotationAfterCreation](#selectAnnotationAfterCreation)
+- [fitMode](#fitMode)
+- [layoutMode](#layoutMode)
+- [initialPageNumber](#initialPageNumber)
+- [pageNumber](#pageNumber)
+- [onPageChanged](#onPageChanged)
+- [onZoomChanged](#onZoomChanged)
+- [topToolbarEnabled](#topToolbarEnabled)
+- [bottomToolbarEnabled](#bottomToolbarEnabled)
+- [annotationToolbars](#annotationToolbars)
+- [hideDefaultAnnotationToolbars](#hideDefaultAnnotationToolbars)
+- [hideAnnotationToolbarSwitcher](#hideAnnotationToolbarSwitcher)
+- [hideTopToolbars](#hideTopToolbars)
+- [hideTopAppNavBar](#hideTopAppNavBar)
+- [hideToolbarsOnTap](#hideToolbarsOnTap)
+- [pageIndicatorEnabled](#pageIndicatorEnabled)
+- [showSavedSignatures](#showSavedSignatures)
+- [isBase64String](#isBase64String)
+- [padStatusBar](#padStatusBar)
+- [autoSaveEnabled](#autoSaveEnabled)
+- [hideAnnotationMenu](#hideAnnotationMenu)
+- [annotationMenuItems](#annotationMenuItems)
+- [overrideAnnotationMenuBehavior](#overrideAnnotationMenuBehavior)
+- [onAnnotationMenuPress](#onAnnotationMenuPress)
+- [longPressMenuEnabled](#longPressMenuEnabled)
+- [longPressMenuItems](#longPressMenuItems)
+- [overrideLongPressMenuBehavior](#overrideLongPressMenuBehavior)
+- [onLongPressMenuPress](#onLongPressMenuPress)
+- [overrideBehavior](#overrideBehavior)
+- [onBehaviorActivated](#onBehaviorActivated)
+- [pageChangeOnTap](#pageChangeOnTap)
+- [useStylusAsPen](#useStylusAsPen)
+- [multiTabEnabled](#multiTabEnabled)
+- [tabTitle](#tabTitle)
+- [signSignatureFieldsWithStamps](#signSignatureFieldsWithStamps)
+- [followSystemDarkMode](#followSystemDarkMode)
+- [collabEnabled](#collabEnabled)
+- [currentUser](#currentUser)
+- [currentUserName](#currentUserName)
+- [onExportAnnotationCommand](#onExportAnnotationCommand)
+- [onAnnotationsSelected](#onAnnotationsSelected)
+- [onAnnotationChanged](#onAnnotationChanged)
+- [annotationPermissionCheckEnabled](#annotationPermissionCheckEnabled)
+- [onFormFieldValueChanged](#onFormFieldValueChanged)
+- [onBookmarkChanged](#onBookmarkChanged)
+- [hideThumbnailFilterModes](#hideThumbnailFilterModes)
+- [onToolChanged](#onToolChanged)
 
 ##### document
 string, required
@@ -397,7 +463,7 @@ The path to the document.
 
 Example:
 
-```jsx
+```js
 <DocumentView
   document={'sample.pdf'}
 />
@@ -410,7 +476,7 @@ The path to the document.
 
 Example:
 
-```jsx
+```js
 <DocumentView
   password={'password'}
 />
@@ -423,7 +489,7 @@ The icon path to the leading navigation button. The button would use the specifi
 
 Example:
 
-```jsx
+```js
 <DocumentView
   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
 />
@@ -434,7 +500,7 @@ bool, optional, default to true
 
 Defines whether to show the leading navigation button.
 
-```jsx
+```js
 <DocumentView
   showLeadingNavButton={true}
 />
@@ -445,7 +511,7 @@ function, optional
 
 This function is called when the leading navigation button is pressed.
 
-```jsx
+```js
 <DocumentView
   onLeadingNavButtonPressed = {() => { 
     console.log('The leading nav has been pressed'); 
@@ -458,7 +524,7 @@ function, optional
 
 This function is called when the document finishes loading.
 
-```jsx
+```js
 <DocumentView
   onDocumentLoaded = {(path) => { 
     console.log('The document has finished loading:', path); 
@@ -471,7 +537,7 @@ function, optional
 
 This function is called when document opening encounters an error.
 
-```jsx
+```js
 <DocumentView
   onDocumentError = {(error) => { 
     console.log('Error occured during document opening:', error); 
@@ -484,7 +550,7 @@ array of string, optional, default to none
 
 Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   disabledElements={[Config.Buttons.userBookmarkListButton]}
 />
@@ -495,7 +561,7 @@ array of string, optional, default to none
 
 Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
 />
@@ -506,7 +572,7 @@ object, optional
 
 Defines custom headers to use with HTTP/HTTPS requests.
 
-```jsx
+```js
 <DocumentView
   customHeaders={{headerKey: 'headerValue'}}
 />
@@ -517,7 +583,7 @@ bool, optional, default to false
 
 Defines whether the viewer is read-only. If true, no change could be made to the presenting document.
 
-```jsx
+```js
 <DocumentView
   readOnly={true}
 />
@@ -528,7 +594,7 @@ bool, optional, default to true
 
 Defines whether user could modify through thumbnail view.
 
-```jsx
+```js
 <DocumentView
   thumbnailViewEditingEnabled={true}
 />
@@ -539,7 +605,7 @@ string, optional
 
 Defines the author name for all annotations in the current document. Exported xfdfCommand would contain this information.
 
-```jsx
+```js
 <DocumentView
   annotationAuthor={'PDFTron'}
 />
@@ -550,7 +616,7 @@ bool, optional, default to true
 
 Defines whether annotations could be continuously edited.
 
-```jsx
+```js
 <DocumentView
   continuousAnnotationEditing={true}
 />
@@ -561,7 +627,7 @@ bool, optional, default to true
 
 Defines whether an annotation should be selected after its creation.
 
-```jsx
+```js
 <DocumentView
   selectAnnotationAfterCreation={true}
 />
@@ -571,7 +637,7 @@ string, optional, default value is 'FitWidth'
 
 Defines the fit mode of the viewer. String should be one of [Config.FitMode](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   fitMode={Config.FitMode.FitPage}
 />
@@ -582,7 +648,7 @@ string, optional, default value is 'Continuous'
 
 Defines the layout mode of the viewer. String should be one of [Config.LayoutMode](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   layoutMode={Config.LayoutMode.FacingContinuous}
 />
@@ -593,7 +659,7 @@ number, optional
 
 Defines the initial page number that viewer lands on when the document opens.
 
-```jsx
+```js
 <DocumentView
   initialPageNumber={5}
 />
@@ -604,7 +670,7 @@ number, optional
 
 Defines the page number that viewer lands on. Different from [`initialPageNumber`](#initialPageNumber), changing this prop value at runtime will change the page accordingly.
 
-```jsx
+```js
 <DocumentView
   pageNumber={5}
 />
@@ -622,7 +688,7 @@ Name | Type | Description
 previousPageNumber | int | the previous page number
 pageNumber | int | the current page number
 
-```jsx
+```js
 <DocumentView
   onPageChanged = {({previousPageNumber, pageNumber}) => {
     console.log('Page number changes from', previousPageNumber, 'to', pageNumber); 
@@ -641,7 +707,7 @@ Name | Type | Description
 --- | --- | ---
 zoom | double | the current zoom ratio of the document
 
-```jsx
+```js
 <DocumentView
   onZoomChanged = {(zoom) => {
     console.log('Current zoom ratio is', zoom); 
@@ -659,7 +725,7 @@ bool, optional, default to true
 
 Defines whether the bottom toolbar of the viewer is enabled.
 
-```jsx
+```js
 <DocumentView
   bottomToolbarEnabled={false}
 />
@@ -689,7 +755,7 @@ array of string, optional, default to none
 
 Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
 
-```jsx
+```js
 <DocumentView
   hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
 />
@@ -700,7 +766,7 @@ bool, optional, default to false
 
 Defines whether to show the toolbar switcher in the top toolbar.
 
-```jsx
+```js
 <DocumentView
   hideAnnotationToolbarSwitcher={false}
 />
@@ -711,7 +777,7 @@ bool, optional, default to false
 
 Defines whether to hide both the top app nav bar and the annotation toolbar.
 
-```jsx
+```js
 <DocumentView
   hideTopToolbars={false}
 />
@@ -722,7 +788,7 @@ bool, optional, default to false
 
 Defines whether to hide the top nav app bar.
 
-```jsx
+```js
 <DocumentView
   hideAnnotationToolbarSwitcher={false}
 />
@@ -733,7 +799,7 @@ bool, optional, default to true
 
 Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
 
-```jsx
+```js
 <DocumentView
   hideToolbarsOnTap={false}
 />
@@ -744,7 +810,7 @@ bool, optional, default to true
 
 Defines whether to show the page indicator for the viewer.
 
-```jsx
+```js
 <DocumentView
   pageIndicatorEnabled={true}
 />
@@ -755,7 +821,7 @@ bool, optional, default to true
 
 Defines whether to show saved signatures for reusing in signature mode.
 
-```jsx
+```js
 <DocumentView
   showSavedSignatures={true}
 />
@@ -768,7 +834,7 @@ If true, [`document`](#document) prop will be treated as a base64 string.
 
 When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
 
-```jsx
+```js
 <DocumentView
   isBase64String={true}
   document={'...'} // base 64 string
@@ -780,7 +846,7 @@ bool, optional, default to false, android only
 
 Defines whether the viewer will add padding to take account of status bar.
 
-```jsx
+```js
 <DocumentView
   padStatusBar={true}
 />
@@ -791,7 +857,7 @@ bool, optional, default to true
 
 Defines whether document is automatically saved for the viewer.
 
-```jsx
+```js
 <DocumentView
   autoSaveEnabled={true}
 />
@@ -802,7 +868,7 @@ array of string, optional, default to none
 
 Defines annotation types that will not show the default annotation menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   hideAnnotationMenu={[Config.Tools.annotationCreateArrow, Config.Tools.annotationEraserTool]}
 />
@@ -813,7 +879,7 @@ array of string, optional, default to containing all the items
 
 Defines menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
 />
@@ -823,7 +889,7 @@ array of string, optional, default to none
 
 Defines menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
 />
@@ -841,7 +907,7 @@ Name | Type | Description
 annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
 annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
 
-```jsx
+```js
 <DocumentView
   onAnnotationMenuPress = {({annotationMenu, annotations}) => {
     console.log('Annotation menu item', annotationMenu, 'has been pressed');
@@ -858,7 +924,7 @@ bool, optional, default to true
 
 Defines whether to show menu of options after long press on text or blank space in the viewer
 
-```jsx
+```js
 <DocumentView
   longPressMenuEnabled={true}
 />
@@ -869,7 +935,7 @@ array of string, optional, default to containing all the items
 
 Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   longPressMenuItems={[Config.LongPressMenu.copy, Config.LongPressMenu.read]}
 />
@@ -880,7 +946,7 @@ array of strings, optional, default to none
 
 Defines menu items on long press that should skip default behavior.
 
-```jsx
+```js
 <DocumentView
   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
 />
@@ -898,7 +964,7 @@ Name | Type | Description
 longPressMenu | string | One of [Config.LongPressMenu](./src/Config/Config.js) constants, representing which item has been pressed
 longPressText | string | the selected text if pressed on text, empty otherwise
 
-```jsx
+```js
 <DocumentView
   onLongPressMenuPress = {({longPressMenu, longPressText}) => {
     console.log('Long press menu item', longPressMenu, 'has been pressed');
@@ -914,7 +980,7 @@ array of string, optional, default to none
 
 Defines actions that should skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants.
 
-```jsx
+```js
 <DocumentView
   overrideBehavior={[Config.Actions.linkPress]}
 />
@@ -938,7 +1004,7 @@ Action | Param
 --- | ---
 [`Config.Actions.linkPress`](./src/Config/Config.js) | key: `url`, value: the link pressed
 
-```jsx
+```js
 <DocumentView
   onBehaviorActivated = {({action, data}) => {
     console.log('Activated action is', action);
@@ -954,7 +1020,7 @@ bool, optional, default to true
 
 Defines whether page should change on tap when viewer is in horizontal viewing mode
 
-```jsx
+```js
 <DocumentView
   pageChangeOnTap={true}
 />
@@ -965,7 +1031,7 @@ bool, optional, default to true
 
 Defines whether stylus should act as a pen in pan mode. If false, it will act as a finger.
 
-```jsx
+```js
 <DocumentView
   useStylusAsPen={true}
 />
@@ -976,7 +1042,7 @@ bool, optional, default to false
 
 Defines whether viewer will show tabs for documents opened. Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
 
-```jsx
+```js
 <DocumentView
   multiTabEnabled={true}
 />
@@ -987,7 +1053,7 @@ string, optional, default to file name
 
 Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 
-```jsx
+```js
 <DocumentView
   multiTabEnabled={true} // requirement
   tabTitle={'tab1'}
@@ -1000,7 +1066,7 @@ bool, optional, default to false
 Defines wether signature field will be signed with image stamp.
 This is useful if you are saving XFDF to remote source.
 
-```jsx
+```js
 <DocumentView
   signSignatureFieldsWithStamps={true}
 />
@@ -1011,7 +1077,7 @@ bool, optional, Android only, default to true
 
 Defines whether UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
 
-```jsx
+```js
 <DocumentView
   signSignatureFieldsWithStamps={false}
 />
@@ -1022,7 +1088,7 @@ bool, optional, default to false
 
 Defines whether to use the collaboration mode. If true then `currentUser` must be set as well for collaboration mode to work
 
-```jsx
+```js
 <DocumentView
   collabEnabled={true}
   currentUser={'Pdftron'}
@@ -1034,7 +1100,7 @@ string, required if [`collabEnabled`](#collabEnabled) is set to true
 
 Defines the current user. Annotations created will has its title matching this string.
 
-```jsx
+```js
 <DocumentView
   collabEnabled={true}
   currentUser={'Pdftron'}
@@ -1046,7 +1112,7 @@ string, optional
 
 Defines the current user name. Will set the user name only if [`collabEnabled`](#collabEnabled) is true and [`currentUser`](#currentUser) is defined.
 
-```jsx
+```js
 <DocumentView
   collabEnabled={true}
   currentUser={'Pdftron'}
@@ -1066,7 +1132,7 @@ Name | Type | Description
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
 
-```jsx
+```js
 <DocumentView
   onExportAnnotationCommand = {({action, xfdfCommand}) => {
     console.log('Annotation edit action is', action);
@@ -1086,7 +1152,7 @@ Name | Type | Description
 --- | --- | ---
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations
 
-```jsx
+```js
 <DocumentView
   onAnnotationsSelected = {({annotations}) => {
     annotations.forEach(annotation => {
@@ -1110,7 +1176,7 @@ Name | Type | Description
 action | string | the action that occurred (add, delete, modify)
 annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`, representing the annotations that have been changed
 
-```jsx
+```js
 <DocumentView
   onAnnotationChanged = {({action, annotations}) => {
     console.log('Annotation edit action is', action);
@@ -1127,7 +1193,7 @@ bool, optional, default to false
 
 Defines whether annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
 
-```jsx
+```js
 <DocumentView
   annotationPermissionCheckEnabled={true}
 />
@@ -1144,7 +1210,7 @@ Name | Type | Description
 --- | --- | ---
 fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`, representing the fields that have been changed
 
-```jsx
+```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
     console.log('Annotation edit action is', action);
@@ -1167,7 +1233,7 @@ Name | Type | Description
 --- | --- | ---
 bookmarkJson | string | the list of current bookmarks in JSON format
 
-```jsx
+```js
 <DocumentView
   onBookmarkChanged = {({bookmarkJson}) => {
     console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
@@ -1180,7 +1246,7 @@ array of string, optional
 
 Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/Config/Config.js) constants
 
-```jsx
+```js
 <DocumentView
   hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
 />
@@ -1198,7 +1264,7 @@ Name | Type | Description
 previousTool | string | the previous tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the tool before change
 tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the current tool
 
-```jsx
+```js
 <DocumentView
   onToolChanged = {({previousTool, tool}) => {
     console.log('Tool has been changed from', previousTool, 'to', tool);
@@ -1230,6 +1296,26 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ```
 
 #### Methods
+- [setToolMode](#setToolMode)
+- [commitTool](#commitTool)
+- [getPageCount](#getPageCount)
+- [importAnnotations](#importAnnotations)
+- [exportAnnotations](#exportAnnotations)
+- [flattenAnnotations](#flattenAnnotations)
+- [deleteAnnotations](#deleteAnnotations)
+- [saveDocument](#saveDocument)
+- [setFlagForFields](#setFlagForFields)
+- [setValuesForFields](#setValuesForFields)
+- [importAnnotationCommand](#importAnnotationCommand)
+- [handleBackButton](#handleBackButton)
+- [selectAnnotation](#selectAnnotation)
+- [setFlagsForAnnotations](#setFlagsForAnnotations)
+- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
+- [getPageCropBox](#getPageCropBox)
+- [importBookmarkJson](#importBookmarkJson)
+- [setCurrentPage](#setCurrentPage)
+- [getDocumentPath](#getDocumentPath)
+- [closeAllTabs](#closeAllTabs)
 
 ##### setToolMode
 To set the current tool mode.
