@@ -288,6 +288,21 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "zoom")
+    public void setZoom(DocumentView documentView, ReadableMap zoom) {
+        documentView.setZoom(zoom);
+    }
+
+    @ReactProp(name = "zoomEnabled")
+    public void setZoomEnabled(DocumentView documentView, boolean zoomEnabled) {
+        documentView.setZoomEnabled(zoomEnabled);
+    }
+
+    @ReactProp(name = "zoomLimit")
+    public void setZoomLimit(DocumentView documentView, ReadableMap zoomLimit) {
+        documentView.setZoomLimit(zoomLimit);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

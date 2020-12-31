@@ -623,6 +623,46 @@ Name | Type | Description
 previousTool | string | the previous tool (one of the `Config.Tools` constants or "unknown tool")
 tool | string | the current tool (one of the `Config.Tools` constants or "unknown tool")
 
+##### onZoomFinished
+function, optional
+
+This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | The current zoom scale
+
+##### zoom
+object, optional
+
+To set the zoom of the current document.
+
+Parameters:
+
+Name | Type | Description
+scale | double | The target zoom scale to be set
+center | object | This is only required if you desire to zoom with a specific center, in the format of `{x: int, y: int}`.
+
+##### zoomEnabled
+bool, optional, default to true
+
+To enable or disable zooming via gesture. If false, gestures would not cause zooming, but setting it via [zoomScale](#zoomScale) is still possible.
+
+##### zoomLimit
+object, optional
+
+Sets the minimum and maximum zoom bounds of PDFViewCtrl. If relative is true, bounds are relative to the standard zoom scale in the current viewer based on the defined [fitMode](#fitMode).
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+min | double | The minimum zoom bound
+max | double | The maximum zoom bound
+relative | bool | Whether bounds are relative to the standard zoom scale in the current viewer based on fitmode
+
 Example:
 
 ```js

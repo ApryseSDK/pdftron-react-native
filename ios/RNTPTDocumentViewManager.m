@@ -367,6 +367,27 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(zoom, NSDictionary, RNTPTDocumentView)
+{
+    if (json) {
+        view.zoom = [RCTConvert NSDictionary:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(zoomEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.zoomEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(zoomLimit, NSDictionary, RNTPTDocumentView)
+{
+    if (json) {
+        view.zoomLimit = [RCTConvert NSDictionary:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -419,6 +440,16 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     if (sender.onChange) {
         sender.onChange(@{
             @"onZoomChanged" : @"onZoomChanged",
+            @"zoom": @(zoom),
+        });
+    }
+}
+
+- (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onZoomFinished": @"onZoomFinished",
             @"zoom": @(zoom),
         });
     }

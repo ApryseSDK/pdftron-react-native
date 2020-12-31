@@ -66,6 +66,8 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
+    _zoomEnabled = YES;
+    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
 }
@@ -1611,6 +1613,20 @@ NS_ASSUME_NONNULL_END
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
+    
+    // Zoom
+    [pdfViewCtrl setZoomEnabled:self.zoomEnabled];
+    [self applyZoom:pdfViewCtrl];
+    if (self.zoomLimit && self.zoomLimit[PTZoomLimitRelativeKey] && self.zoomLimit[PTZoomLimitMinKey] && self.zoomLimit[PTZoomLimitMaxKey]) {
+        
+        bool isRelative = [(NSNumber *)self.zoomLimit[PTZoomLimitRelativeKey] boolValue];
+        TrnZoomLimitMode limitMode = isRelative ? e_trn_zoom_limit_relative : e_trn_zoom_limit_absolute;
+        
+        double zoomMin = [(NSNumber *)self.zoomLimit[PTZoomLimitMinKey] doubleValue];
+        double zoomMax = [(NSNumber *)self.zoomLimit[PTZoomLimitMaxKey] doubleValue];
+        
+        [pdfViewCtrl SetZoomLimits:limitMode Minimum:zoomMin Maxiumum:zoomMax];
+    }
 }
 
 - (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
@@ -1891,6 +1907,47 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - zoom
+
+- (void)setZoom:(NSDictionary<NSString *, id> *)zoom
+{
+    _zoom = [zoom copy];
+    
+    [self applyViewerSettings];
+}
+
+- (void)applyZoom:(PTPDFViewCtrl *)pdfViewCtrl {
+    if (self.zoom) {
+        if (!self.zoom[PTZoomScaleKey]) {
+            return;
+        }
+        double zoomScale = [(NSNumber *)self.zoom[PTZoomScaleKey] doubleValue];
+        NSDictionary *zoomCenter = (NSDictionary *)self.zoom[PTZoomCenterKey];
+        NSNumber* zoomX = zoomCenter[PTZoomCenterXKey];
+        NSNumber* zoomY = zoomCenter[PTZoomCenterYKey];
+        
+        if (zoomX && zoomY) {
+            [pdfViewCtrl SetZoomX:[zoomX intValue] Y:[zoomY intValue] Zoom:zoomScale];
+        } else {
+            [pdfViewCtrl SetZoom:zoomScale];
+        }
+    }
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled
+{
+    _zoomEnabled = zoomEnabled;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setZoomLimit:(NSDictionary<NSString *, id> *)zoomLimit
+{
+    _zoomLimit = [zoomLimit copy];
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Convenience
 
 - (UIViewController *)findParentViewController
@@ -2092,11 +2149,14 @@ NS_ASSUME_NONNULL_END
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
+    [self applyZoom:documentViewController.pdfViewCtrl];
+    
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
+    
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
@@ -2115,6 +2175,17 @@ NS_ASSUME_NONNULL_END
     
     if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
         [self.delegate zoomChanged:self zoom:zoom];
+    }
+}
+
+- (void)rnt_documentViewControllerDidFinishZoom:(PTDocumentBaseViewController *)documentViewController
+{
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    const double zoom = pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
+    
+    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+        [self.delegate zoomFinished:self zoom:zoom];
     }
 }
 

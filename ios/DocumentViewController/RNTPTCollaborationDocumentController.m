@@ -217,6 +217,13 @@
     }
 }
 
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidFinishZoom:)]) {
+        [self.delegate rnt_documentViewControllerDidFinishZoom:self];
+    }
+}
+
 - (void)outlineViewControllerDidCancel:(PTOutlineViewController *)outlineViewController
 {
     [outlineViewController dismissViewControllerAnimated:YES completion:nil];

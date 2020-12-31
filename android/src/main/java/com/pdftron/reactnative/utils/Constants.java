@@ -271,4 +271,14 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_Config_linkPress = "linkPress";
+
+    // Zoom
+    public static final String KEY_zoomScale = "scale";
+    public static final String KEY_zoomCenter = "center";
+    public static final String KEY_zoomCenterX = "x";
+    public static final String KEY_zoomCenterY = "y";
+
+    public static final String KEY_zoomLimitRelative = "relative";
+    public static final String KEY_zoomLimitMinimum = "min";
+    public static final String KEY_zoomLimitMaximum = "max";
 }

@@ -25,6 +25,10 @@ export default class DocumentView extends PureComponent {
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
+    onZoomFinished: PropTypes.func,
+    zoom: PropTypes.object,
+    zoomEnabled: PropTypes.bool,
+    zoomLimit: PropTypes.object,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     longPressMenuItems: PropTypes.array,
@@ -97,6 +101,12 @@ export default class DocumentView extends PureComponent {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
+        });
+      }
+    } else if (event.nativeEvent.onZoomFinished) {
+      if (this.props.onZoomFinished) {
+        this.props.onZoomFinished({
+          'zoom': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onAnnotationChanged) {

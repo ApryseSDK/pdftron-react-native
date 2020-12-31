@@ -165,6 +165,9 @@ static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 static NSString * const PTAnnotatedFilterModeKey = @"annotated";
 static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
+static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
+static NSString * const PTRelativeZoomLimitModeKey = @"relative";
+
 static NSString * const PTRectKey = @"rect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
@@ -175,6 +178,15 @@ static NSString * const PTRectHeightKey = @"height";
 
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
+
+static NSString * const PTZoomScaleKey = @"scale";
+static NSString * const PTZoomCenterKey = @"center";
+static NSString * const PTZoomCenterXKey = @"x";
+static NSString * const PTZoomCenterYKey = @"y";
+
+static NSString * const PTZoomLimitRelativeKey = @"relative";
+static NSString * const PTZoomLimitMinKey = @"min";
+static NSString * const PTZoomLimitMaxKey = @"max";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -207,6 +219,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -309,6 +322,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) BOOL hideTopAppNavBar;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
+
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *zoom;
+@property (nonatomic, assign, getter=isZoomEnabled) BOOL zoomEnabled;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *zoomLimit;
 
 #pragma mark - Methods
 
