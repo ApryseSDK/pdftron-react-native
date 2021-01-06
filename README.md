@@ -1432,7 +1432,7 @@ this._viewer.flattenAnnotations(false);
 ```
 
 ##### deleteAnnotations
-To delete the specified annotations in the current document.
+Delete the specified annotations in the current document.
 
 Parameters:
 
