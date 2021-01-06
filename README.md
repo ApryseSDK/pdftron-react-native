@@ -614,7 +614,7 @@ Defines the author name for all annotations created on the current document. Exp
 ##### continuousAnnotationEditing
 bool, optional, default to true
 
-Defines whether annotations could be continuously edited.
+If true, the active annotation creation tool will revert to the "pan tool" after an annotation is created. If false, it will remain in the current annotation creation tool.
 
 ```js
 <DocumentView
