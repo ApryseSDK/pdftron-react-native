@@ -603,7 +603,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 ##### annotationAuthor
 string, optional
 
-Defines the author name for all annotations in the current document. Exported xfdfCommand would contain this information.
+Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this information.
 
 ```js
 <DocumentView
