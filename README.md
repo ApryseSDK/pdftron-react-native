@@ -302,11 +302,6 @@ document="content://..."
 ## API
 
 ### RNPdftron
-- [initialize](#initialize)
-- [enableJavaScript](#enableJavaScript)
-- [getVersion](#getVersion)
-- [getPlatformVersion](#getPlatformVersion)
-- [encryptDocument](#encryptDocument)
 
 #### initialize
 Used to initialize PDFTron SDK with your PDFTron commercial license key. You can run PDFTron in demo mode by passing an empty string.
@@ -394,85 +389,24 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
 #### Props
-- [document](#document)
-- [password](#password)
-- [leadingNavButtonIcon](#leadingNavButtonIcon)
-- [showLeadingNavButton](#showLeadingNavButton)
-- [onLeadingNavButtonPressed](#onLeadingNavButtonPressed)
-- [onDocumentLoaded](#onDocumentLoaded)
-- [onDocumentError](#onDocumentError)
-- [disabledElements](#disabledElements)
-- [disabledTools](#disabledTools)
-- [customHeaders](#customHeaders)
-- [readOnly](#readOnly)
-- [thumbnailViewEditingEnabled](#thumbnailViewEditingEnabled)
-- [annotationAuthor](#annotationAuthor)
-- [continuousAnnotationEditing](#continuousAnnotationEditing)
-- [selectAnnotationAfterCreation](#selectAnnotationAfterCreation)
-- [fitMode](#fitMode)
-- [layoutMode](#layoutMode)
-- [initialPageNumber](#initialPageNumber)
-- [pageNumber](#pageNumber)
-- [onPageChanged](#onPageChanged)
-- [onZoomChanged](#onZoomChanged)
-- [topToolbarEnabled](#topToolbarEnabled)
-- [bottomToolbarEnabled](#bottomToolbarEnabled)
-- [annotationToolbars](#annotationToolbars)
-- [hideDefaultAnnotationToolbars](#hideDefaultAnnotationToolbars)
-- [hideAnnotationToolbarSwitcher](#hideAnnotationToolbarSwitcher)
-- [hideTopToolbars](#hideTopToolbars)
-- [hideTopAppNavBar](#hideTopAppNavBar)
-- [hideToolbarsOnTap](#hideToolbarsOnTap)
-- [pageIndicatorEnabled](#pageIndicatorEnabled)
-- [showSavedSignatures](#showSavedSignatures)
-- [isBase64String](#isBase64String)
-- [padStatusBar](#padStatusBar)
-- [autoSaveEnabled](#autoSaveEnabled)
-- [hideAnnotationMenu](#hideAnnotationMenu)
-- [annotationMenuItems](#annotationMenuItems)
-- [overrideAnnotationMenuBehavior](#overrideAnnotationMenuBehavior)
-- [onAnnotationMenuPress](#onAnnotationMenuPress)
-- [longPressMenuEnabled](#longPressMenuEnabled)
-- [longPressMenuItems](#longPressMenuItems)
-- [overrideLongPressMenuBehavior](#overrideLongPressMenuBehavior)
-- [onLongPressMenuPress](#onLongPressMenuPress)
-- [overrideBehavior](#overrideBehavior)
-- [onBehaviorActivated](#onBehaviorActivated)
-- [pageChangeOnTap](#pageChangeOnTap)
-- [useStylusAsPen](#useStylusAsPen)
-- [multiTabEnabled](#multiTabEnabled)
-- [tabTitle](#tabTitle)
-- [signSignatureFieldsWithStamps](#signSignatureFieldsWithStamps)
-- [followSystemDarkMode](#followSystemDarkMode)
-- [collabEnabled](#collabEnabled)
-- [currentUser](#currentUser)
-- [currentUserName](#currentUserName)
-- [onExportAnnotationCommand](#onExportAnnotationCommand)
-- [onAnnotationsSelected](#onAnnotationsSelected)
-- [onAnnotationChanged](#onAnnotationChanged)
-- [annotationPermissionCheckEnabled](#annotationPermissionCheckEnabled)
-- [onFormFieldValueChanged](#onFormFieldValueChanged)
-- [onBookmarkChanged](#onBookmarkChanged)
-- [hideThumbnailFilterModes](#hideThumbnailFilterModes)
-- [onToolChanged](#onToolChanged)
 
 ##### document
 string, required
 
-The path to the document.
+The path or url to the document.
 
 Example:
 
 ```js
 <DocumentView
-  document={'sample.pdf'}
+  document={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
 />
 ```
 
 ##### password
 string, optional
 
-The path to the document.
+The password of the document, if any.
 
 Example:
 
@@ -625,7 +559,7 @@ Defines whether annotations could be continuously edited.
 ##### selectAnnotationAfterCreation
 bool, optional, default to true
 
-Defines whether an annotation should be selected after its creation.
+Defines whether an annotation is selected after it is created. On iOS, this functions for shape and text markup annotations only.
 
 ```js
 <DocumentView
@@ -635,7 +569,7 @@ Defines whether an annotation should be selected after its creation.
 ##### fitMode
 string, optional, default value is 'FitWidth'
 
-Defines the fit mode of the viewer. String should be one of [Config.FitMode](./src/Config/Config.js) constants.
+Defines the fit mode (default zoom level) of the viewer. String should be one of [Config.FitMode](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -657,7 +591,7 @@ Defines the layout mode of the viewer. String should be one of [Config.LayoutMod
 ##### initialPageNumber
 number, optional
 
-Defines the initial page number that viewer lands on when the document opens.
+Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed.
 
 ```js
 <DocumentView
@@ -668,7 +602,7 @@ Defines the initial page number that viewer lands on when the document opens.
 ##### pageNumber
 number, optional
 
-Defines the page number that viewer lands on. Different from [`initialPageNumber`](#initialPageNumber), changing this prop value at runtime will change the page accordingly.
+Defines the currently displayed page number. Different from [`initialPageNumber`](#initialPageNumber), changing this prop value at runtime will change the page accordingly.
 
 ```js
 <DocumentView
@@ -732,9 +666,9 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 ##### annotationToolbars
-array of object, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
+array of objects, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
 
-Defines custom toolbars. If passed in, default toolbars will no longer appear.
+Defines custom toolbars. If passed in, the default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
 
 ```js
@@ -751,7 +685,7 @@ const myToolbar = {
 />
 ```
 ##### hideDefaultAnnotationToolbars
-array of string, optional, default to none
+array of strings, optional, default to none
 
 Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
 
@@ -819,7 +753,7 @@ Defines whether to show the page indicator for the viewer.
 ##### showSavedSignatures
 bool, optional, default to true
 
-Defines whether to show saved signatures for reusing in signature mode.
+Defines whether to show saved signatures for re-use when using the signing tool.
 
 ```js
 <DocumentView
@@ -832,7 +766,7 @@ bool, optional, default to false
 
 If true, [`document`](#document) prop will be treated as a base64 string. 
 
-When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android, and no temporary path is created on iOS.
+When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android, but not on iOS. (If you need access to a file-backed PDF on iOS, save the base64 string to disk, and open the file located at that path.)
 
 ```js
 <DocumentView
@@ -855,7 +789,7 @@ Defines whether the viewer will add padding to take account of status bar.
 ##### autoSaveEnabled
 bool, optional, default to true
 
-Defines whether document is automatically saved for the viewer.
+Defines whether document is automatically saved by the viewer.
 
 ```js
 <DocumentView
@@ -864,9 +798,9 @@ Defines whether document is automatically saved for the viewer.
 ```
 
 ##### hideAnnotationMenu
-array of string, optional, default to none
+array of strings, optional, defaults to none
 
-Defines annotation types that will not show the default annotation menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
+Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -875,9 +809,9 @@ Defines annotation types that will not show the default annotation menu. Strings
 ```
 
 ##### annotationMenuItems
-array of string, optional, default to containing all the items
+array of strings, optional, default contains all the items
 
-Defines menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
+Defines the menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -885,9 +819,9 @@ Defines menu items that can show when an annotation is selected. Strings should 
 />
 ```
 ##### overrideAnnotationMenuBehavior
-array of string, optional, default to none
+array of strings, optional, default is none
 
-Defines menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
+Defines the menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -898,7 +832,7 @@ Defines menu items that should skip default behavior. Strings should be [Config.
 ##### onAnnotationMenuPress
 function, optional
 
-This function is called if the pressed annotation menu item is passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior)
+This function is called when an annotation menu item passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior) is pressed.
 
 Parameters:
 
@@ -922,7 +856,7 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
 ##### longPressMenuEnabled
 bool, optional, default to true
 
-Defines whether to show menu of options after long press on text or blank space in the viewer
+Defines whether to show the popup menu of options when the user long presses on text or blank space on the document.
 
 ```js
 <DocumentView
@@ -931,7 +865,7 @@ Defines whether to show menu of options after long press on text or blank space 
 ```
 
 ##### longPressMenuItems
-array of string, optional, default to containing all the items
+array of strings, optional, default contains all the items
 
 Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants.
 
@@ -1018,7 +952,7 @@ Action | Param
 ##### pageChangeOnTap
 bool, optional, default to true
 
-Defines whether page should change on tap when viewer is in horizontal viewing mode
+Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
 
 ```js
 <DocumentView
@@ -1029,7 +963,7 @@ Defines whether page should change on tap when viewer is in horizontal viewing m
 ##### useStylusAsPen
 bool, optional, default to true
 
-Defines whether stylus should act as a pen in pan mode. If false, it will act as a finger.
+Defines whether a stylus should act as a pen when in pan mode. If false, it will act as a finger.
 
 ```js
 <DocumentView
@@ -1040,7 +974,7 @@ Defines whether stylus should act as a pen in pan mode. If false, it will act as
 ##### multiTabEnabled
 bool, optional, default to false
 
-Defines whether viewer will show tabs for documents opened. Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
+Defines whether viewer will use tabs in order to have more than one document open simultaneously (like a web browser). Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
 
 ```js
 <DocumentView
@@ -1049,7 +983,7 @@ Defines whether viewer will show tabs for documents opened. Changing the [`docum
 ```
 
 ##### tabTitle
-string, optional, default to file name
+string, optional, default is the file name
 
 Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 
@@ -1063,7 +997,7 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 ##### signSignatureFieldsWithStamps
 bool, optional, default to false
 
-Defines wether signature field will be signed with image stamp.
+Defines whether signature fields will be signed with image stamps.
 This is useful if you are saving XFDF to remote source.
 
 ```js
@@ -1075,7 +1009,7 @@ This is useful if you are saving XFDF to remote source.
 ##### followSystemDarkMode
 bool, optional, Android only, default to true
 
-Defines whether UI will appear in dark color when System is dark mode. Otherwise it will use viewer setting instead.
+Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
 
 ```js
 <DocumentView
@@ -1086,7 +1020,7 @@ Defines whether UI will appear in dark color when System is dark mode. Otherwise
 ##### collabEnabled
 bool, optional, default to false
 
-Defines whether to use the collaboration mode. If true then `currentUser` must be set as well for collaboration mode to work
+Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work.
 
 ```js
 <DocumentView
@@ -1098,7 +1032,7 @@ Defines whether to use the collaboration mode. If true then `currentUser` must b
 ##### currentUser
 string, required if [`collabEnabled`](#collabEnabled) is set to true
 
-Defines the current user. Annotations created will has its title matching this string.
+Defines the current user. Created annotations will have their title (author) set to this string.
 
 ```js
 <DocumentView
@@ -1110,7 +1044,7 @@ Defines the current user. Annotations created will has its title matching this s
 ##### currentUserName
 string, optional
 
-Defines the current user name. Will set the user name only if [`collabEnabled`](#collabEnabled) is true and [`currentUser`](#currentUser) is defined.
+Defines the current user name. Will set the user name only if [`collabEnabled`](#collabEnabled) is true and [`currentUser`](#currentUser) is defined. This should be used only if you want the user's display name to be different than the annotation's title/author (in the case that `currentUser` is an ID rather than a human-friendly name.)
 
 ```js
 <DocumentView
@@ -1123,7 +1057,7 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 ##### onExportAnnotationCommand
 function, optional
 
-This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has xfdfCommand as its parameter.
+This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter.
 
 Parameters:
 
@@ -1144,7 +1078,7 @@ xfdfCommand | string | an xfdf string containing info about the edit
 ##### onAnnotationsSelected
 function, optional
 
-This function is called if annotations are selected.
+This function is called when an annotation(s) is selected.
 
 Parameters:
 
@@ -1167,7 +1101,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 ##### onAnnotationChanged
 function, optional
 
-This function is called if a change has been made to annotations in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
+This function is called if a change has been made to an annotation(s) in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
 
 Parameters:
 
@@ -1191,7 +1125,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 ##### annotationPermissionCheckEnabled
 bool, optional, default to false
 
-Defines whether annotation's flags will be taken into account when it is selected, for example, a locked annotation can not be resized or moved.
+Defines whether an annotation's permission flags will be respected when it is selected. For example, a locked annotation can not be resized or moved.
 
 ```js
 <DocumentView
@@ -1225,7 +1159,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 ##### onBookmarkChanged
 function, optional
 
-This function is called if a change has been made to bookmarks.
+This function is called if a change has been made to user bookmarks.
 
 Parameters:
 
@@ -1242,7 +1176,7 @@ bookmarkJson | string | the list of current bookmarks in JSON format
 ```
 
 ##### hideThumbnailFilterModes
-array of string, optional
+array of strings, optional
 
 Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/Config/Config.js) constants
 
@@ -1296,26 +1230,6 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ```
 
 #### Methods
-- [setToolMode](#setToolMode)
-- [commitTool](#commitTool)
-- [getPageCount](#getPageCount)
-- [importAnnotations](#importAnnotations)
-- [exportAnnotations](#exportAnnotations)
-- [flattenAnnotations](#flattenAnnotations)
-- [deleteAnnotations](#deleteAnnotations)
-- [saveDocument](#saveDocument)
-- [setFlagForFields](#setFlagForFields)
-- [setValuesForFields](#setValuesForFields)
-- [importAnnotationCommand](#importAnnotationCommand)
-- [handleBackButton](#handleBackButton)
-- [selectAnnotation](#selectAnnotation)
-- [setFlagsForAnnotations](#setFlagsForAnnotations)
-- [setPropertiesForAnnotation](#setPropertiesForAnnotation)
-- [getPageCropBox](#getPageCropBox)
-- [importBookmarkJson](#importBookmarkJson)
-- [setCurrentPage](#setCurrentPage)
-- [getDocumentPath](#getDocumentPath)
-- [closeAllTabs](#closeAllTabs)
 
 ##### setToolMode
 To set the current tool mode.
@@ -1387,7 +1301,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-options | object | key: annotList, type: array. If specified, annotations with the matching id and pageNumber will be exported; otherwise, export all annotations in the current document
+options | object | key: annotList, type: array. If specified, annotations with the matching id and pageNumber will be exported; otherwise, all annotations in the current document will be exported.
 
 Returns a Promise.
 
@@ -1416,7 +1330,7 @@ this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
 ```
 
 ##### flattenAnnotations
-To flatten the forms and (optionally) annotations in the current document.
+Flatten the forms and (optionally) annotations in the current document.
 
 Parameters:
 
