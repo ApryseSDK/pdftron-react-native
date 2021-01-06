@@ -1640,7 +1640,7 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 ```
 
 ##### getPageCropBox
-To get the crop box for specified page as a JSON object.
+Get the crop box for specified page as a JSON object.
 
 Parameters:
 
