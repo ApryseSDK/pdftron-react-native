@@ -369,7 +369,7 @@ RNPdftron.getPlatformVersion().then((platformVersion) => {
 ```
 
 #### encryptDocument
-To encript a document. This function does not lock around the document so be sure to not use it while the document is opened in the viewer.
+Used to encrypt (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
 Parameters:
 
