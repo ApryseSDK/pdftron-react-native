@@ -1665,7 +1665,7 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 ```
 
 ##### importBookmarkJson
-Imports user bookmarks to the document. The input needs to be a valid bookmark JSON format.
+Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
 
 Parameters:
 
