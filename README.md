@@ -1533,7 +1533,7 @@ this._viewer.importAnnotationCommand(xfdf);
 ```
 
 ##### handleBackButton
-To handle back button in search mode. Android only.
+Handle the back button in search mode. Android only.
 
 Returns a Promise.
 
