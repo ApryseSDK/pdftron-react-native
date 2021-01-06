@@ -581,7 +581,7 @@ Defines custom headers to use with HTTP/HTTPS requests.
 ##### readOnly
 bool, optional, default to false
 
-Defines whether the viewer is read-only. If true, no change could be made to the presenting document.
+Defines whether the viewer is read-only. If true, the UI will not allow the user to change the document.
 
 ```js
 <DocumentView
