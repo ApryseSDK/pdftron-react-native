@@ -515,7 +515,7 @@ Defines custom headers to use with HTTP/HTTPS requests.
 ##### readOnly
 bool, optional, default to false
 
-Defines whether the viewer is read-only. If true, no change could be made to the presenting document.
+Defines whether the viewer is read-only. If true, the UI will not allow the user to change the document.
 
 ```js
 <DocumentView
@@ -526,7 +526,7 @@ Defines whether the viewer is read-only. If true, no change could be made to the
 ##### thumbnailViewEditingEnabled
 bool, optional, default to true
 
-Defines whether user could modify through thumbnail view.
+Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
 
 ```js
 <DocumentView
@@ -537,7 +537,7 @@ Defines whether user could modify through thumbnail view.
 ##### annotationAuthor
 string, optional
 
-Defines the author name for all annotations in the current document. Exported xfdfCommand would contain this information.
+Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this information.
 
 ```js
 <DocumentView
@@ -548,7 +548,7 @@ Defines the author name for all annotations in the current document. Exported xf
 ##### continuousAnnotationEditing
 bool, optional, default to true
 
-Defines whether annotations could be continuously edited.
+If true, the active annotation creation tool will revert to the "pan tool" after an annotation is created. If false, it will remain in the current annotation creation tool.
 
 ```js
 <DocumentView
@@ -1346,7 +1346,7 @@ this._viewer.flattenAnnotations(false);
 ```
 
 ##### deleteAnnotations
-To delete the specified annotations in the current document.
+Delete the specified annotations in the current document.
 
 Parameters:
 
@@ -1388,7 +1388,7 @@ this._viewer.saveDocument().then((filePath) => {
 ```
 
 ##### setFlagForFields
-To set a field flag value on one or more form fields.
+Set a field flag value on one or more form fields.
 
 Parameters:
 
@@ -1447,7 +1447,7 @@ this._viewer.importAnnotationCommand(xfdf);
 ```
 
 ##### handleBackButton
-To handle back button in search mode. Android only.
+Handle the back button in search mode. Android only.
 
 Returns a Promise.
 
@@ -1554,7 +1554,7 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 ```
 
 ##### getPageCropBox
-To get the crop box for specified page as a JSON object.
+Get the crop box for specified page as a JSON object.
 
 Parameters:
 
@@ -1579,7 +1579,7 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 ```
 
 ##### importBookmarkJson
-Imports user bookmarks to the document. The input needs to be a valid bookmark JSON format.
+Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
 
 Parameters:
 
