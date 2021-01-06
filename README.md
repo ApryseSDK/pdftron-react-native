@@ -309,7 +309,7 @@ document="content://..."
 - [encryptDocument](#encryptDocument)
 
 #### initialize
-To initialize PDFTron SDK with your PDFTron license key.
+Used to initialize PDFTron SDK with your PDFTron commercial license key. You can run PDFTron in demo mode by passing an empty string.
 
 Parameters:
 
