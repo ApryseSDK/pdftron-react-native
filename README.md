@@ -592,7 +592,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 ##### thumbnailViewEditingEnabled
 bool, optional, default to true
 
-Defines whether user could modify through thumbnail view.
+Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
 
 ```js
 <DocumentView
