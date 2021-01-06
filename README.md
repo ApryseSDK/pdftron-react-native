@@ -1474,7 +1474,7 @@ this._viewer.saveDocument().then((filePath) => {
 ```
 
 ##### setFlagForFields
-To set a field flag value on one or more form fields.
+Set a field flag value on one or more form fields.
 
 Parameters:
 
