@@ -778,7 +778,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 ##### padStatusBar
 bool, optional, default to false, android only
 
-Defines whether the viewer will add padding to take account of status bar.
+Defines whether the viewer will add padding to take account of the system status bar.
 
 ```js
 <DocumentView
