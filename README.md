@@ -720,7 +720,7 @@ Defines whether to hide both the top app nav bar and the annotation toolbar.
 ##### hideTopAppNavBar
 bool, optional, default to false
 
-Defines whether to hide the top nav app bar.
+Defines whether to hide the top navigation app bar.
 
 ```js
 <DocumentView
