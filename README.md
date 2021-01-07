@@ -1643,7 +1643,6 @@ Return a Promise.
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
-});
 ```
 
 ## Contributing
