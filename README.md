@@ -317,7 +317,7 @@ RNPdftron.initialize('your_license_key');
 ```
 
 #### enableJavaScript
-To enable JavaScript for PDFTron SDK, by default it is enabled.
+Enable JavaScript for PDFTron SDK, by default it is enabled.
 
 Parameters:
 
@@ -330,7 +330,7 @@ RNPdftron.enableJavaScript(true);
 ```
 
 #### getVersion
-To get the current PDFNet version.
+Get the current PDFNet version.
 
 Promise Parameters:
 
@@ -347,7 +347,7 @@ RNPdftron.getVersion().then((version) => {
 ```
 
 #### getPlatformVersion
- To get the version of current platform (Android/iOS).
+Get the version of current platform (Android/iOS).
 
 Promise Parameters:
 
@@ -537,7 +537,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 ##### annotationAuthor
 string, optional
 
-Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this information.
+Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this piece of information.
 
 ```js
 <DocumentView
@@ -1232,7 +1232,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 #### Methods
 
 ##### setToolMode
-To set the current tool mode.
+Set the current tool mode.
 
 Parameters:
 
@@ -1262,7 +1262,7 @@ this._viewer.commitTool().then((committed) => {
 ```
 
 ##### getPageCount
-To get the current page count of the document.
+Get the current page count of the document.
 
 Returns a Promise.
 
@@ -1279,7 +1279,7 @@ this._viewer.getPageCount().then((pageCount) => {
 ```
 
 ##### importAnnotations
-To import XFDF annotation string to the current document.
+Import XFDF annotation string to the current document.
 
 Parameters:
 
@@ -1295,7 +1295,7 @@ this._viewer.importAnnotations(xfdf);
 ```
 
 ##### exportAnnotations
-To extract XFDF from the current document.
+Extract XFDF from the current document.
 
 Parameters:
 
@@ -1371,7 +1371,7 @@ this._viewer.deleteAnnotations([
 ```
 
 ##### saveDocument
-To save the current document.
+Save the current document.
 
 Returns a Promise.
 
@@ -1466,7 +1466,7 @@ this._viewer.handleBackButton().then((handled) => {
 ```
 
 ##### selectAnnotation
-To select the specified annotation in the current document.
+Select the specified annotation in the current document.
 
 Parameters:
 
@@ -1483,7 +1483,7 @@ this._viewer.selectAnnotation('annotId1', 1);
 ```
 
 ##### setFlagsForAnnotations
-To set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+Set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
 
 Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
 
@@ -1514,7 +1514,7 @@ this._viewer.setFlagsForAnnotations([
 ```
 
 ##### setPropertiesForAnnotation
-To set properties for specified annotation in the current document, if it is valid. 
+Set properties for specified annotation in the current document, if it is valid. 
 
 Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
