@@ -317,7 +317,7 @@ RNPdftron.initialize('your_license_key');
 ```
 
 #### enableJavaScript
-To enable JavaScript for PDFTron SDK.
+To enable JavaScript for PDFTron SDK, by default it is enabled.
 
 Parameters:
 
@@ -419,7 +419,7 @@ Example:
 ##### leadingNavButtonIcon
 string, optional
 
-The icon path to the leading navigation button. The button would use the specified icon if it is a valid, or the default icon otherwise.
+The path to an icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise.
 
 Example:
 
@@ -821,7 +821,7 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 ##### overrideAnnotationMenuBehavior
 array of strings, optional, default is none
 
-Defines the menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
+Defines the menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called.
 
 ```js
 <DocumentView
@@ -878,7 +878,7 @@ Defines menu items that can show when long press on text or blank space. Strings
 ##### overrideLongPressMenuBehavior
 array of strings, optional, default to none
 
-Defines menu items on long press that should skip default behavior.
+Defines menu items on long press that should skip default behavior. They will still be displayed in the long press menu, and the function [`onLongpressMenuPress`](#onLongPressMenuPress) will be called.
 
 ```js
 <DocumentView
@@ -1206,7 +1206,7 @@ tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.
 />
 ```
 
-Example:
+##### Example:
 
 ```js
 import { DocumentView, Config } from 'react-native-pdftron';
