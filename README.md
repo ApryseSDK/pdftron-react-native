@@ -161,9 +161,8 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     ```
 
 2. In the `ios` folder, run `pod install`.
-3. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
-4. Replace `App.js` with what is shown [here](#usage).
-5. Finally in the root project directory, run `react-native run-ios`.
+3. Replace `App.js` with what is shown [here](#usage).
+4. Finally in the root project directory, run `react-native run-ios`.
 
 ## Usage
 
@@ -304,7 +303,7 @@ document="content://..."
 ### RNPdftron
 
 #### initialize
-Used to initialize PDFTron SDK with your PDFTron commercial license key. You can run PDFTron in demo mode by passing an empty string.
+Initializes PDFTron SDK with your PDFTron commercial license key. You can run PDFTron in demo mode by passing an empty string.
 
 Parameters:
 
@@ -317,7 +316,7 @@ RNPdftron.initialize('your_license_key');
 ```
 
 #### enableJavaScript
-Enable JavaScript for PDFTron SDK, by default it is enabled.
+Enables JavaScript for PDFTron SDK, by default it is enabled.
 
 Parameters:
 
@@ -330,7 +329,7 @@ RNPdftron.enableJavaScript(true);
 ```
 
 #### getVersion
-Get the current PDFNet version.
+Gets the current PDFNet version.
 
 Promise Parameters:
 
@@ -338,7 +337,7 @@ Name | Type | Description
 --- | --- | ---
 version | string | current PDFNet version
 
-Return a promise.
+Returns a promise.
 
 ```js
 RNPdftron.getVersion().then((version) => {
@@ -347,7 +346,7 @@ RNPdftron.getVersion().then((version) => {
 ```
 
 #### getPlatformVersion
-Get the version of current platform (Android/iOS).
+Gets the version of current platform (Android/iOS).
 
 Promise Parameters:
 
@@ -355,7 +354,7 @@ Name | Type | Description
 --- | --- | ---
 platformVersion | string | current platform version (Android/iOS)
 
-Return a promise.
+Returns a promise.
 
 ```js
 RNPdftron.getPlatformVersion().then((platformVersion) => {
@@ -364,7 +363,7 @@ RNPdftron.getPlatformVersion().then((platformVersion) => {
 ```
 
 #### encryptDocument
-Used to encrypt (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
+Encrypts (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
 Parameters:
 
@@ -374,7 +373,7 @@ file path | string | the local file path to the file
 password | string | the password you would like to set
 current password | string | the current password, use empty string if no password
 
-Return a promise.
+Returns a promise.
 
 Example:
 
@@ -419,7 +418,7 @@ Example:
 ##### leadingNavButtonIcon
 string, optional
 
-The path to an icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise.
+The file name of the icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise.
 
 Example:
 
@@ -429,8 +428,30 @@ Example:
 />
 ```
 
+**Note**: to add the image file to your application, please follow the steps below:
+
+###### Android
+1. Add the image resource to the [example/android/app/src/main/res/drawable](./example/android/app/src/main/res/drawable) directory. For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
+
+<img alt='demo-android' src='android_add_resources.png'/>
+
+2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
+
+###### iOS
+1. After pods has been installed, open the .xcworkspace file for this application in Xcode (in this case, it's [example.xcworkspace](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
+- "Project navigator"
+- "example" (or the app name)
+- "Build Phases"
+- "Copy Bundle Resources"
+- "+".
+
+<img alt='demo-android' src='ios_add_resources.png'/>
+
+2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
+
+
 ##### showLeadingNavButton
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether to show the leading navigation button.
 
@@ -480,7 +501,7 @@ This function is called when document opening encounters an error.
 ```
 
 ##### disabledElements
-array of string, optional, default to none
+array of string, optional, defaults to none
 
 Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
 
@@ -491,7 +512,7 @@ Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons
 ```
 
 ##### disabledTools
-array of string, optional, default to none
+array of string, optional, defaults to none
 
 Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/Config/Config.js) constants.
 
@@ -513,7 +534,7 @@ Defines custom headers to use with HTTP/HTTPS requests.
 ```
 
 ##### readOnly
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether the viewer is read-only. If true, the UI will not allow the user to change the document.
 
@@ -524,7 +545,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 ```
 
 ##### thumbnailViewEditingEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
 
@@ -546,9 +567,9 @@ Defines the author name for all annotations created on the current document. Exp
 ```
 
 ##### continuousAnnotationEditing
-bool, optional, default to true
+bool, optional, defaults to true
 
-If true, the active annotation creation tool will revert to the "pan tool" after an annotation is created. If false, it will remain in the current annotation creation tool.
+If true, the active annotation creation tool will remain in the current annotation creation tool. Otherwise, it will revert to the "pan tool" after an annotation is created.
 
 ```js
 <DocumentView
@@ -557,7 +578,7 @@ If true, the active annotation creation tool will revert to the "pan tool" after
 ```
 
 ##### selectAnnotationAfterCreation
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether an annotation is selected after it is created. On iOS, this functions for shape and text markup annotations only.
 
@@ -650,12 +671,12 @@ zoom | double | the current zoom ratio of the document
 ```
 
 ##### topToolbarEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Deprecated. Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
 
 ##### bottomToolbarEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether the bottom toolbar of the viewer is enabled.
 
@@ -685,7 +706,7 @@ const myToolbar = {
 />
 ```
 ##### hideDefaultAnnotationToolbars
-array of strings, optional, default to none
+array of strings, optional, defaults to none
 
 Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
 
@@ -696,7 +717,7 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 ```
 
 ##### hideAnnotationToolbarSwitcher
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether to show the toolbar switcher in the top toolbar.
 
@@ -707,7 +728,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 ```
 
 ##### hideTopToolbars
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether to hide both the top app nav bar and the annotation toolbar.
 
@@ -718,7 +739,7 @@ Defines whether to hide both the top app nav bar and the annotation toolbar.
 ```
 
 ##### hideTopAppNavBar
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether to hide the top navigation app bar.
 
@@ -729,7 +750,7 @@ Defines whether to hide the top navigation app bar.
 ```
 
 ##### hideToolbarsOnTap
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
 
@@ -740,7 +761,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```
 
 ##### pageIndicatorEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether to show the page indicator for the viewer.
 
@@ -751,7 +772,7 @@ Defines whether to show the page indicator for the viewer.
 ```
 
 ##### showSavedSignatures
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether to show saved signatures for re-use when using the signing tool.
 
@@ -762,7 +783,7 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 ```
 
 ##### isBase64String
-bool, optional, default to false
+bool, optional, defaults to false
 
 If true, [`document`](#document) prop will be treated as a base64 string. 
 
@@ -776,7 +797,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 ```
 
 ##### padStatusBar
-bool, optional, default to false, android only
+bool, optional, defaults to false, android only
 
 Defines whether the viewer will add padding to take account of the system status bar.
 
@@ -787,7 +808,7 @@ Defines whether the viewer will add padding to take account of the system status
 ```
 
 ##### autoSaveEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether document is automatically saved by the viewer.
 
@@ -819,9 +840,9 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 />
 ```
 ##### overrideAnnotationMenuBehavior
-array of strings, optional, default is none
+array of strings, optional, defaults to none
 
-Defines the menu items that should skip default behavior. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called.
+Defines the menu items that will skip default behavior when pressed. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -854,7 +875,7 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
 ```
 
 ##### longPressMenuEnabled
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether to show the popup menu of options when the user long presses on text or blank space on the document.
 
@@ -876,9 +897,9 @@ Defines menu items that can show when long press on text or blank space. Strings
 ```
 
 ##### overrideLongPressMenuBehavior
-array of strings, optional, default to none
+array of strings, optional, defaults to none
 
-Defines menu items on long press that should skip default behavior. They will still be displayed in the long press menu, and the function [`onLongpressMenuPress`](#onLongPressMenuPress) will be called.
+Defines the menu items on long press that will skip default behavior when pressed. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -910,9 +931,9 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ```
 
 ##### overrideBehavior
-array of string, optional, default to none
+array of string, optional, defaults to none
 
-Defines actions that should skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants.
+Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -950,7 +971,7 @@ Action | Param
 ```
 
 ##### pageChangeOnTap
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
 
@@ -961,7 +982,7 @@ Defines whether the viewer should change pages when the user taps the edge of a 
 ```
 
 ##### useStylusAsPen
-bool, optional, default to true
+bool, optional, defaults to true
 
 Defines whether a stylus should act as a pen when in pan mode. If false, it will act as a finger.
 
@@ -972,7 +993,7 @@ Defines whether a stylus should act as a pen when in pan mode. If false, it will
 ```
 
 ##### multiTabEnabled
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether viewer will use tabs in order to have more than one document open simultaneously (like a web browser). Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
 
@@ -995,7 +1016,7 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 ```
 
 ##### signSignatureFieldsWithStamps
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether signature fields will be signed with image stamps.
 This is useful if you are saving XFDF to remote source.
@@ -1007,7 +1028,7 @@ This is useful if you are saving XFDF to remote source.
 ```
 
 ##### followSystemDarkMode
-bool, optional, Android only, default to true
+bool, optional, Android only, defaults to true
 
 Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
 
@@ -1018,7 +1039,7 @@ Defines whether the UI will appear in a dark color when the system is dark mode.
 ```
 
 ##### collabEnabled
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work.
 
@@ -1123,7 +1144,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 ```
 
 ##### annotationPermissionCheckEnabled
-bool, optional, default to false
+bool, optional, defaults to false
 
 Defines whether an annotation's permission flags will be respected when it is selected. For example, a locked annotation can not be resized or moved.
 
@@ -1232,7 +1253,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 #### Methods
 
 ##### setToolMode
-Set the current tool mode.
+Sets the current tool mode.
 
 Parameters:
 
@@ -1262,7 +1283,7 @@ this._viewer.commitTool().then((committed) => {
 ```
 
 ##### getPageCount
-Get the current page count of the document.
+Gets the current page count of the document.
 
 Returns a Promise.
 
@@ -1279,7 +1300,7 @@ this._viewer.getPageCount().then((pageCount) => {
 ```
 
 ##### importAnnotations
-Import XFDF annotation string to the current document.
+Imports XFDF annotation string to the current document.
 
 Parameters:
 
@@ -1295,7 +1316,7 @@ this._viewer.importAnnotations(xfdf);
 ```
 
 ##### exportAnnotations
-Extract XFDF from the current document.
+Extracts XFDF from the current document.
 
 Parameters:
 
@@ -1330,7 +1351,7 @@ this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
 ```
 
 ##### flattenAnnotations
-Flatten the forms and (optionally) annotations in the current document.
+Flattens the forms and (optionally) annotations in the current document.
 
 Parameters:
 
@@ -1346,7 +1367,7 @@ this._viewer.flattenAnnotations(false);
 ```
 
 ##### deleteAnnotations
-Delete the specified annotations in the current document.
+Deletes the specified annotations in the current document.
 
 Parameters:
 
@@ -1371,7 +1392,7 @@ this._viewer.deleteAnnotations([
 ```
 
 ##### saveDocument
-Save the current document.
+Saves the current document.
 
 Returns a Promise.
 
@@ -1388,7 +1409,7 @@ this._viewer.saveDocument().then((filePath) => {
 ```
 
 ##### setFlagForFields
-Set a field flag value on one or more form fields.
+Sets a field flag value on one or more form fields.
 
 Parameters:
 
@@ -1405,7 +1426,7 @@ this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.Rea
 ```
 
 ##### setValuesForFields
-Set field values on one or more form fields.
+Sets field values on one or more form fields.
 
 Note: the old function `setValueForFields` is deprecated. Please use this one instead.
 
@@ -1429,7 +1450,7 @@ this._viewer.setValuesForFields({
 ```
 
 ##### importAnnotationCommand
-Import remote annotation command to local document.
+Imports remote annotation command to local document.
 
 Parameters:
 
@@ -1447,7 +1468,7 @@ this._viewer.importAnnotationCommand(xfdf);
 ```
 
 ##### handleBackButton
-Handle the back button in search mode. Android only.
+Handles the back button in search mode. Android only.
 
 Returns a Promise.
 
@@ -1466,7 +1487,7 @@ this._viewer.handleBackButton().then((handled) => {
 ```
 
 ##### selectAnnotation
-Select the specified annotation in the current document.
+Selects the specified annotation in the current document.
 
 Parameters:
 
@@ -1475,7 +1496,7 @@ Name | Type | Description
 id | string | the id of the target annotation
 pageNumber | integer | the page number where the targe annotation is located. It is 1-indexed
 
-Return a Promise.
+Returns a Promise.
 
 ```js
 // select annotation in the current document.
@@ -1483,7 +1504,7 @@ this._viewer.selectAnnotation('annotId1', 1);
 ```
 
 ##### setFlagsForAnnotations
-Set flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+Sets flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
 
 Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
 
@@ -1493,7 +1514,7 @@ Name | Type | Description
 --- | --- | ---
 annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [Config.AnnotationFlags](./src/Config/Config.js) constants, flagValue: bool}
 
-Return a Promise.
+Returns a Promise.
 
 ```js
 //  Set flag for annotations in the current document.
@@ -1514,7 +1535,7 @@ this._viewer.setFlagsForAnnotations([
 ```
 
 ##### setPropertiesForAnnotation
-Set properties for specified annotation in the current document, if it is valid. 
+Sets properties for specified annotation in the current document, if it is valid. 
 
 Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
@@ -1536,7 +1557,7 @@ subject | string | yes | "subject"
 title | string | yes | "title"
 contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
 
-Return a promise.
+Returns a promise.
 
 ```js
 // Set properties for annotation in the current document.
@@ -1554,7 +1575,7 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 ```
 
 ##### getPageCropBox
-Get the crop box for specified page as a JSON object.
+Gets the crop box for specified page as a JSON object.
 
 Parameters:
 
@@ -1562,7 +1583,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
-Return a Promise.
+Returns a Promise.
 
 Promise Parameters:
 
@@ -1587,14 +1608,14 @@ Name | Type | Description
 --- | --- | ---
 bookmarkJson | String | needs to be in valid bookmark JSON format, for example {"0": "Page 1"}. The page numbers are 1-indexed
 
-Return a Promise.
+Returns a Promise.
 
 ```js
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
 ##### setCurrentPage
-Set current page of the document.
+Sets current page of the document.
 
 Parameters:
 
@@ -1602,7 +1623,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | integer | the page number for the target crop box. It is 1-indexed
 
-Return a Promise.
+Returns a Promise.
 
 Promise Parameters:
 
@@ -1619,9 +1640,9 @@ this._viewer.setCurrentPage(4).then((success) => {
 ```
 
 ##### getDocumentPath
-Return the path of the current document.
+Returns the path of the current document.
 
-Return a Promise.
+Returns a Promise.
 
 Promise Parameters:
 
@@ -1638,7 +1659,7 @@ this._viewer.getDocumentPath().then((path) => {
 ##### closeAllTabs
 Closes all tabs in multi-tab environment.
 
-Return a Promise.
+Returns a Promise.
 
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
