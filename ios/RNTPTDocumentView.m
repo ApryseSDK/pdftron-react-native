@@ -1015,14 +1015,16 @@ NS_ASSUME_NONNULL_END
 
 - (void)deleteCurrentPageAnnotations
 {
-    PTPDFViewCtrl *pdfViewCtrl = self.pdfViewCtrl;
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
     int pageNumber = [pdfViewCtrl GetCurrentPage];
     
     NSArray<PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:pageNumber];
     
     NSError *error = nil;
     for (id annot in annots) {
-        [self.pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
             [self.toolManager willRemoveAnnotation:annot onPageNumber:pageNumber];
 
             PTPage *page = [doc GetPage:pageNumber];
@@ -1030,7 +1032,7 @@ NS_ASSUME_NONNULL_END
                 [page AnnotRemoveWithAnnot:annot];
             }
             
-            [self.pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumber];
+            [pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumber];
         } error:&error];
         
         if (error) {
