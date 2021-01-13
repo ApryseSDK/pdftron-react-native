@@ -1,4 +1,3 @@
-
 package com.pdftron.reactnative;
 
 import com.facebook.react.ReactPackage;

@@ -3,6 +3,8 @@ package com.pdftron.reactnative.modules;
 import android.app.Activity;
 import android.content.Intent;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -11,6 +13,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -29,6 +32,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void importBookmarkJson(final int tag, final String bookmarkJson, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.importBookmarkJson(tag, bookmarkJson);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
     }
 
     @ReactMethod
@@ -120,6 +138,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
     @ReactMethod
     public void setToolMode(final int tag, final String item) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
@@ -180,12 +199,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setValueForFields(final int tag, final ReadableMap map, final Promise promise) {
+    public void setValuesForFields(final int tag, final ReadableMap map, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setValueForFields(tag, map);
+                    mDocumentViewInstance.setValuesForFields(tag, map);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -225,12 +244,27 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setFlagForAnnotations(final int tag, final ReadableArray annotationFlaglist, final Promise promise) {
+    public void closeAllTabs(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setFlagForAnnotations(tag, annotationFlaglist);
+                    mDocumentViewInstance.closeAllTabs(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setFlagsForAnnotations(final int tag, final ReadableArray annotationFlaglist, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setFlagsForAnnotations(tag, annotationFlaglist);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -255,12 +289,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setPropertyForAnnotation(final int tag, final String annotId, final int pageNumber, final ReadableMap propertyMap, final Promise promise) {
+    public void setPropertiesForAnnotation(final int tag, final String annotId, final int pageNumber, final ReadableMap propertyMap, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setPropertyForAnnotation(tag, annotId, pageNumber, propertyMap);
+                    mDocumentViewInstance.setPropertiesForAnnotation(tag, annotId, pageNumber, propertyMap);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -298,9 +332,18 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);
+
+        // Handle onActivity result for digital signature using view model, which will
+        // be consumed by DigitalSignatureDialogFragment
+        if (activity instanceof AppCompatActivity) {
+            if (DigitalSignatureDialogFragment.isDigitalSignatureIntent(requestCode)) {
+                DigitalSignatureDialogFragment.getViewModel((AppCompatActivity) activity).setActivityResultIntent(requestCode, resultCode, data);
+            }
+        }
     }
 
     @Override

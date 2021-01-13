@@ -62,8 +62,18 @@ export default class DocumentView extends PureComponent {
     pageChangeOnTap: PropTypes.bool,
     followSystemDarkMode: PropTypes.bool,
     useStylusAsPen: PropTypes.bool,
+    multiTabEnabled: PropTypes.bool,
+    tabTitle: PropTypes.string,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
+    annotationToolbars: PropTypes.array,
+    hideDefaultAnnotationToolbars: PropTypes.array,
+    hideAnnotationToolbarSwitcher: PropTypes.bool,
+    hideTopToolbars: PropTypes.bool,
+    hideTopAppNavBar: PropTypes.bool,
+    onBookmarkChanged: PropTypes.func,
+    hideThumbnailFilterModes: PropTypes.array,
+    onToolChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -150,6 +160,19 @@ export default class DocumentView extends PureComponent {
           'data': event.nativeEvent.data,
         });
       }
+    } else if (event.nativeEvent.onBookmarkChanged) {
+      if (this.props.onBookmarkChanged) {
+        this.props.onBookmarkChanged({
+          'bookmarkJson': event.nativeEvent.bookmarkJson,
+        });
+      }
+    } else if (event.nativeEvent.onToolChanged) {
+      if (this.props.onToolChanged) {
+        this.props.onToolChanged({
+          'previousTool': event.nativeEvent.previousTool,
+          'tool': event.nativeEvent.tool,
+        });
+      }
     }
   }
 
@@ -208,6 +231,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
+    }
+    return Promise.resolve();
+  }
+
+  importBookmarkJson = (bookmarkJson) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }
@@ -283,10 +314,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setValuesForFields.
+  * 
+  */
   setValueForFields = (fieldsMap) => {
+    return this.setValuesForFields(fieldsMap);
+  }
+
+  setValuesForFields = (fieldsMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
-      return DocumentViewManager.setValueForFields(tag, fieldsMap);
+      return DocumentViewManager.setValuesForFields(tag, fieldsMap);
     }
     return Promise.resolve();
   }
@@ -299,10 +338,19 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  
+  /**
+  * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
+  * 
+  */
   setFlagForAnnotations = (annotationFlagList) => {
+    return this.setFlagsForAnnotations(annotationFlagList);  
+  }
+  
+  setFlagsForAnnotations = (annotationFlagList) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setFlagForAnnotations(tag, annotationFlagList);
+      return DocumentViewManager.setFlagsForAnnotations(tag, annotationFlagList);
     }
     return Promise.resolve();
   }
@@ -315,10 +363,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  /**
+  * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
+  * 
+  */
   setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
+    return setPropertiesForAnnotation(id, pageNumber, propertyMap);
+  }
+
+  setPropertiesForAnnotation = (id, pageNumber, propertyMap) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setPropertyForAnnotation(tag, id, pageNumber, propertyMap);
+      return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
     }
     return Promise.resolve();
   }
@@ -335,6 +391,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  closeAllTabs = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.closeAllTabs(tag);
     }
     return Promise.resolve();
   }

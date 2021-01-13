@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -207,6 +208,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageChangeOnTap(pageChangeOnTap);
     }
 
+    @ReactProp(name = "multiTabEnabled")
+    public void setMultiTabEnabled(DocumentView documentView, boolean multiTab) {
+        documentView.setMultiTabEnabled(multiTab);
+    }
+
+    @ReactProp(name = "tabTitle")
+    public void setTabTitle(DocumentView documentView, String tabTitle) {
+        documentView.setTabTitle(tabTitle);
+    }
+
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
@@ -245,6 +256,45 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "annotationPermissionCheckEnabled")
     public void setAnnotationPermissionCheckEnabled(DocumentView documentView, boolean annotPermissionCheckEnabled) {
         documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
+    }
+
+    @ReactProp(name = "annotationToolbars")
+    public void setAnnotationToolbars(DocumentView documentView, ReadableArray toolbars) {
+        documentView.setAnnotationToolbars(toolbars);
+    }
+
+    @ReactProp(name = "hideDefaultAnnotationToolbars")
+    public void setHideDefaultAnnotationToolbars(DocumentView documentView, ReadableArray tags) {
+        documentView.setHideDefaultAnnotationToolbars(tags);
+    }
+
+    @ReactProp(name = "hideAnnotationToolbarSwitcher")
+    public void setHideAnnotationToolbarSwitcher(DocumentView documentView, boolean hide) {
+        documentView.setHideAnnotationToolbarSwitcher(hide);
+    }
+
+    @ReactProp(name = "hideTopToolbars")
+    public void setHideTopToolbars(DocumentView documentView, boolean hide) {
+        documentView.setHideTopToolbars(hide);
+    }
+
+    @ReactProp(name = "hideTopAppNavBar")
+    public void setHideTopAppNavBar(DocumentView documentView, boolean hide) {
+        documentView.setHideTopAppNavBar(hide);
+    }
+
+    @ReactProp(name = "hideThumbnailFilterModes")
+    public void setHideThumbnailFilterModes(DocumentView documentView, ReadableArray filterModes) {
+        documentView.setHideThumbnailFilterModes(filterModes);
+    }
+
+    public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.importBookmarkJson(bookmarkJson);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "importBookmarkJson", "Unable to find DocumentView.");
+        }
     }
 
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
@@ -337,12 +387,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setValueForFields(int tag, ReadableMap map) throws PDFNetException {
+    public void setValuesForFields(int tag, ReadableMap map) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setValueForFields(map);
+            documentView.setValuesForFields(map);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setValueForFields", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setValuesForFields", "Unable to find DocumentView.");
         }
     }
 
@@ -364,15 +414,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setFlagForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
+    public void setFlagsForAnnotations(int tag, ReadableArray annotationFlagList) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setFlagForAnnotations(annotationFlagList);
+            documentView.setFlagsForAnnotations(annotationFlagList);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setFlagForAnnotation", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setFlagsForAnnotation", "Unable to find DocumentView.");
         }
     }
-  
+
     public void selectAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -382,12 +432,21 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setPropertyForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+    public void setPropertiesForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setPropertyForAnnotation(annotId, pageNumber, propertyMap);
+            documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
-            throw new PDFNetException("", 0L, getName(), "setPropertyForAnnotation", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void closeAllTabs(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.closeAllTabs();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "closeAllTabs", "Unable to find DocumentView.");
         }
     }
 
@@ -409,6 +468,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
         }
     }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

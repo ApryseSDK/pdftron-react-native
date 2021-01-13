@@ -17,6 +17,15 @@ static NSString * const PTOutlineListButtonKey = @"outlineListButton";
 static NSString * const PTAnnotationListButtonKey = @"annotationListButton";
 static NSString * const PTUserBookmarkListButtonKey = @"userBookmarkListButton";
 static NSString * const PTReflowButtonKey = @"reflowButton";
+static NSString * const PTEditPagesButtonKey = @"editPagesButton";
+static NSString * const PTPrintButtonKey = @"printButton";
+static NSString * const PTCloseButtonKey = @"closeButton";
+static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
+static NSString * const PTFormToolsButtonKey = @"formToolsButton";
+static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
+static NSString * const PTEditMenuButtonKey = @"editMenuButton";
+static NSString * const PTCropPageButtonKey = @"cropPageButton";
+
 static NSString * const PTStickyToolButtonKey = @"stickyToolButton";
 static NSString * const PTFreeHandToolButtonKey = @"freeHandToolButton";
 static NSString * const PTHighlightToolButtonKey = @"highlightToolButton";
@@ -60,9 +69,22 @@ static NSString * const PTAnnotationCreateFileAttachmentToolKey = @"AnnotationCr
 static NSString * const PTAnnotationCreateDistanceMeasurementToolKey = @"AnnotationCreateDistanceMeasurement";
 static NSString * const PTAnnotationCreatePerimeterMeasurementToolKey = @"AnnotationCreatePerimeterMeasurement";
 static NSString * const PTAnnotationCreateAreaMeasurementToolKey = @"AnnotationCreateAreaMeasurement";
-static NSString * const PTPanToolKey = @"pan";
+static NSString * const PTPanToolKey = @"Pan";
 static NSString * const PTAnnotationEraserToolKey = @"AnnotationEraserTool";
 static NSString * const PTAnnotationCreateSoundToolKey = @"AnnotationCreateSound";
+static NSString * const PTPencilKitDrawingToolKey = @"PencilKitDrawing";
+static NSString * const PTAnnotationCreateFreeHighlighterToolKey = @"AnnotationCreateFreeHighlighter";
+static NSString * const PTAnnotationCreateRubberStampToolKey = @"AnnotationCreateRubberStamp";
+static NSString * const PTAnnotationCreateRedactionToolKey = @"AnnotationCreateRedaction";
+static NSString * const PTAnnotationCreateLinkToolKey = @"AnnotationCreateLink";
+static NSString * const PTAnnotationCreateRedactionTextToolKey = @"AnnotationCreateRedactionText";
+static NSString * const PTAnnotationCreateLinkTextToolKey = @"AnnotationCreateLinkText";
+static NSString * const PTFormCreateTextFieldToolKey = @"FormCreateTextField";
+static NSString * const PTFormCreateCheckboxFieldToolKey = @"FormCreateCheckboxField";
+static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatureField";
+static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
+static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
+static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";
@@ -131,7 +153,7 @@ static NSString * const PTSearchMenuItemIdentifierKey = @"search";
 static NSString * const PTEditTextMenuItemIdentifierKey = @"editText";
 static NSString * const PTEditInkMenuItemIdentifierKey = @"editInk";
 static NSString * const PTFlattenMenuItemIdentifierKey = @"flatten";
-static NSString * const PTOpenMenuItemIdentifierKey = @"OpenAttachment";
+static NSString * const PTOpenMenuItemIdentifierKey = @"openAttachment";
 static NSString * const PTShareMenuItemIdentifierKey = @"share";
 static NSString * const PTReadMenuItemIdentifierKey = @"read";
 static NSString * const PTCalibrateMenuItemIdentifierKey = @"calibrate";
@@ -141,6 +163,8 @@ static NSString * const PTStrikeoutWhiteListKey = @"Strikeout";
 static NSString * const PTUnderlineWhiteListKey = @"Underline";
 static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 
+static NSString * const PTAnnotatedFilterModeKey = @"annotated";
+static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
 static NSString * const PTRectKey = @"rect";
 static NSString * const PTRectX1Key = @"x1";
@@ -152,6 +176,25 @@ static NSString * const PTRectHeightKey = @"height";
 
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
+
+// Default annotation toolbar names.
+typedef NSString * PTDefaultAnnotationToolbarKey;
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarAnnotate = @"PDFTron_Annotate";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarDraw = @"PDFTron_Draw";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarInsert = @"PDFTron_Insert";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFillAndSign = @"PDFTron_Fill_and_Sign";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarMeasure = @"PDFTron_Measure";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPens = @"PDFTron_Pens";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
+
+// Custom annotation toolbar keys.
+typedef NSString * PTAnnotationToolbarKey;
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
+static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @class RNTPTDocumentView;
 
@@ -178,6 +221,10 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)longPressMenuPressed:(RNTPTDocumentView *)sender longPressMenu:(NSString *)longPressMenu longPressText:(NSString *)longPressText;
 
+- (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson;
+
+- (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -198,7 +245,7 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 // viewer options
 @property (nonatomic, assign) BOOL nightModeEnabled;
-@property (nonatomic, assign) BOOL topToolbarEnabled;
+@property (nonatomic, assign) BOOL topToolbarEnabled DEPRECATED_MSG_ATTRIBUTE("Use hideTopAppNavBar instead");
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
@@ -253,6 +300,17 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
 
+@property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
+@property (nonatomic, copy, nullable) NSString *tabTitle;
+
+@property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
+@property (nonatomic) BOOL hideTopToolbars;
+@property (nonatomic) BOOL hideTopAppNavBar;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -269,9 +327,12 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (int)getPageCount;
 
+- (void)importBookmarkJson:(NSString *)bookmarkJson;
+
 - (NSString *)getDocumentPath;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
+
 - (void)importAnnotations:(NSString *)xfdfString;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
@@ -284,20 +345,26 @@ static NSString * const PTFormFieldValueKey = @"fieldValue";
 
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
-- (void)setValueForFields:(NSDictionary<NSString *, id> *)map;
+- (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
 
-- (void)setFlagForAnnotations:(NSArray *)annotationFlagList;
+- (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
-- (void)setPropertyForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+- (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (void)closeAllTabs;
+
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end
 
+
+@interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
 NS_ASSUME_NONNULL_END

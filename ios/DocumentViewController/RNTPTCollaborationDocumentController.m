@@ -1,8 +1,6 @@
-#import "RNTPTCollaborationDocumentViewController.h"
+#import "RNTPTCollaborationDocumentController.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface RNTPTCollaborationDocumentViewController ()
+@interface RNTPTCollaborationDocumentController ()
 
 @property (nonatomic) BOOL local;
 @property (nonatomic) BOOL needsDocumentLoaded;
@@ -11,9 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
-
-@implementation RNTPTCollaborationDocumentViewController
+@implementation RNTPTCollaborationDocumentController
 
 @dynamic delegate;
 
@@ -30,6 +26,14 @@ NS_ASSUME_NONNULL_END
             [self.delegate rnt_documentViewControllerDocumentLoaded:self];
         }
     }
+}
+
+- (void)setThumbnailSliderHidden:(BOOL)hidden animated:(BOOL)animated
+{
+    if (!hidden) {
+        return;
+    }
+    [super setThumbnailSliderHidden:hidden animated:animated];
 }
 
 - (void)openDocumentWithURL:(NSURL *)url password:(NSString *)password
@@ -64,13 +68,47 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
+- (BOOL)areTopToolbarsEnabled
 {
-    if (!hidden && ![self isTopToolbarEnabled]){
-        return;
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerAreTopToolbarsEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerAreTopToolbarsEnabled:self];
     }
+    return YES;
+}
+
+- (BOOL)isNavigationBarEnabled
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerIsNavigationBarEnabled:)]) {
+        return [self.delegate rnt_documentViewControllerIsNavigationBarEnabled:self];
+    }
+    return YES;
+}
+
+- (BOOL)controlsHidden
+{
+    if (self.navigationController) {
+        if ([self isTopToolbarEnabled]) {
+            return [self.navigationController isNavigationBarHidden];
+        }
+        if ([self isBottomToolbarEnabled]) {
+            return [self.navigationController isToolbarHidden];
+        }
+        if ([self areToolGroupsEnabled]) {
+            return [self isToolGroupToolbarHidden];
+        }
+    }
+    return [super controlsHidden];
+}
+
+- (void)setControlsHidden:(BOOL)controlsHidden animated:(BOOL)animated
+{
+    [super setControlsHidden:controlsHidden animated:animated];
     
-    [super setControlsHidden:hidden animated:animated];
+    if ([self areTopToolbarsEnabled] &&
+        ![self isNavigationBarEnabled] &&
+        self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController setTabBarHidden:controlsHidden animated:animated];
+    }
 }
 
 #pragma mark - <PTToolManagerDelegate>
@@ -85,15 +123,7 @@ NS_ASSUME_NONNULL_END
     
     if (tool.backToPanToolAfterUse != backToPan) {
         tool.backToPanToolAfterUse = backToPan;
-    }
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isAnnotationToolbarHidden]) {
-        // ...hide the toolbar.
-        self.annotationToolbar.hidden = YES;
-    }
+    }    
 }
 
 - (void)toolManager:(PTToolManager *)toolManager didSelectAnnotation:(PTAnnot *)annotation onPageNumber:(unsigned long)pageNumber
@@ -154,30 +184,6 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-#pragma mark - <PTAnnotationToolbarDelegate>
-
-- (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
-{
-    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerShouldGoBackToPan:)]) {
-        return [self.delegate rnt_documentViewControllerShouldGoBackToPan:self];
-    }
-    
-    return [super toolShouldGoBackToPan:annotationToolbar];
-}
-
-- (void)annotationToolbarDidCancel:(PTAnnotationToolbar *)annotationToolbar
-{
-    [super annotationToolbarDidCancel:annotationToolbar];
-    
-    // If the top toolbar is disabled...
-    if (![self isTopToolbarEnabled] &&
-        // ...and the annotation toolbar is visible now...
-        ![self isAnnotationToolbarHidden]) {
-        // ...hide the toolbar.
-        self.annotationToolbar.hidden = YES;
-    }
-}
-
 #pragma mark - <PTPDFViewCtrlDelegate>
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
@@ -200,7 +206,7 @@ NS_ASSUME_NONNULL_END
     if (type == e_ptdownloadedtype_finished && !self.documentLoaded) {
         self.needsRemoteDocumentLoaded = YES;
     }
-
+    
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 

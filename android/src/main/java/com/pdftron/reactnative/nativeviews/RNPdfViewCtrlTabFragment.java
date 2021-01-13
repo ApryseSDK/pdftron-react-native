@@ -1,13 +1,14 @@
 package com.pdftron.reactnative.nativeviews;
 
 import android.graphics.PointF;
+
 import androidx.fragment.app.FragmentActivity;
 
-import com.pdftron.pdf.controls.PdfViewCtrlTabFragment;
+import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.ViewerUtils;
 
-public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment {
+public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
 
     @Override
     public void imageStamperSelected(PointF targetPoint) {

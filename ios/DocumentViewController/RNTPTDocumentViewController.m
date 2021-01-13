@@ -64,18 +64,17 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
+- (BOOL)controlsHidden
 {
-    if (![self isTopToolbarEnabled]) {
-        if ([self isBottomToolbarEnabled]) {
-            [self setThumbnailSliderHidden:hidden animated:animated];
+    if (self.navigationController) {
+        if ([self isTopToolbarEnabled]) {
+            return [self.navigationController isNavigationBarHidden];
         }
-        if (!hidden) {
-            return;
+        if ([self isBottomToolbarEnabled]) {
+            return [self isThumbnailSliderHidden];
         }
     }
-    
-    [super setControlsHidden:hidden animated:animated];
+    return [super controlsHidden];
 }
 
 #pragma mark - <PTToolManagerDelegate>

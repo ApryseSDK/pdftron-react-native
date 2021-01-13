@@ -37,6 +37,8 @@ export default {
     reflowButton: 'reflowButton',
     editMenuButton: 'editMenuButton',
     cropPageButton: 'cropPageButton',
+    undo: 'undo',
+    redo: 'redo'
   },
   Tools: {
     annotationEdit: 'AnnotationEdit',
@@ -71,12 +73,16 @@ export default {
     annotationCreateLink: 'AnnotationCreateLink',
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
     annotationCreateLinkText: 'AnnotationCreateLinkText',
+    annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+
+    // iOS only.
+    pencilKitDrawing: 'PencilKitDrawing',
   },
   FitMode: {
     FitPage: 'FitPage',
@@ -133,5 +139,39 @@ export default {
     print: "print",
     readOnly: "readOnly",
     toggleNoView: "toggleNoView"
-  }
+  },
+  DefaultToolbars: {
+    View: "PDFTron_View",
+    Annotate: "PDFTron_Annotate",
+    Draw: "PDFTron_Draw",
+    Insert: "PDFTron_Insert",
+    FillAndSign: "PDFTron_Fill_and_Sign",
+    PrepareForm: "PDFTron_Prepare_Form",
+    Measure: "PDFTron_Measure",
+    Pens: "PDFTron_Pens",
+    Redaction: "PDFTron_Redact",
+    Favorite: "PDFTron_Favorite"
+  },
+  ToolbarIcons: {
+    View: "PDFTron_View",
+    Annotate: "PDFTron_Annotate",
+    Draw: "PDFTron_Draw",
+    Insert: "PDFTron_Insert",
+    FillAndSign: "PDFTron_Fill_and_Sign",
+    PrepareForm: "PDFTron_Prepare_Form",
+    Measure: "PDFTron_Measure",
+    Pens: "PDFTron_Pens",
+    Redaction: "PDFTron_Redact",
+    Favorite: "PDFTron_Favorite"
+  },
+  CustomToolbarKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon",
+    Items: "items"
+  },
+  ThumbnailFilterMode: {
+    Annotated: "annotated",
+    Bookmarked: "bookmarked",
+  },
 };

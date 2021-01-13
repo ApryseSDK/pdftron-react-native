@@ -2,24 +2,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class RNTPTDocumentViewController;
-
-@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate, PTToolManagerDelegate>
+@protocol RNTPTDocumentBaseViewControllerDelegate <PTToolManagerDelegate>
 @required
 
-- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentViewController *)documentViewController;
+- (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController;
 
-- (void)rnt_documentViewControllerDidZoom:(PTDocumentViewController *)documentViewController;
+- (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController;
 
-- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentViewController *)documentViewController;
+- (BOOL)rnt_documentViewControllerIsTopToolbarEnabled:(PTDocumentBaseViewController *)documentViewController;
+
+- (BOOL)rnt_documentViewControllerAreTopToolbarsEnabled:(PTDocumentBaseViewController *)documentViewController;
+
+- (BOOL)rnt_documentViewControllerIsNavigationBarEnabled:(PTDocumentBaseViewController *)documentViewController;
+
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot;
+
+- (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController;
+
+- (void)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber;
+
+@end
+
+@class RNTPTDocumentViewController;
+
+@protocol RNTPTDocumentViewControllerDelegate <PTDocumentViewControllerDelegate, RNTPTDocumentBaseViewControllerDelegate>
+@required
 
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController;
-
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot;
-
-- (BOOL)rnt_documentViewController:(PTDocumentViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController;
-
-- (void)rnt_documentViewController:(PTDocumentViewController *)documentViewController didSelectAnnotations:(NSArray<PTAnnot *> *)annotations onPageNumber:(int)pageNumber;
 
 @end
 

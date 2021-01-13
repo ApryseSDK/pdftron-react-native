@@ -103,6 +103,7 @@ RCT_REMAP_METHOD(getDocumentPath,
         reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
     }
 }
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -113,7 +114,22 @@ RCT_REMAP_METHOD(getPageCount,
         resolve(@(pageCount));
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to get page count", [self errorFromException:exception]);
+        reject(@"get_failed", @"Failed to get page count", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(importBookmarkJson,
+                 importBookmarkJsonForDocumentViewTag:(nonnull NSNumber *)tag
+                 bookmarkJson:(NSString *)bookmarkJson
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] importBookmarkJsonForDocumentViewTag:tag bookmarkJson:bookmarkJson];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"import_failed", @"Failed to import bookmark json", [self errorFromException:exception]);
     }
 }
 
@@ -228,14 +244,14 @@ RCT_REMAP_METHOD(setFlagForFields,
     }
 }
 
-RCT_REMAP_METHOD(setValueForFields,
-                 setValueForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setValuesForFields,
+                 setValuesForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
                  map:(NSDictionary<NSString *, id> *)map
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setValueForFieldsForDocumentViewTag:tag map:map];
+        [[self documentViewManager] setValuesForFieldsForDocumentViewTag:tag map:map];
         resolve(nil);
     }
     @catch (NSException *exception) {
@@ -243,14 +259,14 @@ RCT_REMAP_METHOD(setValueForFields,
     }
 }
 
-RCT_REMAP_METHOD(setFlagForAnnotations,
-                 setFlagForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setFlagsForAnnotations,
+                 setFlagsForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  annotationFlagList:(NSArray *)annotationFlagList
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setFlagForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
+        [[self documentViewManager] setFlagsForAnnotationsForDocumentViewTag:tag annotationFlagList:annotationFlagList];
         resolve(nil);
     }
     @catch (NSException *exception) {
@@ -274,8 +290,8 @@ RCT_REMAP_METHOD(selectAnnotation,
     }
 }
 
-RCT_REMAP_METHOD(setPropertyForAnnotation,
-                 setPropertyForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+RCT_REMAP_METHOD(setPropertiesForAnnotation,
+                 setPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
                  annotationId:(NSString *)annotationId
                  pageNumber:(NSInteger)pageNumber
                  propertyMap:(NSDictionary *)propertyMap
@@ -283,7 +299,7 @@ RCT_REMAP_METHOD(setPropertyForAnnotation,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setPropertyForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        [[self documentViewManager] setPropertiesForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
         resolve(nil);
     }
     @catch (NSException *exception) {
@@ -318,6 +334,20 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
     @catch (NSException *exception) {
         reject(@"set_current_page", @"Failed to set current page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(closeAllTabs,
+                 closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] closeAllTabsForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
     }
 }
 
