@@ -809,7 +809,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)openTextSearch
 {
-    PTTextSearchViewController* searchViewController = [[PTTextSearchViewController alloc] initWithPDFViewCtrl: [self pdfViewCtrl]];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
+    PTTextSearchViewController* searchViewController = [[PTTextSearchViewController alloc] initWithPDFViewCtrl: pdfViewCtrl];
     
     searchViewController.delegate = [self documentViewController];
 
@@ -821,7 +824,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)openThumbnails
 {
-    PTThumbnailsViewController* thumbnailsViewController = [[PTThumbnailsViewController alloc] initWithPDFViewCtrl: [self pdfViewCtrl]];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
+    PTThumbnailsViewController* thumbnailsViewController = [[PTThumbnailsViewController alloc] initWithPDFViewCtrl: pdfViewCtrl];
     
     UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:thumbnailsViewController];
     
