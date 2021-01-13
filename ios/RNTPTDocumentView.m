@@ -1023,6 +1023,7 @@ NS_ASSUME_NONNULL_END
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
 
     int pageNumber = [pdfViewCtrl GetCurrentPage];
     
@@ -1031,7 +1032,7 @@ NS_ASSUME_NONNULL_END
     NSError *error = nil;
     for (id annot in annots) {
         [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
-            [self.toolManager willRemoveAnnotation:annot onPageNumber:pageNumber];
+            [toolManager willRemoveAnnotation:annot onPageNumber:pageNumber];
 
             PTPage *page = [doc GetPage:pageNumber];
             if ([page IsValid]) {
@@ -1044,11 +1045,11 @@ NS_ASSUME_NONNULL_END
         if (error) {
             @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
         } else if (annot) {
-            [self.toolManager annotationRemoved:annot onPageNumber:pageNumber];
+            [toolManager annotationRemoved:annot onPageNumber:pageNumber];
         }
     }
     
-    [self.toolManager changeTool:[PTPanTool class]];
+    [toolManager changeTool:[PTPanTool class]];
 }
 
 - (void)deleteAnnotations:(NSArray *)annotations
