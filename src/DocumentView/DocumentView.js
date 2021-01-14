@@ -84,7 +84,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onDocumentLoaded) {
       if (this.props.onDocumentLoaded) {
-        this.props.onDocumentLoaded();
+        this.props.onDocumentLoaded(event.nativeEvent.onDocumentLoaded);
       }
     } else if (event.nativeEvent.onPageChanged) {
       if (this.props.onPageChanged) {
