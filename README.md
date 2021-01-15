@@ -342,7 +342,7 @@ Returns a promise.
 ```js
 RNPdftron.getVersion().then((version) => {
   console.log("Current PDFNet version:", version);
-})
+});
 ```
 
 #### getPlatformVersion
@@ -359,7 +359,25 @@ Returns a promise.
 ```js
 RNPdftron.getPlatformVersion().then((platformVersion) => {
   console.log("App currently running on:", platformVersion);
-})
+});
+```
+
+#### getSystemFontList
+Gets the font list available on the OS (Android only).
+This is typically useful when you are mostly working with non-ascii characters in the viewer.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fontList | string | the font list available on Android
+
+Returns a promise.
+
+```js
+RNPdftron.getSystemFontList().then((fontList) => {
+  console.log("OS font list:", fontList);
+});
 ```
 
 #### encryptDocument
