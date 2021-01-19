@@ -2131,20 +2131,41 @@ NS_ASSUME_NONNULL_END
         
         // Check for a valid URI action.
         PTAction *action = [linkAnnot GetAction];
-        if (![action IsValid] ||
-            [action GetType] != e_ptURI) {
+
+        // Check action type
+        PTActionType actionType = [action GetType];
+        
+
+        // Handle only e_ptURI and e_ptGoToR
+        if (actionType != e_ptURI && actionType != e_ptGoToR) {
             return;
         }
-        
-        PTObj *actionObj = [action GetSDFObj];
-        if (![actionObj IsValid]) {
-            return;
+
+        if (actionType == e_ptGoToR) {
+            PTObj *obj = [[action GetSDFObj] FindObj:@"F"];
+            
+            if ([obj IsValid]) {
+                PTFileSpec *fileSpec = [[PTFileSpec alloc] initWithF:obj];
+                if ([fileSpec IsValid]) {
+                    NSString *filePath = [fileSpec GetFilePath];
+                    if (filePath.length > 0) {
+                        url = filePath;
+                    }
+                }
+            }
         }
-        
-        // Get the action's URI.
-        PTObj *uriObj = [actionObj FindObj:PTURILinkAnnotationKey];
-        if ([uriObj IsValid] && [uriObj IsString]) {
-            url = [uriObj GetAsPDFText];
+
+        if (actionType == e_ptURI) {
+            PTObj *actionObj = [action GetSDFObj];
+            if (![actionObj IsValid]) {
+                return;
+            }
+            
+            // Get the action's URI.
+            PTObj *uriObj = [actionObj FindObj:PTURILinkAnnotationKey];
+            if ([uriObj IsValid] && [uriObj IsString]) {
+                url = [uriObj GetAsPDFText];
+            }
         }
     } error:&error];
     if (error) {
