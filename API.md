@@ -101,7 +101,7 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
-## DocumentView (Props)
+## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
@@ -1003,9 +1003,9 @@ import { DocumentView, Config } from 'react-native-pdftron';
 />
 ```
 
-### DocumentView (Methods)
+## DocumentView - Methods
 
-#### setToolMode
+### setToolMode
 Sets the current tool mode.
 
 Parameters:
@@ -1018,7 +1018,7 @@ toolMode | string | One of [Config.Tools](./src/Config/Config.js) string constan
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
 ```
 
-#### commitTool
+### commitTool
 Commits the current tool, only available for multi-stroke ink and poly-shape.
 
 Returns a Promise.
@@ -1035,7 +1035,7 @@ this._viewer.commitTool().then((committed) => {
 });
 ```
 
-#### getPageCount
+### getPageCount
 Gets the current page count of the document.
 
 Returns a Promise.
@@ -1052,7 +1052,7 @@ this._viewer.getPageCount().then((pageCount) => {
 });
 ```
 
-#### importAnnotations
+### importAnnotations
 Imports XFDF annotation string to the current document.
 
 Parameters:
@@ -1068,7 +1068,7 @@ const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.ado
 this._viewer.importAnnotations(xfdf);
 ```
 
-#### exportAnnotations
+### exportAnnotations
 Extracts XFDF from the current document.
 
 Parameters:
@@ -1103,7 +1103,7 @@ this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
 });
 ```
 
-#### flattenAnnotations
+### flattenAnnotations
 Flattens the forms and (optionally) annotations in the current document.
 
 Parameters:
@@ -1119,7 +1119,7 @@ Returns a Promise.
 this._viewer.flattenAnnotations(false);
 ```
 
-#### deleteAnnotations
+### deleteAnnotations
 Deletes the specified annotations in the current document.
 
 Parameters:
@@ -1144,7 +1144,7 @@ this._viewer.deleteAnnotations([
 ]);
 ```
 
-#### saveDocument
+### saveDocument
 Saves the current document.
 
 Returns a Promise.
@@ -1161,7 +1161,7 @@ this._viewer.saveDocument().then((filePath) => {
 });
 ```
 
-#### setFlagForFields
+### setFlagForFields
 Sets a field flag value on one or more form fields.
 
 Parameters:
@@ -1178,7 +1178,7 @@ Returns a Promise.
 this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
 ```
 
-#### setValuesForFields
+### setValuesForFields
 Sets field values on one or more form fields.
 
 Note: the old function `setValueForFields` is deprecated. Please use this one instead.
@@ -1202,7 +1202,7 @@ this._viewer.setValuesForFields({
 });
 ```
 
-#### importAnnotationCommand
+### importAnnotationCommand
 Imports remote annotation command to local document.
 
 Parameters:
@@ -1220,7 +1220,7 @@ this._viewer.importAnnotationCommand(xfdf);
 
 ```
 
-#### handleBackButton
+### handleBackButton
 Handles the back button in search mode. Android only.
 
 Returns a Promise.
@@ -1239,7 +1239,7 @@ this._viewer.handleBackButton().then((handled) => {
 });
 ```
 
-#### selectAnnotation
+### selectAnnotation
 Selects the specified annotation in the current document.
 
 Parameters:
@@ -1256,7 +1256,7 @@ Returns a Promise.
 this._viewer.selectAnnotation('annotId1', 1);
 ```
 
-#### setFlagsForAnnotations
+### setFlagsForAnnotations
 Sets flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
 
 Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
@@ -1287,7 +1287,7 @@ this._viewer.setFlagsForAnnotations([
 ]);
 ```
 
-#### setPropertiesForAnnotation
+### setPropertiesForAnnotation
 Sets properties for specified annotation in the current document, if it is valid. 
 
 Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
@@ -1327,7 +1327,7 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
-#### getPageCropBox
+### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
 Parameters:
@@ -1352,7 +1352,7 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 });
 ```
 
-#### importBookmarkJson
+### importBookmarkJson
 Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
 
 Parameters:
@@ -1367,7 +1367,7 @@ Returns a Promise.
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
-#### setCurrentPage
+### setCurrentPage
 Sets current page of the document.
 
 Parameters:
@@ -1392,7 +1392,7 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
-#### getDocumentPath
+### getDocumentPath
 Returns the path of the current document.
 
 Returns a Promise.
@@ -1409,7 +1409,7 @@ this._viewer.getDocumentPath().then((path) => {
 });
 ```
 
-#### closeAllTabs
+### closeAllTabs
 Closes all tabs in multi-tab environment.
 
 Returns a Promise.
