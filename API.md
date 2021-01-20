@@ -101,15 +101,13 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
-## DocumentView
+## DocumentView (Props)
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
-### Props
+### Document
 
-#### Document
-
-##### document
+#### document
 string, required
 
 The path or url to the document.
@@ -122,7 +120,7 @@ Example:
 />
 ```
 
-##### password
+#### password
 string, optional
 
 The password of the document, if any.
@@ -136,7 +134,7 @@ Example:
 ```
 
 
-##### isBase64String
+#### isBase64String
 bool, optional, defaults to false
 
 If true, [`document`](#document) prop will be treated as a base64 string. 
@@ -150,7 +148,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 />
 ```
 
-##### customHeaders
+#### customHeaders
 object, optional
 
 Defines custom headers to use with HTTP/HTTPS requests.
@@ -161,7 +159,7 @@ Defines custom headers to use with HTTP/HTTPS requests.
 />
 ```
 
-##### readOnly
+#### readOnly
 bool, optional, defaults to false
 
 Defines whether the viewer is read-only. If true, the UI will not allow the user to change the document.
@@ -172,7 +170,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 
-##### onDocumentLoaded
+#### onDocumentLoaded
 function, optional
 
 This function is called when the document finishes loading.
@@ -185,7 +183,7 @@ This function is called when the document finishes loading.
 />
 ```
 
-##### onDocumentError
+#### onDocumentError
 function, optional
 
 This function is called when document opening encounters an error.
@@ -198,9 +196,9 @@ This function is called when document opening encounters an error.
 />
 ```
 
-#### Button / Tool
+### Button / Tool
 
-##### disabledElements
+#### disabledElements
 array of string, optional, defaults to none
 
 Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
@@ -211,7 +209,7 @@ Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons
 />
 ```
 
-##### disabledTools
+#### disabledTools
 array of string, optional, defaults to none
 
 Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/Config/Config.js) constants.
@@ -222,7 +220,7 @@ Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./
 />
 ```
 
-##### onToolChanged
+#### onToolChanged
 function, optional
 
 This function is called when the current tool changes to a new tool
@@ -242,9 +240,9 @@ tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.
 />
 ```
 
-#### Leading navigation button
+### Leading navigation button
 
-##### leadingNavButtonIcon
+#### leadingNavButtonIcon
 string, optional
 
 The file name of the icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise.
@@ -259,14 +257,14 @@ Example:
 
 **Note**: to add the image file to your application, please follow the steps below:
 
-###### Android
+##### Android
 1. Add the image resource to the [example/android/app/src/main/res/drawable](./example/android/app/src/main/res/drawable) directory. For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
 <img alt='demo-android' src='android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
-###### iOS
+##### iOS
 1. After pods has been installed, open the .xcworkspace file for this application in Xcode (in this case, it's [example.xcworkspace](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
 - "Project navigator"
 - "example" (or the app name)
@@ -279,7 +277,7 @@ Example:
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
 
-##### showLeadingNavButton
+#### showLeadingNavButton
 bool, optional, defaults to true
 
 Defines whether to show the leading navigation button.
@@ -290,7 +288,7 @@ Defines whether to show the leading navigation button.
 />
 ```
 
-##### onLeadingNavButtonPressed
+#### onLeadingNavButtonPressed
 function, optional
 
 This function is called when the leading navigation button is pressed.
@@ -303,16 +301,7 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
-#### thumbnailViewEditingEnabled
-bool, optional, defaults to true
-
-Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
-
-```js
-<DocumentView
-  thumbnailViewEditingEnabled={true}
-/>
-```
+### Layout
 
 #### fitMode
 string, optional, default value is 'FitWidth'
@@ -336,9 +325,9 @@ Defines the layout mode of the viewer. String should be one of [Config.LayoutMod
 />
 ```
 
-#### Page
+### Page
 
-##### initialPageNumber
+#### initialPageNumber
 number, optional
 
 Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed.
@@ -349,7 +338,7 @@ Defines the initial page number that viewer displays when the document is opened
 />
 ```
 
-##### pageNumber
+#### pageNumber
 number, optional
 
 Defines the currently displayed page number. Different from [`initialPageNumber`](#initialPageNumber), changing this prop value at runtime will change the page accordingly.
@@ -360,7 +349,7 @@ Defines the currently displayed page number. Different from [`initialPageNumber`
 />
 ```
 
-##### onPageChanged
+#### onPageChanged
 function, optional
 
 This function is called when the page number has been changed.
@@ -380,9 +369,9 @@ pageNumber | int | the current page number
 />
 ```
 
-#### Zoom
+### Zoom
 
-##### onZoomChanged
+#### onZoomChanged
 function, optional
 
 This function is called when the zoom scale has been changed.
@@ -401,14 +390,14 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
-#### Toolbar
+### Toolbar
 
-##### topToolbarEnabled
+#### topToolbarEnabled
 bool, optional, defaults to true
 
 Deprecated. Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
 
-##### bottomToolbarEnabled
+#### bottomToolbarEnabled
 bool, optional, defaults to true
 
 Defines whether the bottom toolbar of the viewer is enabled.
@@ -419,7 +408,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 />
 ```
 
-##### annotationToolbars
+#### annotationToolbars
 array of objects, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
 
 Defines custom toolbars. If passed in, the default toolbars will no longer appear.
@@ -438,7 +427,7 @@ const myToolbar = {
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
-##### hideDefaultAnnotationToolbars
+#### hideDefaultAnnotationToolbars
 array of strings, optional, defaults to none
 
 Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
@@ -449,7 +438,7 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 />
 ```
 
-##### hideAnnotationToolbarSwitcher
+#### hideAnnotationToolbarSwitcher
 bool, optional, defaults to false
 
 Defines whether to show the toolbar switcher in the top toolbar.
@@ -460,7 +449,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 />
 ```
 
-##### hideTopToolbars
+#### hideTopToolbars
 bool, optional, defaults to false
 
 Defines whether to hide both the top app nav bar and the annotation toolbar.
@@ -471,7 +460,7 @@ Defines whether to hide both the top app nav bar and the annotation toolbar.
 />
 ```
 
-##### hideTopAppNavBar
+#### hideTopAppNavBar
 bool, optional, defaults to false
 
 Defines whether to hide the top navigation app bar.
@@ -482,7 +471,7 @@ Defines whether to hide the top navigation app bar.
 />
 ```
 
-##### hideToolbarsOnTap
+#### hideToolbarsOnTap
 bool, optional, defaults to true
 
 Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
@@ -493,7 +482,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 />
 ```
 
-##### padStatusBar
+#### padStatusBar
 bool, optional, defaults to false, android only
 
 Defines whether the viewer will add padding to take account of the system status bar.
@@ -504,9 +493,9 @@ Defines whether the viewer will add padding to take account of the system status
 />
 ```
 
-#### Annotation menu
+### Annotation menu
 
-##### hideAnnotationMenu
+#### hideAnnotationMenu
 array of strings, optional, defaults to none
 
 Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
@@ -517,7 +506,7 @@ Defines annotation types that will not show in the annotation (long-press) menu.
 />
 ```
 
-##### annotationMenuItems
+#### annotationMenuItems
 array of strings, optional, default contains all the items
 
 Defines the menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
@@ -528,7 +517,7 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 />
 ```
 
-##### overrideAnnotationMenuBehavior
+#### overrideAnnotationMenuBehavior
 array of strings, optional, defaults to none
 
 Defines the menu items that will skip default behavior when pressed. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
@@ -539,7 +528,7 @@ Defines the menu items that will skip default behavior when pressed. Strings sho
 />
 ```
 
-##### onAnnotationMenuPress
+#### onAnnotationMenuPress
 function, optional
 
 This function is called when an annotation menu item passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior) is pressed.
@@ -563,9 +552,9 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
 />
 ```
 
-#### Long press menu
+### Long press menu
 
-##### longPressMenuEnabled
+#### longPressMenuEnabled
 bool, optional, defaults to true
 
 Defines whether to show the popup menu of options when the user long presses on text or blank space on the document.
@@ -576,7 +565,7 @@ Defines whether to show the popup menu of options when the user long presses on 
 />
 ```
 
-##### longPressMenuItems
+#### longPressMenuItems
 array of strings, optional, default contains all the items
 
 Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants.
@@ -587,7 +576,7 @@ Defines menu items that can show when long press on text or blank space. Strings
 />
 ```
 
-##### overrideLongPressMenuBehavior
+#### overrideLongPressMenuBehavior
 array of strings, optional, defaults to none
 
 Defines the menu items on long press that will skip default behavior when pressed. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
@@ -598,7 +587,7 @@ Defines the menu items on long press that will skip default behavior when presse
 />
 ```
 
-##### onLongPressMenuPress
+#### onLongPressMenuPress
 function, optional
 
 This function is called if the pressed long press menu item is passed in to [`overrideLongPressMenuBehavior`](#overrideLongPressMenuBehavior)
@@ -621,9 +610,9 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 />
 ```
 
-#### Behavior
+### Behavior
 
-##### overrideBehavior
+#### overrideBehavior
 array of string, optional, defaults to none
 
 Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
@@ -634,7 +623,7 @@ Defines actions that will skip default behavior, such as external link click. St
 />
 ```
 
-##### onBehaviorActivated
+#### onBehaviorActivated
 function, optional
 
 This function is called if the activated behavior is passed in to [`overrideBehavior`](#overrideBehavior)
@@ -663,9 +652,9 @@ Action | Param
 />
 ```
 
-#### multi-tab
+### multi-tab
 
-##### multiTabEnabled
+#### multiTabEnabled
 bool, optional, defaults to false
 
 Defines whether viewer will use tabs in order to have more than one document open simultaneously (like a web browser). Changing the [`document`](#document) prop value will cause a new tab to be opened with the associated file.
@@ -676,7 +665,7 @@ Defines whether viewer will use tabs in order to have more than one document ope
 />
 ```
 
-##### tabTitle
+#### tabTitle
 string, optional, default is the file name
 
 Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
@@ -688,9 +677,9 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 />
 ```
 
-#### Collaboration
+### Collaboration
 
-##### collabEnabled
+#### collabEnabled
 bool, optional, defaults to false
 
 Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work.
@@ -702,7 +691,7 @@ Defines whether to enable realtime collaboration. If true then `currentUser` mus
 />
 ```
 
-##### currentUser
+#### currentUser
 string, required if [`collabEnabled`](#collabEnabled) is set to true
 
 Defines the current user. Created annotations will have their title (author) set to this string.
@@ -714,7 +703,7 @@ Defines the current user. Created annotations will have their title (author) set
 />
 ```
 
-##### currentUserName
+#### currentUserName
 string, optional
 
 Defines the current user name. Will set the user name only if [`collabEnabled`](#collabEnabled) is true and [`currentUser`](#currentUser) is defined. This should be used only if you want the user's display name to be different than the annotation's title/author (in the case that `currentUser` is an ID rather than a human-friendly name.)
@@ -727,9 +716,9 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
-#### Annotation (Form field)
+### Annotation (Form field)
 
-##### annotationPermissionCheckEnabled
+#### annotationPermissionCheckEnabled
 bool, optional, defaults to false
 
 Defines whether an annotation's permission flags will be respected when it is selected. For example, a locked annotation can not be resized or moved.
@@ -740,7 +729,7 @@ Defines whether an annotation's permission flags will be respected when it is se
 />
 ```
 
-##### annotationAuthor
+#### annotationAuthor
 string, optional
 
 Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this piece of information.
@@ -751,7 +740,7 @@ Defines the author name for all annotations created on the current document. Exp
 />
 ```
 
-##### continuousAnnotationEditing
+#### continuousAnnotationEditing
 bool, optional, defaults to true
 
 If true, the active annotation creation tool will remain in the current annotation creation tool. Otherwise, it will revert to the "pan tool" after an annotation is created.
@@ -762,7 +751,7 @@ If true, the active annotation creation tool will remain in the current annotati
 />
 ```
 
-##### selectAnnotationAfterCreation
+#### selectAnnotationAfterCreation
 bool, optional, defaults to true
 
 Defines whether an annotation is selected after it is created. On iOS, this functions for shape and text markup annotations only.
@@ -773,7 +762,7 @@ Defines whether an annotation is selected after it is created. On iOS, this func
 />
 ```
 
-##### onExportAnnotationCommand
+#### onExportAnnotationCommand
 function, optional
 
 This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter.
@@ -794,7 +783,7 @@ xfdfCommand | string | an xfdf string containing info about the edit
 />
 ```
 
-##### onAnnotationsSelected
+#### onAnnotationsSelected
 function, optional
 
 This function is called when an annotation(s) is selected.
@@ -817,7 +806,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 />
 ```
 
-##### onAnnotationChanged
+#### onAnnotationChanged
 function, optional
 
 This function is called if a change has been made to an annotation(s) in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
@@ -841,7 +830,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 />
 ```
 
-##### onFormFieldValueChanged
+#### onFormFieldValueChanged
 function, optional
 
 This function is called if a change has been made to form field values.
@@ -864,9 +853,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 />
 ```
 
-#### Bookmark
+### Bookmark
 
-##### onBookmarkChanged
+#### onBookmarkChanged
 function, optional
 
 This function is called if a change has been made to user bookmarks.
@@ -885,9 +874,9 @@ bookmarkJson | string | the list of current bookmarks in JSON format
 />
 ```
 
-#### Signature
+### Signature
 
-##### signSignatureFieldsWithStamps
+#### signSignatureFieldsWithStamps
 bool, optional, defaults to false
 
 Defines whether signature fields will be signed with image stamps.
@@ -899,7 +888,7 @@ This is useful if you are saving XFDF to remote source.
 />
 ```
 
-##### showSavedSignatures
+#### showSavedSignatures
 bool, optional, defaults to true
 
 Defines whether to show saved signatures for re-use when using the signing tool.
@@ -910,9 +899,9 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
-#### Others
+### Thumbnail browser
 
-##### hideThumbnailFilterModes
+#### hideThumbnailFilterModes
 array of strings, optional
 
 Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/Config/Config.js) constants
@@ -923,7 +912,20 @@ Defines filter modes that should be hidden in the thumbnails browser. Strings sh
 />
 ```
 
-##### pageChangeOnTap
+#### thumbnailViewEditingEnabled
+bool, optional, defaults to true
+
+Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
+
+```js
+<DocumentView
+  thumbnailViewEditingEnabled={true}
+/>
+```
+
+### Others
+
+#### pageChangeOnTap
 bool, optional, defaults to true
 
 Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
@@ -934,7 +936,7 @@ Defines whether the viewer should change pages when the user taps the edge of a 
 />
 ```
 
-##### useStylusAsPen
+#### useStylusAsPen
 bool, optional, defaults to true
 
 Defines whether a stylus should act as a pen when in pan mode. If false, it will act as a finger.
@@ -945,7 +947,7 @@ Defines whether a stylus should act as a pen when in pan mode. If false, it will
 />
 ```
 
-##### followSystemDarkMode
+#### followSystemDarkMode
 bool, optional, Android only, defaults to true
 
 Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
@@ -956,7 +958,7 @@ Defines whether the UI will appear in a dark color when the system is dark mode.
 />
 ```
 
-##### pageIndicatorEnabled
+#### pageIndicatorEnabled
 bool, optional, defaults to true
 
 Defines whether to show the page indicator for the viewer.
@@ -967,7 +969,7 @@ Defines whether to show the page indicator for the viewer.
 />
 ```
 
-##### autoSaveEnabled
+#### autoSaveEnabled
 bool, optional, defaults to true
 
 Defines whether document is automatically saved by the viewer.
@@ -1001,7 +1003,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 />
 ```
 
-### Methods
+### DocumentView (Methods)
 
 #### setToolMode
 Sets the current tool mode.
