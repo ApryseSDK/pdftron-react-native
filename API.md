@@ -349,6 +349,28 @@ Defines the currently displayed page number. Different from [`initialPageNumber`
 />
 ```
 
+#### pageChangeOnTap
+bool, optional, defaults to true
+
+Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
+
+```js
+<DocumentView
+  pageChangeOnTap={true}
+/>
+```
+
+#### pageIndicatorEnabled
+bool, optional, defaults to true
+
+Defines whether to show the page indicator for the viewer.
+
+```js
+<DocumentView
+  pageIndicatorEnabled={true}
+/>
+```
+
 #### onPageChanged
 function, optional
 
@@ -925,17 +947,6 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 
 ### Others
 
-#### pageChangeOnTap
-bool, optional, defaults to true
-
-Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
-
-```js
-<DocumentView
-  pageChangeOnTap={true}
-/>
-```
-
 #### useStylusAsPen
 bool, optional, defaults to true
 
@@ -955,17 +966,6 @@ Defines whether the UI will appear in a dark color when the system is dark mode.
 ```js
 <DocumentView
   signSignatureFieldsWithStamps={false}
-/>
-```
-
-#### pageIndicatorEnabled
-bool, optional, defaults to true
-
-Defines whether to show the page indicator for the viewer.
-
-```js
-<DocumentView
-  pageIndicatorEnabled={true}
 />
 ```
 
