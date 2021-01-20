@@ -260,7 +260,7 @@ Example:
 ##### Android
 1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
-<img alt='demo-android' src='./android_add_resources.png'/>
+<img alt='demo-android' src='android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
@@ -272,7 +272,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-android' src='./ios_add_resources.png'/>
+<img alt='demo-android' src='ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
