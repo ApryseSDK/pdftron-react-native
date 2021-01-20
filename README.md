@@ -380,6 +380,18 @@ RNPdftron.getSystemFontList().then((fontList) => {
 });
 ```
 
+#### clearRubberStampCache
+Clear the information and bitmap cache for rubber stamps (Android only).
+This is typically useful when the content of rubber stamps has been changed in the viewer.
+
+Returns a promise.
+
+```js
+RNPdftron.clearRubberStampCache().then(() => {
+  console.log("Rubber stamp cache cleared");
+});
+```
+
 #### encryptDocument
 Encrypts (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
