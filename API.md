@@ -240,7 +240,7 @@ tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.
 />
 ```
 
-### Leading navigation button
+### Leading Navigation Button
 
 #### leadingNavButtonIcon
 string, optional
@@ -515,7 +515,7 @@ Defines whether the viewer will add padding to take account of the system status
 />
 ```
 
-### Annotation menu
+### Annotation Menu
 
 #### hideAnnotationMenu
 array of strings, optional, defaults to none
@@ -574,7 +574,7 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
 />
 ```
 
-### Long press menu
+### Long Press Menu
 
 #### longPressMenuEnabled
 bool, optional, defaults to true
@@ -674,7 +674,7 @@ Action | Param
 />
 ```
 
-### multi-tab
+### Multi-tab
 
 #### multiTabEnabled
 bool, optional, defaults to false
@@ -738,7 +738,7 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
-### Annotation (Form field)
+### Annotation (Form Field)
 
 #### annotationPermissionCheckEnabled
 bool, optional, defaults to false
@@ -921,7 +921,7 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
-### Thumbnail browser
+### Thumbnail Browser
 
 #### hideThumbnailFilterModes
 array of strings, optional
