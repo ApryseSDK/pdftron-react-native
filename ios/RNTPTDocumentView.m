@@ -177,8 +177,6 @@ NS_ASSUME_NONNULL_END
                 // Use the RNTPTDocumentController class inside the tabbed viewer.
                 tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
                 
-                [tabbedDocumentViewController.tabManager restoreItems];
-                
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
@@ -209,6 +207,12 @@ NS_ASSUME_NONNULL_END
     UIViewController *parentController = [self findParentViewController];
     if (parentController == nil || self.window == nil) {
         return;
+    }
+    
+    [self applyLeadingNavButton];
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager restoreItems];
     }
     
     RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
@@ -1540,6 +1544,33 @@ NS_ASSUME_NONNULL_END
     }
     
     // Leading Nav Icon.
+    [self applyLeadingNavButton];
+    
+    // Thumbnail Filter Mode
+    
+    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
+    
+    [filterModeArray addObject:PTThumbnailFilterAll];
+    [filterModeArray addObject:PTThumbnailFilterAnnotated];
+    [filterModeArray addObject:PTThumbnailFilterBookmarked];
+    
+    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
+        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
+        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
+        }
+    }
+    
+    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
+    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
+    
+    // Custom HTTP request headers.
+    [self applyCustomHeaders:documentViewController];
+}
+
+- (void)applyLeadingNavButton
+{
     if (self.showNavButton) {
         UIBarButtonItem* navButton = self.leadingNavButtonItem;
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
@@ -1589,28 +1620,6 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
-    
-    // Thumbnail Filter Mode
-    
-    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
-    
-    [filterModeArray addObject:PTThumbnailFilterAll];
-    [filterModeArray addObject:PTThumbnailFilterAnnotated];
-    [filterModeArray addObject:PTThumbnailFilterBookmarked];
-    
-    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
-        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
-            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
-        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
-            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
-        }
-    }
-    
-    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
-    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
-    
-    // Custom HTTP request headers.
-    [self applyCustomHeaders:documentViewController];
 }
 
 - (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
