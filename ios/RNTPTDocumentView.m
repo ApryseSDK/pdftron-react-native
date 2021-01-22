@@ -2877,6 +2877,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Get Zoom
+
+- (double)getZoom
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value
