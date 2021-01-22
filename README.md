@@ -1696,6 +1696,17 @@ Returns a Promise.
 this._viewer.closeAllTabs();
 ```
 
+##### getZoom
+Returns the current zoom scale of the document.
+
+Returns a Promise.
+
+```js
+this._viewer.getZoom().then((zoom) => {
+  console.log('Zoom scale of the current document is:', zoom)
+});
+```
+
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
 
