@@ -333,6 +333,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
+    public void getZoom(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    double zoom = mDocumentViewInstance.getZoom(tag);
+                    promise.resolve(zoom);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);
