@@ -1005,7 +1005,45 @@ import { DocumentView, Config } from 'react-native-pdftron';
 
 ## DocumentView - Methods
 
-### setToolMode
+### Document
+
+#### getDocumentPath
+Returns the path of the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the document path
+
+```js
+this._viewer.getDocumentPath().then((path) => {
+  console.log('The path to current document is: ' + path);
+});
+```
+
+#### saveDocument
+Saves the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+filePath | string | the location of the saved document
+
+```js
+this._viewer.saveDocument().then((filePath) => {
+  console.log('saveDocument:', filePath);
+});
+```
+
+### Tool
+
+#### setToolMode
 Sets the current tool mode.
 
 Parameters:
@@ -1018,7 +1056,7 @@ toolMode | string | One of [Config.Tools](./src/Config/Config.js) string constan
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
 ```
 
-### commitTool
+#### commitTool
 Commits the current tool, only available for multi-stroke ink and poly-shape.
 
 Returns a Promise.
@@ -1035,7 +1073,9 @@ this._viewer.commitTool().then((committed) => {
 });
 ```
 
-### getPageCount
+### Page
+
+#### getPageCount
 Gets the current page count of the document.
 
 Returns a Promise.
@@ -1052,7 +1092,77 @@ this._viewer.getPageCount().then((pageCount) => {
 });
 ```
 
-### importAnnotations
+#### setCurrentPage
+Sets current page of the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.setCurrentPage(4).then((success) => {
+  if (success) {
+    console.log("Current page is set to 4.");
+  }
+});
+```
+
+#### getPageCropBox
+Gets the crop box for specified page as a JSON object.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number for the target crop box. It is 1-indexed
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+cropBox | object | an object with information about position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
+
+```js
+this._viewer.getPageCropBox(1).then((cropBox) => {
+  console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
+  console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
+  console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+### Annotation (Form Field)
+
+#### importAnnotationCommand
+Imports remote annotation command to local document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+xfdfCommand | string | the XFDF command string
+initialLoad | bool | whether this is for initial load. Will be false by default
+
+Returns a Promise.
+
+```js
+const xfdfCommand = 'xfdfCommand <?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
+this._viewer.importAnnotationCommand(xfdf);
+
+```
+
+#### importAnnotations
 Imports XFDF annotation string to the current document.
 
 Parameters:
@@ -1068,7 +1178,7 @@ const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.ado
 this._viewer.importAnnotations(xfdf);
 ```
 
-### exportAnnotations
+#### exportAnnotations
 Extracts XFDF from the current document.
 
 Parameters:
@@ -1103,7 +1213,7 @@ this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
 });
 ```
 
-### flattenAnnotations
+#### flattenAnnotations
 Flattens the forms and (optionally) annotations in the current document.
 
 Parameters:
@@ -1119,7 +1229,7 @@ Returns a Promise.
 this._viewer.flattenAnnotations(false);
 ```
 
-### deleteAnnotations
+#### deleteAnnotations
 Deletes the specified annotations in the current document.
 
 Parameters:
@@ -1144,102 +1254,7 @@ this._viewer.deleteAnnotations([
 ]);
 ```
 
-### saveDocument
-Saves the current document.
-
-Returns a Promise.
-
-Promise Parameters:
-
-Name | Type | Description
---- | --- | ---
-filePath | string | the location of the saved document
-
-```js
-this._viewer.saveDocument().then((filePath) => {
-  console.log('saveDocument:', filePath);
-});
-```
-
-### setFlagForFields
-Sets a field flag value on one or more form fields.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-fields | array | list of field names for which the flag should be set
-flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/Config/Config.js) constant
-value | bool | value to set for flag
-
-Returns a Promise.
-
-```js
-this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
-```
-
-### setValuesForFields
-Sets field values on one or more form fields.
-
-Note: the old function `setValueForFields` is deprecated. Please use this one instead.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-fieldsMap | object | map of field names and values which should be set
-
-Returns a Promise.
-
-```js
-this._viewer.setValuesForFields({
-  'textField1': 'Test',
-  'textField2': 1234,
-  'checkboxField1': true,
-  'checkboxField2': false,
-  'radioButton1': 'Yes',
-  'radioButton2': 'No'
-});
-```
-
-### importAnnotationCommand
-Imports remote annotation command to local document.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-xfdfCommand | string | the XFDF command string
-initialLoad | bool | whether this is for initial load. Will be false by default
-
-Returns a Promise.
-
-```js
-const xfdfCommand = 'xfdfCommand <?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
-this._viewer.importAnnotationCommand(xfdf);
-
-```
-
-### handleBackButton
-Handles the back button in search mode. Android only.
-
-Returns a Promise.
-
-Promise Parameters:
-
-Name | Type | Description
---- | --- | ---
-handled | bool | whether the back button is handled successfully
-
-```js
-this._viewer.handleBackButton().then((handled) => {
-  if (!handled) {
-    BackHandler.exitApp();
-  }
-});
-```
-
-### selectAnnotation
+#### selectAnnotation
 Selects the specified annotation in the current document.
 
 Parameters:
@@ -1256,7 +1271,7 @@ Returns a Promise.
 this._viewer.selectAnnotation('annotId1', 1);
 ```
 
-### setFlagsForAnnotations
+#### setFlagsForAnnotations
 Sets flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
 
 Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
@@ -1287,7 +1302,7 @@ this._viewer.setFlagsForAnnotations([
 ]);
 ```
 
-### setPropertiesForAnnotation
+#### setPropertiesForAnnotation
 Sets properties for specified annotation in the current document, if it is valid. 
 
 Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
@@ -1327,14 +1342,49 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
-### getPageCropBox
-Gets the crop box for specified page as a JSON object.
+#### setFlagForFields
+Sets a field flag value on one or more form fields.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | integer | the page number for the target crop box. It is 1-indexed
+fields | array | list of field names for which the flag should be set
+flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/Config/Config.js) constant
+value | bool | value to set for flag
+
+Returns a Promise.
+
+```js
+this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
+```
+
+#### setValuesForFields
+Sets field values on one or more form fields.
+
+Note: the old function `setValueForFields` is deprecated. Please use this one instead.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldsMap | object | map of field names and values which should be set
+
+Returns a Promise.
+
+```js
+this._viewer.setValuesForFields({
+  'textField1': 'Test',
+  'textField2': 1234,
+  'checkboxField1': true,
+  'checkboxField2': false,
+  'radioButton1': 'Yes',
+  'radioButton2': 'No'
+});
+```
+
+### handleBackButton
+Handles the back button in search mode. Android only.
 
 Returns a Promise.
 
@@ -1342,17 +1392,19 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-cropBox | object | an object with information about position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
+handled | bool | whether the back button is handled successfully
 
 ```js
-this._viewer.getPageCropBox(1).then((cropBox) => {
-  console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
-  console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
-  console.log('width and height:', cropBox.width, cropBox.height);
+this._viewer.handleBackButton().then((handled) => {
+  if (!handled) {
+    BackHandler.exitApp();
+  }
 });
 ```
 
-### importBookmarkJson
+### Bookmark
+
+#### importBookmarkJson
 Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
 
 Parameters:
@@ -1367,49 +1419,9 @@ Returns a Promise.
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
-### setCurrentPage
-Sets current page of the document.
+### Multi-tab
 
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-pageNumber | integer | the page number for the target crop box. It is 1-indexed
-
-Returns a Promise.
-
-Promise Parameters:
-
-Name | Type | Description
---- | --- | ---
-success | bool | whether the setting process was successful
-
-```js
-this._viewer.setCurrentPage(4).then((success) => {
-  if (success) {
-    console.log("Current page is set to 4.");
-  }
-});
-```
-
-### getDocumentPath
-Returns the path of the current document.
-
-Returns a Promise.
-
-Promise Parameters:
-
-Name | Type | Description
---- | --- | ---
-path | string | the document path
-
-```js
-this._viewer.getDocumentPath().then((path) => {
-  console.log('The path to current document is: ' + path);
-});
-```
-
-### closeAllTabs
+#### closeAllTabs
 Closes all tabs in multi-tab environment.
 
 Returns a Promise.
