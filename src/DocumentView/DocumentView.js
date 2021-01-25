@@ -84,7 +84,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onDocumentLoaded) {
       if (this.props.onDocumentLoaded) {
-        this.props.onDocumentLoaded();
+        this.props.onDocumentLoaded(event.nativeEvent.onDocumentLoaded);
       }
     } else if (event.nativeEvent.onPageChanged) {
       if (this.props.onPageChanged) {
@@ -363,6 +363,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.closeAllTabs(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getZoom = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getZoom(tag);
     }
     return Promise.resolve();
   }

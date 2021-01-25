@@ -48,6 +48,7 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (double)getZoom:(NSNumber *)tag;
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

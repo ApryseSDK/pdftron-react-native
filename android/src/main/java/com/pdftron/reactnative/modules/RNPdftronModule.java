@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
+import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
@@ -42,6 +43,42 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @ReactMethod
+    public void getSystemFontList(final Promise promise) {
+        String fontList = null;
+        Exception exception = null;
+        try {
+            fontList = PDFNet.getSystemFontList();
+        } catch (Exception e) {
+            exception = e;
+        }
+
+        String finalFontList = fontList;
+        Exception finalException = exception;
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (finalFontList != null) {
+                    promise.resolve(finalFontList);
+                } else {
+                    promise.reject(finalException);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void clearRubberStampCache(final Promise promise) {
+        StandardStampOption.clearCache(getReactApplicationContext());
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                promise.resolve(null);
+            }
+        });
     }
 
     @ReactMethod
