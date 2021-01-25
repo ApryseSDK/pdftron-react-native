@@ -2837,11 +2837,31 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
-#pragma mark - Set Current Page
+#pragma mark - Set Page
 
 - (bool)setCurrentPage:(NSInteger)pageNumber {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
+- (bool)gotoPreviousPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoPreviousPage];
+}
+
+- (bool)gotoNextPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoNextPage];
+}
+
+- (bool)gotoFirstPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoFirstPage];
+}
+
+- (bool)gotoLastPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoLastPage];
 }
 
 #pragma mark - Get Document Path

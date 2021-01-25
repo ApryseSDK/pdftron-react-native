@@ -359,6 +359,38 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  gotoPreviousPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoPreviousPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoNextPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoNextPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoFirstPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoFirstPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoLastPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoLastPage(tag);
+    }
+    return Promise.resolve();
+  }
+
   closeAllTabs = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
