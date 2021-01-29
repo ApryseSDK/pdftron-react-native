@@ -117,7 +117,7 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
 
-### Document
+### Open a Document
 
 #### document
 string, required
@@ -208,7 +208,7 @@ This function is called when document opening encounters an error.
 />
 ```
 
-### Button / Tool
+### UI Customization
 
 #### disabledElements
 array of string, optional, defaults to none
@@ -251,8 +251,6 @@ tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.
   }}
 />
 ```
-
-### Leading Navigation Button
 
 #### leadingNavButtonIcon
 string, optional
@@ -310,6 +308,109 @@ This function is called when the leading navigation button is pressed.
   onLeadingNavButtonPressed = {() => { 
     console.log('The leading nav has been pressed'); 
   }}
+/>
+```
+
+### Toolbar Customization
+
+#### topToolbarEnabled
+bool, optional, defaults to true
+
+Deprecated. Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
+
+#### bottomToolbarEnabled
+bool, optional, defaults to true
+
+Defines whether the bottom toolbar of the viewer is enabled.
+
+```js
+<DocumentView
+  bottomToolbarEnabled={false}
+/>
+```
+
+#### annotationToolbars
+array of objects, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
+
+Defines custom toolbars. If passed in, the default toolbars will no longer appear.
+It is possible to mix and match with default toolbars. See example below:
+
+```js
+const myToolbar = {
+  [Config.CustomToolbarKey.Id]: 'myToolbar',
+  [Config.CustomToolbarKey.Name]: 'myToolbar', 
+  [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
+  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+};
+
+...
+<Documentview
+  annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+/>
+```
+#### hideDefaultAnnotationToolbars
+array of strings, optional, defaults to none
+
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
+
+```js
+<DocumentView
+  hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
+/>
+```
+
+#### hideAnnotationToolbarSwitcher
+bool, optional, defaults to false
+
+Defines whether to show the toolbar switcher in the top toolbar.
+
+```js
+<DocumentView
+  hideAnnotationToolbarSwitcher={false}
+/>
+```
+
+#### hideTopToolbars
+bool, optional, defaults to false
+
+Defines whether to hide both the top app nav bar and the annotation toolbar.
+
+```js
+<DocumentView
+  hideTopToolbars={false}
+/>
+```
+
+#### hideTopAppNavBar
+bool, optional, defaults to false
+
+Defines whether to hide the top navigation app bar.
+
+```js
+<DocumentView
+  hideAnnotationToolbarSwitcher={false}
+/>
+```
+
+#### hideToolbarsOnTap
+bool, optional, defaults to true
+
+Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
+
+```js
+<DocumentView
+  hideToolbarsOnTap={false}
+/>
+```
+
+#### padStatusBar
+bool, optional, defaults to false, android only
+
+Defines whether the viewer will add padding to take account of the system status bar.
+
+```js
+<DocumentView
+  padStatusBar={true}
 />
 ```
 
@@ -421,109 +522,6 @@ zoom | double | the current zoom ratio of the document
   onZoomChanged = {(zoom) => {
     console.log('Current zoom ratio is', zoom); 
   }}
-/>
-```
-
-### Toolbar
-
-#### topToolbarEnabled
-bool, optional, defaults to true
-
-Deprecated. Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
-
-#### bottomToolbarEnabled
-bool, optional, defaults to true
-
-Defines whether the bottom toolbar of the viewer is enabled.
-
-```js
-<DocumentView
-  bottomToolbarEnabled={false}
-/>
-```
-
-#### annotationToolbars
-array of objects, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
-
-Defines custom toolbars. If passed in, the default toolbars will no longer appear.
-It is possible to mix and match with default toolbars. See example below:
-
-```js
-const myToolbar = {
-  [Config.CustomToolbarKey.Id]: 'myToolbar',
-  [Config.CustomToolbarKey.Name]: 'myToolbar', 
-  [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
-  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
-};
-
-...
-<Documentview
-  annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
-/>
-```
-#### hideDefaultAnnotationToolbars
-array of strings, optional, defaults to none
-
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
-
-```js
-<DocumentView
-  hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
-/>
-```
-
-#### hideAnnotationToolbarSwitcher
-bool, optional, defaults to false
-
-Defines whether to show the toolbar switcher in the top toolbar.
-
-```js
-<DocumentView
-  hideAnnotationToolbarSwitcher={false}
-/>
-```
-
-#### hideTopToolbars
-bool, optional, defaults to false
-
-Defines whether to hide both the top app nav bar and the annotation toolbar.
-
-```js
-<DocumentView
-  hideTopToolbars={false}
-/>
-```
-
-#### hideTopAppNavBar
-bool, optional, defaults to false
-
-Defines whether to hide the top navigation app bar.
-
-```js
-<DocumentView
-  hideAnnotationToolbarSwitcher={false}
-/>
-```
-
-#### hideToolbarsOnTap
-bool, optional, defaults to true
-
-Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
-
-```js
-<DocumentView
-  hideToolbarsOnTap={false}
-/>
-```
-
-#### padStatusBar
-bool, optional, defaults to false, android only
-
-Defines whether the viewer will add padding to take account of the system status bar.
-
-```js
-<DocumentView
-  padStatusBar={true}
 />
 ```
 
@@ -644,7 +642,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 />
 ```
 
-### Behavior
+### Custom Behavior
 
 #### overrideBehavior
 array of string, optional, defaults to none
@@ -750,7 +748,7 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
-### Annotation (Form Field)
+### Annotations
 
 #### annotationPermissionCheckEnabled
 bool, optional, defaults to false
@@ -1053,7 +1051,7 @@ this._viewer.saveDocument().then((filePath) => {
 });
 ```
 
-### Tool
+### Annotation Tools
 
 #### setToolMode
 Sets the current tool mode.
@@ -1154,7 +1152,7 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 });
 ```
 
-### Annotation (Form Field)
+### Import/Export Annotations
 
 #### importAnnotationCommand
 Imports remote annotation command to local document.
@@ -1224,6 +1222,8 @@ this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
   console.log('XFDF for 2 specified annotations', xfdf);
 });
 ```
+
+### Annotations
 
 #### flattenAnnotations
 Flattens the forms and (optionally) annotations in the current document.
@@ -1395,7 +1395,9 @@ this._viewer.setValuesForFields({
 });
 ```
 
-### handleBackButton
+### Navigation
+
+#### handleBackButton
 Handles the back button in search mode. Android only.
 
 Returns a Promise.
