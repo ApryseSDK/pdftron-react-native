@@ -1444,3 +1444,22 @@ Returns a Promise.
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
 ```
+
+### Zoom
+
+#### getZoom
+Returns the current zoom scale of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | current zoom scale in the viewer
+
+```js
+this._viewer.getZoom().then((zoom) => {
+  console.log('Zoom scale of the current document is:', zoom);
+});
+```
