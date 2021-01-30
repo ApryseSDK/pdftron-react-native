@@ -66,8 +66,6 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
-    _zoomEnabled = YES;
-    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
 }
@@ -1613,20 +1611,6 @@ NS_ASSUME_NONNULL_END
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
-    
-    // Zoom
-    [pdfViewCtrl setZoomEnabled:self.zoomEnabled];
-    [self applyZoom:pdfViewCtrl];
-    if (self.zoomLimit && self.zoomLimit[PTZoomLimitRelativeKey] && self.zoomLimit[PTZoomLimitMinKey] && self.zoomLimit[PTZoomLimitMaxKey]) {
-        
-        bool isRelative = [(NSNumber *)self.zoomLimit[PTZoomLimitRelativeKey] boolValue];
-        TrnZoomLimitMode limitMode = isRelative ? e_trn_zoom_limit_relative : e_trn_zoom_limit_absolute;
-        
-        double zoomMin = [(NSNumber *)self.zoomLimit[PTZoomLimitMinKey] doubleValue];
-        double zoomMax = [(NSNumber *)self.zoomLimit[PTZoomLimitMaxKey] doubleValue];
-        
-        [pdfViewCtrl SetZoomLimits:limitMode Minimum:zoomMin Maxiumum:zoomMax];
-    }
 }
 
 - (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
@@ -1909,43 +1893,59 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - zoom
 
-- (void)setZoom:(NSDictionary<NSString *, id> *)zoom
+- (void)setZoom:(double)zoom
 {
-    _zoom = [zoom copy];
-    
-    [self applyViewerSettings];
-}
-
-- (void)applyZoom:(PTPDFViewCtrl *)pdfViewCtrl {
-    if (self.zoom) {
-        if (!self.zoom[PTZoomScaleKey]) {
-            return;
-        }
-        double zoomScale = [(NSNumber *)self.zoom[PTZoomScaleKey] doubleValue];
-        NSDictionary *zoomCenter = (NSDictionary *)self.zoom[PTZoomCenterKey];
-        NSNumber* zoomX = zoomCenter[PTZoomCenterXKey];
-        NSNumber* zoomY = zoomCenter[PTZoomCenterYKey];
-        
-        if (zoomX && zoomY) {
-            [pdfViewCtrl SetZoomX:[zoomX intValue] Y:[zoomY intValue] Zoom:zoomScale];
-        } else {
-            [pdfViewCtrl SetZoom:zoomScale];
-        }
+    _zoom = zoom;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SetZoom:zoom];
     }
 }
 
-- (void)setZoomEnabled:(BOOL)zoomEnabled
+- (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
 {
-    _zoomEnabled = zoomEnabled;
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
-    [self applyViewerSettings];
+    if ([zoomLimitMode isEqualToString:PTZoomLimitAbsoluteKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_absolute Minimum:minimum Maxiumum:maximum];
+    } else if ([zoomLimitMode isEqualToString:PTZoomLimitRelativeKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_relative Minimum:minimum Maxiumum:maximum];
+    } else if ([zoomLimitMode isEqualToString:PTZoomLimitNoneKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_none Minimum:minimum Maxiumum:maximum];
+    }
 }
 
-- (void)setZoomLimit:(NSDictionary<NSString *, id> *)zoomLimit
+- (void)zoomWithCenter:(double)zoom x:(int)x y:(int)y
 {
-    _zoomLimit = [zoomLimit copy];
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
-    [self applyViewerSettings];
+    [pdfViewCtrl SetZoomX:x Y:y Zoom:zoom];
+}
+
+- (void)zoomToRect:(int)pageNumber rect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    
+    if (rectX1 && rectY1 && rectX2 && rectY2) {
+        PTPDFRect* rect = [[PTPDFRect alloc] initWithX1:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+        [pdfViewCtrl ShowRect:pageNumber rect:rect];
+    }
+}
+
+- (void)smartZoom:(int)x y:(int)y animated:(BOOL)animated
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    [pdfViewCtrl SmartZoomX:(double)x y:(double)y animated:animated];
 }
 
 #pragma mark - Convenience
@@ -2148,8 +2148,6 @@ NS_ASSUME_NONNULL_END
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
-    
-    [self applyZoom:documentViewController.pdfViewCtrl];
     
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;

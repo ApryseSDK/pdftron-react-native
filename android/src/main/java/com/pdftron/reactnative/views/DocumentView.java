@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -112,12 +114,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
-
-    private double zoomScale = -1;
-    private int zoomCenterX = 0;
-    private int zoomCenterY = 0;
-
-    private boolean zoomEnabled = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -586,42 +582,68 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
     }
 
-    public void setZoom(ReadableMap zoom) {
-        zoomScale = zoom.getDouble(KEY_zoomScale);
-
-        ReadableMap center = zoom.getMap(KEY_zoomCenter);
-        if (center != null) {
-            zoomCenterX = center.getInt(KEY_zoomCenterX);
-            zoomCenterY = center.getInt(KEY_zoomCenterY);
-        }
-
+    public void setZoom(double zoom) {
         if (getPdfViewCtrlTabFragment() != null &&
                 getPdfViewCtrlTabFragment().isDocumentReady()) {
-            if (center != null) {
-                getPdfViewCtrl().setZoom(zoomCenterX, zoomCenterY, zoomScale);
-            } else {
-                getPdfViewCtrl().setZoom(zoomScale);
+            getPdfViewCtrl().setZoom(zoom);
+        }
+    }
+
+    public void setZoomLimits(String zoomLimitMode, double minimum, double maximum) {
+        if (getPdfViewCtrl() != null) {
+
+            PDFViewCtrl.ZoomLimitMode limitMode = null;
+
+            switch (zoomLimitMode) {
+                case KEY_zoomLimitAbsolute:
+                    limitMode = PDFViewCtrl.ZoomLimitMode.ABSOLUTE;
+                    break;
+                case KEY_zoomLimitRelative:
+                    limitMode = PDFViewCtrl.ZoomLimitMode.RELATIVE;
+                    break;
+                case KEY_zoomLimitNone:
+                    limitMode = PDFViewCtrl.ZoomLimitMode.NONE;
+                    break;
+            }
+
+
+            if (limitMode != null) {
+                try {
+                    getPdfViewCtrl().setZoomLimits(limitMode, minimum, maximum);
+                } catch (PDFNetException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
 
-    public void setZoomEnabled(boolean zoomEnabled) {
-        this.zoomEnabled = zoomEnabled;
+    public void zoomWithCenter(double zoom, int x, int y) {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setZoom(x, y, zoom);
+        }
     }
 
-    public void setZoomLimit(ReadableMap zoomLimit) {
+    public void zoomToRect(int pageNumber, ReadableMap rectMap) {
         if (getPdfViewCtrl() != null) {
-            boolean relative = zoomLimit.getBoolean(KEY_zoomLimitRelative);
-            PDFViewCtrl.ZoomLimitMode limitMode = relative ? PDFViewCtrl.ZoomLimitMode.RELATIVE : PDFViewCtrl.ZoomLimitMode.ABSOLUTE;
-
-            double maxLimit = zoomLimit.getDouble(KEY_zoomLimitMaximum);
-            double minLimit = zoomLimit.getDouble(KEY_zoomLimitMinimum);
-
             try {
-                getPdfViewCtrl().setZoomLimits(limitMode, maxLimit, minLimit);
+                if (rectMap != null && rectMap.hasKey(KEY_x1) && rectMap.hasKey(KEY_y1) &&
+                        rectMap.hasKey(KEY_x2) && rectMap.hasKey(KEY_y2)) {
+                    double rectX1 = rectMap.getDouble(KEY_x1);
+                    double rectY1 = rectMap.getDouble(KEY_y1);
+                    double rectX2 = rectMap.getDouble(KEY_x2);
+                    double rectY2 = rectMap.getDouble(KEY_y2);
+                    com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
+                    getPdfViewCtrl().showRect(pageNumber, rect);
+                }
             } catch (PDFNetException ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    public void smartZoom(int x, int y, boolean animated) {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().smartZoom(x, y, animated);
         }
     }
 
@@ -1445,6 +1467,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().removeAnnotationsSelectionListener(mAnnotationsSelectionListener);
             getToolManager().removePdfDocModificationListener(mPdfDocModificationListener);
             getToolManager().removeToolChangedListener(mToolChangedListener);
+            getToolManager().setPreToolManagerListener(null);
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
@@ -1888,6 +1911,69 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private ToolManager.PreToolManagerListener mPreToolManagerListener = new ToolManager.PreToolManagerListener() {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onMove(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onUp(MotionEvent motionEvent, PDFViewCtrl.PriorEventMode priorEventMode) {
+            return false;
+        }
+
+        @Override
+        public boolean onScaleBegin(float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public boolean onScale(float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public boolean onScaleEnd(float v, float v1) {
+
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_ZOOM_FINISHED, ON_ZOOM_FINISHED);
+            params.putDouble(ZOOM_KEY, getPdfViewCtrl().getZoom());
+            onReceiveNativeEvent(params);
+
+            return false;
+        }
+
+        @Override
+        public boolean onLongPress(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public void onScrollChanged(int i, int i1, int i2, int i3) {
+
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onKeyUp(int i, KeyEvent keyEvent) {
+            return false;
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -1976,17 +2062,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().setReadOnly(true);
         }
 
-        if (getPdfViewCtrl() != null) {
-            getPdfViewCtrl().setZoomEnabled(zoomEnabled);
-            if (zoomScale != -1) {
-                if (zoomCenterX != 0 && zoomCenterY != 0) {
-                    getPdfViewCtrl().setZoom(zoomCenterX, zoomCenterY, zoomScale);
-                } else {
-                    getPdfViewCtrl().setZoom(zoomScale);
-                }
-            }
-        }
-
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
@@ -1995,6 +2070,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
         getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
         getToolManager().addToolChangedListener(mToolChangedListener);
+        getToolManager().setPreToolManagerListener(mPreToolManagerListener);
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);

@@ -6,6 +6,7 @@ public final class Constants {
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
+    public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
     public static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
@@ -273,12 +274,8 @@ public final class Constants {
     public static final String KEY_Config_linkPress = "linkPress";
 
     // Zoom
-    public static final String KEY_zoomScale = "scale";
-    public static final String KEY_zoomCenter = "center";
-    public static final String KEY_zoomCenterX = "x";
-    public static final String KEY_zoomCenterY = "y";
 
+    public static final String KEY_zoomLimitAbsolute = "absolute";
     public static final String KEY_zoomLimitRelative = "relative";
-    public static final String KEY_zoomLimitMinimum = "min";
-    public static final String KEY_zoomLimitMaximum = "max";
+    public static final String KEY_zoomLimitNone = "none";
 }

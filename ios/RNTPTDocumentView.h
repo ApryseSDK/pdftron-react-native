@@ -185,8 +185,8 @@ static NSString * const PTZoomCenterXKey = @"x";
 static NSString * const PTZoomCenterYKey = @"y";
 
 static NSString * const PTZoomLimitRelativeKey = @"relative";
-static NSString * const PTZoomLimitMinKey = @"min";
-static NSString * const PTZoomLimitMaxKey = @"max";
+static NSString * const PTZoomLimitAbsoluteKey = @"absolute";
+static NSString * const PTZoomLimitNoneKey = @"none";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -323,9 +323,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
-@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *zoom;
-@property (nonatomic, assign, getter=isZoomEnabled) BOOL zoomEnabled;
-@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *zoomLimit;
+@property (nonatomic) double zoom;
 
 #pragma mark - Methods
 
@@ -364,6 +362,14 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
 - (void)closeAllTabs;
+
+- (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
+
+- (void)zoomWithCenter:(double)zoom x:(int)x y:(int)y;
+
+- (void)zoomToRect:(int)pageNumber rect:(NSDictionary *)rect;
+
+- (void)smartZoom:(int)x y:(int)y animated:(BOOL)animated;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

@@ -173,4 +173,9 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+  ZoomLimitMode: {
+    None: "none",
+    Absolute: "absolute",
+    Relative: "relative",
+  }
 };

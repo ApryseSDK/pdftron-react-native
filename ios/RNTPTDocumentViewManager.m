@@ -367,24 +367,10 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(zoom, NSDictionary, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
 {
     if (json) {
-        view.zoom = [RCTConvert NSDictionary:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(zoomEnabled, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.zoomEnabled = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(zoomLimit, NSDictionary, RNTPTDocumentView)
-{
-    if (json) {
-        view.zoomLimit = [RCTConvert NSDictionary:json];
+        view.zoom = [RCTConvert double:json];
     }
 }
 
@@ -743,6 +729,45 @@ RCT_CUSTOM_VIEW_PROPERTY(zoomLimit, NSDictionary, RNTPTDocumentView)
     }
 }
 
+- (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setZoomLimits:zoomLimitMode minimum:minimum maximum:maximum];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)zoomWithCenterForDocumentViewTag:(nonnull NSNumber *)tag zoom:(double)zoom x:(int)x y:(int)y
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView zoomWithCenter:zoom x:x y:y];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)zoomToRectForDocumentViewTag:(nonnull NSNumber *)tag pageNumber:(int)pageNumber rect:(NSDictionary *)rect
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView zoomToRect:pageNumber rect:rect];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)smartZoomForDocumentViewTag:(nonnull NSNumber *)tag x:(int)x y:(int)y animated:(BOOL)animated
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView smartZoom:x y:y animated:animated];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
 #pragma mark - DocumentView attached/detached
 
 - (void)documentViewAttachedToWindow:(RNTPTDocumentView *)documentView

@@ -635,33 +635,9 @@ Name | Type | Description
 zoom | double | The current zoom scale
 
 ##### zoom
-object, optional
+number, optional
 
 To set the zoom of the current document.
-
-Parameters:
-
-Name | Type | Description
-scale | double | The target zoom scale to be set
-center | object | This is only required if you desire to zoom with a specific center, in the format of `{x: int, y: int}`.
-
-##### zoomEnabled
-bool, optional, default to true
-
-To enable or disable zooming via gesture. If false, gestures would not cause zooming, but setting it via [zoomScale](#zoomScale) is still possible.
-
-##### zoomLimit
-object, optional
-
-Sets the minimum and maximum zoom bounds of PDFViewCtrl. If relative is true, bounds are relative to the standard zoom scale in the current viewer based on the defined [fitMode](#fitMode).
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-min | double | The minimum zoom bound
-max | double | The maximum zoom bound
-relative | bool | Whether bounds are relative to the standard zoom scale in the current viewer based on fitmode
 
 Example:
 
@@ -1018,6 +994,73 @@ this._viewer.getDocumentPath().then((path) => {
 
 ##### closeAllTabs
 Closes all tabs in multi-tab environment.
+
+##### setZoomLimits
+Sets the minimum and maximum zoom bounds of current viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+minimum | double | the lower bound of the zoom limit range
+maximum | double | the upper bound of the zoom limit range
+
+Return a Promise.
+
+```js
+this._viewer.setZoomLimits(Config.ZoomLimitMode.Absolute, 1.0, 3.5);
+```
+
+##### zoomWithCenter
+Sets the zoom scale in the current document viewer with a zoom center.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the zoom ratio to be set
+x | int | the x-coordinate of the zoom center
+y | int | the y-coordinate of the zoom center
+
+Return a Promise.
+
+```js
+this._viewer.zoomWithCenter(3.0, 100, 300);
+```
+
+##### zoomToRect
+Zoom the viewer to a specific rectangular area in a page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page number of the zooming area (1-indexed)
+rect | map | The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
+
+Return a Promise.
+
+```js
+this._viewer.zoomToRect(3, {'x1': 1.0, 'y1': 2.0, 'x2': 3.0, 'y2': 4.0});
+```
+
+##### smartZoom
+Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
+
+Parameters:
+
+Name | Type | Description
+-- | -- | --
+x | int | the x-coordinate of the target coordinate
+y | int | the y-coordinate of the target coordinate
+animated | bool | whether the transition is animated
+
+Return a Promise.
+
+```js
+this._viewer.smartZoom(100, 200, true);
+```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
