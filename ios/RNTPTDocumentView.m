@@ -2885,6 +2885,46 @@ NS_ASSUME_NONNULL_END
     return pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
 }
 
+#pragma mark - Scroll Pos
+
+- (void)setHorizontalScrollPos:(double)horizontalScrollPos
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetHScrollPos:horizontalScrollPos];
+}
+
+- (void)setVerticalScrollPos:(double)verticalScrollPos
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetVScrollPos:verticalScrollPos];
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)getScrollPos
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    NSDictionary<NSString *, NSNumber *> * scrollPos = @{
+        PTScrollHorizontalKey: [[NSNumber alloc] initWithDouble:[pdfViewCtrl GetHScrollPos]],
+        PTScrollVerticalKey: [[NSNumber alloc] initWithDouble:[pdfViewCtrl GetVScrollPos]],
+    };
+    
+    return scrollPos;
+}
+
+# pragma mark - Canvas Size
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSize
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    NSDictionary<NSString *, NSNumber *> * canvasSize = @{
+        PTRectWidthKey: [[NSNumber alloc] initWithDouble:[pdfViewCtrl GetCanvasWidth]],
+        PTRectHeightKey: [[NSNumber alloc] initWithDouble:[pdfViewCtrl GetCanvasHeight]],
+    };
+    
+    return canvasSize;
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value
