@@ -301,6 +301,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
 @property (nonatomic, copy, nullable) NSString *tabTitle;
+@property (nonatomic, assign) int maxTabCount;
 
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
