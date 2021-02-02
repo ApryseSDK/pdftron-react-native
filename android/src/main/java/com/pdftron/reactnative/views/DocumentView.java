@@ -187,6 +187,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder
                 .fullscreenModeEnabled(false)
                 .multiTabEnabled(false)
+                .maximumTabCount(Integer.MAX_VALUE)
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
                 .skipReadOnlyCheck(true);
@@ -419,6 +420,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setTabTitle(String tabTitle) {
         mTabTitle = tabTitle;
+    }
+
+    public void setMaxTabCount(int maxTabCount) {
+        mBuilder = mBuilder.maximumTabCount(maxTabCount);
     }
 
     public void setThumbnailViewEditingEnabled(boolean thumbnailViewEditingEnabled) {
