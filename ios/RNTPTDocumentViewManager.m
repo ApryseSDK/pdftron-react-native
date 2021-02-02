@@ -220,6 +220,13 @@ RCT_CUSTOM_VIEW_PROPERTY(tabTitle, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(maxTabCount, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.maxTabCount = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -475,11 +482,18 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
 {
     if (sender.onChange) {
-        sender.onChange(@{
-            @"onExportAnnotationCommand": @"onExportAnnotationCommand",
-            @"action": action,
-            @"xfdfCommand": (xfdfCommand ?: @""),
-        });
+        if (xfdfCommand) {
+            sender.onChange(@{
+                @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+                @"action": action,
+                @"xfdfCommand": (xfdfCommand ?: @""),
+            });
+        } else {
+            sender.onChange(@{
+                @"onExportAnnotationCommand": @"onExportAnnotationCommand",
+                @"error": @"XFDF command cannot be generated"
+            });
+        }
     }
 }
 
@@ -508,10 +522,18 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
 - (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson
 {
     if (sender.onChange) {
-        sender.onChange(@{
-            @"onBookmarkChanged": @"onBookmarkChanged",
-            @"bookmarkJson": bookmarkJson,
-        });
+        if (bookmarkJson) {
+            sender.onChange(@{
+                @"onBookmarkChanged": @"onBookmarkChanged",
+                @"bookmarkJson": bookmarkJson,
+            });
+        } else {
+            sender.onChange(@{
+                @"onBookmarkChanged": @"onBookmarkChanged",
+                @"error": @"Bookmark cannot be exported"
+            });
+        }
+        
     }
 }
 
@@ -724,6 +746,17 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView closeAllTabs];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (double)getZoom:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        double zoom = [documentView getZoom];
+        return zoom;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

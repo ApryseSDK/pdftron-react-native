@@ -66,6 +66,8 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
+    _maxTabCount = NSUIntegerMax;
+    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
 }
@@ -172,12 +174,11 @@ NS_ASSUME_NONNULL_END
         } else {
             if ([self isMultiTabEnabled]) {
                 PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
+                tabbedDocumentViewController.maximumTabCount = self.maxTabCount;
                 tabbedDocumentViewController.delegate = self;
                 
                 // Use the RNTPTDocumentController class inside the tabbed viewer.
                 tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
-                
-                [tabbedDocumentViewController.tabManager restoreItems];
                 
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
@@ -209,6 +210,12 @@ NS_ASSUME_NONNULL_END
     UIViewController *parentController = [self findParentViewController];
     if (parentController == nil || self.window == nil) {
         return;
+    }
+    
+    [self applyLeadingNavButton];
+    
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController.tabManager restoreItems];
     }
     
     RNTPTNavigationController *navigationController = [[RNTPTNavigationController alloc] initWithRootViewController:self.viewController];
@@ -1540,6 +1547,33 @@ NS_ASSUME_NONNULL_END
     }
     
     // Leading Nav Icon.
+    [self applyLeadingNavButton];
+    
+    // Thumbnail Filter Mode
+    
+    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
+    
+    [filterModeArray addObject:PTThumbnailFilterAll];
+    [filterModeArray addObject:PTThumbnailFilterAnnotated];
+    [filterModeArray addObject:PTThumbnailFilterBookmarked];
+    
+    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
+        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
+        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
+            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
+        }
+    }
+    
+    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
+    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
+    
+    // Custom HTTP request headers.
+    [self applyCustomHeaders:documentViewController];
+}
+
+- (void)applyLeadingNavButton
+{
     if (self.showNavButton) {
         UIBarButtonItem* navButton = self.leadingNavButtonItem;
         UIImage *navImage = [UIImage imageNamed:self.navButtonPath];
@@ -1589,28 +1623,6 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
-    
-    // Thumbnail Filter Mode
-    
-    NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
-    
-    [filterModeArray addObject:PTThumbnailFilterAll];
-    [filterModeArray addObject:PTThumbnailFilterAnnotated];
-    [filterModeArray addObject:PTThumbnailFilterBookmarked];
-    
-    for (NSString * filterModeString in self.hideThumbnailFilterModes) {
-        if ([filterModeString isEqualToString:PTAnnotatedFilterModeKey]) {
-            [filterModeArray removeObject:PTThumbnailFilterAnnotated];
-        } else if ([filterModeString isEqualToString:PTBookmarkedFilterModeKey]) {
-            [filterModeArray removeObject:PTThumbnailFilterBookmarked];
-        }
-    }
-    
-    NSOrderedSet* filterModeSet = [[NSOrderedSet alloc] initWithArray:filterModeArray];
-    documentViewController.thumbnailsViewController.filterModes = filterModeSet;
-    
-    // Custom HTTP request headers.
-    [self applyCustomHeaders:documentViewController];
 }
 
 - (void)applyDocumentControllerSettings:(PTDocumentController *)documentController
@@ -2935,6 +2947,14 @@ NS_ASSUME_NONNULL_END
     if (tabManager.selectedItem) {
         [tabManager removeItem:tabManager.selectedItem];
     }
+}
+
+#pragma mark - Get Zoom
+
+- (double)getZoom
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
 }
 
 #pragma mark - Helper

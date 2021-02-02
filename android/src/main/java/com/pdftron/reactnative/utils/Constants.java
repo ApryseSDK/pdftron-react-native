@@ -219,62 +219,62 @@ public final class Constants {
 
     public static final String KEY_LINK_BEHAVIOR_DATA = "url";
 
-    public static final String KEY_annotList = "annotList";
-    public static final String KEY_annotId = "id";
-    public static final String KEY_annotPage = "pageNumber";
-    public static final String KEY_annotRect = "rect";
-    public static final String KEY_annotFlag = "flag";
-    public static final String KEY_annotFlagValue = "flagValue";
-    public static final String KEY_annotSubject = "subject";
-    public static final String KEY_annotTitle = "title";
-    public static final String KEY_annotContents = "contents";
-    public static final String KEY_annotContentRect = "contentRect";
+    public static final String KEY_ANNOTATION_LIST = "annotList";
+    public static final String KEY_ANNOTATION_ID = "id";
+    public static final String KEY_ANNOTATION_PAGE = "pageNumber";
+    public static final String KEY_ANNOTATION_RECT = "rect";
+    public static final String KEY_ANNOTATION_FLAG = "flag";
+    public static final String KEY_ANNOTATION_FLAG_VALUE = "flagValue";
+    public static final String KEY_ANNOTATION_SUBJECT = "subject";
+    public static final String KEY_ANNOTATION_TITLE = "title";
+    public static final String KEY_ANNOTATION_CONTENTS = "contents";
+    public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
 
-    public static final String KEY_action = "action";
-    public static final String KEY_action_add = "add";
-    public static final String KEY_action_modify = "modify";
-    public static final String KEY_action_delete = "delete";
-    public static final String KEY_annotations = "annotations";
-    public static final String KEY_xfdfCommand = "xfdfCommand";
-    public static final String Key_fields = "fields";
-    public static final String Key_fieldName = "fieldName";
-    public static final String Key_fieldValue = "fieldValue";
+    public static final String KEY_ACTION = "action";
+    public static final String KEY_ACTION_ADD = "add";
+    public static final String KEY_ACTION_MODIFY = "modify";
+    public static final String KEY_ACTION_DELETE = "delete";
+    public static final String KEY_ANNOTATIONS = "annotations";
+    public static final String KEY_XFDF_COMMAND = "xfdfCommand";
+    public static final String KEY_FIELDS = "fields";
+    public static final String KEY_FIELD_NAME = "fieldName";
+    public static final String KEY_FIELD_VALUE = "fieldValue";
+    public static final String KEY_ERROR = "error";
 
-    public static final String KEY_annotationMenu = "annotationMenu";
-    public static final String KEY_longPressMenu = "longPressMenu";
-    public static final String KEY_longPressText = "longPressText";
+    public static final String KEY_ANNOTATION_MENU = "annotationMenu";
+    public static final String KEY_LONG_PRESS_MENU = "longPressMenu";
+    public static final String KEY_LONG_PRESS_TEXT = "longPressText";
 
-    public static final String KEY_data = "data";
+    public static final String KEY_DATA = "data";
 
-    public static final String KEY_x1 = "x1";
-    public static final String KEY_x2 = "x2";
-    public static final String KEY_y1 = "y1";
-    public static final String KEY_y2 = "y2";
-    public static final String KEY_width = "width";
-    public static final String KEY_height = "height";
+    public static final String KEY_X1 = "x1";
+    public static final String KEY_X2 = "x2";
+    public static final String KEY_Y1 = "y1";
+    public static final String KEY_Y2 = "y2";
+    public static final String KEY_WIDTH = "width";
+    public static final String KEY_HEIGHT = "height";
 
-    public static final String KEY_annotFlagHidden = "hidden";
-    public static final String KEY_annotFlagInvisible = "invisible";
-    public static final String KEY_annotFlagLocked = "locked";
-    public static final String KEY_annotFlagLockedContents = "lockedContents";
-    public static final String KEY_annotFlagNoRotate = "noRotate";
-    public static final String KEY_flagNoView = "noView";
-    public static final String KEY_flagNoZoom = "noZoom";
-    public static final String kEY_flagPrint = "print";
-    public static final String KEY_flagReadOnly = "readOnly";
-    public static final String KEY_flagToggleNoView = "toggleNoView";
+    public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
+    public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
+    public static final String KEY_ANNOTATION_FLAG_LOCKED = "locked";
+    public static final String KEY_ANNOTATION_FLAG_LOCKED_CONTENTS = "lockedContents";
+    public static final String KEY_ANNOTATION_FLAG_NO_ROTATE = "noRotate";
+    public static final String KEY_ANNOTATION_FLAG_NO_VIEW = "noView";
+    public static final String KEY_ANNOTATION_FLAG_NO_ZOOM = "noZoom";
+    public static final String KEY_ANNOTATION_FLAG_PRINT = "print";
+    public static final String KEY_ANNOTATION_FLAG_READ_ONLY = "readOnly";
+    public static final String KEY_ANNOTATION_FLAG_TOGGLE_NO_VIEW = "toggleNoView";
 
-    public static final String KEY_bookmark_json = "bookmarkJson";
+    public static final String KEY_BOOKMARK_JSON = "bookmarkJson";
 
-    public static final String KEY_previous_tool = "previousTool";
-    public static final String KEY_tool = "tool";
+    public static final String KEY_PREVIOUS_TOOL = "previousTool";
+    public static final String KEY_TOOL = "tool";
     // EVENTS END
 
     // Config keys
     public static final String KEY_Config_linkPress = "linkPress";
 
     // Zoom
-
     public static final String KEY_zoomLimitAbsolute = "absolute";
     public static final String KEY_zoomLimitRelative = "relative";
     public static final String KEY_zoomLimitNone = "none";

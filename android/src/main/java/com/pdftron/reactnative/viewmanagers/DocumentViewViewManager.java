@@ -218,6 +218,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTabTitle(tabTitle);
     }
 
+    @ReactProp(name = "maxTabCount")
+    public void setMaxTabCount(DocumentView documentView, int maxTabCount) {
+        documentView.setMaxTabCount(maxTabCount);
+    }
+
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
@@ -471,6 +476,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return setResult;
         } else {
             throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public double getZoom(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getZoom();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
         }
     }
 

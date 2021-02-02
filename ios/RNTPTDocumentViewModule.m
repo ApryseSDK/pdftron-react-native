@@ -301,6 +301,20 @@ RCT_REMAP_METHOD(closeAllTabs,
     }
 }
 
+RCT_REMAP_METHOD(getZoom,
+                 getZoomForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        double zoom = [[self documentViewManager] getZoom:tag];
+        resolve([NSNumber numberWithDouble:zoom]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setZoomLimits,
                  setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag
                  zoomLimitMode:(NSString *)zoomLimitMode
