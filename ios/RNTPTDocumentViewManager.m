@@ -220,6 +220,13 @@ RCT_CUSTOM_VIEW_PROPERTY(tabTitle, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(maxTabCount, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.maxTabCount = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {

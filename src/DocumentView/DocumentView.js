@@ -64,6 +64,7 @@ export default class DocumentView extends PureComponent {
     useStylusAsPen: PropTypes.bool,
     multiTabEnabled: PropTypes.bool,
     tabTitle: PropTypes.string,
+    maxTabCount: PropTypes.number,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,

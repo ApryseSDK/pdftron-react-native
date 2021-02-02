@@ -66,6 +66,8 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
+    _maxTabCount = NSUIntegerMax;
+    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
 }
@@ -172,6 +174,7 @@ NS_ASSUME_NONNULL_END
         } else {
             if ([self isMultiTabEnabled]) {
                 PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
+                tabbedDocumentViewController.maximumTabCount = self.maxTabCount;
                 tabbedDocumentViewController.delegate = self;
                 
                 // Use the RNTPTDocumentController class inside the tabbed viewer.

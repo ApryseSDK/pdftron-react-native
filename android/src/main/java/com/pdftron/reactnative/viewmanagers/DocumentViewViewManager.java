@@ -218,6 +218,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTabTitle(tabTitle);
     }
 
+    @ReactProp(name = "maxTabCount")
+    public void setMaxTabCount(DocumentView documentView, int maxTabCount) {
+        documentView.setMaxTabCount(maxTabCount);
+    }
+
     @ReactProp(name = "thumbnailViewEditingEnabled")
     public void setThumbnailViewEditingEnabled(DocumentView documentView, boolean thumbnailViewEditingEnabled) {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
