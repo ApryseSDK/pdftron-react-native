@@ -709,6 +709,18 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 />
 ```
 
+#### maxTabCount
+number, optional, defaults to unlimited
+
+Sets the limit on the maximum number of tabs that the viewer could have at a time. Open more documents after reaching this limit will overwrite the old tabs.
+
+```js
+<DocumentView
+  multiTabEnabled={true} // requirement
+  maxTabCount={5}
+/>
+```
+
 ### Collaboration
 
 #### collabEnabled
