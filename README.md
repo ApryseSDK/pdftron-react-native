@@ -1,11 +1,15 @@
 # PDFTron React Native Wrapper
 
+- [API](#API)
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Components](#components)
 - [License](#license)
+
+## API
+The API page has been relocated to [here](API.md).
 
 ## Prerequisites
 - No license key is required for trial. However, a valid commercial license key is required after trial.
@@ -297,9 +301,6 @@ document="android.resource://mypackagename/raw/sample.pdf"
 ```javascript
 document="content://..."
 ```
-
-## API
-The API page has been relocated to [here](API.md).
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
