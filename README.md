@@ -9,7 +9,7 @@
 - [License](#license)
 
 ## API
-The API page has been relocated to [here](API.md).
+APIs are available on the [API page](API.md).
 
 ## Prerequisites
 - No license key is required for trial. However, a valid commercial license key is required after trial.
