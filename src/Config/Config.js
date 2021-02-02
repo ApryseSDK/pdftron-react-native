@@ -199,6 +199,7 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
   ZoomLimitMode: {
     None: "none",
     Absolute: "absolute",
