@@ -2,6 +2,8 @@
 
 ## RNPdftron
 
+RNPdftron contains global library initialization, configuration, and other utility methods.
+
 ### initialize
 Initializes PDFTron SDK with your PDFTron commercial license key. You can run PDFTron in demo mode by passing an empty string.
 
