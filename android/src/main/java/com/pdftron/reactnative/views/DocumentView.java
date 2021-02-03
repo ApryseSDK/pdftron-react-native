@@ -925,7 +925,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolModeString = TOOL_ANNOTATION_ERASER_TOOL;
                 break;
             case FREE_HIGHLIGHTER:
-                ;
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
                 break;
         }
