@@ -2182,7 +2182,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 }
             } else {
                 if (getPdfViewCtrlTabFragment() != null) {
-                    return getFilePath();
+                    return getPdfViewCtrlTabFragment().getFilePath();
                 }
             }
         }
@@ -2355,17 +2355,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (mIsBase64 && mTempFile != null) {
             return mTempFile.getAbsolutePath();
         } else if (getPdfViewCtrlTabFragment() != null) {
-            return getFilePath();
-        }
-        return null;
-    }
-
-    public String getFilePath() {
-        if (getPdfViewCtrlTabFragment().getFile() != null) {
-            return getPdfViewCtrlTabFragment().getFile().getAbsolutePath();
-        }
-        if (getPdfViewCtrlTabFragment().getUriFile() != null) {
-            return getPdfViewCtrlTabFragment().getUriFile().getPath();
+            return getPdfViewCtrlTabFragment().getFilePath();
         }
         return null;
     }
