@@ -62,9 +62,11 @@ public class ReactUtils {
             } else if (URLUtil.isHttpUrl(path) || URLUtil.isHttpsUrl(path)) {
                 // this is a link uri, let's encode the file name
                 String filename = FilenameUtils.getName(path);
-                String filepath = FilenameUtils.getFullPath(path);
+                if (filename.contains("?")) {
+                    filename = filename.substring(0, filename.indexOf("?")); // remove query params
+                }
                 String encodedName = URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
-                String newUrl = filepath + encodedName;
+                String newUrl = path.replace(filename, encodedName);
                 return Uri.parse(newUrl);
             }
             return fileUri;
