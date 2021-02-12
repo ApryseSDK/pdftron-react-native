@@ -284,7 +284,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-android' src='ios_add_resources.png'/>
+<img alt='demo-ios' src='ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
