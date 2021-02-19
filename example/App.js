@@ -23,22 +23,9 @@ export default class App extends Component<Props> {
   onLeadingNavButtonPressed = () => {
     console.log('leading nav button pressed');
     if (this._viewer) {
-      this._viewer.exportAnnotations().then((xfdf) => {
-        console.log('xfdf', xfdf);
+      this._viewer.saveDocument().then((filePath) => {
+        console.log(filePath);
       });
-    }
-
-    if (Platform.OS === 'ios') {
-      Alert.alert(
-        'App',
-        'onLeadingNavButtonPressed',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: true }
-      )
-    } else {
-      BackHandler.exitApp();
     }
   }
 
@@ -69,7 +56,7 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf";
+    const path = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png";
     const myToolbar = {
       [Config.CustomToolbarKey.Id]: 'myToolbar',
       [Config.CustomToolbarKey.Name]: 'myToolbar', 
