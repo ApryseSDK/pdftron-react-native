@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 // Array of wrapped PTExtendedAnnotTypes.
 @property (nonatomic, strong, nullable) NSArray<NSNumber *> *hideAnnotMenuToolsAnnotTypes;
 
+@property (nonatomic, strong, nullable) NSMutableArray<NSString *> *tempFilePaths;
+
 @end
 
 NS_ASSUME_NONNULL_END
@@ -52,6 +54,9 @@ NS_ASSUME_NONNULL_END
     
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
+    
+    _base64String = NO;
+    _base64Extension = @".pdf";
     
     _pageIndicatorEnabled = YES;
     _pageIndicatorShowsOnPageChange = YES;
@@ -70,6 +75,8 @@ NS_ASSUME_NONNULL_END
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
+    
+    _tempFilePaths = [[NSMutableArray alloc] init];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -122,34 +129,36 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
+    NSURL* fileURL;
     if (![self isBase64String]) {
-        // Open a file URL.
-        NSURL *fileURL = [RNTPTDocumentView PT_getFileURL:self.document];
-        
-        if (self.documentViewController) {
-            [self.documentViewController openDocumentWithURL:fileURL
-                                                    password:self.password];
-            
-            [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
-        } else {
-            [self.tabbedDocumentViewController openDocumentWithURL:fileURL
-                                                          password:self.password];
-        }
+        fileURL = [RNTPTDocumentView PT_getFileURL:self.document];
     } else {
         NSData *data = [[NSData alloc] initWithBase64EncodedString:self.document options:0];
+
+        NSMutableString *path = [[NSMutableString alloc] init];
+        [path appendFormat:@"%@tmp%@%@", NSTemporaryDirectory(), [[NSUUID UUID] UUIDString], self.base64Extension];
+
+        fileURL = [NSURL fileURLWithPath:path isDirectory:NO];
+        NSError* error;
+
+        [data writeToURL:fileURL options:NSDataWritingAtomic error:&error];
         
-        PTPDFDoc *doc = nil;
-        @try {
-            doc = [[PTPDFDoc alloc] initWithBuf:data buf_size:data.length];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        if (error) {
+            NSLog(@"Error: There was an error while trying to create a temporary file for base64 string. %@", error.localizedDescription);
             return;
         }
-        
-        [self.documentViewController openDocumentWithPDFDoc:doc];
+
+        [self.tempFilePaths addObject:path];
+    }
+    
+    if (self.documentViewController) {
+        [self.documentViewController openDocumentWithURL:fileURL
+                                                password:self.password];
         
         [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
+    } else {
+        [self.tabbedDocumentViewController openDocumentWithURL:fileURL
+                                                      password:self.password];
     }
 }
 
@@ -264,6 +273,17 @@ NS_ASSUME_NONNULL_END
 
 - (void)unloadViewController
 {
+    
+    if (self.tempFilePaths) {
+        for (NSString* path in self.tempFilePaths) {
+            NSError* error;
+            [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+            
+            if (error) {
+                NSLog(@"Error: There was an error while deleting the temporary file for base64. %@", error.localizedDescription);
+            }
+        }
+    }
     if (!self.viewController) {
         return;
     }
@@ -2864,11 +2884,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
-    if (![self isBase64String]) {
-        return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
-    } else {
-        return nil;
-    }
+    return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
 }
 
 #pragma mark - Close all tabs

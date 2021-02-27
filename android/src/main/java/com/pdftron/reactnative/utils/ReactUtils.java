@@ -26,16 +26,15 @@ import java.util.HashMap;
 public class ReactUtils {
 
     private static final String TAG = ReactUtils.class.getName();
-    private static HashMap<String, byte[]> fileTypeMap = new HashMap<>();
 
-    public static Uri getUri(Context context, String path, boolean isBase64) {
+    public static Uri getUri(Context context, String path, boolean isBase64, String base64Extension) {
         if (context == null || path == null) {
             return null;
         }
         try {
             if (isBase64) {
                 byte[] data = Base64.decode(path, Base64.DEFAULT);
-                File tempFile = File.createTempFile("tmp", getFileTypeFromBase64(data));
+                File tempFile = File.createTempFile("tmp", base64Extension);
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(tempFile);
@@ -134,42 +133,5 @@ public class ReactUtils {
             }
         }
         return array;
-    }
-
-    // This function makes use of the magical numbers for the base64 string of different file types
-    private static String getFileTypeFromBase64(byte[] byteArray) {
-        if (fileTypeMap.isEmpty()) {
-            fileTypeMap.put(".pdf", byteArray(0x25, 0x50, 0x44, 0x46, 0x2d));
-            fileTypeMap.put(".jpg", byteArray(0xff, 0xd8));
-            fileTypeMap.put(".png", byteArray(0x89, 0x50, 0x4e, 0x47));
-            fileTypeMap.put(".ico", byteArray(0x00, 0x00, 0x01, 0x00));
-            fileTypeMap.put(".gif", byteArray(0x47, 0x49, 0x46, 0x38));
-            fileTypeMap.put(".tif", byteArray(0x49, 0x49));
-        }
-
-        // iterate through supported types to match the base64 byte array
-        for (String extension : fileTypeMap.keySet()) {
-            boolean matchExtensionPattern = true;
-            byte[] extensionArray = fileTypeMap.get(extension);
-
-            for (int i = 0; i < extensionArray.length; i ++) {
-                if (i >= byteArray.length || extensionArray[i] != byteArray[i]) {
-                    matchExtensionPattern = false;
-                    break;
-                }
-            }
-            if (matchExtensionPattern) {
-                return extension;
-            }
-        }
-        return ".pdf";
-    }
-
-    private static byte[] byteArray(int... parameters) {
-        byte[] byteArray = new byte[parameters.length];
-        for (int i = 0; i < parameters.length; i ++) {
-            byteArray[i] = (byte)parameters[i];
-        }
-        return byteArray;
     }
 }

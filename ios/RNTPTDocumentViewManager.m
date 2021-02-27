@@ -41,6 +41,13 @@ RCT_CUSTOM_VIEW_PROPERTY(isBase64String, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(base64FileExtension, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.base64Extension = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(password, NSString, RNTPTDocumentView)
 {
     if (json) {
