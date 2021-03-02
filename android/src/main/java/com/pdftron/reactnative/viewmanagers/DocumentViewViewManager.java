@@ -158,6 +158,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setIsBase64String(isBase64);
     }
 
+    @ReactProp(name = "base64FileExtension")
+    public void setBase64FileExtension(DocumentView documentView, String base64Extension) {
+        documentView.setBase64FileExtension(base64Extension);
+    }
+
     @ReactProp(name = "autoSaveEnabled")
     public void setAutoSaveEnabled(DocumentView documentView, boolean autoSaveEnabled) {
         documentView.setAutoSaveEnabled(autoSaveEnabled);
