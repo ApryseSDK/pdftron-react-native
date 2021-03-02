@@ -834,7 +834,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Nullable
     private String convToolModeToString(ToolManager.ToolMode toolMode) {
         String toolModeString = null;
-        switch(toolMode) {
+        switch (toolMode) {
             case INK_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HAND;
                 break;
@@ -940,7 +940,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             case INK_ERASER:
                 toolModeString = TOOL_ANNOTATION_ERASER_TOOL;
                 break;
-            case FREE_HIGHLIGHTER:;
+            case FREE_HIGHLIGHTER:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
                 break;
         }
@@ -2197,7 +2197,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     return "";
                 }
             } else {
-                return getPdfViewCtrlTabFragment().getFilePath();
+                if (getPdfViewCtrlTabFragment() != null) {
+                    return getPdfViewCtrlTabFragment().getFilePath();
+                }
             }
         }
         return null;
@@ -2368,9 +2370,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public String getDocumentPath() {
         if (mIsBase64 && mTempFile != null) {
             return mTempFile.getAbsolutePath();
-        } else {
+        } else if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().getFilePath();
         }
+        return null;
     }
 
     public void setToolMode(String item) {

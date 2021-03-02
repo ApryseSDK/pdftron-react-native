@@ -1,11 +1,12 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "2.0.3-beta.36",
+  "version": "2.0.3-beta.45",
   "description": "React Native Pdftron",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
+    "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd .."
   },
   "repository": {
     "type": "git",

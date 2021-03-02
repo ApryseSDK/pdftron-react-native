@@ -215,6 +215,20 @@ NS_ASSUME_NONNULL_END
     [self applyLeadingNavButton];
     
     if (self.tabbedDocumentViewController) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            @try {
+                NSURL * const fileURLToRemove = PTDocumentTabManager.savedItemsURL;
+                if (!fileURLToRemove) {
+                    return;
+                }
+                [NSFileManager.defaultManager removeItemAtURL:fileURLToRemove
+                                                        error:nil];
+            }
+            @catch (...) {
+                // Ignored.
+            }
+        });
         [self.tabbedDocumentViewController.tabManager restoreItems];
     }
     
