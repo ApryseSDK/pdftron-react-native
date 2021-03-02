@@ -21,12 +21,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class ReactUtils {
 
     private static final String TAG = ReactUtils.class.getName();
-    public static final ArrayList<File> tempFiles = new ArrayList<>();
 
     public static Uri getUri(Context context, String path, boolean isBase64, String base64Extension) {
         if (context == null || path == null) {
@@ -40,7 +38,6 @@ public class ReactUtils {
                 try {
                     fos = new FileOutputStream(tempFile);
                     IOUtils.write(data, fos);
-                    tempFiles.add(tempFile);
                     return Uri.fromFile(tempFile);
                 } finally {
                     IOUtils.closeQuietly(fos);
