@@ -95,7 +95,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mDocumentPath;
     private String mTabTitle;
     private boolean mIsBase64;
-    private File mTempFile;
+    private String mBase64Extension = ".pdf";
+
+    private ArrayList<File> mTempFiles = new ArrayList<>();
 
     private FragmentManager mFragmentManagerSave; // used to deal with lifecycle issue
 
@@ -223,8 +225,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         if (mDocumentPath != null) {
             // we are switching document
-            Uri fileUri = ReactUtils.getUri(getContext(), path, mIsBase64);
+            Uri fileUri = ReactUtils.getUri(getContext(), path, mIsBase64, mBase64Extension);
+
             if (fileUri != null) {
+                if (mIsBase64) {
+                    mTempFiles.add(new File(fileUri.getPath()));
+                }
                 setDocumentUri(fileUri);
                 setViewerConfig(getConfig());
                 prepView();
@@ -371,6 +377,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setIsBase64String(boolean isBase64String) {
         mIsBase64 = isBase64String;
+    }
+
+    public void setBase64FileExtension(String base64Extension) {
+        mBase64Extension = base64Extension;
     }
 
     public void setAutoSaveEnabled(boolean autoSaveEnabled) {
@@ -992,7 +1002,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolModeString = TOOL_ANNOTATION_ERASER_TOOL;
                 break;
             case FREE_HIGHLIGHTER:
-                ;
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
                 break;
         }
@@ -1427,13 +1436,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             setSupportFragmentManager(mFragmentManagerSave);
         }
         // TODO, update base64 when ViewerBuilder supports byte array
-        Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath, mIsBase64);
+        Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath, mIsBase64, mBase64Extension);
+
         if (fileUri != null) {
+            if (mIsBase64) {
+                mTempFiles.add(new File(fileUri.getPath()));
+            }
             setDocumentUri(fileUri);
             setViewerConfig(getConfig());
-            if (mIsBase64 && fileUri.getPath() != null) {
-                mTempFile = new File(fileUri.getPath());
-            }
         }
         super.onAttachedToWindow();
 
@@ -1484,8 +1494,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
-        if (mTempFile != null && mTempFile.exists()) {
-            mTempFile.delete();
+        if (mTempFiles != null) {
+            for (File file : mTempFiles) {
+                if (file != null && file.exists()) {
+                    file.delete();
+                }
+            }
+            mTempFiles = null;
         }
     }
 
@@ -2306,16 +2321,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrlTabFragment().setSavingEnabled(true);
             getPdfViewCtrlTabFragment().save(false, true, true);
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
-            if (mIsBase64 && mTempFile != null) {
-                try {
-                    byte[] data = FileUtils.readFileToByteArray(mTempFile);
-                    return Base64.encodeToString(data, Base64.DEFAULT);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    return "";
+
+            if (getPdfViewCtrlTabFragment() != null && getPdfViewCtrlTabFragment().getFile() != null) {
+                File file = getPdfViewCtrlTabFragment().getFile();
+                if (mIsBase64) {
+                    try {
+                        byte[] data = FileUtils.readFileToByteArray(file);
+                        return Base64.encodeToString(data, Base64.DEFAULT);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return "";
+                    }
+                } else {
+                    if (getPdfViewCtrlTabFragment() != null) {
+                        return getPdfViewCtrlTabFragment().getFilePath();
+                    }
                 }
-            } else {
-                return getPdfViewCtrlTabFragment().getFilePath();
             }
         }
         return null;
@@ -2484,11 +2505,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public String getDocumentPath() {
-        if (mIsBase64 && mTempFile != null) {
-            return mTempFile.getAbsolutePath();
-        } else {
-            return getPdfViewCtrlTabFragment().getFilePath();
-        }
+        return getPdfViewCtrlTabFragment().getFilePath();
     }
 
     public void setToolMode(String item) {

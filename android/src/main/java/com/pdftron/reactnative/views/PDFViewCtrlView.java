@@ -49,7 +49,7 @@ public class PDFViewCtrlView extends PDFViewCtrl {
 
     public void setDocument(@Nonnull String path) {
         try {
-            Uri fileUri = ReactUtils.getUri(getContext(), path, false);
+            Uri fileUri = ReactUtils.getUri(getContext(), path, false, null);
             mPdfDoc = openPDFUri(fileUri, "");
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage() != null ? ex.getMessage() : "unknown error");
