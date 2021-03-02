@@ -226,7 +226,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             Uri fileUri = ReactUtils.getUri(getContext(), path, mIsBase64, mBase64Extension);
 
             if (fileUri != null) {
-                mTempFiles.add(new File(fileUri.getPath()));
+                if (mIsBase64) {
+                    mTempFiles.add(new File(fileUri.getPath()));
+                }
                 setDocumentUri(fileUri);
                 setViewerConfig(getConfig());
                 prepView();
@@ -1368,6 +1370,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         // TODO, update base64 when ViewerBuilder supports byte array
         Uri fileUri = ReactUtils.getUri(getContext(), mDocumentPath, mIsBase64, mBase64Extension);
+        if (mIsBase64) {
+            mTempFiles.add(new File(fileUri.getPath()));
+        }
+
         if (fileUri != null) {
             setDocumentUri(fileUri);
             setViewerConfig(getConfig());
