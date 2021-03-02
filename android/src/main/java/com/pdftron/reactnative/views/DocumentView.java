@@ -226,7 +226,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             Uri fileUri = ReactUtils.getUri(getContext(), path, mIsBase64, mBase64Extension);
 
             if (fileUri != null) {
-                mTempFiles.add(new File(mDocumentUri.getPath()));
+                mTempFiles.add(new File(fileUri.getPath()));
                 setDocumentUri(fileUri);
                 setViewerConfig(getConfig());
                 prepView();
