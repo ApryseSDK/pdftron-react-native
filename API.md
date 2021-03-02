@@ -147,18 +147,30 @@ Example:
 />
 ```
 
-
 #### isBase64String
 bool, optional, defaults to false
 
-If true, [`document`](#document) prop will be treated as a base64 string. 
+If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [base64FileExtension](#base64FileExtension) is required. 
 
-When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android, but not on iOS. (If you need access to a file-backed PDF on iOS, save the base64 string to disk, and open the file located at that path.)
+When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
 
 ```js
 <DocumentView
   isBase64String={true}
   document={'...'} // base 64 string
+/>
+```
+
+#### base64FileExtension
+string, required if using base64 string of a non-pdf file, defaults to ".pdf"
+
+The file extension for the base64 string in [document](#document), if [isBase64String](#isBase64String) is true.
+
+```js
+<DocumentView
+  isBase64String={true}
+  document={'...'} // base 64 string
+  base64FileExtension={'.jpeg'}
 />
 ```
 
@@ -1032,7 +1044,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ### Document
 
 #### getDocumentPath
-Returns the path of the current document.
+Returns the path of the current document. If [isBase64String](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [document](#document).
 
 Returns a Promise.
 
@@ -1049,7 +1061,7 @@ this._viewer.getDocumentPath().then((path) => {
 ```
 
 #### saveDocument
-Saves the current document.
+Saves the current document. If [isBase64String](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [document](#document).
 
 Returns a Promise.
 
@@ -1057,7 +1069,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-filePath | string | the location of the saved document
+filePath | string | the location of the saved document, or the base64 string of the pdf in the case of base64
 
 ```js
 this._viewer.saveDocument().then((filePath) => {
