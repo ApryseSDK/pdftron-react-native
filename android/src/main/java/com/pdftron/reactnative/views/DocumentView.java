@@ -94,7 +94,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mTabTitle;
     private boolean mIsBase64;
     private String mBase64Extension = ".pdf";
-    private ArrayList<File> mTempFiles = new ArrayList<>();
 
     private FragmentManager mFragmentManagerSave; // used to deal with lifecycle issue
 
@@ -1417,13 +1416,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
-        if (mTempFiles != null) {
-            for (File file : mTempFiles) {
+        if (!ReactUtils.tempFiles.isEmpty()) {
+            for (File file : ReactUtils.tempFiles) {
                 if (file != null && file.exists()) {
                     file.delete();
                 }
             }
-            mTempFiles = null;
         }
 
     }
@@ -1941,10 +1939,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }
-
-        if (mIsBase64 && mDocumentUri.getPath() != null) {
-            mTempFiles.add(new File(mDocumentUri.getPath()));
         }
 
         if (!mAutoSaveEnabled) {
