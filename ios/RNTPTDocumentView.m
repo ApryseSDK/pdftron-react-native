@@ -1280,6 +1280,57 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (NSDictionary *)getField:(NSString *)fieldName
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+    
+    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        
+        PTField *field = [doc GetField:fieldName];
+        if (field && [field IsValid]) {
+            
+            PTFieldType fieldType = [field GetType];
+            NSString* typeString;
+            if (fieldType == e_ptbutton) {
+                typeString = PTFieldTypeButtonKey;
+            } else if (fieldType == e_ptcheck) {
+                typeString = PTFieldTypeCheckboxKey;
+                [fieldMap setValue:[[NSNumber alloc] initWithBool:[field GetValueAsBool]] forKey:PTFormFieldValueKey];
+            } else if (fieldType == e_ptradio) {
+                typeString = PTFieldTypeRadioKey;
+                [fieldMap setValue:[field GetValueAsString] forKey:PTFormFieldValueKey];
+            } else if (fieldType == e_pttext) {
+                typeString = PTFieldTypeTextKey;
+                [fieldMap setValue:[field GetValueAsString] forKey:PTFormFieldValueKey];
+            } else if (fieldType == e_ptchoice) {
+                typeString = PTFieldTypeChoiceKey;
+                [fieldMap setValue:[field GetValueAsString] forKey:PTFormFieldValueKey];
+            } else if (fieldType == e_ptsignature) {
+                typeString = PTFieldTypeSignatureKey;
+            } else {
+                typeString = PTFieldTypeUnknownKey;
+            }
+            
+            [fieldMap setValue:typeString forKey:PTFormFieldTypeKey];
+            [fieldMap setValue:fieldName forKey:PTFormFieldNameKey];
+        }
+            
+        
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to get field. %@", error.localizedDescription);
+    }
+    
+    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
+}
+
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
     _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;

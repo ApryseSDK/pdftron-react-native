@@ -406,6 +406,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableMap getField(int tag, String fieldName) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getField(fieldName);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getField", "Unable to find DocumentView.");
+        }
+    }
+
+
     public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
