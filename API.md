@@ -1421,6 +1421,33 @@ this._viewer.setValuesForFields({
 });
 ```
 
+#### getField
+Get type and value information of a field using its name.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldName | string | name of the field
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+field | object | an object with information key `fieldName`, `fieldValue` (undefined for fields with no values) and `fieldType`(one of button, checkbox, radio, text, choice, signature and unknown), or undefined if such field does not exist
+
+```js
+this._viewer.getField('someFieldName').then((field) => {
+  if (field !== undefined) {
+    console.log('field name:', field.fieldName);
+    console.log('field value:', field.fieldValue);
+    console.log('field type:', field.fieldType);
+  }
+});
+```
+
 ### Navigation
 
 #### handleBackButton
