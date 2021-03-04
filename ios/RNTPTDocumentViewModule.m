@@ -209,6 +209,21 @@ RCT_REMAP_METHOD(setValuesForFields,
     }
 }
 
+RCT_REMAP_METHOD(getField,
+                 getFieldForDocumentViewTag:(nonnull NSNumber *)tag
+                 fieldName:(NSString *)fieldName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *field = [[self documentViewManager] getFieldForDocumentViewTag:tag fieldName:fieldName];
+        resolve(field);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setFlagsForAnnotations,
                  setFlagsForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  annotationFlagList:(NSArray *)annotationFlagList

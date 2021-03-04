@@ -175,6 +175,15 @@ static NSString * const PTRectHeightKey = @"height";
 
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
+static NSString * const PTFormFieldTypeKey = @"fieldType";
+
+static NSString * const PTFieldTypeUnknownKey = @"unknown";
+static NSString * const PTFieldTypeButtonKey = @"button";
+static NSString * const PTFieldTypeCheckboxKey = @"checkbox";
+static NSString * const PTFieldTypeRadioKey = @"radio";
+static NSString * const PTFieldTypeTextKey = @"text";
+static NSString * const PTFieldTypeChoiceKey = @"choice";
+static NSString * const PTFieldTypeSignatureKey = @"signature";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -337,6 +346,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
 - (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
+
+- (NSDictionary *)getField:(NSString *)fieldName;
 
 - (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 
