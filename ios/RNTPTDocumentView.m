@@ -1077,28 +1077,28 @@ NS_ASSUME_NONNULL_END
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
 
-    if (![self isBase64String]) {
-        NSString *filePath = documentViewController.coordinatedDocument.fileURL.path;
-        
-        [documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
-            if (completionHandler) {
-                completionHandler((success) ? filePath : nil);
-            }
-        }];
-    } else {
-        __block NSString *base64String = nil;
-        __block BOOL success = NO;
-        NSError *error = nil;
-        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            NSData *data = [doc SaveToBuf:0];
-            
-            base64String = [data base64EncodedStringWithOptions:0];
-            success = YES;
-        } error:&error];
+    NSString *filePath = documentViewController.coordinatedDocument.fileURL.path;
+
+    [documentViewController saveDocument:e_ptincremental completionHandler:^(BOOL success) {
         if (completionHandler) {
-            completionHandler((error == nil) ? base64String : nil);
+            if (![self isBase64String]) {
+                completionHandler((success) ? filePath : nil);
+            } else if (!success) {
+                completionHandler(nil);
+            } else {
+                __block NSString *base64String = nil;
+                NSError *error = nil;
+                [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+                    NSData *data = [doc SaveToBuf:0];
+
+                    base64String = [data base64EncodedStringWithOptions:0];
+                } error:&error];
+                if (completionHandler) {
+                    completionHandler((error == nil) ? base64String : nil);
+                }
+            }
         }
-    }
+    }];
 }
 
 #pragma mark - Annotation Flag
