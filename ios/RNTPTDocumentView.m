@@ -1800,6 +1800,7 @@ NS_ASSUME_NONNULL_END
         //PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
         //PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
         PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
+        //PTAnnotationToolbarRedaction: [NSNull null], // not implemented
         PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
         PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
     };
