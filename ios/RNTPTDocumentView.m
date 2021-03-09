@@ -2310,6 +2310,7 @@ NS_ASSUME_NONNULL_END
     NSDictionary<NSString *, NSString *> *map = @{
         PTStyleMenuItemTitleKey: PTStyleMenuItemIdentifierKey,
         PTNoteMenuItemTitleKey: PTNoteMenuItemIdentifierKey,
+        PTCommentsMenuItemTitleKey: PTNoteMenuItemIdentifierKey, // "Comments" has same id as "Note".
         PTCopyMenuItemTitleKey: PTCopyMenuItemIdentifierKey,
         PTDeleteMenuItemTitleKey: PTDeleteMenuItemIdentifierKey,
         PTTypeMenuItemTitleKey: PTTypeMenuItemIdentifierKey,
