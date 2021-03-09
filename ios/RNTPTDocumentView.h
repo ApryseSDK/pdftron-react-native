@@ -132,6 +132,7 @@ static NSString * const PTActionLinkAnnotationKey = @"action";
 
 static NSString * const PTStyleMenuItemTitleKey = @"Style";
 static NSString * const PTNoteMenuItemTitleKey = @"Note";
+static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
