@@ -302,6 +302,20 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
 }
 
+RCT_REMAP_METHOD(getVisiblePages,
+                 getVisiblePagesforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *pages = [[self documentViewManager] getVisiblePagesForDocumentViewTag:tag];
+        resolve(pages);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_visible_pages", @"Failed to get visible pages", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

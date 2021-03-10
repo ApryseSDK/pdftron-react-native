@@ -381,6 +381,41 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(urlExtraction, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.urlExtraction = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(pageBorderVisibility, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.pageBorderVisibility = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(pageTransparencyGrid, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.pageTransparencyGrid = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(defaultPageColor, NSDictionary, RNTPTDocumentView)
+{
+    if (json) {
+        view.defaultPageColor = [RCTConvert NSDictionary:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(backgroundColor, NSDictionary, RNTPTDocumentView)
+{
+    if (json) {
+        view.viewerBackgroundColor = [RCTConvert NSDictionary:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -737,6 +772,17 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     if (documentView) {
         bool setResult = [documentView setCurrentPage:pageNumber];
         return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSArray *)getVisiblePagesForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray *pages = [documentView getVisiblePages];
+        return pages;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

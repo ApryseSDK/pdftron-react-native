@@ -186,6 +186,10 @@ static NSString * const PTFieldTypeTextKey = @"text";
 static NSString * const PTFieldTypeChoiceKey = @"choice";
 static NSString * const PTFieldTypeSignatureKey = @"signature";
 
+static NSString * const PTColorRedKey = @"red";
+static NSString * const PTColorGreenKey = @"green";
+static NSString * const PTColorBlueKey = @"blue";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -323,6 +327,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
+@property (nonatomic) BOOL urlExtraction;
+@property (nonatomic) BOOL pageBorderVisibility;
+@property (nonatomic) BOOL pageTransparencyGrid;
+
+@property (nonatomic, copy, nullable) NSDictionary *defaultPageColor;
+@property (nonatomic, copy, nullable) NSDictionary *viewerBackgroundColor;
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -360,6 +370,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
+
+- (NSArray *)getVisiblePages;
 
 - (void)closeAllTabs;
 

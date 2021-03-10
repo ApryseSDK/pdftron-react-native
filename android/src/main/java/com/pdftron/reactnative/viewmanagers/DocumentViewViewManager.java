@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -298,6 +299,31 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "urlExtraction")
+    public void setUrlExtraction(DocumentView documentView, boolean urlExtraction) {
+        documentView.setUrlExtraction(urlExtraction);
+    }
+
+    @ReactProp(name = "pageBorderVisibility")
+    public void setPageBorderVisibility(DocumentView documentView, boolean pageBorderVisibility) {
+        documentView.setPageBorderVisibility(pageBorderVisibility);
+    }
+
+    @ReactProp(name = "pageTransparencyGrid")
+    public void setPageTransparencyGrid(DocumentView documentView, boolean pageTransparencyGrid) {
+        documentView.setPageTransparencyGrid(pageTransparencyGrid);
+    }
+
+    @ReactProp(name = "defaultPageColor")
+    public void setDefaultPageColor(DocumentView documentView, ReadableMap defaultPageColor) {
+        documentView.setDefaultPageColor(defaultPageColor);
+    }
+
+    @ReactProp(name = "backgroundColor")
+    public void setBackgroundColor(DocumentView documentView, ReadableMap backgroundColor) {
+        documentView.setBackgroundColor(backgroundColor);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -486,6 +512,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return setResult;
         } else {
             throw new PDFNetException("", 0L, getName(), "setCurrentPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray getVisiblePages(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getVisiblePages();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getVisiblePages", "Unable to find DocumentView.");
         }
     }
 

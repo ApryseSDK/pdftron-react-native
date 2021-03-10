@@ -325,6 +325,65 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
+#### urlExtraction
+bool, optional, defaults to false
+
+Defines whether to extract urls from the ucrrent document. It is recommended to set this value only once (not updating after document is loaded).
+
+```js
+<DocumentView
+  urlExtraction={true}
+/>
+```
+
+#### pageBorderVisibility
+bool, optional, defaults to false
+
+Defines whether borders of each page are visible in the viewer.
+
+```js
+<DocumentView
+  pageBorderVisibility={true}
+/>
+```
+
+#### pageTransparencyGrid
+bool, optional, defaults to false
+
+Defines whether transparency grid (check board pattern) is enabled to reflect page transparency.
+
+```js
+<DocumentView
+  pageTransparencyGrid={true}
+/>
+```
+
+#### backgroundColor
+object, optional
+
+Defines the background color of the viewer.
+
+The object would have 3 keys (red, green and blue) each having a integer value between 0 and 255 (inclusive).
+
+```js
+<DocumentView
+  backgroundColor={{red: 0, green: 0, blue: 255}} // blue color
+/>
+```
+
+#### defaultPageColor
+object, optional
+
+Defines the default page color of the viewer.
+
+The object would have 3 keys (red, green and blue) each having a integer value between 0 and 255 (inclusive).
+
+```js
+<DocumentView
+  defaultPageColor={{red: 127, green: 127, blue: 127}} // grey color
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -1175,6 +1234,25 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
+});
+```
+
+#### getVisiblePages
+Gets the visible pages in the current viewer as an array.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+visiblePages | array | a list of visible pages in the current viewer
+
+```js
+this._viewer.getVisiblePages().then((visiblePages) => {
+  for (const page of visiblePages) {
+    console.log('page', page, 'is visible.')
+  }
 });
 ```
 

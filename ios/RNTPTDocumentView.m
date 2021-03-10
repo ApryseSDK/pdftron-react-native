@@ -77,6 +77,10 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTThumbnailsViewController class]];
     
     _tempFilePaths = [[NSMutableArray alloc] init];
+    
+    _urlExtraction = NO;
+    _pageTransparencyGrid = NO;
+    _pageBorderVisibility = NO;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1528,8 +1532,67 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
+- (void)setUrlExtraction:(BOOL)urlExtraction
+{
+    _urlExtraction = urlExtraction;
+    
+    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
+}
 
-#pragma mark -
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
+{
+    _pageBorderVisibility = pageBorderVisibility;
+    
+    [self.documentViewController.pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
+}
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
+{
+    _pageTransparencyGrid = pageTransparencyGrid;
+    
+    [self.documentViewController.pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
+}
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
+{
+    if (defaultPageColor) {
+        NSArray *keyList = defaultPageColor.allKeys;
+        if ([keyList containsObject:PTColorRedKey] &&
+            [keyList containsObject:PTColorGreenKey] &&
+            [keyList containsObject:PTColorBlueKey]) {
+            _defaultPageColor = defaultPageColor;
+         
+            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+            [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+            
+            [pdfViewCtrl Update];
+        }
+    }
+}
+
+- (void)setViewerBackgroundColor:(NSDictionary *)viewerBackgroundColor
+{
+    if (viewerBackgroundColor) {
+        NSArray *keyList = viewerBackgroundColor.allKeys;
+        if ([keyList containsObject:PTColorRedKey] &&
+            [keyList containsObject:PTColorGreenKey] &&
+            [keyList containsObject:PTColorBlueKey]) {
+            _viewerBackgroundColor = viewerBackgroundColor;
+            
+            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+            [pdfViewCtrl
+             SetBackgroundColor:[viewerBackgroundColor[PTColorRedKey] unsignedCharValue] g:[viewerBackgroundColor[PTColorGreenKey] unsignedCharValue] b:[viewerBackgroundColor[PTColorBlueKey] unsignedCharValue]
+             a:255];
+            
+            [pdfViewCtrl Update];
+        }
+    }
+}
+
+#pragma mark - viewer settings
 
 - (void)applyViewerSettings
 {
@@ -2189,12 +2252,29 @@ NS_ASSUME_NONNULL_END
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
-    
+        
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
+    
+    // Following block is for enforcing pdfViewCtrl related prop to work on load
+    [documentViewController.pdfViewCtrl SetUrlExtraction:self.urlExtraction];
+    [documentViewController.pdfViewCtrl SetPageBorderVisibility:self.pageBorderVisibility];
+    [documentViewController.pdfViewCtrl SetPageTransparencyGrid:self.pageTransparencyGrid];
+    
+    if (self.viewerBackgroundColor) {
+        [documentViewController.pdfViewCtrl SetBackgroundColor:[self.viewerBackgroundColor[PTColorRedKey] unsignedCharValue] g:[self.viewerBackgroundColor[PTColorGreenKey] unsignedCharValue] b:[self.viewerBackgroundColor[PTColorBlueKey] unsignedCharValue]
+            a:255];
+    }
+    
+    if (self.defaultPageColor) {
+        [documentViewController.pdfViewCtrl SetDefaultPageColor:[self.defaultPageColor[PTColorRedKey] unsignedCharValue] g:[self.defaultPageColor[PTColorGreenKey] unsignedCharValue]
+            b:[self.defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+    }
+    
+    [documentViewController.pdfViewCtrl Update:YES];
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
@@ -2897,7 +2977,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Get Crop Box
+#pragma mark - Page
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber
 {
@@ -2927,11 +3007,14 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
-#pragma mark - Set Current Page
-
 - (bool)setCurrentPage:(NSInteger)pageNumber {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
+- (NSArray *)getVisiblePages {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GetVisiblePages];
 }
 
 #pragma mark - Get Document Path

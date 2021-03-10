@@ -108,6 +108,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
+    private boolean mUrlExtraction = false;
+    private boolean mPageBorderVisibility = false;
+    private boolean mPageTransparencyGrid = false;
+    private ReadableMap mBackgroundColor;
+    private ReadableMap mDefaultPageColor;
+
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -593,6 +599,74 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
+    }
+
+    public void setUrlExtraction(boolean urlExtraction) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setUrlExtraction(urlExtraction);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            mUrlExtraction = urlExtraction;
+        }
+    }
+
+    public void setPageBorderVisibility(boolean pageBorderVisibility) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setPageBorderVisibility(pageBorderVisibility);
+                getPdfViewCtrl().update();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            mPageBorderVisibility = pageBorderVisibility;
+        }
+    }
+
+    public void setPageTransparencyGrid(boolean pageTransparencyGrid) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setPageTransparencyGrid(pageTransparencyGrid);
+                getPdfViewCtrl().update();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            mPageTransparencyGrid = pageTransparencyGrid;
+        }
+    }
+
+    public void setDefaultPageColor(ReadableMap defaultPageColor) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                int red = defaultPageColor.getInt(COLOR_RED);
+                int green = defaultPageColor.getInt(COLOR_GREEN);
+                int blue = defaultPageColor.getInt(COLOR_BLUE);
+                getPdfViewCtrl().setDefaultPageColor(red, green, blue);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            mDefaultPageColor = defaultPageColor;
+        }
+    }
+
+    public void setBackgroundColor(ReadableMap backgroundColor) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                int red = backgroundColor.getInt(COLOR_RED);
+                int green = backgroundColor.getInt(COLOR_GREEN);
+                int blue = backgroundColor.getInt(COLOR_BLUE);
+                getPdfViewCtrl().setClientBackgroundColor(red, green, blue, false);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            mBackgroundColor = backgroundColor;
+        }
     }
 
     private void disableElements(ReadableArray args) {
@@ -1951,6 +2025,52 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
+        if (mUrlExtraction) {
+            try {
+                getPdfViewCtrl().setUrlExtraction(mUrlExtraction);
+            } catch (Exception ex) {
+                ex.printStackTrace();;
+            }
+        }
+
+        if (mPageBorderVisibility) {
+            try {
+                getPdfViewCtrl().setPageBorderVisibility(mPageBorderVisibility);
+            } catch (Exception ex) {
+                ex.printStackTrace();;
+            }
+        }
+
+        if (mPageTransparencyGrid) {
+            try {
+                getPdfViewCtrl().setPageTransparencyGrid(mPageTransparencyGrid);
+            } catch (Exception ex) {
+                ex.printStackTrace();;
+            }
+        }
+
+        if (mDefaultPageColor != null) {
+            try {
+                int red = mDefaultPageColor.getInt(COLOR_RED);
+                int green = mDefaultPageColor.getInt(COLOR_GREEN);
+                int blue = mDefaultPageColor.getInt(COLOR_BLUE);
+                getPdfViewCtrl().setDefaultPageColor(red, green, blue);
+            } catch (Exception ex) {
+                ex.printStackTrace();;
+            }
+        }
+
+        if (mBackgroundColor != null) {
+            try {
+                int red = mBackgroundColor.getInt(COLOR_RED);
+                int green = mBackgroundColor.getInt(COLOR_GREEN);
+                int blue = mBackgroundColor.getInt(COLOR_BLUE);
+                getPdfViewCtrl().setClientBackgroundColor(red, green, blue, false);
+            } catch (Exception ex) {
+                ex.printStackTrace();;
+            }
+        }
+
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2640,6 +2760,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean setCurrentPage(int pageNumber) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.setCurrentPage(pageNumber);
+    }
+
+    public WritableArray getVisiblePages() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return Arguments.fromArray(pdfViewCtrl.getVisiblePages());
     }
 
     public void closeAllTabs() {

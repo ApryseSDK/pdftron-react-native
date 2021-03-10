@@ -75,6 +75,11 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    urlExtraction: PropTypes.bool,
+    pageBorderVisibility: PropTypes.bool,
+    pageTransparencyGrid: PropTypes.bool,
+    defaultPageColor: PropTypes.object,
+    backgroundColor: PropTypes.object,
     ...ViewPropTypes,
   };
 
@@ -364,6 +369,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  getVisiblePages = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getVisiblePages(tag);
     }
     return Promise.resolve();
   }

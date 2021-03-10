@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
@@ -341,6 +342,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     boolean setResult = mDocumentViewInstance.setCurrentPage(tag, pageNumber);
                     promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getVisiblePages(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray pages = mDocumentViewInstance.getVisiblePages(tag);
+                    promise.resolve(pages);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
