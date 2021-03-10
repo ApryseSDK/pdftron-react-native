@@ -48,6 +48,7 @@ export default class DocumentView extends PureComponent {
     thumbnailViewEditingEnabled: PropTypes.bool,
     fitMode: PropTypes.string,
     layoutMode: PropTypes.string,
+    onLayoutChanged: PropTypes.func,
     padStatusBar: PropTypes.bool,
     continuousAnnotationEditing: PropTypes.bool,
     selectAnnotationAfterCreation: PropTypes.bool,
@@ -99,6 +100,10 @@ export default class DocumentView extends PureComponent {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
         });
+      }
+    } else if (event.nativeEvent.onLayoutChanged) {
+      if (this.props.onLayoutChanged) {
+        this.props.onLayoutChanged();
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
       if (this.props.onAnnotationChanged) {

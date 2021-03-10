@@ -452,6 +452,19 @@ Defines the layout mode of the viewer. String should be one of [Config.LayoutMod
 />
 ```
 
+#### onLayoutChanged
+function, optional
+
+This function is called when the layout of the viewer has been changed.
+
+```js
+<DocumentView
+  onLayoutChanged = {() => {
+    console.log('Layout has been updated.'); 
+  }}
+/>
+```
+
 ### Page
 
 #### initialPageNumber
