@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -495,6 +496,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getZoom();
         } else {
             throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray convertPoints(int tag, ReadableArray points, String from, String to) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertPoints(points, from, to);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertPoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public int getPageNumberFromScreenPoint(int tag, double x, double y) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageNumberFromScreenPoint(x, y);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint", "Unable to find DocumentView.");
         }
     }
 

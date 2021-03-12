@@ -24,6 +24,7 @@ export default class DocumentView extends PureComponent {
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onScrollChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
@@ -94,6 +95,13 @@ export default class DocumentView extends PureComponent {
         	'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onScrollChanged) {
+      if (this.props.onScrollChanged) {
+        this.props.onScrollChanged({
+        	'horizontal': event.nativeEvent.horizontal,
+          'vertical': event.nativeEvent.vertical,
+        });
+      } 
     } else if (event.nativeEvent.onZoomChanged) {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
@@ -380,6 +388,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
+    }
+    return Promise.resolve();
+  }
+
+  convertPoints = (points, from, to) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertPoints(tag, points, from, to);
+    }
+    return Promise.resolve();
+  }
+
+  getPageNumberFromScreenPoint = (x, y) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
     }
     return Promise.resolve();
   }

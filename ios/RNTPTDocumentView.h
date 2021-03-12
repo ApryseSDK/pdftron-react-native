@@ -174,6 +174,14 @@ static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
 
+static NSString * const PTConversionScreenKey = @"screen";
+static NSString * const PTConversionCanvasKey = @"canvas";
+static NSString * const PTConversionPageKey = @"page";
+
+static NSString * const PTCoordinatePointX = @"x";
+static NSString * const PTCoordinatePointY = @"y";
+static NSString * const PTCoordinatePointPageNumber = @"pageNumber";
+
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 static NSString * const PTFormFieldTypeKey = @"fieldType";
@@ -217,6 +225,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+- (void)scrollChanged:(RNTPTDocumentView *)sender horizontal:(double)horizontal vertical:(double)vertical;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
@@ -364,6 +373,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)closeAllTabs;
 
 - (double)getZoom;
+
+- (NSArray *)convertPoints:(NSArray *)points from:(NSString *)from to:(NSString *)to;
+
+- (int)getPageNumberFromScreenPoint:(double)x y:(double)y;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

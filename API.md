@@ -539,6 +539,28 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
+### Scroll
+
+#### onScrollChanged
+function, optional
+
+This function is called when the scroll position has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | the horizontal position of the scroll
+vertical | number | the vertical position of the scroll
+
+```js
+<DocumentView
+  onScrollChanged = {({horizontal, vertical}) => {
+    console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.'); 
+  }}
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -1514,5 +1536,59 @@ zoom | double | current zoom scale in the viewer
 ```js
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
+});
+```
+
+### Coordinate
+
+#### convertPoints
+Converts points between multiple coordinate systems of the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+points | array | list of points, each in the format `{x: number, y: number}`. If either the source or destination coordinate system is page, you could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+from | string | One of the [Config.Conversion](./src/Config/Config.js) constants, representing the source coordinate system
+to | string | One of the [Config.Conversion](./src/Config/Config.js) constants, representing the destination coordinate system
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+convertedPoints | array | list of converted points in the specified destination system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+
+```js
+// convert (50, 50) in current page and (100, 100) on page 1 in page system to canvas system
+this._viewer.convertPoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}], Config.Conversion.Page, Config.Conversion.Canvas).then((convertedPoints) => {
+  convertedPoints.forEach(point => {
+    console.log(point);
+  })
+});
+```
+
+#### getPageNumberFromScreenPoint
+Returns the page number that contains the point on screen.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+x | number | the x-coordinate of the screen point
+y | number | the y-coordinate of the screen point
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the page number of the screen point
+
+```js
+this._viewer.getPageNumberFromScreenPoint(10.0,50.5).then((pageNumber) => {
+  console.log('The page number of the screen point is', pageNumber);
 });
 ```

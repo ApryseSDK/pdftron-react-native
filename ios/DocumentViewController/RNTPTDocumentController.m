@@ -216,6 +216,13 @@ NS_ASSUME_NONNULL_END
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidScroll:)]) {
+        [self.delegate rnt_documentViewControllerDidScroll:self];
+    }
+}
+
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidZoom:(UIScrollView *)scrollView
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidZoom:)]) {

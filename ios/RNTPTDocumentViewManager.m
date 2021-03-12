@@ -428,6 +428,17 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+- (void)scrollChanged:(RNTPTDocumentView *)sender horizontal:(double)horizontal vertical:(double)vertical
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onScrollChanged": @"onScrollChanged",
+            @"horizontal": @(horizontal),
+            @"vertical": @(vertical),
+        });
+    }
+}
+
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom
 {
     if (sender.onChange) {
@@ -752,12 +763,34 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
-- (double)getZoom:(NSNumber *)tag
+- (double)getZoomForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         double zoom = [documentView getZoom];
         return zoom;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+#pragma mark - Coordination
+
+- (NSArray *)convertPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points from:(NSString *)from to:(NSString *)to {
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray *convertedPoints = [documentView convertPoints:points from:from to:to];
+        return convertedPoints;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (int)getPageNumberFromScreenPointForDocumentViewTag:(nonnull NSNumber *)tag x:(double)x y:(double)y {
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        int pageNumber = [documentView getPageNumberFromScreenPoint:x y:y];
+        return pageNumber;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

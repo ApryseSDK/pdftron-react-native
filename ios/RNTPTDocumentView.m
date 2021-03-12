@@ -2205,6 +2205,18 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerDidScroll:(PTDocumentBaseViewController *)documentViewController
+{
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    double horizontal = [pdfViewCtrl GetHScrollPos];
+    double vertical = [pdfViewCtrl GetVScrollPos];
+    
+    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+        [self.delegate scrollChanged:self horizontal:horizontal vertical:vertical];
+    }
+}
+
 - (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
@@ -2969,6 +2981,77 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
+}
+
+#pragma mark - Coordinate
+
+- (NSArray *)convertPoints:(NSArray *)points from:(NSString *)from to:(NSString *)to
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    NSMutableArray <NSDictionary *> *convertedPoints = [[NSMutableArray alloc] init];
+    
+    if (pdfViewCtrl) {
+        int currentPage = [pdfViewCtrl GetCurrentPage];
+        
+        PTPDFPoint *pdfPoint = [[PTPDFPoint alloc] initWithPx:0 py:0];
+        PTPDFPoint *convertedPdfPoint;
+        
+        for (NSDictionary *point in points) {
+            [pdfPoint setX:[point[PTCoordinatePointX] doubleValue]];
+            [pdfPoint setY:[point[PTCoordinatePointY] doubleValue]];
+            int pageNumber = currentPage;
+            
+            // 6 conversion cases
+            if ([from isEqualToString:PTConversionCanvasKey]) {
+                if ([to isEqualToString:PTConversionScreenKey]) {
+                    convertedPdfPoint = [pdfViewCtrl ConvCanvasPtToScreenPt:pdfPoint];
+                } else if ([to isEqualToString:PTConversionPageKey]) {
+                    if ([[point allKeys] containsObject:PTCoordinatePointPageNumber]) {
+                        pageNumber = [point[PTCoordinatePointPageNumber] intValue];
+                    }
+                    convertedPdfPoint = [pdfViewCtrl ConvCanvasPtToPagePt:pdfPoint page_num:pageNumber];
+                }
+                
+            } else if ([from isEqualToString:PTConversionPageKey]) {
+                if ([to isEqualToString:PTConversionScreenKey]) {
+                    if ([[point allKeys] containsObject:PTCoordinatePointPageNumber]) {
+                        pageNumber = [point[PTCoordinatePointPageNumber] intValue];
+                    }
+                    convertedPdfPoint = [pdfViewCtrl ConvPagePtToScreenPt:pdfPoint page_num:pageNumber];
+                } else if ([to isEqualToString:PTConversionCanvasKey]) {
+                    if ([[point allKeys] containsObject:PTCoordinatePointPageNumber]) {
+                        pageNumber = [point[PTCoordinatePointPageNumber] intValue];
+                    }
+                    convertedPdfPoint = [pdfViewCtrl ConvPagePtToCanvasPt:pdfPoint page_num:pageNumber];
+                }
+                
+            } else if ([from isEqualToString:PTConversionScreenKey]) {
+                if ([to isEqualToString:PTConversionCanvasKey]) {
+                    convertedPdfPoint = [pdfViewCtrl ConvScreenPtToCanvasPt:pdfPoint];
+                } else if ([to isEqualToString:PTConversionPageKey]) {
+                    if ([[point allKeys] containsObject:PTCoordinatePointPageNumber]) {
+                        pageNumber = [point[PTCoordinatePointPageNumber] intValue];
+                    }
+                    convertedPdfPoint = [pdfViewCtrl ConvScreenPtToPagePt:pdfPoint page_num:pageNumber];
+                }
+            }
+            
+            if (convertedPdfPoint) {
+                [convertedPoints addObject:@{
+                    PTCoordinatePointX: @([convertedPdfPoint getX]),
+                    PTCoordinatePointY: @([convertedPdfPoint getY]),
+                }];
+            }
+        }
+    }
+    
+    return [convertedPoints copy];
+}
+
+- (int)getPageNumberFromScreenPoint:(double)x y:(double)y
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GetPageNumberFromScreenPt:x y:y];
 }
 
 #pragma mark - Helper

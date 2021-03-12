@@ -322,11 +322,46 @@ RCT_REMAP_METHOD(getZoom,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        double zoom = [[self documentViewManager] getZoom:tag];
+        double zoom = [[self documentViewManager] getZoomForDocumentViewTag:tag];
         resolve([NSNumber numberWithDouble:zoom]);
     }
     @catch (NSException *exception) {
         reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
+    }
+}
+
+#pragma mark - Coordinate
+
+RCT_REMAP_METHOD(convertPoints,
+                 convertPointsForDocumentViewTag: (nonnull NSNumber *)tag
+                 points:(NSArray *)points
+                 from:(NSString *)from
+                 to:(NSString *)to
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *convertedPoints = [[self documentViewManager] convertPointsForDocumentViewTag:tag points:points from:from to:to];
+        resolve(convertedPoints);
+    }
+    @catch (NSException *exception) {
+        reject(@"convert_points", @"Failed to convert points", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getPageNumberFromScreenPoint,
+                 getPageNumberFromScreenPointForDocumentViewTag: (nonnull NSNumber *)tag
+                 x:(double)x
+                 y:(double)y
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageNumber = [[self documentViewManager] getPageNumberFromScreenPointForDocumentViewTag:tag x:x y:y];
+        resolve([NSNumber numberWithInt:pageNumber]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_number_from_screen_point", @"Failed to get page number from screen point", [self errorFromException:exception]);
     }
 }
 

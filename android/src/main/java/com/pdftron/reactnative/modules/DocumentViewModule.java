@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
@@ -356,6 +357,36 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     double zoom = mDocumentViewInstance.getZoom(tag);
                     promise.resolve(zoom);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void convertPoints(final int tag, final ReadableArray points, final String from, final String to, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertPoints(tag, points, from, to);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPageNumberFromScreenPoint(final int tag, final double x, final double y, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int pageNumber = mDocumentViewInstance.getPageNumberFromScreenPoint(tag, x, y);
+                    promise.resolve(pageNumber);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }

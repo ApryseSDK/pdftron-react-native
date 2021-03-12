@@ -5,6 +5,7 @@ public final class Constants {
     public static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
+    public static final String ON_SCROLL_CHANGED = "onScrollChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
@@ -263,6 +264,9 @@ public final class Constants {
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
 
+    public static final String KEY_HORIZONTAL = "horizontal";
+    public static final String KEY_VERTICAL = "vertical";
+
     public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
     public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
     public static final String KEY_ANNOTATION_FLAG_LOCKED = "locked";
@@ -282,4 +286,13 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
+
+    // Conversion
+    public static final String KEY_CONVERSION_SCREEN = "screen";
+    public static final String KEY_CONVERSION_CANVAS = "canvas";
+    public static final String KEY_CONVERSION_PAGE = "page";
+
+    public static final String KEY_COORDINATE_POINT_X = "x";
+    public static final String KEY_COORDINATE_POINT_Y = "y";
+    public static final String KEY_COORDINATE_POINT_PAGE_NUMBER = "pageNumber";
 }

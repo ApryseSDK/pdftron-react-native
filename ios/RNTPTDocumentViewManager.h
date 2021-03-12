@@ -50,7 +50,12 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
-- (double)getZoom:(NSNumber *)tag;
+- (double)getZoomForDocumentViewTag:(NSNumber *)tag;
+
+- (NSArray *)convertPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points from:(NSString *)from to:(NSString *)to;
+
+- (int)getPageNumberFromScreenPointForDocumentViewTag:(nonnull NSNumber *)tag x:(double)x y:(double)y;
+
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

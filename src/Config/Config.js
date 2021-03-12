@@ -199,4 +199,11 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+
+  // Conversion defines conversion sources and destinations
+  Conversion: {
+    Screen: "screen",
+    Canvas: "canvas",
+    Page: "page",
+  }
 };
