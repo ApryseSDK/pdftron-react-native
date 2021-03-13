@@ -237,6 +237,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_TITLE = "title";
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
+    public static final String KEY_ANNOTATION_TYPE = "type";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -282,4 +283,5 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
+    public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
 }

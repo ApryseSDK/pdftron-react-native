@@ -538,6 +538,16 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+- (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data {
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onBehaviorActivated": @"onBehaviorActivated",
+            @"action": action,
+            @"data": data,
+        });
+    }
+}
+
 #pragma mark - Methods
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
