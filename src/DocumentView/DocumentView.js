@@ -67,6 +67,7 @@ export default class DocumentView extends PureComponent {
     maxTabCount: PropTypes.number,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
+    drawAnnotations: PropTypes.bool,
     annotationToolbars: PropTypes.array,
     hideDefaultAnnotationToolbars: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
@@ -348,6 +349,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
+    }
+    return Promise.resolve();
+  }
+
+  setVisibilityForAnnotation = (id, pageNumber, visibility) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
     }
     return Promise.resolve();
   }

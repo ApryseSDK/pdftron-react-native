@@ -108,6 +108,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
+    private boolean mDrawAnnotations = true;
+
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -462,6 +464,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
+    }
+
+    public void setDrawAnnotations(boolean drawAnnotations) {
+        mDrawAnnotations = drawAnnotations;
+
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setDrawAnnotations(drawAnnotations);
+            } catch (PDFNetException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
@@ -1951,6 +1965,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
+        try {
+            getPdfViewCtrl().setDrawAnnotations(mDrawAnnotations);
+        } catch (PDFNetException ex) {
+            ex.printStackTrace();
+        }
+
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2618,6 +2638,32 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } finally {
             if (shouldUnlock) {
                 pdfViewCtrl.docUnlock();
+            }
+        }
+    }
+
+    public void setVisibilityForAnnotation(String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
+            if (annot != null && annot.isValid()) {
+
+                if (visibility) {
+                    pdfViewCtrl.showAnnotation(annot);
+                } else {
+                    pdfViewCtrl.hideAnnotation(annot);
+                }
+
+                pdfViewCtrl.update(annot, pageNumber);
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
             }
         }
     }

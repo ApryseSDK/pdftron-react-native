@@ -310,6 +310,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
+@property (nonatomic, assign) BOOL drawAnnotations;
 
 @property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
 @property (nonatomic, copy, nullable) NSString *tabTitle;
@@ -356,6 +357,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 

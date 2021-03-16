@@ -1338,6 +1338,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setDrawAnnotations:(BOOL)drawAnnotations
+{
+    _drawAnnotations = drawAnnotations;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Collaboration
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
@@ -1595,6 +1602,9 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl SetPageViewMode:e_trn_zoom];
         [pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
     }
+    
+    // Draw Annotations.
+    [pdfViewCtrl SetDrawAnnotations:_drawAnnotations];
     
     // Layout mode.
     [self applyLayoutMode:pdfViewCtrl];
@@ -2889,6 +2899,40 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
         
         [toolManager annotationModified:annot onPageNumber:(int)pageNumber];
+    } error:&error];
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    }
+}
+
+#pragma mark - Set Visibility for Annotation
+
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+
+    NSError *error;
+    
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        
+        PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
+        if (![annot IsValid]) {
+            NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                  annotationId, (int)pageNumber);
+            annot = nil;
+            return;
+        }
+        
+        if (visibility) {
+            [pdfViewCtrl ShowAnnotation:annot];
+        } else {
+            [pdfViewCtrl HideAnnotation:annot];
+        }
+        
+        [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+        
     } error:&error];
     
     // Throw error as exception to reject promise.

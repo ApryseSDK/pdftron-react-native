@@ -264,11 +264,28 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setPropertiesForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        [[self documentViewManager] setPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
         resolve(nil);
     }
     @catch (NSException *exception) {
         reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setVisibilityForAnnotation,
+                 setVisibilityForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 visibility:(BOOL)visibility
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setVisibilityForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber visibility:visibility];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_visibility_for_annotation", @"Failed to set visibility for annotation", [self errorFromException:exception]);
     }
 }
 
