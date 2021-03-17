@@ -108,6 +108,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
+    private int mColorPostProcessMode = -1;
+
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -593,6 +595,32 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
+    }
+
+    public void setColorPostProcessMode(String colorPostProcessMode) {
+
+        switch (colorPostProcessMode) {
+            case KEY_COLOR_POST_PROCESS_MODE_NONE:
+                mColorPostProcessMode = 0;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_INVERT:
+                mColorPostProcessMode = 1;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP:
+                mColorPostProcessMode = 2;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE:
+                mColorPostProcessMode = 3;
+                break;
+        }
+
+        if (mColorPostProcessMode != -1 && getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setColorPostProcessMode(mColorPostProcessMode);
+            } catch (PDFNetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void disableElements(ReadableArray args) {
@@ -1951,6 +1979,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
+        if (mColorPostProcessMode != -1) {
+            try {
+                getPdfViewCtrl().setColorPostProcessMode(mColorPostProcessMode);
+            } catch (PDFNetException e) {
+                e.printStackTrace();
+            }
+        }
+
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2651,6 +2687,60 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public double getZoom() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.getZoom();
+    }
+
+    public void setColorPostProcessColors(ReadableMap whiteColor, ReadableMap blackColor) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+
+            String[] colorKeys = {COLOR_ALPHA, COLOR_RED, COLOR_GREEN, COLOR_BLUE};
+
+            int whiteColorNumber = 0;
+            // convert white map to int (rgba)
+            for (String colorKey : colorKeys) {
+                whiteColorNumber <<= 8;
+                if (!whiteColor.hasKey(colorKey)) {
+                    // not alpha
+                    if (!colorKey.equals(COLOR_ALPHA)) {
+                        return;
+                    }
+                    // if alpha is not provided
+                    whiteColorNumber += 255;
+                    continue;
+                }
+                int currentColorValue = whiteColor.getInt(colorKey);
+                if (currentColorValue > 255 || currentColorValue < 0) {
+                    return;
+                }
+                whiteColorNumber += currentColorValue;
+            }
+
+            int blackColorNumber = 0;
+            // convert black map to int (rgba)
+            for (String colorKey : colorKeys) {
+                blackColorNumber <<= 8;
+                if (!blackColor.hasKey(colorKey)) {
+                    // not alpha
+                    if (!colorKey.equals(COLOR_ALPHA)) {
+                        return;
+                    }
+                    // if alpha is not provided
+                    blackColorNumber += 255;
+                    continue;
+                }
+                int currentColorValue = blackColor.getInt(colorKey);
+                if (currentColorValue > 255 || currentColorValue < 0) {
+                    return;
+                }
+                blackColorNumber += currentColorValue;
+            }
+
+            try {
+                pdfViewCtrl.setColorPostProcessColors(whiteColorNumber, blackColorNumber);
+            } catch (PDFNetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {

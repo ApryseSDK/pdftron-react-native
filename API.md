@@ -312,6 +312,18 @@ Defines whether to show the leading navigation button.
 />
 ```
 
+#### colorPostProcessMode
+string, optional, defaults to none
+
+Defines the color post processing transformation mode for the viewer. Strings should be [Config.ColorPostProcessMode](./src/Config/Config.js) constants.
+
+```js
+<DocumentView>
+  colorPostProcessMode={Config.ColorPostProcessMode.NightMode}
+/>
+```
+
+
 #### onLeadingNavButtonPressed
 function, optional
 
@@ -1075,6 +1087,24 @@ filePath | string | the location of the saved document, or the base64 string of 
 this._viewer.saveDocument().then((filePath) => {
   console.log('saveDocument:', filePath);
 });
+```
+
+### UI Customization
+
+#### setColorPostProcessColors
+Sets the white and black color for the color post processing transformation.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+whiteColor | object | the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (Android only), and all numbers should be in range [0, 255]
+blackColor | object | the black color for the color post processing transformation, in the same format as whiteColor
+
+```js
+const whiteColor = {"red": 0, "green": 0, "blue": 255};
+const blackColor = {"red": 255, "green": 0, "blue": 0};
+this._viewer.setColorPostProcessColors(whiteColor, blackColor);
 ```
 
 ### Annotation Tools

@@ -186,6 +186,16 @@ static NSString * const PTFieldTypeTextKey = @"text";
 static NSString * const PTFieldTypeChoiceKey = @"choice";
 static NSString * const PTFieldTypeSignatureKey = @"signature";
 
+static NSString * const PTColorRedKey = @"red";
+static NSString * const PTColorGreenKey = @"green";
+static NSString * const PTColorBlueKey = @"blue";
+static NSString * const PTColorAlphaKey = @"alpha";
+
+static NSString * const PTColorPostProcessModeNoneKey = @"none";
+static NSString * const PTColorPostProcessModeInvertKey = @"invert";
+static NSString * const PTColorPostProcessModeGradientMapKey = @"gradientMap";
+static NSString * const PTColorPostProcessModeNightModeKey = @"nightMode";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -323,6 +333,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
+@property (nonatomic, copy, nullable) NSString *colorPostProcessMode;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -364,6 +376,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)closeAllTabs;
 
 - (double)getZoom;
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

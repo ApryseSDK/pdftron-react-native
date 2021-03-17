@@ -199,4 +199,12 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+
+  // ColorPostProcessMode defines color modifications after rendering in the viewer
+  ColorPostProcessMode: {
+    None: "none",
+    Invert: "invert",
+    GradientMap: "gradientMap",
+    NightMode: "nightMode",
+  }
 };

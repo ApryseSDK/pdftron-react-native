@@ -75,6 +75,7 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    colorPostProcessMode: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -380,6 +381,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setColorPostProcessColors = (whiteColor, blackColor) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
     }
     return Promise.resolve();
   }

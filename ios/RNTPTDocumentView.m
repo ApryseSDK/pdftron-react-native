@@ -1528,7 +1528,6 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
-
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -1989,6 +1988,88 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+# pragma mark - Color Post Process
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode
+{
+    _colorPostProcessMode = [colorPostProcessMode copy];
+    
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        [self applyColorPostProcessMode:pdfViewCtrl];
+    }
+}
+
+- (void)applyColorPostProcessMode:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
+        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeInvertKey]) {
+        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_invert];
+    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeGradientMapKey]) {
+        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_gradient_map];
+    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeNightModeKey]) {
+        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
+    }
+}
+
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
+{
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        
+        NSString *colorKeys[4] = {PTColorRedKey, PTColorGreenKey, PTColorBlueKey, PTColorAlphaKey};
+        double colorValues[4];
+        
+        NSArray *whiteColorKeys = [whiteColor allKeys];
+        NSArray *blackColorKeys = [blackColor allKeys];
+        
+        for (int i = 0; i < 4; i ++) {
+            if (![whiteColorKeys containsObject:colorKeys[i]]) {
+                // not alpha
+                if (![colorKeys[i] isEqualToString:PTColorAlphaKey]) {
+                    return;
+                }
+                // alpha
+                colorValues[i] = (double)1;
+                continue;
+            }
+            
+            double value = (double)[whiteColor[colorKeys[i]] intValue] / 255;
+            if (value < 0 || value > 1) {
+                return;
+            }
+            
+            colorValues[i] = value;
+        }
+        
+        UIColor *whiteUIColor = [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
+        
+        for (int i = 0; i < 4; i ++) {
+            if (![blackColorKeys containsObject:colorKeys[i]]) {
+                // not alpha
+                if (![colorKeys[i] isEqualToString:PTColorAlphaKey]) {
+                    return;
+                }
+                // alpha
+                colorValues[i] = (double)1;
+                continue;
+            }
+            
+            double value = (double)[blackColor[colorKeys[i]] intValue] / 255;
+            if (value < 0 || value > 1) {
+                return;
+            }
+            
+            colorValues[i] = value;
+        }
+        
+        UIColor *blackUIColor = [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
+        
+        [pdfViewCtrl SetColorPostProcessColors:whiteUIColor black_color:blackUIColor];
+    }
+}
+
 #pragma mark - Convenience
 
 - (UIViewController *)findParentViewController
@@ -2195,6 +2276,7 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
+    [self applyColorPostProcessMode:documentViewController.pdfViewCtrl];
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];

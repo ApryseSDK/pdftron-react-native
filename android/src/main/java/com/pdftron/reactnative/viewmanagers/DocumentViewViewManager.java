@@ -298,6 +298,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "colorPostProcessMode")
+    public void setColorPostProcessMode(DocumentView documentView, String colorPostProcessMode) {
+        documentView.setColorPostProcessMode(colorPostProcessMode);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -495,6 +500,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getZoom();
         } else {
             throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessColors(int tag, ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessColors(whiteColor, blackColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessColors", "Unable to find DocumentView.");
         }
     }
 

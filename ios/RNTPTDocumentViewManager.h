@@ -51,6 +51,9 @@
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoom:(NSNumber *)tag;
+
+- (void)setColorPostProcessColorsForDocumentViewTag:(NSNumber *)tag whiteColor:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor;
+
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

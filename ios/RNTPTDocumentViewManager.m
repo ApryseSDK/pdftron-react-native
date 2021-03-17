@@ -381,6 +381,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(colorPostProcessMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.colorPostProcessMode = [RCTConvert NSString:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -758,6 +765,16 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     if (documentView) {
         double zoom = [documentView getZoom];
         return zoom;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setColorPostProcessColorsForDocumentViewTag:(NSNumber *)tag whiteColor:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setColorPostProcessColors:whiteColor blackColor:blackColor];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
