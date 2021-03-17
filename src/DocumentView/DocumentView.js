@@ -75,6 +75,13 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    pathHinting: PropTypes.bool,
+    antiAliasing: PropTypes.bool,
+    pixelGridFit: PropTypes.bool,
+    strokeAdjust: PropTypes.bool,
+    imageSmoothing: PropTypes.bool,
+    gamma: PropTypes.number,
+    overprint: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -380,6 +387,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      setProgressiveRendering.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
     }
     return Promise.resolve();
   }

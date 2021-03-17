@@ -199,4 +199,11 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+
+  // OverprintMode defines when overprint would be applied in the viewer
+  OverprintMode: {
+    On: "on",
+    Off: "off",
+    OnlyPDFX: "pdfx", // only apply to PDF/X files
+  }
 };
