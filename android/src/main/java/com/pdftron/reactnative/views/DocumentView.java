@@ -108,14 +108,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
-    private boolean mAntiAliasing = true;
-    private boolean mPathHinting = true;
-    private boolean mPixelGridFit = false;
-    private boolean mStrokeAdjust = true;
-    private boolean mImageSmoothing = true;
-    private double mGamma = Double.MAX_VALUE;
-    private PDFViewCtrl.OverPrintMode mOverprintMode = PDFViewCtrl.OverPrintMode.PDFX;
-
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -601,104 +593,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
-    }
-
-    public void setPathHinting(boolean pathHinting) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setPathHinting(pathHinting);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mPathHinting = pathHinting;
-        }
-    }
-
-
-    public void setAntiAliasing(boolean antiAliasing) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setAntiAliasing(antiAliasing);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mAntiAliasing = antiAliasing;
-        }
-    }
-
-    public void setPixelGridFit(boolean pixelGridFit) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setThinLineAdjustment(pixelGridFit, mStrokeAdjust);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mPixelGridFit = pixelGridFit;
-        }
-    }
-
-    public void setStrokeAdjust(boolean strokeAdjust) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setThinLineAdjustment(mPixelGridFit, strokeAdjust);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mStrokeAdjust = strokeAdjust;
-        }
-    }
-
-    public void setImageSmoothing(boolean imageSmoothing) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setImageSmoothing(imageSmoothing);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mImageSmoothing = imageSmoothing;
-        }
-    }
-
-    public void setGamma(double gamma) {
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setGamma(gamma);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mGamma = gamma;
-        }
-    }
-
-    public void setOverprint(String overprint) {
-        PDFViewCtrl.OverPrintMode overprintMode = null;
-        switch (overprint) {
-            case KEY_OVERPRINT_MODE_ON:
-                overprintMode = PDFViewCtrl.OverPrintMode.ON;
-                break;
-            case KEY_OVERPRINT_MODE_OFF:
-                overprintMode = PDFViewCtrl.OverPrintMode.OFF;
-                break;
-            case KEY_OVERPRINT_MODE_PDFX:
-                overprintMode = PDFViewCtrl.OverPrintMode.PDFX;
-                break;
-        }
-
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setOverprint(overprintMode);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            mOverprintMode = overprintMode;
-        }
     }
 
     private void disableElements(ReadableArray args) {
@@ -2057,47 +1951,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
-        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-
-        try {
-            pdfViewCtrl.setPathHinting(mPathHinting);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            pdfViewCtrl.setAntiAliasing(mAntiAliasing);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            pdfViewCtrl.setThinLineAdjustment(mPixelGridFit, mStrokeAdjust);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            pdfViewCtrl.setImageSmoothing(mImageSmoothing);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (mGamma != Double.MAX_VALUE) {
-            try {
-                pdfViewCtrl.setGamma(mGamma);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            pdfViewCtrl.setOverprint(mOverprintMode);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2801,9 +2654,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setProgressiveRendering(boolean progressiveRendering, int initialDelay, int interval) {
-        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-        if (pdfViewCtrl != null) {
-            pdfViewCtrl.setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        }
+    }
+
+    public void setImageSmoothing(boolean imageSmoothing) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setImageSmoothing(imageSmoothing);
+        }
+    }
+
+    public void setOverprint(String overprint) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            PDFViewCtrl.OverPrintMode overprintMode = null;
+            switch (overprint) {
+                case KEY_OVERPRINT_MODE_ON:
+                    overprintMode = PDFViewCtrl.OverPrintMode.ON;
+                    break;
+                case KEY_OVERPRINT_MODE_OFF:
+                    overprintMode = PDFViewCtrl.OverPrintMode.OFF;
+                    break;
+                case KEY_OVERPRINT_MODE_PDFX:
+                    overprintMode = PDFViewCtrl.OverPrintMode.PDFX;
+                    break;
+            }
+
+            if (overprintMode != null) {
+                getPdfViewCtrl().setOverprint(overprintMode);
+            }
         }
     }
 

@@ -1516,3 +1516,53 @@ this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
 });
 ```
+
+### Rendering Options
+
+#### setProgressiveRendering
+Sets whether the control will render progressively or will just draw once the entire view has been rendered.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+progressiveRendering | bool | whether to render progressively
+initialDelay | number | delay before the progressive rendering timer is started, in milliseconds
+interval | number | delay between refreshes, in milliseconds
+
+Returns a Promise.
+
+```js
+// delay for 10s before start, and refresh every 1s
+this._viewer.setProgressiveRendering(true, 10000, 1000);
+```
+
+#### setImageSmoothing
+Enables or disables image smoothing. The rasterizer allows a trade-off between rendering quality and rendering speed. This function can be used to indicate the preference between rendering speed and quality.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+imageSmoothing | bool | whether to enable image smoothing
+
+Returns a Promise.
+
+```js
+this._viewer.setImageSmoothing(false);
+```
+
+#### setOverprint
+Enables or disables support for overprint and overprint simulation. Overprint is a device dependent feature and the results will vary depending on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+overprint | string | the mode of overprint, should be a [`Config.OverprintMode`](./src/Config/Config.js) constant
+
+Returns a Promise.
+
+```js
+this._viewer.setOverprint(Config.OverprintMode.Off);
+```

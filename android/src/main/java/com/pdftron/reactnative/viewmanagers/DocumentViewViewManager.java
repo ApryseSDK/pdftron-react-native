@@ -298,41 +298,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
-    @ReactProp(name = "pathHinting")
-    public void setPathHinting(DocumentView documentView, boolean pathHinting) {
-        documentView.setPathHinting(pathHinting);
-    }
-
-    @ReactProp(name = "antiAliasing")
-    public void setAntiAliasing(DocumentView documentView, boolean antiAliasing) {
-        documentView.setAntiAliasing(antiAliasing);
-    }
-
-    @ReactProp(name = "pixelGridFit")
-    public void setPixelGridFit(DocumentView documentView, boolean pixelGridFit) {
-        documentView.setPixelGridFit(pixelGridFit);
-    }
-
-    @ReactProp(name = "strokeAdjust")
-    public void setStrokeAdjust(DocumentView documentView, boolean strokeAdjust) {
-        documentView.setStrokeAdjust(strokeAdjust);
-    }
-
-    @ReactProp(name = "imageSmoothing")
-    public void setImageSmoothing(DocumentView documentView, boolean imageSmoothing) {
-        documentView.setImageSmoothing(imageSmoothing);
-    }
-
-    @ReactProp(name = "gamma")
-    public void setGamma(DocumentView documentView, double gamma) {
-        documentView.setGamma(gamma);
-    }
-
-    @ReactProp(name = "overprint")
-    public void setOverprint(DocumentView documentView, String overprint) {
-        documentView.setOverprint(overprint);
-    }
-
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -539,6 +504,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setProgressiveRendering(progressiveRendering, initialDelay, interval);
         } else {
             throw new PDFNetException("", 0L, getName(), "setProgressiveRendering", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setImageSmoothing(int tag, boolean imageSmoothing) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setImageSmoothing(imageSmoothing);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setImageSmoothing", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setOverprint(int tag, String overprint) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setOverprint(overprint);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setOverprint", "Unable to find DocumentView.");
         }
     }
 
