@@ -2,6 +2,7 @@ export default {
 
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
+    editToolButton: 'editToolButton',
     viewControlsButton: 'viewControlsButton',
     freeHandToolButton: 'freeHandToolButton',
     highlightToolButton: 'highlightToolButton',

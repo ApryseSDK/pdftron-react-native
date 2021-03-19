@@ -519,7 +519,8 @@ NS_ASSUME_NONNULL_END
         if ([item isKindOfClass:[NSString class]]) {
             NSString *string = (NSString *)item;
             
-            if ([string isEqualToString:PTAnnotationEditToolKey]) {
+            if ([string isEqualToString:PTAnnotationEditToolKey] ||
+                [string isEqualToString:PTEditToolButtonKey]) {
                 // multi-select not implemented
             }
             else if ([string isEqualToString:PTAnnotationCreateStickyToolKey] ||
@@ -612,7 +613,7 @@ NS_ASSUME_NONNULL_END
                 toolManager.freehandHighlightAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
-                // TODO
+                toolManager.stampAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
                 toolManager.redactAnnotationOptions.canCreate = value;
@@ -661,7 +662,7 @@ NS_ASSUME_NONNULL_END
     
     if( [toolMode isEqualToString:PTAnnotationEditToolKey] )
     {
-        // multi-select not implemented
+        toolClass = [PTAnnotEditTool class];
     }
     else if( [toolMode isEqualToString:PTAnnotationCreateStickyToolKey])
     {
@@ -2034,7 +2035,7 @@ NS_ASSUME_NONNULL_END
         PTPencilKitDrawingToolKey: @(PTExtendedAnnotTypePencilDrawing),
         PTAnnotationCreateFreeHighlighterToolKey: @(PTExtendedAnnotTypeFreehandHighlight),
 //        PTPanToolKey: @(),
-//        PTAnnotationCreateRubberStampToolKey: @(),
+        PTAnnotationCreateRubberStampToolKey: @(PTExtendedAnnotTypeStamp),
         PTAnnotationCreateRedactionToolKey : @(PTExtendedAnnotTypeRedact),
         PTAnnotationCreateLinkToolKey : @(PTExtendedAnnotTypeLink),
 //        PTAnnotationCreateRedactionTextToolKey : @(),
@@ -2045,6 +2046,7 @@ NS_ASSUME_NONNULL_END
 //        PTFormCreateRadioFieldToolKey : @(),
 //        PTFormCreateComboBoxFieldToolKey : @(),
 //        PTFormCreateListBoxFieldToolKey : @(),
+//        PTAnnotationEditToolKey: @(),
     };
     
     PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
@@ -3064,7 +3066,8 @@ NS_ASSUME_NONNULL_END
 
 + (Class)toolClassForKey:(NSString *)key
 {
-    if ([key isEqualToString:PTAnnotationEditToolKey]) {
+    if ([key isEqualToString:PTAnnotationEditToolKey] ||
+        [key isEqualToString:PTEditToolButtonKey]) {
         return [PTAnnotEditTool class];
     }
     else if ([key isEqualToString:PTAnnotationCreateStickyToolKey] ||
