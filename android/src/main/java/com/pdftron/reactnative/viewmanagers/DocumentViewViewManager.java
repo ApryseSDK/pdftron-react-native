@@ -299,31 +299,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
-    @ReactProp(name = "urlExtraction")
-    public void setUrlExtraction(DocumentView documentView, boolean urlExtraction) {
-        documentView.setUrlExtraction(urlExtraction);
-    }
-
-    @ReactProp(name = "pageBorderVisibility")
-    public void setPageBorderVisibility(DocumentView documentView, boolean pageBorderVisibility) {
-        documentView.setPageBorderVisibility(pageBorderVisibility);
-    }
-
-    @ReactProp(name = "pageTransparencyGrid")
-    public void setPageTransparencyGrid(DocumentView documentView, boolean pageTransparencyGrid) {
-        documentView.setPageTransparencyGrid(pageTransparencyGrid);
-    }
-
-    @ReactProp(name = "defaultPageColor")
-    public void setDefaultPageColor(DocumentView documentView, ReadableMap defaultPageColor) {
-        documentView.setDefaultPageColor(defaultPageColor);
-    }
-
-    @ReactProp(name = "backgroundColor")
-    public void setBackgroundColor(DocumentView documentView, ReadableMap backgroundColor) {
-        documentView.setBackgroundColor(backgroundColor);
-    }
-
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -530,6 +505,51 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getZoom();
         } else {
             throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setUrlExtraction(int tag, boolean urlExtraction) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setUrlExtraction(urlExtraction);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setUrlExtraction", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setPageBorderVisibility(int tag, boolean pageBorderVisibility) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPageBorderVisibility(pageBorderVisibility);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPageBorderVisibility", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setPageTransparencyGrid(int tag, boolean pageTransparencyGrid) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPageTransparencyGrid(pageTransparencyGrid);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPageTransparencyGrid", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setDefaultPageColor(int tag, ReadableMap defaultPageColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDefaultPageColor(defaultPageColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setDefaultPageColor", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setBackgroundColor(int tag, ReadableMap backgroundColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setBackgroundColor(backgroundColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setBackgroundColor", "Unable to find DocumentView.");
         }
     }
 

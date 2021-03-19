@@ -77,10 +77,6 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTThumbnailsViewController class]];
     
     _tempFilePaths = [[NSMutableArray alloc] init];
-    
-    _urlExtraction = NO;
-    _pageTransparencyGrid = NO;
-    _pageBorderVisibility = NO;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1532,66 +1528,6 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
-- (void)setUrlExtraction:(BOOL)urlExtraction
-{
-    _urlExtraction = urlExtraction;
-    
-    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
-}
-
-- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
-{
-    _pageBorderVisibility = pageBorderVisibility;
-    
-    [self.documentViewController.pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
-}
-
-- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
-{
-    _pageTransparencyGrid = pageTransparencyGrid;
-    
-    [self.documentViewController.pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
-}
-
-- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
-{
-    if (defaultPageColor) {
-        NSArray *keyList = defaultPageColor.allKeys;
-        if ([keyList containsObject:PTColorRedKey] &&
-            [keyList containsObject:PTColorGreenKey] &&
-            [keyList containsObject:PTColorBlueKey]) {
-            _defaultPageColor = defaultPageColor;
-         
-            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
-            
-            [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
-                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
-            
-            [pdfViewCtrl Update];
-        }
-    }
-}
-
-- (void)setViewerBackgroundColor:(NSDictionary *)viewerBackgroundColor
-{
-    if (viewerBackgroundColor) {
-        NSArray *keyList = viewerBackgroundColor.allKeys;
-        if ([keyList containsObject:PTColorRedKey] &&
-            [keyList containsObject:PTColorGreenKey] &&
-            [keyList containsObject:PTColorBlueKey]) {
-            _viewerBackgroundColor = viewerBackgroundColor;
-            
-            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
-            
-            [pdfViewCtrl
-             SetBackgroundColor:[viewerBackgroundColor[PTColorRedKey] unsignedCharValue] g:[viewerBackgroundColor[PTColorGreenKey] unsignedCharValue] b:[viewerBackgroundColor[PTColorBlueKey] unsignedCharValue]
-             a:255];
-            
-            [pdfViewCtrl Update];
-        }
-    }
-}
-
 #pragma mark - viewer settings
 
 - (void)applyViewerSettings
@@ -1933,6 +1869,60 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setUrlExtraction:(BOOL)urlExtraction
+{
+    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
+}
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
+    [pdfViewCtrl Update];
+}
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
+    [pdfViewCtrl Update];
+}
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
+{
+    if (defaultPageColor) {
+        NSArray *keyList = defaultPageColor.allKeys;
+        if ([keyList containsObject:PTColorRedKey] &&
+            [keyList containsObject:PTColorGreenKey] &&
+            [keyList containsObject:PTColorBlueKey]) {
+         
+            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+            [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+            
+            [pdfViewCtrl Update];
+        }
+    }
+}
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor
+{
+    if (backgroundColor) {
+        NSArray *keyList = backgroundColor.allKeys;
+        if ([keyList containsObject:PTColorRedKey] &&
+            [keyList containsObject:PTColorGreenKey] &&
+            [keyList containsObject:PTColorBlueKey]) {
+            
+            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+            [pdfViewCtrl
+             SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue]
+             a:255];
+        }
+    }
+}
+
 #pragma mark - Custom headers
 
 - (void)setCustomHeaders:(NSDictionary<NSString *, NSString *> *)customHeaders
@@ -2258,23 +2248,6 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
-    
-    // Following block is for enforcing pdfViewCtrl related prop to work on load
-    [documentViewController.pdfViewCtrl SetUrlExtraction:self.urlExtraction];
-    [documentViewController.pdfViewCtrl SetPageBorderVisibility:self.pageBorderVisibility];
-    [documentViewController.pdfViewCtrl SetPageTransparencyGrid:self.pageTransparencyGrid];
-    
-    if (self.viewerBackgroundColor) {
-        [documentViewController.pdfViewCtrl SetBackgroundColor:[self.viewerBackgroundColor[PTColorRedKey] unsignedCharValue] g:[self.viewerBackgroundColor[PTColorGreenKey] unsignedCharValue] b:[self.viewerBackgroundColor[PTColorBlueKey] unsignedCharValue]
-            a:255];
-    }
-    
-    if (self.defaultPageColor) {
-        [documentViewController.pdfViewCtrl SetDefaultPageColor:[self.defaultPageColor[PTColorRedKey] unsignedCharValue] g:[self.defaultPageColor[PTColorGreenKey] unsignedCharValue]
-            b:[self.defaultPageColor[PTColorBlueKey] unsignedCharValue]];
-    }
-    
-    [documentViewController.pdfViewCtrl Update:YES];
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];

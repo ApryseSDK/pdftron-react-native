@@ -327,12 +327,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
-@property (nonatomic) BOOL urlExtraction;
-@property (nonatomic) BOOL pageBorderVisibility;
-@property (nonatomic) BOOL pageTransparencyGrid;
-
-@property (nonatomic, copy, nullable) NSDictionary *defaultPageColor;
-@property (nonatomic, copy, nullable) NSDictionary *viewerBackgroundColor;
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -376,6 +370,16 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)closeAllTabs;
 
 - (double)getZoom;
+
+- (void)setUrlExtraction:(BOOL)urlExtraction;
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

@@ -325,65 +325,6 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
-#### urlExtraction
-bool, optional, defaults to false
-
-Defines whether to extract urls from the ucrrent document. It is recommended to set this value only once (not updating after document is loaded).
-
-```js
-<DocumentView
-  urlExtraction={true}
-/>
-```
-
-#### pageBorderVisibility
-bool, optional, defaults to false
-
-Defines whether borders of each page are visible in the viewer.
-
-```js
-<DocumentView
-  pageBorderVisibility={true}
-/>
-```
-
-#### pageTransparencyGrid
-bool, optional, defaults to false
-
-Defines whether transparency grid (check board pattern) is enabled to reflect page transparency.
-
-```js
-<DocumentView
-  pageTransparencyGrid={true}
-/>
-```
-
-#### backgroundColor
-object, optional
-
-Defines the background color of the viewer.
-
-The object would have 3 keys (red, green and blue) each having a integer value between 0 and 255 (inclusive).
-
-```js
-<DocumentView
-  backgroundColor={{red: 0, green: 0, blue: 255}} // blue color
-/>
-```
-
-#### defaultPageColor
-object, optional
-
-Defines the default page color of the viewer.
-
-The object would have 3 keys (red, green and blue) each having a integer value between 0 and 255 (inclusive).
-
-```js
-<DocumentView
-  defaultPageColor={{red: 127, green: 127, blue: 127}} // grey color
-/>
-```
-
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -1593,4 +1534,71 @@ zoom | double | current zoom scale in the viewer
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
 });
+```
+
+### Viewer Options
+
+#### setUrlExtraction
+Sets whether to extract urls from the current document, which is disabled by default. It is recommended to set this value before document is opened.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+urlExtraction | bool | whether to extract urls from the current document
+
+```js
+this._viewer.setUrlExtraction(true);
+```
+
+#### setPageBorderVisibility
+Sets whether borders of each page are visible in the viewer, which is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageBorderVisibility | bool | whether borders of each page are visible in the viewer
+
+```js
+this._viewer.setPageBorderVisibility(true);
+```
+
+#### setPageTransparencyGrid
+Enables or disables transparency grid (check board pattern) to reflect page transparency, which is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageTransparencyGrid | bool | whether to use the transpareny grid
+
+```js
+this._viewer.setPageTransparencyGrid(true);
+```
+
+#### setBackgroundColor
+Sets the background color of the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+backgroundColor | object | the background color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setBackgroundColor({red: 0, green: 0, blue: 255}); // blue color
+```
+
+#### defaultPageColor
+Sets the default page color of the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+defaultPageColor | object | the default page color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 ```

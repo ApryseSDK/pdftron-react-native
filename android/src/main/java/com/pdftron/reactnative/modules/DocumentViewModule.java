@@ -379,6 +379,81 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
+    public void setUrlExtraction(final int tag, final boolean urlExtraction, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setUrlExtraction(tag, urlExtraction);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setPageBorderVisibility(final int tag, final boolean pageBorderVisibility, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setPageBorderVisibility(tag, pageBorderVisibility);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setPageTransparencyGrid(final int tag, final boolean pageTransparencyGrid, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setPageTransparencyGrid(tag, pageTransparencyGrid);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setDefaultPageColor(final int tag, final ReadableMap defaultPageColor, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setDefaultPageColor(tag, defaultPageColor);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setBackgroundColor(final int tag, final ReadableMap backgroundColor, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setBackgroundColor(tag, backgroundColor);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);

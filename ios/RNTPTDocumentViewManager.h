@@ -53,6 +53,17 @@
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoom:(NSNumber *)tag;
+
+- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction;
+
+- (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColorForDocumentViewTag:(NSNumber *)tag defaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColorForDocumentViewTag:(NSNumber *)tag backgroundColor:(NSDictionary *)backgroundColor;
+
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 @end

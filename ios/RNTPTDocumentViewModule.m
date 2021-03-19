@@ -344,6 +344,81 @@ RCT_REMAP_METHOD(getZoom,
     }
 }
 
+RCT_REMAP_METHOD(setUrlExtraction,
+                 setUrlExtractionForDocumentViewTag: (nonnull NSNumber *) tag
+                 urlExtraction:(BOOL)urlExtraction
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setUrlExtractionForDocumentViewTag:tag urlExtraction:urlExtraction];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_url_extraction", @"Failed to set url extraction", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setPageBorderVisibility,
+                 setPageBorderVisibilityForDocumentViewTag: (nonnull NSNumber *) tag
+                 pageBorderVisibility:(BOOL)pageBorderVisibility
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPageBorderVisibilityForDocumentViewTag:tag pageBorderVisibility:pageBorderVisibility];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_page_border_visibility", @"Failed to set page border visibility", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setPageTransparencyGrid,
+                 setPageTransparencyGridForDocumentViewTag: (nonnull NSNumber *) tag
+                 pageTransparencyGrid:(BOOL)pageTransparencyGrid
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPageTransparencyGridForDocumentViewTag:tag pageTransparencyGrid:pageTransparencyGrid];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_page_transparency_grid", @"Failed to set page transparency grid", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setDefaultPageColor,
+                 setDefaultPageColorForDocumentViewTag: (nonnull NSNumber *) tag
+                 defaultPageColor:(NSDictionary *)defaultPageColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDefaultPageColorForDocumentViewTag:tag defaultPageColor:defaultPageColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_default_page_color", @"Failed to set default page color", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setBackgroundColor,
+                 setBackgroundColorForDocumentViewTag: (nonnull NSNumber *) tag
+                 backgroundColor:(NSDictionary *)backgroundColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setBackgroundColorForDocumentViewTag:tag backgroundColor:backgroundColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_background_color", @"Failed to set background color", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,

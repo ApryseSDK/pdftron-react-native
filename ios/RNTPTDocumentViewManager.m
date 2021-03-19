@@ -381,41 +381,6 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(urlExtraction, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.urlExtraction = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(pageBorderVisibility, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.pageBorderVisibility = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(pageTransparencyGrid, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.pageTransparencyGrid = [RCTConvert BOOL:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(defaultPageColor, NSDictionary, RNTPTDocumentView)
-{
-    if (json) {
-        view.defaultPageColor = [RCTConvert NSDictionary:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(backgroundColor, NSDictionary, RNTPTDocumentView)
-{
-    if (json) {
-        view.viewerBackgroundColor = [RCTConvert NSDictionary:json];
-    }
-}
-
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -804,6 +769,56 @@ RCT_CUSTOM_VIEW_PROPERTY(backgroundColor, NSDictionary, RNTPTDocumentView)
     if (documentView) {
         double zoom = [documentView getZoom];
         return zoom;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setUrlExtraction:urlExtraction];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setPageBorderVisibility:pageBorderVisibility];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setPageTransparencyGrid:pageTransparencyGrid];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setDefaultPageColorForDocumentViewTag:(NSNumber *)tag defaultPageColor:(NSDictionary *)defaultPageColor
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setDefaultPageColor:defaultPageColor];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setBackgroundColorForDocumentViewTag:(NSNumber *)tag backgroundColor:(NSDictionary *)backgroundColor
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setBackgroundColor:backgroundColor];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
