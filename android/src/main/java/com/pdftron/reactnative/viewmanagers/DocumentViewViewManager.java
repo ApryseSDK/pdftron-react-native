@@ -303,6 +303,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setZoom(zoom);
     }
 
+    @ReactProp(name = "horizontalScrollPos")
+    public void setHorizontalScrollPos(DocumentView documentView, double horizontalScrollPos) {
+        documentView.setHorizontalScrollPos(horizontalScrollPos);
+    }
+
+    @ReactProp(name = "verticalScrollPos")
+    public void setVerticalScrollPos(DocumentView documentView, double verticalScrollPos) {
+        documentView.setVerticalScrollPos(verticalScrollPos);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -410,6 +420,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "setValuesForFields", "Unable to find DocumentView.");
         }
     }
+
+    public WritableMap getField(int tag, String fieldName) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getField(fieldName);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getField", "Unable to find DocumentView.");
+        }
+    }
+
 
     public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
@@ -526,6 +546,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.smartZoom(x, y, animated);
         } else {
             throw new PDFNetException("", 0L, getName(), "smartZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getScrollPos(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getScrollPos();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getScrollPos", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getCanvasSize(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getCanvasSize();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getCanvasSize", "Unable to find DocumentView.");
         }
     }
 

@@ -214,6 +214,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getField(final int tag, final String fieldName, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap field = mDocumentViewInstance.getField(tag, fieldName);
+                    promise.resolve(field);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void deleteAnnotations(final int tag, final ReadableArray annots, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -364,6 +379,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getScrollPos(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap scrollPos = mDocumentViewInstance.getScrollPos(tag);
+                    promise.resolve(scrollPos);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void zoomWithCenter(final int tag, final double zoom, final int x, final int y, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -371,6 +401,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     mDocumentViewInstance.zoomWithCenter(tag, zoom, x, y);
                     promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getCanvasSize(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap canvasSize = mDocumentViewInstance.getCanvasSize(tag);
+                    promise.resolve(canvasSize);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
@@ -407,9 +452,6 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
-
-
-
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {

@@ -77,6 +77,8 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    horizontalScrollPos: PropTypes.number,
+    verticalScrollPos: PropTypes.number,
     ...ViewPropTypes,
   };
 
@@ -287,6 +289,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getField = (fieldName) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
@@ -412,6 +422,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.smartZoom(tag, x, y, animated);
+    }
+    return Promise.resolve();
+  }
+  
+  getScrollPos = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getScrollPos(tag);
+    }
+    return Promise.resolve();
+  }
+  
+  getCanvasSize = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCanvasSize(tag);
     }
     return Promise.resolve();
   }

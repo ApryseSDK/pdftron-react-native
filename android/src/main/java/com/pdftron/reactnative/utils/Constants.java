@@ -102,6 +102,15 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
     public static final String TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER = "AnnotationCreateFreeHighlighter";
 
+    // Field types
+    public static final String FIELD_TYPE_UNKNOWN = "unknown";
+    public static final String FIELD_TYPE_BUTTON = "button";
+    public static final String FIELD_TYPE_CHECKBOX = "checkbox";
+    public static final String FIELD_TYPE_RADIO = "radio";
+    public static final String FIELD_TYPE_TEXT = "text";
+    public static final String FIELD_TYPE_CHOICE = "choice";
+    public static final String FIELD_TYPE_SIGNATURE = "signature";
+
     // Toolbars
     public static final String TAG_VIEW_TOOLBAR = "PDFTron_View";
     public static final String TAG_ANNOTATE_TOOLBAR = "PDFTron_Annotate";
@@ -229,6 +238,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_TITLE = "title";
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
+    public static final String KEY_ANNOTATION_TYPE = "type";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -239,6 +249,7 @@ public final class Constants {
     public static final String KEY_FIELDS = "fields";
     public static final String KEY_FIELD_NAME = "fieldName";
     public static final String KEY_FIELD_VALUE = "fieldValue";
+    public static final String KEY_FIELD_TYPE = "fieldType";
     public static final String KEY_ERROR = "error";
 
     public static final String KEY_ANNOTATION_MENU = "annotationMenu";
@@ -253,6 +264,9 @@ public final class Constants {
     public static final String KEY_Y2 = "y2";
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
+
+    public static final String KEY_HORIZONTAL = "horizontal";
+    public static final String KEY_VERTICAL = "vertical";
 
     public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
     public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
@@ -272,7 +286,8 @@ public final class Constants {
     // EVENTS END
 
     // Config keys
-    public static final String KEY_Config_linkPress = "linkPress";
+    public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
+    public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
 
     // Zoom
     public static final String KEY_zoomLimitAbsolute = "absolute";
