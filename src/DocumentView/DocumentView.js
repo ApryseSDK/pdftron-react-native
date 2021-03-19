@@ -75,6 +75,8 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    horizontalScrollPos: PropTypes.number,
+    verticalScrollPos: PropTypes.number,
     ...ViewPropTypes,
   };
 
@@ -380,6 +382,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getScrollPos = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getScrollPos(tag);
+    }
+    return Promise.resolve();
+  }
+    
+  getCanvasSize = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCanvasSize(tag);
     }
     return Promise.resolve();
   }

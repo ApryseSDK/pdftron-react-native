@@ -346,11 +346,25 @@ RCT_REMAP_METHOD(setProgressiveRendering,
         reject(@"set_progressive_rendering", @"Failed to set progressive rendering", [self errorFromException:exception]);
     }
 }
+                 
+RCT_REMAP_METHOD(getScrollPos,
+                 getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [[self documentViewManager] getScrollPosForDocumentViewTag:tag];
+        resolve(scrollPos);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_scroll_pos", @"Failed to get scroll pos", [self errorFromException:exception]);
+    }
+}
 
 RCT_REMAP_METHOD(setImageSmoothing,
                  setImageSmoothingforDocumentViewTag: (nonnull NSNumber *) tag
                  imageSmoothing:(BOOL)imageSmoothing
-                 resolver:(RCTPromiseResolveBlock)resolve
+                resolver:(RCTPromiseResolveBlock)resolve
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
@@ -359,6 +373,20 @@ RCT_REMAP_METHOD(setImageSmoothing,
     }
     @catch (NSException *exception) {
         reject(@"set_image_smoothing", @"Failed to set image smoothing", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCanvasSize,
+                 getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [[self documentViewManager] getCanvasSizeForDocumentViewTag:tag];
+        resolve(canvasSize);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
     }
 }
 
@@ -376,7 +404,6 @@ RCT_REMAP_METHOD(setOverprint,
         reject(@"set_overprint", @"Failed to set overprint", [self errorFromException:exception]);
     }
 }
-
 
 #pragma mark - Collaboration
 
