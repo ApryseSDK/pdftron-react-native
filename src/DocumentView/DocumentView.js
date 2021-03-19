@@ -402,6 +402,30 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getPageRotation = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageRotation(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateCounterClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateCounterClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

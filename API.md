@@ -1209,6 +1209,41 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 });
 ```
 
+#### getPageRotation
+Gets the rotation value of all pages in the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageRotation | number | the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
+
+```js
+this._viewer.getPageRotation().then((pageRotation) => {
+  console.log('The current page rotation degree is' + pageRotation);
+});
+```
+
+#### rotateClockwise
+Rotates all pages in the current document in clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateClockwise();
+```
+
+#### rotateCounterClockwise
+Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateCounterClockwise();
+```
+
 ### Import/Export Annotations
 
 #### importAnnotationCommand
