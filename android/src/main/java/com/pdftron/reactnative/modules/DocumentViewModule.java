@@ -380,13 +380,13 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setUrlExtraction(final int tag, final boolean urlExtraction, final Promise promise) {
+    public void getScrollPos(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setUrlExtraction(tag, urlExtraction);
-                    promise.resolve(null);
+                    WritableMap scrollPos = mDocumentViewInstance.getScrollPos(tag);
+                    promise.resolve(scrollPos);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
@@ -395,7 +395,37 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void setUrlExtraction(final int tag, final boolean urlExtraction, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setUrlExtraction(tag, urlExtraction);
+                    promise.resolve(null);
+               } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setPageBorderVisibility(final int tag, final boolean pageBorderVisibility, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap canvasSize = mDocumentViewInstance.getCanvasSize(tag);
+                    promise.resolve(canvasSize);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getCanvasSize(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {

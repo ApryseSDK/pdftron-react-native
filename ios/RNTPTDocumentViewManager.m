@@ -381,6 +381,20 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(horizontalScrollPos, double, RNTPTDocumentView)
+{
+    if (json) {
+        view.horizontalScrollPos = [RCTConvert double:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
+{
+    if (json) {
+        view.verticalScrollPos = [RCTConvert double:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -534,6 +548,16 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
             @"onToolChanged": @"onToolChanged",
             @"previousTool": previousTool ?: @"unknown tool",
             @"tool": tool ?: @"unknown tool",
+        });
+    }
+}
+
+- (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data {
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onBehaviorActivated": @"onBehaviorActivated",
+            @"action": action,
+            @"data": data,
         });
     }
 }
@@ -769,6 +793,28 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
     if (documentView) {
         double zoom = [documentView getZoom];
         return zoom;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)getScrollPosForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [documentView getScrollPos];
+        return scrollPos;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSizeForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [documentView getCanvasSize];
+        return canvasSize;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
