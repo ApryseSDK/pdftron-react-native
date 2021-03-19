@@ -551,6 +551,30 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
+### Scroll
+
+#### horizontalScrollPos
+number, optional
+
+Defines the horizontal scroll position in the current document viewer.
+
+```js
+<DocumentView
+  horizontalScrollPos={50}
+/>
+```
+
+#### verticalScrollPos
+number, optional
+
+Defines the vertical scroll position in the current document viewer.
+
+```js
+<DocumentView
+  verticalScrollPos={50}
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -596,7 +620,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [Config.Tools](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
 
 ```js
 <DocumentView
@@ -604,6 +628,8 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
     console.log('Annotation menu item', annotationMenu, 'has been pressed');
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
+      console.log('The page number of selected annotation is', annotation.pageNumber);
+      console.log('The type of selected annotation is', annotation.type);
       console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
     });
   }}
@@ -695,9 +721,10 @@ data | object | A JSON object that varies depending on the action
 
 Data param table:
 
-Action | Param
+Action | Data param
 --- | ---
-[`Config.Actions.linkPress`](./src/Config/Config.js) | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
 <DocumentView
@@ -705,6 +732,8 @@ Action | Param
     console.log('Activated action is', action);
     if (action === Config.Actions.linkPress) {
       console.log('The external link pressed is', data.url);
+    } else if (action === Config.Actions.stickyNoteShowPopUp) {
+      console.log('Sticky note has been activated, but it would not show a pop up window.');
     }
   }}
 />
@@ -862,7 +891,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -870,6 +899,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
       console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
@@ -886,7 +916,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`, representing the annotations that have been changed
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -895,6 +925,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of changed annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
     });
   }}
 />
@@ -1544,5 +1575,47 @@ zoom | double | current zoom scale in the viewer
 ```js
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
+});
+```
+
+### Scroll
+
+#### getScrollPos
+Returns the horizontal and vertical scroll position of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | current horizontal scroll position
+vertical | number | current vertical scroll position
+
+```js
+this._viewer.getScrollPos().then(({horizontal, vertical}) => {
+  console.log('Current horizontal scroll position is:', horizontal);
+  console.log('Current vertical scroll position is:', vertical);
+});
+```
+
+### Canvas
+
+#### getCanvasSize
+Returns the canvas size of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+width | number | current width of canvas
+height | number | current height of canvas
+
+```js
+this._viewer.getCanvasSize().then(({width, height}) => {
+  console.log('Current canvas width is:', width);
+  console.log('Current canvas height is:', height);
 });
 ```

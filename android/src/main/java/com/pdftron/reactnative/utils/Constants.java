@@ -237,6 +237,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_TITLE = "title";
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
+    public static final String KEY_ANNOTATION_TYPE = "type";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -263,6 +264,9 @@ public final class Constants {
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
 
+    public static final String KEY_HORIZONTAL = "horizontal";
+    public static final String KEY_VERTICAL = "vertical";
+
     public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
     public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
     public static final String KEY_ANNOTATION_FLAG_LOCKED = "locked";
@@ -288,6 +292,7 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
+    public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
 
     // Color Post Process Modes
     public static final String KEY_COLOR_POST_PROCESS_MODE_NONE = "none";

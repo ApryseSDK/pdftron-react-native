@@ -75,6 +75,8 @@ export default class DocumentView extends PureComponent {
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    horizontalScrollPos: PropTypes.number,
+    verticalScrollPos: PropTypes.number,
     colorPostProcessMode: PropTypes.string,
     ...ViewPropTypes,
   };
@@ -385,13 +387,29 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getScrollPos = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getScrollPos(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getCanvasSize = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCanvasSize(tag);
+    }
+    return Promise.resolve();
+  }
+
   setColorPostProcessColors = (whiteColor, blackColor) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
     }
     return Promise.resolve();
-  }
+  }    
 
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
