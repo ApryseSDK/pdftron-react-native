@@ -395,13 +395,6 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(colorPostProcessMode, NSString, RNTPTDocumentView)
-{
-    if (json) {
-        view.colorPostProcessMode = [RCTConvert NSString:json];
-    }
-}
-
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
@@ -811,6 +804,16 @@ RCT_CUSTOM_VIEW_PROPERTY(colorPostProcessMode, NSString, RNTPTDocumentView)
     if (documentView) {
         NSDictionary<NSString *, NSNumber *> *canvasSize = [documentView getCanvasSize];
         return canvasSize;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setColorPostProcessModeForDocumentViewTag:(NSNumber *)tag colorPostProcessMode:(NSString *)colorPostProcessMode
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setColorPostProcessMode:colorPostProcessMode];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

@@ -348,8 +348,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 
-@property (nonatomic, copy, nullable) NSString *colorPostProcessMode;
-
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -395,6 +393,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode;
 
 - (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor;
 

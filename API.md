@@ -312,18 +312,6 @@ Defines whether to show the leading navigation button.
 />
 ```
 
-#### colorPostProcessMode
-string, optional, defaults to none
-
-Defines the color post processing transformation mode for the viewer. Strings should be [Config.ColorPostProcessMode](./src/Config/Config.js) constants.
-
-```js
-<DocumentView>
-  colorPostProcessMode={Config.ColorPostProcessMode.NightMode}
-/>
-```
-
-
 #### onLeadingNavButtonPressed
 function, optional
 
@@ -1121,6 +1109,19 @@ this._viewer.saveDocument().then((filePath) => {
 ```
 
 ### UI Customization
+
+#### setColorPostProcessMode
+Sets the color post processing transformation mode for the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+colorPostProcessMode | string | color post processing transformation mode, should be a [Config.ColorPostProcessMode](./src/Config/Config.js) constant
+
+```js
+this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
+```
 
 #### setColorPostProcessColors
 Sets the white and black color for the color post processing transformation.

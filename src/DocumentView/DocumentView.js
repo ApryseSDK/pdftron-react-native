@@ -77,7 +77,6 @@ export default class DocumentView extends PureComponent {
     onToolChanged: PropTypes.func,
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
-    colorPostProcessMode: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -399,6 +398,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setColorPostProcessMode = (colorPostProcessMode) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
     }
     return Promise.resolve();
   }

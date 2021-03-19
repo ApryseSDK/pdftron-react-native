@@ -108,8 +108,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
-    private int mColorPostProcessMode = -1;
-
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -613,31 +611,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (pdfViewCtrl != null) {
             pdfViewCtrl.setVScrollPos((int)(verticalScrollPos + 0.5));
-        }
-    }
-
-    public void setColorPostProcessMode(String colorPostProcessMode) {
-        switch (colorPostProcessMode) {
-            case KEY_COLOR_POST_PROCESS_MODE_NONE:
-                mColorPostProcessMode = 0;
-                break;
-            case KEY_COLOR_POST_PROCESS_MODE_INVERT:
-                mColorPostProcessMode = 1;
-                break;
-            case KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP:
-                mColorPostProcessMode = 2;
-                break;
-            case KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE:
-                mColorPostProcessMode = 3;
-                break;
-        }
-
-        if (mColorPostProcessMode != -1 && getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setColorPostProcessMode(mColorPostProcessMode);
-            } catch (PDFNetException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -2115,14 +2088,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
-        if (mColorPostProcessMode != -1) {
-            try {
-                getPdfViewCtrl().setColorPostProcessMode(mColorPostProcessMode);
-            } catch (PDFNetException e) {
-                e.printStackTrace();
-            }
-        }
-
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2851,7 +2816,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return map;
     }
 
-    public void setColorPostProcessColors(ReadableMap whiteColor, ReadableMap blackColor) {
+    public void setColorPostProcessMode(String colorPostProcessMode) throws PDFNetException {
+        int colorPostProcessModeValue = -1;
+        switch (colorPostProcessMode) {
+            case KEY_COLOR_POST_PROCESS_MODE_NONE:
+                colorPostProcessModeValue = 0;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_INVERT:
+                colorPostProcessModeValue = 1;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP:
+                colorPostProcessModeValue = 2;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE:
+                colorPostProcessModeValue = 3;
+                break;
+        }
+
+        if (colorPostProcessModeValue != -1 && getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setColorPostProcessMode(colorPostProcessModeValue);
+        }
+    }
+
+    public void setColorPostProcessColors(ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null) {
 
@@ -2897,11 +2884,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 blackColorNumber += currentColorValue;
             }
 
-            try {
-                pdfViewCtrl.setColorPostProcessColors(whiteColorNumber, blackColorNumber);
-            } catch (PDFNetException e) {
-                e.printStackTrace();
-            }
+            pdfViewCtrl.setColorPostProcessColors(whiteColorNumber, blackColorNumber);
         }
     }
 

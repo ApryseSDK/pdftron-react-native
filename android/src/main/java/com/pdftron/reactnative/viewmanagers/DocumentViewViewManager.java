@@ -308,11 +308,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setVerticalScrollPos(verticalScrollPos);
     }
 
-    @ReactProp(name = "colorPostProcessMode")
-    public void setColorPostProcessMode(DocumentView documentView, String colorPostProcessMode) {
-        documentView.setColorPostProcessMode(colorPostProcessMode);
-    }
-
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -528,6 +523,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getCanvasSize();
         } else {
             throw new PDFNetException("", 0L, getName(), "getCanvasSize", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessMode(int tag, String colorPostProcessMode) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessMode(colorPostProcessMode);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessMode", "Unable to find DocumentView.");
         }
     }
 

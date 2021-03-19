@@ -1994,27 +1994,20 @@ NS_ASSUME_NONNULL_END
 # pragma mark - Color Post Process
 - (void)setColorPostProcessMode:(NSString *)colorPostProcessMode
 {
-    _colorPostProcessMode = [colorPostProcessMode copy];
-    
     PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
     if (pdfViewCtrl) {
-        [self applyColorPostProcessMode:pdfViewCtrl];
+        
+        if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeInvertKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_invert];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeGradientMapKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_gradient_map];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNightModeKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
+        }
     }
 }
-
-- (void)applyColorPostProcessMode:(PTPDFViewCtrl *)pdfViewCtrl
-{
-    if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
-        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
-    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeInvertKey]) {
-        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_invert];
-    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeGradientMapKey]) {
-        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_gradient_map];
-    } else if ([self.colorPostProcessMode isEqualToString:PTColorPostProcessModeNightModeKey]) {
-        [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
-    }
-}
-
 
 - (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
 {
@@ -2278,7 +2271,6 @@ NS_ASSUME_NONNULL_END
     }
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
-    [self applyColorPostProcessMode:documentViewController.pdfViewCtrl];
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
