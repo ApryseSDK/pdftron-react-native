@@ -1932,7 +1932,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
             WritableMap params = Arguments.createMap();
             params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
-            if (xfdfCommand != null) {
+            if (xfdfCommand == null) {
                 params.putString(KEY_ERROR, "XFDF command cannot be generated");
             } else {
                 params.putString(KEY_ACTION, action);
@@ -2385,6 +2385,62 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 pdfViewCtrl.docUnlock();
             }
         }
+    }
+
+    public WritableMap getField(String fieldName) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        WritableMap fieldMap = null;
+        boolean shouldUnlock = false;
+
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlock = true;
+
+            Field field = pdfDoc.getField(fieldName);
+
+            if (field != null && field.isValid()) {
+                fieldMap = Arguments.createMap();
+                int fieldType = field.getType();
+                String typeString;
+                switch (fieldType) {
+                    case Field.e_button:
+                        typeString = FIELD_TYPE_BUTTON;
+                        break;
+                    case Field.e_check:
+                        typeString = FIELD_TYPE_CHECKBOX;
+                        fieldMap.putBoolean(KEY_FIELD_VALUE, field.getValueAsBool());
+                        break;
+                    case Field.e_radio:
+                        typeString = FIELD_TYPE_RADIO;
+                        fieldMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
+                        break;
+                    case Field.e_text:
+                        typeString = FIELD_TYPE_TEXT;
+                        fieldMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
+                        break;
+                    case Field.e_choice:
+                        typeString = FIELD_TYPE_CHOICE;
+                        fieldMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
+                        break;
+                    case Field.e_signature:
+                        typeString = FIELD_TYPE_SIGNATURE;
+                        break;
+                    default:
+                        typeString = FIELD_TYPE_UNKNOWN;
+                        break;
+                }
+
+                fieldMap.putString(KEY_FIELD_NAME, fieldName);
+                fieldMap.putString(KEY_FIELD_TYPE, typeString);
+            }
+        } finally {
+            if (shouldUnlock) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+        return fieldMap;
     }
 
     public String getDocumentPath() {

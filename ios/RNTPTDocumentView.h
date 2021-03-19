@@ -132,6 +132,7 @@ static NSString * const PTActionLinkAnnotationKey = @"action";
 
 static NSString * const PTStyleMenuItemTitleKey = @"Style";
 static NSString * const PTNoteMenuItemTitleKey = @"Note";
+static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
@@ -178,6 +179,15 @@ static NSString * const PTScrollVerticalKey = @"vertical";
 
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
+static NSString * const PTFormFieldTypeKey = @"fieldType";
+
+static NSString * const PTFieldTypeUnknownKey = @"unknown";
+static NSString * const PTFieldTypeButtonKey = @"button";
+static NSString * const PTFieldTypeCheckboxKey = @"checkbox";
+static NSString * const PTFieldTypeRadioKey = @"radio";
+static NSString * const PTFieldTypeTextKey = @"text";
+static NSString * const PTFieldTypeChoiceKey = @"choice";
+static NSString * const PTFieldTypeSignatureKey = @"signature";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -189,6 +199,7 @@ static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFillAndSign = @"PD
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarMeasure = @"PDFTron_Measure";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPens = @"PDFTron_Pens";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarRedaction = @"PDFTron_Redact";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
 
 // Custom annotation toolbar keys.
@@ -346,6 +357,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
 - (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
+
+- (NSDictionary *)getField:(NSString *)fieldName;
 
 - (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 

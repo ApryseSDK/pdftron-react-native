@@ -281,6 +281,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getField = (fieldName) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
