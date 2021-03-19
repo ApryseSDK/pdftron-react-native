@@ -268,11 +268,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationPermissionCheckEnabled(annotPermissionCheckEnabled);
     }
 
-    @ReactProp(name = "drawAnnotations")
-    public void setDrawAnnotations(DocumentView documentView, boolean drawAnnotations) {
-        documentView.setDrawAnnotations(drawAnnotations);
-    }
-
     @ReactProp(name = "annotationToolbars")
     public void setAnnotationToolbars(DocumentView documentView, ReadableArray toolbars) {
         documentView.setAnnotationToolbars(toolbars);
@@ -473,6 +468,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
             throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setDrawAnnotations(int tag, boolean drawAnnotations) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDrawAnnotations(drawAnnotations);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
         }
     }
 

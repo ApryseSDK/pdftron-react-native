@@ -1338,13 +1338,6 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setDrawAnnotations:(BOOL)drawAnnotations
-{
-    _drawAnnotations = drawAnnotations;
-    
-    [self applyViewerSettings];
-}
-
 #pragma mark - Collaboration
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
@@ -1605,9 +1598,6 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl SetPageViewMode:e_trn_zoom];
         [pdfViewCtrl SetPageRefViewMode:e_trn_zoom];
     }
-    
-    // Draw Annotations.
-    [pdfViewCtrl SetDrawAnnotations:_drawAnnotations];
     
     // Layout mode.
     [self applyLayoutMode:pdfViewCtrl];
@@ -2932,7 +2922,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Set Visibility for Annotation
+#pragma mark - Annotation Visibility
+
+- (void)setDrawAnnotations:(BOOL)drawAnnotations
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetDrawAnnotations:drawAnnotations];
+}
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
 {

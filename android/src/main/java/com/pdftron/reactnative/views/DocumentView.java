@@ -108,8 +108,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCacheDir;
     private int mInitialPageNumber = -1;
 
-    private boolean mDrawAnnotations = true;
-
     private boolean mPadStatusBar;
 
     private boolean mAutoSaveEnabled = true;
@@ -467,18 +465,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
-    }
-
-    public void setDrawAnnotations(boolean drawAnnotations) {
-        mDrawAnnotations = drawAnnotations;
-
-        if (getPdfViewCtrl() != null) {
-            try {
-                getPdfViewCtrl().setDrawAnnotations(drawAnnotations);
-            } catch (PDFNetException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
@@ -2102,12 +2088,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
 
-        try {
-            getPdfViewCtrl().setDrawAnnotations(mDrawAnnotations);
-        } catch (PDFNetException ex) {
-            ex.printStackTrace();
-        }
-
         if (!mAutoSaveEnabled) {
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
         }
@@ -2776,6 +2756,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (shouldUnlock) {
                 pdfViewCtrl.docUnlock();
             }
+        }
+    }
+
+    public void setDrawAnnotations(boolean drawAnnotations) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setDrawAnnotations(drawAnnotations);
         }
     }
 

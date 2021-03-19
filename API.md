@@ -849,17 +849,6 @@ Defines whether an annotation is selected after it is created. On iOS, this func
 />
 ```
 
-#### drawAnnotations
-bool, optional, defaults to true
-
-Defines whether annotations and forms should be rendered in the viewer.
-
-```js
-<DocumentView
-  drawAnnotations={false}
-/>
-```
-
 #### onExportAnnotationCommand
 function, optional
 
@@ -1420,6 +1409,21 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   subject: 'Sample',
   title: 'set-prop-for-annot'
 });
+```
+
+#### setDrawAnnotations
+Sets whether all annotations and forms should be rendered in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+drawAnnotations | bool | whether all annotations and forms should be rendered
+
+Returns a promise.
+
+```js
+this._viewer.setDrawAnnotations(false);
 ```
 
 #### setVisibilityForAnnotation

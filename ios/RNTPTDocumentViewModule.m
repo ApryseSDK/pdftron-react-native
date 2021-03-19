@@ -272,6 +272,21 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(setDrawAnnotations,
+                 setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
+                 drawAnnotations:(BOOL)drawAnnotations
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDrawAnnotationsForDocumentViewTag:tag drawAnnotations:drawAnnotations];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_draw_annotations", @"Failed to set draw annotations", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setVisibilityForAnnotation,
                  setVisibilityForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
                  annotationId:(NSString *)annotationId
