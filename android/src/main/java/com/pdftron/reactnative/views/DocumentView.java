@@ -598,6 +598,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
     }
 
+    public void setHorizontalScrollPos(double horizontalScrollPos) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.setHScrollPos((int)(horizontalScrollPos + 0.5));
+        }
+    }
+
+    public void setVerticalScrollPos(double verticalScrollPos) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.setVScrollPos((int)(verticalScrollPos + 0.5));
+        }
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
@@ -2772,6 +2788,32 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public double getZoom() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.getZoom();
+    }
+
+    public WritableMap getScrollPos() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableMap map = Arguments.createMap();
+
+        if (pdfViewCtrl != null) {
+            map.putDouble(KEY_HORIZONTAL, pdfViewCtrl.getHScrollPos());
+            map.putDouble(KEY_VERTICAL, pdfViewCtrl.getVScrollPos());
+        }
+
+        return map;
+    }
+
+    public WritableMap getCanvasSize() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableMap map = Arguments.createMap();
+
+        if (pdfViewCtrl != null) {
+            map.putDouble(KEY_WIDTH, pdfViewCtrl.getCanvasWidth());
+            map.putDouble(KEY_HEIGHT, pdfViewCtrl.getCanvasHeight());
+        }
+
+        return map;
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {

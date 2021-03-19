@@ -264,6 +264,9 @@ public final class Constants {
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
 
+    public static final String KEY_HORIZONTAL = "horizontal";
+    public static final String KEY_VERTICAL = "vertical";
+
     public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
     public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
     public static final String KEY_ANNOTATION_FLAG_LOCKED = "locked";

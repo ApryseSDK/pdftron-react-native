@@ -539,6 +539,30 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
+### Scroll
+
+#### horizontalScrollPos
+number, optional
+
+Defines the horizontal scroll position in the current document viewer.
+
+```js
+<DocumentView
+  horizontalScrollPos={50}
+/>
+```
+
+#### verticalScrollPos
+number, optional
+
+Defines the vertical scroll position in the current document viewer.
+
+```js
+<DocumentView
+  verticalScrollPos={50}
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -1521,5 +1545,47 @@ zoom | double | current zoom scale in the viewer
 ```js
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
+});
+```
+
+### Scroll
+
+#### getScrollPos
+Returns the horizontal and vertical scroll position of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | current horizontal scroll position
+vertical | number | current vertical scroll position
+
+```js
+this._viewer.getScrollPos().then(({horizontal, vertical}) => {
+  console.log('Current horizontal scroll position is:', horizontal);
+  console.log('Current vertical scroll position is:', vertical);
+});
+```
+
+### Canvas
+
+#### getCanvasSize
+Returns the canvas size of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+width | number | current width of canvas
+height | number | current height of canvas
+
+```js
+this._viewer.getCanvasSize().then(({width, height}) => {
+  console.log('Current canvas width is:', width);
+  console.log('Current canvas height is:', height);
 });
 ```

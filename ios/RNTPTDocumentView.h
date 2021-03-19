@@ -178,6 +178,9 @@ static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
 
+static NSString * const PTScrollHorizontalKey = @"horizontal";
+static NSString * const PTScrollVerticalKey = @"vertical";
+
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 static NSString * const PTFormFieldTypeKey = @"fieldType";
@@ -329,6 +332,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
+@property (nonatomic) double horizontalScrollPos;
+@property (nonatomic) double verticalScrollPos;
+
+@property (nonatomic) double canvasWidth;
+@property (nonatomic) double canvasHeight;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -370,6 +379,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)closeAllTabs;
 
 - (double)getZoom;
+
+- (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
