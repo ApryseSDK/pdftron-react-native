@@ -1443,6 +1443,19 @@ Returns a promise.
 this._viewer.setVisibilityForAnnotation('Pdftron', 1, true);
 ```
 
+#### setHighlightFields
+Enables or disables highlighting form fields. It is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+highlightFields | bool | whether form fields should be highlighted
+
+```js
+this._viewer.setHighlightFields(true);
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 

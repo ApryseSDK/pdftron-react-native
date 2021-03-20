@@ -304,6 +304,21 @@ RCT_REMAP_METHOD(setVisibilityForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(setHighlightFields,
+                 setHighlightFieldsForDocumentViewTag: (nonnull NSNumber *)tag
+                 highlightFields:(BOOL)highlightFields
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setHighlightFieldsForDocumentViewTag:tag highlightFields:highlightFields];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_highlight_fields", @"Failed to set highlight fields", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber

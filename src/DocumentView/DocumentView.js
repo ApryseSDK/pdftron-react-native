@@ -370,6 +370,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setHighlightFields = (highlightFields) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setHighlightFields(tag, highlightFields);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

@@ -2962,6 +2962,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setHighlightFields:(BOOL)highlightFields
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetHighlightFields:highlightFields];
+    [pdfViewCtrl Update];
+}
+
 #pragma mark - Get Crop Box
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber

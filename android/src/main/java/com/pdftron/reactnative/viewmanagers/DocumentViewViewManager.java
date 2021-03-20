@@ -489,6 +489,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setHighlightFields(int tag, boolean highlightFields) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setHighlightFields(highlightFields);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setHighlightFields", "Unable to find DocumentView.");
+        }
+    }
+
     public void closeAllTabs(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
