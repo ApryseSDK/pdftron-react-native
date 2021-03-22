@@ -454,7 +454,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setOverrideBehavior(@NonNull ReadableArray items) {
         mActionOverrideItems = items;
-        if (getToolManager() != null) {
+        if (!mCollabEnabled && getToolManager() != null) {
             getToolManager().setStickyNoteShowPopup(!isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP));
         }
     }
@@ -2076,7 +2076,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
-        if (getToolManager() != null) {
+        if (!mCollabEnabled && getToolManager() != null) {
             getToolManager().setStickyNoteShowPopup(!isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP));
         }
 
