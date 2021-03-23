@@ -150,7 +150,7 @@ Example:
 #### isBase64String
 bool, optional, defaults to false
 
-If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [base64FileExtension](#base64FileExtension) is required. 
+If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [`base64FileExtension`](#base64FileExtension) is required. 
 
 When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
 
@@ -164,7 +164,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 #### base64FileExtension
 string, required if using base64 string of a non-pdf file, defaults to ".pdf"
 
-The file extension for the base64 string in [document](#document), if [isBase64String](#isBase64String) is true.
+The file extension for the base64 string in [`document`](#document), if [`isBase64String`](#isBase64String) is true.
 
 ```js
 <DocumentView
@@ -284,7 +284,7 @@ Example:
 ##### Android
 1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
-<img alt='demo-android' src='android_add_resources.png'/>
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
@@ -296,7 +296,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-ios' src='ios_add_resources.png'/>
+<img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
@@ -687,7 +687,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 #### overrideBehavior
 array of string, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -1075,7 +1075,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ### Document
 
 #### getDocumentPath
-Returns the path of the current document. If [isBase64String](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [document](#document).
+Returns the path of the current document. If [`isBase64String`](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1092,7 +1092,7 @@ this._viewer.getDocumentPath().then((path) => {
 ```
 
 #### saveDocument
-Saves the current document. If [isBase64String](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [document](#document).
+Saves the current document. If [`isBase64String`](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
