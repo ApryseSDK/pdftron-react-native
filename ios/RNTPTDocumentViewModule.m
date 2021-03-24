@@ -264,11 +264,58 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setPropertiesForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        [[self documentViewManager] setPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
         resolve(nil);
     }
     @catch (NSException *exception) {
         reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setDrawAnnotations,
+                 setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
+                 drawAnnotations:(BOOL)drawAnnotations
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDrawAnnotationsForDocumentViewTag:tag drawAnnotations:drawAnnotations];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_draw_annotations", @"Failed to set draw annotations", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setVisibilityForAnnotation,
+                 setVisibilityForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 visibility:(BOOL)visibility
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setVisibilityForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber visibility:visibility];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_visibility_for_annotation", @"Failed to set visibility for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setHighlightFields,
+                 setHighlightFieldsForDocumentViewTag: (nonnull NSNumber *)tag
+                 highlightFields:(BOOL)highlightFields
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setHighlightFieldsForDocumentViewTag:tag highlightFields:highlightFields];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_highlight_fields", @"Failed to set highlight fields", [self errorFromException:exception]);
     }
 }
 
@@ -355,6 +402,53 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
     @catch (NSException *exception) {
         reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(findText,
+                 findTextForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 searchUp:(BOOL)searchUp
+                 regExp:(BOOL)regExp
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] findTextForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord searchUp:searchUp regExp:regExp];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"find_text", @"Failed to initiaze a text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(cancelFindText,
+                 cancelFindTextForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] cancelFindTextForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"cancel_text", @"Failed to cancel text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSelection,
+                 getSelectionForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *selection = [[self documentViewManager] getSelectionForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(selection);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_selection", @"Failed to get text selection", [self errorFromException:exception]);
     }
 }
 

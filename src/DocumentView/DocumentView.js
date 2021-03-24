@@ -354,6 +354,30 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setDrawAnnotations = (drawAnnotations) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
+    }
+    return Promise.resolve();
+  }
+
+  setVisibilityForAnnotation = (id, pageNumber, visibility) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
+    }
+    return Promise.resolve();
+  }
+
+  setHighlightFields = (highlightFields) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setHighlightFields(tag, highlightFields);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -398,6 +422,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
+    }
+    return Promise.resolve();
+  }
+
+  findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
+    }
+    return Promise.resolve();
+  }
+
+  cancelFindText = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.cancelFindText(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSelection = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.cancelFindText(tag, pageNumber);
     }
     return Promise.resolve();
   }

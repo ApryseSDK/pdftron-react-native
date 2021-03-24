@@ -193,6 +193,13 @@ static NSString * const PTFieldTypeTextKey = @"text";
 static NSString * const PTFieldTypeChoiceKey = @"choice";
 static NSString * const PTFieldTypeSignatureKey = @"signature";
 
+static NSString * const PTTextSelectionPageNumberKey = @"pageNumber";
+static NSString * const PTTextSelectionUnicodekey = @"unicode";
+static NSString * const PTTextSelectionHtmlKey = @"html";
+static NSString * const PTTextSelectionQuadsKey = @"quads";
+static NSString * const PTTextSelectionQuadXKey = @"x";
+static NSString * const PTTextSelectionQuadYKey = @"y";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -225,6 +232,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)textSearchStart:(RNTPTDocumentView *)sender;
+- (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(NSDictionary *)textSelection;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -372,6 +381,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (void)setDrawAnnotations:(BOOL)drawAnnotations;
+
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
+
+- (void)setHighlightFields:(BOOL)highlightFields;
+
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
@@ -383,6 +398,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
+
+- (void)cancelFindText;
+
+- (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

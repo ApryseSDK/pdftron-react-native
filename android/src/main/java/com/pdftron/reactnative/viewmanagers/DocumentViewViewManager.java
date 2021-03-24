@@ -471,6 +471,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setDrawAnnotations(int tag, boolean drawAnnotations) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDrawAnnotations(drawAnnotations);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setVisibilityForAnnotation(int tag, String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setVisibilityForAnnotation(annotId, pageNumber, visibility);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setHighlightFields(int tag, boolean highlightFields) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setHighlightFields(highlightFields);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setHighlightFields", "Unable to find DocumentView.");
+        }
+    }
+
     public void closeAllTabs(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -523,6 +550,34 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getCanvasSize();
         } else {
             throw new PDFNetException("", 0L, getName(), "getCanvasSize", "Unable to find DocumentView.");
+        }
+    }
+
+    public void findText(int tag, String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.findText(searchString, matchCase, matchWholeWord, searchUp, regExp);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "findText", "Unable to find DocumentView.");
+        }
+    }
+
+    public void cancelFindText(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.cancelFindText();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "cancelFindText", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getSelection(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            WritableMap selection = documentView.getSelection(pageNumber);
+            return selection;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "cancelFindText", "Unable to find DocumentView.");
         }
     }
 

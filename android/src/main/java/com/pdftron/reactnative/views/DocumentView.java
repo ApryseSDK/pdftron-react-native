@@ -1516,6 +1516,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
             getPdfViewCtrl().removeOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
+            getPdfViewCtrl().setTextSearchListener(null);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
@@ -1840,6 +1841,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private PDFViewCtrl.TextSearchListener mTextSearchListener = new PDFViewCtrl.TextSearchListener() {
+        @Override
+        public void onTextSearchStart() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TEXT_SEARCH_START, ON_TEXT_SEARCH_START);
+            onReceiveNativeEvent(params);
+        }
+
+        @Override
+        public void onTextSearchProgress(int i) {
+        }
+
+        @Override
+        public void onTextSearchEnd(PDFViewCtrl.TextSearchResult textSearchResult) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TEXT_SEARCH_RESULT, ON_TEXT_SEARCH_RESULT);
+
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+            if (textSearchResult.equals(PDFViewCtrl.TextSearchResult.FOUND)) {
+                params.putBoolean(KEY_TEXT_SELECTION_FOUND, true);
+                int currentPage = pdfViewCtrl.getCurrentPage();
+                PDFViewCtrl.Selection selection = pdfViewCtrl.getSelection(currentPage);
+                params.putMap(KEY_TEXT_SELECTION, getMapFromSelection(selection));
+            } else {
+                params.putBoolean(KEY_TEXT_SELECTION_FOUND, false);
+            }
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private ToolManager.AnnotationModificationListener mAnnotationModificationListener = new ToolManager.AnnotationModificationListener() {
         @Override
         public void onAnnotationsAdded(Map<Annot, Integer> map) {
@@ -2098,6 +2131,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
+        getPdfViewCtrl().setTextSearchListener(mTextSearchListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
@@ -2759,6 +2793,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setDrawAnnotations(boolean drawAnnotations) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setDrawAnnotations(drawAnnotations);
+        }
+    }
+
+    public void setVisibilityForAnnotation(String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
+            if (annot != null && annot.isValid()) {
+
+                if (visibility) {
+                    pdfViewCtrl.showAnnotation(annot);
+                } else {
+                    pdfViewCtrl.hideAnnotation(annot);
+                }
+
+                pdfViewCtrl.update(annot, pageNumber);
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+    }
+
+    public void setHighlightFields(boolean highlightFields) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setHighlightFields(highlightFields);
+        }
+    }
+
     public WritableMap getPageCropBox(int pageNumber) throws PDFNetException {
         com.pdftron.pdf.Rect rect = getPdfDoc().getPage(pageNumber).getCropBox();
 
@@ -2814,6 +2886,54 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return map;
+    }
+
+    public void findText(String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.findText(searchString, matchCase, matchWholeWord, searchUp, regExp);
+        }
+    }
+
+    public void cancelFindText() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.cancelFindText();
+        }
+    }
+
+    public WritableMap getSelection(int pageNumber) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            PDFViewCtrl.Selection selection = pdfViewCtrl.getSelection(pageNumber);
+            // Valid
+            if (selection.getPageNum() != -1) {
+                return getMapFromSelection(selection);
+            }
+        }
+        return null;
+    }
+
+    private WritableMap getMapFromSelection(PDFViewCtrl.Selection selection) {
+        WritableMap selectionMap = Arguments.createMap();
+        selectionMap.putInt(KEY_TEXT_SELECTION_PAGE_NUMBER, selection.getPageNum());
+        selectionMap.putString(KEY_TEXT_SELECTION_UNICODE, selection.getAsUnicode());
+        selectionMap.putString(KEY_TEXT_SELECTION_HTML, selection.getAsHtml());
+
+        double[] quads = selection.getQuads();
+        WritableArray points = Arguments.createArray();
+        for (int i = 0; i < 4; i ++) {
+            WritableMap point = Arguments.createMap();
+            point.putDouble(KEY_TEXT_SELECTION_QUAD_X, quads[2 * i]);
+            point.putDouble(KEY_TEXT_SELECTION_QUAD_Y, quads[2 * i + 1]);
+            points.pushMap(point);
+        }
+        selectionMap.putArray(KEY_TEXT_SELECTION_QUADS, points);
+
+        return selectionMap;
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
