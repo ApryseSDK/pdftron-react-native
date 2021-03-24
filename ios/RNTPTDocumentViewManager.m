@@ -574,11 +574,15 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(NSDictionary *)textSelection
 {
     if (sender.onChange) {
-        sender.onChange(@{
+        NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary: @{
             @"onTextSearchResult": @"onTextSearchResult",
-            @"found": [NSNumber numberWithBool:found],
-            @"textSelection": textSelection,
-        });
+            @"found": [NSNumber numberWithBool:found]
+        }];
+        
+        // set potential nil value through this way
+        result[@"textSelection"] = textSelection;
+        
+        sender.onChange(result);
     }
 }
 

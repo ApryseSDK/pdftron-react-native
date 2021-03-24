@@ -77,6 +77,8 @@ export default class DocumentView extends PureComponent {
     onToolChanged: PropTypes.func,
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
+    onTextSearchStart: PropTypes.func,
+    onTextSearchResult: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -174,6 +176,17 @@ export default class DocumentView extends PureComponent {
         this.props.onToolChanged({
           'previousTool': event.nativeEvent.previousTool,
           'tool': event.nativeEvent.tool,
+        });
+      }
+    } else if (event.nativeEvent.onTextSearchStart) {
+      if (this.props.onTextSearchStart) {
+        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+      }
+    } else if (event.nativeEvent.onTextSearchResult) {
+      if (this.props.onTextSearchResult) {
+        this.props.onTextSearchResult({
+          'found': event.nativeEvent.found,
+          'textSelection': event.nativeEvent.textSelection,
         });
       }
     }
@@ -445,7 +458,7 @@ export default class DocumentView extends PureComponent {
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.cancelFindText(tag, pageNumber);
+      return DocumentViewManager.getSelection(tag, pageNumber);
     }
     return Promise.resolve();
   }

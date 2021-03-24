@@ -2923,15 +2923,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         selectionMap.putString(KEY_TEXT_SELECTION_UNICODE, selection.getAsUnicode());
         selectionMap.putString(KEY_TEXT_SELECTION_HTML, selection.getAsHtml());
 
-        double[] quads = selection.getQuads();
-        WritableArray points = Arguments.createArray();
-        for (int i = 0; i < 4; i ++) {
-            WritableMap point = Arguments.createMap();
-            point.putDouble(KEY_TEXT_SELECTION_QUAD_X, quads[2 * i]);
-            point.putDouble(KEY_TEXT_SELECTION_QUAD_Y, quads[2 * i + 1]);
-            points.pushMap(point);
+        // convert all quads into points
+        double[] quadDoubleArray = selection.getQuads();
+        WritableArray quads = Arguments.createArray();
+        for (int i = 0; i < quadDoubleArray.length; i += 8) {
+            WritableArray quad = Arguments.createArray();
+            for (int j = 0; j < 8; j += 2) {
+                WritableMap point = Arguments.createMap();
+                point.putDouble(KEY_TEXT_SELECTION_QUAD_POINT_X, quadDoubleArray[i + j]);
+                point.putDouble(KEY_TEXT_SELECTION_QUAD_POINT_Y, quadDoubleArray[i + j + 1]);
+                quad.pushMap(point);
+            }
+            quads.pushArray(quad);
         }
-        selectionMap.putArray(KEY_TEXT_SELECTION_QUADS, points);
+        selectionMap.putArray(KEY_TEXT_SELECTION_QUADS, quads);
 
         return selectionMap;
     }

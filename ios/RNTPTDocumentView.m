@@ -3139,14 +3139,32 @@ NS_ASSUME_NONNULL_END
     [selectionMap setValue:[selection GetAsUnicode] forKey:PTTextSelectionUnicodekey];
     [selectionMap setValue:[selection GetAsHtml] forKey:PTTextSelectionHtmlKey];
     
-    PTVectorQuadPoint *quads = [selection GetQuads];
-    NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:4];
-    for (int i = 0; i < 4; i ++) {
-        PTQuadPoint *quad = [quads get:i];
-        // TODO: set points
+    PTVectorQuadPoint *vectorQuads = [selection GetQuads];
+    NSMutableArray *quads = [[NSMutableArray alloc] initWithCapacity:[vectorQuads size]];
+    
+    for (int i = 0; i < [vectorQuads size]; i ++) {
+        PTQuadPoint *quad = [vectorQuads get:i];
+        NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:4];
+        for (int j = 0; j < 4; j ++) {
+            PTPDFPoint *point;
+            if (j == 0) {
+                point = [quad getP1];
+            } else if (j == 1) {
+                point = [quad getP2];
+            } else if (j == 2) {
+                point = [quad getP3];
+            } else if (j == 3) {
+                point = [quad getP4];
+            }
+            
+            [points addObject:@{PTTextSelectionQuadPointXKey: [NSNumber numberWithDouble:[point getX]], PTTextSelectionQuadPointYKey: [NSNumber numberWithDouble:[point getY]]}];
+        }
+        
+        [quads addObject:points];
     }
     
-    [selectionMap setValue:points forKey:PTTextSelectionQuadsKey];
+    
+    [selectionMap setValue:quads forKey:PTTextSelectionQuadsKey];
     return selectionMap;
 }
 

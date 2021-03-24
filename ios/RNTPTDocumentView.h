@@ -197,8 +197,9 @@ static NSString * const PTTextSelectionPageNumberKey = @"pageNumber";
 static NSString * const PTTextSelectionUnicodekey = @"unicode";
 static NSString * const PTTextSelectionHtmlKey = @"html";
 static NSString * const PTTextSelectionQuadsKey = @"quads";
-static NSString * const PTTextSelectionQuadXKey = @"x";
-static NSString * const PTTextSelectionQuadYKey = @"y";
+
+static NSString * const PTTextSelectionQuadPointXKey = @"x";
+static NSString * const PTTextSelectionQuadPointYKey = @"y";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -233,7 +234,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
-- (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(NSDictionary *)textSelection;
+- (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
