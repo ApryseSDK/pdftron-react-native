@@ -1584,15 +1584,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             WritableMap annotationData = getAnnotationData(entry.getKey(), entry.getValue());
 
             if (annotationData != null) {
-                annots.pushMap(annotationData);
                 if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
+                    WritableMap annotationDataCopy = annotationData.copy();
                     try {
                         if (entry.getKey().getType() == Annot.e_Text) {
                             WritableMap params = Arguments.createMap();
 
                             params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
                             params.putString(KEY_ACTION, KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP);
-                            params.putMap(KEY_DATA, annotationData);
+                            params.putMap(KEY_DATA, annotationDataCopy);
 
                             onReceiveNativeEvent(params);
                         }
@@ -1600,6 +1600,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         e.printStackTrace();
                     }
                 }
+
+                annots.pushMap(annotationData);
             }
         }
         return annots;
