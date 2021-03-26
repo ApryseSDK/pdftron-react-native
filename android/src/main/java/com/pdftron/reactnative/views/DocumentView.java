@@ -324,29 +324,45 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mode = PDFViewCtrl.PageViewMode.ZOOM;
             }
             if (mode != null) {
-                mPDFViewCtrlConfig.setPageViewMode(mode);
+                if (getPdfViewCtrl() == null) {
+                    mPDFViewCtrlConfig.setPageViewMode(mode);
+                } else {
+                    getPdfViewCtrl().setPageViewMode(mode);
+                }
             }
         }
     }
 
     public void setLayoutMode(String layoutMode) {
         String mode = null;
+        PDFViewCtrl.PagePresentationMode presentationMode = null;
+
         if (LAYOUT_MODE_SINGLE.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_SINGLEPAGE_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.SINGLE;
         } else if (LAYOUT_MODE_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_CONTINUOUS_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.SINGLE_CONT;
         } else if (LAYOUT_MODE_FACING.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.FACING;
         } else if (LAYOUT_MODE_FACING_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACING_CONT_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.FACING_CONT;
         } else if (LAYOUT_MODE_FACING_COVER.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.FACING_COVER;
         } else if (LAYOUT_MODE_FACING_COVER_CONTINUOUS.equals(layoutMode)) {
             mode = PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_FACINGCOVER_CONT_VALUE;
+            presentationMode = PDFViewCtrl.PagePresentationMode.FACING_COVER_CONT;
         }
         Context context = getContext();
         if (mode != null && context != null) {
-            PdfViewCtrlSettingsManager.updateViewMode(context, mode);
+            if (getPdfViewCtrl() == null) {
+                PdfViewCtrlSettingsManager.updateViewMode(context, mode);
+            } else {
+                getPdfViewCtrl().setPagePresentationMode(presentationMode);
+            }
         }
     }
 
