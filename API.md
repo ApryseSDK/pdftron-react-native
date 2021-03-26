@@ -1130,7 +1130,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-whiteColor | object | the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (Android only), and all numbers should be in range [0, 255]
+whiteColor | object | the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (only Android would apply alpha), and all numbers should be in range [0, 255]
 blackColor | object | the black color for the color post processing transformation, in the same format as whiteColor
 
 ```js

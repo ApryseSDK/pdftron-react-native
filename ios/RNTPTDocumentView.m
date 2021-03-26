@@ -2014,56 +2014,46 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
     if (pdfViewCtrl) {
         
-        NSString *colorKeys[4] = {PTColorRedKey, PTColorGreenKey, PTColorBlueKey, PTColorAlphaKey};
-        double colorValues[4];
-        
-        NSArray *whiteColorKeys = [whiteColor allKeys];
-        NSArray *blackColorKeys = [blackColor allKeys];
-        
-        for (int i = 0; i < 4; i ++) {
-            if (![whiteColorKeys containsObject:colorKeys[i]]) {
-                // not alpha
-                if (![colorKeys[i] isEqualToString:PTColorAlphaKey]) {
-                    return;
-                }
-                // alpha
-                colorValues[i] = (double)1;
-                continue;
-            }
-            
-            double value = (double)[whiteColor[colorKeys[i]] intValue] / 255;
-            if (value < 0 || value > 1) {
-                return;
-            }
-            
-            colorValues[i] = value;
+        UIColor *whiteUIColor = [self convertRGBAToUIColor:whiteColor];
+        if (!whiteUIColor) {
+            return;
         }
         
-        UIColor *whiteUIColor = [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
-        
-        for (int i = 0; i < 4; i ++) {
-            if (![blackColorKeys containsObject:colorKeys[i]]) {
-                // not alpha
-                if (![colorKeys[i] isEqualToString:PTColorAlphaKey]) {
-                    return;
-                }
-                // alpha
-                colorValues[i] = (double)1;
-                continue;
-            }
-            
-            double value = (double)[blackColor[colorKeys[i]] intValue] / 255;
-            if (value < 0 || value > 1) {
-                return;
-            }
-            
-            colorValues[i] = value;
+        UIColor *blackUIColor = [self convertRGBAToUIColor:blackColor];
+        if (!blackUIColor) {
+            return;
         }
-        
-        UIColor *blackUIColor = [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
         
         [pdfViewCtrl SetColorPostProcessColors:whiteUIColor black_color:blackUIColor];
     }
+}
+
+- (UIColor *)convertRGBAToUIColor:(NSDictionary *)colorMap
+{
+    NSString *requiredColorKeys[4] = {PTColorRedKey, PTColorGreenKey, PTColorBlueKey, PTColorAlphaKey};
+    double colorValues[4];
+    NSArray *colorKeys = [colorMap allKeys];
+    
+    for (int i = 0; i < 4; i ++) {
+        if (![colorKeys containsObject:requiredColorKeys[i]]) {
+            // not alpha
+            if (![requiredColorKeys[i] isEqualToString:PTColorAlphaKey]) {
+                return nil;
+            }
+            // alpha
+            colorValues[i] = (double)1;
+            continue;
+        }
+        
+        double value = (double)[colorMap[requiredColorKeys[i]] intValue] / 255;
+        if (value < 0 || value > 1) {
+            return nil;
+        }
+        
+        colorValues[i] = value;
+    }
+    
+    return [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
 }
 
 #pragma mark - Convenience

@@ -2842,50 +2842,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null) {
 
-            String[] colorKeys = {COLOR_ALPHA, COLOR_RED, COLOR_GREEN, COLOR_BLUE};
-
-            int whiteColorNumber = 0;
             // convert white map to int (rgba)
-            for (String colorKey : colorKeys) {
-                whiteColorNumber <<= 8;
-                if (!whiteColor.hasKey(colorKey)) {
-                    // not alpha
-                    if (!colorKey.equals(COLOR_ALPHA)) {
-                        return;
-                    }
-                    // if alpha is not provided
-                    whiteColorNumber += 255;
-                    continue;
-                }
-                int currentColorValue = whiteColor.getInt(colorKey);
-                if (currentColorValue > 255 || currentColorValue < 0) {
-                    return;
-                }
-                whiteColorNumber += currentColorValue;
+            int whiteColorNumber = convertRGBAToHex(whiteColor);
+            if (whiteColorNumber == -1) {
+                return;
             }
-
-            int blackColorNumber = 0;
-            // convert black map to int (rgba)
-            for (String colorKey : colorKeys) {
-                blackColorNumber <<= 8;
-                if (!blackColor.hasKey(colorKey)) {
-                    // not alpha
-                    if (!colorKey.equals(COLOR_ALPHA)) {
-                        return;
-                    }
-                    // if alpha is not provided
-                    blackColorNumber += 255;
-                    continue;
-                }
-                int currentColorValue = blackColor.getInt(colorKey);
-                if (currentColorValue > 255 || currentColorValue < 0) {
-                    return;
-                }
-                blackColorNumber += currentColorValue;
+            int blackColorNumber = convertRGBAToHex(blackColor);
+            if (blackColorNumber == -1) {
+                return;
             }
 
             pdfViewCtrl.setColorPostProcessColors(whiteColorNumber, blackColorNumber);
         }
+    }
+
+    private int convertRGBAToHex(ReadableMap color) {
+        String[] colorKeys = {COLOR_ALPHA, COLOR_RED, COLOR_GREEN, COLOR_BLUE};
+        int colorNumber = 0;
+        for (String colorKey : colorKeys) {
+            colorNumber <<= 8;
+            if (!color.hasKey(colorKey)) {
+                // not alpha
+                if (!colorKey.equals(COLOR_ALPHA)) {
+                    return -1;
+                }
+                // if alpha is not provided
+                colorNumber += 255;
+                continue;
+            }
+            int currentColorValue = color.getInt(colorKey);
+            if (currentColorValue > 255 || currentColorValue < 0) {
+                return -1;
+            }
+            colorNumber += currentColorValue;
+        }
+        return colorNumber;
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
