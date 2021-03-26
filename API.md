@@ -150,7 +150,7 @@ Example:
 #### isBase64String
 bool, optional, defaults to false
 
-If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [base64FileExtension](#base64FileExtension) is required. 
+If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [`base64FileExtension`](#base64FileExtension) is required. 
 
 When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
 
@@ -164,7 +164,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 #### base64FileExtension
 string, required if using base64 string of a non-pdf file, defaults to ".pdf"
 
-The file extension for the base64 string in [document](#document), if [isBase64String](#isBase64String) is true.
+The file extension for the base64 string in [`document`](#document), if [`isBase64String`](#isBase64String) is true.
 
 ```js
 <DocumentView
@@ -284,7 +284,7 @@ Example:
 ##### Android
 1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
-<img alt='demo-android' src='android_add_resources.png'/>
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
@@ -296,7 +296,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-ios' src='ios_add_resources.png'/>
+<img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
@@ -541,6 +541,28 @@ zoom | double | the current zoom ratio of the document
 
 ### Scroll
 
+#### horizontalScrollPos
+number, optional
+
+Defines the horizontal scroll position in the current document viewer.
+
+```js
+<DocumentView
+  horizontalScrollPos={50}
+/>
+```
+
+#### verticalScrollPos
+number, optional
+
+Defines the vertical scroll position in the current document viewer.
+
+```js
+<DocumentView
+  verticalScrollPos={50}
+/>
+```
+
 #### onScrollChanged
 function, optional
 
@@ -558,7 +580,6 @@ vertical | number | the vertical position of the scroll
   onScrollChanged = {({horizontal, vertical}) => {
     console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.'); 
   }}
-/>
 ```
 
 ### Annotation Menu
@@ -606,7 +627,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [Config.Tools](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
 
 ```js
 <DocumentView
@@ -614,6 +635,8 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
     console.log('Annotation menu item', annotationMenu, 'has been pressed');
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
+      console.log('The page number of selected annotation is', annotation.pageNumber);
+      console.log('The type of selected annotation is', annotation.type);
       console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
     });
   }}
@@ -683,7 +706,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 #### overrideBehavior
 array of string, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -705,9 +728,10 @@ data | object | A JSON object that varies depending on the action
 
 Data param table:
 
-Action | Param
+Action | Data param
 --- | ---
-[`Config.Actions.linkPress`](./src/Config/Config.js) | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
 <DocumentView
@@ -715,6 +739,8 @@ Action | Param
     console.log('Activated action is', action);
     if (action === Config.Actions.linkPress) {
       console.log('The external link pressed is', data.url);
+    } else if (action === Config.Actions.stickyNoteShowPopUp) {
+      console.log('Sticky note has been activated, but it would not show a pop up window.');
     }
   }}
 />
@@ -872,7 +898,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -880,6 +906,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
       console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
@@ -896,7 +923,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`, representing the annotations that have been changed
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -905,6 +932,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of changed annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
     });
   }}
 />
@@ -1066,7 +1094,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ### Document
 
 #### getDocumentPath
-Returns the path of the current document. If [isBase64String](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [document](#document).
+Returns the path of the current document. If [`isBase64String`](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1083,7 +1111,7 @@ this._viewer.getDocumentPath().then((path) => {
 ```
 
 #### saveDocument
-Saves the current document. If [isBase64String](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [document](#document).
+Saves the current document. If [`isBase64String`](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1536,6 +1564,48 @@ zoom | double | current zoom scale in the viewer
 ```js
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
+});
+```
+
+### Scroll
+
+#### getScrollPos
+Returns the horizontal and vertical scroll position of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | current horizontal scroll position
+vertical | number | current vertical scroll position
+
+```js
+this._viewer.getScrollPos().then(({horizontal, vertical}) => {
+  console.log('Current horizontal scroll position is:', horizontal);
+  console.log('Current vertical scroll position is:', vertical);
+});
+```
+
+### Canvas
+
+#### getCanvasSize
+Returns the canvas size of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+width | number | current width of canvas
+height | number | current height of canvas
+
+```js
+this._viewer.getCanvasSize().then(({width, height}) => {
+  console.log('Current canvas width is:', width);
+  console.log('Current canvas height is:', height);
 });
 ```
 

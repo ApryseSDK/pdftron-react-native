@@ -43,7 +43,7 @@ static NSString * const PTRectangleToolButtonKey = @"rectangleToolButton";
 static NSString * const PTEllipseToolButtonKey = @"ellipseToolButton";
 static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
-
+static NSString * const PTEditToolButtonKey = @"editToolButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -118,6 +118,7 @@ static NSString * const PTAnnotationIdKey = @"id";
 static NSString * const PTAnnotationPageNumberKey = @"pageNumber";
 static NSString * const PTAnnotationFlagKey = @"flag";
 static NSString * const PTAnnotationFlagValueKey = @"flagValue";
+static NSString * const PTAnnotationTypeKey = @"type";
 
 static NSString * const PTContentRectAnnotationPropertyKey = @"contentRect";
 static NSString * const PTContentsAnnotationPropertyKey = @"contents";
@@ -127,8 +128,11 @@ static NSString * const PTTitleAnnotationPropertyKey = @"title";
 static NSString * const PTLinkPressLinkAnnotationKey = @"linkPress";
 static NSString * const PTURILinkAnnotationKey = @"URI";
 static NSString * const PTURLLinkAnnotationKey = @"url";
-static NSString * const PTDataLinkAnnotationKey = @"data";
-static NSString * const PTActionLinkAnnotationKey = @"action";
+
+static NSString * const PTStickyNoteShowPopUpKey = @"stickyNoteShowPopUp";
+
+static NSString * const PTDataBehaviorKey = @"data";
+static NSString * const PTActionBehaviorKey = @"action";
 
 static NSString * const PTStyleMenuItemTitleKey = @"Style";
 static NSString * const PTNoteMenuItemTitleKey = @"Note";
@@ -173,6 +177,9 @@ static NSString * const PTRectX2Key = @"x2";
 static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
+
+static NSString * const PTScrollHorizontalKey = @"horizontal";
+static NSString * const PTScrollVerticalKey = @"vertical";
 
 static NSString * const PTConversionScreenKey = @"screen";
 static NSString * const PTConversionCanvasKey = @"canvas";
@@ -243,6 +250,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)bookmarkChanged:(RNTPTDocumentView *)sender bookmarkJson:(NSString *)bookmarkJson;
 
 - (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool;
+
+- (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
 @end
 
@@ -332,6 +341,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
+@property (nonatomic) double horizontalScrollPos;
+@property (nonatomic) double verticalScrollPos;
+
+@property (nonatomic) double canvasWidth;
+@property (nonatomic) double canvasHeight;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -373,6 +388,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)closeAllTabs;
 
 - (double)getZoom;
+
+- (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
 
 - (NSArray *)convertScreenPointsToPagePoints:(NSArray *)points;
 

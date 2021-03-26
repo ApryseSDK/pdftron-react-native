@@ -330,6 +330,34 @@ RCT_REMAP_METHOD(getZoom,
     }
 }
 
+RCT_REMAP_METHOD(getScrollPos,
+                 getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [[self documentViewManager] getScrollPosForDocumentViewTag:tag];
+        resolve(scrollPos);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_scroll_pos", @"Failed to get scroll pos", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCanvasSize,
+                 getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [[self documentViewManager] getCanvasSizeForDocumentViewTag:tag];
+        resolve(canvasSize);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Coordinate
 
 RCT_REMAP_METHOD(convertScreenPointsToPagePoints,

@@ -60,6 +60,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STICKY = "stickyToolButton";
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
+    public static final String TOOL_BUTTON_EDIT = "editToolButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -238,6 +239,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_TITLE = "title";
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
+    public static final String KEY_ANNOTATION_TYPE = "type";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -286,11 +288,7 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
-
-    // Conversion
-    public static final String KEY_CONVERSION_SCREEN = "screen";
-    public static final String KEY_CONVERSION_CANVAS = "canvas";
-    public static final String KEY_CONVERSION_PAGE = "page";
+    public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
 
     public static final String KEY_COORDINATE_POINT_X = "x";
     public static final String KEY_COORDINATE_POINT_Y = "y";
