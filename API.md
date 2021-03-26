@@ -402,7 +402,7 @@ Defines whether to hide the top navigation app bar.
 
 ```js
 <DocumentView
-  hideAnnotationToolbarSwitcher={false}
+  hideTopAppNavBar={true}
 />
 ```
 
