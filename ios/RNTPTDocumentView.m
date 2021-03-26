@@ -3168,6 +3168,34 @@ NS_ASSUME_NONNULL_END
     return selectionMap;
 }
 
+- (bool)hasSelection
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelection];
+}
+
+- (void)clearSelection
+{
+    [self.currentDocumentViewController.pdfViewCtrl ClearSelection];
+}
+
+- (NSDictionary *)getSelectionPageRange
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        return @{PTTextSelectionPageRangeBeginKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionBeginPage]],
+                 PTTextSelectionPageRangeEndKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionEndPage]]
+        };
+    }
+    
+    return nil;
+}
+
+- (bool)hasSelectionOnPage:(NSInteger)pageNumber
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelectionOnPage:(int)pageNumber];
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value

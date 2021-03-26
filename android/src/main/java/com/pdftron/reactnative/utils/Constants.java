@@ -241,6 +241,9 @@ public final class Constants {
     public static final String KEY_TEXT_SELECTION_QUAD_POINT_X = "x";
     public static final String KEY_TEXT_SELECTION_QUAD_POINT_Y = "y";
 
+    public static final String KEY_TEXT_SELECTION_PAGE_RANGE_BEGIN = "begin";
+    public static final String KEY_TEXT_SELECTION_PAGE_RANGE_END = "end";
+
     public static final String KEY_ANNOTATION_LIST = "annotList";
     public static final String KEY_ANNOTATION_ID = "id";
     public static final String KEY_ANNOTATION_PAGE = "pageNumber";

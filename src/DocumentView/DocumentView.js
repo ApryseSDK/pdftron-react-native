@@ -463,6 +463,38 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  hasSelection = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.hasSelection(tag);
+    }
+    return Promise.resolve();
+  }
+
+  clearSelection = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.clearSelection(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSelectionPageRange = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getSelectionPageRange(tag);
+    }
+    return Promise.resolve();
+  }
+
+  hasSelectionOnPage = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.hasSelectionOnPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
