@@ -1881,14 +1881,14 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     [pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
-    [pdfViewCtrl Update];
+    [pdfViewCtrl Update:YES];
 }
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
     [pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
-    [pdfViewCtrl Update];
+    [pdfViewCtrl Update:YES];
 }
 
 - (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
@@ -1904,7 +1904,7 @@ NS_ASSUME_NONNULL_END
             [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
                 b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
             
-            [pdfViewCtrl Update];
+            [pdfViewCtrl Update:YES];
         }
     }
 }

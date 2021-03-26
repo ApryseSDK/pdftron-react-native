@@ -2830,14 +2830,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setPageBorderVisibility(boolean pageBorderVisibility) throws PDFNetException {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().setPageBorderVisibility(pageBorderVisibility);
-            getPdfViewCtrl().update();
+            getPdfViewCtrl().update(true);
         }
     }
 
     public void setPageTransparencyGrid(boolean pageTransparencyGrid) throws PDFNetException {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().setPageTransparencyGrid(pageTransparencyGrid);
-            getPdfViewCtrl().update();
+            getPdfViewCtrl().update(true);
         }
     }
 
