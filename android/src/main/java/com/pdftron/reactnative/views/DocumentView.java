@@ -358,7 +358,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         Context context = getContext();
         if (mode != null && context != null && presentationMode != null) {
-            if (getPdfViewCtrl() == null) {
+            if (getPdfViewCtrl() != null) {
                 getPdfViewCtrl().setPagePresentationMode(presentationMode);
             } else {
                 PdfViewCtrlSettingsManager.updateViewMode(context, mode);
