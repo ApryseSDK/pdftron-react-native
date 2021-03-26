@@ -324,10 +324,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mode = PDFViewCtrl.PageViewMode.ZOOM;
             }
             if (mode != null) {
-                if (getPdfViewCtrl() == null) {
-                    mPDFViewCtrlConfig.setPageViewMode(mode);
-                } else {
+                if (getPdfViewCtrl() != null) {
                     getPdfViewCtrl().setPageViewMode(mode);
+                } else {
+                    mPDFViewCtrlConfig.setPageViewMode(mode);
                 }
             }
         }
@@ -359,9 +359,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         Context context = getContext();
         if (mode != null && context != null && presentationMode != null) {
             if (getPdfViewCtrl() == null) {
-                PdfViewCtrlSettingsManager.updateViewMode(context, mode);
-            } else {
                 getPdfViewCtrl().setPagePresentationMode(presentationMode);
+            } else {
+                PdfViewCtrlSettingsManager.updateViewMode(context, mode);
             }
         }
     }
