@@ -374,7 +374,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (double)getZoom;
 
-- (NSArray *)convertPoints:(NSArray *)points from:(NSString *)from to:(NSString *)to;
+- (NSArray *)convertScreenPointsToPagePoints:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPoints:(NSArray *)points;
 
 - (int)getPageNumberFromScreenPoint:(double)x y:(double)y;
 

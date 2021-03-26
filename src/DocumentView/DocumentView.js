@@ -392,10 +392,18 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  convertPoints = (points, from, to) => {
+  convertScreenPointsToPagePoints = (points) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.convertPoints(tag, points, from, to);
+      return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
+    }
+    return Promise.resolve();
+  }
+
+  convertPagePointsToScreenPoints = (points) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
     }
     return Promise.resolve();
   }

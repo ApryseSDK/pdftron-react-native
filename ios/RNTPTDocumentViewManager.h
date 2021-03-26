@@ -52,7 +52,9 @@
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
 
-- (NSArray *)convertPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points from:(NSString *)from to:(NSString *)to;
+- (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
 
 - (int)getPageNumberFromScreenPointForDocumentViewTag:(nonnull NSNumber *)tag x:(double)x y:(double)y;
 

@@ -776,10 +776,22 @@ RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailFilterModes, NSArray, RNTPTDocumentView)
 
 #pragma mark - Coordination
 
-- (NSArray *)convertPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points from:(NSString *)from to:(NSString *)to {
+- (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points
+{
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        NSArray *convertedPoints = [documentView convertPoints:points from:from to:to];
+        NSArray *convertedPoints = [documentView convertScreenPointsToPagePoints:points];
+        return convertedPoints;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSArray *)convertPagePointsToScreenPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray *convertedPoints = [documentView convertPagePointsToScreenPoints:points];
         return convertedPoints;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];

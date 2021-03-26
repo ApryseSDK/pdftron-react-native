@@ -332,20 +332,33 @@ RCT_REMAP_METHOD(getZoom,
 
 #pragma mark - Coordinate
 
-RCT_REMAP_METHOD(convertPoints,
-                 convertPointsForDocumentViewTag: (nonnull NSNumber *)tag
+RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
+                 convertScreenPointsToPagePointsForDocumentViewTag: (nonnull NSNumber *)tag
                  points:(NSArray *)points
-                 from:(NSString *)from
-                 to:(NSString *)to
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSArray *convertedPoints = [[self documentViewManager] convertPointsForDocumentViewTag:tag points:points from:from to:to];
+        NSArray *convertedPoints = [[self documentViewManager] convertScreenPointsToPagePointsForDocumentViewTag:tag points:points];
         resolve(convertedPoints);
     }
     @catch (NSException *exception) {
-        reject(@"convert_points", @"Failed to convert points", [self errorFromException:exception]);
+        reject(@"convert_screen_points_to_page_points", @"Failed to convert screen points to page points", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(convertPagePointsToScreenPoints,
+                 convertPagePointsToScreenPointsForDocumentViewTag: (nonnull NSNumber *)tag
+                 points:(NSArray *)points
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *convertedPoints = [[self documentViewManager] convertPagePointsToScreenPointsForDocumentViewTag:tag points:points];
+        resolve(convertedPoints);
+    }
+    @catch (NSException *exception) {
+        reject(@"convert_page_points_to_screen_points", @"Failed to convert page points to screen points", [self errorFromException:exception]);
     }
 }
 

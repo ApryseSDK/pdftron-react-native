@@ -2718,7 +2718,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return pdfViewCtrl.getZoom();
     }
 
-    public WritableArray convertPoints(ReadableArray points, String from, String to) {
+    public WritableArray convertScreenPointsToPagePoints(ReadableArray points) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         WritableArray convertedPoints = Arguments.createArray();
@@ -2731,53 +2731,47 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 double x = point.getDouble(KEY_COORDINATE_POINT_X);
                 double y = point.getDouble(KEY_COORDINATE_POINT_Y);
                 int pageNumber = currentPage;
-                double[] convertedPointCoordinates = null;
 
-                switch(from) {
-                    case KEY_CONVERSION_CANVAS:
-                        if (to.equals(KEY_CONVERSION_PAGE)) {
-                            if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
-                                pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
-                            }
-                            convertedPointCoordinates = pdfViewCtrl.convCanvasPtToPagePt(x, y, pageNumber);
-                        } else if (to.equals(KEY_CONVERSION_SCREEN)) {
-                            convertedPointCoordinates = pdfViewCtrl.convCanvasPtToScreenPt(x, y);
-                        }
-                        break;
-
-                    case KEY_CONVERSION_PAGE:
-                        if (to.equals(KEY_CONVERSION_CANVAS)) {
-                            if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
-                                pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
-                            }
-                            convertedPointCoordinates = pdfViewCtrl.convPagePtToCanvasPt(x, y, pageNumber);
-                        } else if (to.equals(KEY_CONVERSION_SCREEN)) {
-                            if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
-                                pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
-                            }
-                            convertedPointCoordinates = pdfViewCtrl.convPagePtToScreenPt(x, y, pageNumber);
-                        }
-                        break;
-
-                    case KEY_CONVERSION_SCREEN:
-                        if (to.equals(KEY_CONVERSION_CANVAS)) {
-                            convertedPointCoordinates = pdfViewCtrl.convScreenPtToCanvasPt(x, y);
-                        } else if (to.equals(KEY_CONVERSION_PAGE)) {
-                            if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
-                                pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
-                            }
-                            convertedPointCoordinates = pdfViewCtrl.convScreenPtToPagePt(x, y, pageNumber);
-                        }
-                        break;
+                if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
+                    pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
                 }
+                double[] convertedPointCoordinates = pdfViewCtrl.convScreenPtToPagePt(x, y, pageNumber);
 
-                if (convertedPointCoordinates != null) {
-                    WritableMap map = Arguments.createMap();
-                    map.putDouble(KEY_COORDINATE_POINT_X, convertedPointCoordinates[0]);
-                    map.putDouble(KEY_COORDINATE_POINT_Y, convertedPointCoordinates[1]);
+                WritableMap map = Arguments.createMap();
+                map.putDouble(KEY_COORDINATE_POINT_X, convertedPointCoordinates[0]);
+                map.putDouble(KEY_COORDINATE_POINT_Y, convertedPointCoordinates[1]);
 
-                    convertedPoints.pushMap(map);
+                convertedPoints.pushMap(map);
+            }
+        }
+
+        return convertedPoints;
+    }
+
+    public WritableArray convertPagePointsToScreenPoints(ReadableArray points) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableArray convertedPoints = Arguments.createArray();
+
+        if (pdfViewCtrl != null) {
+            int currentPage = pdfViewCtrl.getCurrentPage();
+
+            for(int i = 0; i < points.size(); i ++) {
+                ReadableMap point = points.getMap(i);
+                double x = point.getDouble(KEY_COORDINATE_POINT_X);
+                double y = point.getDouble(KEY_COORDINATE_POINT_Y);
+                int pageNumber = currentPage;
+
+                if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
+                    pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
                 }
+                double[] convertedPointCoordinates = pdfViewCtrl.convPagePtToScreenPt(x, y, pageNumber);
+
+                WritableMap map = Arguments.createMap();
+                map.putDouble(KEY_COORDINATE_POINT_X, convertedPointCoordinates[0]);
+                map.putDouble(KEY_COORDINATE_POINT_Y, convertedPointCoordinates[1]);
+
+                convertedPoints.pushMap(map);
             }
         }
 

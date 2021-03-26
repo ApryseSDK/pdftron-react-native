@@ -499,12 +499,21 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public WritableArray convertPoints(int tag, ReadableArray points, String from, String to) throws PDFNetException {
+    public WritableArray convertScreenPointsToPagePoints(int tag, ReadableArray points) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.convertPoints(points, from, to);
+            return documentView.convertScreenPointsToPagePoints(points);
         } else {
-            throw new PDFNetException("", 0L, getName(), "convertPoints", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "convertScreenPointsToPagePoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray convertPagePointsToScreenPoints(int tag, ReadableArray points) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertPagePointsToScreenPoints(points);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertPagePointsToScreenPoints", "Unable to find DocumentView.");
         }
     }
 

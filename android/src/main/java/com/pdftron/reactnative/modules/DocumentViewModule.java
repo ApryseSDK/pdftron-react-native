@@ -365,12 +365,27 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void convertPoints(final int tag, final ReadableArray points, final String from, final String to, final Promise promise) {
+    public void convertScreenPointsToPagePoints(final int tag, final ReadableArray points, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    WritableArray convertedPoints = mDocumentViewInstance.convertPoints(tag, points, from, to);
+                    WritableArray convertedPoints = mDocumentViewInstance.convertScreenPointsToPagePoints(tag, points);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void convertPagePointsToScreenPoints(final int tag, final ReadableArray points, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertPagePointsToScreenPoints(tag, points);
                     promise.resolve(convertedPoints);
                 } catch (Exception ex) {
                     promise.reject(ex);

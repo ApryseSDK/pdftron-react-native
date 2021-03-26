@@ -1541,16 +1541,14 @@ this._viewer.getZoom().then((zoom) => {
 
 ### Coordinate
 
-#### convertPoints
-Converts points between multiple coordinate systems of the viewer.
+#### convertPagePointsToScreenPoints
+Converts points from page coordinates to screen coordinates in the viewer.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-points | array | list of points, each in the format `{x: number, y: number}`. If either the source or destination coordinate system is page, you could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
-from | string | One of the [Config.Conversion](./src/Config/Config.js) constants, representing the source coordinate system
-to | string | One of the [Config.Conversion](./src/Config/Config.js) constants, representing the destination coordinate system
+points | array | list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
 
 Returns a Promise.
 
@@ -1558,11 +1556,37 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-convertedPoints | array | list of converted points in the specified destination system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+convertedPoints | array | list of converted points in screen system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
 
 ```js
-// convert (50, 50) in current page and (100, 100) on page 1 in page system to canvas system
-this._viewer.convertPoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}], Config.Conversion.Page, Config.Conversion.Canvas).then((convertedPoints) => {
+// convert (50, 50) on current page and (100, 100) on page 1 from page system to screen system
+this._viewer.convertPagePointsToScreenPoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
+  convertedPoints.forEach(point => {
+    console.log(point);
+  })
+});
+```
+
+#### convertScreenPointsToPagePoints
+Converts points from screen coordinates to page coordinates in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+points | array | list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+convertedPoints | array | list of converted points in page system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+
+```js
+// convert (50, 50) and (100, 100) from screen system to page system, on current page and page 1 respectively
+this._viewer.convertScreenPointsToPagePoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
   convertedPoints.forEach(point => {
     console.log(point);
   })
