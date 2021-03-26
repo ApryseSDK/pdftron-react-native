@@ -357,7 +357,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             presentationMode = PDFViewCtrl.PagePresentationMode.FACING_COVER_CONT;
         }
         Context context = getContext();
-        if (mode != null && context != null) {
+        if (mode != null && context != null && presentationMode != null) {
             if (getPdfViewCtrl() == null) {
                 PdfViewCtrlSettingsManager.updateViewMode(context, mode);
             } else {
