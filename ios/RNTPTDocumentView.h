@@ -268,6 +268,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
+@property (nonatomic, assign) BOOL documentSliderEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
@@ -326,6 +327,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
+
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
