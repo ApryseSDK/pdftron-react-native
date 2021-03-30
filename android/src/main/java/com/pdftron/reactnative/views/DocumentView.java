@@ -291,7 +291,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setDocumentSliderEnabled(boolean documentSliderEnabled) {
-        mBuilder = mBuilder.showBottomNavBar(documentSliderEnabled);
+        mBuilder = mBuilder.showDocumentSlider(documentSliderEnabled);
     }
 
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
