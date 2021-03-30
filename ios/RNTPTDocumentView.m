@@ -22,7 +22,7 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate>
+@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
 
 @property (nonatomic, strong, nullable) UIViewController *viewController;
 
@@ -2873,17 +2873,44 @@ NS_ASSUME_NONNULL_END
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didModifyBookmark:(PTUserBookmark *)bookmark {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    
+    [documentViewController bookmarkViewController:bookmarkViewController
+                                 didModifyBookmark:bookmark];
+    
     [self bookmarksModified:documentViewController.pdfViewCtrl];
 }
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didAddBookmark:(PTUserBookmark *)bookmark {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    
+    [documentViewController bookmarkViewController:bookmarkViewController
+                                    didAddBookmark:bookmark];
+    
     [self bookmarksModified:documentViewController.pdfViewCtrl];
 }
 
 - (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController didRemoveBookmark:(nonnull PTUserBookmark *)bookmark {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    
+    [documentViewController bookmarkViewController:bookmarkViewController
+                                 didRemoveBookmark:bookmark];
+    
     [self bookmarksModified:documentViewController.pdfViewCtrl];
+}
+
+- (void)bookmarkViewController:(PTBookmarkViewController *)bookmarkViewController selectedBookmark:(PTUserBookmark *)bookmark
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    
+    [documentViewController bookmarkViewController:bookmarkViewController
+                                  selectedBookmark:bookmark];
+}
+
+- (void)bookmarkViewControllerDidCancel:(PTBookmarkViewController *)bookmarkViewController
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    
+    [documentViewController bookmarkViewControllerDidCancel:bookmarkViewController];
 }
 
 - (void)bookmarksModified:(PTPDFViewCtrl *)pdfViewCtrl
