@@ -113,6 +113,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
     }
 
+    @ReactProp(name = "documentSliderEnabled")
+    public void setDocumentSliderEnabled(DocumentView documentView, boolean documentSliderEnabled) {
+        documentView.setDocumentSliderEnabled(documentSliderEnabled);
+    }
+
     @ReactProp(name = "pageIndicatorEnabled")
     public void setPageIndicatorEnabled(DocumentView documentView, boolean pageIndicatorEnabled) {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);

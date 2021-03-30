@@ -129,6 +129,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(documentSliderEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.documentSliderEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -350,6 +357,20 @@ RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentVi
 {
     if (json) {
         view.hideDefaultAnnotationToolbars = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(topAppNavBarRightBar, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.topAppNavBarRightBar = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(bottomToolbar, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.bottomToolbar = [RCTConvert NSArray:json];
     }
 }
 

@@ -325,6 +325,17 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
+#### documentSliderEnabled
+bool, optional, defaults to true
+
+Defines whether the document slider of the viewer is enabled.
+
+```js
+<DocumentView
+  documentSliderEnabled={false}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -414,6 +425,28 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```js
 <DocumentView
   hideToolbarsOnTap={false}
+/>
+```
+
+#### topAppNavBarRightBar
+array of strings, optional, iOS only
+
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### bottomToolbar
+array of strings, optional, iOS only
+
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
