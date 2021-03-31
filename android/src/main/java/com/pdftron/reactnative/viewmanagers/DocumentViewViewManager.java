@@ -581,6 +581,35 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean selectInRect(int tag, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean selected = documentView.selectInRect(rect);
+            return selected;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectInRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean isThereTextInRect(int tag, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean hasText = documentView.isThereTextInRect(rect);
+            return hasText;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isThereTextInRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public void selectAll(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.selectAll();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectAll", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
