@@ -374,6 +374,13 @@ RCT_CUSTOM_VIEW_PROPERTY(bottomToolbar, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(moreItemsToolbar, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.moreItemsToolbar = [RCTConvert NSArray:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(hideAnnotationToolbarSwitcher, BOOL, RNTPTDocumentView)
 {
     if (json) {

@@ -337,6 +337,7 @@ static const PTCustomToolbarButonKey PTCustomToolbarButonKeySelected = @"selecte
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *moreItemsToolbar;
 
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;

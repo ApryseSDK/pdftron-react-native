@@ -1415,6 +1415,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setMoreItemsToolbar:(NSArray<NSString *> *)moreItemsToolbar
+{
+    _moreItemsToolbar = [moreItemsToolbar copy];
+    
+    [self applyViewerSettings];
+}
+
 - (void)setHideAnnotationToolbarSwitcher:(BOOL)hideAnnotationToolbarSwitcher
 {
     _hideAnnotationToolbarSwitcher = hideAnnotationToolbarSwitcher;
@@ -1878,6 +1885,32 @@ NS_ASSUME_NONNULL_END
         }
         documentController.toolbarItems = [bottomToolbarItems copy];
     }
+    
+    // Handle moreItemsToolbar
+    if (self.moreItemsToolbar && self.moreItemsToolbar.count >= 0) {
+        NSMutableArray *moreItemsToolbarItems = [[NSMutableArray alloc] init];
+        
+        for (id moreItemsValue in self.moreItemsToolbar) {
+            if ([moreItemsValue isKindOfClass:[NSString class]]) {
+                // Default right bar button key.
+                UIBarButtonItem *moreItemsItem = [self itemForButton:moreItemsValue];
+                if (moreItemsItem) {
+                    [moreItemsToolbarItems addObject:moreItemsItem];
+                }
+            }
+            else if ([moreItemsValue isKindOfClass:[NSDictionary class]]) {
+                // Custom bottom toolbar button dictionary.
+                NSMutableDictionary *moreItemsDictionary = (NSMutableDictionary *)moreItemsValue;
+                [moreItemsDictionary removeObjectForKey:PTCustomToolbarButonKeySelected];
+
+                NSDictionary<NSString *, id> *buttonData = (NSDictionary *)moreItemsDictionary;
+                PTCustomToolbarButton *moreItemsItem = [self createCustomToolbarButtonWithDictionary:buttonData];
+                [moreItemsToolbarItems addObject:moreItemsItem];
+            }
+        }
+        
+        documentController.moreItems = [moreItemsToolbarItems copy];
+    }
 }
 
 - (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
@@ -1938,13 +1971,13 @@ NS_ASSUME_NONNULL_END
     return toolGroup;
 }
 
-- (PTSelectableBarButtonItem *)createCustomToolbarButtonWithDictionary:(NSDictionary<NSString *, id> *)dictionary
+- (PTCustomToolbarButton *)createCustomToolbarButtonWithDictionary:(NSDictionary<NSString *, id> *)dictionary
 {
     NSString *toolbarId = dictionary[PTCustomToolbarButonKeyId];
     NSString *toolbarName = dictionary[PTCustomToolbarButonKeyName];
     NSString *toolbarIcon = dictionary[PTCustomToolbarButonKeyIcon];
     NSString *toolbarSelected = dictionary[PTCustomToolbarButonKeySelected];
-      
+          
     PTCustomToolbarButton* toolbarItem = [[PTCustomToolbarButton alloc] initWithImage:[UIImage systemImageNamed:toolbarIcon] style:UIBarButtonItemStylePlain target:self action:@selector(customToolbarButtonPressed:)];
     toolbarItem.toolbarData = dictionary;
     toolbarItem.title = toolbarName;
@@ -2088,17 +2121,20 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)customToolbarButtonPressed:(PTCustomToolbarButton *)sender
+- (void)customToolbarButtonPressed:(id)sender
 {
-    NSDictionary<NSString *, id> *toolbar = sender.toolbarData;
-    NSString *toolbarSelected = toolbar[PTCustomToolbarButonKeySelected];
+    if ([sender isKindOfClass:[PTCustomToolbarButton class]]) {
+        PTCustomToolbarButton * customToolbarButton = (PTCustomToolbarButton *)sender;
+        NSDictionary<NSString *, id> *toolbar = customToolbarButton.toolbarData;
+        NSString *toolbarSelected = toolbar[PTCustomToolbarButonKeySelected];
         
-    if (toolbarSelected != 0) {
-        sender.selected = !sender.selected;
-    }
+        if (toolbarSelected != 0) {
+            customToolbarButton.selected = !customToolbarButton.selected;
+        }
         
-    if ([self.delegate respondsToSelector:@selector(customToolbarButtonPressed:toolbar:)]) {
-        [self.delegate customToolbarButtonPressed:self toolbar:toolbar];
+        if ([self.delegate respondsToSelector:@selector(customToolbarButtonPressed:toolbar:)]) {
+            [self.delegate customToolbarButtonPressed:self toolbar:toolbar];
+        }
     }
 }
 

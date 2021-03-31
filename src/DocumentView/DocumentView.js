@@ -73,6 +73,7 @@ export default class DocumentView extends PureComponent {
     hideDefaultAnnotationToolbars: PropTypes.array,
     topAppNavBarRightBar: PropTypes.array,
     bottomToolbar: PropTypes.array,
+    moreItemsToolbar: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
