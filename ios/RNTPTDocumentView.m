@@ -3018,6 +3018,90 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Get Annotation(s)
+
+- (NSDictionary *)getAnnotationAtPoint:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
+    
+    __block NSDictionary *annotation;
+    if (pdfViewCtrl && pdfDoc) {
+        NSError *error;
+        
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            PTAnnot *annot = [pdfViewCtrl GetAnnotationAt:(int)x y:(int)y distanceThreshold:distanceThreshold minimumLineWeight:minimumLineWeight];
+            
+            if (annot && [annot IsValid]) {
+                annotation = [self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl];
+            }
+        } error:&error];
+        
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+    
+    return annotation ? [annotation copy] : nil;
+}
+
+- (NSArray *)getAnnotationsAtLine:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
+    
+    __block NSMutableArray *annotations = [[NSMutableArray alloc] init];
+    if (pdfViewCtrl && pdfDoc) {
+        NSError *error;
+        
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            NSArray <PTAnnot *> *annots = [pdfViewCtrl GetAnnotationListAt:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2];
+            
+            for (PTAnnot *annot in annots) {
+                if ([annot IsValid]) {
+                    [annotations addObject:[self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl]];
+                }
+            }
+        } error:&error];
+        
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+    
+    return [annotations copy];
+}
+
+- (NSArray *)getAnnotationsOnPage:(NSInteger)pageNumber
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
+    
+    __block NSMutableArray *annotations = [[NSMutableArray alloc] init];
+    if (pdfViewCtrl && pdfDoc) {
+        NSError *error;
+        
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            NSArray <PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:(int)pageNumber];
+            
+            for (PTAnnot *annot in annots) {
+                if ([annot IsValid]) {
+                    [annotations addObject:[self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl]];
+                }
+            }
+        } error:&error];
+        
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+    
+    return [annotations copy];
+}
+
 #pragma mark - Get Crop Box
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber

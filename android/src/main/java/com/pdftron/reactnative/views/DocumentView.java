@@ -1599,30 +1599,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // overrideAction is for onBehaviorActivated
         WritableArray annots = Arguments.createArray();
 
-        for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
-            WritableMap annotationData = getAnnotationData(entry.getKey(), entry.getValue());
 
-            if (annotationData != null) {
-                if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
-                    WritableMap annotationDataCopy = annotationData.copy();
-                    try {
-                        if (entry.getKey().getType() == Annot.e_Text) {
-                            WritableMap params = Arguments.createMap();
+        boolean shouldUnlockRead = false;
+        try {
+            getPdfViewCtrl().docLockRead();
+            shouldUnlockRead = true;
+            for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
+                WritableMap annotationData = getAnnotationData(entry.getKey(), entry.getValue());
 
-                            params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
-                            params.putString(KEY_ACTION, KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP);
-                            params.putMap(KEY_DATA, annotationDataCopy);
+                if (annotationData != null) {
+                    if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
+                        WritableMap annotationDataCopy = annotationData.copy();
+                        try {
+                            if (entry.getKey().getType() == Annot.e_Text) {
+                                WritableMap params = Arguments.createMap();
 
-                            onReceiveNativeEvent(params);
+                                params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
+                                params.putString(KEY_ACTION, KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP);
+                                params.putMap(KEY_DATA, annotationDataCopy);
+
+                                onReceiveNativeEvent(params);
+                            }
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
                         }
-                    } catch (PDFNetException e) {
-                        e.printStackTrace();
                     }
-                }
 
-                annots.pushMap(annotationData);
+                    annots.pushMap(annotationData);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (shouldUnlockRead) {
+                getPdfViewCtrl().docUnlockRead();
             }
         }
+
         return annots;
     }
 
@@ -2430,6 +2443,92 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolManager.deselectAll();
             }
         }
+    }
+
+    public WritableMap getAnnotationAtPoint(int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableMap annotation = null;
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                Annot annot = pdfViewCtrl.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
+
+                if (annot != null && annot.isValid()) {
+                    annotation = getAnnotationData(annot, annot.getPage().getIndex());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotation;
+    }
+
+    public WritableArray getAnnotationsAtLine(int x1, int y1, int x2, int y2) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableArray annotations = Arguments.createArray();
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationListAt(x1, y1, x2, y2);
+                for (Annot annot : annots) {
+                    if (annot.isValid()) {
+                        annotations.pushMap(getAnnotationData(annot, annot.getPage().getIndex()));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotations;
+    }
+
+    public WritableArray getAnnotationsOnPage(int pageNumber) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableArray annotations = Arguments.createArray();
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationsOnPage(pageNumber);
+                for (Annot annot : annots) {
+                    if (annot.isValid()) {
+                        annotations.pushMap(getAnnotationData(annot, annot.getPage().getIndex()));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotations;
     }
 
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {

@@ -244,6 +244,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getAnnotationAtPoint(final int tag, final int x, final int y, final double distanceThreshold, final double minimumLineWeight, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableMap annotation = mDocumentViewInstance.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+                    promise.resolve(annotation);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAnnotationsAtLine(final int tag, final int x1, final int y1, final int x2, final int y2, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableArray annotations = mDocumentViewInstance.getAnnotationsAtLine(tag, x1, y1, x2, y2);
+                    promise.resolve(annotations);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAnnotationsOnPage(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableArray annotations = mDocumentViewInstance.getAnnotationsOnPage(tag, pageNumber);
+                    promise.resolve(annotations);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void handleBackButton(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

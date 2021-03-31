@@ -440,6 +440,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public ReadableMap getAnnotationAtPoint(int tag, int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationAtPoint(x, y, distanceThreshold, minimumLineWeight);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationAtPoint", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationsAtLine(int tag, int x1, int y1, int x2, int y2) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationsAtLine(x1, y1, x2, y2);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationsAtLine", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationsOnPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationsOnPage(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationsOnPage", "Unable to find DocumentView.");
+        }
+    }
+
     public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

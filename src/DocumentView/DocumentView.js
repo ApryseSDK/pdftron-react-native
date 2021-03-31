@@ -357,6 +357,30 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+    }
+    return Promise.resolve();
+  }
+
+  getAnnotationsAtLine = (x1, y1, x2, y2) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationsAtLine(tag, x1, y1, x2, y2);
+    }
+    return Promise.resolve();
+  }
+
+  getAnnotationsOnPage = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
