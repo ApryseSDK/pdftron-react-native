@@ -21,6 +21,7 @@ export default class DocumentView extends PureComponent {
     leadingNavButtonIcon: PropTypes.string,
     showLeadingNavButton: PropTypes.bool,
     onLeadingNavButtonPressed: PropTypes.func,
+    onCustomToolbarButtonPressed: PropTypes.func,
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
@@ -87,6 +88,10 @@ export default class DocumentView extends PureComponent {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
+      }
+    } else if (event.nativeEvent.onCustomToolbarButtonPressed) {
+      if (this.props.onCustomToolbarButtonPressed) {
+        this.props.onCustomToolbarButtonPressed(event.nativeEvent.toolbar);
       }
     } else if (event.nativeEvent.onDocumentLoaded) {
       if (this.props.onDocumentLoaded) {

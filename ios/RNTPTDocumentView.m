@@ -1857,7 +1857,7 @@ NS_ASSUME_NONNULL_END
             else if ([bottomToolbarValue isKindOfClass:[NSDictionary class]]) {
                 // Custom bottom toolbar dictionary.
                 NSDictionary<NSString *, id> *bottomToolbar = (NSDictionary *)bottomToolbarValue;
-                PTCustomToolbarButton *bottomToolbarItem = [self createCustomToolbarItemWithDictionary:bottomToolbar];
+                PTCustomToolbarButton *bottomToolbarItem = [self createCustomToolbarButtonWithDictionary:bottomToolbar];
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 [bottomToolbarItems addObject:space];
             }
@@ -1929,14 +1929,14 @@ NS_ASSUME_NONNULL_END
     return toolGroup;
 }
 
-- (PTSelectableBarButtonItem *)createCustomToolbarItemWithDictionary:(NSDictionary<NSString *, id> *)dictionary
+- (PTSelectableBarButtonItem *)createCustomToolbarButtonWithDictionary:(NSDictionary<NSString *, id> *)dictionary
 {
     NSString *toolbarId = dictionary[PTCustomToolbarButonKeyId];
     NSString *toolbarName = dictionary[PTCustomToolbarButonKeyName];
     NSString *toolbarIcon = dictionary[PTCustomToolbarButonKeyIcon];
     NSString *toolbarSelected = dictionary[PTCustomToolbarButonKeySelected];
       
-    PTCustomToolbarButton* toolbarItem = [[PTCustomToolbarButton alloc] initWithImage:[UIImage systemImageNamed:toolbarIcon] style:UIBarButtonItemStylePlain target:self action:@selector(customToolbarPressed:)];
+    PTCustomToolbarButton* toolbarItem = [[PTCustomToolbarButton alloc] initWithImage:[UIImage systemImageNamed:toolbarIcon] style:UIBarButtonItemStylePlain target:self action:@selector(customToolbarButtonPressed:)];
     toolbarItem.toolbarData = dictionary;
     toolbarItem.title = toolbarName;
     
@@ -2081,10 +2081,10 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)customToolbarPressed:(PTCustomToolbarButton *)sender
+- (void)customToolbarButtonPressed:(PTCustomToolbarButton *)sender
 {
-    if ([self.delegate respondsToSelector:@selector(customToolbarPressed:toolbar:)]) {
-        [self.delegate customToolbarPressed:self toolbar:sender.toolbarData];
+    if ([self.delegate respondsToSelector:@selector(customToolbarButtonPressed:toolbar:)]) {
+        [self.delegate customToolbarButtonPressed:self toolbar:sender.toolbarData];
     }
 }
 

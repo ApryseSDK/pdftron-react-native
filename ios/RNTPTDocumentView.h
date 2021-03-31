@@ -228,7 +228,7 @@ static const PTCustomToolbarButonKey PTCustomToolbarButonKeySelected = @"selecte
 - (void)documentViewDetachedFromWindow:(RNTPTDocumentView *)documentView;
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
-- (void)customToolbarPressed:(RNTPTDocumentView *)sender toolbar:(NSDictionary<NSString *, id> *)toolbar;
+- (void)customToolbarButtonPressed:(RNTPTDocumentView *)sender toolbar:(NSDictionary<NSString *, id> *)toolbar;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;

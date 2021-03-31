@@ -196,6 +196,14 @@ export default {
     Items: "items"
   },
 
+  // CustomToolbarButonKey defines the necessary keys for a custom toolbar button
+  CustomToolbarButonKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon",
+    Selected: "selected"
+  },
+
   // ThumbnailFilterMode defines filter modes in the thumbnails browser
   ThumbnailFilterMode: {
     Annotated: "annotated",
