@@ -1823,12 +1823,21 @@ NS_ASSUME_NONNULL_END
     
     // Handle topAppNavBarRightBar.
     if (self.topAppNavBarRightBar && self.topAppNavBarRightBar.count >= 0) {
-        
+
         NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
         
-        for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
-            UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString];
-            if (rightBarItem) {
+        for (id rightBarItemValue in self.topAppNavBarRightBar) {
+            if ([rightBarItemValue isKindOfClass:[NSString class]]) {
+                // Default right bar button key.
+                UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemValue];
+                if (rightBarItem) {
+                    [righBarItems addObject:rightBarItem];
+                }
+            }
+            else if ([rightBarItemValue isKindOfClass:[NSDictionary class]]) {
+                // Custom bottom toolbar button dictionary.
+                NSDictionary<NSString *, id> *buttonData = (NSDictionary *)rightBarItemValue;
+                PTCustomToolbarButton *rightBarItem = [self createCustomToolbarButtonWithDictionary:buttonData];
                 [righBarItems addObject:rightBarItem];
             }
         }
@@ -1847,7 +1856,7 @@ NS_ASSUME_NONNULL_END
         
         for (id bottomToolbarValue in self.bottomToolbar) {
             if ([bottomToolbarValue isKindOfClass:[NSString class]]) {
-                // Default bottom toolbar key.
+                // Default bottom toolbar button key.
                 UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarValue];
                 if (bottomToolbarItem) {
                     [bottomToolbarItems addObject:bottomToolbarItem];
@@ -1855,9 +1864,9 @@ NS_ASSUME_NONNULL_END
                 }
             }
             else if ([bottomToolbarValue isKindOfClass:[NSDictionary class]]) {
-                // Custom bottom toolbar dictionary.
-                NSDictionary<NSString *, id> *bottomToolbar = (NSDictionary *)bottomToolbarValue;
-                PTCustomToolbarButton *bottomToolbarItem = [self createCustomToolbarButtonWithDictionary:bottomToolbar];
+                // Custom bottom toolbar button dictionary.
+                NSDictionary<NSString *, id> *buttonData = (NSDictionary *)bottomToolbarValue;
+                PTCustomToolbarButton *bottomToolbarItem = [self createCustomToolbarButtonWithDictionary:buttonData];
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 [bottomToolbarItems addObject:space];
             }
@@ -1940,9 +1949,7 @@ NS_ASSUME_NONNULL_END
     toolbarItem.toolbarData = dictionary;
     toolbarItem.title = toolbarName;
     
-    if (toolbarSelected == (id)[NSNull null]) {
-        toolbarItem.selected = NO;
-    } else {
+    if (toolbarSelected != 0) {
         toolbarItem.selected = [toolbarSelected boolValue];
     }
     
@@ -2083,8 +2090,15 @@ NS_ASSUME_NONNULL_END
 
 - (void)customToolbarButtonPressed:(PTCustomToolbarButton *)sender
 {
+    NSDictionary<NSString *, id> *toolbar = sender.toolbarData;
+    NSString *toolbarSelected = toolbar[PTCustomToolbarButonKeySelected];
+        
+    if (toolbarSelected != 0) {
+        sender.selected = !sender.selected;
+    }
+        
     if ([self.delegate respondsToSelector:@selector(customToolbarButtonPressed:toolbar:)]) {
-        [self.delegate customToolbarButtonPressed:self toolbar:sender.toolbarData];
+        [self.delegate customToolbarButtonPressed:self toolbar:toolbar];
     }
 }
 
