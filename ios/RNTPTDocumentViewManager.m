@@ -434,6 +434,16 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
+- (void)customToolbarPressed:(RNTPTDocumentView *)sender toolbar:(NSDictionary<NSString *, id> *)toolbar
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onCustomToolbarPressed": @"onCustomToolbarPressed",
+            @"toolbar": toolbar
+        });
+    }
+}
+
 - (void)documentLoaded:(RNTPTDocumentView *)sender
 {
     if (sender.onChange) {

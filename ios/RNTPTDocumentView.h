@@ -213,6 +213,13 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// Custom bottom toolbar keys.
+typedef NSString * PTCustomToolbarButonKey;
+static const PTCustomToolbarButonKey PTCustomToolbarButonKeyId = @"id";
+static const PTCustomToolbarButonKey PTCustomToolbarButonKeyName = @"name";
+static const PTCustomToolbarButonKey PTCustomToolbarButonKeyIcon = @"icon";
+static const PTCustomToolbarButonKey PTCustomToolbarButonKeySelected = @"selected";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -221,6 +228,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentViewDetachedFromWindow:(RNTPTDocumentView *)documentView;
 
 - (void)navButtonClicked:(RNTPTDocumentView *)sender;
+- (void)customToolbarPressed:(RNTPTDocumentView *)sender toolbar:(NSDictionary<NSString *, id> *)toolbar;
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
@@ -396,4 +404,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @interface RNTPTThumbnailsViewController : PTThumbnailsViewController
 
 @end
+
+// Custom toolbar button
+@interface PTCustomToolbarButton : PTSelectableBarButtonItem
+
+@property (nonatomic, strong) NSDictionary<NSString *, id> *toolbarData;
+
+@end
+
 NS_ASSUME_NONNULL_END

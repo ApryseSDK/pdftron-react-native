@@ -1845,9 +1845,19 @@ NS_ASSUME_NONNULL_END
         
         NSMutableArray *bottomToolbarItems = [[NSMutableArray alloc] init];
         
-        for (NSString *bottomToolbarString in self.bottomToolbar) {
-            UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarString];
-            if (bottomToolbarItem) {
+        for (id bottomToolbarValue in self.bottomToolbar) {
+            if ([bottomToolbarValue isKindOfClass:[NSString class]]) {
+                // Default bottom toolbar key.
+                UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarValue];
+                if (bottomToolbarItem) {
+                    [bottomToolbarItems addObject:bottomToolbarItem];
+                    [bottomToolbarItems addObject:space];
+                }
+            }
+            else if ([bottomToolbarValue isKindOfClass:[NSDictionary class]]) {
+                // Custom bottom toolbar dictionary.
+                NSDictionary<NSString *, id> *bottomToolbar = (NSDictionary *)bottomToolbarValue;
+                PTCustomToolbarButton *bottomToolbarItem = [self createCustomToolbarItemWithDictionary:bottomToolbar];
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 [bottomToolbarItems addObject:space];
             }
@@ -1917,6 +1927,26 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (PTSelectableBarButtonItem *)createCustomToolbarItemWithDictionary:(NSDictionary<NSString *, id> *)dictionary
+{
+    NSString *toolbarId = dictionary[PTCustomToolbarButonKeyId];
+    NSString *toolbarName = dictionary[PTCustomToolbarButonKeyName];
+    NSString *toolbarIcon = dictionary[PTCustomToolbarButonKeyIcon];
+    NSString *toolbarSelected = dictionary[PTCustomToolbarButonKeySelected];
+      
+    PTCustomToolbarButton* toolbarItem = [[PTCustomToolbarButton alloc] initWithImage:[UIImage systemImageNamed:toolbarIcon] style:UIBarButtonItemStylePlain target:self action:@selector(customToolbarPressed:)];
+    toolbarItem.toolbarData = dictionary;
+    toolbarItem.title = toolbarName;
+    
+    if (toolbarSelected == (id)[NSNull null]) {
+        toolbarItem.selected = NO;
+    } else {
+        toolbarItem.selected = [toolbarSelected boolValue];
+    }
+    
+    return toolbarItem;
 }
 
 - (void)applyLayoutMode:(PTPDFViewCtrl *)pdfViewCtrl
@@ -2048,6 +2078,13 @@ NS_ASSUME_NONNULL_END
 {
     if([self.delegate respondsToSelector:@selector(navButtonClicked:)]) {
         [self.delegate navButtonClicked:self];
+    }
+}
+
+- (void)customToolbarPressed:(PTCustomToolbarButton *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(customToolbarPressed:toolbar:)]) {
+        [self.delegate customToolbarPressed:self toolbar:sender.toolbarData];
     }
 }
 
@@ -3503,4 +3540,10 @@ NS_ASSUME_NONNULL_END
     [super viewWillAppear:animated];
     self.navigationController.toolbarHidden = !self.editingEnabled;
 }
+@end
+
+#pragma mark - PTCustomToolbarButton
+
+@implementation PTCustomToolbarButton
+
 @end
