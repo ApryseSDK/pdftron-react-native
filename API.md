@@ -431,7 +431,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 #### topAppNavBarRightBar
 array of strings, optional, iOS only
 
-Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants or [Config.CustomToolbarButonKey](./src/Config/Config.js).
 
 ```js
 <Documentview
@@ -442,11 +442,41 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 #### bottomToolbar
 array of strings, optional, iOS only
 
-Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants or [Config.CustomToolbarButonKey](./src/Config/Config.js).
 
 ```js
 <Documentview
   bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### moreItemsToolbar
+array of strings, optional, iOS only
+
+Defines a custom more items toolbar. If passed in, the default more items toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants or [Config.CustomToolbarButonKey](./src/Config/Config.js).
+
+```js
+<Documentview
+  moreItemsToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### onCustomToolbarButtonPressed
+function, optional
+
+This function is called when a custom toolbar button is pressed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | object | the custom toolbar button object that was pressed
+
+```js
+<DocumentView
+  onCustomToolbarButtonPressed={toolbar => {
+    console.log('Custom toolbar button pressed:', toolbar);
+  }
 />
 ```
 
