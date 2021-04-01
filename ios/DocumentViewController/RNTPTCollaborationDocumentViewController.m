@@ -73,6 +73,11 @@ NS_ASSUME_NONNULL_END
     [super setControlsHidden:hidden animated:animated];
 }
 
+- (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
+{
+    return NO;
+}
+
 #pragma mark - <PTToolManagerDelegate>
 
 - (void)toolManagerToolChanged:(PTToolManager *)toolManager
