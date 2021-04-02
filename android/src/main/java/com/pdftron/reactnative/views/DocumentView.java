@@ -83,6 +83,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.pdftron.reactnative.utils.Constants.*;
 
@@ -2034,6 +2035,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+            if (uid == null) {
+                uid = UUID.randomUUID().toString();
+                try {
+                    key.setUniqueID(uid);
+                } catch (PDFNetException e) {
+                    e.printStackTrace();
+                }
             }
 
             WritableMap annotData = Arguments.createMap();
