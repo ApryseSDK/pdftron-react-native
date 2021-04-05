@@ -48,6 +48,14 @@
 
 - (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (BOOL)gotoPreviousPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoNextPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoFirstPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoom:(NSNumber *)tag;

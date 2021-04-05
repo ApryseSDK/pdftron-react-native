@@ -381,6 +381,14 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (bool)gotoPreviousPage;
+
+- (bool)gotoNextPage;
+
+- (bool)gotoFirstPage;
+
+- (bool)gotoLastPage;
+
 - (void)closeAllTabs;
 
 - (double)getZoom;

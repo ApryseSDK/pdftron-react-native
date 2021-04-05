@@ -2825,6 +2825,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return pdfViewCtrl.setCurrentPage(pageNumber);
     }
 
+    public boolean gotoPreviousPage() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.gotoPreviousPage();
+    }
+
+    public boolean gotoNextPage() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.gotoNextPage();
+    }
+
+    public boolean gotoFirstPage() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.gotoFirstPage();
+    }
+
+    public boolean gotoLastPage() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.gotoLastPage();
+    }
+
     public void closeAllTabs() {
         if (mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.closeAllTabs();
