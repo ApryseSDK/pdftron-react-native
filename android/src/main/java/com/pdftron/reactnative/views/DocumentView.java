@@ -81,6 +81,7 @@ import org.json.JSONException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -2672,6 +2673,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         double rectY2 = rectMap.getDouble(KEY_Y2);
                         com.pdftron.pdf.Rect rect = new com.pdftron.pdf.Rect(rectX1, rectY1, rectX2, rectY2);
                         annot.setRect(rect);
+                    }
+                }
+
+                if (propertyMap.hasKey(KEY_ANNOTATION_CUSTOM_DATA)) {
+                    ReadableMap customData = propertyMap.getMap(KEY_ANNOTATION_CUSTOM_DATA);
+
+                    if (customData != null) {
+                        ReadableMapKeySetIterator keySetIterator = customData.keySetIterator();
+                        while (keySetIterator.hasNextKey()) {
+                            String key = keySetIterator.nextKey();
+                            String value = customData.getString(key);
+
+                            annot.setCustomData(key, value);
+                        }
                     }
                 }
 

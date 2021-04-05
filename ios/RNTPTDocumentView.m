@@ -2981,6 +2981,15 @@ NS_ASSUME_NONNULL_END
             }
         }
         
+        NSDictionary *customData = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[PTAnnotationCustomDataKey]];
+        if (customData) {
+            [customData enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
+                if ([key isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]]) {
+                    [annot SetCustomData:key value:value];
+                }
+            }];
+        }
+        
         if ([annot IsMarkup]) {
             PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
             

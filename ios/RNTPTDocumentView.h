@@ -119,6 +119,7 @@ static NSString * const PTAnnotationPageNumberKey = @"pageNumber";
 static NSString * const PTAnnotationFlagKey = @"flag";
 static NSString * const PTAnnotationFlagValueKey = @"flagValue";
 static NSString * const PTAnnotationTypeKey = @"type";
+static NSString * const PTAnnotationCustomDataKey = @"customData";
 
 static NSString * const PTContentRectAnnotationPropertyKey = @"contentRect";
 static NSString * const PTContentsAnnotationPropertyKey = @"contents";
