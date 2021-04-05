@@ -209,6 +209,21 @@ RCT_REMAP_METHOD(setValuesForFields,
     }
 }
 
+RCT_REMAP_METHOD(getField,
+                 getFieldForDocumentViewTag:(nonnull NSNumber *)tag
+                 fieldName:(NSString *)fieldName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *field = [[self documentViewManager] getFieldForDocumentViewTag:tag fieldName:fieldName];
+        resolve(field);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setFlagsForAnnotations,
                  setFlagsForAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  annotationFlagList:(NSArray *)annotationFlagList
@@ -368,6 +383,34 @@ RCT_REMAP_METHOD(getZoom,
     }
     @catch (NSException *exception) {
         reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getScrollPos,
+                 getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [[self documentViewManager] getScrollPosForDocumentViewTag:tag];
+        resolve(scrollPos);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_scroll_pos", @"Failed to get scroll pos", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCanvasSize,
+                 getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [[self documentViewManager] getCanvasSizeForDocumentViewTag:tag];
+        resolve(canvasSize);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
     }
 }
 

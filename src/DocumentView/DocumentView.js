@@ -40,6 +40,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     hideToolbarsOnTap: PropTypes.bool,
+    documentSliderEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
@@ -69,12 +70,16 @@ export default class DocumentView extends PureComponent {
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
     hideDefaultAnnotationToolbars: PropTypes.array,
+    topAppNavBarRightBar: PropTypes.array,
+    bottomToolbar: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
     onBookmarkChanged: PropTypes.func,
     hideThumbnailFilterModes: PropTypes.array,
     onToolChanged: PropTypes.func,
+    horizontalScrollPos: PropTypes.number,
+    verticalScrollPos: PropTypes.number,
     ...ViewPropTypes,
   };
 
@@ -279,6 +284,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getField = (fieldName) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
@@ -404,6 +417,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getScrollPos = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getScrollPos(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getCanvasSize = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCanvasSize(tag);
     }
     return Promise.resolve();
   }
