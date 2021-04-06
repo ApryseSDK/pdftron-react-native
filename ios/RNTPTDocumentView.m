@@ -2060,6 +2060,63 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - zoom
+
+- (void)setZoom:(double)zoom
+{
+    _zoom = zoom;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SetZoom:zoom];
+    }
+}
+
+- (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    if ([zoomLimitMode isEqualToString:PTZoomLimitAbsoluteKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_absolute Minimum:minimum Maxiumum:maximum];
+    } else if ([zoomLimitMode isEqualToString:PTZoomLimitRelativeKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_relative Minimum:minimum Maxiumum:maximum];
+    } else if ([zoomLimitMode isEqualToString:PTZoomLimitNoneKey]) {
+        [pdfViewCtrl SetZoomLimits:e_trn_zoom_limit_none Minimum:minimum Maxiumum:maximum];
+    }
+}
+
+- (void)zoomWithCenter:(double)zoom x:(int)x y:(int)y
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    [pdfViewCtrl SetZoomX:x Y:y Zoom:zoom];
+}
+
+- (void)zoomToRect:(int)pageNumber rect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    
+    if (rectX1 && rectY1 && rectX2 && rectY2) {
+        PTPDFRect* rect = [[PTPDFRect alloc] initWithX1:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+        [pdfViewCtrl ShowRect:pageNumber rect:rect];
+    }
+}
+
+- (void)smartZoom:(int)x y:(int)y animated:(BOOL)animated
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    [pdfViewCtrl SmartZoomX:(double)x y:(double)y animated:animated];
+}
+
 #pragma mark - Convenience
 
 - (UIViewController *)findParentViewController
@@ -2267,6 +2324,7 @@ NS_ASSUME_NONNULL_END
     
     [self applyLayoutMode:documentViewController.pdfViewCtrl];
     
+    
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
     }
@@ -2284,6 +2342,17 @@ NS_ASSUME_NONNULL_END
     
     if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
         [self.delegate zoomChanged:self zoom:zoom];
+    }
+}
+
+- (void)rnt_documentViewControllerDidFinishZoom:(PTDocumentBaseViewController *)documentViewController
+{
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    const double zoom = pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
+    
+    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+        [self.delegate zoomFinished:self zoom:zoom];
     }
 }
 
@@ -2981,6 +3050,15 @@ NS_ASSUME_NONNULL_END
             }
         }
         
+        NSDictionary *customData = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[PTAnnotationCustomDataKey]];
+        if (customData) {
+            [customData enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL* stop) {
+                if ([key isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]]) {
+                    [annot SetCustomData:key value:value];
+                }
+            }];
+        }
+        
         if ([annot IsMarkup]) {
             PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
             
@@ -3018,9 +3096,56 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Annotation Visibility
+
+- (void)setDrawAnnotations:(BOOL)drawAnnotations
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetDrawAnnotations:drawAnnotations];
+}
+
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+
+    NSError *error;
+    
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        
+        PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
+        if (![annot IsValid]) {
+            NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                  annotationId, (int)pageNumber);
+            annot = nil;
+            return;
+        }
+        
+        if (visibility) {
+            [pdfViewCtrl ShowAnnotation:annot];
+        } else {
+            [pdfViewCtrl HideAnnotation:annot];
+        }
+        
+        [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+        
+    } error:&error];
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    }
+}
+
+- (void)setHighlightFields:(BOOL)highlightFields
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetHighlightFields:highlightFields];
+    [pdfViewCtrl Update];
+}
+
 #pragma mark - Get Annotation(s)
 
-- (NSDictionary *)getAnnotationAtPoint:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight
+- (NSDictionary *)getAnnotationAt:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
@@ -3033,7 +3158,7 @@ NS_ASSUME_NONNULL_END
             PTAnnot *annot = [pdfViewCtrl GetAnnotationAt:(int)x y:(int)y distanceThreshold:distanceThreshold minimumLineWeight:minimumLineWeight];
             
             if (annot && [annot IsValid]) {
-                annotation = [self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl];
+                annotation = [self getAnnotationData:annot pageNumber:[pdfViewCtrl GetPageNumberFromScreenPt:(double)x y:(double)y] pdfViewCtrl:pdfViewCtrl];
             }
         } error:&error];
         
@@ -3046,7 +3171,7 @@ NS_ASSUME_NONNULL_END
     return annotation ? [annotation copy] : nil;
 }
 
-- (NSArray *)getAnnotationsAtLine:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2
+- (NSArray *)getAnnotationListAt:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
@@ -3058,9 +3183,11 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             NSArray <PTAnnot *> *annots = [pdfViewCtrl GetAnnotationListAt:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2];
             
+            int pageNumber = [pdfViewCtrl GetPageNumberFromScreenPt:(double)x1 y:(double)y1];
+            
             for (PTAnnot *annot in annots) {
                 if ([annot IsValid]) {
-                    [annotations addObject:[self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl]];
+                    [annotations addObject:[self getAnnotationData:annot pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl]];
                 }
             }
         } error:&error];
@@ -3074,7 +3201,7 @@ NS_ASSUME_NONNULL_END
     return [annotations copy];
 }
 
-- (NSArray *)getAnnotationsOnPage:(NSInteger)pageNumber
+- (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
@@ -3088,7 +3215,7 @@ NS_ASSUME_NONNULL_END
             
             for (PTAnnot *annot in annots) {
                 if ([annot IsValid]) {
-                    [annotations addObject:[self getAnnotationData:annot pageNumber:[[annot GetPage] GetIndex] pdfViewCtrl:pdfViewCtrl]];
+                    [annotations addObject:[self getAnnotationData:annot pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl]];
                 }
             }
         } error:&error];
@@ -3132,11 +3259,31 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
-#pragma mark - Set Current Page
+#pragma mark - Set Page
 
 - (bool)setCurrentPage:(NSInteger)pageNumber {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
+- (bool)gotoPreviousPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoPreviousPage];
+}
+
+- (bool)gotoNextPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoNextPage];
+}
+
+- (bool)gotoFirstPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoFirstPage];
+}
+
+- (bool)gotoLastPage {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GotoLastPage];
 }
 
 #pragma mark - Get Document Path
@@ -3166,6 +3313,34 @@ NS_ASSUME_NONNULL_END
     if (tabManager.selectedItem) {
         [tabManager removeItem:tabManager.selectedItem];
     }
+}
+
+#pragma mark - Page Rotation
+
+- (int)getPageRotation
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTRotate rotation = [pdfViewCtrl GetRotation];
+    
+    if (rotation == e_pt0) {
+        return 0;
+    } else if (rotation == e_pt90) {
+        return 90;
+    } else if (rotation == e_pt180) {
+        return 180;
+    } else {
+        return 270;
+    }
+}
+
+- (void)rotateClockwise
+{
+    [self.currentDocumentViewController.pdfViewCtrl RotateClockwise];
+}
+
+- (void)rotateCounterClockwise
+{
+    [self.currentDocumentViewController.pdfViewCtrl RotateCounterClockwise];
 }
 
 #pragma mark - Get Zoom

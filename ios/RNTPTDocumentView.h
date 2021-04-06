@@ -119,6 +119,7 @@ static NSString * const PTAnnotationPageNumberKey = @"pageNumber";
 static NSString * const PTAnnotationFlagKey = @"flag";
 static NSString * const PTAnnotationFlagValueKey = @"flagValue";
 static NSString * const PTAnnotationTypeKey = @"type";
+static NSString * const PTAnnotationCustomDataKey = @"customData";
 
 static NSString * const PTContentRectAnnotationPropertyKey = @"contentRect";
 static NSString * const PTContentsAnnotationPropertyKey = @"contents";
@@ -170,6 +171,9 @@ static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 static NSString * const PTAnnotatedFilterModeKey = @"annotated";
 static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
+static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
+static NSString * const PTRelativeZoomLimitModeKey = @"relative";
+
 static NSString * const PTRectKey = @"rect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
@@ -192,6 +196,15 @@ static NSString * const PTFieldTypeRadioKey = @"radio";
 static NSString * const PTFieldTypeTextKey = @"text";
 static NSString * const PTFieldTypeChoiceKey = @"choice";
 static NSString * const PTFieldTypeSignatureKey = @"signature";
+
+static NSString * const PTZoomScaleKey = @"scale";
+static NSString * const PTZoomCenterKey = @"center";
+static NSString * const PTZoomCenterXKey = @"x";
+static NSString * const PTZoomCenterYKey = @"y";
+
+static NSString * const PTZoomLimitRelativeKey = @"relative";
+static NSString * const PTZoomLimitAbsoluteKey = @"absolute";
+static NSString * const PTZoomLimitNoneKey = @"none";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -225,6 +238,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -336,6 +350,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
+@property (nonatomic) double zoom;
+
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;
 
@@ -376,19 +392,47 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
-- (NSDictionary *)getAnnotationAtPoint:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight;
+- (void)setDrawAnnotations:(BOOL)drawAnnotations;
 
-- (NSArray *)getAnnotationsAtLine:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
 
-- (NSArray *)getAnnotationsOnPage:(NSInteger)pageNumber;
+- (void)setHighlightFields:(BOOL)highlightFields;
+
+- (NSDictionary *)getAnnotationAt:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight;
+
+- (NSArray *)getAnnotationListAt:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
+
+- (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (bool)gotoPreviousPage;
+
+- (bool)gotoNextPage;
+
+- (bool)gotoFirstPage;
+
+- (bool)gotoLastPage;
+
 - (void)closeAllTabs;
 
+- (int)getPageRotation;
+
+- (void)rotateClockwise;
+
+- (void)rotateCounterClockwise;
+
 - (double)getZoom;
+
+- (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
+
+- (void)zoomWithCenter:(double)zoom x:(int)x y:(int)y;
+
+- (void)zoomToRect:(int)pageNumber rect:(NSDictionary *)rect;
+
+- (void)smartZoom:(int)x y:(int)y animated:(BOOL)animated;
 
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 

@@ -117,6 +117,11 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
+{
+    return NO;
+}
+
 #pragma mark - <PTToolManagerDelegate>
 
 - (void)toolManagerToolChanged:(PTToolManager *)toolManager
@@ -220,6 +225,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidZoom:)]) {
         [self.delegate rnt_documentViewControllerDidZoom:self];
+    }
+}
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidFinishZoom:)]) {
+        [self.delegate rnt_documentViewControllerDidFinishZoom:self];
     }
 }
 
