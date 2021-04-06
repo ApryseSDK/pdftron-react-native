@@ -504,6 +504,34 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public int getPageRotation(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            int rotation = documentView.getPageRotation();
+            return rotation;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageRotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void rotateClockwise(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.rotateClockwise();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "rotateClockwise", "Unable to find DocumentView.");
+        }
+    }
+
+    public void rotateCounterClockwise(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.rotateCounterClockwise();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "rotateCounterClockwise", "Unable to find DocumentView.");
+        }
+    }
+
     public boolean gotoPreviousPage(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

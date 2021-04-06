@@ -391,6 +391,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)closeAllTabs;
 
+- (int)getPageRotation;
+
+- (void)rotateClockwise;
+
+- (void)rotateCounterClockwise;
+
 - (double)getZoom;
 
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;

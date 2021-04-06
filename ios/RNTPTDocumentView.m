@@ -3113,6 +3113,34 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Page Rotation
+
+- (int)getPageRotation
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTRotate rotation = [pdfViewCtrl GetRotation];
+    
+    if (rotation == e_pt0) {
+        return 0;
+    } else if (rotation == e_pt90) {
+        return 90;
+    } else if (rotation == e_pt180) {
+        return 180;
+    } else {
+        return 270;
+    }
+}
+
+- (void)rotateClockwise
+{
+    [self.currentDocumentViewController.pdfViewCtrl RotateClockwise];
+}
+
+- (void)rotateCounterClockwise
+{
+    [self.currentDocumentViewController.pdfViewCtrl RotateCounterClockwise];
+}
+
 #pragma mark - Get Zoom
 
 - (double)getZoom

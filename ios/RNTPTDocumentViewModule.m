@@ -372,6 +372,46 @@ RCT_REMAP_METHOD(closeAllTabs,
     }
 }
 
+RCT_REMAP_METHOD(getPageRotation,
+                 getPageRotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageNumber = [[self documentViewManager] getPageRotationForDocumentViewTag:tag];
+        resolve([NSNumber numberWithInt:pageNumber]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_rotation", @"Failed to get page rotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateClockwise,
+                 rotateClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_clockwise", @"Failed to rotate clockwise", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateCounterClockwise,
+                 rotateCounterClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateCounterClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_counter_clockwise", @"Failed to rotate counter-clockwise", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getZoom,
                  getZoomForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

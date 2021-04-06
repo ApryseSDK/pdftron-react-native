@@ -58,6 +58,12 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
+
+- (void)rotateClockwiseForDocumentViewTag:(NSNumber *)tag;
+
+- (void)rotateCounterClockwiseForDocumentViewTag:(NSNumber *)tag;
+
 - (double)getZoom:(NSNumber *)tag;
 
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPosForDocumentViewTag:(NSNumber *)tag;

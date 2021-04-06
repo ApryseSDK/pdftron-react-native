@@ -2851,6 +2851,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public int getPageRotation() {
+        return getPdfViewCtrl().getPageRotation() * 90;
+    }
+
+    public void rotateClockwise() {
+        getPdfViewCtrl().rotateClockwise();
+    }
+
+    public void rotateCounterClockwise() {
+        getPdfViewCtrl().rotateCounterClockwise();
+
+    }
+
     public double getZoom() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.getZoom();
