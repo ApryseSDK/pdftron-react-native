@@ -150,7 +150,7 @@ Example:
 #### isBase64String
 bool, optional, defaults to false
 
-If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [base64FileExtension](#base64FileExtension) is required. 
+If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [`base64FileExtension`](#base64FileExtension) is required. 
 
 When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
 
@@ -164,7 +164,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 #### base64FileExtension
 string, required if using base64 string of a non-pdf file, defaults to ".pdf"
 
-The file extension for the base64 string in [document](#document), if [isBase64String](#isBase64String) is true.
+The file extension for the base64 string in [`document`](#document), if [`isBase64String`](#isBase64String) is true.
 
 ```js
 <DocumentView
@@ -284,7 +284,7 @@ Example:
 ##### Android
 1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
-<img alt='demo-android' src='android_add_resources.png'/>
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
@@ -296,7 +296,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-ios' src='ios_add_resources.png'/>
+<img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
@@ -322,6 +322,17 @@ This function is called when the leading navigation button is pressed.
   onLeadingNavButtonPressed = {() => { 
     console.log('The leading nav has been pressed'); 
   }}
+/>
+```
+
+#### documentSliderEnabled
+bool, optional, defaults to true
+
+Defines whether the document slider of the viewer is enabled.
+
+```js
+<DocumentView
+  documentSliderEnabled={false}
 />
 ```
 
@@ -402,7 +413,7 @@ Defines whether to hide the top navigation app bar.
 
 ```js
 <DocumentView
-  hideAnnotationToolbarSwitcher={false}
+  hideTopAppNavBar={true}
 />
 ```
 
@@ -414,6 +425,28 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```js
 <DocumentView
   hideToolbarsOnTap={false}
+/>
+```
+
+#### topAppNavBarRightBar
+array of strings, optional, iOS only
+
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### bottomToolbar
+array of strings, optional, iOS only
+
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
@@ -687,7 +720,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 #### overrideBehavior
 array of string, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -1075,7 +1108,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ### Document
 
 #### getDocumentPath
-Returns the path of the current document. If [isBase64String](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [document](#document).
+Returns the path of the current document. If [`isBase64String`](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1092,7 +1125,7 @@ this._viewer.getDocumentPath().then((path) => {
 ```
 
 #### saveDocument
-Saves the current document. If [isBase64String](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [document](#document).
+Saves the current document. If [`isBase64String`](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1184,6 +1217,82 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
+#### gotoPreviousPage
+Go to the previous page of the document. If on first page, it would stay on first page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in first page counts as being successful)
+
+```js
+this._viewer.gotoPreviousPage().then((success) => {
+  if (success) {
+    console.log("Go to previous page.");
+  }
+});
+```
+
+#### gotoNextPage
+Go to the next page of the document. If on last page, it would stay on last page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in last page counts as being successful)
+
+```js
+this._viewer.gotoNextPage().then((success) => {
+  if (success) {
+    console.log("Go to next page.");
+  }
+});
+```
+
+#### gotoFirstPage
+Go to the first page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoFirstPage().then((success) => {
+  if (success) {
+    console.log("Go to first page.");
+  }
+});
+```
+
+#### gotoLastPage
+Go to the last page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoLastPage().then((success) => {
+  if (success) {
+    console.log("Go to last page.");
+  }
+});
+```
+
 #### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
@@ -1207,6 +1316,41 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
 });
+```
+
+#### getPageRotation
+Gets the rotation value of all pages in the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageRotation | number | the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
+
+```js
+this._viewer.getPageRotation().then((pageRotation) => {
+  console.log('The current page rotation degree is' + pageRotation);
+});
+```
+
+#### rotateClockwise
+Rotates all pages in the current document in clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateClockwise();
+```
+
+#### rotateCounterClockwise
+Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateCounterClockwise();
 ```
 
 ### Import/Export Annotations

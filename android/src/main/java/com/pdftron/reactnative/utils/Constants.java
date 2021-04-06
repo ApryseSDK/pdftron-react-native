@@ -59,6 +59,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STICKY = "stickyToolButton";
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
+    public static final String TOOL_BUTTON_EDIT = "editToolButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -238,6 +239,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
+    public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";

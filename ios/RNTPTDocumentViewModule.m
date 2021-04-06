@@ -349,6 +349,62 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
 }
 
+RCT_REMAP_METHOD(gotoPreviousPage,
+                 gotoPreviousPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoPreviousPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_previous_page", @"Failed to go to previous page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoNextPage,
+                 gotoNextPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoNextPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_next_page", @"Failed to go to next page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoFirstPage,
+                 gotoFirstPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoFirstPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_first_page", @"Failed to go to first page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoLastPage,
+                 gotoLastPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoLastPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_last_page", @"Failed to go to last page", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -360,6 +416,46 @@ RCT_REMAP_METHOD(closeAllTabs,
     }
     @catch (NSException *exception) {
         reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getPageRotation,
+                 getPageRotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageNumber = [[self documentViewManager] getPageRotationForDocumentViewTag:tag];
+        resolve([NSNumber numberWithInt:pageNumber]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_rotation", @"Failed to get page rotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateClockwise,
+                 rotateClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_clockwise", @"Failed to rotate clockwise", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateCounterClockwise,
+                 rotateCounterClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateCounterClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_counter_clockwise", @"Failed to rotate counter-clockwise", [self errorFromException:exception]);
     }
 }
 
