@@ -2356,6 +2356,15 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerLayoutDidChange:(PTDocumentBaseViewController *)documentViewController
+{
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    if ([self.delegate respondsToSelector:@selector(layoutChanged:)]) {
+        [self.delegate layoutChanged:self];
+    }
+}
+
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
 {
     return !self.continuousAnnotationEditing;
@@ -3377,7 +3386,7 @@ NS_ASSUME_NONNULL_END
     return scrollPos;
 }
 
-# pragma mark - Canvas Size
+#pragma mark - Canvas Size
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize
 {
@@ -3389,6 +3398,33 @@ NS_ASSUME_NONNULL_END
     };
     
     return canvasSize;
+}
+
+#pragma mark - Rendering Options
+
+- (void)setProgressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetProgressiveRendering:progressiveRendering withInitialDelay:(int)initialDelay withInterval:(int)interval];
+}
+
+
+- (void)setImageSmoothing:(BOOL)imageSmoothing
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetImageSmoothing:imageSmoothing];
+}
+
+- (void)setOverprint:(NSString *)overprint {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if ([overprint isEqualToString:PTOverprintModeOnKey]) {
+        [pdfViewCtrl SetOverprint:e_ptop_on];
+    } else if ([overprint isEqualToString:PTOverprintModeOffKey]) {
+        [pdfViewCtrl SetOverprint:e_ptop_off];
+    } else if ([overprint isEqualToString:PTOverprintModePdfxKey]) {
+        [pdfViewCtrl SetOverprint:e_ptop_pdfx_on];
+    }
 }
 
 #pragma mark - Helper

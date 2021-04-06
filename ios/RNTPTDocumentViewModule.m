@@ -523,7 +523,7 @@ RCT_REMAP_METHOD(getZoom,
         reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
     }
 }
-
+                 
 RCT_REMAP_METHOD(setZoomLimits,
                  setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag
                  zoomLimitMode:(NSString *)zoomLimitMode
@@ -605,6 +605,38 @@ RCT_REMAP_METHOD(getScrollPos,
     }
 }
 
+RCT_REMAP_METHOD(setProgressiveRendering,
+                 setProgressiveRenderingforDocumentViewTag: (nonnull NSNumber *) tag
+                 progressiveRendering:(BOOL)progressiveRendering
+                 initialDelay:(NSInteger)initialDelay
+                 interval:(NSInteger)interval
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setProgressiveRenderingForDocumentViewTag:tag progressiveRendering:progressiveRendering initialDelay:initialDelay interval:interval];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_progressive_rendering", @"Failed to set progressive rendering", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setImageSmoothing,
+                 setImageSmoothingforDocumentViewTag: (nonnull NSNumber *) tag
+                 imageSmoothing:(BOOL)imageSmoothing
+                resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setImageSmoothingforDocumentViewTag:tag imageSmoothing:imageSmoothing];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_image_smoothing", @"Failed to set image smoothing", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getCanvasSize,
                  getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -616,6 +648,21 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
     @catch (NSException *exception) {
         reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setOverprint,
+                 setOverprintforDocumentViewTag: (nonnull NSNumber *) tag
+                 overprint:(NSString *)overprint
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setOverprintforDocumentViewTag:tag overprint:overprint];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_overprint", @"Failed to set overprint", [self errorFromException:exception]);
     }
 }
 
