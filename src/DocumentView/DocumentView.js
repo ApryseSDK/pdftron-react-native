@@ -40,6 +40,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     hideToolbarsOnTap: PropTypes.bool,
+    documentSliderEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
@@ -69,6 +70,8 @@ export default class DocumentView extends PureComponent {
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
     hideDefaultAnnotationToolbars: PropTypes.array,
+    topAppNavBarRightBar: PropTypes.array,
+    bottomToolbar: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
@@ -366,6 +369,38 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  gotoPreviousPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoPreviousPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoNextPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoNextPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoFirstPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoFirstPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoLastPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoLastPage(tag);
     }
     return Promise.resolve();
   }
