@@ -939,18 +939,6 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
-
-- (NSDictionary<NSString *, NSNumber *> *)getCanvasSizeForDocumentViewTag:(NSNumber *)tag
-{
-    RNTPTDocumentView *documentView = self.documentViews[tag];
-    if (documentView) {
-        NSDictionary<NSString *, NSNumber *> *canvasSize = [documentView getCanvasSize];
-        return canvasSize;
-    } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
-    }
-}
-
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -997,6 +985,17 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     if (documentView) {
         NSDictionary<NSString *, NSNumber *> *scrollPos = [documentView getScrollPos];
         return scrollPos;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSizeForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [documentView getCanvasSize];
+        return canvasSize;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
