@@ -150,7 +150,7 @@ Example:
 #### isBase64String
 bool, optional, defaults to false
 
-If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [base64FileExtension](#base64FileExtension) is required. 
+If true, [`document`](#document) prop will be treated as a base64 string. If it is not the base64 string of a pdf file, [`base64FileExtension`](#base64FileExtension) is required. 
 
 When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
 
@@ -164,7 +164,7 @@ When viewing a document initialized with a base64 string (i.e. a memory buffer),
 #### base64FileExtension
 string, required if using base64 string of a non-pdf file, defaults to ".pdf"
 
-The file extension for the base64 string in [document](#document), if [isBase64String](#isBase64String) is true.
+The file extension for the base64 string in [`document`](#document), if [`isBase64String`](#isBase64String) is true.
 
 ```js
 <DocumentView
@@ -284,7 +284,7 @@ Example:
 ##### Android
 1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
-<img alt='demo-android' src='android_add_resources.png'/>
+<img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
@@ -296,7 +296,7 @@ Example:
 - "Copy Bundle Resources"
 - "+".
 
-<img alt='demo-ios' src='ios_add_resources.png'/>
+<img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/ios_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
 
@@ -322,6 +322,17 @@ This function is called when the leading navigation button is pressed.
   onLeadingNavButtonPressed = {() => { 
     console.log('The leading nav has been pressed'); 
   }}
+/>
+```
+
+#### documentSliderEnabled
+bool, optional, defaults to true
+
+Defines whether the document slider of the viewer is enabled.
+
+```js
+<DocumentView
+  documentSliderEnabled={false}
 />
 ```
 
@@ -402,7 +413,7 @@ Defines whether to hide the top navigation app bar.
 
 ```js
 <DocumentView
-  hideAnnotationToolbarSwitcher={false}
+  hideTopAppNavBar={true}
 />
 ```
 
@@ -414,6 +425,28 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```js
 <DocumentView
   hideToolbarsOnTap={false}
+/>
+```
+
+#### topAppNavBarRightBar
+array of strings, optional, iOS only
+
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### bottomToolbar
+array of strings, optional, iOS only
+
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
@@ -552,6 +585,48 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
+#### onZoomFinished
+function, optional
+
+This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onZoomFinished = {(zoom) => {
+    console.log('Current zoom ratio is', zoom); 
+  }}
+```
+
+### Scroll
+
+#### horizontalScrollPos
+number, optional
+
+Defines the horizontal scroll position in the current document viewer.
+
+```js
+<DocumentView
+  horizontalScrollPos={50}
+/>
+```
+
+#### verticalScrollPos
+number, optional
+
+Defines the vertical scroll position in the current document viewer.
+
+```js
+<DocumentView
+  verticalScrollPos={50}
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -597,7 +672,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id, rect}` objects, where `id` is the annotation identifier and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect.
+annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [Config.Tools](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
 
 ```js
 <DocumentView
@@ -605,6 +680,8 @@ annotations | array | An array of `{id, rect}` objects, where `id` is the annota
     console.log('Annotation menu item', annotationMenu, 'has been pressed');
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
+      console.log('The page number of selected annotation is', annotation.pageNumber);
+      console.log('The type of selected annotation is', annotation.type);
       console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
     });
   }}
@@ -674,7 +751,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 #### overrideBehavior
 array of string, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`] will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -696,9 +773,10 @@ data | object | A JSON object that varies depending on the action
 
 Data param table:
 
-Action | Param
+Action | Data param
 --- | ---
-[`Config.Actions.linkPress`](./src/Config/Config.js) | key: `url`, value: the link pressed
+[`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
 <DocumentView
@@ -706,6 +784,8 @@ Action | Param
     console.log('Activated action is', action);
     if (action === Config.Actions.linkPress) {
       console.log('The external link pressed is', data.url);
+    } else if (action === Config.Actions.stickyNoteShowPopUp) {
+      console.log('Sticky note has been activated, but it would not show a pop up window.');
     }
   }}
 />
@@ -863,7 +943,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -871,6 +951,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
       console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
@@ -887,7 +968,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number}`, representing the annotations that have been changed
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [Config.Tools](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -896,6 +977,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
     annotations.forEach(annotation => {
       console.log('The id of changed annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
     });
   }}
 />
@@ -1057,7 +1139,7 @@ import { DocumentView, Config } from 'react-native-pdftron';
 ### Document
 
 #### getDocumentPath
-Returns the path of the current document. If [isBase64String](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [document](#document).
+Returns the path of the current document. If [`isBase64String`](#isBase64String) is true, this would be the path to the temporary pdf file converted from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1074,7 +1156,7 @@ this._viewer.getDocumentPath().then((path) => {
 ```
 
 #### saveDocument
-Saves the current document. If [isBase64String](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [document](#document).
+Saves the current document. If [`isBase64String`](#isBase64String) is true, this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string in [`document`](#document).
 
 Returns a Promise.
 
@@ -1166,6 +1248,82 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
+#### gotoPreviousPage
+Go to the previous page of the document. If on first page, it would stay on first page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in first page counts as being successful)
+
+```js
+this._viewer.gotoPreviousPage().then((success) => {
+  if (success) {
+    console.log("Go to previous page.");
+  }
+});
+```
+
+#### gotoNextPage
+Go to the next page of the document. If on last page, it would stay on last page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in last page counts as being successful)
+
+```js
+this._viewer.gotoNextPage().then((success) => {
+  if (success) {
+    console.log("Go to next page.");
+  }
+});
+```
+
+#### gotoFirstPage
+Go to the first page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoFirstPage().then((success) => {
+  if (success) {
+    console.log("Go to first page.");
+  }
+});
+```
+
+#### gotoLastPage
+Go to the last page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoLastPage().then((success) => {
+  if (success) {
+    console.log("Go to last page.");
+  }
+});
+```
+
 #### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
@@ -1189,6 +1347,41 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
 });
+```
+
+#### getPageRotation
+Gets the rotation value of all pages in the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageRotation | number | the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
+
+```js
+this._viewer.getPageRotation().then((pageRotation) => {
+  console.log('The current page rotation degree is' + pageRotation);
+});
+```
+
+#### rotateClockwise
+Rotates all pages in the current document in clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateClockwise();
+```
+
+#### rotateCounterClockwise
+Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateCounterClockwise();
 ```
 
 ### Import/Export Annotations
@@ -1393,6 +1586,51 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### setDrawAnnotations
+Sets whether all annotations and forms should be rendered in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+drawAnnotations | bool | whether all annotations and forms should be rendered
+
+Returns a promise.
+
+```js
+this._viewer.setDrawAnnotations(false);
+```
+
+#### setVisibilityForAnnotation
+Sets visibility for specified annotation in the current document, if it is valid. Note that if [drawAnnotations](#drawAnnotations) is set to false in the viewer, this function would not render the annotation even if visibility is true.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+visibility | bool | whether the annotation should be visible
+
+Returns a promise.
+
+```js
+this._viewer.setVisibilityForAnnotation('Pdftron', 1, true);
+```
+
+#### setHighlightFields
+Enables or disables highlighting form fields. It is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+highlightFields | bool | whether form fields should be highlighted
+
+```js
+this._viewer.setHighlightFields(true);
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 
@@ -1527,5 +1765,114 @@ zoom | double | current zoom scale in the viewer
 ```js
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
+});
+```
+
+#### setZoomLimits
+Sets the minimum and maximum zoom bounds of current viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+minimum | double | the lower bound of the zoom limit range
+maximum | double | the upper bound of the zoom limit range
+
+Returns a Promise.
+
+```js
+this._viewer.setZoomLimits(Config.ZoomLimitMode.Absolute, 1.0, 3.5);
+```
+
+#### zoomWithCenter
+Sets the zoom scale in the current document viewer with a zoom center.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the zoom ratio to be set
+x | int | the x-coordinate of the zoom center
+y | int | the y-coordinate of the zoom center
+
+Returns a Promise.
+
+```js
+this._viewer.zoomWithCenter(3.0, 100, 300);
+```
+
+#### zoomToRect
+Zoom the viewer to a specific rectangular area in a page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page number of the zooming area (1-indexed)
+rect | map | The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
+
+Returns a Promise.
+
+```js
+this._viewer.zoomToRect(3, {'x1': 1.0, 'y1': 2.0, 'x2': 3.0, 'y2': 4.0});
+```
+
+#### smartZoom
+Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
+
+Parameters:
+
+Name | Type | Description
+-- | -- | --
+x | int | the x-coordinate of the target coordinate
+y | int | the y-coordinate of the target coordinate
+animated | bool | whether the transition is animated
+
+Returns a Promise.
+
+```js
+this._viewer.smartZoom(100, 200, true);
+```
+
+### Scroll
+
+#### getScrollPos
+Returns the horizontal and vertical scroll position of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | current horizontal scroll position
+vertical | number | current vertical scroll position
+
+```js
+this._viewer.getScrollPos().then(({horizontal, vertical}) => {
+  console.log('Current horizontal scroll position is:', horizontal);
+  console.log('Current vertical scroll position is:', vertical);
+});
+```
+
+### Canvas
+
+#### getCanvasSize
+Returns the canvas size of current document viewer.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+width | number | current width of canvas
+height | number | current height of canvas
+
+```js
+this._viewer.getCanvasSize().then(({width, height}) => {
+  console.log('Current canvas width is:', width);
+  console.log('Current canvas height is:', height);
 });
 ```

@@ -6,6 +6,7 @@ public final class Constants {
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
+    public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
     public static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
@@ -60,6 +61,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STICKY = "stickyToolButton";
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
+    public static final String TOOL_BUTTON_EDIT = "editToolButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -238,6 +240,8 @@ public final class Constants {
     public static final String KEY_ANNOTATION_TITLE = "title";
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
+    public static final String KEY_ANNOTATION_TYPE = "type";
+    public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -264,6 +268,9 @@ public final class Constants {
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
 
+    public static final String KEY_HORIZONTAL = "horizontal";
+    public static final String KEY_VERTICAL = "vertical";
+
     public static final String KEY_ANNOTATION_FLAG_HIDDEN = "hidden";
     public static final String KEY_ANNOTATION_FLAG_INVISIBLE = "invisible";
     public static final String KEY_ANNOTATION_FLAG_LOCKED = "locked";
@@ -283,4 +290,10 @@ public final class Constants {
 
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
+    public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
+
+    // Zoom
+    public static final String KEY_zoomLimitAbsolute = "absolute";
+    public static final String KEY_zoomLimitRelative = "relative";
+    public static final String KEY_zoomLimitNone = "none";
 }

@@ -264,11 +264,58 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] setPropertiesForAnnotation:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+        [[self documentViewManager] setPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber propertyMap:propertyMap];
         resolve(nil);
     }
     @catch (NSException *exception) {
         reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setDrawAnnotations,
+                 setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
+                 drawAnnotations:(BOOL)drawAnnotations
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDrawAnnotationsForDocumentViewTag:tag drawAnnotations:drawAnnotations];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_draw_annotations", @"Failed to set draw annotations", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setVisibilityForAnnotation,
+                 setVisibilityForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 visibility:(BOOL)visibility
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setVisibilityForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber visibility:visibility];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_visibility_for_annotation", @"Failed to set visibility for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setHighlightFields,
+                 setHighlightFieldsForDocumentViewTag: (nonnull NSNumber *)tag
+                 highlightFields:(BOOL)highlightFields
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setHighlightFieldsForDocumentViewTag:tag highlightFields:highlightFields];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_highlight_fields", @"Failed to set highlight fields", [self errorFromException:exception]);
     }
 }
 
@@ -302,6 +349,62 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
 }
 
+RCT_REMAP_METHOD(gotoPreviousPage,
+                 gotoPreviousPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoPreviousPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_previous_page", @"Failed to go to previous page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoNextPage,
+                 gotoNextPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoNextPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_next_page", @"Failed to go to next page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoFirstPage,
+                 gotoFirstPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoFirstPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_first_page", @"Failed to go to first page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(gotoLastPage,
+                 gotoLastPageforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool setResult = [[self documentViewManager] gotoLastPageForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:setResult]);
+    }
+    @catch (NSException *exception) {
+        reject(@"goto_last_page", @"Failed to go to last page", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -316,6 +419,46 @@ RCT_REMAP_METHOD(closeAllTabs,
     }
 }
 
+RCT_REMAP_METHOD(getPageRotation,
+                 getPageRotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageNumber = [[self documentViewManager] getPageRotationForDocumentViewTag:tag];
+        resolve([NSNumber numberWithInt:pageNumber]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_rotation", @"Failed to get page rotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateClockwise,
+                 rotateClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_clockwise", @"Failed to rotate clockwise", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(rotateCounterClockwise,
+                 rotateCounterClockwiseForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] rotateCounterClockwiseForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"rotate_counter_clockwise", @"Failed to rotate counter-clockwise", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getZoom,
                  getZoomForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -327,6 +470,101 @@ RCT_REMAP_METHOD(getZoom,
     }
     @catch (NSException *exception) {
         reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setZoomLimits,
+                 setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag
+                 zoomLimitMode:(NSString *)zoomLimitMode
+                 minimum:(double)minimum
+                 maximum:(double)maximum
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setZoomLimitsForDocumentViewTag:tag zoomLimitMode:zoomLimitMode minimum:minimum maximum:maximum];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_failed", @"Failed to set zoom limits", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(zoomWithCenter,
+                 zoomWithCenterForDocumentViewTag:(nonnull NSNumber *)tag
+                 zoom:(double)zoom
+                 x:(int)x
+                 y:(int)y
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] zoomWithCenterForDocumentViewTag:tag zoom:zoom x:x y:y];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to zoom with center", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(zoomToRect,
+                 zoomToRect:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] zoomToRectForDocumentViewTag:tag pageNumber:pageNumber rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to zoom to rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(smartZoom,
+                 smartZoomForDocumentViewTag:(nonnull NSNumber *)tag
+                 x:(int)x
+                 y:(int)y
+                 animated:(BOOL)animated
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] smartZoomForDocumentViewTag:tag x:x y:y animated:animated];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to smart zoom", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getScrollPos,
+                 getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [[self documentViewManager] getScrollPosForDocumentViewTag:tag];
+        resolve(scrollPos);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_scroll_pos", @"Failed to get scroll pos", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCanvasSize,
+                 getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *canvasSize = [[self documentViewManager] getCanvasSizeForDocumentViewTag:tag];
+        resolve(canvasSize);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
     }
 }
 

@@ -2,6 +2,7 @@ export default {
 
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
+    editToolButton: 'editToolButton',
     viewControlsButton: 'viewControlsButton',
     freeHandToolButton: 'freeHandToolButton',
     highlightToolButton: 'highlightToolButton',
@@ -142,6 +143,7 @@ export default {
   // Actions define potentially overridable action to the viewer
   Actions: {
     linkPress: 'linkPress',
+    stickyNoteShowPopUp: 'stickyNoteShowPopUp',
   },
 
   // AnnotationFlags define the flags for any annotation in the document
@@ -199,4 +201,10 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
+  ZoomLimitMode: {
+    None: "none",
+    Absolute: "absolute",
+    Relative: "relative",
+  }
 };
