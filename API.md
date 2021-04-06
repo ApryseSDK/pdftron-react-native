@@ -1937,7 +1937,7 @@ backgroundColor | object | the background color, in the format `{red: number, gr
 this._viewer.setBackgroundColor({red: 0, green: 0, blue: 255}); // blue color
 ```
 
-#### defaultPageColor
+#### setDefaultPageColor
 Sets the default page color of the viewer.
 
 Parameters:
