@@ -2805,6 +2805,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setDrawAnnotations(boolean drawAnnotations) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setDrawAnnotations(drawAnnotations);
+        }
+    }
+
+    public void setVisibilityForAnnotation(String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
+            if (annot != null && annot.isValid()) {
+
+                if (visibility) {
+                    pdfViewCtrl.showAnnotation(annot);
+                } else {
+                    pdfViewCtrl.hideAnnotation(annot);
+                }
+
+                pdfViewCtrl.update(annot, pageNumber);
+            }
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
+        }
+    }
+
+    public void setHighlightFields(boolean highlightFields) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setHighlightFields(highlightFields);
+        }
+    }
+
     public WritableMap getPageCropBox(int pageNumber) throws PDFNetException {
         com.pdftron.pdf.Rect rect = getPdfDoc().getPage(pageNumber).getCropBox();
 

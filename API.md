@@ -1555,6 +1555,51 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### setDrawAnnotations
+Sets whether all annotations and forms should be rendered in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+drawAnnotations | bool | whether all annotations and forms should be rendered
+
+Returns a promise.
+
+```js
+this._viewer.setDrawAnnotations(false);
+```
+
+#### setVisibilityForAnnotation
+Sets visibility for specified annotation in the current document, if it is valid. Note that if [drawAnnotations](#drawAnnotations) is set to false in the viewer, this function would not render the annotation even if visibility is true.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+visibility | bool | whether the annotation should be visible
+
+Returns a promise.
+
+```js
+this._viewer.setVisibilityForAnnotation('Pdftron', 1, true);
+```
+
+#### setHighlightFields
+Enables or disables highlighting form fields. It is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+highlightFields | bool | whether form fields should be highlighted
+
+```js
+this._viewer.setHighlightFields(true);
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 

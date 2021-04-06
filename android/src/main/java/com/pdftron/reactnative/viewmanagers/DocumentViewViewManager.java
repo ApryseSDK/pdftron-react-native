@@ -476,6 +476,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setDrawAnnotations(int tag, boolean drawAnnotations) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDrawAnnotations(drawAnnotations);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setVisibilityForAnnotation(int tag, String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setVisibilityForAnnotation(annotId, pageNumber, visibility);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setHighlightFields(int tag, boolean highlightFields) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setHighlightFields(highlightFields);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setHighlightFields", "Unable to find DocumentView.");
+        }
+    }
+
     public void closeAllTabs(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
