@@ -129,6 +129,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(documentSliderEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.documentSliderEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(pageIndicatorEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -350,6 +357,20 @@ RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentVi
 {
     if (json) {
         view.hideDefaultAnnotationToolbars = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(topAppNavBarRightBar, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.topAppNavBarRightBar = [RCTConvert NSArray:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(bottomToolbar, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.bottomToolbar = [RCTConvert NSArray:json];
     }
 }
 
@@ -751,11 +772,41 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
-- (void)setPropertiesForAnnotation:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap
+- (void)setPropertiesForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView setPropertiesForAnnotation:annotationId pageNumber:pageNumber propertyMap:propertyMap];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setDrawAnnotationsForDocumentViewTag:(NSNumber *)tag drawAnnotations:(BOOL)drawAnnotations
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setDrawAnnotations:drawAnnotations];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setVisibilityForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setVisibilityForAnnotation:annotationId pageNumber:pageNumber visibility:visibility];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)setHighlightFieldsForDocumentViewTag:(NSNumber *)tag highlightFields:(BOOL)highlightFields
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setHighlightFields:highlightFields];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
@@ -783,11 +834,86 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
+- (BOOL)gotoPreviousPageForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView gotoPreviousPage];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)gotoNextPageForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView gotoNextPage];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)gotoFirstPageForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView gotoFirstPage];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        bool setResult = [documentView gotoLastPage];
+        return setResult;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView closeAllTabs];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (int)getPageRotationForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        int rotation = [documentView getPageRotation];
+        return rotation;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)rotateClockwiseForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView rotateClockwise];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)rotateCounterClockwiseForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView rotateCounterClockwise];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

@@ -42,13 +42,33 @@
 
 - (void)selectAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
-- (void)setPropertiesForAnnotation:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+- (void)setPropertiesForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
+
+- (void)setDrawAnnotationsForDocumentViewTag:(NSNumber *)tag drawAnnotations:(BOOL)drawAnnotations;
+
+- (void)setVisibilityForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
+
+- (void)setHighlightFieldsForDocumentViewTag:(NSNumber *)tag highlightFields:(BOOL)highlightFields;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (BOOL)gotoPreviousPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoNextPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoFirstPageForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
+
+- (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
+
+- (void)rotateClockwiseForDocumentViewTag:(NSNumber *)tag;
+
+- (void)rotateCounterClockwiseForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoom:(NSNumber *)tag;
 

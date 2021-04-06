@@ -42,6 +42,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     hideToolbarsOnTap: PropTypes.bool,
+    documentSliderEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
@@ -71,6 +72,8 @@ export default class DocumentView extends PureComponent {
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
     hideDefaultAnnotationToolbars: PropTypes.array,
+    topAppNavBarRightBar: PropTypes.array,
+    bottomToolbar: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
@@ -362,6 +365,30 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setDrawAnnotations = (drawAnnotations) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
+    }
+    return Promise.resolve();
+  }
+
+  setVisibilityForAnnotation = (id, pageNumber, visibility) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
+    }
+    return Promise.resolve();
+  }
+
+  setHighlightFields = (highlightFields) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setHighlightFields(tag, highlightFields);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -374,6 +401,38 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  gotoPreviousPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoPreviousPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoNextPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoNextPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoFirstPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoFirstPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoLastPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoLastPage(tag);
     }
     return Promise.resolve();
   }
@@ -438,6 +497,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getPageRotation = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageRotation(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateCounterClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateCounterClockwise(tag);
     }
     return Promise.resolve();
   }

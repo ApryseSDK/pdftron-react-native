@@ -117,6 +117,11 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
+{
+    return NO;
+}
+
 #pragma mark - <PTToolManagerDelegate>
 
 - (void)toolManagerToolChanged:(PTToolManager *)toolManager

@@ -319,6 +319,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void setDrawAnnotations(final int tag, final boolean drawAnnotations, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setDrawAnnotations(tag, drawAnnotations);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setVisibilityForAnnotation(final int tag, final String annotId, final int pageNumber, final boolean visibility, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setVisibilityForAnnotation(tag, annotId, pageNumber, visibility);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setHighlightFields(final int tag, final boolean highlightFields, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setHighlightFields(tag, highlightFields);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void getPageCropBox(final int tag, final int pageNumber, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -341,6 +386,112 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     boolean setResult = mDocumentViewInstance.setCurrentPage(tag, pageNumber);
                     promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoPreviousPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoPreviousPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoNextPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoNextPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoFirstPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoFirstPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoLastPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoLastPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+
+    @ReactMethod
+    public void getPageRotation(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int rotation = mDocumentViewInstance.getPageRotation(tag);
+                    promise.resolve(rotation);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void rotateClockwise(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.rotateClockwise(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void rotateCounterClockwise(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.rotateCounterClockwise(tag);
+                    promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
