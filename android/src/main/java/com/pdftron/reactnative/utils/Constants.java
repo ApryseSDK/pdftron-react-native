@@ -6,6 +6,7 @@ public final class Constants {
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
+    public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
     public static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
@@ -289,4 +290,9 @@ public final class Constants {
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
     public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
+
+    // Zoom
+    public static final String KEY_zoomLimitAbsolute = "absolute";
+    public static final String KEY_zoomLimitRelative = "relative";
+    public static final String KEY_zoomLimitNone = "none";
 }

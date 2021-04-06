@@ -572,6 +572,24 @@ zoom | double | the current zoom ratio of the document
 />
 ```
 
+#### onZoomFinished
+function, optional
+
+This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onZoomFinished = {(zoom) => {
+    console.log('Current zoom ratio is', zoom); 
+  }}
+```
+
 ### Scroll
 
 #### horizontalScrollPos
@@ -1735,6 +1753,73 @@ zoom | double | current zoom scale in the viewer
 this._viewer.getZoom().then((zoom) => {
   console.log('Zoom scale of the current document is:', zoom);
 });
+```
+
+#### setZoomLimits
+Sets the minimum and maximum zoom bounds of current viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+minimum | double | the lower bound of the zoom limit range
+maximum | double | the upper bound of the zoom limit range
+
+Returns a Promise.
+
+```js
+this._viewer.setZoomLimits(Config.ZoomLimitMode.Absolute, 1.0, 3.5);
+```
+
+#### zoomWithCenter
+Sets the zoom scale in the current document viewer with a zoom center.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the zoom ratio to be set
+x | int | the x-coordinate of the zoom center
+y | int | the y-coordinate of the zoom center
+
+Returns a Promise.
+
+```js
+this._viewer.zoomWithCenter(3.0, 100, 300);
+```
+
+#### zoomToRect
+Zoom the viewer to a specific rectangular area in a page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page number of the zooming area (1-indexed)
+rect | map | The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
+
+Returns a Promise.
+
+```js
+this._viewer.zoomToRect(3, {'x1': 1.0, 'y1': 2.0, 'x2': 3.0, 'y2': 4.0});
+```
+
+#### smartZoom
+Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
+
+Parameters:
+
+Name | Type | Description
+-- | -- | --
+x | int | the x-coordinate of the target coordinate
+y | int | the y-coordinate of the target coordinate
+animated | bool | whether the transition is animated
+
+Returns a Promise.
+
+```js
+this._viewer.smartZoom(100, 200, true);
 ```
 
 ### Scroll

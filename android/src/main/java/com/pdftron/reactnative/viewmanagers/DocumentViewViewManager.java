@@ -303,6 +303,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "zoom")
+    public void setZoom(DocumentView documentView, double zoom) {
+        documentView.setZoom(zoom);
+    }
+
     @ReactProp(name = "horizontalScrollPos")
     public void setHorizontalScrollPos(DocumentView documentView, double horizontalScrollPos) {
         documentView.setHorizontalScrollPos(horizontalScrollPos);
@@ -605,6 +610,42 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getZoom();
         } else {
             throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setZoomLimits(int tag, String zoomLimitMode, double minimum, double maximum) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setZoomLimits(zoomLimitMode, minimum, maximum);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setZoomLimits", "Unable to find DocumentView.");
+        }
+    }
+
+    public void zoomWithCenter(int tag, double zoom, int x, int y) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.zoomWithCenter(zoom, x, y);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "zoomWithCenter", "Unable to find DocumentView.");
+        }
+    }
+
+    public void zoomToRect(int tag, int pageNumber, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.zoomToRect(pageNumber, rect);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "zoomToRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public void smartZoom(int tag, int x, int y, boolean animated) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.smartZoom(x, y, animated);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "smartZoom", "Unable to find DocumentView.");
         }
     }
 

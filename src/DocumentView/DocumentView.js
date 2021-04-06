@@ -25,6 +25,8 @@ export default class DocumentView extends PureComponent {
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
+    onZoomFinished: PropTypes.func,
+    zoom: PropTypes.number,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     longPressMenuItems: PropTypes.array,
@@ -103,6 +105,12 @@ export default class DocumentView extends PureComponent {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
+        });
+      }
+    } else if (event.nativeEvent.onZoomFinished) {
+      if (this.props.onZoomFinished) {
+        this.props.onZoomFinished({
+          'zoom': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
@@ -445,6 +453,38 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setZoomLimits = (zoomLimitMode, minimum, maximum) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
+    }
+    return Promise.resolve();
+  }
+
+  zoomWithCenter = (zoom, x, y) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.zoomWithCenter(tag, zoom, x, y);
+    }
+    return Promise.resolve();
+  }
+
+  zoomToRect = (pageNumber, rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.zoomToRect(tag, pageNumber, rect);
+    }
+    return Promise.resolve();
+  }
+
+  smartZoom = (x, y, animated) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.smartZoom(tag, x, y, animated);
+    }
+    return Promise.resolve();
+  }
+  
   getScrollPos = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

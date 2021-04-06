@@ -473,6 +473,73 @@ RCT_REMAP_METHOD(getZoom,
     }
 }
 
+RCT_REMAP_METHOD(setZoomLimits,
+                 setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag
+                 zoomLimitMode:(NSString *)zoomLimitMode
+                 minimum:(double)minimum
+                 maximum:(double)maximum
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setZoomLimitsForDocumentViewTag:tag zoomLimitMode:zoomLimitMode minimum:minimum maximum:maximum];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_failed", @"Failed to set zoom limits", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(zoomWithCenter,
+                 zoomWithCenterForDocumentViewTag:(nonnull NSNumber *)tag
+                 zoom:(double)zoom
+                 x:(int)x
+                 y:(int)y
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] zoomWithCenterForDocumentViewTag:tag zoom:zoom x:x y:y];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to zoom with center", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(zoomToRect,
+                 zoomToRect:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] zoomToRectForDocumentViewTag:tag pageNumber:pageNumber rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to zoom to rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(smartZoom,
+                 smartZoomForDocumentViewTag:(nonnull NSNumber *)tag
+                 x:(int)x
+                 y:(int)y
+                 animated:(BOOL)animated
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] smartZoomForDocumentViewTag:tag x:x y:y animated:animated];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"zoom_failed", @"Failed to smart zoom", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getScrollPos,
                  getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
