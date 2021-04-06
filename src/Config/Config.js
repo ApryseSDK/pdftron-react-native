@@ -2,6 +2,7 @@ export default {
 
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
+    editToolButton: 'editToolButton',
     viewControlsButton: 'viewControlsButton',
     freeHandToolButton: 'freeHandToolButton',
     highlightToolButton: 'highlightToolButton',
@@ -199,6 +200,13 @@ export default {
   ThumbnailFilterMode: {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
+  },
+
+  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
+  ZoomLimitMode: {
+    None: "none",
+    Absolute: "absolute",
+    Relative: "relative",
   },
 
   // OverprintMode defines when overprint would be applied in the viewer
