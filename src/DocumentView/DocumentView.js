@@ -492,7 +492,7 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-  
+
   getCanvasSize = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
