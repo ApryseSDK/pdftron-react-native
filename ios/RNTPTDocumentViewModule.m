@@ -412,6 +412,34 @@ RCT_REMAP_METHOD(rotateCounterClockwise,
     }
 }
 
+RCT_REMAP_METHOD(getZoom,
+                 getZoomForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        double zoom = [[self documentViewManager] getZoom:tag];
+        resolve([NSNumber numberWithDouble:zoom]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_zoom", @"Failed to get zoom", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getScrollPos,
+                 getScrollPosForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary<NSString *, NSNumber *> *scrollPos = [[self documentViewManager] getScrollPosForDocumentViewTag:tag];
+        resolve(scrollPos);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_scroll_pos", @"Failed to get scroll pos", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getCanvasSize,
                  getCanvasSizeForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
