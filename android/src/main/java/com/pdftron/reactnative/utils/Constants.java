@@ -17,6 +17,7 @@ public final class Constants {
     public static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
     public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
     public static final String ON_TOOL_CHANGED = "onToolChanged";
+    public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
