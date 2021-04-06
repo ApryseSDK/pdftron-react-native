@@ -201,10 +201,18 @@ export default {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
+
   // ZoomLimitMode defines the limit mode for zoom in the current document viewer
   ZoomLimitMode: {
     None: "none",
     Absolute: "absolute",
     Relative: "relative",
+  },
+
+  // OverprintMode defines when overprint would be applied in the viewer
+  OverprintMode: {
+    On: "on",
+    Off: "off",
+    OnlyPDFX: "pdfx", // only apply to PDF/X files
   }
 };

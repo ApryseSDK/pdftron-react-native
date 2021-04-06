@@ -296,4 +296,9 @@ public final class Constants {
     public static final String KEY_zoomLimitAbsolute = "absolute";
     public static final String KEY_zoomLimitRelative = "relative";
     public static final String KEY_zoomLimitNone = "none";
+
+    // OverprintMode
+    public static final String KEY_OVERPRINT_MODE_ON = "on";
+    public static final String KEY_OVERPRINT_MODE_OFF = "off";
+    public static final String KEY_OVERPRINT_MODE_PDFX = "pdfx";
 }

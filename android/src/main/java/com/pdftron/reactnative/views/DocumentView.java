@@ -3078,6 +3078,39 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return map;
     }
 
+    public void setProgressiveRendering(boolean progressiveRendering, int initialDelay, int interval) {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        }
+    }
+
+    public void setImageSmoothing(boolean imageSmoothing) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setImageSmoothing(imageSmoothing);
+        }
+    }
+
+    public void setOverprint(String overprint) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            PDFViewCtrl.OverPrintMode overprintMode = null;
+            switch (overprint) {
+                case KEY_OVERPRINT_MODE_ON:
+                    overprintMode = PDFViewCtrl.OverPrintMode.ON;
+                    break;
+                case KEY_OVERPRINT_MODE_OFF:
+                    overprintMode = PDFViewCtrl.OverPrintMode.OFF;
+                    break;
+                case KEY_OVERPRINT_MODE_PDFX:
+                    overprintMode = PDFViewCtrl.OverPrintMode.PDFX;
+                    break;
+            }
+
+            if (overprintMode != null) {
+                getPdfViewCtrl().setOverprint(overprintMode);
+            }
+        }
+    }
+
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();

@@ -497,7 +497,7 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-
+    
   getCanvasSize = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -526,6 +526,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.rotateCounterClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
+    }
+    return Promise.resolve();
+  }
+
+  setImageSmoothing = (imageSmoothing) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
+    }
+    return Promise.resolve();
+  }
+
+  setOverprint = (overprint) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setOverprint(tag, overprint);
     }
     return Promise.resolve();
   }

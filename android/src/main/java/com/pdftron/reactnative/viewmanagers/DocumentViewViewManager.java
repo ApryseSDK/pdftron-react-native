@@ -667,6 +667,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setProgressiveRendering(int tag, boolean progressiveRendering, int initialDelay, int interval) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setProgressiveRendering", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setImageSmoothing(int tag, boolean imageSmoothing) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setImageSmoothing(imageSmoothing);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setImageSmoothing", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setOverprint(int tag, String overprint) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setOverprint(overprint);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setOverprint", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

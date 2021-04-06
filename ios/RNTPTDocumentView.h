@@ -206,6 +206,10 @@ static NSString * const PTZoomLimitRelativeKey = @"relative";
 static NSString * const PTZoomLimitAbsoluteKey = @"absolute";
 static NSString * const PTZoomLimitNoneKey = @"none";
 
+static NSString * const PTOverprintModeOnKey = @"on";
+static NSString * const PTOverprintModeOffKey = @"off";
+static NSString * const PTOverprintModePdfxKey = @"pdfx";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -432,6 +436,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (void)setProgressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
+
+- (void)setImageSmoothing:(BOOL)imageSmoothing;
+
+- (void)setOverprint:(NSString *)overprint;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
