@@ -3215,7 +3215,7 @@ NS_ASSUME_NONNULL_END
             
             for (PTAnnot *annot in annots) {
                 if ([annot IsValid]) {
-                    [annotations addObject:[self getAnnotationData:annot pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl]];
+                    [annotations addObject:[self getAnnotationData:annot pageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl]];
                 }
             }
         } error:&error];

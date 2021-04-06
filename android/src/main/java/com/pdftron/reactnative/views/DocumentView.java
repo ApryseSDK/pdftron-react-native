@@ -2588,7 +2588,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public WritableMap getAnnotationAtPoint(int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+    public WritableMap getAnnotationAt(int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc doc = getPdfDoc();
 
@@ -2602,7 +2602,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 Annot annot = pdfViewCtrl.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
 
                 if (annot != null && annot.isValid()) {
-                    annotation = getAnnotationData(annot, annot.getPage().getIndex());
+                    annotation = getAnnotationData(annot, pdfViewCtrl.getPageNumberFromScreenPt(x, y));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -2616,7 +2616,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return annotation;
     }
 
-    public WritableArray getAnnotationsAtLine(int x1, int y1, int x2, int y2) throws PDFNetException {
+    public WritableArray getAnnotationListAt(int x1, int y1, int x2, int y2) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc doc = getPdfDoc();
 
@@ -2628,9 +2628,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 doc.lockRead();
                 shouldUnlockRead = true;
                 ArrayList<Annot> annots = pdfViewCtrl.getAnnotationListAt(x1, y1, x2, y2);
+                int pageNumber = pdfViewCtrl.getPageNumberFromScreenPt(x1, y1);
                 for (Annot annot : annots) {
                     if (annot.isValid()) {
-                        annotations.pushMap(getAnnotationData(annot, annot.getPage().getIndex()));
+                        annotations.pushMap(getAnnotationData(annot, pageNumber));
                     }
                 }
             } catch (Exception ex) {
@@ -2645,7 +2646,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return annotations;
     }
 
-    public WritableArray getAnnotationsOnPage(int pageNumber) throws PDFNetException {
+    public WritableArray getAnnotationListOnPage(int pageNumber) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc doc = getPdfDoc();
 
@@ -2659,7 +2660,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 ArrayList<Annot> annots = pdfViewCtrl.getAnnotationsOnPage(pageNumber);
                 for (Annot annot : annots) {
                     if (annot.isValid()) {
-                        annotations.pushMap(getAnnotationData(annot, annot.getPage().getIndex()));
+                        annotations.pushMap(getAnnotationData(annot, pageNumber));
                     }
                 }
             } catch (Exception ex) {

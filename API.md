@@ -1619,8 +1619,8 @@ this._viewer.setHighlightFields(true);
 ```
 
 
-#### getAnnotationAtPoint
-Gets the annotation at the (x, y) position in screen coordinates.
+#### getAnnotationAt
+Gets an annotation at the (x, y) position in screen coordinates, if any.
 
 Parameters:
 
@@ -1640,15 +1640,15 @@ Name | Type | Description
 annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
-this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
+this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
   if (annotation) {
     console.log('Annotation found at point (167, 287) has id:', annotation.id);
   }
 })
 ```
 
-#### getAnnotationsAtLine
-Gets the list of annotations at a given line in screen coordinates.
+#### getAnnotationListAt
+Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [getAnnotationAt](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
 
 Parameters:
 
@@ -1656,8 +1656,8 @@ Name | Type | Description
 --- | --- | ---
 x1 | integer | the x-coordinate of an endpoint on the line
 y1 | integer | the y-coordinate of an endpoint on the line
-x2 | integer | the x-coordinate of the other endpoint on the line
-y2 | integer | the y-coordinate of the other endpoint on the line
+x2 | integer | the x-coordinate of the other endpoint on the line, usually used as a threshold
+y2 | integer | the y-coordinate of the other endpoint on the line, usually used as a threshold
 
 Returns a Promise.
 
@@ -1668,14 +1668,14 @@ Name | Type | Description
 annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
-this._viewer.getAnnotationsAtLine(0, 0, 200, 200).then((annotations) => {
+this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found at line has id:', annotation.id);
   }
 })
 ```
 
-#### getAnnotationsOnPage
+#### getAnnotationListOnPage
 Gets the list of annotations on a given page.
 
 Parameters:
@@ -1693,7 +1693,7 @@ Name | Type | Description
 annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
 
 ```js
-this._viewer.getAnnotationsOnPage(2).then((annotations) => {
+this._viewer.getAnnotationListOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
