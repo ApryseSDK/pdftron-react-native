@@ -370,29 +370,29 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-setDrawAnnotations = (drawAnnotations) => {
-  const tag = findNodeHandle(this._viewerRef);
-  if (tag != null) {
-    DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
+  setDrawAnnotations = (drawAnnotations) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
+    }
+    return Promise.resolve();
   }
-  return Promise.resolve();
-}
 
-setVisibilityForAnnotation = (id, pageNumber, visibility) => {
-  const tag = findNodeHandle(this._viewerRef);
-  if (tag != null) {
-    DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
+  setVisibilityForAnnotation = (id, pageNumber, visibility) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
+    }
+    return Promise.resolve();
   }
-  return Promise.resolve();
-}
-
-setHighlightFields = (highlightFields) => {
-  const tag = findNodeHandle(this._viewerRef);
-  if (tag != null) {
-    DocumentViewManager.setHighlightFields(tag, highlightFields);
+  
+  setHighlightFields = (highlightFields) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setHighlightFields(tag, highlightFields);
+    }
+    return Promise.resolve();
   }
-  return Promise.resolve();
-}
 
   getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
     const tag = findNodeHandle(this._viewerRef);
