@@ -25,6 +25,8 @@ export default class DocumentView extends PureComponent {
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
+    onZoomFinished: PropTypes.func,
+    zoom: PropTypes.number,
     disabledElements: PropTypes.array,
     disabledTools: PropTypes.array,
     longPressMenuItems: PropTypes.array,
@@ -40,6 +42,7 @@ export default class DocumentView extends PureComponent {
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
     hideToolbarsOnTap: PropTypes.bool,
+    documentSliderEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
@@ -48,6 +51,7 @@ export default class DocumentView extends PureComponent {
     thumbnailViewEditingEnabled: PropTypes.bool,
     fitMode: PropTypes.string,
     layoutMode: PropTypes.string,
+    onLayoutChanged: PropTypes.func,
     padStatusBar: PropTypes.bool,
     continuousAnnotationEditing: PropTypes.bool,
     selectAnnotationAfterCreation: PropTypes.bool,
@@ -69,6 +73,8 @@ export default class DocumentView extends PureComponent {
     annotationPermissionCheckEnabled: PropTypes.bool,
     annotationToolbars: PropTypes.array,
     hideDefaultAnnotationToolbars: PropTypes.array,
+    topAppNavBarRightBar: PropTypes.array,
+    bottomToolbar: PropTypes.array,
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
@@ -103,6 +109,16 @@ export default class DocumentView extends PureComponent {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
         });
+      }
+    } else if (event.nativeEvent.onZoomFinished) {
+      if (this.props.onZoomFinished) {
+        this.props.onZoomFinished({
+          'zoom': event.nativeEvent.zoom,
+        });
+      }
+    } else if (event.nativeEvent.onLayoutChanged) {
+      if (this.props.onLayoutChanged) {
+        this.props.onLayoutChanged();
       }
     } else if (event.nativeEvent.onAnnotationChanged) {
       if (this.props.onAnnotationChanged) {
@@ -407,6 +423,38 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  gotoPreviousPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoPreviousPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoNextPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoNextPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoFirstPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoFirstPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  gotoLastPage = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.gotoLastPage(tag);
+    }
+    return Promise.resolve();
+  }
+
   closeAllTabs = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -423,6 +471,38 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setZoomLimits = (zoomLimitMode, minimum, maximum) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
+    }
+    return Promise.resolve();
+  }
+
+  zoomWithCenter = (zoom, x, y) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.zoomWithCenter(tag, zoom, x, y);
+    }
+    return Promise.resolve();
+  }
+
+  zoomToRect = (pageNumber, rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.zoomToRect(tag, pageNumber, rect);
+    }
+    return Promise.resolve();
+  }
+
+  smartZoom = (x, y, animated) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.smartZoom(tag, x, y, animated);
+    }
+    return Promise.resolve();
+  }
+  
   getScrollPos = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -430,11 +510,59 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-
+    
   getCanvasSize = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getPageRotation = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageRotation(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+  rotateCounterClockwise = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.rotateCounterClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
+    }
+    return Promise.resolve();
+  }
+
+  setImageSmoothing = (imageSmoothing) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
+    }
+    return Promise.resolve();
+  }
+
+  setOverprint = (overprint) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setOverprint(tag, overprint);
     }
     return Promise.resolve();
   }
