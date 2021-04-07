@@ -3416,11 +3416,11 @@ NS_ASSUME_NONNULL_END
             [points addObject:@{PTTextSelectionQuadPointXKey: [NSNumber numberWithDouble:[point getX]], PTTextSelectionQuadPointYKey: [NSNumber numberWithDouble:[point getY]]}];
         }
         
-        [quads addObject:points];
+        [quads addObject:[points copy]];
     }
     
     
-    [selectionMap setValue:quads forKey:PTTextSelectionQuadsKey];
+    [selectionMap setValue:[quads copy] forKey:PTTextSelectionQuadsKey];
     return selectionMap;
 }
 
