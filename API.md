@@ -325,6 +325,17 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
+#### documentSliderEnabled
+bool, optional, defaults to true
+
+Defines whether the document slider of the viewer is enabled.
+
+```js
+<DocumentView
+  documentSliderEnabled={false}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -402,7 +413,7 @@ Defines whether to hide the top navigation app bar.
 
 ```js
 <DocumentView
-  hideAnnotationToolbarSwitcher={false}
+  hideTopAppNavBar={true}
 />
 ```
 
@@ -414,6 +425,28 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```js
 <DocumentView
   hideToolbarsOnTap={false}
+/>
+```
+
+#### topAppNavBarRightBar
+array of strings, optional, iOS only
+
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+/>
+```
+
+#### bottomToolbar
+array of strings, optional, iOS only
+
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+
+```js
+<Documentview
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
@@ -449,6 +482,19 @@ Defines the layout mode of the viewer. String should be one of [Config.LayoutMod
 ```js
 <DocumentView
   layoutMode={Config.LayoutMode.FacingContinuous}
+/>
+```
+
+#### onLayoutChanged
+function, optional
+
+This function is called when the layout of the viewer has been changed.
+
+```js
+<DocumentView
+  onLayoutChanged = {() => {
+    console.log('Layout has been updated.'); 
+  }}
 />
 ```
 
@@ -537,6 +583,24 @@ zoom | double | the current zoom ratio of the document
     console.log('Current zoom ratio is', zoom); 
   }}
 />
+```
+
+#### onZoomFinished
+function, optional
+
+This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onZoomFinished = {(zoom) => {
+    console.log('Current zoom ratio is', zoom); 
+  }}
 ```
 
 ### Scroll
@@ -1203,6 +1267,82 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
+#### gotoPreviousPage
+Go to the previous page of the document. If on first page, it would stay on first page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in first page counts as being successful)
+
+```js
+this._viewer.gotoPreviousPage().then((success) => {
+  if (success) {
+    console.log("Go to previous page.");
+  }
+});
+```
+
+#### gotoNextPage
+Go to the next page of the document. If on last page, it would stay on last page.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful (no change due to staying in last page counts as being successful)
+
+```js
+this._viewer.gotoNextPage().then((success) => {
+  if (success) {
+    console.log("Go to next page.");
+  }
+});
+```
+
+#### gotoFirstPage
+Go to the first page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoFirstPage().then((success) => {
+  if (success) {
+    console.log("Go to first page.");
+  }
+});
+```
+
+#### gotoLastPage
+Go to the last page of the document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+success | bool | whether the setting process was successful
+
+```js
+this._viewer.gotoLastPage().then((success) => {
+  if (success) {
+    console.log("Go to last page.");
+  }
+});
+```
+
 #### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
@@ -1226,6 +1366,41 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
   console.log('width and height:', cropBox.width, cropBox.height);
 });
+```
+
+#### getPageRotation
+Gets the rotation value of all pages in the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageRotation | number | the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
+
+```js
+this._viewer.getPageRotation().then((pageRotation) => {
+  console.log('The current page rotation degree is' + pageRotation);
+});
+```
+
+#### rotateClockwise
+Rotates all pages in the current document in clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateClockwise();
+```
+
+#### rotateCounterClockwise
+Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
+
+Returns a Promise.
+
+```js
+this._viewer.rotateCounterClockwise();
 ```
 
 ### Import/Export Annotations
@@ -1430,6 +1605,51 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### setDrawAnnotations
+Sets whether all annotations and forms should be rendered in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+drawAnnotations | bool | whether all annotations and forms should be rendered
+
+Returns a promise.
+
+```js
+this._viewer.setDrawAnnotations(false);
+```
+
+#### setVisibilityForAnnotation
+Sets visibility for specified annotation in the current document, if it is valid. Note that if [drawAnnotations](#drawAnnotations) is set to false in the viewer, this function would not render the annotation even if visibility is true.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+visibility | bool | whether the annotation should be visible
+
+Returns a promise.
+
+```js
+this._viewer.setVisibilityForAnnotation('Pdftron', 1, true);
+```
+
+#### setHighlightFields
+Enables or disables highlighting form fields. It is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+highlightFields | bool | whether form fields should be highlighted
+
+```js
+this._viewer.setHighlightFields(true);
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 
@@ -1567,6 +1787,73 @@ this._viewer.getZoom().then((zoom) => {
 });
 ```
 
+#### setZoomLimits
+Sets the minimum and maximum zoom bounds of current viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+minimum | double | the lower bound of the zoom limit range
+maximum | double | the upper bound of the zoom limit range
+
+Returns a Promise.
+
+```js
+this._viewer.setZoomLimits(Config.ZoomLimitMode.Absolute, 1.0, 3.5);
+```
+
+#### zoomWithCenter
+Sets the zoom scale in the current document viewer with a zoom center.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the zoom ratio to be set
+x | int | the x-coordinate of the zoom center
+y | int | the y-coordinate of the zoom center
+
+Returns a Promise.
+
+```js
+this._viewer.zoomWithCenter(3.0, 100, 300);
+```
+
+#### zoomToRect
+Zoom the viewer to a specific rectangular area in a page.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page number of the zooming area (1-indexed)
+rect | map | The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
+
+Returns a Promise.
+
+```js
+this._viewer.zoomToRect(3, {'x1': 1.0, 'y1': 2.0, 'x2': 3.0, 'y2': 4.0});
+```
+
+#### smartZoom
+Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
+
+Parameters:
+
+Name | Type | Description
+-- | -- | --
+x | int | the x-coordinate of the target coordinate
+y | int | the y-coordinate of the target coordinate
+animated | bool | whether the transition is animated
+
+Returns a Promise.
+
+```js
+this._viewer.smartZoom(100, 200, true);
+```
+
 ### Scroll
 
 #### getScrollPos
@@ -1685,4 +1972,54 @@ pageNumber | number | the page number of the screen point
 this._viewer.getPageNumberFromScreenPoint(10.0,50.5).then((pageNumber) => {
   console.log('The page number of the screen point is', pageNumber);
 });
+```
+
+### Rendering Options
+
+#### setProgressiveRendering
+Sets whether the control will render progressively or will just draw once the entire view has been rendered.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+progressiveRendering | bool | whether to render progressively
+initialDelay | number | delay before the progressive rendering timer is started, in milliseconds
+interval | number | delay between refreshes, in milliseconds
+
+Returns a Promise.
+
+```js
+// delay for 10s before start, and refresh every 1s
+this._viewer.setProgressiveRendering(true, 10000, 1000);
+```
+
+#### setImageSmoothing
+Enables or disables image smoothing. The rasterizer allows a trade-off between rendering quality and rendering speed. This function can be used to indicate the preference between rendering speed and quality.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+imageSmoothing | bool | whether to enable image smoothing
+
+Returns a Promise.
+
+```js
+this._viewer.setImageSmoothing(false);
+```
+
+#### setOverprint
+Enables or disables support for overprint and overprint simulation. Overprint is a device dependent feature and the results will vary depending on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+overprint | string | the mode of overprint, should be a [`Config.OverprintMode`](./src/Config/Config.js) constant
+
+Returns a Promise.
+
+```js
+this._viewer.setOverprint(Config.OverprintMode.Off);
 ```

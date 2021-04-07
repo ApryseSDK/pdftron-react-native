@@ -207,5 +207,19 @@ export default {
     Screen: "screen",
     Canvas: "canvas",
     Page: "page",
+  },
+  
+  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
+  ZoomLimitMode: {
+    None: "none",
+    Absolute: "absolute",
+    Relative: "relative",
+  },
+
+  // OverprintMode defines when overprint would be applied in the viewer
+  OverprintMode: {
+    On: "on",
+    Off: "off",
+    OnlyPDFX: "pdfx", // only apply to PDF/X files
   }
 };

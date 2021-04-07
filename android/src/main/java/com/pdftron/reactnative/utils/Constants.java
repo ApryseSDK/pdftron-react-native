@@ -7,6 +7,7 @@ public final class Constants {
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_SCROLL_CHANGED = "onScrollChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
+    public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
     public static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
@@ -17,6 +18,7 @@ public final class Constants {
     public static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
     public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
     public static final String ON_TOOL_CHANGED = "onToolChanged";
+    public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -240,6 +242,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
+    public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -293,4 +296,14 @@ public final class Constants {
     public static final String KEY_COORDINATE_POINT_X = "x";
     public static final String KEY_COORDINATE_POINT_Y = "y";
     public static final String KEY_COORDINATE_POINT_PAGE_NUMBER = "pageNumber";
+
+    // Zoom
+    public static final String KEY_zoomLimitAbsolute = "absolute";
+    public static final String KEY_zoomLimitRelative = "relative";
+    public static final String KEY_zoomLimitNone = "none";
+
+    // OverprintMode
+    public static final String KEY_OVERPRINT_MODE_ON = "on";
+    public static final String KEY_OVERPRINT_MODE_OFF = "off";
+    public static final String KEY_OVERPRINT_MODE_PDFX = "pdfx";
 }

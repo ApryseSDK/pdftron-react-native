@@ -114,6 +114,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
     }
 
+    @ReactProp(name = "documentSliderEnabled")
+    public void setDocumentSliderEnabled(DocumentView documentView, boolean documentSliderEnabled) {
+        documentView.setDocumentSliderEnabled(documentSliderEnabled);
+    }
+
     @ReactProp(name = "pageIndicatorEnabled")
     public void setPageIndicatorEnabled(DocumentView documentView, boolean pageIndicatorEnabled) {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
@@ -299,6 +304,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "zoom")
+    public void setZoom(DocumentView documentView, double zoom) {
+        documentView.setZoom(zoom);
+    }
+
     @ReactProp(name = "horizontalScrollPos")
     public void setHorizontalScrollPos(DocumentView documentView, double horizontalScrollPos) {
         documentView.setHorizontalScrollPos(horizontalScrollPos);
@@ -472,6 +482,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setDrawAnnotations(int tag, boolean drawAnnotations) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDrawAnnotations(drawAnnotations);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setVisibilityForAnnotation(int tag, String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setVisibilityForAnnotation(annotId, pageNumber, visibility);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setVisibilityForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setHighlightFields(int tag, boolean highlightFields) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setHighlightFields(highlightFields);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setHighlightFields", "Unable to find DocumentView.");
+        }
+    }
+
     public void closeAllTabs(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -500,12 +537,116 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public int getPageRotation(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            int rotation = documentView.getPageRotation();
+            return rotation;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageRotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void rotateClockwise(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.rotateClockwise();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "rotateClockwise", "Unable to find DocumentView.");
+        }
+    }
+
+    public void rotateCounterClockwise(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.rotateCounterClockwise();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "rotateCounterClockwise", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean gotoPreviousPage(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.gotoPreviousPage();
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "gotoPreviousPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean gotoNextPage(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.gotoNextPage();
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "gotoNextPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean gotoFirstPage(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.gotoFirstPage();
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "gotoFirstPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean gotoLastPage(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean setResult = documentView.gotoLastPage();
+            return setResult;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "gotoLastPage", "Unable to find DocumentView.");
+        }
+    }
+
     public double getZoom(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             return documentView.getZoom();
         } else {
             throw new PDFNetException("", 0L, getName(), "getZoom", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setZoomLimits(int tag, String zoomLimitMode, double minimum, double maximum) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setZoomLimits(zoomLimitMode, minimum, maximum);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setZoomLimits", "Unable to find DocumentView.");
+        }
+    }
+
+    public void zoomWithCenter(int tag, double zoom, int x, int y) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.zoomWithCenter(zoom, x, y);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "zoomWithCenter", "Unable to find DocumentView.");
+        }
+    }
+
+    public void zoomToRect(int tag, int pageNumber, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.zoomToRect(pageNumber, rect);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "zoomToRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public void smartZoom(int tag, int x, int y, boolean animated) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.smartZoom(x, y, animated);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "smartZoom", "Unable to find DocumentView.");
         }
     }
 
@@ -551,6 +692,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getPageNumberFromScreenPoint(x, y);
         } else {
             throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setProgressiveRendering(int tag, boolean progressiveRendering, int initialDelay, int interval) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setProgressiveRendering", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setImageSmoothing(int tag, boolean imageSmoothing) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setImageSmoothing(imageSmoothing);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setImageSmoothing", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setOverprint(int tag, String overprint) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setOverprint(overprint);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setOverprint", "Unable to find DocumentView.");
         }
     }
 
