@@ -394,6 +394,112 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void gotoPreviousPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoPreviousPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoNextPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoNextPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoFirstPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoFirstPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void gotoLastPage(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean setResult = mDocumentViewInstance.gotoLastPage(tag);
+                    promise.resolve(setResult);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+
+    @ReactMethod
+    public void getPageRotation(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int rotation = mDocumentViewInstance.getPageRotation(tag);
+                    promise.resolve(rotation);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void rotateClockwise(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.rotateClockwise(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void rotateCounterClockwise(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.rotateCounterClockwise(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void getZoom(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -401,6 +507,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     double zoom = mDocumentViewInstance.getZoom(tag);
                     promise.resolve(zoom);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setZoomLimits(final int tag, final String zoomLimitMode, final double minimum, final double maximum, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
+                    promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
@@ -424,6 +545,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void zoomWithCenter(final int tag, final double zoom, final int x, final int y, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.zoomWithCenter(tag, zoom, x, y);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void getCanvasSize(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -431,6 +567,81 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     WritableMap canvasSize = mDocumentViewInstance.getCanvasSize(tag);
                     promise.resolve(canvasSize);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void zoomToRect(final int tag, final int pageNumber, final ReadableMap rect, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.zoomToRect(tag, pageNumber, rect);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void smartZoom(final int tag, final int x, final int y, final boolean animated, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.smartZoom(tag, x, y, animated);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setProgressiveRendering(final int tag, final boolean progressiveRendering, final int initialDelay, final int interval, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setImageSmoothing(final int tag, final boolean imageSmoothing, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setImageSmoothing(tag, imageSmoothing);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setOverprint(final int tag, final String overprint, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setOverprint(tag, overprint);
+                    promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
@@ -482,6 +693,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
