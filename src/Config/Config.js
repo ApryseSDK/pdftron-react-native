@@ -2,6 +2,7 @@ export default {
 
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
+    editToolButton: 'editToolButton',
     viewControlsButton: 'viewControlsButton',
     freeHandToolButton: 'freeHandToolButton',
     highlightToolButton: 'highlightToolButton',
@@ -201,11 +202,25 @@ export default {
     Bookmarked: "bookmarked",
   },
 
+  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
+  ZoomLimitMode: {
+    None: "none",
+    Absolute: "absolute",
+    Relative: "relative",
+  },
+
+  // OverprintMode defines when overprint would be applied in the viewer
+  OverprintMode: {
+    On: "on",
+    Off: "off",
+    OnlyPDFX: "pdfx", // only apply to PDF/X files
+  },
+
   // ColorPostProcessMode defines color modifications after rendering in the viewer
   ColorPostProcessMode: {
     None: "none",
     Invert: "invert",
     GradientMap: "gradientMap",
-    NightMode: "nightMode",
+    NightMode: "nightMode"
   }
 };

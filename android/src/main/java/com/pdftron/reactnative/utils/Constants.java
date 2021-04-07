@@ -6,6 +6,7 @@ public final class Constants {
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
+    public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
     public static final String ON_DOCUMENT_ERROR = "onDocumentError";
     public static final String ON_EXPORT_ANNOTATION_COMMAND = "onExportAnnotationCommand";
@@ -16,6 +17,7 @@ public final class Constants {
     public static final String ON_FORM_FIELD_VALUE_CHANGED = "onFormFieldValueChanged";
     public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
     public static final String ON_TOOL_CHANGED = "onToolChanged";
+    public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -59,6 +61,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STICKY = "stickyToolButton";
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
+    public static final String TOOL_BUTTON_EDIT = "editToolButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -238,6 +241,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENTS = "contents";
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
+    public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -293,6 +297,16 @@ public final class Constants {
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
     public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
+
+    // Zoom
+    public static final String KEY_zoomLimitAbsolute = "absolute";
+    public static final String KEY_zoomLimitRelative = "relative";
+    public static final String KEY_zoomLimitNone = "none";
+
+    // OverprintMode
+    public static final String KEY_OVERPRINT_MODE_ON = "on";
+    public static final String KEY_OVERPRINT_MODE_OFF = "off";
+    public static final String KEY_OVERPRINT_MODE_PDFX = "pdfx";
 
     // Color Post Process Modes
     public static final String KEY_COLOR_POST_PROCESS_MODE_NONE = "none";
