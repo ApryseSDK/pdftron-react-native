@@ -229,6 +229,13 @@
     }
 }
 
+- (void)pdfViewCtrlOnLayoutChanged:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerLayoutDidChange:)]) {
+        [self.delegate rnt_documentViewControllerLayoutDidChange:self];
+    }
+}
+
 - (void)outlineViewControllerDidCancel:(PTOutlineViewController *)outlineViewController
 {
     [outlineViewController dismissViewControllerAnimated:YES completion:nil];

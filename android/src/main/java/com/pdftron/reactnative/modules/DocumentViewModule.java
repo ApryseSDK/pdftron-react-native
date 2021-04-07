@@ -621,6 +621,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void setProgressiveRendering(final int tag, final boolean progressiveRendering, final int initialDelay, final int interval, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setImageSmoothing(final int tag, final boolean imageSmoothing, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setImageSmoothing(tag, imageSmoothing);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setOverprint(final int tag, final String overprint, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setOverprint(tag, overprint);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setUrlExtraction(final int tag, final boolean urlExtraction, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -694,6 +739,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
+
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {

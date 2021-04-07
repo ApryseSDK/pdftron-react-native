@@ -206,6 +206,10 @@ static NSString * const PTZoomLimitRelativeKey = @"relative";
 static NSString * const PTZoomLimitAbsoluteKey = @"absolute";
 static NSString * const PTZoomLimitNoneKey = @"none";
 
+static NSString * const PTOverprintModeOnKey = @"on";
+static NSString * const PTOverprintModeOffKey = @"off";
+static NSString * const PTOverprintModePdfxKey = @"pdfx";
+
 static NSString * const PTColorRedKey = @"red";
 static NSString * const PTColorGreenKey = @"green";
 static NSString * const PTColorBlueKey = @"blue";
@@ -243,6 +247,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)layoutChanged:(RNTPTDocumentView *)sender;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -437,6 +442,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (void)setProgressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
+
+- (void)setImageSmoothing:(BOOL)imageSmoothing;
+
+- (void)setOverprint:(NSString *)overprint;
 
 - (void)setUrlExtraction:(BOOL)urlExtraction;
 

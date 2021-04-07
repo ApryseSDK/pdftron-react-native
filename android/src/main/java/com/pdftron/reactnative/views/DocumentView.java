@@ -1603,6 +1603,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
             getPdfViewCtrl().removeOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
+            getPdfViewCtrl().removeOnLayoutChangeListener(mLayoutChangedListener);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
@@ -2152,6 +2153,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private View.OnLayoutChangeListener mLayoutChangedListener = new OnLayoutChangeListener() {
+        @Override
+        public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_LAYOUT_CHANGED, ON_LAYOUT_CHANGED);
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -2261,6 +2273,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
+        getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
@@ -3068,6 +3081,39 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return map;
+    }
+
+    public void setProgressiveRendering(boolean progressiveRendering, int initialDelay, int interval) {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setProgressiveRendering(progressiveRendering, initialDelay, interval);
+        }
+    }
+
+    public void setImageSmoothing(boolean imageSmoothing) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setImageSmoothing(imageSmoothing);
+        }
+    }
+
+    public void setOverprint(String overprint) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            PDFViewCtrl.OverPrintMode overprintMode = null;
+            switch (overprint) {
+                case KEY_OVERPRINT_MODE_ON:
+                    overprintMode = PDFViewCtrl.OverPrintMode.ON;
+                    break;
+                case KEY_OVERPRINT_MODE_OFF:
+                    overprintMode = PDFViewCtrl.OverPrintMode.OFF;
+                    break;
+                case KEY_OVERPRINT_MODE_PDFX:
+                    overprintMode = PDFViewCtrl.OverPrintMode.PDFX;
+                    break;
+            }
+
+            if (overprintMode != null) {
+                getPdfViewCtrl().setOverprint(overprintMode);
+            }
+        }
     }
 
     public void setUrlExtraction(boolean urlExtraction) throws PDFNetException {
