@@ -337,9 +337,9 @@ Defines whether the document slider of the viewer is enabled.
 ```
 
 #### hideViewModeItems
-array of string, optional, defaults to none
+array of string, optional, defaults to none. Android only.
 
-Defines view mode items to be hidden in the view mode dialog (Android only). Strings should be [Config.ViewModePickerItem](./src/Config/Config.js) constants. 
+Defines view mode items to be hidden in the view mode dialog  Strings should be [Config.ViewModePickerItem](./src/Config/Config.js) constants. 
 
 ```js
 <DocumentView
