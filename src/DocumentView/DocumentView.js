@@ -84,6 +84,7 @@ export default class DocumentView extends PureComponent {
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
     hideCropDialog: PropTypes.bool,
+    hideViewModeItems: PropTypes.array,
     ...ViewPropTypes,
   };
 
