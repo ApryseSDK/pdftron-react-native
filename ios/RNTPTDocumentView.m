@@ -3467,6 +3467,8 @@ NS_ASSUME_NONNULL_END
         return self.documentViewController.readerModeButtonItem;
     } else if ([buttonString isEqualToString:PTShareButtonKey]) {
         return self.documentViewController.shareButtonItem;
+    } else if ([buttonString isEqualToString:PTViewControlsButtonKey]) {
+        return self.documentViewController.settingsButtonItem;
     }
     return nil;
 }
