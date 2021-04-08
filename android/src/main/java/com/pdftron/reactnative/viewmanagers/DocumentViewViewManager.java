@@ -303,6 +303,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "hideViewModeItems")
+    public void hideViewModeItems(DocumentView documentView, ReadableArray viewModePickerItems) {
+        documentView.viewModePickerItems(viewModePickerItems);
+    }
+
     @ReactProp(name = "zoom")
     public void setZoom(DocumentView documentView, double zoom) {
         documentView.setZoom(zoom);

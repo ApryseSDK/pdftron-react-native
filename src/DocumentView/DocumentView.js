@@ -83,6 +83,7 @@ export default class DocumentView extends PureComponent {
     onToolChanged: PropTypes.func,
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
+    hideCropDialog: PropTypes.bool,
     ...ViewPropTypes,
   };
 

@@ -621,6 +621,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
     }
 
+    public void viewModePickerItems(ReadableArray viewModePickerItems) {
+
+        ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> hideList = new ArrayList<>();
+
+        for (int i = 0; i < viewModePickerItems.size(); i++) {
+            String mode = viewModePickerItems.getString(i);
+            if (VIEW_MODE_CROP.equals(mode)) {
+                hideList.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
+            }
+        }
+        mBuilder.hideViewModeItems(hideList.toArray(new ViewModePickerDialogFragment.ViewModePickerItems[hideList.size()]));
+    }
+
     public void setZoom(double zoom) {
         if (getPdfViewCtrlTabFragment() != null &&
                 getPdfViewCtrlTabFragment().isDocumentReady()) {
