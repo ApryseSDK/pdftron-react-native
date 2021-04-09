@@ -1966,7 +1966,7 @@ NS_ASSUME_NONNULL_END
         NSAssert([keyList containsObject:PTColorRedKey] &&
                  [keyList containsObject:PTColorGreenKey] &&
                  [keyList containsObject:PTColorBlueKey],
-                 @"default page color does not have red, green or blue keys"));
+                 @"default page color does not have red, green or blue keys");
          
         PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
             
