@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
@@ -236,6 +237,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     mDocumentViewInstance.deleteAnnotations(tag, annots);
                     promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAnnotationAt(final int tag, final int x, final int y, final double distanceThreshold, final double minimumLineWeight, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableMap annotation = mDocumentViewInstance.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
+                    promise.resolve(annotation);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAnnotationListAt(final int tag, final int x1, final int y1, final int x2, final int y2, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableArray annotations = mDocumentViewInstance.getAnnotationListAt(tag, x1, y1, x2, y2);
+                    promise.resolve(annotations);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAnnotationListOnPage(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableArray annotations = mDocumentViewInstance.getAnnotationListOnPage(tag, pageNumber);
+                    promise.resolve(annotations);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
@@ -597,6 +643,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     mDocumentViewInstance.smartZoom(tag, x, y, animated);
                     promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void convertScreenPointsToPagePoints(final int tag, final ReadableArray points, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertScreenPointsToPagePoints(tag, points);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void convertPagePointsToScreenPoints(final int tag, final ReadableArray points, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertPagePointsToScreenPoints(tag, points);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPageNumberFromScreenPoint(final int tag, final double x, final double y, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int pageNumber = mDocumentViewInstance.getPageNumberFromScreenPoint(tag, x, y);
+                    promise.resolve(pageNumber);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }
