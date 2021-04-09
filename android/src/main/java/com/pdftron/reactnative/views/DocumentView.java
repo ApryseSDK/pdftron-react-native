@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -83,7 +81,6 @@ import org.json.JSONException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -621,6 +618,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder.hideThumbnailFilterModes(hideList.toArray(new ThumbnailsViewFragment.FilterModes[0]));
     }
 
+    public void viewModePickerItems(ReadableArray viewModePickerItems) {
+
+        ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> hideList = new ArrayList<>();
+
+        for (int i = 0; i < viewModePickerItems.size(); i++) {
+            String mode = viewModePickerItems.getString(i);
+            if (VIEW_MODE_CROP.equals(mode)) {
+                hideList.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
+            }
+        }
+        mBuilder.hideViewModeItems(hideList.toArray(new ViewModePickerDialogFragment.ViewModePickerItems[hideList.size()]));
+    }
+
     public void setZoom(double zoom) {
         if (getPdfViewCtrlTabFragment() != null &&
                 getPdfViewCtrlTabFragment().isDocumentReady()) {
@@ -644,7 +654,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     limitMode = PDFViewCtrl.ZoomLimitMode.NONE;
                     break;
             }
-
 
             if (limitMode != null) {
                 try {
@@ -685,11 +694,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrl().smartZoom(x, y, animated);
         }
     }
+
     public void setHorizontalScrollPos(double horizontalScrollPos) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         if (pdfViewCtrl != null) {
-            pdfViewCtrl.setHScrollPos((int)(horizontalScrollPos + 0.5));
+            pdfViewCtrl.setHScrollPos((int) (horizontalScrollPos + 0.5));
         }
     }
 
@@ -697,7 +707,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         if (pdfViewCtrl != null) {
-            pdfViewCtrl.setVScrollPos((int)(verticalScrollPos + 0.5));
+            pdfViewCtrl.setVScrollPos((int) (verticalScrollPos + 0.5));
         }
     }
 
@@ -933,7 +943,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return annotString;
     }
-
 
     @Nullable
     private ToolManager.ToolMode convStringToToolMode(String item) {
@@ -1604,6 +1613,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
             getPdfViewCtrl().removeOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
             getPdfViewCtrl().removeOnLayoutChangeListener(mLayoutChangedListener);
+            getPdfViewCtrl().setTextSearchListener(null);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
@@ -1669,30 +1679,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // overrideAction is for onBehaviorActivated
         WritableArray annots = Arguments.createArray();
 
-        for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
-            WritableMap annotationData = getAnnotationData(entry.getKey(), entry.getValue());
 
-            if (annotationData != null) {
-                if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
-                    WritableMap annotationDataCopy = annotationData.copy();
-                    try {
-                        if (entry.getKey().getType() == Annot.e_Text) {
-                            WritableMap params = Arguments.createMap();
+        boolean shouldUnlockRead = false;
+        try {
+            getPdfViewCtrl().docLockRead();
+            shouldUnlockRead = true;
+            for (Map.Entry<Annot, Integer> entry : mSelectedAnnots.entrySet()) {
+                WritableMap annotationData = getAnnotationData(entry.getKey(), entry.getValue());
 
-                            params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
-                            params.putString(KEY_ACTION, KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP);
-                            params.putMap(KEY_DATA, annotationDataCopy);
+                if (annotationData != null) {
+                    if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
+                        WritableMap annotationDataCopy = annotationData.copy();
+                        try {
+                            if (entry.getKey().getType() == Annot.e_Text) {
+                                WritableMap params = Arguments.createMap();
 
-                            onReceiveNativeEvent(params);
+                                params.putString(ON_BEHAVIOR_ACTIVATED, ON_BEHAVIOR_ACTIVATED);
+                                params.putString(KEY_ACTION, KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP);
+                                params.putMap(KEY_DATA, annotationDataCopy);
+
+                                onReceiveNativeEvent(params);
+                            }
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
                         }
-                    } catch (PDFNetException e) {
-                        e.printStackTrace();
                     }
-                }
 
-                annots.pushMap(annotationData);
+                    annots.pushMap(annotationData);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (shouldUnlockRead) {
+                getPdfViewCtrl().docUnlockRead();
             }
         }
+
         return annots;
     }
 
@@ -1851,7 +1874,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     params.putString(ON_ANNOTATIONS_SELECTED, ON_ANNOTATIONS_SELECTED);
                     params.putArray(KEY_ANNOTATIONS, annotationsData);
                     onReceiveNativeEvent(params);
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1927,6 +1949,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             WritableMap params = Arguments.createMap();
             params.putString(ON_ZOOM_CHANGED, ON_ZOOM_CHANGED);
             params.putDouble(ZOOM_KEY, getPdfViewCtrl().getZoom());
+            onReceiveNativeEvent(params);
+        }
+    };
+
+    private PDFViewCtrl.TextSearchListener mTextSearchListener = new PDFViewCtrl.TextSearchListener() {
+        @Override
+        public void onTextSearchStart() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TEXT_SEARCH_START, ON_TEXT_SEARCH_START);
+            onReceiveNativeEvent(params);
+        }
+
+        @Override
+        public void onTextSearchProgress(int i) {
+        }
+
+        @Override
+        public void onTextSearchEnd(PDFViewCtrl.TextSearchResult textSearchResult) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TEXT_SEARCH_RESULT, ON_TEXT_SEARCH_RESULT);
+
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+            if (textSearchResult.equals(PDFViewCtrl.TextSearchResult.FOUND)) {
+                params.putBoolean(KEY_TEXT_SELECTION_FOUND, true);
+                int currentPage = pdfViewCtrl.getCurrentPage();
+                PDFViewCtrl.Selection selection = pdfViewCtrl.getSelection(currentPage);
+                params.putMap(KEY_TEXT_SELECTION, getMapFromSelection(selection));
+            } else {
+                params.putBoolean(KEY_TEXT_SELECTION_FOUND, false);
+            }
+
             onReceiveNativeEvent(params);
         }
     };
@@ -2090,69 +2144,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
-    private ToolManager.PreToolManagerListener mPreToolManagerListener = new ToolManager.PreToolManagerListener() {
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public boolean onMove(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            return false;
-        }
-
-        @Override
-        public boolean onDown(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public boolean onUp(MotionEvent motionEvent, PDFViewCtrl.PriorEventMode priorEventMode) {
-            return false;
-        }
-
-        @Override
-        public boolean onScaleBegin(float v, float v1) {
-            return false;
-        }
-
-        @Override
-        public boolean onScale(float v, float v1) {
-            return false;
-        }
-
-        @Override
-        public boolean onScaleEnd(float v, float v1) {
-
-            WritableMap params = Arguments.createMap();
-            params.putString(ON_ZOOM_FINISHED, ON_ZOOM_FINISHED);
-            params.putDouble(ZOOM_KEY, getPdfViewCtrl().getZoom());
-            onReceiveNativeEvent(params);
-
-            return false;
-        }
-
-        @Override
-        public boolean onLongPress(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public void onScrollChanged(int i, int i1, int i2, int i3) {
-
-        }
-
-        @Override
-        public boolean onDoubleTap(MotionEvent motionEvent) {
-            return false;
-        }
-
-        @Override
-        public boolean onKeyUp(int i, KeyEvent keyEvent) {
-            return false;
-        }
-    };
-
     private View.OnLayoutChangeListener mLayoutChangedListener = new OnLayoutChangeListener() {
         @Override
         public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
@@ -2250,6 +2241,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
+        // set react context
+        if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
+            RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
+            fragment.setReactContext((ReactContext) getContext(), getId());
+        }
+
         if (!mCollabEnabled && getToolManager() != null) {
             getToolManager().setStickyNoteShowPopup(!isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP));
         }
@@ -2270,16 +2267,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().setReadOnly(true);
         }
 
-
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
         getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
+        getPdfViewCtrl().setTextSearchListener(mTextSearchListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
         getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
         getToolManager().addToolChangedListener(mToolChangedListener);
-        getToolManager().setPreToolManagerListener(mPreToolManagerListener);
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
@@ -2586,6 +2582,93 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolManager.deselectAll();
             }
         }
+    }
+
+    public WritableMap getAnnotationAt(int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableMap annotation = null;
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                Annot annot = pdfViewCtrl.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
+
+                if (annot != null && annot.isValid()) {
+                    annotation = getAnnotationData(annot, pdfViewCtrl.getPageNumberFromScreenPt(x, y));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotation;
+    }
+
+    public WritableArray getAnnotationListAt(int x1, int y1, int x2, int y2) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableArray annotations = Arguments.createArray();
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationListAt(x1, y1, x2, y2);
+                int pageNumber = pdfViewCtrl.getPageNumberFromScreenPt(x1, y1);
+                for (Annot annot : annots) {
+                    if (annot.isValid()) {
+                        annotations.pushMap(getAnnotationData(annot, pageNumber));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotations;
+    }
+
+    public WritableArray getAnnotationListOnPage(int pageNumber) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+
+        WritableArray annotations = Arguments.createArray();
+
+        if (pdfViewCtrl != null && doc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                doc.lockRead();
+                shouldUnlockRead = true;
+                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationsOnPage(pageNumber);
+                for (Annot annot : annots) {
+                    if (annot.isValid()) {
+                        annotations.pushMap(getAnnotationData(annot, pageNumber));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    doc.unlockRead();
+                }
+            }
+        }
+
+        return annotations;
     }
 
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
@@ -3044,7 +3127,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void rotateCounterClockwise() {
         getPdfViewCtrl().rotateCounterClockwise();
-
     }
 
     public double getZoom() {
@@ -3076,6 +3158,71 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return map;
+    }
+
+    public WritableArray convertScreenPointsToPagePoints(ReadableArray points) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableArray convertedPoints = Arguments.createArray();
+
+        if (pdfViewCtrl != null) {
+            int currentPage = pdfViewCtrl.getCurrentPage();
+
+            for (int i = 0; i < points.size(); i++) {
+                ReadableMap point = points.getMap(i);
+                double x = point.getDouble(KEY_COORDINATE_POINT_X);
+                double y = point.getDouble(KEY_COORDINATE_POINT_Y);
+                int pageNumber = currentPage;
+
+                if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
+                    pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
+                }
+                double[] convertedPointCoordinates = pdfViewCtrl.convScreenPtToPagePt(x, y, pageNumber);
+
+                WritableMap map = Arguments.createMap();
+                map.putDouble(KEY_COORDINATE_POINT_X, convertedPointCoordinates[0]);
+                map.putDouble(KEY_COORDINATE_POINT_Y, convertedPointCoordinates[1]);
+
+                convertedPoints.pushMap(map);
+            }
+        }
+
+        return convertedPoints;
+    }
+
+    public WritableArray convertPagePointsToScreenPoints(ReadableArray points) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableArray convertedPoints = Arguments.createArray();
+
+        if (pdfViewCtrl != null) {
+            int currentPage = pdfViewCtrl.getCurrentPage();
+
+            for (int i = 0; i < points.size(); i++) {
+                ReadableMap point = points.getMap(i);
+                double x = point.getDouble(KEY_COORDINATE_POINT_X);
+                double y = point.getDouble(KEY_COORDINATE_POINT_Y);
+                int pageNumber = currentPage;
+
+                if (point.hasKey(KEY_COORDINATE_POINT_PAGE_NUMBER)) {
+                    pageNumber = point.getInt(KEY_COORDINATE_POINT_PAGE_NUMBER);
+                }
+                double[] convertedPointCoordinates = pdfViewCtrl.convPagePtToScreenPt(x, y, pageNumber);
+
+                WritableMap map = Arguments.createMap();
+                map.putDouble(KEY_COORDINATE_POINT_X, convertedPointCoordinates[0]);
+                map.putDouble(KEY_COORDINATE_POINT_Y, convertedPointCoordinates[1]);
+
+                convertedPoints.pushMap(map);
+            }
+        }
+
+        return convertedPoints;
+    }
+
+    public int getPageNumberFromScreenPoint(double x, double y) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl.getPageNumberFromScreenPt(x, y);
     }
 
     public void setProgressiveRendering(boolean progressiveRendering, int initialDelay, int interval) {
@@ -3172,6 +3319,59 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             colorNumber += currentColorValue;
         }
         return colorNumber;
+    }
+
+    public void findText(String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.findText(searchString, matchCase, matchWholeWord, searchUp, regExp);
+        }
+    }
+
+    public void cancelFindText() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.cancelFindText();
+        }
+    }
+
+    public WritableMap getSelection(int pageNumber) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            PDFViewCtrl.Selection selection = pdfViewCtrl.getSelection(pageNumber);
+            // Valid
+            if (selection.getPageNum() != -1) {
+                return getMapFromSelection(selection);
+            }
+        }
+        return null;
+    }
+
+    private WritableMap getMapFromSelection(PDFViewCtrl.Selection selection) {
+        WritableMap selectionMap = Arguments.createMap();
+        selectionMap.putInt(KEY_TEXT_SELECTION_PAGE_NUMBER, selection.getPageNum());
+        selectionMap.putString(KEY_TEXT_SELECTION_UNICODE, selection.getAsUnicode());
+        selectionMap.putString(KEY_TEXT_SELECTION_HTML, selection.getAsHtml());
+
+        // convert all quads into points
+        double[] quadDoubleArray = selection.getQuads();
+        WritableArray quads = Arguments.createArray();
+        for (int i = 0; i < quadDoubleArray.length; i += 8) {
+            WritableArray quad = Arguments.createArray();
+            for (int j = 0; j < 8; j += 2) {
+                WritableMap point = Arguments.createMap();
+                point.putDouble(KEY_TEXT_SELECTION_QUAD_POINT_X, quadDoubleArray[i + j]);
+                point.putDouble(KEY_TEXT_SELECTION_QUAD_POINT_Y, quadDoubleArray[i + j + 1]);
+                quad.pushMap(point);
+            }
+            quads.pushArray(quad);
+        }
+        selectionMap.putArray(KEY_TEXT_SELECTION_QUADS, quads);
+
+        return selectionMap;
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {

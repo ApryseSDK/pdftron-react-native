@@ -215,6 +215,13 @@
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidScroll:)]) {
+        [self.delegate rnt_documentViewControllerDidScroll:self];
+    }
+}
+
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidZoom:(UIScrollView *)scrollView
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidZoom:)]) {
@@ -233,6 +240,22 @@
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerLayoutDidChange:)]) {
         [self.delegate rnt_documentViewControllerLayoutDidChange:self];
+    }
+}
+
+- (void)pdfViewCtrlTextSearchStart:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerTextSearchDidStart:)]) {
+        [self.delegate rnt_documentViewControllerTextSearchDidStart:self];
+    }
+}
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl textSearchResult:(PTSelection *)selection
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerTextSearchDidFindResult:
+                                                    selection:)]) {
+        [self.delegate rnt_documentViewControllerTextSearchDidFindResult:self
+                                                          selection:selection];
     }
 }
 

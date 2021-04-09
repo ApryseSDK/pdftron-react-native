@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -303,6 +304,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "hideViewModeItems")
+    public void hideViewModeItems(DocumentView documentView, ReadableArray viewModePickerItems) {
+        documentView.viewModePickerItems(viewModePickerItems);
+    }
+
     @ReactProp(name = "zoom")
     public void setZoom(DocumentView documentView, double zoom) {
         documentView.setZoom(zoom);
@@ -442,6 +448,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.deleteAnnotations(annots);
         } else {
             throw new PDFNetException("", 0L, getName(), "deleteAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableMap getAnnotationAt(int tag, int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationAt", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationListAt(int tag, int x1, int y1, int x2, int y2) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationListAt(x1, y1, x2, y2);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationListAt", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationListOnPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationListOnPage(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationListOnPage", "Unable to find DocumentView.");
         }
     }
 
@@ -667,6 +700,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableArray convertScreenPointsToPagePoints(int tag, ReadableArray points) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertScreenPointsToPagePoints(points);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertScreenPointsToPagePoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray convertPagePointsToScreenPoints(int tag, ReadableArray points) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertPagePointsToScreenPoints(points);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertPagePointsToScreenPoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public int getPageNumberFromScreenPoint(int tag, double x, double y) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageNumberFromScreenPoint(x, y);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint", "Unable to find DocumentView.");
+        }
+    }
+
     public void setProgressiveRendering(int tag, boolean progressiveRendering, int initialDelay, int interval) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -709,6 +769,34 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setColorPostProcessColors(whiteColor, blackColor);
         } else {
             throw new PDFNetException("", 0L, getName(), "setColorPostProcessColors", "Unable to find DocumentView.");
+        }
+    }
+
+    public void findText(int tag, String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.findText(searchString, matchCase, matchWholeWord, searchUp, regExp);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "findText", "Unable to find DocumentView.");
+        }
+    }
+
+    public void cancelFindText(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.cancelFindText();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "cancelFindText", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getSelection(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            WritableMap selection = documentView.getSelection(pageNumber);
+            return selection;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "cancelFindText", "Unable to find DocumentView.");
         }
     }
 

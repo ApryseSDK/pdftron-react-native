@@ -5,6 +5,7 @@ public final class Constants {
     public static final String ON_NAV_BUTTON_PRESSED = "onLeadingNavButtonPressed";
     public static final String ON_DOCUMENT_LOADED = "onDocumentLoaded";
     public static final String ON_PAGE_CHANGED = "onPageChanged";
+    public static final String ON_SCROLL_CHANGED = "onScrollChanged";
     public static final String ON_ZOOM_CHANGED = "onZoomChanged";
     public static final String ON_ZOOM_FINISHED = "onZoomFinished";
     public static final String ON_ANNOTATION_CHANGED = "onAnnotationChanged";
@@ -18,6 +19,8 @@ public final class Constants {
     public static final String ON_BOOKMARK_CHANGED = "onBookmarkChanged";
     public static final String ON_TOOL_CHANGED = "onToolChanged";
     public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
+    public static final String ON_TEXT_SEARCH_START = "onTextSearchStart";
+    public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -223,12 +226,25 @@ public final class Constants {
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
     public static final String THUMBNAIL_FILTER_MODE_BOOKMARKED = "bookmarked";
 
+    public static final String VIEW_MODE_CROP = "viewModeCrop";
+
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
 
     public static final String ZOOM_KEY = "zoom";
 
     public static final String KEY_LINK_BEHAVIOR_DATA = "url";
+
+    public static final String KEY_TEXT_SELECTION = "textSelection";
+    public static final String KEY_TEXT_SELECTION_FOUND = "found";
+    public static final String KEY_TEXT_SELECTION_PAGE_NUMBER = "pageNumber";
+    public static final String KEY_TEXT_SELECTION_UNICODE = "unicode";
+    public static final String KEY_TEXT_SELECTION_HTML = "html";
+    public static final String KEY_TEXT_SELECTION_QUADS = "quads";
+    public static final String KEY_TEXT_SELECTION_QUAD_POINTS = "points";
+
+    public static final String KEY_TEXT_SELECTION_QUAD_POINT_X = "x";
+    public static final String KEY_TEXT_SELECTION_QUAD_POINT_Y = "y";
 
     public static final String KEY_ANNOTATION_LIST = "annotList";
     public static final String KEY_ANNOTATION_ID = "id";
@@ -297,6 +313,10 @@ public final class Constants {
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
     public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
+
+    public static final String KEY_COORDINATE_POINT_X = "x";
+    public static final String KEY_COORDINATE_POINT_Y = "y";
+    public static final String KEY_COORDINATE_POINT_PAGE_NUMBER = "pageNumber";
 
     // Zoom
     public static final String KEY_zoomLimitAbsolute = "absolute";
