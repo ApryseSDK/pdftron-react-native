@@ -1963,17 +1963,17 @@ NS_ASSUME_NONNULL_END
 {
     if (defaultPageColor) {
         NSArray *keyList = defaultPageColor.allKeys;
-        if ([keyList containsObject:PTColorRedKey] &&
-            [keyList containsObject:PTColorGreenKey] &&
-            [keyList containsObject:PTColorBlueKey]) {
+        NSAssert([keyList containsObject:PTColorRedKey] &&
+                 [keyList containsObject:PTColorGreenKey] &&
+                 [keyList containsObject:PTColorBlueKey],
+                 @"default page color does not have red, green or blue keys"));
          
-            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
             
-            [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+        [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
                 b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
             
-            [pdfViewCtrl Update:YES];
-        }
+        [pdfViewCtrl Update:YES];
     }
 }
 
@@ -1981,16 +1981,15 @@ NS_ASSUME_NONNULL_END
 {
     if (backgroundColor) {
         NSArray *keyList = backgroundColor.allKeys;
-        if ([keyList containsObject:PTColorRedKey] &&
-            [keyList containsObject:PTColorGreenKey] &&
-            [keyList containsObject:PTColorBlueKey]) {
+        NSAssert([keyList containsObject:PTColorRedKey] &&
+                 [keyList containsObject:PTColorGreenKey] &&
+                 [keyList containsObject:PTColorBlueKey],
+                 @"background color does not have red, green or blue keys");
             
-            PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
             
-            [pdfViewCtrl
-             SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue]
-             a:255];
-        }
+        [pdfViewCtrl
+         SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue] a:255];
     }
 }
 
