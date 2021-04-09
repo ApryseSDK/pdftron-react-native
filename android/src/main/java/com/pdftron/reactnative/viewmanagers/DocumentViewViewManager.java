@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -303,6 +304,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailFilterModes(filterModes);
     }
 
+    @ReactProp(name = "hideViewModeItems")
+    public void hideViewModeItems(DocumentView documentView, ReadableArray viewModePickerItems) {
+        documentView.viewModePickerItems(viewModePickerItems);
+    }
+
     @ReactProp(name = "zoom")
     public void setZoom(DocumentView documentView, double zoom) {
         documentView.setZoom(zoom);
@@ -442,6 +448,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.deleteAnnotations(annots);
         } else {
             throw new PDFNetException("", 0L, getName(), "deleteAnnotations", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableMap getAnnotationAt(int tag, int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationAt", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationListAt(int tag, int x1, int y1, int x2, int y2) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationListAt(x1, y1, x2, y2);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationListAt", "Unable to find DocumentView.");
+        }
+    }
+
+    public ReadableArray getAnnotationListOnPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAnnotationListOnPage(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAnnotationListOnPage", "Unable to find DocumentView.");
         }
     }
 
@@ -664,6 +697,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getCanvasSize();
         } else {
             throw new PDFNetException("", 0L, getName(), "getCanvasSize", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray convertScreenPointsToPagePoints(int tag, ReadableArray points) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertScreenPointsToPagePoints(points);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertScreenPointsToPagePoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray convertPagePointsToScreenPoints(int tag, ReadableArray points) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.convertPagePointsToScreenPoints(points);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "convertPagePointsToScreenPoints", "Unable to find DocumentView.");
+        }
+    }
+
+    public int getPageNumberFromScreenPoint(int tag, double x, double y) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPageNumberFromScreenPoint(x, y);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint", "Unable to find DocumentView.");
         }
     }
 

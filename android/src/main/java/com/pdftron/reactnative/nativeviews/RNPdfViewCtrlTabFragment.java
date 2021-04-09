@@ -4,11 +4,27 @@ import android.graphics.PointF;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.ViewerUtils;
 
+import javax.annotation.Nullable;
+
+import static com.pdftron.reactnative.utils.Constants.KEY_HORIZONTAL;
+import static com.pdftron.reactnative.utils.Constants.KEY_VERTICAL;
+import static com.pdftron.reactnative.utils.Constants.ON_SCROLL_CHANGED;
+import static com.pdftron.reactnative.utils.Constants.ON_ZOOM_FINISHED;
+import static com.pdftron.reactnative.utils.Constants.ZOOM_KEY;
+
 public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
+
+    @Nullable
+    private ReactContext mReactContext;
+    private int mViewId;
 
     @Override
     public void imageStamperSelected(PointF targetPoint) {
@@ -48,5 +64,41 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
         }
         mAnnotTargetPoint = targetPoint;
         ViewerUtils.openFileIntent(activity);
+    }
+
+    @Override
+    public boolean onScaleEnd(float x, float y) {
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_ZOOM_FINISHED, ON_ZOOM_FINISHED);
+        params.putDouble(ZOOM_KEY, mPdfViewCtrl.getZoom());
+        onReceiveNativeEvent(params);
+
+        return super.onScaleEnd(x, y);
+    }
+
+    @Override
+    public void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_SCROLL_CHANGED, ON_SCROLL_CHANGED);
+        params.putInt(KEY_HORIZONTAL, l);
+        params.putInt(KEY_VERTICAL, t);
+        onReceiveNativeEvent(params);
+    }
+
+    public void setReactContext(@Nullable ReactContext reactContext, int id) {
+        mReactContext = reactContext;
+        mViewId = id;
+    }
+
+    public void onReceiveNativeEvent(WritableMap event) {
+        if (mReactContext == null) {
+            return;
+        }
+        mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                mViewId,
+                "topChange",
+                event);
     }
 }

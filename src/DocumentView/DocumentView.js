@@ -24,6 +24,7 @@ export default class DocumentView extends PureComponent {
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onScrollChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
     onZoomFinished: PropTypes.func,
     zoom: PropTypes.number,
@@ -85,6 +86,7 @@ export default class DocumentView extends PureComponent {
     verticalScrollPos: PropTypes.number,
     onTextSearchStart: PropTypes.func,
     onTextSearchResult: PropTypes.func,
+    hideViewModeItems: PropTypes.array,
     ...ViewPropTypes,
   };
 
@@ -104,6 +106,13 @@ export default class DocumentView extends PureComponent {
         	'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onScrollChanged) {
+      if (this.props.onScrollChanged) {
+        this.props.onScrollChanged({
+        	'horizontal': event.nativeEvent.horizontal,
+          'vertical': event.nativeEvent.vertical,
+        });
+      } 
     } else if (event.nativeEvent.onZoomChanged) {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
@@ -398,11 +407,35 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-
+  
   setHighlightFields = (highlightFields) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setHighlightFields(tag, highlightFields);
+    }
+    return Promise.resolve();
+  }
+
+  getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+    }
+    return Promise.resolve();
+  }
+
+  getAnnotationsAtLine = (x1, y1, x2, y2) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationsAtLine(tag, x1, y1, x2, y2);
+    }
+    return Promise.resolve();
+  }
+
+  getAnnotationsOnPage = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
     }
     return Promise.resolve();
   }
@@ -539,6 +572,31 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.rotateCounterClockwise(tag);
+    }
+    return Promise.resolve();
+  }
+
+
+  convertScreenPointsToPagePoints = (points) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
+    }
+    return Promise.resolve();
+  }
+
+  convertPagePointsToScreenPoints = (points) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
+    }
+    return Promise.resolve();
+  }
+
+  getPageNumberFromScreenPoint = (x, y) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
     }
     return Promise.resolve();
   }
