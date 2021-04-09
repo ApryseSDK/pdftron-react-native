@@ -319,6 +319,57 @@ RCT_REMAP_METHOD(setHighlightFields,
     }
 }
 
+RCT_REMAP_METHOD(getAnnotationAt,
+                 getAnnotationAtForDocumentViewTag: (nonnull NSNumber *)tag
+                 x:(NSInteger)x
+                 y:(NSInteger)y
+                 distanceThreshold:(double)distanceThreshold
+                 minimumLineWeight:(double)minimumLineWeight
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *annotation = [[self documentViewManager] getAnnotationAtForDocumentViewTag:tag x:x y:y distanceThreshold:distanceThreshold minimumLineWeight:minimumLineWeight];
+        resolve(annotation);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_annotation_at", @"Failed to get annotation at", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getAnnotationListAt,
+                 getAnnotationListAtForDocumentViewTag: (nonnull NSNumber *)tag
+                 x1:(NSInteger)x1
+                 y1:(NSInteger)y1
+                 x2:(NSInteger)x2
+                 y2:(NSInteger)y2
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *annotations = [[self documentViewManager] getAnnotationListAtForDocumentViewTag:tag x1:x1 y1:y1 x2:x2 y2:y2];
+        resolve(annotations);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_annotation_list_at", @"Failed to get annotation list at", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getAnnotationListOnPage,
+                 getAnnotationListOnPageForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *annotations = [[self documentViewManager] getAnnotationListOnPageForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(annotations);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_annotation_list_on_page", @"Failed to get annotation list on page", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber
