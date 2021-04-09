@@ -7,6 +7,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController;
 
+- (void)rnt_documentViewControllerDidScroll:(PTDocumentBaseViewController *)documentViewController;
+
 - (void)rnt_documentViewControllerDidZoom:(PTDocumentBaseViewController *)documentViewController;
 
 - (void)rnt_documentViewControllerDidFinishZoom:(PTDocumentBaseViewController *)documentViewController;

@@ -70,13 +70,13 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (double)getZoomForDocumentViewTag:(NSNumber *)tag;
+
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
 
 - (void)rotateClockwiseForDocumentViewTag:(NSNumber *)tag;
 
 - (void)rotateCounterClockwiseForDocumentViewTag:(NSNumber *)tag;
-
-- (double)getZoom:(NSNumber *)tag;
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
@@ -89,6 +89,12 @@
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPosForDocumentViewTag:(NSNumber *)tag;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSizeForDocumentViewTag:(NSNumber *)tag;
+
+- (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
+
+- (int)getPageNumberFromScreenPointForDocumentViewTag:(nonnull NSNumber *)tag x:(double)x y:(double)y;
 
 - (void)setProgressiveRenderingForDocumentViewTag:(NSNumber *)tag progressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
 

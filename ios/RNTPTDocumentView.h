@@ -185,6 +185,14 @@ static NSString * const PTRectHeightKey = @"height";
 static NSString * const PTScrollHorizontalKey = @"horizontal";
 static NSString * const PTScrollVerticalKey = @"vertical";
 
+static NSString * const PTConversionScreenKey = @"screen";
+static NSString * const PTConversionCanvasKey = @"canvas";
+static NSString * const PTConversionPageKey = @"page";
+
+static NSString * const PTCoordinatePointX = @"x";
+static NSString * const PTCoordinatePointY = @"y";
+static NSString * const PTCoordinatePointPageNumber = @"pageNumber";
+
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 static NSString * const PTFormFieldTypeKey = @"fieldType";
@@ -241,6 +249,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+- (void)scrollChanged:(RNTPTDocumentView *)sender horizontal:(double)horizontal vertical:(double)vertical;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
@@ -442,6 +451,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (NSArray *)convertScreenPointsToPagePoints:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPoints:(NSArray *)points;
+
+- (int)getPageNumberFromScreenPoint:(double)x y:(double)y;
 
 - (void)setProgressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
 

@@ -516,7 +516,7 @@ RCT_REMAP_METHOD(getZoom,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        double zoom = [[self documentViewManager] getZoom:tag];
+        double zoom = [[self documentViewManager] getZoomForDocumentViewTag:tag];
         resolve([NSNumber numberWithDouble:zoom]);
     }
     @catch (NSException *exception) {
@@ -648,6 +648,54 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
     @catch (NSException *exception) {
         reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
+    }
+}
+
+#pragma mark - Coordinate
+
+RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
+                 convertScreenPointsToPagePointsForDocumentViewTag: (nonnull NSNumber *)tag
+                 points:(NSArray *)points
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *convertedPoints = [[self documentViewManager] convertScreenPointsToPagePointsForDocumentViewTag:tag points:points];
+        resolve(convertedPoints);
+    }
+    @catch (NSException *exception) {
+        reject(@"convert_screen_points_to_page_points", @"Failed to convert screen points to page points", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(convertPagePointsToScreenPoints,
+                 convertPagePointsToScreenPointsForDocumentViewTag: (nonnull NSNumber *)tag
+                 points:(NSArray *)points
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *convertedPoints = [[self documentViewManager] convertPagePointsToScreenPointsForDocumentViewTag:tag points:points];
+        resolve(convertedPoints);
+    }
+    @catch (NSException *exception) {
+        reject(@"convert_page_points_to_screen_points", @"Failed to convert page points to screen points", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getPageNumberFromScreenPoint,
+                 getPageNumberFromScreenPointForDocumentViewTag: (nonnull NSNumber *)tag
+                 x:(double)x
+                 y:(double)y
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        int pageNumber = [[self documentViewManager] getPageNumberFromScreenPointForDocumentViewTag:tag x:x y:y];
+        resolve([NSNumber numberWithInt:pageNumber]);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_page_number_from_screen_point", @"Failed to get page number from screen point", [self errorFromException:exception]);
     }
 }
 
