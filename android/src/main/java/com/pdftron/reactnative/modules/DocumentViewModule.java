@@ -666,6 +666,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void convertScreenPointsToPagePoints(final int tag, final ReadableArray points, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertScreenPointsToPagePoints(tag, points);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void convertPagePointsToScreenPoints(final int tag, final ReadableArray points, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray convertedPoints = mDocumentViewInstance.convertPagePointsToScreenPoints(tag, points);
+                    promise.resolve(convertedPoints);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getPageNumberFromScreenPoint(final int tag, final double x, final double y, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int pageNumber = mDocumentViewInstance.getPageNumberFromScreenPoint(tag, x, y);
+                    promise.resolve(pageNumber);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setProgressiveRendering(final int tag, final boolean progressiveRendering, final int initialDelay, final int interval, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -778,6 +823,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     mDocumentViewInstance.setBackgroundColor(tag, backgroundColor);
                     promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void findText(final int tag, final String searchString, final boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void cancelFindText(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.cancelFindText(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getSelection(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap selection = mDocumentViewInstance.getSelection(tag, pageNumber);
+                    promise.resolve(selection);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }

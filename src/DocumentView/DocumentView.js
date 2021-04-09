@@ -24,6 +24,7 @@ export default class DocumentView extends PureComponent {
     onDocumentLoaded: PropTypes.func,
     onDocumentError: PropTypes.func,
     onPageChanged: PropTypes.func,
+    onScrollChanged: PropTypes.func,
     onZoomChanged: PropTypes.func,
     onZoomFinished: PropTypes.func,
     zoom: PropTypes.number,
@@ -83,6 +84,8 @@ export default class DocumentView extends PureComponent {
     onToolChanged: PropTypes.func,
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
+    onTextSearchStart: PropTypes.func,
+    onTextSearchResult: PropTypes.func,
     hideViewModeItems: PropTypes.array,
     ...ViewPropTypes,
   };
@@ -103,6 +106,13 @@ export default class DocumentView extends PureComponent {
         	'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onScrollChanged) {
+      if (this.props.onScrollChanged) {
+        this.props.onScrollChanged({
+        	'horizontal': event.nativeEvent.horizontal,
+          'vertical': event.nativeEvent.vertical,
+        });
+      } 
     } else if (event.nativeEvent.onZoomChanged) {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
@@ -191,6 +201,17 @@ export default class DocumentView extends PureComponent {
         this.props.onToolChanged({
           'previousTool': event.nativeEvent.previousTool,
           'tool': event.nativeEvent.tool,
+        });
+      }
+    } else if (event.nativeEvent.onTextSearchStart) {
+      if (this.props.onTextSearchStart) {
+        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+      }
+    } else if (event.nativeEvent.onTextSearchResult) {
+      if (this.props.onTextSearchResult) {
+        this.props.onTextSearchResult({
+          'found': event.nativeEvent.found,
+          'textSelection': event.nativeEvent.textSelection,
         });
       }
     }
@@ -563,6 +584,31 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+
+  convertScreenPointsToPagePoints = (points) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
+    }
+    return Promise.resolve();
+  }
+
+  convertPagePointsToScreenPoints = (points) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
+    }
+    return Promise.resolve();
+  }
+
+  getPageNumberFromScreenPoint = (x, y) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
+    }
+    return Promise.resolve();
+  }
+
   setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -583,6 +629,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setOverprint(tag, overprint);
+    }
+    return Promise.resolve();
+  }
+
+  findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
+    }
+    return Promise.resolve();
+  }
+
+  cancelFindText = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.cancelFindText(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSelection = (pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getSelection(tag, pageNumber);
     }
     return Promise.resolve();
   }

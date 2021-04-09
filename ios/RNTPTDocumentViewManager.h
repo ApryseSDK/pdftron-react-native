@@ -72,13 +72,13 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (double)getZoomForDocumentViewTag:(NSNumber *)tag;
+
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
 
 - (void)rotateClockwiseForDocumentViewTag:(NSNumber *)tag;
 
 - (void)rotateCounterClockwiseForDocumentViewTag:(NSNumber *)tag;
-
-- (double)getZoom:(NSNumber *)tag;
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
@@ -91,6 +91,12 @@
 - (NSDictionary<NSString *, NSNumber *> *)getScrollPosForDocumentViewTag:(NSNumber *)tag;
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSizeForDocumentViewTag:(NSNumber *)tag;
+
+- (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points;
+
+- (int)getPageNumberFromScreenPointForDocumentViewTag:(nonnull NSNumber *)tag x:(double)x y:(double)y;
 
 - (void)setProgressiveRenderingForDocumentViewTag:(NSNumber *)tag progressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
 
@@ -107,6 +113,12 @@
 - (void)setDefaultPageColorForDocumentViewTag:(NSNumber *)tag defaultPageColor:(NSDictionary *)defaultPageColor;
 
 - (void)setBackgroundColorForDocumentViewTag:(NSNumber *)tag backgroundColor:(NSDictionary *)backgroundColor;
+
+- (void)findTextForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
+
+- (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
+
+- (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

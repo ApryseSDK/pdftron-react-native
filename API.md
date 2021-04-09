@@ -638,6 +638,25 @@ Defines the vertical scroll position in the current document viewer.
 />
 ```
 
+#### onScrollChanged
+function, optional
+
+This function is called when the scroll position has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+horizontal | number | the horizontal position of the scroll
+vertical | number | the vertical position of the scroll
+
+```js
+<DocumentView
+  onScrollChanged = {({horizontal, vertical}) => {
+    console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.'); 
+  }}
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -1084,6 +1103,52 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 ```js
 <DocumentView
   thumbnailViewEditingEnabled={true}
+/>
+```
+
+### TextSelection
+
+#### onTextSearchStart
+function, optional
+
+This function is called immediately before a text search begins, either through user actions, or function calls such as [`findText`](#findText).
+
+```js
+<DocumentView
+  onTextSearchStart = {() => {
+    console.log('Text search has started');
+  }}
+/>
+```
+
+#### onTextSearchResult
+function, optional
+
+This function is called after a text search is finished or canceled.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+found | bool | whether a result is found. If no, it could be caused by not finding a matching result in the document, invalid text input, or action cancellation (user actions or [`cancelFindText`](#cancelFindText))
+textSelection | object | the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+
+quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+
+```js
+<DocumentView
+  onTextSearchResult = {({found, textSelection}) => {
+    if (found) {
+      console.log('Found selection on page', textSelection.pageNumber);
+      for (let i = 0; i < textSelection.quads.length; i ++) {
+        const quad = textSelection.quads[i];
+        console.log('selection boundary quad', i);
+        for (const quadPoint of quad) {
+          console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+        }
+      }
+    }
+  }}
 />
 ```
 
@@ -1989,6 +2054,84 @@ this._viewer.getCanvasSize().then(({width, height}) => {
 });
 ```
 
+### Coordinate
+
+#### convertPagePointsToScreenPoints
+Converts points from page coordinates to screen coordinates in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+points | array | list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+convertedPoints | array | list of converted points in screen system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+
+```js
+// convert (50, 50) on current page and (100, 100) on page 1 from page system to screen system
+this._viewer.convertPagePointsToScreenPoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
+  convertedPoints.forEach(point => {
+    console.log(point);
+  })
+});
+```
+
+#### convertScreenPointsToPagePoints
+Converts points from screen coordinates to page coordinates in the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+points | array | list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+convertedPoints | array | list of converted points in page system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+
+```js
+// convert (50, 50) and (100, 100) from screen system to page system, on current page and page 1 respectively
+this._viewer.convertScreenPointsToPagePoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
+  convertedPoints.forEach(point => {
+    console.log(point);
+  })
+});
+```
+
+#### getPageNumberFromScreenPoint
+Returns the page number that contains the point on screen.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+x | number | the x-coordinate of the screen point
+y | number | the y-coordinate of the screen point
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the page number of the screen point
+
+```js
+this._viewer.getPageNumberFromScreenPoint(10.0,50.5).then((pageNumber) => {
+  console.log('The page number of the screen point is', pageNumber);
+});
+```
+
 ### Rendering Options
 
 #### setProgressiveRendering
@@ -2104,4 +2247,62 @@ defaultPageColor | object | the default page color, in the format `{red: number,
 
 ```js
 this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
+```
+
+### Text Selection
+
+#### findText
+Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+searchUp | bool | indicates if it searches upward
+regExp | bool | indicates if searchString is a regular expression
+
+```js
+this._viewer.findText('PDFTron', false, false, true, false);
+```
+
+#### cancelFindText
+Cancels the current text search thread, if exists.
+
+Returns a Promise.
+
+```js
+this._viewer.cancelFindText();
+```
+
+#### getSelection
+Returns the text selection on a given page, if any.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+selection | object | the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+
+quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+
+```js
+this._viewer.getSelection(2).then((selection) => {
+  if (selection) {
+    console.log('Found selection on page', selection.pageNumber);
+    for (let i = 0; i < selection.quads.length; i ++) {
+      const quad = selection.quads[i];
+      console.log('selection boundary quad', i);
+      for (const quadPoint of quad) {
+        console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+      }
+    }
+  }
+});
 ```
