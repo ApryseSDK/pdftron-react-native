@@ -202,6 +202,18 @@ export default {
     Bookmarked: "bookmarked",
   },
 
+  // Conversion defines conversion sources and destinations
+  Conversion: {
+    Screen: "screen",
+    Canvas: "canvas",
+    Page: "page",
+  },
+  
+  // ViewModePickerItem defines view mode items in the view mode dialog
+  ViewModePickerItem: {
+    Crop: "viewModeCrop",
+  },
+
   // ZoomLimitMode defines the limit mode for zoom in the current document viewer
   ZoomLimitMode: {
     None: "none",

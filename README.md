@@ -129,7 +129,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
           android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
     -     android:windowSoftInputMode="adjustResize"
     +     android:windowSoftInputMode="adjustPan"
-    +     android:theme="@style/CustomAppTheme">
+    +     android:theme="@style/PDFTronAppTheme">
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
