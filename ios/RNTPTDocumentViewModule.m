@@ -714,6 +714,53 @@ RCT_REMAP_METHOD(setOverprint,
     }
 }
 
+RCT_REMAP_METHOD(findText,
+                 findTextForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 searchUp:(BOOL)searchUp
+                 regExp:(BOOL)regExp
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] findTextForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord searchUp:searchUp regExp:regExp];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"find_text", @"Failed to initiaze a text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(cancelFindText,
+                 cancelFindTextForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] cancelFindTextForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"cancel_text", @"Failed to cancel text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSelection,
+                 getSelectionForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *selection = [[self documentViewManager] getSelectionForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(selection);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_selection", @"Failed to get text selection", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,

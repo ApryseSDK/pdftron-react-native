@@ -1106,6 +1106,52 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
+### TextSelection
+
+#### onTextSearchStart
+function, optional
+
+This function is called immediately before a text search begins, either through user actions, or function calls such as [`findText`](#findText).
+
+```js
+<DocumentView
+  onTextSearchStart = {() => {
+    console.log('Text search has started');
+  }}
+/>
+```
+
+#### onTextSearchResult
+function, optional
+
+This function is called after a text search is finished or canceled.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+found | bool | whether a result is found. If no, it could be caused by not finding a matching result in the document, invalid text input, or action cancellation (user actions or [`cancelFindText`](#cancelFindText))
+textSelection | object | the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+
+quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+
+```js
+<DocumentView
+  onTextSearchResult = {({found, textSelection}) => {
+    if (found) {
+      console.log('Found selection on page', textSelection.pageNumber);
+      for (let i = 0; i < textSelection.quads.length; i ++) {
+        const quad = textSelection.quads[i];
+        console.log('selection boundary quad', i);
+        for (const quadPoint of quad) {
+          console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+        }
+      }
+    }
+  }}
+/>
+```
+
 ### Others
 
 #### useStylusAsPen
@@ -2115,4 +2161,62 @@ Returns a Promise.
 
 ```js
 this._viewer.setOverprint(Config.OverprintMode.Off);
+```
+
+### Text Selection
+
+#### findText
+Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+searchUp | bool | indicates if it searches upward
+regExp | bool | indicates if searchString is a regular expression
+
+```js
+this._viewer.findText('PDFTron', false, false, true, false);
+```
+
+#### cancelFindText
+Cancels the current text search thread, if exists.
+
+Returns a Promise.
+
+```js
+this._viewer.cancelFindText();
+```
+
+#### getSelection
+Returns the text selection on a given page, if any.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+selection | object | the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+
+quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+
+```js
+this._viewer.getSelection(2).then((selection) => {
+  if (selection) {
+    console.log('Found selection on page', selection.pageNumber);
+    for (let i = 0; i < selection.quads.length; i ++) {
+      const quad = selection.quads[i];
+      console.log('selection boundary quad', i);
+      for (const quadPoint of quad) {
+        console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+      }
+    }
+  }
+});
 ```

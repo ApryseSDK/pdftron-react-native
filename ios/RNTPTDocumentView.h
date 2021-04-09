@@ -218,6 +218,14 @@ static NSString * const PTOverprintModeOnKey = @"on";
 static NSString * const PTOverprintModeOffKey = @"off";
 static NSString * const PTOverprintModePdfxKey = @"pdfx";
 
+static NSString * const PTTextSelectionPageNumberKey = @"pageNumber";
+static NSString * const PTTextSelectionUnicodekey = @"unicode";
+static NSString * const PTTextSelectionHtmlKey = @"html";
+static NSString * const PTTextSelectionQuadsKey = @"quads";
+
+static NSString * const PTTextSelectionQuadPointXKey = @"x";
+static NSString * const PTTextSelectionQuadPointYKey = @"y";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -253,6 +261,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
+- (void)textSearchStart:(RNTPTDocumentView *)sender;
+- (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -463,6 +473,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)setImageSmoothing:(BOOL)imageSmoothing;
 
 - (void)setOverprint:(NSString *)overprint;
+
+- (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
+
+- (void)cancelFindText;
+
+- (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

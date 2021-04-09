@@ -2397,6 +2397,24 @@ NS_ASSUME_NONNULL_END
     return !self.hideTopAppNavBar;
 }
 
+- (void)rnt_documentViewControllerTextSearchDidStart:(PTDocumentBaseViewController *)documentViewController
+{
+    if ([self.delegate respondsToSelector:@selector(textSearchStart:)]) {
+        [self.delegate textSearchStart:self];
+    }
+}
+
+- (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection
+{
+    if ([self.delegate respondsToSelector:@selector(textSearchResult:found:textSelection:)]) {
+        if ([selection GetPageNum] > 0) {
+            [self.delegate textSearchResult:self found:YES textSelection:[self getMapFromSelection:selection]];
+        } else {
+            [self.delegate textSearchResult:self found:NO textSelection:nil];
+        }
+    }
+}
+
 - (NSDictionary<NSString *, id> *)getAnnotationData:(PTAnnot *)annot pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl {
     if (![annot IsValid]) {
         return nil;
@@ -3507,6 +3525,71 @@ NS_ASSUME_NONNULL_END
     } else if ([overprint isEqualToString:PTOverprintModePdfxKey]) {
         [pdfViewCtrl SetOverprint:e_ptop_pdfx_on];
     }
+}
+
+# pragma mark - Text Search
+
+- (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    [pdfViewCtrl FindText:searchString MatchCase:matchCase MatchWholeWord:matchWholeWord SearchUp:searchUp RegExp:regExp];
+}
+
+- (void)cancelFindText
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    [pdfViewCtrl CancelFindText];
+}
+
+- (NSDictionary *)getSelection:(NSInteger)pageNumber
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    PTSelection *selection = [pdfViewCtrl GetSelection:(int)pageNumber];
+    
+    if ([selection GetPageNum] != -1 && pdfViewCtrl) {
+        return [self getMapFromSelection:selection];
+    }
+    
+    return nil;
+}
+
+- (NSDictionary *)getMapFromSelection:(PTSelection *)selection
+{
+    NSMutableDictionary *selectionMap = [[NSMutableDictionary alloc] initWithCapacity:4];
+    [selectionMap setValue:[NSNumber numberWithInt:[selection GetPageNum]] forKey:PTTextSelectionPageNumberKey];
+    [selectionMap setValue:[selection GetAsUnicode] forKey:PTTextSelectionUnicodekey];
+    [selectionMap setValue:[selection GetAsHtml] forKey:PTTextSelectionHtmlKey];
+    
+    PTVectorQuadPoint *vectorQuads = [selection GetQuads];
+    NSMutableArray *quads = [[NSMutableArray alloc] initWithCapacity:[vectorQuads size]];
+    
+    for (int i = 0; i < [vectorQuads size]; i ++) {
+        PTQuadPoint *quad = [vectorQuads get:i];
+        NSMutableArray *points = [[NSMutableArray alloc] initWithCapacity:4];
+        for (int j = 0; j < 4; j ++) {
+            PTPDFPoint *point;
+            if (j == 0) {
+                point = [quad getP1];
+            } else if (j == 1) {
+                point = [quad getP2];
+            } else if (j == 2) {
+                point = [quad getP3];
+            } else if (j == 3) {
+                point = [quad getP4];
+            }
+            
+            [points addObject:@{PTTextSelectionQuadPointXKey: [NSNumber numberWithDouble:[point getX]], PTTextSelectionQuadPointYKey: [NSNumber numberWithDouble:[point getY]]}];
+        }
+        
+        [quads addObject:[points copy]];
+    }
+    
+    
+    [selectionMap setValue:[quads copy] forKey:PTTextSelectionQuadsKey];
+    return selectionMap;
 }
 
 #pragma mark - Helper
