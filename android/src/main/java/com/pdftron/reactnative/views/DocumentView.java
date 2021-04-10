@@ -3286,6 +3286,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
+    public boolean hasSelection() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl != null && pdfViewCtrl.hasSelection();
+    }
+
+    public void clearSelection() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.clearSelection();
+        }
+    }
+
+    public WritableMap getSelectionPageRange() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            WritableMap selection = Arguments.createMap();
+            int start = pdfViewCtrl.getSelectionBeginPage();
+
+            int end = pdfViewCtrl.getSelectionEndPage();
+
+            selection.putInt(KEY_TEXT_SELECTION_PAGE_RANGE_BEGIN, pdfViewCtrl.getSelectionBeginPage());
+            selection.putInt(KEY_TEXT_SELECTION_PAGE_RANGE_END, pdfViewCtrl.getSelectionEndPage());
+            return selection;
+        }
+
+        return null;
+    }
+
+    public boolean hasSelectionOnPage(int pageNumber) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl != null && pdfViewCtrl.hasSelectionOnPage(pageNumber);
+    }
+
     private WritableMap getMapFromSelection(PDFViewCtrl.Selection selection) {
         WritableMap selectionMap = Arguments.createMap();
         selectionMap.putInt(KEY_TEXT_SELECTION_PAGE_NUMBER, selection.getPageNum());

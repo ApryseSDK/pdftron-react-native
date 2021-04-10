@@ -108,6 +108,14 @@
 
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;
+
+- (void)clearSelectionForDocumentViewTag:(NSNumber *)tag;
+
+- (NSDictionary *)getSelectionPageRangeForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)hasSelectionOnPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
+
 - (BOOL)selectInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect;
 
 - (BOOL)isThereTextInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect;
