@@ -836,6 +836,74 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean hasSelection(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean hasSelection = documentView.hasSelection();
+            return hasSelection;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "hasSelection", "Unable to find DocumentView.");
+        }
+    }
+
+    public void clearSelection(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.clearSelection();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "clearSelection", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getSelectionPageRange(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            WritableMap pageRange = documentView.getSelectionPageRange();
+            return pageRange;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getSelectionPageRange", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean hasSelectionOnPage(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean hasSelection = documentView.hasSelectionOnPage(pageNumber);
+            return hasSelection;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "hasSelectionOnPage", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean selectInRect(int tag, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean selected = documentView.selectInRect(rect);
+            return selected;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectInRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean isThereTextInRect(int tag, ReadableMap rect) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            boolean hasText = documentView.isThereTextInRect(rect);
+            return hasText;
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isThereTextInRect", "Unable to find DocumentView.");
+        }
+    }
+
+    public void selectAll(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.selectAll();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "selectAll", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

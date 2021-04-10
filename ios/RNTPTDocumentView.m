@@ -3647,6 +3647,77 @@ NS_ASSUME_NONNULL_END
     return selectionMap;
 }
 
+- (BOOL)hasSelection
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelection];
+}
+
+- (void)clearSelection
+{
+    [self.currentDocumentViewController.pdfViewCtrl ClearSelection];
+}
+
+- (NSDictionary *)getSelectionPageRange
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        return @{PTTextSelectionPageRangeBeginKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionBeginPage]],
+                 PTTextSelectionPageRangeEndKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionEndPage]]
+        };
+    }
+    
+    return nil;
+}
+
+- (bool)hasSelectionOnPage:(NSInteger)pageNumber
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelectionOnPage:(int)pageNumber];
+}
+
+- (BOOL)selectInRect:(NSDictionary *)rect
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl && rect) {
+        NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+        NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+        NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+        NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+        if (rectX1 && rectY1 && rectX2 && rectY2) {
+            return [pdfViewCtrl SelectX1:[rectX1 doubleValue] Y1:[rectY1 doubleValue] X2:[rectX2 doubleValue] Y2:[rectY2 doubleValue]];
+        }
+    }
+    
+    return NO;
+}
+
+- (BOOL)isThereTextInRect:(NSDictionary *)rect
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl && rect) {
+        NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+        NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+        NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+        NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+        if (rectX1 && rectY1 && rectX2 && rectY2) {
+            return [pdfViewCtrl IsThereTextInRect:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+        }
+    }
+    
+    return NO;
+}
+
+- (void)selectAll
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SelectAll];
+    }
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value

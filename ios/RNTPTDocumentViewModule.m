@@ -850,6 +850,107 @@ RCT_REMAP_METHOD(getSelection,
     }
 }
 
+RCT_REMAP_METHOD(hasSelection,
+                 hasSelectionForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool hasSelection = [[self documentViewManager] hasSelectionForDocumentViewTag:tag];
+        resolve([NSNumber numberWithBool:hasSelection]);
+    }
+    @catch (NSException *exception) {
+        reject(@"has_selection", @"Failed to get whether document has text selection", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(clearSelection,
+                 clearSelectionForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] clearSelectionForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"clear_selection", @"Failed to clear text selection", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSelectionPageRange,
+                 getSelectionPageRangeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *pageRange = [[self documentViewManager] getSelectionPageRangeForDocumentViewTag:tag];
+        resolve(pageRange);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_selection_page_range", @"Failed to get text selection page range", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(hasSelectionOnPage,
+                 hasSelectionOnPageForDocumentViewTag: (nonnull NSNumber *)tag
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        bool hasSelection = [[self documentViewManager] hasSelectionOnPageForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve([NSNumber numberWithBool:hasSelection]);
+    }
+    @catch (NSException *exception) {
+        reject(@"has_selection_on_page", @"Failed to get whether document has text selection on page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(selectInRect,
+                 selectInRectForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL selected = [[self documentViewManager] selectInRectForDocumentViewTag:tag rect:rect];
+        resolve([NSNumber numberWithBool:selected]);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_in_rect", @"Failed to select in rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(isThereTextInRect,
+                 isThereTextInRectForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL hasText = [[self documentViewManager] isThereTextInRectForDocumentViewTag:tag rect:rect];
+        resolve([NSNumber numberWithBool:hasText]);
+    }
+    @catch (NSException *exception) {
+        reject(@"is_there_text_in_rect", @"Failed to get whether there is text in rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(selectAll,
+                 selectAllForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] selectAllForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_all", @"Failed to select all", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,

@@ -241,10 +241,12 @@ public final class Constants {
     public static final String KEY_TEXT_SELECTION_UNICODE = "unicode";
     public static final String KEY_TEXT_SELECTION_HTML = "html";
     public static final String KEY_TEXT_SELECTION_QUADS = "quads";
-    public static final String KEY_TEXT_SELECTION_QUAD_POINTS = "points";
 
     public static final String KEY_TEXT_SELECTION_QUAD_POINT_X = "x";
     public static final String KEY_TEXT_SELECTION_QUAD_POINT_Y = "y";
+
+    public static final String KEY_TEXT_SELECTION_PAGE_RANGE_BEGIN = "begin";
+    public static final String KEY_TEXT_SELECTION_PAGE_RANGE_END = "end";
 
     public static final String KEY_ANNOTATION_LIST = "annotList";
     public static final String KEY_ANNOTATION_ID = "id";
