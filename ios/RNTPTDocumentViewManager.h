@@ -108,13 +108,19 @@
 
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
-- (bool)hasSelectionForDocumentViewTag:(NSNumber *)tag;
+- (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;
 
 - (void)clearSelectionForDocumentViewTag:(NSNumber *)tag;
 
 - (NSDictionary *)getSelectionPageRangeForDocumentViewTag:(NSNumber *)tag;
 
 - (bool)hasSelectionOnPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
+
+- (BOOL)selectInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (BOOL)isThereTextInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)selectAllForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 

@@ -818,6 +818,50 @@ RCT_REMAP_METHOD(hasSelectionOnPage,
     }
 }
 
+RCT_REMAP_METHOD(selectInRect,
+                 selectInRectForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL selected = [[self documentViewManager] selectInRectForDocumentViewTag:tag rect:rect];
+        resolve([NSNumber numberWithBool:selected]);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_in_rect", @"Failed to select in rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(isThereTextInRect,
+                 isThereTextInRectForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL hasText = [[self documentViewManager] isThereTextInRectForDocumentViewTag:tag rect:rect];
+        resolve([NSNumber numberWithBool:hasText]);
+    }
+    @catch (NSException *exception) {
+        reject(@"is_there_text_in_rect", @"Failed to get whether there is text in rect", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(selectAll,
+                 selectAllForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] selectAllForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"select_all", @"Failed to select all", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,

@@ -1165,7 +1165,7 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
-- (bool)hasSelectionForDocumentViewTag:(NSNumber *)tag
+- (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
@@ -1197,12 +1197,44 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
-- (bool)hasSelectionOnPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
+- (BOOL)hasSelectionOnPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         bool hasSelection = [documentView hasSelectionOnPage:pageNumber];
         return hasSelection;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)selectInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        BOOL selected = [documentView selectInRect:rect];
+        return selected;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (BOOL)isThereTextInRectForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        BOOL hasText = [documentView isThereTextInRect:rect];
+        return hasText;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)selectAllForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView selectAll];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

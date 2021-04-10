@@ -483,13 +483,19 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
-- (bool)hasSelection;
+- (BOOL)hasSelection;
 
 - (void)clearSelection;
 
 - (NSDictionary *)getSelectionPageRange;
 
 - (bool)hasSelectionOnPage:(NSInteger)pageNumber;
+
+- (BOOL)selectInRect:(NSDictionary *)rect;
+
+- (BOOL)isThereTextInRect:(NSDictionary *)rect;
+
+- (void)selectAll;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
