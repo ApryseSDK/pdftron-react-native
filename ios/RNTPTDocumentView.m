@@ -2142,8 +2142,16 @@ NS_ASSUME_NONNULL_END
         UIColor *whiteUIColor = [self convertRGBAToUIColor:whiteColor];
         NSAssert(whiteUIColor, @"white color is not valid for setting post process colors");
         
+        if (!whiteUIColor) {
+            return;
+        }
+        
         UIColor *blackUIColor = [self convertRGBAToUIColor:blackColor];
-        NSAssert(blackUIColor, @"white color is not valid for setting post process colors");
+        NSAssert(blackUIColor, @"black color is not valid for setting post process colors");
+        
+        if (!blackUIColor) {
+            return;
+        }
         
         [pdfViewCtrl SetColorPostProcessColors:whiteUIColor black_color:blackUIColor];
     }
