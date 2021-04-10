@@ -2251,3 +2251,132 @@ this._viewer.getSelection(2).then((selection) => {
   }
 });
 ```
+
+#### hasSelection
+Returns whether there is a text selection in the current document.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+hasSelection | bool | whether a text selection exists
+
+```js
+this._viewer.hasSelection().then((hasSelection) => {
+  console.log('There is a selection in the document.');
+});
+```
+
+#### clearSelection
+Clears any text selection in the current document.
+
+Returns a Promise.
+
+```js
+this._viewer.clearSelection();
+```
+
+#### getPageSelectionRange
+Returns the page range (beginning and end) that has text selection on it.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+begin | number | the first page to have selection, -1 if there are no selections
+end | number | the last page to have selection,  -1 if there are no selections
+
+```js
+this._viewer.getPageSelectionRange().then(({begin, end}) => {
+  if (begin === -1) {
+    console.log('There is no selection');
+  } else {
+    console.log('The selection range is from', begin, 'to', end);
+  }
+});
+```
+
+#### hasSelectionOnPage
+Returns whether there is a text selection on the specified page in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the specified page number. It is 1-indexed
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+hasSelection | bool | whether a text selection exists on the specified page
+
+```js
+this._viewer.hasSelectionOnPage(5).then((hasSelection) => {
+  if (hasSelection) {
+    console.log('There is a selection on page 5 in the document.');
+  }
+});
+```
+
+#### selectInRect
+Selects the text within the given rectangle region.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | object | the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+selected | bool | whether there is text selected
+
+```js
+this._viewer.selectInRect({x1: 0, y1: 0, x2: 200.5, y2: 200.5}).then((selected) => {
+        console.log(selected);
+});
+```
+
+#### isThereTextInRect
+Returns whether there is text in given rectangle region.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | object | the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+hasText | bool | whether there is text in the region
+
+```js
+this._viewer.isThereTextInRect({x1: 0, y1: 0, x2: 200, y2: 200}).then((hasText) => {
+        console.log(hasText);
+});
+```
+
+#### selectAll
+Selects all text on the page.
+
+Returns a Promise.
+
+```js
+this._viewer.selectAll();
+});
+```

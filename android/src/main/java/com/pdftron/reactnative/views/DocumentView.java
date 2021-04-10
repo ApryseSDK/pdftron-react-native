@@ -3350,6 +3350,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
+    public boolean hasSelection() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl != null && pdfViewCtrl.hasSelection();
+    }
+
+    public void clearSelection() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.clearSelection();
+        }
+    }
+
+    public WritableMap getSelectionPageRange() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            WritableMap selection = Arguments.createMap();
+            int start = pdfViewCtrl.getSelectionBeginPage();
+
+            int end = pdfViewCtrl.getSelectionEndPage();
+
+            selection.putInt(KEY_TEXT_SELECTION_PAGE_RANGE_BEGIN, pdfViewCtrl.getSelectionBeginPage());
+            selection.putInt(KEY_TEXT_SELECTION_PAGE_RANGE_END, pdfViewCtrl.getSelectionEndPage());
+            return selection;
+        }
+
+        return null;
+    }
+
+    public boolean hasSelectionOnPage(int pageNumber) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return pdfViewCtrl != null && pdfViewCtrl.hasSelectionOnPage(pageNumber);
+    }
+
     private WritableMap getMapFromSelection(PDFViewCtrl.Selection selection) {
         WritableMap selectionMap = Arguments.createMap();
         selectionMap.putInt(KEY_TEXT_SELECTION_PAGE_NUMBER, selection.getPageNum());
@@ -3372,6 +3406,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         selectionMap.putArray(KEY_TEXT_SELECTION_QUADS, quads);
 
         return selectionMap;
+    }
+
+    public boolean selectInRect(ReadableMap rect) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null && rect != null && rect.hasKey(KEY_X1) && rect.hasKey(KEY_Y1) &&
+                rect.hasKey(KEY_X2) && rect.hasKey(KEY_Y2)) {
+            double rectX1 = rect.getDouble(KEY_X1);
+            double rectY1 = rect.getDouble(KEY_Y1);
+            double rectX2 = rect.getDouble(KEY_X2);
+            double rectY2 = rect.getDouble(KEY_Y2);
+            return pdfViewCtrl.select(rectX1, rectY1, rectX2, rectY2);
+        }
+        return false;
+    }
+
+    public boolean isThereTextInRect(ReadableMap rect) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null && rect != null && rect.hasKey(KEY_X1) && rect.hasKey(KEY_Y1) &&
+                rect.hasKey(KEY_X2) && rect.hasKey(KEY_Y2)) {
+            double rectX1 = rect.getDouble(KEY_X1);
+            double rectY1 = rect.getDouble(KEY_Y1);
+            double rectX2 = rect.getDouble(KEY_X2);
+            double rectY2 = rect.getDouble(KEY_Y2);
+            return pdfViewCtrl.isThereTextInRect(rectX1, rectY1, rectX2, rectY2);
+        }
+        return false;
+    }
+
+    public void selectAll() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            pdfViewCtrl.selectAll();
+        }
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
