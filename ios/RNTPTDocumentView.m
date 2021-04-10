@@ -1963,10 +1963,16 @@ NS_ASSUME_NONNULL_END
 {
     if (defaultPageColor) {
         NSArray *keyList = defaultPageColor.allKeys;
-        NSAssert([keyList containsObject:PTColorRedKey] &&
-                 [keyList containsObject:PTColorGreenKey] &&
-                 [keyList containsObject:PTColorBlueKey],
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
                  @"default page color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
          
         PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
             
@@ -1981,10 +1987,16 @@ NS_ASSUME_NONNULL_END
 {
     if (backgroundColor) {
         NSArray *keyList = backgroundColor.allKeys;
-        NSAssert([keyList containsObject:PTColorRedKey] &&
-                 [keyList containsObject:PTColorGreenKey] &&
-                 [keyList containsObject:PTColorBlueKey],
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
                  @"background color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
             
         PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
             
