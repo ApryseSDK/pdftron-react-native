@@ -785,6 +785,65 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
+    public void hasSelection(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean hasSelection = mDocumentViewInstance.hasSelection(tag);
+                    promise.resolve(hasSelection);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void clearSelection(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.clearSelection(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getSelectionPageRange(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap pageRange = mDocumentViewInstance.getSelectionPageRange(tag);
+                    promise.resolve(pageRange);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void hasSelectionOnPage(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean hasSelection = mDocumentViewInstance.hasSelectionOnPage(tag, pageNumber);
+                    promise.resolve(hasSelection);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
