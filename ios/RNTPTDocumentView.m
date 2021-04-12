@@ -105,10 +105,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)didMoveToWindow
 {
-    if (@available(iOS 13.0, *)) {
-        self.window.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
-    }
-    
     if (self.window) {
         if ([self.delegate respondsToSelector:@selector(documentViewAttachedToWindow:)]) {
             [self.delegate documentViewAttachedToWindow:self];
@@ -265,6 +261,11 @@ NS_ASSUME_NONNULL_END
     [navigationController didMoveToParentViewController:parentController];
     
     navigationController.navigationBarHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
+    
+    // Follow System Dark Mode
+    if (@available(iOS 13.0, *)) {
+        navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
     
     [self openDocument];
 }
@@ -2046,7 +2047,7 @@ NS_ASSUME_NONNULL_END
     _followSystemDarkMode = followSystemDarkMode;
     
     if (@available(iOS 13.0, *)) {
-        self.window.overrideUserInterfaceStyle = followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
     }
 }
 
