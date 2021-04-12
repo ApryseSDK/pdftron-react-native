@@ -1166,7 +1166,7 @@ Defines whether a stylus should act as a pen when in pan mode. If false, it will
 ```
 
 #### followSystemDarkMode
-bool, optional, Android only, defaults to true
+bool, optional, Android and iOS 13+ only, defaults to true
 
 Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
 

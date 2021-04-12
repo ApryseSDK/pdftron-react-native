@@ -358,6 +358,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isLongPressMenuEnabled) BOOL longPressMenuEnabled;
 
+@property (nonatomic, assign) BOOL followSystemDarkMode;
+
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;

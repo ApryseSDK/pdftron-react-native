@@ -69,6 +69,8 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    
+    _followSystemDarkMode = YES;
 
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
@@ -103,6 +105,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)didMoveToWindow
 {
+    if (@available(iOS 13.0, *)) {
+        self.window.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
+    
     if (self.window) {
         if ([self.delegate respondsToSelector:@selector(documentViewAttachedToWindow:)]) {
             [self.delegate documentViewAttachedToWindow:self];
@@ -2031,6 +2037,17 @@ NS_ASSUME_NONNULL_END
     _showSavedSignatures = showSavedSignatures;
     
     [self applyViewerSettings];
+}
+
+# pragma mark - Dark Mode
+
+- (void)setFollowSystemDarkMode:(BOOL)followSystemDarkMode
+{
+    _followSystemDarkMode = followSystemDarkMode;
+    
+    if (@available(iOS 13.0, *)) {
+        self.window.overrideUserInterfaceStyle = followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
 }
 
 #pragma mark - Stylus
