@@ -1651,6 +1651,11 @@ NS_ASSUME_NONNULL_END
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+    
+    // Follow system dark mode.
+    if (@available(iOS 13.0, *)) {
+        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
 
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
@@ -2045,10 +2050,8 @@ NS_ASSUME_NONNULL_END
 - (void)setFollowSystemDarkMode:(BOOL)followSystemDarkMode
 {
     _followSystemDarkMode = followSystemDarkMode;
-    
-    if (@available(iOS 13.0, *)) {
-        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
-    }
+
+    [self applyViewerSettings];
 }
 
 #pragma mark - Stylus
