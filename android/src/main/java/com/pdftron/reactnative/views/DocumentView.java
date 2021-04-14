@@ -133,6 +133,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mReadOnly;
 
+    private boolean mFragmentTransactionFinished;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -1582,6 +1584,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         super.onAttachedToWindow();
 
+        mFragmentTransactionFinished = true;
+
         // since we are using this component as an individual component,
         // we don't want to fit system window, unless user specifies
         if (!mPadStatusBar) {
@@ -1667,7 +1671,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     public boolean canRecreateActivity() {
-        return false;
+        return !mFragmentTransactionFinished;
     }
 
     private boolean hasAnnotationsSelected() {
@@ -1677,7 +1681,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private WritableArray getAnnotationsData(boolean overrideAction) {
         // overrideAction is for onBehaviorActivated
         WritableArray annots = Arguments.createArray();
-
 
         boolean shouldUnlockRead = false;
         try {
