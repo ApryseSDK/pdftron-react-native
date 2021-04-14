@@ -69,6 +69,8 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    
+    _followSystemDarkMode = YES;
 
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
@@ -259,6 +261,11 @@ NS_ASSUME_NONNULL_END
     [navigationController didMoveToParentViewController:parentController];
     
     navigationController.navigationBarHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
+    
+    // Follow System Dark Mode
+    if (@available(iOS 13.0, *)) {
+        navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
     
     [self openDocument];
 }
@@ -1644,6 +1651,11 @@ NS_ASSUME_NONNULL_END
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+    
+    // Follow system dark mode.
+    if (@available(iOS 13.0, *)) {
+        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
 
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
@@ -2030,6 +2042,15 @@ NS_ASSUME_NONNULL_END
 {
     _showSavedSignatures = showSavedSignatures;
     
+    [self applyViewerSettings];
+}
+
+# pragma mark - Dark Mode
+
+- (void)setFollowSystemDarkMode:(BOOL)followSystemDarkMode
+{
+    _followSystemDarkMode = followSystemDarkMode;
+
     [self applyViewerSettings];
 }
 
@@ -3590,6 +3611,77 @@ NS_ASSUME_NONNULL_END
     
     [selectionMap setValue:[quads copy] forKey:PTTextSelectionQuadsKey];
     return selectionMap;
+}
+
+- (BOOL)hasSelection
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelection];
+}
+
+- (void)clearSelection
+{
+    [self.currentDocumentViewController.pdfViewCtrl ClearSelection];
+}
+
+- (NSDictionary *)getSelectionPageRange
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        return @{PTTextSelectionPageRangeBeginKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionBeginPage]],
+                 PTTextSelectionPageRangeEndKey: [NSNumber numberWithInt:(int)[pdfViewCtrl GetSelectionEndPage]]
+        };
+    }
+    
+    return nil;
+}
+
+- (bool)hasSelectionOnPage:(NSInteger)pageNumber
+{
+    return [self.currentDocumentViewController.pdfViewCtrl HasSelectionOnPage:(int)pageNumber];
+}
+
+- (BOOL)selectInRect:(NSDictionary *)rect
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl && rect) {
+        NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+        NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+        NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+        NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+        if (rectX1 && rectY1 && rectX2 && rectY2) {
+            return [pdfViewCtrl SelectX1:[rectX1 doubleValue] Y1:[rectY1 doubleValue] X2:[rectX2 doubleValue] Y2:[rectY2 doubleValue]];
+        }
+    }
+    
+    return NO;
+}
+
+- (BOOL)isThereTextInRect:(NSDictionary *)rect
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl && rect) {
+        NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+        NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+        NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+        NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+        if (rectX1 && rectY1 && rectX2 && rectY2) {
+            return [pdfViewCtrl IsThereTextInRect:[rectX1 doubleValue] y1:[rectY1 doubleValue] x2:[rectX2 doubleValue] y2:[rectY2 doubleValue]];
+        }
+    }
+    
+    return NO;
+}
+
+- (void)selectAll
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SelectAll];
+    }
 }
 
 #pragma mark - Helper

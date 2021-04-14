@@ -226,6 +226,9 @@ static NSString * const PTTextSelectionQuadsKey = @"quads";
 static NSString * const PTTextSelectionQuadPointXKey = @"x";
 static NSString * const PTTextSelectionQuadPointYKey = @"y";
 
+static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
+static NSString * const PTTextSelectionPageRangeEndKey = @"end";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -355,6 +358,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isLongPressMenuEnabled) BOOL longPressMenuEnabled;
 
+@property (nonatomic, assign) BOOL followSystemDarkMode;
+
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
@@ -479,6 +484,20 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)cancelFindText;
 
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
+
+- (BOOL)hasSelection;
+
+- (void)clearSelection;
+
+- (NSDictionary *)getSelectionPageRange;
+
+- (bool)hasSelectionOnPage:(NSInteger)pageNumber;
+
+- (BOOL)selectInRect:(NSDictionary *)rect;
+
+- (BOOL)isThereTextInRect:(NSDictionary *)rect;
+
+- (void)selectAll;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
