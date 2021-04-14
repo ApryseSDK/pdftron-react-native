@@ -451,7 +451,7 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 ```
 
 #### bottomToolbar
-array of strings, optional, iOS only
+array of strings, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
 
