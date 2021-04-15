@@ -451,7 +451,7 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 ```
 
 #### bottomToolbar
-array of strings, optional, iOS only
+array of strings, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
 
@@ -1166,13 +1166,13 @@ Defines whether a stylus should act as a pen when in pan mode. If false, it will
 ```
 
 #### followSystemDarkMode
-bool, optional, Android only, defaults to true
+bool, optional, Android and iOS 13+ only, defaults to true
 
 Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
 
 ```js
 <DocumentView
-  signSignatureFieldsWithStamps={false}
+  followSystemDarkMode={false}
 />
 ```
 
@@ -1246,6 +1246,37 @@ filePath | string | the location of the saved document, or the base64 string of 
 this._viewer.saveDocument().then((filePath) => {
   console.log('saveDocument:', filePath);
 });
+```
+
+### UI Customization
+
+#### setColorPostProcessMode
+Sets the color post processing transformation mode for the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+colorPostProcessMode | string | color post processing transformation mode, should be a [Config.ColorPostProcessMode](./src/Config/Config.js) constant
+
+```js
+this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
+```
+
+#### setColorPostProcessColors
+Sets the white and black color for the color post processing transformation.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+whiteColor | object | the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (only Android would apply alpha), and all numbers should be in range [0, 255]
+blackColor | object | the black color for the color post processing transformation, in the same format as whiteColor
+
+```js
+const whiteColor = {"red": 0, "green": 0, "blue": 255};
+const blackColor = {"red": 255, "green": 0, "blue": 0};
+this._viewer.setColorPostProcessColors(whiteColor, blackColor);
 ```
 
 ### Annotation Tools
@@ -1494,7 +1525,7 @@ initialLoad | bool | whether this is for initial load. Will be false by default
 Returns a Promise.
 
 ```js
-const xfdfCommand = 'xfdfCommand <?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
+const xfdfCommand = '<?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
 this._viewer.importAnnotationCommand(xfdf);
 
 ```

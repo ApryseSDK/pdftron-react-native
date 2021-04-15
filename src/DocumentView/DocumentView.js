@@ -633,6 +633,22 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setColorPostProcessMode = (colorPostProcessMode) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
+    }
+    return Promise.resolve();
+  }
+
+  setColorPostProcessColors = (whiteColor, blackColor) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
+    }
+    return Promise.resolve();
+  }    
+
   findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

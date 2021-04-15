@@ -226,5 +226,13 @@ export default {
     On: "on",
     Off: "off",
     OnlyPDFX: "pdfx", // only apply to PDF/X files
+  },
+
+  // ColorPostProcessMode defines color modifications after rendering in the viewer
+  ColorPostProcessMode: {
+    None: "none",
+    Invert: "invert",
+    GradientMap: "gradientMap",
+    NightMode: "nightMode"
   }
 };

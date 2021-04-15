@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,6 +67,7 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
@@ -132,6 +134,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ReadableArray mActionOverrideItems;
 
     private boolean mReadOnly;
+
+    private boolean mFragmentTransactionFinished;
 
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
@@ -288,6 +292,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setBottomToolbarEnabled(boolean bottomToolbarEnabled) {
         mBuilder = mBuilder.showBottomToolbar(bottomToolbarEnabled);
+    }
+
+    public void bottomToolbar(ReadableArray bottomToolbarItems) {
+        BottomBarBuilder customBottomBar = BottomBarBuilder.withTag("CustomBottomBar");
+
+        for (int i = 0; i < bottomToolbarItems.size(); i++) {
+            String item = bottomToolbarItems.getString(i);
+
+            if (BUTTON_THUMBNAILS.equals(item)) {
+                customBottomBar.addCustomButton(R.string.pref_viewmode_thumbnails, R.drawable.ic_thumbnails_grid_black_24dp, R.id.action_thumbnails);
+            } else if (BUTTON_LISTS.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_outline, R.drawable.ic_outline_white_24dp, R.id.action_outline);
+            } else if (BUTTON_SHARE.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_file_share, R.drawable.ic_share_black_24dp, R.id.action_share);
+            } else if (BUTTON_VIEW_CONTROLS.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_view_mode, R.drawable.ic_viewing_mode_white_24dp, R.id.action_viewmode);
+            } else if (BUTTON_SEARCH.equals(item)) {
+                customBottomBar.addCustomButton(R.string.action_search, R.drawable.ic_search_white_24dp, R.id.action_search);
+            } else if (BUTTON_REFLOW.equals(item)) {
+                customBottomBar.addCustomButton(R.string.pref_viewmode_reflow, R.drawable.ic_view_mode_reflow_black_24dp, R.id.action_reflow_mode);
+            }
+        }
+
+        mBuilder.bottomBarBuilder(customBottomBar);
     }
 
     public void setDocumentSliderEnabled(boolean documentSliderEnabled) {
@@ -1582,6 +1610,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         super.onAttachedToWindow();
 
+        mFragmentTransactionFinished = true;
+
         // since we are using this component as an individual component,
         // we don't want to fit system window, unless user specifies
         if (!mPadStatusBar) {
@@ -1667,7 +1697,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     public boolean canRecreateActivity() {
-        return false;
+        return !mFragmentTransactionFinished;
     }
 
     private boolean hasAnnotationsSelected() {
@@ -1677,7 +1707,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private WritableArray getAnnotationsData(boolean overrideAction) {
         // overrideAction is for onBehaviorActivated
         WritableArray annots = Arguments.createArray();
-
 
         boolean shouldUnlockRead = false;
         try {
@@ -2226,8 +2255,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // helper
     @Nullable
     private String generateXfdfCommand(@Nullable ArrayList<Annot> added,
-            @Nullable ArrayList<Annot> modified,
-            @Nullable ArrayList<Annot> removed) throws PDFNetException {
+                                       @Nullable ArrayList<Annot> modified,
+                                       @Nullable ArrayList<Annot> removed) throws PDFNetException {
         PDFDoc pdfDoc = getPdfDoc();
         if (pdfDoc != null) {
             FDFDoc fdfDoc = pdfDoc.fdfExtract(added, modified, removed);
@@ -3298,6 +3327,69 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             int blue = backgroundColor.getInt(COLOR_BLUE);
             getPdfViewCtrl().setClientBackgroundColor(red, green, blue, false);
         }
+    }
+
+    public void setColorPostProcessMode(String colorPostProcessMode) throws PDFNetException {
+        int colorPostProcessModeValue = -1;
+        switch (colorPostProcessMode) {
+            case KEY_COLOR_POST_PROCESS_MODE_NONE:
+                colorPostProcessModeValue = 0;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_INVERT:
+                colorPostProcessModeValue = 1;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP:
+                colorPostProcessModeValue = 2;
+                break;
+            case KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE:
+                colorPostProcessModeValue = 3;
+                break;
+        }
+
+        if (colorPostProcessModeValue != -1 && getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setColorPostProcessMode(colorPostProcessModeValue);
+        }
+    }
+
+    public void setColorPostProcessColors(ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+
+            // convert white map to int (rgba)
+            int whiteColorNumber = convertRGBAToHex(whiteColor);
+            if (whiteColorNumber == -1) {
+                return;
+            }
+            int blackColorNumber = convertRGBAToHex(blackColor);
+            if (blackColorNumber == -1) {
+                return;
+            }
+
+            pdfViewCtrl.setColorPostProcessColors(whiteColorNumber, blackColorNumber);
+        }
+    }
+
+    private int convertRGBAToHex(ReadableMap color) {
+        String[] colorKeys = {COLOR_ALPHA, COLOR_RED, COLOR_GREEN, COLOR_BLUE};
+        int colorNumber = 0;
+        for (String colorKey : colorKeys) {
+            colorNumber <<= 8;
+            if (!color.hasKey(colorKey)) {
+                // not alpha
+                if (!colorKey.equals(COLOR_ALPHA)) {
+                    return -1;
+                }
+                // if alpha is not provided
+                colorNumber += 255;
+                continue;
+            }
+            int currentColorValue = color.getInt(colorKey);
+            if (currentColorValue > 255 || currentColorValue < 0) {
+                return -1;
+            }
+            colorNumber += currentColorValue;
+        }
+        return colorNumber;
     }
 
     public void findText(String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) {

@@ -109,6 +109,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setBottomToolbarEnabled(bottomToolbarEnabled);
     }
 
+    @ReactProp(name = "bottomToolbar")
+    public void bottomToolbar(DocumentView documentView, @NonNull ReadableArray bottomToolbarItems) {
+        documentView.bottomToolbar(bottomToolbarItems);
+    }
+
     @ReactProp(name = "hideToolbarsOnTap")
     public void setHideToolbarsOnTap(DocumentView documentView, boolean hideToolbarsOnTap) {
         documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
@@ -805,6 +810,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setBackgroundColor(backgroundColor);
         } else {
             throw new PDFNetException("", 0L, getName(), "setBackgroundColor", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessMode(int tag, String colorPostProcessMode) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessMode(colorPostProcessMode);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessColors(int tag, ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessColors(whiteColor, blackColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessColors", "Unable to find DocumentView.");
         }
     }
 
