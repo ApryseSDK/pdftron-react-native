@@ -305,11 +305,6 @@ public final class Constants {
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";
 
-    // Color RGB
-    public static final String COLOR_RED = "red";
-    public static final String COLOR_GREEN = "green";
-    public static final String COLOR_BLUE = "blue";
-
     // Color RGBA
     public static final String COLOR_RED = "red";
     public static final String COLOR_GREEN = "green";
