@@ -69,6 +69,8 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    
+    _followSystemDarkMode = YES;
 
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
@@ -259,6 +261,11 @@ NS_ASSUME_NONNULL_END
     [navigationController didMoveToParentViewController:parentController];
     
     navigationController.navigationBarHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
+    
+    // Follow System Dark Mode
+    if (@available(iOS 13.0, *)) {
+        navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
     
     [self openDocument];
 }
@@ -1643,6 +1650,11 @@ NS_ASSUME_NONNULL_END
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
+    
+    // Follow system dark mode.
+    if (@available(iOS 13.0, *)) {
+        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+    }
 
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
@@ -2029,6 +2041,15 @@ NS_ASSUME_NONNULL_END
 {
     _showSavedSignatures = showSavedSignatures;
     
+    [self applyViewerSettings];
+}
+
+# pragma mark - Dark Mode
+
+- (void)setFollowSystemDarkMode:(BOOL)followSystemDarkMode
+{
+    _followSystemDarkMode = followSystemDarkMode;
+
     [self applyViewerSettings];
 }
 
