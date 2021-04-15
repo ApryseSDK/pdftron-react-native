@@ -178,40 +178,17 @@ NS_ASSUME_NONNULL_END
 - (void)loadViewController
 {
     if (!self.documentViewController && !self.tabbedDocumentViewController) {
-        if ([self isCollabEnabled]) {
-            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self];
-            collaborationViewController.delegate = self;
-            
-            self.viewController = collaborationViewController;
-            self.documentViewController = collaborationViewController;
-        } else {
-            if ([self isMultiTabEnabled]) {
-                PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
-                tabbedDocumentViewController.maximumTabCount = self.maxTabCount;
-                tabbedDocumentViewController.delegate = self;
-                
-                // Use the RNTPTDocumentController class inside the tabbed viewer.
-                tabbedDocumentViewController.viewControllerClass = [RNTPTDocumentController class];
-                
-                self.viewController = tabbedDocumentViewController;
-                self.tabbedDocumentViewController = tabbedDocumentViewController;
-            } else {
-                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController alloc] init];
-                documentViewController.delegate = self;
-                
-                self.viewController = documentViewController;
-                self.documentViewController = documentViewController;
-            }
-        }
         
-        if (self.documentViewController) {
-            [self applyViewerSettings:self.documentViewController];
-            
-            [self registerForDocumentViewControllerNotifications:self.documentViewController];
-            [self registerForPDFViewCtrlNotifications:self.documentViewController];
-        } else {
-            // Using tabbed viewer.
-        }
+        PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
+        tabbedDocumentViewController.maximumTabCount = self.maxTabCount;
+        tabbedDocumentViewController.tabsEnabled = self.multiTabEnabled;
+        tabbedDocumentViewController.delegate = self;
+        
+        // Use the RNTPTCollaborationDocumentController or RNTPTDocumentController class inside the tabbed viewer.
+        tabbedDocumentViewController.viewControllerClass = self.collabEnabled ? [RNTPTCollaborationDocumentController class] : [RNTPTDocumentController class];
+        
+        self.viewController = tabbedDocumentViewController;
+        self.tabbedDocumentViewController = tabbedDocumentViewController;
     }
     
     // Check if document view controller has already been added to a navigation controller.
