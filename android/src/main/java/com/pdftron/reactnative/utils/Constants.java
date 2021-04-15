@@ -306,6 +306,12 @@ public final class Constants {
     public static final String KEY_TOOL = "tool";
     // EVENTS END
 
+    // Color RGBA
+    public static final String COLOR_RED = "red";
+    public static final String COLOR_GREEN = "green";
+    public static final String COLOR_BLUE = "blue";
+    public static final String COLOR_ALPHA = "alpha";
+
     // Config keys
     public static final String KEY_CONFIG_LINK_PRESS = "linkPress";
     public static final String KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP = "stickyNoteShowPopUp";
@@ -323,4 +329,10 @@ public final class Constants {
     public static final String KEY_OVERPRINT_MODE_ON = "on";
     public static final String KEY_OVERPRINT_MODE_OFF = "off";
     public static final String KEY_OVERPRINT_MODE_PDFX = "pdfx";
+
+    // Color Post Process Modes
+    public static final String KEY_COLOR_POST_PROCESS_MODE_NONE = "none";
+    public static final String KEY_COLOR_POST_PROCESS_MODE_INVERT = "invert";
+    public static final String KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP = "gradientMap";
+    public static final String KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE = "nightMode";
 }

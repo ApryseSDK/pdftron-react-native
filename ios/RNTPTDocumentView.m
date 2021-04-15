@@ -1561,7 +1561,6 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
-
 #pragma mark -
 
 - (void)applyViewerSettings
@@ -2136,6 +2135,75 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
     [pdfViewCtrl SmartZoomX:(double)x y:(double)y animated:animated];
+}
+
+# pragma mark - Color Post Process
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode
+{
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        
+        if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeInvertKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_invert];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeGradientMapKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_gradient_map];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNightModeKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
+        }
+    }
+}
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
+{
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        
+        UIColor *whiteUIColor = [self convertRGBAToUIColor:whiteColor];
+        NSAssert(whiteUIColor, @"white color is not valid for setting post process colors");
+        
+        if (!whiteUIColor) {
+            return;
+        }
+        
+        UIColor *blackUIColor = [self convertRGBAToUIColor:blackColor];
+        NSAssert(blackUIColor, @"black color is not valid for setting post process colors");
+        
+        if (!blackUIColor) {
+            return;
+        }
+        
+        [pdfViewCtrl SetColorPostProcessColors:whiteUIColor black_color:blackUIColor];
+    }
+}
+
+- (UIColor *)convertRGBAToUIColor:(NSDictionary *)colorMap
+{
+    NSString *requiredColorKeys[4] = {PTColorRedKey, PTColorGreenKey, PTColorBlueKey, PTColorAlphaKey};
+    double colorValues[4];
+    NSArray *colorKeys = [colorMap allKeys];
+    
+    for (int i = 0; i < 4; i ++) {
+        if (![colorKeys containsObject:requiredColorKeys[i]]) {
+            // not alpha
+            if (![requiredColorKeys[i] isEqualToString:PTColorAlphaKey]) {
+                return nil;
+            }
+            // alpha
+            colorValues[i] = (double)1;
+            continue;
+        }
+        
+        double value = (double)[colorMap[requiredColorKeys[i]] intValue] / 255;
+        if (value < 0 || value > 1) {
+            return nil;
+        }
+        
+        colorValues[i] = value;
+    }
+    
+    return [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
 }
 
 #pragma mark - Convenience

@@ -714,6 +714,37 @@ RCT_REMAP_METHOD(setOverprint,
     }
 }
 
+RCT_REMAP_METHOD(setColorPostProcessMode,
+                 setColorPostProcessModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 colorPostProcessMode:(NSString *)colorPostProcessMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setColorPostProcessModeForDocumentViewTag:tag colorPostProcessMode:colorPostProcessMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_color_post_process_mode", @"Failed to set color post-process mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setColorPostProcessColors,
+                 setColorPostProcessColorsForDocumentViewTag: (nonnull NSNumber *)tag
+                 whiteColor:(NSDictionary *)whiteColor
+                 blackColor:(NSDictionary *)blackColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setColorPostProcessColorsForDocumentViewTag:tag whiteColor:whiteColor blackColor:blackColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_color_post_process_colors", @"Failed to set color post-process colors", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(findText,
                  findTextForDocumentViewTag: (nonnull NSNumber *)tag
                  searchString:(NSString *)searchString
