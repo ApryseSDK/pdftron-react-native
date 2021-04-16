@@ -227,6 +227,7 @@ public final class Constants {
     public static final String THUMBNAIL_FILTER_MODE_BOOKMARKED = "bookmarked";
 
     public static final String VIEW_MODE_CROP = "viewModeCrop";
+    public static final String VIEW_MODE_ROTATION = "viewModeRotation";
 
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
