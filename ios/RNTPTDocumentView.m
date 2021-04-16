@@ -1561,8 +1561,7 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
-
-#pragma mark -
+#pragma mark - viewer settings
 
 - (void)applyViewerSettings
 {
@@ -1953,6 +1952,71 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setUrlExtraction:(BOOL)urlExtraction
+{
+    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
+}
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
+    [pdfViewCtrl Update:YES];
+}
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
+    [pdfViewCtrl Update:YES];
+}
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
+{
+    if (defaultPageColor) {
+        NSArray *keyList = defaultPageColor.allKeys;
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
+                 @"default page color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
+         
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+        [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+            
+        [pdfViewCtrl Update:YES];
+    }
+}
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor
+{
+    if (backgroundColor) {
+        NSArray *keyList = backgroundColor.allKeys;
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
+                 @"background color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
+            
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+        [pdfViewCtrl
+         SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue] a:255];
+    }
+}
+
 #pragma mark - Custom headers
 
 - (void)setCustomHeaders:(NSDictionary<NSString *, NSString *> *)customHeaders
@@ -2136,6 +2200,75 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     
     [pdfViewCtrl SmartZoomX:(double)x y:(double)y animated:animated];
+}
+
+# pragma mark - Color Post Process
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode
+{
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        
+        if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeInvertKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_invert];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeGradientMapKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_gradient_map];
+        } else if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNightModeKey]) {
+            [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
+        }
+    }
+}
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
+{
+    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    if (pdfViewCtrl) {
+        
+        UIColor *whiteUIColor = [self convertRGBAToUIColor:whiteColor];
+        NSAssert(whiteUIColor, @"white color is not valid for setting post process colors");
+        
+        if (!whiteUIColor) {
+            return;
+        }
+        
+        UIColor *blackUIColor = [self convertRGBAToUIColor:blackColor];
+        NSAssert(blackUIColor, @"black color is not valid for setting post process colors");
+        
+        if (!blackUIColor) {
+            return;
+        }
+        
+        [pdfViewCtrl SetColorPostProcessColors:whiteUIColor black_color:blackUIColor];
+    }
+}
+
+- (UIColor *)convertRGBAToUIColor:(NSDictionary *)colorMap
+{
+    NSString *requiredColorKeys[4] = {PTColorRedKey, PTColorGreenKey, PTColorBlueKey, PTColorAlphaKey};
+    double colorValues[4];
+    NSArray *colorKeys = [colorMap allKeys];
+    
+    for (int i = 0; i < 4; i ++) {
+        if (![colorKeys containsObject:requiredColorKeys[i]]) {
+            // not alpha
+            if (![requiredColorKeys[i] isEqualToString:PTColorAlphaKey]) {
+                return nil;
+            }
+            // alpha
+            colorValues[i] = (double)1;
+            continue;
+        }
+        
+        double value = (double)[colorMap[requiredColorKeys[i]] intValue] / 255;
+        if (value < 0 || value > 1) {
+            return nil;
+        }
+        
+        colorValues[i] = value;
+    }
+    
+    return [UIColor colorWithRed:colorValues[0] green:colorValues[1] blue:colorValues[2] alpha:colorValues[3]];
 }
 
 #pragma mark - Convenience
@@ -2338,7 +2471,7 @@ NS_ASSUME_NONNULL_END
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
-    
+        
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -3289,7 +3422,7 @@ NS_ASSUME_NONNULL_END
     return [annotations copy];
 }
 
-#pragma mark - Get Crop Box
+#pragma mark - Page
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber
 {
@@ -3319,11 +3452,14 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
-#pragma mark - Set Page
-
 - (bool)setCurrentPage:(NSInteger)pageNumber {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
+- (NSArray *)getVisiblePages {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GetVisiblePages];
 }
 
 - (bool)gotoPreviousPage {

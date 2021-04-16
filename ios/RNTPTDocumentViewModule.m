@@ -400,6 +400,20 @@ RCT_REMAP_METHOD(setCurrentPage,
     }
 }
 
+RCT_REMAP_METHOD(getVisiblePages,
+                 getVisiblePagesforDocumentViewTag: (nonnull NSNumber *) tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *pages = [[self documentViewManager] getVisiblePagesForDocumentViewTag:tag];
+        resolve(pages);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_visible_pages", @"Failed to get visible pages", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(gotoPreviousPage,
                  gotoPreviousPageforDocumentViewTag: (nonnull NSNumber *) tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -711,6 +725,112 @@ RCT_REMAP_METHOD(setOverprint,
     }
     @catch (NSException *exception) {
         reject(@"set_overprint", @"Failed to set overprint", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setUrlExtraction,
+                 setUrlExtractionForDocumentViewTag: (nonnull NSNumber *) tag
+                 urlExtraction:(BOOL)urlExtraction
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setUrlExtractionForDocumentViewTag:tag urlExtraction:urlExtraction];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_url_extraction", @"Failed to set url extraction", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setPageBorderVisibility,
+                 setPageBorderVisibilityForDocumentViewTag: (nonnull NSNumber *) tag
+                 pageBorderVisibility:(BOOL)pageBorderVisibility
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPageBorderVisibilityForDocumentViewTag:tag pageBorderVisibility:pageBorderVisibility];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_page_border_visibility", @"Failed to set page border visibility", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setPageTransparencyGrid,
+                 setPageTransparencyGridForDocumentViewTag: (nonnull NSNumber *) tag
+                 pageTransparencyGrid:(BOOL)pageTransparencyGrid
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setPageTransparencyGridForDocumentViewTag:tag pageTransparencyGrid:pageTransparencyGrid];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_page_transparency_grid", @"Failed to set page transparency grid", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setDefaultPageColor,
+                 setDefaultPageColorForDocumentViewTag: (nonnull NSNumber *) tag
+                 defaultPageColor:(NSDictionary *)defaultPageColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDefaultPageColorForDocumentViewTag:tag defaultPageColor:defaultPageColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_default_page_color", @"Failed to set default page color", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setBackgroundColor,
+                 setBackgroundColorForDocumentViewTag: (nonnull NSNumber *) tag
+                 backgroundColor:(NSDictionary *)backgroundColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setBackgroundColorForDocumentViewTag:tag backgroundColor:backgroundColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_background_color", @"Failed to set background color", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setColorPostProcessMode,
+                 setColorPostProcessModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 colorPostProcessMode:(NSString *)colorPostProcessMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setColorPostProcessModeForDocumentViewTag:tag colorPostProcessMode:colorPostProcessMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_color_post_process_mode", @"Failed to set color post-process mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setColorPostProcessColors,
+                 setColorPostProcessColorsForDocumentViewTag: (nonnull NSNumber *)tag
+                 whiteColor:(NSDictionary *)whiteColor
+                 blackColor:(NSDictionary *)blackColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setColorPostProcessColorsForDocumentViewTag:tag whiteColor:whiteColor blackColor:blackColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_color_post_process_colors", @"Failed to set color post-process colors", [self errorFromException:exception]);
     }
 }
 

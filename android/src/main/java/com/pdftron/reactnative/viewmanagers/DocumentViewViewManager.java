@@ -109,6 +109,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setBottomToolbarEnabled(bottomToolbarEnabled);
     }
 
+    @ReactProp(name = "bottomToolbar")
+    public void bottomToolbar(DocumentView documentView, @NonNull ReadableArray bottomToolbarItems) {
+        documentView.bottomToolbar(bottomToolbarItems);
+    }
+
     @ReactProp(name = "hideToolbarsOnTap")
     public void setHideToolbarsOnTap(DocumentView documentView, boolean hideToolbarsOnTap) {
         documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
@@ -569,6 +574,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableArray getVisiblePages(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getVisiblePages();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getVisiblePages", "Unable to find DocumentView.");
+        }
+    }
+
     public int getPageRotation(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -751,6 +765,69 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setOverprint(overprint);
         } else {
             throw new PDFNetException("", 0L, getName(), "setOverprint", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setUrlExtraction(int tag, boolean urlExtraction) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setUrlExtraction(urlExtraction);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setUrlExtraction", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setPageBorderVisibility(int tag, boolean pageBorderVisibility) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPageBorderVisibility(pageBorderVisibility);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPageBorderVisibility", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setPageTransparencyGrid(int tag, boolean pageTransparencyGrid) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setPageTransparencyGrid(pageTransparencyGrid);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setPageTransparencyGrid", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setDefaultPageColor(int tag, ReadableMap defaultPageColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDefaultPageColor(defaultPageColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setDefaultPageColor", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setBackgroundColor(int tag, ReadableMap backgroundColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setBackgroundColor(backgroundColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setBackgroundColor", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessMode(int tag, String colorPostProcessMode) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessMode(colorPostProcessMode);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setColorPostProcessColors(int tag, ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setColorPostProcessColors(whiteColor, blackColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setColorPostProcessColors", "Unable to find DocumentView.");
         }
     }
 

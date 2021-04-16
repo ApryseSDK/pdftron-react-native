@@ -218,6 +218,16 @@ static NSString * const PTOverprintModeOnKey = @"on";
 static NSString * const PTOverprintModeOffKey = @"off";
 static NSString * const PTOverprintModePdfxKey = @"pdfx";
 
+static NSString * const PTColorRedKey = @"red";
+static NSString * const PTColorGreenKey = @"green";
+static NSString * const PTColorBlueKey = @"blue";
+static NSString * const PTColorAlphaKey = @"alpha";
+
+static NSString * const PTColorPostProcessModeNoneKey = @"none";
+static NSString * const PTColorPostProcessModeInvertKey = @"invert";
+static NSString * const PTColorPostProcessModeGradientMapKey = @"gradientMap";
+static NSString * const PTColorPostProcessModeNightModeKey = @"nightMode";
+
 static NSString * const PTTextSelectionPageNumberKey = @"pageNumber";
 static NSString * const PTTextSelectionUnicodekey = @"unicode";
 static NSString * const PTTextSelectionHtmlKey = @"html";
@@ -437,6 +447,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (NSArray *)getVisiblePages;
+
 - (bool)gotoPreviousPage;
 
 - (bool)gotoNextPage;
@@ -478,6 +490,20 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)setImageSmoothing:(BOOL)imageSmoothing;
 
 - (void)setOverprint:(NSString *)overprint;
+
+- (void)setUrlExtraction:(BOOL)urlExtraction;
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor;
+
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode;
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor;
 
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
