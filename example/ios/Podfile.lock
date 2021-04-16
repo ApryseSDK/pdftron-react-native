@@ -19,7 +19,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - PDFNet (8.1.2.76990)
+  - PDFNet (7.0.2.72700)
   - RCTRequired (0.61.2)
   - RCTTypeSafety (0.61.2):
     - FBLazyVector (= 0.61.2)
@@ -218,9 +218,9 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/jscallinvoker (= 0.61.2)
-  - RNPdftron (2.0.3-beta.83):
+  - RNPdftron (1.0.0):
     - PDFNet
-    - React-Core
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -229,7 +229,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - PDFNet (from `http://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec`)
+  - PDFNet (from `https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -256,7 +256,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
     - boost-for-react-native
 
 EXTERNAL SOURCES:
@@ -271,7 +271,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   PDFNet:
-    :podspec: http://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec
+    :podspec: https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -322,7 +322,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 5a764c60abdc3336a213e5310c40b74741f32839
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  PDFNet: 42280e3d039b3739785c2817c54038a4c5c535e5
+  PDFNet: 5d31bc9451148ccb1faf80e619b613eac6a5ca68
   RCTRequired: c639d59ed389cfb1f1203f65c2ea946d8ec586e2
   RCTTypeSafety: dc23fb655d6c77667c78e327bf661bc11e3b8aec
   React: 7e586e5d7bec12b91c1a096826b0fc9ab1da7865
@@ -342,9 +342,9 @@ SPEC CHECKSUMS:
   React-RCTText: e3ef6191cdb627855ff7fe8fa0c1e14094967fb8
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
-  RNPdftron: 6688b95b01f7e6d1333eebb5451aff034c23c404
+  RNPdftron: 465701a9872daf3598229405e37d6fddd7e11a90
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
-PODFILE CHECKSUM: 040dfa9425ddc72091cd54981949abd631f950a5
+PODFILE CHECKSUM: b59538e93d67ef62b46fe2d643aeeba9b2b8f845
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.7.2
