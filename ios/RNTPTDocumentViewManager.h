@@ -60,6 +60,8 @@
 
 - (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (NSArray *)getVisiblePagesForDocumentViewTag:(NSNumber *)tag;
+
 - (BOOL)gotoPreviousPageForDocumentViewTag:(NSNumber *)tag;
 
 - (BOOL)gotoNextPageForDocumentViewTag:(NSNumber *)tag;
@@ -101,6 +103,16 @@
 - (void)setImageSmoothingforDocumentViewTag:(NSNumber *)tag imageSmoothing:(BOOL)imageSmoothing;
 
 - (void)setOverprintforDocumentViewTag:(NSNumber *)tag overprint:(NSString *)overprint;
+
+- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction;
+
+- (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColorForDocumentViewTag:(NSNumber *)tag defaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColorForDocumentViewTag:(NSNumber *)tag backgroundColor:(NSDictionary *)backgroundColor;
 
 - (void)setColorPostProcessModeForDocumentViewTag:(NSNumber *)tag colorPostProcessMode:(NSString *)colorPostProcessMode;
 

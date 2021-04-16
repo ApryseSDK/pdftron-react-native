@@ -1456,6 +1456,25 @@ this._viewer.getPageCropBox(1).then((cropBox) => {
 });
 ```
 
+#### getVisiblePages
+Gets the visible pages in the current viewer as an array.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+visiblePages | array | a list of visible pages in the current viewer
+
+```js
+this._viewer.getVisiblePages().then((visiblePages) => {
+  for (const page of visiblePages) {
+    console.log('page', page, 'is visible.')
+  }
+});
+```
+
 #### getPageRotation
 Gets the rotation value of all pages in the current document.
 
@@ -2192,6 +2211,73 @@ Returns a Promise.
 
 ```js
 this._viewer.setOverprint(Config.OverprintMode.Off);
+```
+
+### Viewer Options
+
+#### setUrlExtraction
+Sets whether to extract urls from the current document, which is disabled by default. It is recommended to set this value before document is opened.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+urlExtraction | bool | whether to extract urls from the current document
+
+```js
+this._viewer.setUrlExtraction(true);
+```
+
+#### setPageBorderVisibility
+Sets whether borders of each page are visible in the viewer, which is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageBorderVisibility | bool | whether borders of each page are visible in the viewer
+
+```js
+this._viewer.setPageBorderVisibility(true);
+```
+
+#### setPageTransparencyGrid
+Enables or disables transparency grid (check board pattern) to reflect page transparency, which is disabled by default.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageTransparencyGrid | bool | whether to use the transpareny grid
+
+```js
+this._viewer.setPageTransparencyGrid(true);
+```
+
+#### setBackgroundColor
+Sets the background color of the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+backgroundColor | object | the background color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setBackgroundColor({red: 0, green: 0, blue: 255}); // blue color
+```
+
+#### setDefaultPageColor
+Sets the default page color of the viewer.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+defaultPageColor | object | the default page color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 ```
 
 ### Text Selection

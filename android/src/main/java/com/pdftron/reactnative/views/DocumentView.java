@@ -3119,6 +3119,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return pdfViewCtrl.setCurrentPage(pageNumber);
     }
 
+    public WritableArray getVisiblePages() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        return Arguments.fromArray(pdfViewCtrl.getVisiblePages());
+    }
+
     public boolean gotoPreviousPage() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         return pdfViewCtrl.gotoPreviousPage();
@@ -3283,6 +3288,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (overprintMode != null) {
                 getPdfViewCtrl().setOverprint(overprintMode);
             }
+        }
+    }
+
+    public void setUrlExtraction(boolean urlExtraction) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setUrlExtraction(urlExtraction);
+        }
+    }
+
+    public void setPageBorderVisibility(boolean pageBorderVisibility) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setPageBorderVisibility(pageBorderVisibility);
+            getPdfViewCtrl().update(true);
+        }
+    }
+
+    public void setPageTransparencyGrid(boolean pageTransparencyGrid) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            getPdfViewCtrl().setPageTransparencyGrid(pageTransparencyGrid);
+            getPdfViewCtrl().update(true);
+        }
+    }
+
+    public void setDefaultPageColor(ReadableMap defaultPageColor) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            int red = defaultPageColor.getInt(COLOR_RED);
+            int green = defaultPageColor.getInt(COLOR_GREEN);
+            int blue = defaultPageColor.getInt(COLOR_BLUE);
+            getPdfViewCtrl().setDefaultPageColor(red, green, blue);
+        }
+    }
+
+    public void setBackgroundColor(ReadableMap backgroundColor) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            int red = backgroundColor.getInt(COLOR_RED);
+            int green = backgroundColor.getInt(COLOR_GREEN);
+            int blue = backgroundColor.getInt(COLOR_BLUE);
+            getPdfViewCtrl().setClientBackgroundColor(red, green, blue, false);
         }
     }
 

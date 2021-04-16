@@ -447,6 +447,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (NSArray *)getVisiblePages;
+
 - (bool)gotoPreviousPage;
 
 - (bool)gotoNextPage;
@@ -488,6 +490,16 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)setImageSmoothing:(BOOL)imageSmoothing;
 
 - (void)setOverprint:(NSString *)overprint;
+
+- (void)setUrlExtraction:(BOOL)urlExtraction;
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor;
 
 - (void)setColorPostProcessMode:(NSString *)colorPostProcessMode;
 

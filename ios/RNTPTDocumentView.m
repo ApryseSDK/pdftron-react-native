@@ -1561,7 +1561,7 @@ NS_ASSUME_NONNULL_END
     self.hideAnnotMenuToolsAnnotTypes = [hideMenuTools copy];
 }
 
-#pragma mark -
+#pragma mark - viewer settings
 
 - (void)applyViewerSettings
 {
@@ -1949,6 +1949,71 @@ NS_ASSUME_NONNULL_END
     }
     else if ([self.layoutMode isEqualToString:PTFacingCoverContinuousLayoutModeKey]) {
         [pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
+
+- (void)setUrlExtraction:(BOOL)urlExtraction
+{
+    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
+}
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageBorderVisibility:pageBorderVisibility];
+    [pdfViewCtrl Update:YES];
+}
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+    [pdfViewCtrl SetPageTransparencyGrid:pageTransparencyGrid];
+    [pdfViewCtrl Update:YES];
+}
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor
+{
+    if (defaultPageColor) {
+        NSArray *keyList = defaultPageColor.allKeys;
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
+                 @"default page color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
+         
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+        [pdfViewCtrl SetDefaultPageColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+            
+        [pdfViewCtrl Update:YES];
+    }
+}
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor
+{
+    if (backgroundColor) {
+        NSArray *keyList = backgroundColor.allKeys;
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
+                 @"background color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
+            
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+        [pdfViewCtrl
+         SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue] a:255];
     }
 }
 
@@ -2406,7 +2471,7 @@ NS_ASSUME_NONNULL_END
     if (self.initialPageNumber > 0) {
         [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
-    
+        
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -3357,7 +3422,7 @@ NS_ASSUME_NONNULL_END
     return [annotations copy];
 }
 
-#pragma mark - Get Crop Box
+#pragma mark - Page
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber
 {
@@ -3387,11 +3452,14 @@ NS_ASSUME_NONNULL_END
     return map;
 }
 
-#pragma mark - Set Page
-
 - (bool)setCurrentPage:(NSInteger)pageNumber {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl SetCurrentPage:(int)pageNumber];
+}
+
+- (NSArray *)getVisiblePages {
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    return [pdfViewCtrl GetVisiblePages];
 }
 
 - (bool)gotoPreviousPage {

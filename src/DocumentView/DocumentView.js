@@ -456,6 +456,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getVisiblePages = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getVisiblePages(tag);
+    }
+    return Promise.resolve();
+  }
+
   gotoPreviousPage = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -718,6 +726,47 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.selectAll(tag);
+    }
+    return Promise.resolve();
+  }
+
+
+  setUrlExtraction = (urlExtraction) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       DocumentViewManager.setUrlExtraction(tag, urlExtraction);
+    }
+    return Promise.resolve();
+  }
+
+  setPageBorderVisibility = (pageBorderVisibility) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       DocumentViewManager.setPageBorderVisibility(tag, pageBorderVisibility);
+    }
+    return Promise.resolve();
+  }
+
+  setPageTransparencyGrid = (pageTransparencyGrid) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       DocumentViewManager.setPageTransparencyGrid(tag, pageTransparencyGrid);
+    }
+    return Promise.resolve();
+  }
+
+  setDefaultPageColor = (defaultPageColor) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       DocumentViewManager.setDefaultPageColor(tag, defaultPageColor);
+    }
+    return Promise.resolve();
+  }
+
+  setBackgroundColor = (backgroundColor) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       DocumentViewManager.setBackgroundColor(tag, backgroundColor);
     }
     return Promise.resolve();
   }

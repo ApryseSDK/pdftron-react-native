@@ -304,7 +304,6 @@ public final class Constants {
 
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";
-    // EVENTS END
 
     // Color RGBA
     public static final String COLOR_RED = "red";
