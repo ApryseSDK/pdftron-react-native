@@ -3854,7 +3854,7 @@ NS_ASSUME_NONNULL_END
         return self.documentViewController.moreItemsButtonItem;
     } else if ([buttonString isEqualToString:PTThumbNailsButtonKey]) {
         return self.documentViewController.thumbnailsButtonItem;
-    } else if ([buttonString isEqualToString:PTOutlineListButtonKey]) {
+    } else if ([buttonString isEqualToString:PTListsButtonKey]) {
         return self.documentViewController.navigationListsButtonItem;
     } else if ([buttonString isEqualToString:PTReflowButtonKey]) {
         return self.documentViewController.readerModeButtonItem;
