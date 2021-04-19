@@ -264,7 +264,17 @@ NS_ASSUME_NONNULL_END
     
     // Follow System Dark Mode
     if (@available(iOS 13.0, *)) {
-        navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+        UIViewController * const viewController = navigationController;
+        viewController.overrideUserInterfaceStyle = (self.followSystemDarkMode ?
+                                                     UIUserInterfaceStyleUnspecified :
+                                                     UIUserInterfaceStyleLight);
+        
+        UIWindow * const window = self.window;
+        if (window) {
+            window.overrideUserInterfaceStyle = (self.followSystemDarkMode ?
+                                                 UIUserInterfaceStyleUnspecified :
+                                                 UIUserInterfaceStyleLight);
+        }
     }
     
     [self openDocument];
@@ -1653,7 +1663,17 @@ NS_ASSUME_NONNULL_END
     
     // Follow system dark mode.
     if (@available(iOS 13.0, *)) {
-        self.viewController.navigationController.overrideUserInterfaceStyle = self.followSystemDarkMode ? UIUserInterfaceStyleUnspecified : UIUserInterfaceStyleLight;
+        UIViewController * const viewController = self.viewController.navigationController;
+        viewController.overrideUserInterfaceStyle = (self.followSystemDarkMode ?
+                                                     UIUserInterfaceStyleUnspecified :
+                                                     UIUserInterfaceStyleLight);
+        
+        UIWindow * const window = self.window;
+        if (window) {
+            window.overrideUserInterfaceStyle = (self.followSystemDarkMode ?
+                                                 UIUserInterfaceStyleUnspecified :
+                                                 UIUserInterfaceStyleLight);
+        }
     }
 
     // Use Apple Pencil as a pen
