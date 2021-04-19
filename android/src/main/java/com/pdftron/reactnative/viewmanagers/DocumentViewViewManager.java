@@ -329,6 +329,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setVerticalScrollPos(verticalScrollPos);
     }
 
+    @ReactProp(name = "pageStackEnabled")
+    public void setPageStackEnabled(DocumentView documentView, boolean pageStackEnabled) {
+        documentView.setPageStackEnabled(pageStackEnabled);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
