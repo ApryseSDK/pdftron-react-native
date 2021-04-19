@@ -185,6 +185,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
+        PdfViewCtrlSettingsManager.setShowScrollbarOption(currentActivity, true);
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .setShowRichContentOption(false)
@@ -734,6 +735,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null) {
             pdfViewCtrl.setVScrollPos((int) (verticalScrollPos + 0.5));
         }
+    }
+
+    public void setPageStackEnabled(boolean pageStackEnabled) {
+        mBuilder = mBuilder.pageStackEnabled(pageStackEnabled);
     }
 
     private void disableElements(ReadableArray args) {

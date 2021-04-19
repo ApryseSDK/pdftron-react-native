@@ -1210,6 +1210,13 @@ import { DocumentView, Config } from 'react-native-pdftron';
 />
 ```
 
+### Navigation
+
+#### pageStackEnabled
+bool, optional, defaults to true, Android only
+
+Defines whether the page stack navigation buttons will appear in the viewer.
+
 ## DocumentView - Methods
 
 ### Document
