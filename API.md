@@ -1217,6 +1217,12 @@ bool, optional, defaults to true, Android only
 
 Defines whether the page stack navigation buttons will appear in the viewer.
 
+```js
+<DocumentView
+  pageStackEnabled={false}
+/>
+```
+
 ## DocumentView - Methods
 
 ### Document
