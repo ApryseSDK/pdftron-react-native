@@ -1630,7 +1630,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (appBar != null) {
                 appBar.setFitsSystemWindows(false);
             }
-            View annotToolbar = findViewById(R.id.annotationToolbar);
+            View annotToolbar = findViewById(R.id.annotation_toolbar);
             if (annotToolbar != null) {
                 annotToolbar.setFitsSystemWindows(false);
             }
