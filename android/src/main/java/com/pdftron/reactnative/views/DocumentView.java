@@ -1766,15 +1766,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // try to obtain bbox and type
         try {
             annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot.getType()));
-            com.pdftron.pdf.Rect bbox = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
-            WritableMap bboxMap = Arguments.createMap();
-            bboxMap.putDouble(KEY_X1, bbox.getX1());
-            bboxMap.putDouble(KEY_Y1, bbox.getY1());
-            bboxMap.putDouble(KEY_X2, bbox.getX2());
-            bboxMap.putDouble(KEY_Y2, bbox.getY2());
-            bboxMap.putDouble(KEY_WIDTH, bbox.getWidth());
-            bboxMap.putDouble(KEY_HEIGHT, bbox.getHeight());
-            annotPair.putMap(KEY_ANNOTATION_RECT, bboxMap);
+            // screen rect
+            com.pdftron.pdf.Rect screenRect = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
+            WritableMap screenRectMap = Arguments.createMap();
+            screenRectMap.putDouble(KEY_X1, screenRect.getX1());
+            screenRectMap.putDouble(KEY_Y1, screenRect.getY1());
+            screenRectMap.putDouble(KEY_X2, screenRect.getX2());
+            screenRectMap.putDouble(KEY_Y2, screenRect.getY2());
+            screenRectMap.putDouble(KEY_WIDTH, screenRect.getWidth());
+            screenRectMap.putDouble(KEY_HEIGHT, screenRect.getHeight());
+            annotPair.putMap(KEY_ANNOTATION_SCREEN_RECT, screenRectMap);
+            // page rect
+            com.pdftron.pdf.Rect pageRect = getPdfViewCtrl().getPageRectForAnnot(annot, pageNumber);
+            WritableMap pageRectMap = Arguments.createMap();
+            pageRectMap.putDouble(KEY_X1, pageRect.getX1());
+            pageRectMap.putDouble(KEY_Y1, pageRect.getY1());
+            pageRectMap.putDouble(KEY_X2, pageRect.getX2());
+            pageRectMap.putDouble(KEY_Y2, pageRect.getY2());
+            pageRectMap.putDouble(KEY_WIDTH, pageRect.getWidth());
+            pageRectMap.putDouble(KEY_HEIGHT, pageRect.getHeight());
+            annotPair.putMap(KEY_ANNOTATION_PAGE_RECT, pageRectMap);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

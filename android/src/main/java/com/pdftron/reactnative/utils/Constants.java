@@ -253,6 +253,8 @@ public final class Constants {
     public static final String KEY_ANNOTATION_ID = "id";
     public static final String KEY_ANNOTATION_PAGE = "pageNumber";
     public static final String KEY_ANNOTATION_RECT = "rect";
+    public static final String KEY_ANNOTATION_PAGE_RECT = "pageRect";
+    public static final String KEY_ANNOTATION_SCREEN_RECT = "screenRect";
     public static final String KEY_ANNOTATION_FLAG = "flag";
     public static final String KEY_ANNOTATION_FLAG_VALUE = "flagValue";
     public static final String KEY_ANNOTATION_SUBJECT = "subject";
