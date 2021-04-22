@@ -220,6 +220,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (!Utils.isNullOrEmpty(mTabTitle)) {
             mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
         }
+        mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
     }
 
     public void setDocument(String path) {

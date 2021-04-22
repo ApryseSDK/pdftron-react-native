@@ -6,4 +6,13 @@
         <!-- remove some tools from AnnotationToolbar and QuickMenu -->
         <item name="disable_tool_modes">@array/disable_tool_modes</item>
     </style>
+
+    <style name="RNAppTheme" parent="PDFTronAppTheme">
+        <item name="search_toolbar">@style/RNSearchToolbarStyle</item>
+    </style>
+
+    <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
+        <item name="showSearchWeb">false</item>
+    </style>
+
 </resources>
