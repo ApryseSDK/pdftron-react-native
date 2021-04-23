@@ -334,6 +334,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageStackEnabled(pageStackEnabled);
     }
 
+    @ReactProp(name = "hideToolbarsOnAppear")
+    public void setHideToolbarsOnAppear(DocumentView documentView, boolean hideToolbarsOnAppear) {
+        documentView.setHideToolbarsOnAppear(hideToolbarsOnAppear);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

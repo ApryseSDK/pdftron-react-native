@@ -88,6 +88,7 @@ export default class DocumentView extends PureComponent {
     onTextSearchResult: PropTypes.func,
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
+    hideToolbarsOnAppear: PropTypes.bool,
     ...ViewPropTypes,
   };
 
