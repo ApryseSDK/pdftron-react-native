@@ -439,6 +439,17 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 />
 ```
 
+#### hideToolbarsOnAppear
+bool, optional, defaults to false
+
+Defines whether the toolbars will be gone at startup.
+
+```js
+<DocumentView
+  hideToolbarsOnAppear={true}
+/>
+```
+
 #### topAppNavBarRightBar
 array of strings, optional, iOS only
 
