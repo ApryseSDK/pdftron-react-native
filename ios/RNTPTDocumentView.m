@@ -64,6 +64,8 @@ NS_ASSUME_NONNULL_END
     _pageIndicatorShowsOnPageChange = YES;
     _pageIndicatorShowsWithControls = YES;
     
+    _keyboardShortcutsEnabled = YES;
+
     _autoSaveEnabled = YES;
     
     _pageChangeOnTap = NO;
@@ -1529,6 +1531,12 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Keyboard shortcuts
+- (void)setKeyboardShortcutsEnabled:(BOOL)keyboardShortcutsEnabled
+{
+    _keyboardShortcutsEnabled = keyboardShortcutsEnabled;
+}
+
 - (void)setAutoSaveEnabled:(BOOL)autoSaveEnabled
 {
     _autoSaveEnabled = autoSaveEnabled;
@@ -2563,6 +2571,11 @@ NS_ASSUME_NONNULL_END
 - (BOOL)rnt_documentViewControllerAreTopToolbarsEnabled:(PTDocumentBaseViewController *)documentViewController;
 {
     return !self.hideTopToolbars;
+}
+
+- (BOOL)rnt_documentViewControllerAreKeyboardShortcutsEnabled:(PTDocumentBaseViewController *)documentViewController
+{
+    return self.keyboardShortcutsEnabled;
 }
 
 - (BOOL)rnt_documentViewControllerIsNavigationBarEnabled:(PTDocumentBaseViewController *)documentViewController

@@ -555,6 +555,17 @@ Defines whether to show the page indicator for the viewer.
 />
 ```
 
+#### keyboardShortcutsEnabled
+bool, optional, defaults to true, iOS only
+
+Defines whether the keyboard shortcuts of the viewer are enabled.
+
+```js
+<DocumentView
+  keyboardShortcutsEnabled={false}
+/>
+```
+
 #### onPageChanged
 function, optional
 
