@@ -318,6 +318,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL topToolbarEnabled DEPRECATED_MSG_ATTRIBUTE("Use hideTopAppNavBar instead");
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
+@property (nonatomic, assign) BOOL keyboardShortcutsEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
 @property (nonatomic, assign) BOOL documentSliderEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;

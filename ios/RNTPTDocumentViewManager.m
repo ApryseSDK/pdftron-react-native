@@ -129,6 +129,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(keyboardShortcutsEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.keyboardShortcutsEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(documentSliderEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {

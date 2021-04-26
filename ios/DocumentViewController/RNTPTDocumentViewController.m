@@ -272,5 +272,19 @@ NS_ASSUME_NONNULL_END
     [bookmarkViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (NSArray<UIKeyCommand *> *)keyCommands
+{
+    BOOL keyboardShortcutsEnabled = YES;
+
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerAreKeyboardShortcutsEnabled:)]) {
+        keyboardShortcutsEnabled = [self.delegate rnt_documentViewControllerAreKeyboardShortcutsEnabled:self];
+    }
+
+    if (keyboardShortcutsEnabled) {
+        return [super keyCommands];
+    }
+
+    return nil;
+}
 
 @end
