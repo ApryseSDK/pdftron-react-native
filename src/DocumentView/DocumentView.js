@@ -45,6 +45,7 @@ export default class DocumentView extends PureComponent {
     hideToolbarsOnTap: PropTypes.bool,
     documentSliderEnabled: PropTypes.bool,
     pageIndicatorEnabled: PropTypes.bool,
+    keyboardShortcutsEnabled: PropTypes.bool,
     onAnnotationsSelected: PropTypes.func,
     onAnnotationChanged: PropTypes.func,
     onFormFieldValueChanged: PropTypes.func,
