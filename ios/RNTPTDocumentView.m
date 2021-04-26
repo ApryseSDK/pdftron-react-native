@@ -1615,7 +1615,6 @@ NS_ASSUME_NONNULL_END
     documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
-    documentViewController.pageFitsBetweenBars = !self.hideToolbarsOnTap;
     
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
