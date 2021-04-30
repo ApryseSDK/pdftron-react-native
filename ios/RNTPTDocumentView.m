@@ -3524,7 +3524,26 @@ NS_ASSUME_NONNULL_END
 
 - (NSString*)exportAsImage:(int)pageNum
 {
-    return @"yada yada";
+    NSError* error;
+    __block NSString* path;
+
+    [self.currentDocumentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi: 92];
+        
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        NSString* type = @"PNG";
+        
+        path = [tempDir stringByAppendingPathComponent:fileName];
+        
+        path = [path stringByAppendingPathExtension:type];
+        
+        [draw Export:[[doc GetPageIterator:pageNum] Current] filename:path format: @"PNG"];
+
+    } error:&error];
+    
+    return path;
+    
 }
 
 #pragma mark - Close all tabs
