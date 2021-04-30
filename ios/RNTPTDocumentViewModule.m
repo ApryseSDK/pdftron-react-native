@@ -68,6 +68,21 @@ RCT_REMAP_METHOD(getDocumentPath,
     }
 }
 
+RCT_REMAP_METHOD(exportAsImage,
+                 exportAsImageForDocumentViewTag:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *path = [[self documentViewManager] exportAsImageForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(path);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

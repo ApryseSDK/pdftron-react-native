@@ -19,6 +19,8 @@
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
+-(NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber;
+
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importBookmarkJsonForDocumentViewTag:(NSNumber *)tag bookmarkJson:(NSString *)bookmarkJson;

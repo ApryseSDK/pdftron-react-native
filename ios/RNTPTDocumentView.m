@@ -3520,6 +3520,13 @@ NS_ASSUME_NONNULL_END
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
 }
 
+#pragma mark - Export as image
+
+- (NSString*)exportAsImage:(int)pageNum
+{
+    return @"yada yada";
+}
+
 #pragma mark - Close all tabs
 
 - (void)closeAllTabs
