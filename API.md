@@ -2491,7 +2491,7 @@ this._viewer.selectAll();
 });
 ```
 
-#### exportToImage
+#### exportAsImage
 Export a PDF page to image format defined in `Config.ExportFormat`.
 
 Parameters:
