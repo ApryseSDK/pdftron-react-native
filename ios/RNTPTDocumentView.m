@@ -3541,6 +3541,12 @@ NS_ASSUME_NONNULL_END
 
     } error:&error];
     
+    if( error )
+    {
+        NSException* exception = [NSException exceptionWithName:error.localizedDescription reason:error.localizedFailureReason userInfo:nil];
+        @throw exception;
+    }
+    
     return path;
     
 }
