@@ -321,14 +321,6 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNum) => {
-    const tag = findNodeHandle(this._viewerRef);
-    if(tag != null) {
-      return DocumentViewManager.exportAsImage(tag, pageNum);
-    }
-    return Promise.resolve();
-  }
-
   getField = (fieldName) => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
