@@ -234,5 +234,12 @@ export default {
     Invert: "invert",
     GradientMap: "gradientMap",
     NightMode: "nightMode"
-  }
+  },
+
+  // Export to format
+  ExportFormat: {
+    BMP: "BMP",
+    JPEG: "JPEG",
+    PNG: "PNG",
+  },
 };

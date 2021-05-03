@@ -337,4 +337,9 @@ public final class Constants {
     public static final String KEY_COLOR_POST_PROCESS_MODE_INVERT = "invert";
     public static final String KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP = "gradientMap";
     public static final String KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE = "nightMode";
+
+    // Export format
+    public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
+    public static final String KEY_EXPORT_FORMAT_JPG = "JPG";
+    public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
 }
