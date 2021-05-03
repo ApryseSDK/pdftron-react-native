@@ -19,7 +19,7 @@
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
--(NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber;
+-(NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 

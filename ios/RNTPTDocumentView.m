@@ -3522,23 +3522,22 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString*)exportAsImage:(int)pageNum
+- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
 {
     NSError* error;
     __block NSString* path;
 
     [self.currentDocumentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi: 92];
+        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
         
         NSString* tempDir = NSTemporaryDirectory();
         NSString* fileName = [NSUUID UUID].UUIDString;
-        NSString* type = @"PNG";
         
         path = [tempDir stringByAppendingPathComponent:fileName];
         
-        path = [path stringByAppendingPathExtension:type];
+        path = [path stringByAppendingPathExtension:imageFormat];
         
-        [draw Export:[[doc GetPageIterator:pageNum] Current] filename:path format: @"PNG"];
+        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:path format:imageFormat];
 
     } error:&error];
     
