@@ -1620,7 +1620,7 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationController.navigationBar.translucent = translucent;
     
     // Bottom toolbar.
-    documentViewController.bottomToolbarEnabled = self.bottomToolbarEnabled;
+    documentViewController.navigationController.toolbarHidden = !self.bottomToolbarEnabled;
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
