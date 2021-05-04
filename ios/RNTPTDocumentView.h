@@ -410,6 +410,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (NSString *)getDocumentPath;
 
+- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
 - (void)importAnnotations:(NSString *)xfdfString;

@@ -3520,6 +3520,37 @@ NS_ASSUME_NONNULL_END
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
 }
 
+#pragma mark - Export as image
+
+- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+{
+    NSError* error;
+    __block NSString* path;
+
+    [self.currentDocumentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
+        
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        
+        path = [tempDir stringByAppendingPathComponent:fileName];
+        
+        path = [path stringByAppendingPathExtension:imageFormat];
+        
+        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:path format:imageFormat];
+
+    } error:&error];
+    
+    if( error )
+    {
+        NSException* exception = [NSException exceptionWithName:error.localizedDescription reason:error.localizedFailureReason userInfo:nil];
+        @throw exception;
+    }
+    
+    return path;
+    
+}
+
 #pragma mark - Close all tabs
 
 - (void)closeAllTabs

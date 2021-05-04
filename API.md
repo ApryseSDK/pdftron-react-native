@@ -2490,3 +2490,26 @@ Returns a Promise.
 this._viewer.selectAll();
 });
 ```
+
+#### exportAsImage
+Export a PDF page to image format defined in `Config.ExportFormat`.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page to be converted
+dpi | double | the output image resolution
+exportFormat | string | one of `Config.ExportFormat`
+
+Returns a Promise.
+
+Name | Type | Description
+--- | --- | ---
+path | string | the temp path of the created image, user is responsible for clean up the cache
+
+```js
+this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+  console.log('export', path);
+});
+```

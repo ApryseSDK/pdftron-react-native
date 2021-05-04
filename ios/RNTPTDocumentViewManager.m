@@ -689,6 +689,17 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
         return nil;
     }
 }
+ 
+- (NSString *)exportAsImageForDocumentViewTag:(NSNumber *)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView exportAsImage:pageNumber dpi:dpi imageFormat:imageFormat];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+        return nil;
+    }
+}
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag
 {

@@ -11,7 +11,6 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +37,7 @@ import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
+import com.pdftron.pdf.PDFDraw;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
@@ -2270,8 +2270,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // helper
     @Nullable
     private String generateXfdfCommand(@Nullable ArrayList<Annot> added,
-                                       @Nullable ArrayList<Annot> modified,
-                                       @Nullable ArrayList<Annot> removed) throws PDFNetException {
+            @Nullable ArrayList<Annot> modified,
+            @Nullable ArrayList<Annot> removed) throws PDFNetException {
         PDFDoc pdfDoc = getPdfDoc();
         if (pdfDoc != null) {
             FDFDoc fdfDoc = pdfDoc.fdfExtract(added, modified, removed);
@@ -3528,6 +3528,46 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null) {
             pdfViewCtrl.selectAll();
         }
+    }
+
+    @NonNull
+    public String exportToImage(int pageNumber, double dpi, String exportFormat) {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        if (pdfViewCtrl != null) {
+            PDFDraw draw = null;
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+
+                draw = new PDFDraw();
+                draw.setDPI(dpi);
+                Page pg = pdfViewCtrl.getDoc().getPage(pageNumber);
+                String ext = "png";
+                if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
+                    ext = "bmp";
+                } else if (KEY_EXPORT_FORMAT_JPG.equals(exportFormat)) {
+                    ext = "jpg";
+                }
+                File tempFile = File.createTempFile("tmp", "." + ext);
+                draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
+                return tempFile.getAbsolutePath();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+                if (draw != null) {
+                    try {
+                        draw.destroy();
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
