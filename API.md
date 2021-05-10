@@ -1237,7 +1237,7 @@ Defines whether the page stack navigation buttons will appear in the viewer.
 #### showQuickNavigationButton
 bool, optional, defaults to true, Android only
 
-Defines whether the quick navigation buttons buttons will appear in the viewer.
+Defines whether the quick navigation buttons will appear in the viewer.
 
 ```js
 <DocumentView
