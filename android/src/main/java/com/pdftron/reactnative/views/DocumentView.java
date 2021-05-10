@@ -739,7 +739,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setPageStackEnabled(boolean pageStackEnabled) {
-        mBuilder = mBuilder.pageStackEnabled(pageStackEnabled);
+        mBuilder = mBuilder.pageStackEnabl  ed(pageStackEnabled);
+    }
+
+    public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
+        mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
 
     private void disableElements(ReadableArray args) {

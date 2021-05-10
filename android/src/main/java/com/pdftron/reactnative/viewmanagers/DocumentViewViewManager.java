@@ -334,6 +334,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageStackEnabled(pageStackEnabled);
     }
 
+    @ReactProp(name = "showQuickNavigationButton")
+    public void setShowQuickNavigationButton(DocumentView documentView, boolean showQuickNavigationButton) {
+        documentView.setShowQuickNavigationButton(showQuickNavigationButton);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
