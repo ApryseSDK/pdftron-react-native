@@ -343,7 +343,11 @@ Defines view mode items to be hidden in the view mode dialog. Strings should be 
 
 ```js
 <DocumentView
-  hideViewModeItems={[Config.ViewModePickerItem.Crop]}
+  hideViewModeItems={[
+    Config.ViewModePickerItem.Crop,
+    Config.ViewModePickerItem.Rotation,
+    Config.ViewModePickerItem.ColorMode
+  ]}
 />
 ```
 
