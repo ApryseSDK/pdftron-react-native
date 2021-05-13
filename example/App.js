@@ -88,7 +88,6 @@ export default class App extends Component<Props> {
           document={path}
           padStatusBar={true}
           showLeadingNavButton={true}
-          hideViewModeItems={[Config.ViewModePickerItem.ColorMode]}
           leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
           onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
           onDocumentLoaded={this.onDocumentLoaded}
