@@ -90,22 +90,6 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (BOOL)controlsHidden
-{
-    if (self.navigationController) {
-        if ([self isTopToolbarEnabled]) {
-            return [self.navigationController isNavigationBarHidden];
-        }
-        if ([self isBottomToolbarEnabled]) {
-            return [self.navigationController isToolbarHidden];
-        }
-        if ([self areToolGroupsEnabled]) {
-            return [self isToolGroupToolbarHidden];
-        }
-    }
-    return [super controlsHidden];
-}
-
 - (void)setControlsHidden:(BOOL)controlsHidden animated:(BOOL)animated
 {
     [super setControlsHidden:controlsHidden animated:animated];
