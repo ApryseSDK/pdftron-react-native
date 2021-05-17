@@ -73,7 +73,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     +       multiDexEnabled true
     +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         }
-
         ...
     }
 
