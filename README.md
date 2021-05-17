@@ -74,10 +74,11 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         }
 
-        dependencies {
-    +       implementation "androidx.multidex:multidex:2.0.1"
-        }
+        ...
+    }
 
+    dependencies {
+    +   implementation "androidx.multidex:multidex:2.0.1"
         ...
     }
     ```
@@ -94,7 +95,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 	    // ...
 	}
 	```
-3. In your `android/gradle.properties` file. Add the following line to it:
+3. In your `android/gradle.properties` file, add the following line:
     ``` diff
     # Add the PDFTRON_LICENSE_KEY variable here. 
     # For trial purposes leave it blank.
@@ -140,7 +141,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     </manifest>
     ```
 
-5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+5. In your `android/app/src/main/java/com/myapp/MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import androidx.multidex.MultiDexApplication;
