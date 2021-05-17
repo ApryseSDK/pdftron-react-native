@@ -1376,7 +1376,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | integer | the page number for the target crop box. It is 1-indexed
+pageNumber | integer | the page number to be set as the current page; 1-indexed
 
 Returns a Promise.
 
