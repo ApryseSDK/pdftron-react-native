@@ -14,7 +14,7 @@ APIs are available on the [API page](API.md).
 ## Prerequisites
 - No license key is required for trial. However, a valid commercial license key is required after trial.
 - npm or yarn
-- PDFTron SDK >= 6.10.0
+- PDFTron SDK >= 9.0.0
 - react-native >= 0.60.0
 
 ## Preview
@@ -73,11 +73,11 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     +       multiDexEnabled true
     +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
         }
+        ...
+    }
 
-        dependencies {
-    +       implementation "androidx.multidex:multidex:2.0.1"
-        }
-
+    dependencies {
+    +   implementation "androidx.multidex:multidex:2.0.1"
         ...
     }
     ```
@@ -94,7 +94,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 	    // ...
 	}
 	```
-3. In your `android/gradle.properties` file. Add the following line to it:
+3. In your `android/gradle.properties` file, add the following line:
     ``` diff
     # Add the PDFTRON_LICENSE_KEY variable here. 
     # For trial purposes leave it blank.
@@ -140,7 +140,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     </manifest>
     ```
 
-5. In your `android\app\src\main\java\com\myapp\MainApplication.java` file, change `Application` to `MultiDexApplication`:
+5. In your `android/app/src/main/java/com/myapp/MainApplication.java` file, change `Application` to `MultiDexApplication`:
     ```diff
     - import android.app.Application;
     + import androidx.multidex.MultiDexApplication;
@@ -154,7 +154,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add the followng line to the `target 'MyApp' do ... end` block:
+1. Open `Podfile` in the `ios` folder, add the following line to the `target 'MyApp' do ... end` block:
 
     ```
     target 'MyApp' do
@@ -167,6 +167,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 2. In the `ios` folder, run `pod install`.
 3. Replace `App.js` with what is shown [here](#usage).
 4. Finally in the root project directory, run `react-native run-ios`.
+5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
 ## Usage
 
