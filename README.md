@@ -154,7 +154,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ### iOS
 
-1. Open `Podfile` in the `ios` folder, add the followng line to the `target 'MyApp' do ... end` block:
+1. Open `Podfile` in the `ios` folder, add the following line to the `target 'MyApp' do ... end` block:
 
     ```
     target 'MyApp' do
@@ -167,6 +167,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 2. In the `ios` folder, run `pod install`.
 3. Replace `App.js` with what is shown [here](#usage).
 4. Finally in the root project directory, run `react-native run-ios`.
+5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
 ## Usage
 
