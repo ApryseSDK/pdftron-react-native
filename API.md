@@ -2548,7 +2548,7 @@ this._viewer.redo();
 ```
 
 #### showCrop
-Displays the page crop option.
+Displays the page crop option. Android only.
 
 Returns a Promise.
 
