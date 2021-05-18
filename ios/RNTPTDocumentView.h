@@ -108,6 +108,10 @@ static NSString * const PTFacingContinuousLayoutModeKey = @"FacingContinuous";
 static NSString * const PTFacingCoverLayoutModeKey = @"FacingCover";
 static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverContinuous";
 
+static NSString * const PTViewModeCropKey = @"viewModeCrop";
+static NSString * const PTViewModeRotationKey = @"viewModeRotation";
+static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
+
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
 static NSString * const PTDeleteAnnotationActionKey = @"delete";
@@ -381,6 +385,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
 
