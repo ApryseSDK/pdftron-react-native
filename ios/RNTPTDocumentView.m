@@ -3606,6 +3606,18 @@ NS_ASSUME_NONNULL_END
     [self.currentDocumentViewController.pdfViewCtrl RotateCounterClockwise];
 }
 
+#pragma mark - Undo/Redo
+
+- (void)undo
+{
+    [self.currentDocumentViewController.undoManager undo];
+}
+
+- (void)redo
+{
+    [self.currentDocumentViewController.undoManager redo];
+}
+
 #pragma mark - Get Zoom
 
 - (double)getZoom

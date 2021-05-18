@@ -2528,3 +2528,30 @@ this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
 ```
+
+#### undo
+Undo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.undo();
+```
+
+#### redo
+Redo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.redo();
+```
+
+#### showCrop
+Displays the page crop option. Android only.
+
+Returns a Promise.
+
+```js
+this._viewer.showCrop();
+```
