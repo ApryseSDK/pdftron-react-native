@@ -469,6 +469,7 @@ NS_ASSUME_NONNULL_END
         },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
+            documentViewController.settingsViewController.viewModeReaderHidden = YES;
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
