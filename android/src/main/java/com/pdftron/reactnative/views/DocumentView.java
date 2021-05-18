@@ -3536,7 +3536,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    @NonNull
     public String exportToImage(int pageNumber, double dpi, String exportFormat) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -3574,6 +3573,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
         return null;
+    }
+
+    public void undo() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().undo();
+        }
+    }
+
+    public void redo() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().redo();
+        }
+    }
+
+    public void showCropDialog() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onViewModeSelected(
+                    PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
+            );
+        }
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
