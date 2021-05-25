@@ -2761,6 +2761,7 @@ NS_ASSUME_NONNULL_END
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         PTCopyMenuItemTitleKey: PTCopyMenuItemIdentifierKey,
+        PTPasteMenuItemTitleKey: PTPasteMenuItemIdentifierKey,
         PTSearchMenuItemTitleKey: PTSearchMenuItemIdentifierKey,
         PTShareMenuItemTitleKey: PTShareMenuItemIdentifierKey,
         PTReadMenuItemTitleKey: PTReadMenuItemIdentifierKey,
