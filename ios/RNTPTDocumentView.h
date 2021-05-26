@@ -108,6 +108,9 @@ static NSString * const PTFacingContinuousLayoutModeKey = @"FacingContinuous";
 static NSString * const PTFacingCoverLayoutModeKey = @"FacingCover";
 static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverContinuous";
 
+static NSString * const PTHorizontalReflowOrientationKey = @"horizontal";
+static NSString * const PTVerticalReflowOrientationKey = @"vertical";
+
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
 static NSString * const PTDeleteAnnotationActionKey = @"delete";
@@ -340,6 +343,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy) NSString *fitMode;
 @property (nonatomic, copy) NSString *layoutMode;
+@property (nonatomic, copy) NSString *reflowOrientation;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *annotationMenuItems;
 

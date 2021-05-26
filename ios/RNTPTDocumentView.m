@@ -1744,11 +1744,19 @@ NS_ASSUME_NONNULL_END
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
 
-   // Annotations list editing enabled.
-   documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    // Annotations list editing enabled.
+    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
 
-   // Image in reflow mode enabled.
-   documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    // Image in reflow mode enabled.
+    documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Reflow orientation.
+    if ([self.reflowOrientation isEqualToString:PTHorizontalReflowOrientationKey]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
+        // This works, however in order for reflow orientation to be horizontal in sample app, "View Settings" -> "Vertical Scrolling" button must be turned off.
+    } else if ([self.reflowOrientation isEqualToString:PTVerticalReflowOrientationKey]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
+    }
 }
 
 - (void)applyLeadingNavButton
@@ -3259,6 +3267,13 @@ NS_ASSUME_NONNULL_END
     if (annotation) {
         [toolManager selectAnnotation:annotation onPageNumber:(unsigned long)pageNumber];
     }
+}
+
+- (void)setReflowOrientation:(NSString *)reflowOrientation
+{
+    _reflowOrientation = reflowOrientation;
+
+    [self applyViewerSettings];
 }
 
 
