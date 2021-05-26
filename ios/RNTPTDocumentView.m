@@ -1565,6 +1565,13 @@ NS_ASSUME_NONNULL_END
    [self applyViewerSettings];
 }
 
+-(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
+{
+   _imageInReflowEnabled = imageInReflowEnabled;
+
+   [self applyViewerSettings];
+}
+
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
 {
     _selectAnnotationAfterCreation = selectAnnotationAfterCreation;
@@ -1739,6 +1746,9 @@ NS_ASSUME_NONNULL_END
 
    // Annotations list editing enabled.
    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+
+   // Image in reflow mode enabled.
+   documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
 }
 
 - (void)applyLeadingNavButton

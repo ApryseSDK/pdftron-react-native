@@ -349,6 +349,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL annotationsListEditingEnabled;
 
+@property (nonatomic, assign) BOOL imageInReflowEnabled;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;

@@ -311,6 +311,13 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationsListEditingEnabled, BOOL, RNTPTDocumentView)
    }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(imageInReflowEnabled, BOOL, RNTPTDocumentView)
+{
+   if (json) {
+       view.imageInReflowEnabled = [RCTConvert BOOL:json];
+   }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)
 {
     if (json) {
