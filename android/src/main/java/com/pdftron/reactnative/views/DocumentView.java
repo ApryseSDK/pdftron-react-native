@@ -497,6 +497,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
     }
 
+    public void setReflowOrientation(int reflowOrientation) {
+        mBuilder = mBuilder.reflowOrientation(reflowOrientation);
+    }
+
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
     }
