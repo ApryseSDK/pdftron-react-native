@@ -493,6 +493,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.annotationsListEditingEnabled(annotationsListEditingEnabled);
     }
 
+    public void setImageInReflowEnabled(boolean imageInReflowEnabled) {
+        mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
+    }
+
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
     }

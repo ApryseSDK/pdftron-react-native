@@ -249,6 +249,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
     }
 
+    @ReactProp(name = "imageInReflowEnabled")
+    public void setImageInReflowEnabled(DocumentView documentView, boolean imageInReflowEnabled) {
+        documentView.setImageInReflowEnabled(imageInReflowEnabled);
+    }
+
     @ReactProp(name = "selectAnnotationAfterCreation")
     public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
