@@ -1729,6 +1729,9 @@ NS_ASSUME_NONNULL_END
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
+
+    // Set Annotation List Editing 
+    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
 }
 
 - (void)applyLeadingNavButton
@@ -2093,6 +2096,13 @@ NS_ASSUME_NONNULL_END
     }
     
     documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
+}
+
+- (void)setAnnotationsListEditingEnabled:(BOOL)annotationsListEditingEnabled
+{
+    _annotationsListEditingEnabled = annotationsListEditingEnabled;
+    
+    [self applyViewerSettings];
 }
 
 #pragma mark - Fit mode

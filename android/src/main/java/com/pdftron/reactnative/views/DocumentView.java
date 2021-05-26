@@ -489,6 +489,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    public void setAnnotationsListEditingEnabled(boolean annotationsListEditingEnabled) {
+        mBuilder = mBuilder.annotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
     }

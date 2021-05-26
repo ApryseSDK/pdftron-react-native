@@ -339,6 +339,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
     }
 
+    @ReactProp(name = "annotationsListEditingEnabled")
+    public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
+        documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
