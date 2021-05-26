@@ -239,6 +239,12 @@ export default {
     NightMode: "nightMode"
   },
 
+  // ReflowOrientation defines the scrolling direction when in reflow viewing mode
+  ReflowOrientation: {
+    Horizontal: 'horizontal',
+    Vertical: 'vertical',
+  },
+
   // Export to format
   ExportFormat: {
     BMP: "BMP",

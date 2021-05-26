@@ -255,7 +255,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "reflowOrientation")
-    public void setReflowOrientation(DocumentView documentView, int reflowOrientation) {
+    public void setReflowOrientation(DocumentView documentView, String reflowOrientation) {
         documentView.setReflowOrientation(reflowOrientation);
     }
 

@@ -50,6 +50,7 @@ import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
+import com.pdftron.pdf.controls.ReflowControl;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
@@ -497,8 +498,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
     }
 
-    public void setReflowOrientation(int reflowOrientation) {
-        mBuilder = mBuilder.reflowOrientation(reflowOrientation);
+    public void setReflowOrientation(String reflowOrientation) {
+        int orientation = ReflowControl.HORIZONTAL;
+        // int annotType = Annot.e_Unknown;
+        if (REFLOW_ORIENTATION_HORIZONTAL.equals(reflowOrientation)) {
+            orientation = ReflowControl.HORIZONTAL;
+        } else if (REFLOW_ORIENTATION_VERTICAL.equals(reflowOrientation)) {
+            orientation = ReflowControl.VERTICAL;
+        }
+        mBuilder = mBuilder.reflowOrientation(orientation);
     }
 
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {

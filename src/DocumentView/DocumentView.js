@@ -92,7 +92,7 @@ export default class DocumentView extends PureComponent {
     showQuickNavigationButton: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
-    reflowOrientation: PropTypes.number,
+    reflowOrientation: PropTypes.string,
     ...ViewPropTypes,
   };
 
