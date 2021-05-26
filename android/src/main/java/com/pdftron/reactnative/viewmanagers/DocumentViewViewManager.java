@@ -244,6 +244,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    @ReactProp(name = "annotationsListEditingEnabled")
+    public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
+        documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
     @ReactProp(name = "selectAnnotationAfterCreation")
     public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
