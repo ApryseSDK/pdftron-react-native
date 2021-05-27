@@ -1753,7 +1753,6 @@ NS_ASSUME_NONNULL_END
     // Reflow orientation.
     if ([self.reflowOrientation isEqualToString:PTHorizontalReflowOrientationKey]) {
         documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
-        // This works, however in order for reflow orientation to be horizontal in sample app, "View Settings" -> "Vertical Scrolling" button must be turned off.
     } else if ([self.reflowOrientation isEqualToString:PTVerticalReflowOrientationKey]) {
         documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
     }
