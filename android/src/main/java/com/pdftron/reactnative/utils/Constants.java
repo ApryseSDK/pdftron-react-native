@@ -340,8 +340,8 @@ public final class Constants {
     public static final String KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE = "nightMode";
 
     // ReflowOrientation
-    public static final String REFLOW_ORIENTATION_HORIZONTAL = "horizontal";
-    public static final String REFLOW_ORIENTATION_VERTICAL = "vertical";
+    public static final String KEY_REFLOW_ORIENTATION_HORIZONTAL = "horizontal";
+    public static final String KEY_REFLOW_ORIENTATION_VERTICAL = "vertical";
 
     // Export format
     public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
