@@ -216,11 +216,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     protected void buildViewer() {
         super.buildViewer();
-        mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
-        if (!Utils.isNullOrEmpty(mTabTitle)) {
-            mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+        if (mViewerBuilder != null) {
+            mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            if (!Utils.isNullOrEmpty(mTabTitle)) {
+                mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+            }
+            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
-        mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
     }
 
     public void setDocument(String path) {
