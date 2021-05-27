@@ -344,6 +344,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
     }
 
+    @ReactProp(name = "conversionOptions")
+    public void setConversionOptions(DocumentView documentView, String conversionOptions) {
+        documentView.setConversionOptions(conversionOptions);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

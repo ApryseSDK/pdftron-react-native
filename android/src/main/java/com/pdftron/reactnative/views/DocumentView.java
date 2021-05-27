@@ -3579,6 +3579,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
+    public void setConversionOptions(String conversionOptions) {
+        mBuilder = mBuilder.conversionOptions(conversionOptions);
+    }
+
     public void undo() {
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().undo();

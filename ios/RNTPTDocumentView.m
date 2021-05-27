@@ -1732,6 +1732,9 @@ NS_ASSUME_NONNULL_END
 
     // Set Annotation List Editing 
     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+
+    // Conversion Options
+    documentViewController.conversionOptions = self.conversionOptions;
 }
 
 - (void)applyLeadingNavButton
@@ -4270,6 +4273,15 @@ NS_ASSUME_NONNULL_END
     }
     
     return fileURL;
+}
+
+#pragma mark - File Conversion 
+
+- (void)setConversionOptions:(NSString *)conversionOptions
+{
+    _conversionOptions = [conversionOptions copy];
+    
+    [self applyViewerSettings];
 }
 
 @end

@@ -402,6 +402,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL annotationsListEditingEnabled;
 
+@property (nonatomic, copy) NSString *conversionOptions;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
