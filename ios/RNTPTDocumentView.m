@@ -1751,6 +1751,7 @@ NS_ASSUME_NONNULL_END
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
 
     // Reflow orientation.
+    // Currently gets overridden by "View Settings" -> "Vertical Scrolling" in sample app.
     if ([self.reflowOrientation isEqualToString:PTHorizontalReflowOrientationKey]) {
         documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
     } else if ([self.reflowOrientation isEqualToString:PTVerticalReflowOrientationKey]) {
