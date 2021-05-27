@@ -92,6 +92,7 @@ export default class DocumentView extends PureComponent {
     showQuickNavigationButton: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     conversionOptions: PropTypes.string,
+    navigationListForLargeDevices: PropTypes.bool,
     ...ViewPropTypes,
   };
 

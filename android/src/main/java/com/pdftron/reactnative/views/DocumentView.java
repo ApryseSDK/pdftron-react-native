@@ -752,6 +752,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
 
+    public void setNavigationListForLargeDevices(boolean navigationListForLargeDevices) {
+        mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(navigationListForLargeDevices);
+    }
+
     private void disableElements(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);

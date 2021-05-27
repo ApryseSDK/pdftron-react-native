@@ -404,6 +404,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy) NSString *conversionOptions;
 
+@property (nonatomic, assign) BOOL navigationListForLargeDevices;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

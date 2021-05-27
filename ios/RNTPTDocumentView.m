@@ -1734,7 +1734,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
 
     // Conversion Options
-    documentViewController.conversionOptions = self.conversionOptions;
+    [documentViewController.conversionOptions initWithValue: self.conversionOptions];
+    
+    // Hanlde displays of various sizes
+    documentViewController.alwaysShowNavigationListsAsModal = !self.navigationListForLargeDevices;
 }
 
 - (void)applyLeadingNavButton
@@ -4280,6 +4283,15 @@ NS_ASSUME_NONNULL_END
 - (void)setConversionOptions:(NSString *)conversionOptions
 {
     _conversionOptions = [conversionOptions copy];
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Display Responsiveness
+
+-(void)setNavigationListForLargeDevices:(BOOL)navigationListForLargeDevices
+{
+    _navigationListForLargeDevices = navigationListForLargeDevices;
     
     [self applyViewerSettings];
 }

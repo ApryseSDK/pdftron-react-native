@@ -451,6 +451,13 @@ RCT_CUSTOM_VIEW_PROPERTY(conversionOptions, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(navigationListForLargeDevices, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.navigationListForLargeDevices = [RCTConvert BOOL:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];

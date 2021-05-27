@@ -349,6 +349,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setConversionOptions(conversionOptions);
     }
 
+    @ReactProp(name = "navigationListForLargeDevices")
+    public void setNavigationListForLargeDevices(DocumentView documentView, boolean navigationListForLargeDevices) {
+        documentView.setNavigationListForLargeDevices(navigationListForLargeDevices);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
