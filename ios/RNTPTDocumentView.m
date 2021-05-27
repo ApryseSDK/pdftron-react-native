@@ -1558,13 +1558,6 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setAnnotationsListEditingEnabled:(BOOL)annotationsListEditingEnabled
-{
-   _annotationsListEditingEnabled = annotationsListEditingEnabled;
-
-   [self applyViewerSettings];
-}
-
 -(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
 {
    _imageInReflowEnabled = imageInReflowEnabled;
@@ -1743,9 +1736,6 @@ NS_ASSUME_NONNULL_END
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
-
-    // Annotations list editing enabled.
-    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
 
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;

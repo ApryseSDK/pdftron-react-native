@@ -304,13 +304,6 @@ RCT_CUSTOM_VIEW_PROPERTY(thumbnailViewEditingEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotationsListEditingEnabled, BOOL, RNTPTDocumentView)
-{
-   if (json) {
-       view.annotationsListEditingEnabled = [RCTConvert BOOL:json];
-   }
-}
-
 RCT_CUSTOM_VIEW_PROPERTY(imageInReflowEnabled, BOOL, RNTPTDocumentView)
 {
    if (json) {
