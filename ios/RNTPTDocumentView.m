@@ -3261,7 +3261,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)setReflowOrientation:(NSString *)reflowOrientation
 {
-    _reflowOrientation = reflowOrientation;
+    _reflowOrientation = [reflowOrientation copy];
 
     [self applyViewerSettings];
 }
