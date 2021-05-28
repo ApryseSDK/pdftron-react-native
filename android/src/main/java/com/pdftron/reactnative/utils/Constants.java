@@ -40,6 +40,7 @@ public final class Constants {
     public static final String BUTTON_OUTLINE_LIST = "outlineListButton";
     public static final String BUTTON_ANNOTATION_LIST = "annotationListButton";
     public static final String BUTTON_USER_BOOKMARK_LIST = "userBookmarkListButton";
+    public static final String BUTTON_LAYER_LIST = "layerListButton";
     public static final String BUTTON_REFLOW = "reflowButton";
     public static final String BUTTON_EDIT_MENU = "editMenuButton";
     public static final String BUTTON_CROP_PAGE = "cropPageButton";
