@@ -106,7 +106,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ViewerConfig.Builder mBuilder;
 
     private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
-    private ArrayList<ToolManager.ToolMode> mAnnotToolbarPrecedence = new ArrayList<>();
 
     private String mCacheDir;
     private int mInitialPageNumber = -1;
@@ -263,10 +262,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setDisabledTools(ReadableArray array) {
         disableTools(array);
-    }
-
-    public void setAnnotToolbarPrecedence(ReadableArray array) {
-        addAnnotToolbarPrecedence(array);
     }
 
     public void setCustomHeaders(ReadableMap map) {
@@ -751,10 +746,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.pageStackEnabled(pageStackEnabled);
     }
 
-    public void setToolbarTitle(String toolbarTitle) {
-        mBuilder = mBuilder.toolbarTitle(toolbarTitle);
-    }
-
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
@@ -827,16 +818,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
-            }
-        }
-    }
-
-    private void addAnnotToolbarPrecedence(ReadableArray args) {
-        for (int i = 0; i < args.size(); i++) {
-            String item = args.getString(i);
-            ToolManager.ToolMode mode = convStringToToolMode(item);
-            if (mode != null) {
-                mAnnotToolbarPrecedence.add(mode);
             }
         }
     }
@@ -1566,12 +1547,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (mCacheDir != null) {
             mBuilder.openUrlCachePath(mCacheDir)
                     .saveCopyExportPath(mCacheDir);
-        }
-        if (mAnnotToolbarPrecedence.size() > 0) {
-            ToolManager.ToolMode[] modes = mAnnotToolbarPrecedence.toArray(new ToolManager.ToolMode[0]);
-            if (modes.length > 0) {
-                mToolManagerBuilder = mToolManagerBuilder.setAnnotToolbarPrecedence(modes);
-            }
         }
         if (mDisabledTools.size() > 0) {
             ToolManager.ToolMode[] modes = mDisabledTools.toArray(new ToolManager.ToolMode[0]);

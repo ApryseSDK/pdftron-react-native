@@ -90,10 +90,6 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
-    imageInReflowEnabled: PropTypes.bool,
-    reflowOrientation: PropTypes.string,
-    toolbarTitle: PropTypes.string,
-    annotToolbarPrecedence: PropTypes.array,
     ...ViewPropTypes,
   };
 

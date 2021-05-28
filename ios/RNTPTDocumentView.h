@@ -304,7 +304,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
 
-@property (nonatomic, copy, nullable) NSArray<NSString *> *annotToolbarPrecedence;
 
 // annotation selection menu customization
 @property (nonatomic, copy, nullable) NSArray<NSString *> *overrideAnnotationMenuBehavior;

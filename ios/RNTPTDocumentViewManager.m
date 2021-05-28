@@ -100,14 +100,6 @@ RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotToolbarPrecedence, NSArray, RNTPTDocumentView)
-{
-    if (json) {
-        NSArray *annotToolbarPrecedence = [RCTConvert NSArray:json];
-        view.annotToolbarPrecedence = annotToolbarPrecedence;
-    }
-}
-
 // viewer options
 //RCT_CUSTOM_VIEW_PROPERTY(nightModeEnabled, BOOL, RNTPTDocumentView)
 //{

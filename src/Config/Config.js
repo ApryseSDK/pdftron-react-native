@@ -240,12 +240,6 @@ export default {
     NightMode: "nightMode"
   },
 
-  // ColorPostProcessMode defines color modifications after rendering in the viewer
-  ReflowOrientation: {
-    Horizontal: "horizontal",
-    Vertical: "vertical",
-  },  
-
   // Export to format
   ExportFormat: {
     BMP: "BMP",
