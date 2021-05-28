@@ -240,6 +240,11 @@ export default {
     NightMode: "nightMode"
   },
 
+  ReflowOrientation: {
+    Horizontal: "horizontal",
+    Vertical: "vertical",
+  },
+
   // Export to format
   ExportFormat: {
     BMP: "BMP",
