@@ -496,9 +496,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setReflowOrientation(String reflowOrientation) {
         int orientation = ReflowControl.HORIZONTAL;
-        if (KEY_REFLOW_ORIENTATION_HORIZONTAL.equals(reflowOrientation)) {
-            orientation = ReflowControl.HORIZONTAL;
-        } else if (KEY_REFLOW_ORIENTATION_VERTICAL.equals(reflowOrientation)) {
+        if (KEY_REFLOW_ORIENTATION_VERTICAL.equals(reflowOrientation)) {
             orientation = ReflowControl.VERTICAL;
         }
         mBuilder = mBuilder.reflowOrientation(orientation);
