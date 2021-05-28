@@ -672,6 +672,30 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+### Reflow
+
+#### imageInReflowEnabled
+bool, optional, defaults to true
+
+Whether to show images in reflow mode. 
+
+```js
+<DocumentView
+  imageInReflowEnabled={false}
+/>
+```
+
+#### reflowOrientation
+string, optional, default value is 'Horizontal'
+
+Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+
+```js
+<DocumentView
+  reflowOrientation={Config.ReflowOrientation.Vertical} 
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
