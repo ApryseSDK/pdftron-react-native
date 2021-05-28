@@ -344,6 +344,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
     }
 
+    @ReactProp(name = "userBookmarksListEditingEnabled")
+    public void setUserBookmarksListEditingEnabled(DocumentView documentView, boolean userBookmarksListEditingEnabled) {
+        documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
+    }
+
     @ReactProp(name = "conversionOptions")
     public void setConversionOptions(DocumentView documentView, String conversionOptions) {
         documentView.setConversionOptions(conversionOptions);
@@ -352,6 +357,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "navigationListForLargeDevices")
     public void setNavigationListForLargeDevices(DocumentView documentView, boolean navigationListForLargeDevices) {
         documentView.setNavigationListForLargeDevices(navigationListForLargeDevices);
+    }
+
+    @ReactProp(name = "restrictDownloadUsage")
+    public void setRestrictDownloadUsage(DocumentView documentView, boolean restrictDownloadUsage) {
+        documentView.setRestrictDownloadUsage(restrictDownloadUsage);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {

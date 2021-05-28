@@ -458,6 +458,20 @@ RCT_CUSTOM_VIEW_PROPERTY(navigationListForLargeDevices, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(restrictDownloadUsage, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.restrictDownloadUsage = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.userBookmarksListEditingEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];

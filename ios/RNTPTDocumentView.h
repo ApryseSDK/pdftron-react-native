@@ -406,6 +406,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL navigationListForLargeDevices;
 
+@property (nonatomic, assign) BOOL restrictDownloadUsage;
+
+@property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

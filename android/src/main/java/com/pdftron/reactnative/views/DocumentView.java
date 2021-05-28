@@ -493,6 +493,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.annotationsListEditingEnabled(annotationsListEditingEnabled);
     }
 
+    public void setUserBookmarksListEditingEnabled(boolean userBookmarksListEditingEnabled) {
+        mBuilder = mBuilder.userBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
+    }
+
     public void setSelectAnnotationAfterCreation(boolean selectAnnotationAfterCreation) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoSelect(selectAnnotationAfterCreation);
     }
@@ -3626,6 +3630,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             return getPdfViewCtrlTabFragment().getPdfDoc();
         }
         return null;
+    }
+
+    public void setRestrictDownloadUsage(boolean restrictDownloadUsage) {
+        mBuilder = mBuilder.restrictDownloadUsage(restrictDownloadUsage);
     }
 
     public ToolManager getToolManager() {

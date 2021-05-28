@@ -93,6 +93,8 @@ export default class DocumentView extends PureComponent {
     annotationsListEditingEnabled: PropTypes.bool,
     conversionOptions: PropTypes.string,
     navigationListForLargeDevices: PropTypes.bool,
+    restrictDownloadUsage: PropTypes.bool,
+    userBookmarksListEditingEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 

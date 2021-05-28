@@ -1738,6 +1738,12 @@ NS_ASSUME_NONNULL_END
     
     // Hanlde displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.navigationListForLargeDevices;
+    
+    // Data Usage
+    [documentViewController.httpRequestOptions RestrictDownloadUsage: self.restrictDownloadUsage];
+    
+    // Set User Bookmark List Editing
+    documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
 }
 
 - (void)applyLeadingNavButton
@@ -2111,6 +2117,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setUserBookmarksListEditingEnabled:(BOOL)userBookmarksListEditingEnabled
+{
+    _userBookmarksListEditingEnabled = userBookmarksListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Fit mode
 
 - (void)setFitMode:(NSString *)fitMode
@@ -2192,7 +2205,7 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - zoom
+#pragma mark - Zoom
 
 - (void)setZoom:(double)zoom
 {
@@ -4292,6 +4305,15 @@ NS_ASSUME_NONNULL_END
 -(void)setNavigationListForLargeDevices:(BOOL)navigationListForLargeDevices
 {
     _navigationListForLargeDevices = navigationListForLargeDevices;
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Online Settings
+
+-(void)setRestictDownloadUsage:(BOOL)restrictDownloadUsage
+{
+    _restrictDownloadUsage = restrictDownloadUsage;
     
     [self applyViewerSettings];
 }
