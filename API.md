@@ -686,7 +686,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-string, optional, default value is 'Horizontal'
+string, optional, default value is 'Horizontal'. Android only.
 
 Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
 
