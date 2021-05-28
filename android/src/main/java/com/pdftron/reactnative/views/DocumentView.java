@@ -767,7 +767,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder
                         .showAnnotationsList(false)
                         .showOutlineList(false)
-                        .showUserBookmarksList(false);
+                        .showUserBookmarksList(false)
                         .showViewLayersToolbarOption(false);
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
