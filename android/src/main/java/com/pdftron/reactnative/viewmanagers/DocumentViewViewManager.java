@@ -84,6 +84,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDisabledTools(array);
     }
 
+    @ReactProp(name = "annotToolbarPrecedence")
+    public void setAnnotToolbarPrecedence(DocumentView documentView, @NonNull ReadableArray array) {
+        documentView.setAnnotToolbarPrecedence(array);
+    }
+
     @ReactProp(name = "customHeaders")
     public void setCustomHeaders(DocumentView documentView, @Nullable ReadableMap map) {
         documentView.setCustomHeaders(map);
@@ -222,6 +227,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "pageChangeOnTap")
     public void setPageChangeOnTap(DocumentView documentView, boolean pageChangeOnTap) {
         documentView.setPageChangeOnTap(pageChangeOnTap);
+    }
+
+    @ReactProp(name = "toolbarTitle")
+    public void setToolbarTitle(DocumentView documentView, String toolbarTitle) {
+        documentView.setToolbarTitle(toolbarTitle);
     }
 
     @ReactProp(name = "multiTabEnabled")
