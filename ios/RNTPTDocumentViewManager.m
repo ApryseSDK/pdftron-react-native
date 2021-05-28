@@ -311,13 +311,6 @@ RCT_CUSTOM_VIEW_PROPERTY(imageInReflowEnabled, BOOL, RNTPTDocumentView)
    }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(reflowOrientation, NSString, RNTPTDocumentView)
-{
-   if (json) {
-       view.reflowOrientation = [RCTConvert NSString:json];
-   }
-}
-
 RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)
 {
     if (json) {

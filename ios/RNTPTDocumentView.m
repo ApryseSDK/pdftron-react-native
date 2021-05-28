@@ -1739,14 +1739,6 @@ NS_ASSUME_NONNULL_END
 
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
-
-    // Reflow orientation.
-    // Currently gets overridden by "View Settings" -> "Vertical Scrolling" in sample app.
-    if ([self.reflowOrientation isEqualToString:PTHorizontalReflowOrientationKey]) {
-        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
-    } else if ([self.reflowOrientation isEqualToString:PTVerticalReflowOrientationKey]) {
-        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
-    }
 }
 
 - (void)applyLeadingNavButton
@@ -3257,13 +3249,6 @@ NS_ASSUME_NONNULL_END
     if (annotation) {
         [toolManager selectAnnotation:annotation onPageNumber:(unsigned long)pageNumber];
     }
-}
-
-- (void)setReflowOrientation:(NSString *)reflowOrientation
-{
-    _reflowOrientation = [reflowOrientation copy];
-
-    [self applyViewerSettings];
 }
 
 
