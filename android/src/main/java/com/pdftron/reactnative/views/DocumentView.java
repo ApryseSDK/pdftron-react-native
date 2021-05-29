@@ -756,8 +756,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
 
-    public void setNavigationListForLargeDevices(boolean navigationListForLargeDevices) {
-        mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(navigationListForLargeDevices);
+    public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
+        mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
 
     private void disableElements(ReadableArray args) {
@@ -3585,10 +3585,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
         return null;
-    }
-
-    public void setConversionOptions(String conversionOptions) {
-        mBuilder = mBuilder.conversionOptions(conversionOptions);
     }
 
     public void undo() {

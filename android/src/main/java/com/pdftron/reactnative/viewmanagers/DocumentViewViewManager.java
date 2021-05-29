@@ -349,14 +349,9 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     }
 
-    @ReactProp(name = "conversionOptions")
-    public void setConversionOptions(DocumentView documentView, String conversionOptions) {
-        documentView.setConversionOptions(conversionOptions);
-    }
-
-    @ReactProp(name = "navigationListForLargeDevices")
-    public void setNavigationListForLargeDevices(DocumentView documentView, boolean navigationListForLargeDevices) {
-        documentView.setNavigationListForLargeDevices(navigationListForLargeDevices);
+    @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
+    public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
+        documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
     }
 
     @ReactProp(name = "restrictDownloadUsage")

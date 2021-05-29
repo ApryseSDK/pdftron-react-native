@@ -402,9 +402,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL annotationsListEditingEnabled;
 
-@property (nonatomic, copy) NSString *conversionOptions;
-
-@property (nonatomic, assign) BOOL navigationListForLargeDevices;
+@property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
 
 @property (nonatomic, assign) BOOL restrictDownloadUsage;
 

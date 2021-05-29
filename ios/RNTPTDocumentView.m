@@ -1732,12 +1732,9 @@ NS_ASSUME_NONNULL_END
 
     // Set Annotation List Editing 
     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
-
-    // Conversion Options
-    [documentViewController.conversionOptions initWithValue: self.conversionOptions];
     
     // Hanlde displays of various sizes
-    documentViewController.alwaysShowNavigationListsAsModal = !self.navigationListForLargeDevices;
+    documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
     
     // Data Usage
     [documentViewController.httpRequestOptions RestrictDownloadUsage: self.restrictDownloadUsage];
@@ -4291,20 +4288,11 @@ NS_ASSUME_NONNULL_END
     return fileURL;
 }
 
-#pragma mark - File Conversion 
-
-- (void)setConversionOptions:(NSString *)conversionOptions
-{
-    _conversionOptions = [conversionOptions copy];
-    
-    [self applyViewerSettings];
-}
-
 #pragma mark - Display Responsiveness
 
--(void)setNavigationListForLargeDevices:(BOOL)navigationListForLargeDevices
+-(void)setShowNavigationListAsSidePanelOnLargeDevices:(BOOL)showNavigationListAsSidePanelOnLargeDevices
 {
-    _navigationListForLargeDevices = navigationListForLargeDevices;
+    _showNavigationListAsSidePanelOnLargeDevices = showNavigationListAsSidePanelOnLargeDevices;
     
     [self applyViewerSettings];
 }

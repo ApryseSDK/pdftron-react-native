@@ -444,17 +444,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationsListEditingEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(conversionOptions, NSString, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(showNavigationListAsSidePanelOnLargeDevices, BOOL, RNTPTDocumentView)
 {
     if (json) {
-        view.conversionOptions = [RCTConvert NSString:json];
-    }
-}
-
-RCT_CUSTOM_VIEW_PROPERTY(navigationListForLargeDevices, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.navigationListForLargeDevices = [RCTConvert BOOL:json];
+        view.showNavigationListAsSidePanelOnLargeDevices = [RCTConvert BOOL:json];
     }
 }
 
