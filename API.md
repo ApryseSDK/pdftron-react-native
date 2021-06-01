@@ -116,14 +116,14 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 ```
 
 ### pdfFromOfficeTemplate
-Generates a pdf from a template in the form of an Office file and its replacement data in the form of a JSON String
+Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
 
 Paramaters:
 
 Name | Type | Description
 --- | --- | ---
-docxPath | string | the local file path to the template 
-json | string | the replacement data as a JSON string
+docxPath | string | the local file path to the template file
+json | object | the replacement data in the form of a JSON object
 
 Returns a Promise.
 
@@ -131,7 +131,19 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-resultPdfPath | string | the local file path to the converted pdf (This file is temporary and must be handled by the user)
+resultPdfPath | string | the local file path to the generated PDF (This file is temporary and must be handled by the user)
+
+Example:
+
+```js
+RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json)
+  .then((resultPdfPath) => {
+    console.log(resultPdfPath);
+  })
+  .catch((error) => {
+    console.warn(error);
+  })
+```
 
 ## DocumentView - Props
 

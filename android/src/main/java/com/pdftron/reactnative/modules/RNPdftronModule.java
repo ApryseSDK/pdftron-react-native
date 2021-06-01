@@ -15,6 +15,7 @@ import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
 
 import org.json.JSONObject;
@@ -139,22 +140,17 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void pdfFromOfficeTemplate(final String docxPath, final String json, final Promise promise) {
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PDFDoc doc = new PDFDoc();
-                    OfficeToPDFOptions options = new OfficeToPDFOptions();
-                    options = options.setTemplateParamsJson(json);
-                    Convert.officeToPdf(doc, docxPath, options);
-                    File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
-                    doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.INCREMENTAL, null);
-                    promise.resolve(resultPdf.getAbsolutePath());
-                } catch (Exception e) {
-                    promise.reject(e);
-                }
-            }
-        });
+    public void pdfFromOfficeTemplate(final String docxPath, final ReadableMap json, final Promise promise) {
+        try {
+            PDFDoc doc = new PDFDoc();
+            OfficeToPDFOptions options = new OfficeToPDFOptions();
+            options = options.setTemplateParamsJson(ReactUtils.convertMapToJson(json).toString());
+            Convert.officeToPdf(doc, docxPath, options);
+            File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
+            doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.INCREMENTAL, null);
+            promise.resolve(resultPdf.getAbsolutePath());
+        } catch (Exception e) {
+            promise.reject(e);
+        }
     }
 }
