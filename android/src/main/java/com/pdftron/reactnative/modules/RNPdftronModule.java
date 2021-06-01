@@ -18,8 +18,6 @@ import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
 
-import org.json.JSONObject;
-
 import java.io.File;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
