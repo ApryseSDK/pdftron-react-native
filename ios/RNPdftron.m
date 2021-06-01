@@ -119,7 +119,7 @@ RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary 
         [options SetTemplateParamsJson:jsonString];
         [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:options];
         
-        NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingString:@".pdf"];
+        NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"pdf"];
         NSString* resultPdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
         [pdfDoc Lock];
         [pdfDoc SaveToFile:resultPdfPath flags:0];
