@@ -109,6 +109,31 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
+RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary *)json resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        PTPDFDoc* pdfDoc = [[PTPDFDoc alloc] init];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+        PTOfficeToPDFOptions* options = [[PTOfficeToPDFOptions alloc] init];
+        [options SetTemplateParamsJson:jsonString];
+
+        [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:options];
+        NSString* homeDirectory = NSHomeDirectory();
+        NSString* resultPdfPath = [NSString stringWithFormat:@"%@%@", homeDirectory, @"/tmp.pdf"];
+        [pdfDoc Lock];
+        [pdfDoc SaveToFile:resultPdfPath flags:0];
+        [pdfDoc Unlock];
+
+        resolve(resultPdfPath);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate document from template", [self errorFromException:exception]);
+    }    
+}
+
 - (NSError *)errorFromException:(NSException *)exception
 {
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
@@ -117,6 +142,7 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
                 NSLocalizedFailureReasonErrorKey: exception.reason,
             }];
 }
+
 
 @end
   
