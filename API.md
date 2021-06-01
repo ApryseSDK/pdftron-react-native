@@ -117,7 +117,7 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 
 ### pdfFromOfficeTemplate
 Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
-For more information please see our [template guide](https://www.pdftron.com/documentation/ios/guides/generate-via-template/).
+For more information please see our [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
 
 Parameters:
 
