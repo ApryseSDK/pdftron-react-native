@@ -117,6 +117,7 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 
 ### pdfFromOfficeTemplate
 Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
+For more information please see our [template guide](https://www.pdftron.com/documentation/ios/guides/generate-via-template/).
 
 Parameters:
 
@@ -131,7 +132,9 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-resultPdfPath | string | the local file path to the generated PDF (This file is temporary and must be handled by the user)
+resultPdfPath | string | the local file path to the generated PDF 
+
+The user is responsible for cleaning up the temporary file that is generated.
 
 Example:
 

@@ -142,10 +142,10 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
         try {
             PDFDoc doc = new PDFDoc();
             OfficeToPDFOptions options = new OfficeToPDFOptions();
-            options = options.setTemplateParamsJson(ReactUtils.convertMapToJson(json).toString());
+            options.setTemplateParamsJson(ReactUtils.convertMapToJson(json).toString());
             Convert.officeToPdf(doc, docxPath, options);
             File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
-            doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.INCREMENTAL, null);
+            doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.NO_FLAGS, null);
             promise.resolve(resultPdf.getAbsolutePath());
         } catch (Exception e) {
             promise.reject(e);
