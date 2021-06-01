@@ -115,6 +115,24 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
+### pdfFromOfficeTemplate
+Generates a pdf from a template in the form of an Office file and its replacement data in the form of a JSON String
+
+Paramaters:
+
+Name | Type | Description
+--- | --- | ---
+docxPath | string | the local file path to the template 
+json | string | the replacement data as a JSON string
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+resultPdfPath | string | the local file path to the converted pdf (This file is temporary and must be handled by the user)
+
 ## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.

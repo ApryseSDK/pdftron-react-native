@@ -6,6 +6,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+import com.pdftron.pdf.Convert;
+import com.pdftron.pdf.OfficeToPDFOptions;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.model.StandardStampOption;
@@ -13,6 +16,10 @@ import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.sdf.SDFDoc;
+
+import org.json.JSONObject;
+
+import java.io.File;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 
@@ -126,6 +133,26 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
                     promise.resolve("Android " + android.os.Build.VERSION.RELEASE);
                 } catch (Exception ex) {
                     promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void pdfFromOfficeTemplate(final String docxPath, final String json, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PDFDoc doc = new PDFDoc();
+                    OfficeToPDFOptions options = new OfficeToPDFOptions();
+                    options = options.setTemplateParamsJson(json);
+                    Convert.officeToPdf(doc, docxPath, options);
+                    File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
+                    doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.INCREMENTAL, null);
+                    promise.resolve(resultPdf.getAbsolutePath());
+                } catch (Exception e) {
+                    promise.reject(e);
                 }
             }
         });
