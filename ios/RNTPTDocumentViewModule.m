@@ -541,6 +541,32 @@ RCT_REMAP_METHOD(rotateCounterClockwise,
     }
 }
 
+RCT_REMAP_METHOD(undo,
+                 undoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] undoForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"undo", @"Failed to undo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(redo,
+                 redoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] undoForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getZoom,
                  getZoomForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

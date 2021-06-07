@@ -22,7 +22,8 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "prop-types": "*"
   },
   "devDependencies": {
     "react": "*"

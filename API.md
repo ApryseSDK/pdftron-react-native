@@ -115,6 +115,35 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
+### pdfFromOfficeTemplate
+Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
+For more information please see our [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+docxPath | string | the local file path to the template file
+json | object | the replacement data in the form of a JSON object
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+resultPdfPath | string | the local file path to the generated PDF 
+
+The user is responsible for cleaning up the temporary file that is generated.
+
+Example:
+
+```js
+RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+```
+
 ## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
@@ -227,7 +256,7 @@ This function is called when document opening encounters an error.
 #### disabledElements
 array of string, optional, defaults to none
 
-Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+Defines buttons to be disabled for the viewer. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -238,7 +267,7 @@ Defines buttons to be disabled for the viewer. Strings should be [Config.Buttons
 #### disabledTools
 array of string, optional, defaults to none
 
-Defines tools to be disabled for the viewer. Strings should be [Config.Tools](./src/Config/Config.js) constants.
+Defines tools to be disabled for the viewer. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -255,8 +284,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-previousTool | string | the previous tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the tool before change
-tool | string | the current tool (one of the [Config.Tools](./src/Config/Config.js) constants or "unknown tool"), representing the current tool
+previousTool | string | the previous tool (one of the [`Config.Tools`](./src/Config/Config.js) constants or "unknown tool"), representing the tool before change
+tool | string | the current tool (one of the [`Config.Tools`](./src/Config/Config.js) constants or "unknown tool"), representing the current tool
 
 ```js
 <DocumentView
@@ -282,14 +311,14 @@ Example:
 **Note**: to add the image file to your application, please follow the steps below:
 
 ##### Android
-1. Add the image resource to the drawable directory in [example/android/app/src/main/res](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
+1. Add the image resource to the drawable directory in [`example/android/app/src/main/res`](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
 
 <img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
 
 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
 
 ##### iOS
-1. After pods has been installed, open the .xcworkspace file for this application in Xcode (in this case, it's [example.xcworkspace](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
+1. After pods has been installed, open the `.xcworkspace` file for this application in Xcode (in this case, it's [`example.xcworkspace`](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
 - "Project navigator"
 - "example" (or the app name)
 - "Build Phases"
@@ -319,8 +348,8 @@ This function is called when the leading navigation button is pressed.
 
 ```js
 <DocumentView
-  onLeadingNavButtonPressed = {() => { 
-    console.log('The leading nav has been pressed'); 
+  onLeadingNavButtonPressed = {() => {
+    console.log('The leading nav has been pressed');
   }}
 />
 ```
@@ -339,11 +368,15 @@ Defines whether the document slider of the viewer is enabled.
 #### hideViewModeItems
 array of string, optional, defaults to none. Android only.
 
-Defines view mode items to be hidden in the view mode dialog. Strings should be [Config.ViewModePickerItem](./src/Config/Config.js) constants. 
+Defines view mode items to be hidden in the view mode dialog. Strings should be [`Config.ViewModePickerItem`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
-  hideViewModeItems={[Config.ViewModePickerItem.Crop]}
+  hideViewModeItems={[
+    Config.ViewModePickerItem.Crop,
+    Config.ViewModePickerItem.Rotation,
+    Config.ViewModePickerItem.ColorMode
+  ]}
 />
 ```
 
@@ -366,7 +399,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 #### annotationToolbars
-array of objects, options (one of [Config.DefaultToolbars](./src/Config/Config.js) constants or custom toolbar object)
+array of objects, options (one of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar object)
 
 Defines custom toolbars. If passed in, the default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -374,7 +407,7 @@ It is possible to mix and match with default toolbars. See example below:
 ```js
 const myToolbar = {
   [Config.CustomToolbarKey.Id]: 'myToolbar',
-  [Config.CustomToolbarKey.Name]: 'myToolbar', 
+  [Config.CustomToolbarKey.Name]: 'myToolbar',
   [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
   [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
 };
@@ -387,7 +420,7 @@ const myToolbar = {
 #### hideDefaultAnnotationToolbars
 array of strings, optional, defaults to none
 
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [Config.DefaultToolbars](./src/Config/Config.js) constants
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [`Config.DefaultToolbars`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -442,7 +475,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 #### topAppNavBarRightBar
 array of strings, optional, iOS only
 
-Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
 <Documentview
@@ -453,7 +486,7 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 #### bottomToolbar
 array of strings, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
-Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [Config.Buttons](./src/Config/Config.js) constants.
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
 <Documentview
@@ -477,7 +510,7 @@ Defines whether the viewer will add padding to take account of the system status
 #### fitMode
 string, optional, default value is 'FitWidth'
 
-Defines the fit mode (default zoom level) of the viewer. String should be one of [Config.FitMode](./src/Config/Config.js) constants.
+Defines the fit mode (default zoom level) of the viewer. String should be one of [`Config.FitMode`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -488,7 +521,7 @@ Defines the fit mode (default zoom level) of the viewer. String should be one of
 #### layoutMode
 string, optional, default value is 'Continuous'
 
-Defines the layout mode of the viewer. String should be one of [Config.LayoutMode](./src/Config/Config.js) constants.
+Defines the layout mode of the viewer. String should be one of [`Config.LayoutMode`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -504,7 +537,7 @@ This function is called when the layout of the viewer has been changed.
 ```js
 <DocumentView
   onLayoutChanged = {() => {
-    console.log('Layout has been updated.'); 
+    console.log('Layout has been updated.');
   }}
 />
 ```
@@ -581,7 +614,7 @@ pageNumber | int | the current page number
 ```js
 <DocumentView
   onPageChanged = {({previousPageNumber, pageNumber}) => {
-    console.log('Page number changes from', previousPageNumber, 'to', pageNumber); 
+    console.log('Page number changes from', previousPageNumber, 'to', pageNumber);
   }}
 />
 ```
@@ -602,7 +635,7 @@ zoom | double | the current zoom ratio of the document
 ```js
 <DocumentView
   onZoomChanged = {(zoom) => {
-    console.log('Current zoom ratio is', zoom); 
+    console.log('Current zoom ratio is', zoom);
   }}
 />
 ```
@@ -621,7 +654,7 @@ zoom | double | the current zoom ratio of the document
 ```js
 <DocumentView
   onZoomFinished = {(zoom) => {
-    console.log('Current zoom ratio is', zoom); 
+    console.log('Current zoom ratio is', zoom);
   }}
 ```
 
@@ -664,7 +697,7 @@ vertical | number | the vertical position of the scroll
 ```js
 <DocumentView
   onScrollChanged = {({horizontal, vertical}) => {
-    console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.'); 
+    console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.');
   }}
 ```
 
@@ -673,7 +706,7 @@ vertical | number | the vertical position of the scroll
 #### hideAnnotationMenu
 array of strings, optional, defaults to none
 
-Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [Config.Tools](./src/Config/Config.js) constants.
+Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -684,7 +717,7 @@ Defines annotation types that will not show in the annotation (long-press) menu.
 #### annotationMenuItems
 array of strings, optional, default contains all the items
 
-Defines the menu items that can show when an annotation is selected. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants.
+Defines the menu items that can show when an annotation is selected. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -695,7 +728,7 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 #### overrideAnnotationMenuBehavior
 array of strings, optional, defaults to none
 
-Defines the menu items that will skip default behavior when pressed. Strings should be [Config.AnnotationMenu](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items that will skip default behavior when pressed. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -712,8 +745,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationMenu | string | One of [Config.AnnotationMenu](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [Config.Tools](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
+annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [`Config.Tools`](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
 
 ```js
 <DocumentView
@@ -745,7 +778,7 @@ Defines whether to show the popup menu of options when the user long presses on 
 #### longPressMenuItems
 array of strings, optional, default contains all the items
 
-Defines menu items that can show when long press on text or blank space. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants.
+Defines menu items that can show when long press on text or blank space. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants.
 
 ```js
 <DocumentView
@@ -756,7 +789,7 @@ Defines menu items that can show when long press on text or blank space. Strings
 #### overrideLongPressMenuBehavior
 array of strings, optional, defaults to none
 
-Defines the menu items on long press that will skip default behavior when pressed. Strings should be [Config.LongPressMenu](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items on long press that will skip default behavior when pressed. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -773,7 +806,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-longPressMenu | string | One of [Config.LongPressMenu](./src/Config/Config.js) constants, representing which item has been pressed
+longPressMenu | string | One of [`Config.LongPressMenu`](./src/Config/Config.js) constants, representing which item has been pressed
 longPressText | string | the selected text if pressed on text, empty otherwise
 
 ```js
@@ -792,7 +825,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 #### overrideBehavior
 array of string, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [Config.Actions](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. Strings should be [`Config.Actions`](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -809,7 +842,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | One of [Config.Actions](./src/Config/Config.js) constants, representing which action has been activated
+action | string | One of [`Config.Actions`](./src/Config/Config.js) constants, representing which action has been activated
 data | object | A JSON object that varies depending on the action
 
 Data param table:
@@ -984,7 +1017,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [Config.Tools](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1009,7 +1042,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [Config.Tools](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1098,7 +1131,7 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 #### hideThumbnailFilterModes
 array of strings, optional
 
-Defines filter modes that should be hidden in the thumbnails browser. Strings should be [Config.ThumbnailFilterMode](./src/Config/Config.js) constants
+Defines filter modes that should be hidden in the thumbnails browser. Strings should be [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1292,7 +1325,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-colorPostProcessMode | string | color post processing transformation mode, should be a [Config.ColorPostProcessMode](./src/Config/Config.js) constant
+colorPostProcessMode | string | color post processing transformation mode, should be a [`Config.ColorPostProcessMode`](./src/Config/Config.js) constant
 
 ```js
 this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
@@ -1323,7 +1356,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolMode | string | One of [Config.Tools](./src/Config/Config.js) string constants, representing to tool mode to set
+toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
@@ -1372,7 +1405,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | integer | the page number for the target crop box. It is 1-indexed
+pageNumber | integer | the page number to be set as the current page; 1-indexed
 
 Returns a Promise.
 
@@ -1685,7 +1718,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [Config.AnnotationFlags](./src/Config/Config.js) constants, flagValue: bool}
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
 
 Returns a Promise.
 
@@ -1708,7 +1741,7 @@ this._viewer.setFlagsForAnnotations([
 ```
 
 #### setPropertiesForAnnotation
-Sets properties for specified annotation in the current document, if it is valid. 
+Sets properties for specified annotation in the current document, if it is valid.
 
 Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
 
@@ -1763,7 +1796,7 @@ this._viewer.setDrawAnnotations(false);
 ```
 
 #### setVisibilityForAnnotation
-Sets visibility for specified annotation in the current document, if it is valid. Note that if [drawAnnotations](#drawAnnotations) is set to false in the viewer, this function would not render the annotation even if visibility is true.
+Sets visibility for specified annotation in the current document, if it is valid. Note that if [`drawAnnotations`](#drawAnnotations) is set to false in the viewer, this function would not render the annotation even if visibility is true.
 
 Parameters:
 
@@ -1822,7 +1855,7 @@ this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
 ```
 
 #### getAnnotationListAt
-Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [getAnnotationAt](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
+Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAt`](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
 
 Parameters:
 
@@ -2523,4 +2556,31 @@ path | string | the temp path of the created image, user is responsible for clea
 this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
+```
+
+#### undo
+Undo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.undo();
+```
+
+#### redo
+Redo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.redo();
+```
+
+#### showCrop
+Displays the page crop option. Android only.
+
+Returns a Promise.
+
+```js
+this._viewer.showCrop();
 ```

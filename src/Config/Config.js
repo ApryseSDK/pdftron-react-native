@@ -135,6 +135,7 @@ export default {
   // LongPressMenu defines the menu items when a long press on empty space or text occurs
   LongPressMenu: {
     copy: 'copy',
+    paste: 'paste',
     search: 'search',
     share: 'share',
     read: 'read',
@@ -212,6 +213,8 @@ export default {
   // ViewModePickerItem defines view mode items in the view mode dialog
   ViewModePickerItem: {
     Crop: "viewModeCrop",
+    Rotation: "viewModeRotation",
+    ColorMode: "viewModeColorMode",
   },
 
   // ZoomLimitMode defines the limit mode for zoom in the current document viewer

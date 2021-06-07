@@ -216,11 +216,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     protected void buildViewer() {
         super.buildViewer();
-        mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
-        if (!Utils.isNullOrEmpty(mTabTitle)) {
-            mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+        if (mViewerBuilder != null) {
+            mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            if (!Utils.isNullOrEmpty(mTabTitle)) {
+                mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+            }
+            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
-        mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
     }
 
     public void setDocument(String path) {
@@ -654,6 +656,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
             } else if (VIEW_MODE_ROTATION.equals(mode)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_ROTATION);
+            } else if (VIEW_MODE_COLORMODE.equals(mode)) {
+                mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_COLORMODE);
             }
         }
     }
@@ -1297,7 +1301,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
             buttonType = ToolbarButtonType.CALLOUT;
         } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
-            buttonType = ToolbarButtonType.STAMP;
+            buttonType = ToolbarButtonType.IMAGE;
         } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
             buttonType = ToolbarButtonType.STAMP;
         } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
@@ -1311,11 +1315,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
             buttonType = ToolbarButtonType.SOUND;
         } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
-            // TODO
+            buttonType = ToolbarButtonType.RECT_REDACTION;
         } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
             buttonType = ToolbarButtonType.LINK;
         } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
-            // TODO
+            buttonType = ToolbarButtonType.TEXT_REDACTION;
         } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             // TODO
         } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
@@ -3534,7 +3538,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    @NonNull
     public String exportToImage(int pageNumber, double dpi, String exportFormat) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -3572,6 +3575,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
         return null;
+    }
+
+    public void undo() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().undo();
+        }
+    }
+
+    public void redo() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().redo();
+        }
+    }
+
+    public void showCropDialog() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onViewModeSelected(
+                    PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
+            );
+        }
     }
 
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {

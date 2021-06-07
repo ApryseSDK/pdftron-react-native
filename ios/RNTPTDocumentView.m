@@ -1668,6 +1668,10 @@ NS_ASSUME_NONNULL_END
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
     
+    if (@available(iOS 13.4, *)) {
+        toolManager.widgetAnnotationOptions.preferredDatePickerStyle = UIDatePickerStyleWheels;
+    }
+    
     // Follow system dark mode.
     if (@available(iOS 13.0, *)) {
         UIViewController * const viewController = self.viewController.navigationController;
@@ -2763,6 +2767,7 @@ NS_ASSUME_NONNULL_END
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         PTCopyMenuItemTitleKey: PTCopyMenuItemIdentifierKey,
+        PTPasteMenuItemTitleKey: PTPasteMenuItemIdentifierKey,
         PTSearchMenuItemTitleKey: PTSearchMenuItemIdentifierKey,
         PTShareMenuItemTitleKey: PTShareMenuItemIdentifierKey,
         PTReadMenuItemTitleKey: PTReadMenuItemIdentifierKey,
@@ -3606,6 +3611,18 @@ NS_ASSUME_NONNULL_END
 - (void)rotateCounterClockwise
 {
     [self.currentDocumentViewController.pdfViewCtrl RotateCounterClockwise];
+}
+
+#pragma mark - Undo/Redo
+
+- (void)undo
+{
+    [self.currentDocumentViewController.undoManager undo];
+}
+
+- (void)redo
+{
+    [self.currentDocumentViewController.undoManager redo];
 }
 
 #pragma mark - Get Zoom

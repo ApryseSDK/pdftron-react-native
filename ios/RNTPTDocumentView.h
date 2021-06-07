@@ -139,6 +139,7 @@ static NSString * const PTStyleMenuItemTitleKey = @"Style";
 static NSString * const PTNoteMenuItemTitleKey = @"Note";
 static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
+static NSString * const PTPasteMenuItemTitleKey = @"Paste";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
 static NSString * const PTSearchMenuItemTitleKey = @"Search";
@@ -152,6 +153,7 @@ static NSString * const PTCalibrateMenuItemTitleKey = @"Calibrate";
 static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
 static NSString * const PTCopyMenuItemIdentifierKey = @"copy";
+static NSString * const PTPasteMenuItemIdentifierKey = @"paste";
 static NSString * const PTDeleteMenuItemIdentifierKey = @"delete";
 static NSString * const PTTypeMenuItemIdentifierKey = @"markupType";
 static NSString * const PTSearchMenuItemIdentifierKey = @"search";
@@ -467,6 +469,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)rotateClockwise;
 
 - (void)rotateCounterClockwise;
+
+- (void)undo;
+
+- (void)redo;
 
 - (double)getZoom;
 
