@@ -398,7 +398,7 @@ export default class DocumentView extends PureComponent {
   setDrawAnnotations = (drawAnnotations) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
+      return DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
     }
     return Promise.resolve();
   }
@@ -427,10 +427,10 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationsAtLine = (x1, y1, x2, y2) => {
+  getAnnotationListAt = (x1, y1, x2, y2) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationsAtLine(tag, x1, y1, x2, y2);
+      return DocumentViewManager.getAnnotationListAt(tag, x1, y1, x2, y2);
     }
     return Promise.resolve();
   }
@@ -574,7 +574,7 @@ export default class DocumentView extends PureComponent {
   rotateClockwise = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.rotateClockwise(tag);
+      return DocumentViewManager.rotateClockwise(tag);
     }
     return Promise.resolve();
   }
@@ -582,7 +582,7 @@ export default class DocumentView extends PureComponent {
   rotateCounterClockwise = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.rotateCounterClockwise(tag);
+      return DocumentViewManager.rotateCounterClockwise(tag);
     }
     return Promise.resolve();
   }
@@ -615,7 +615,7 @@ export default class DocumentView extends PureComponent {
   setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
+      return DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
     }
     return Promise.resolve();
   }
@@ -623,7 +623,7 @@ export default class DocumentView extends PureComponent {
   setImageSmoothing = (imageSmoothing) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
+      return DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
     }
     return Promise.resolve();
   }
@@ -631,7 +631,7 @@ export default class DocumentView extends PureComponent {
   setOverprint = (overprint) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setOverprint(tag, overprint);
+      return DocumentViewManager.setOverprint(tag, overprint);
     }
     return Promise.resolve();
   }
@@ -647,7 +647,7 @@ export default class DocumentView extends PureComponent {
   setColorPostProcessColors = (whiteColor, blackColor) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
+      return DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
     }
     return Promise.resolve();
   }    
@@ -655,7 +655,7 @@ export default class DocumentView extends PureComponent {
   findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
+      return DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
     }
     return Promise.resolve();
   }
@@ -663,7 +663,7 @@ export default class DocumentView extends PureComponent {
   cancelFindText = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.cancelFindText(tag);
+      return DocumentViewManager.cancelFindText(tag);
     }
     return Promise.resolve();
   }
@@ -687,7 +687,7 @@ export default class DocumentView extends PureComponent {
   clearSelection = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.clearSelection(tag);
+      return DocumentViewManager.clearSelection(tag);
     }
     return Promise.resolve();
   }
@@ -728,7 +728,7 @@ export default class DocumentView extends PureComponent {
   selectAll = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.selectAll(tag);
+      return DocumentViewManager.selectAll(tag);
     }
     return Promise.resolve();
   }
@@ -737,7 +737,7 @@ export default class DocumentView extends PureComponent {
   setUrlExtraction = (urlExtraction) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       DocumentViewManager.setUrlExtraction(tag, urlExtraction);
+       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
     }
     return Promise.resolve();
   }
@@ -745,7 +745,7 @@ export default class DocumentView extends PureComponent {
   setPageBorderVisibility = (pageBorderVisibility) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       DocumentViewManager.setPageBorderVisibility(tag, pageBorderVisibility);
+       return DocumentViewManager.setPageBorderVisibility(tag, pageBorderVisibility);
     }
     return Promise.resolve();
   }
@@ -753,7 +753,7 @@ export default class DocumentView extends PureComponent {
   setPageTransparencyGrid = (pageTransparencyGrid) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       DocumentViewManager.setPageTransparencyGrid(tag, pageTransparencyGrid);
+      return DocumentViewManager.setPageTransparencyGrid(tag, pageTransparencyGrid);
     }
     return Promise.resolve();
   }
@@ -761,7 +761,7 @@ export default class DocumentView extends PureComponent {
   setDefaultPageColor = (defaultPageColor) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       DocumentViewManager.setDefaultPageColor(tag, defaultPageColor);
+       return DocumentViewManager.setDefaultPageColor(tag, defaultPageColor);
     }
     return Promise.resolve();
   }
@@ -769,7 +769,7 @@ export default class DocumentView extends PureComponent {
   setBackgroundColor = (backgroundColor) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       DocumentViewManager.setBackgroundColor(tag, backgroundColor);
+      return DocumentViewManager.setBackgroundColor(tag, backgroundColor);
     }
     return Promise.resolve();
   }
@@ -778,6 +778,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
+    }
+    return Promise.resolve();
+  }
+
+  undo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.undo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  redo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.redo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  showCrop = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showCrop(tag);
     }
     return Promise.resolve();
   }

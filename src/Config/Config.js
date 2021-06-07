@@ -135,6 +135,7 @@ export default {
   // LongPressMenu defines the menu items when a long press on empty space or text occurs
   LongPressMenu: {
     copy: 'copy',
+    paste: 'paste',
     search: 'search',
     share: 'share',
     read: 'read',

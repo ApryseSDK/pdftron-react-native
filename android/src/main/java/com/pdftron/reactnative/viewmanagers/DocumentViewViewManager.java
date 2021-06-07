@@ -946,6 +946,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void undo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.undo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "undo", "Unable to find DocumentView.");
+        }
+    }
+
+    public void redo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.redo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "redo", "Unable to find DocumentView.");
+        }
+    }
+
+    public void showCrop(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showCropDialog();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showCrop", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

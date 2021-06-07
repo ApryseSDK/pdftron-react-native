@@ -1621,14 +1621,14 @@ NS_ASSUME_NONNULL_END
     documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
-    
-    const BOOL translucent = (self.hideTopAppNavBar || self.hideTopToolbars);
-    documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
-    documentViewController.navigationController.navigationBar.translucent = translucent;
+    const BOOL shouldHideNavigationBar = (self.hideTopAppNavBar || self.hideTopToolbars);
+    documentViewController.hidesNavigationBar = !shouldHideNavigationBar;
+    documentViewController.navigationController.navigationBarHidden = shouldHideNavigationBar;
     
     // Bottom toolbar.
-    documentViewController.navigationController.toolbarHidden = !self.bottomToolbarEnabled;
+    const BOOL shouldHideBottomBar = !self.bottomToolbarEnabled;
+    documentViewController.hidesBottomBar = !shouldHideBottomBar;
+    documentViewController.navigationController.toolbarHidden = shouldHideNavigationBar;
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
@@ -1807,7 +1807,13 @@ NS_ASSUME_NONNULL_END
 {
     PTToolGroupManager *toolGroupManager = documentController.toolGroupManager;
     
-    documentController.toolGroupsEnabled = !self.hideTopToolbars;
+    const BOOL shouldHideToolGroupToolbar = self.hideTopToolbars;
+    documentController.toolGroupsEnabled = !shouldHideToolGroupToolbar;
+    documentController.hidesToolGroupToolbar = !shouldHideToolGroupToolbar;
+    if (shouldHideToolGroupToolbar) {
+        documentController.toolGroupToolbarHidden = YES;
+    }
+    
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
@@ -2780,6 +2786,7 @@ NS_ASSUME_NONNULL_END
     // Mapping from menu item title to identifier.
     NSDictionary<NSString *, NSString *> *map = @{
         PTCopyMenuItemTitleKey: PTCopyMenuItemIdentifierKey,
+        PTPasteMenuItemTitleKey: PTPasteMenuItemIdentifierKey,
         PTSearchMenuItemTitleKey: PTSearchMenuItemIdentifierKey,
         PTShareMenuItemTitleKey: PTShareMenuItemIdentifierKey,
         PTReadMenuItemTitleKey: PTReadMenuItemIdentifierKey,
@@ -3623,6 +3630,18 @@ NS_ASSUME_NONNULL_END
 - (void)rotateCounterClockwise
 {
     [self.currentDocumentViewController.pdfViewCtrl RotateCounterClockwise];
+}
+
+#pragma mark - Undo/Redo
+
+- (void)undo
+{
+    [self.currentDocumentViewController.undoManager undo];
+}
+
+- (void)redo
+{
+    [self.currentDocumentViewController.undoManager redo];
 }
 
 #pragma mark - Get Zoom
