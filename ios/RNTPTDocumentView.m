@@ -469,6 +469,7 @@ NS_ASSUME_NONNULL_END
         },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
+            documentViewController.settingsViewController.viewModeReaderHidden = YES;
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
@@ -1420,6 +1421,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHideViewModeItems:(NSArray<NSString *> *)hideViewModeItems
+{
+    _hideViewModeItems = [hideViewModeItems copy];
+
+    [self applyViewerSettings];
+}
+
 - (void)setTopAppNavBarRightBar:(NSArray<NSString *> *)topAppNavBarRightBar
 {
     _topAppNavBarRightBar = [topAppNavBarRightBar copy];
@@ -1705,6 +1713,17 @@ NS_ASSUME_NONNULL_END
         [self applyDocumentControllerSettings:documentController];
     }
     
+    // View Mode items
+    for (NSString * viewModeItemString in self.hideViewModeItems) {
+        if ([viewModeItemString isEqualToString:PTViewModeColorModeKey]) {
+            documentViewController.settingsViewController.colorModeLightHidden = YES;
+            documentViewController.settingsViewController.colorModeDarkHidden = YES;
+            documentViewController.settingsViewController.colorModeSepiaHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
+            documentViewController.settingsViewController.pageRotationHidden = YES;
+        }
+    }
+
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     

@@ -374,6 +374,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentVi
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hideViewModeItems, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideViewModeItems = [RCTConvert NSArray:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(topAppNavBarRightBar, NSArray, RNTPTDocumentView)
 {
     if (json) {
