@@ -339,6 +339,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
     }
 
+    @ReactProp(name = "photoPickerEnabled") 
+    public void setPhotoPickerEnabled(DocumentView documentView, boolean photoPickerEnabled) {
+        documentView.setPhotoPickerEnabled(photoPickerEnabled);
+    }
+
+    @ReactProp(name = "autoResizeFreeTextEnabled")
+    public void setAutoResizeFreeTextEnabled(DocumentView documentView, boolean autoResizeFreeTextEnabled) {
+        documentView.setAutoResizeFreeTextEnabled(autoResizeFreeTextEnabled);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

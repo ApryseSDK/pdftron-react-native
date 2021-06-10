@@ -1126,6 +1126,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+### photoPickerEnabled
+bool, optional, defaults to true
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1228,6 +1239,17 @@ Defines whether document is automatically saved by the viewer.
 ```js
 <DocumentView
   autoSaveEnabled={true}
+/>
+```
+
+### autoResizeFreeTextEnabled
+bool, optional defaults to false
+
+Defines whether to automatically resize free text when editing
+
+```js
+<DocumentView
+  autoResizeFreeTextEnabled={true}
 />
 ```
 
