@@ -1762,6 +1762,8 @@ contents | string | no | "contents"
 subject | string | yes | "subject"
 title | string | yes | "title"
 contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+customData | object | no | {key: value}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
 
 Returns a promise.
 
@@ -1776,7 +1778,17 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   },
   contents: 'Hello World',
   subject: 'Sample',
-  title: 'set-prop-for-annot'
+  title: 'set-prop-for-annot',
+  customData: {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value3'
+  },
+  strokeColor: {
+    "red": 255,
+    "green": 0,
+    "blue": 0
+  }
 });
 ```
 
