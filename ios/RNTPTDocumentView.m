@@ -3314,6 +3314,17 @@ NS_ASSUME_NONNULL_END
             }];
         }
         
+        NSDictionary *annotStrokeColor = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[PTStrokeColorKey]];
+        if (annotStrokeColor) {
+            UIColor *strokeColor = [self convertRGBAToUIColor:annotStrokeColor];
+            int componentCount;
+            PTColorPt *strokePTColor = [PTColorPt colorFromUIColor:strokeColor componentCount:&componentCount];
+            if (componentCount) {
+                [annot SetColor:strokePTColor numcomp:componentCount];
+                [annot RefreshAppearance];
+            }
+        }
+
         if ([annot IsMarkup]) {
             PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
             
