@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    _autoResizeFreeTextEnabled = YES;
     
     _followSystemDarkMode = YES;
 
@@ -1354,6 +1355,13 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
+-(void)setAnnotationAuthorCheckEnabled:(BOOL)annotationAuthorCheckEnabled
+{
+    _annotationAuthorCheckEnabled = annotationAuthorCheckEnabled;
+
+    [self applyViewerSettings];
+}
+
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
     _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
@@ -1573,6 +1581,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoResizeFreeTextEnabled:(BOOL)autoResizeFreeTextEnabled
+{
+    _autoResizeFreeTextEnabled = autoResizeFreeTextEnabled;
+    
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -1613,6 +1628,9 @@ NS_ASSUME_NONNULL_END
     
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
+    
+    // Auto resize free text enabled.
+    toolManager.autoResizeFreeTextEnabled = self.autoResizeFreeTextEnabled;
     
     // Sticky note pop up.
     toolManager.textAnnotationOptions.opensPopupOnTap = ![self.overrideBehavior containsObject:PTStickyNoteShowPopUpKey];
@@ -1667,6 +1685,9 @@ NS_ASSUME_NONNULL_END
     
     // Annotation author.
     toolManager.annotationAuthor = self.annotationAuthor;
+    
+    // Annotation author check enabled.
+    toolManager.annotationAuthorCheckEnabled = self.annotationAuthorCheckEnabled;
     
     // Shows saved signatures.
     toolManager.showDefaultSignature = self.showSavedSignatures;
