@@ -35,6 +35,7 @@ import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
 import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
+import com.pdftron.pdf.ColorPt;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFDraw;
@@ -2966,6 +2967,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                             annot.setCustomData(key, value);
                         }
+                    }
+                }
+
+                if (propertyMap.hasKey(KEY_ANNOTATION_STROKE_COLOR)) {
+                    ReadableMap strokeColor = propertyMap.getMap(KEY_ANNOTATION_STROKE_COLOR);
+
+                    if (strokeColor != null && strokeColor.hasKey(COLOR_RED) && strokeColor.hasKey(COLOR_GREEN) &&
+                            strokeColor.hasKey(COLOR_BLUE)) {
+                        double red = (double) strokeColor.getInt(COLOR_RED)/255F;
+                        double green = (double) strokeColor.getInt(COLOR_GREEN)/255F;
+                        double blue = (double) strokeColor.getInt(COLOR_BLUE)/255F;
+                        ColorPt colorPt = new ColorPt(red, green, blue);
+                        annot.setColor(colorPt);
+                        annot.refreshAppearance();
                     }
                 }
 

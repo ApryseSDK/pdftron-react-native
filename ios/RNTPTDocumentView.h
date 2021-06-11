@@ -188,6 +188,8 @@ static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
 
+static NSString * const PTStrokeColorKey = @"strokeColor";
+
 static NSString * const PTScrollHorizontalKey = @"horizontal";
 static NSString * const PTScrollVerticalKey = @"vertical";
 
