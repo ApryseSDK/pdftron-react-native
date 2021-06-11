@@ -291,10 +291,6 @@ public final class Constants {
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
 
-    public static final String KEY_RED = "red";
-    public static final String KEY_GREEN = "green";
-    public static final String KEY_BLUE = "blue";
-
     public static final String KEY_HORIZONTAL = "horizontal";
     public static final String KEY_VERTICAL = "vertical";
 
