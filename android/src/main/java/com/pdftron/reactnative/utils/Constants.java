@@ -264,6 +264,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
     public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
+    public static final String KEY_ANNOTATION_STROKE_COLOR = "strokeColor";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -289,6 +290,10 @@ public final class Constants {
     public static final String KEY_Y2 = "y2";
     public static final String KEY_WIDTH = "width";
     public static final String KEY_HEIGHT = "height";
+
+    public static final String KEY_RED = "red";
+    public static final String KEY_GREEN = "green";
+    public static final String KEY_BLUE = "blue";
 
     public static final String KEY_HORIZONTAL = "horizontal";
     public static final String KEY_VERTICAL = "vertical";
