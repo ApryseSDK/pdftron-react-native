@@ -560,7 +560,7 @@ RCT_REMAP_METHOD(redo,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] undoForDocumentViewTag:tag];
+        [[self documentViewManager] redoForDocumentViewTag:tag];
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
