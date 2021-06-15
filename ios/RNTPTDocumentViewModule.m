@@ -289,6 +289,22 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(getPropertiesForAnnotation,
+                 getPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *propertyMap = [[self documentViewManager] getPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(propertyMap);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_properties_for_annotation", @"Failed to get properties for annotation", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setDrawAnnotations,
                  setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
                  drawAnnotations:(BOOL)drawAnnotations
