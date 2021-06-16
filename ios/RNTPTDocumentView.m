@@ -3365,12 +3365,11 @@ NS_ASSUME_NONNULL_END
 - (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
-    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
 
     NSError *error;
     
     __block NSMutableDictionary<NSString *, NSObject *> *map = [[NSMutableDictionary alloc] init];
-    if (pdfViewCtrl && pdfDoc) {
+    if (pdfViewCtrl) {
         NSError *error;
 
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
