@@ -3373,7 +3373,7 @@ NS_ASSUME_NONNULL_END
     if (pdfViewCtrl && pdfDoc) {
         NSError *error;
 
-        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc *doc) {
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             
             PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
             if (![annot IsValid]) {

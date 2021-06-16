@@ -1792,6 +1792,39 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### getPropertiesForAnnotation
+Gets properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+
+Available properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 2, x2: 3, y2: 4}
+contents | string | no | "contents"
+subject | string | yes | "subject"
+title | string | yes | "title"
+contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+customData | object | no | {key: value}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
+
+Returns a promise.
+
+```js
+// Get properties for annotation in the current document.
+this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((propertyMap) => {
+  if (propertyMap) {
+    console.log('Properties for annotation: ', JSON.stringify(propertyMap));
+  }
+})
+```
+
 #### setDrawAnnotations
 Sets whether all annotations and forms should be rendered in the viewer.
 
