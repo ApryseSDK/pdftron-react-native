@@ -290,6 +290,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getCustomDataForAnnotation(final int tag, final String annotationID, final int pageNumber, final String key, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String customData = mDocumentViewInstance.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
+                    promise.resolve(customData);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void handleBackButton(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
