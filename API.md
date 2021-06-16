@@ -1812,9 +1812,9 @@ propertyMap | object | the non-null properties of the annotation | `{contents: '
 
 ```js
 // Get properties for annotation in the current document.
-this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((propertyMap) => {
-  if (propertyMap) {
-    console.log('Properties for annotation: ', JSON.stringify(propertyMap));
+this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
+  if (properties) {
+    console.log('Properties for annotation: ', JSON.stringify(properties));
   }
 })
 ```

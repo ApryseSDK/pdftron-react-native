@@ -3028,10 +3028,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public WritableMap getPropertiesForAnnotation(String annotId, int pageNumber) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-        PDFDoc doc = getPdfDoc();
 
         WritableMap propertyMap = Arguments.createMap();
-        if (pdfViewCtrl != null && doc != null) {
+        
+        if (pdfViewCtrl != null) {
             boolean shouldUnlockRead = false;
             try {
                 pdfViewCtrl.docLockRead();
