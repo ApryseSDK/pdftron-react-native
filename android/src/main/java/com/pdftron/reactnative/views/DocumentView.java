@@ -2725,11 +2725,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-        PDFDoc pdfDoc = getPdfDoc();
 
         String customData = "";
 
-        if (pdfViewCtrl != null && pdfDoc != null) {
+        if (pdfViewCtrl != null) {
             boolean shouldUnlockRead = false;
             try {
                 pdfViewCtrl.docLockRead();
