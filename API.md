@@ -1938,8 +1938,14 @@ Name | Type | Description
 value | string | the `customData` property associated with the given key
 
 ```js
-this._viewer.getCustomDataForAnnotation("Pdftron", 2, "version").then((value) => {
-  console.log('The PDFNet version is', value);
+this._viewer.setPropertiesForAnnotation("annotation1", 2, {
+  customData: {
+    data: "Nice annotation"
+  }
+}).then(() => {
+  this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
+    console.log(value == "Nice annotation");
+  })
 })
 ```
 

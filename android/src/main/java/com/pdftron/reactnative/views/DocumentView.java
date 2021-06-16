@@ -2732,19 +2732,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null && pdfDoc != null) {
             boolean shouldUnlockRead = false;
             try {
-                pdfDoc.lockRead();
+                pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationsOnPage(pageNumber);
-                for (Annot annot : annots) {
-                    if (annot.getUniqueID().getAsPDFText().equals(annotationID)) {
-                        customData = annot.getCustomData(key);
-                    }
-                 }
+                Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotationID, pageNumber);
+                if (annot != null) {
+                    customData = annot.getCustomData(key);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (shouldUnlockRead) {
-                    pdfDoc.unlockRead();
+                    pdfViewCtrl.docUnlockRead();
                 }
             }
         }
