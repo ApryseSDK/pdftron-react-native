@@ -3034,24 +3034,36 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null && doc != null) {
             boolean shouldUnlockRead = false;
             try {
-                doc.lockRead();
+                // doc.lockRead();
+                pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
 
                 if (annot != null && annot.isValid()) {
-                    propertyMap.putString(KEY_ANNOTATION_CONTENTS, annot.getContents());
+
+                    String contents = annot.getContents();
+                    if (!contents.isEmpty()) {
+                        propertyMap.putString(KEY_ANNOTATION_CONTENTS, contents);
+                    }
 
                     com.pdftron.pdf.Rect rect = annot.getRect();
-                    WritableMap rectMap = Arguments.createMap();
                     if (rect != null) {
+                        double rectX1 = rect.getX1();
+                        double rectY1 = rect.getY1();
+                        double rectX2 = rect.getY1();
+                        double rectY2 = rect.getY1();
+                        double rectWidth = rect.getWidth();
+                        double rectHeight = rect.getHeight();
+
+                        WritableMap rectMap = Arguments.createMap();
                         rectMap.putDouble(KEY_X1, rect.getX1());
                         rectMap.putDouble(KEY_Y1, rect.getY1());
                         rectMap.putDouble(KEY_X2, rect.getX2());
                         rectMap.putDouble(KEY_Y2, rect.getY2());
                         rectMap.putDouble(KEY_WIDTH, rect.getWidth());
                         rectMap.putDouble(KEY_HEIGHT, rect.getHeight());
+                        propertyMap.putMap(KEY_ANNOTATION_RECT, rectMap);
                     }
-                    propertyMap.putMap(KEY_ANNOTATION_RECT, rectMap);
 
                     ColorPt colorPt = annot.getColorAsRGB();
                     WritableMap colorMap = Arguments.createMap();
@@ -3085,7 +3097,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 ex.printStackTrace();
             } finally {
                 if (shouldUnlockRead) {
-                    doc.unlockRead();
+                    // doc.unlockRead();
+                    pdfViewCtrl.docUnlockRead();
                 }
             }
         }

@@ -3390,19 +3390,21 @@ NS_ASSUME_NONNULL_END
             
             PTPDFRect *rect = [annot GetRect];
             if (rect) {
-                NSNumber *rectX1 = [NSNumber numberWithDouble:[rect GetX1]];
-                NSNumber *rectY1 = [NSNumber numberWithDouble:[rect GetY1]];
-                NSNumber *rectX2 = [NSNumber numberWithDouble:[rect GetX2]];
-                NSNumber *rectY2 = [NSNumber numberWithDouble:[rect GetY2]];
-                if (rectX1 && rectY1 && rectX2 && rectY2) {
-                    NSDictionary *rectDict = @{
-                        PTRectX1Key: rectX1,
-                        PTRectY1Key: rectY1,
-                        PTRectX2Key: rectX2,
-                        PTRectY2Key: rectY2
-                    };
-                    [map setObject:rectDict forKey:PTRectKey];
-                }
+                double rectX1 = [rect GetX1];
+                double rectY1 = [rect GetY1];
+                double rectX2 = [rect GetX2];
+                double rectY2 = [rect GetY2];
+                double rectWidth = [rect Width];
+                double rectHeight = [rect Height];
+                NSDictionary *rectDict = @{
+                    PTRectX1Key: @(rectX1),
+                    PTRectY1Key: @(rectY1),
+                    PTRectX2Key: @(rectX2),
+                    PTRectY2Key: @(rectY2),
+                    PTRectWidthKey: @(rectWidth),
+                    PTRectHeightKey: @(rectHeight)
+                };
+                [map setObject:rectDict forKey:PTRectKey];
             }
             
             PTColorPt *color = [annot GetColorAsRGB];
@@ -3433,19 +3435,21 @@ NS_ASSUME_NONNULL_END
                                 
                 PTPDFRect *contentRect = [markupAnnot GetContentRect];
                 if (contentRect) {
-                    NSNumber *contentRectX1 = [NSNumber numberWithDouble:[contentRect GetX1]];
-                    NSNumber *contentRectY1 = [NSNumber numberWithDouble:[contentRect GetY1]];
-                    NSNumber *contentRectX2 = [NSNumber numberWithDouble:[contentRect GetX2]];
-                    NSNumber *contentRectY2 = [NSNumber numberWithDouble:[contentRect GetY2]];
-                    if (contentRectX1 && contentRectY1 && contentRectX2 && contentRectY2) {
-                        NSDictionary *contentRectDict = @{
-                            PTRectX1Key: contentRectX1,
-                            PTRectY1Key: contentRectY1,
-                            PTRectX2Key: contentRectX2,
-                            PTRectY2Key: contentRectY2
-                        };
-                        [map setObject:contentRectDict forKey:PTContentRectAnnotationPropertyKey];
-                    }
+                    double contentRectX1 = [contentRect GetX1];
+                    double contentRectY1 = [contentRect GetY1];
+                    double contentRectX2 = [contentRect GetX2];
+                    double contentRectY2 = [contentRect GetY2];
+                    double contentRectWidth = [contentRect Width];
+                    double contentRectHeight = [contentRect Height];
+                    NSDictionary *contentRectDict = @{
+                        PTRectX1Key: @(contentRectX1),
+                        PTRectY1Key: @(contentRectY1),
+                        PTRectX2Key: @(contentRectX2),
+                        PTRectY2Key: @(contentRectY2),
+                        PTRectWidthKey: @(contentRectWidth),
+                        PTRectHeightKey: @(contentRectHeight)
+                    };
+                    [map setObject:contentRectDict forKey:PTContentRectAnnotationPropertyKey];
                 }
             }
         } error:&error];
