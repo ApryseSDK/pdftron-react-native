@@ -1802,13 +1802,24 @@ Name | Type | Description
 annotationId | string | the unique id of the annotation
 pageNumber | integer | the page number where annotation is located. It is 1-indexed
 
+Available Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+contents | string | no | "Contents"
+subject | string | yes | "Subject"
+title | string | yes | "Title"
+contentRect | object | yes | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
+
 Returns a promise.
 
 Promise Parameters:
 
 Name | Type | Description | Example
 --- | --- | --- | ---
-propertyMap | object | the non-null properties of the annotation | `{contents: 'Contents', strokeColor: {blue: 0, green: 255, red: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
+propertyMap | object | the non-null properties of the annotation | `{contents: 'Contents', strokeColor: {red: 255, green: 0, blue: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
 
 ```js
 // Get properties for annotation in the current document.
