@@ -387,6 +387,24 @@ RCT_REMAP_METHOD(getAnnotationListOnPage,
     }
 }
 
+RCT_REMAP_METHOD(getCustomDataForAnnotation,
+                  getCustomDataForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                  annotationId:(NSString *)annotationId
+                  pageNumber:(NSInteger)pageNumber
+                  key:(NSString *)key
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *customData = [[self documentViewManager]
+            getCustomDataForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber key:key];
+        resolve(customData);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_custom_data_for_annotation", @"Failed to get custom data for annotation", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber
@@ -560,7 +578,7 @@ RCT_REMAP_METHOD(redo,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] undoForDocumentViewTag:tag];
+        [[self documentViewManager] redoForDocumentViewTag:tag];
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);

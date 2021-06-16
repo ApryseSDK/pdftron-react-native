@@ -64,19 +64,6 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (BOOL)controlsHidden
-{
-    if (self.navigationController) {
-        if ([self isTopToolbarEnabled]) {
-            return [self.navigationController isNavigationBarHidden];
-        }
-        if ([self isBottomToolbarEnabled]) {
-            return [self isThumbnailSliderHidden];
-        }
-    }
-    return [super controlsHidden];
-}
-
 - (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
 {
     return NO;

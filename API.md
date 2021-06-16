@@ -115,6 +115,35 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
+### pdfFromOfficeTemplate
+Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
+For more information please see our [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+docxPath | string | the local file path to the template file
+json | object | the replacement data in the form of a JSON object
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+resultPdfPath | string | the local file path to the generated PDF 
+
+The user is responsible for cleaning up the temporary file that is generated.
+
+Example:
+
+```js
+RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+```
+
 ## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
@@ -337,7 +366,7 @@ Defines whether the document slider of the viewer is enabled.
 ```
 
 #### hideViewModeItems
-array of string, optional, defaults to none. Android only.
+array of string, optional, defaults to none.
 
 Defines view mode items to be hidden in the view mode dialog. Strings should be [`Config.ViewModePickerItem`](./src/Config/Config.js) constants.
 
@@ -1754,6 +1783,8 @@ contents | string | no | "contents"
 subject | string | yes | "subject"
 title | string | yes | "title"
 contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+customData | object | no | {key: value}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
 
 Returns a promise.
 
@@ -1768,7 +1799,17 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   },
   contents: 'Hello World',
   subject: 'Sample',
-  title: 'set-prop-for-annot'
+  title: 'set-prop-for-annot',
+  customData: {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value3'
+  },
+  strokeColor: {
+    "red": 255,
+    "green": 0,
+    "blue": 0
+  }
 });
 ```
 
@@ -1896,6 +1937,36 @@ this._viewer.getAnnotationListOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
+})
+```
+
+#### getCustomDataForAnnotation
+Gets an annotation's `customData` property.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+key | string | the unique key associated with the `customData` property
+
+Returns a Promise.
+
+Promise Parameters: 
+Name | Type | Description
+--- | --- | ---
+value | string | the `customData` property associated with the given key
+
+```js
+this._viewer.setPropertiesForAnnotation("annotation1", 2, {
+  customData: {
+    data: "Nice annotation"
+  }
+}).then(() => {
+  this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
+    console.log(value === "Nice annotation");
+  })
 })
 ```
 

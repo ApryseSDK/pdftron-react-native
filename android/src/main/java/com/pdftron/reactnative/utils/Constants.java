@@ -264,6 +264,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
     public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
+    public static final String KEY_ANNOTATION_STROKE_COLOR = "strokeColor";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";

@@ -469,6 +469,7 @@ NS_ASSUME_NONNULL_END
         },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
+            documentViewController.settingsViewController.viewModeReaderHidden = YES;
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
@@ -1420,6 +1421,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHideViewModeItems:(NSArray<NSString *> *)hideViewModeItems
+{
+    _hideViewModeItems = [hideViewModeItems copy];
+
+    [self applyViewerSettings];
+}
+
 - (void)setTopAppNavBarRightBar:(NSArray<NSString *> *)topAppNavBarRightBar
 {
     _topAppNavBarRightBar = [topAppNavBarRightBar copy];
@@ -1613,14 +1621,14 @@ NS_ASSUME_NONNULL_END
     documentViewController.automaticallySavesDocument = self.autoSaveEnabled;
     
     // Top toolbar.
-    documentViewController.controlsHidden = (self.hideTopAppNavBar || self.hideTopToolbars);
-    
-    const BOOL translucent = (self.hideTopAppNavBar || self.hideTopToolbars);
-    documentViewController.thumbnailSliderController.toolbar.translucent = translucent;
-    documentViewController.navigationController.navigationBar.translucent = translucent;
+    const BOOL shouldHideNavigationBar = (self.hideTopAppNavBar || self.hideTopToolbars);
+    documentViewController.hidesNavigationBar = !shouldHideNavigationBar;
+    documentViewController.navigationController.navigationBarHidden = shouldHideNavigationBar;
     
     // Bottom toolbar.
-    documentViewController.navigationController.toolbarHidden = !self.bottomToolbarEnabled;
+    const BOOL shouldHideBottomBar = !self.bottomToolbarEnabled;
+    documentViewController.hidesBottomBar = !shouldHideBottomBar;
+    documentViewController.navigationController.toolbarHidden = shouldHideNavigationBar;
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
@@ -1705,6 +1713,17 @@ NS_ASSUME_NONNULL_END
         [self applyDocumentControllerSettings:documentController];
     }
     
+    // View Mode items
+    for (NSString * viewModeItemString in self.hideViewModeItems) {
+        if ([viewModeItemString isEqualToString:PTViewModeColorModeKey]) {
+            documentViewController.settingsViewController.colorModeLightHidden = YES;
+            documentViewController.settingsViewController.colorModeDarkHidden = YES;
+            documentViewController.settingsViewController.colorModeSepiaHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
+            documentViewController.settingsViewController.pageRotationHidden = YES;
+        }
+    }
+
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     
@@ -1800,7 +1819,13 @@ NS_ASSUME_NONNULL_END
 {
     PTToolGroupManager *toolGroupManager = documentController.toolGroupManager;
     
-    documentController.toolGroupsEnabled = !self.hideTopToolbars;
+    const BOOL shouldHideToolGroupToolbar = self.hideTopToolbars;
+    documentController.toolGroupsEnabled = !shouldHideToolGroupToolbar;
+    documentController.hidesToolGroupToolbar = !shouldHideToolGroupToolbar;
+    if (shouldHideToolGroupToolbar) {
+        documentController.toolGroupToolbarHidden = YES;
+    }
+    
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
@@ -3315,6 +3340,17 @@ NS_ASSUME_NONNULL_END
             }];
         }
         
+        NSDictionary *annotStrokeColor = [RNTPTDocumentView PT_idAsNSDictionary:propertyMap[PTStrokeColorKey]];
+        if (annotStrokeColor) {
+            UIColor *strokeColor = [self convertRGBAToUIColor:annotStrokeColor];
+            int componentCount;
+            PTColorPt *strokePTColor = [PTColorPt colorFromUIColor:strokeColor componentCount:&componentCount];
+            if (componentCount) {
+                [annot SetColor:strokePTColor numcomp:componentCount];
+                [annot RefreshAppearance];
+            }
+        }
+
         if ([annot IsMarkup]) {
             PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
             
@@ -3483,6 +3519,33 @@ NS_ASSUME_NONNULL_END
     }
     
     return [annotations copy];
+}
+
+- (NSString *)getCustomDataForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber key:(NSString *)key
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
+    
+    __block NSString *customData = @"";
+    if (pdfViewCtrl && pdfDoc) {
+        NSError *error;
+        
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            NSArray <PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:(int)pageNumber];
+            for (PTAnnot *annot in annots) {
+                if ([[annot GetUniqueIDAsString] isEqualToString:annotationId]) {
+                    customData = [[annot GetCustomData:key] copy];
+                }
+            }
+        } error:&error];
+        
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+    
+    return [customData copy];
 }
 
 #pragma mark - Page

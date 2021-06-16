@@ -447,6 +447,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getCustomDataForAnnotation = (annotationID, pageNumber, key) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

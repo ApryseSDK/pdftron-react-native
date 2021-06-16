@@ -35,6 +35,7 @@ import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
 import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
+import com.pdftron.pdf.ColorPt;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFDraw;
@@ -216,11 +217,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     protected void buildViewer() {
         super.buildViewer();
-        mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
-        if (!Utils.isNullOrEmpty(mTabTitle)) {
-            mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+        if (mViewerBuilder != null) {
+            mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            if (!Utils.isNullOrEmpty(mTabTitle)) {
+                mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+            }
+            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
-        mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
     }
 
     public void setDocument(String path) {
@@ -1311,7 +1314,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_BUTTON_CALLOUT.equals(item) || TOOL_ANNOTATION_CREATE_CALLOUT.equals(item)) {
             buttonType = ToolbarButtonType.CALLOUT;
         } else if (TOOL_BUTTON_STAMP.equals(item) || TOOL_ANNOTATION_CREATE_STAMP.equals(item)) {
-            buttonType = ToolbarButtonType.STAMP;
+            buttonType = ToolbarButtonType.IMAGE;
         } else if (TOOL_ANNOTATION_CREATE_RUBBER_STAMP.equals(item)) {
             buttonType = ToolbarButtonType.STAMP;
         } else if (TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT.equals(item)) {
@@ -1325,11 +1328,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
             buttonType = ToolbarButtonType.SOUND;
         } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)) {
-            // TODO
+            buttonType = ToolbarButtonType.RECT_REDACTION;
         } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item)) {
             buttonType = ToolbarButtonType.LINK;
         } else if (TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
-            // TODO
+            buttonType = ToolbarButtonType.TEXT_REDACTION;
         } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             // TODO
         } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
@@ -2732,6 +2735,32 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return annotations;
     }
 
+    public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        String customData = "";
+
+        if (pdfViewCtrl != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+                Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotationID, pageNumber);
+                if (annot != null) {
+                    customData = annot.getCustomData(key);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+        }
+
+        return customData;
+    }
+
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -2976,6 +3005,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                             annot.setCustomData(key, value);
                         }
+                    }
+                }
+
+                if (propertyMap.hasKey(KEY_ANNOTATION_STROKE_COLOR)) {
+                    ReadableMap strokeColor = propertyMap.getMap(KEY_ANNOTATION_STROKE_COLOR);
+
+                    if (strokeColor != null && strokeColor.hasKey(COLOR_RED) && strokeColor.hasKey(COLOR_GREEN) &&
+                            strokeColor.hasKey(COLOR_BLUE)) {
+                        double red = (double) strokeColor.getInt(COLOR_RED)/255F;
+                        double green = (double) strokeColor.getInt(COLOR_GREEN)/255F;
+                        double blue = (double) strokeColor.getInt(COLOR_BLUE)/255F;
+                        ColorPt colorPt = new ColorPt(red, green, blue);
+                        annot.setColor(colorPt);
+                        annot.refreshAppearance();
                     }
                 }
 

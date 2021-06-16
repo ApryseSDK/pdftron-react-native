@@ -374,6 +374,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideDefaultAnnotationToolbars, NSArray, RNTPTDocumentVi
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hideViewModeItems, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideViewModeItems = [RCTConvert NSArray:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(topAppNavBarRightBar, NSArray, RNTPTDocumentView)
 {
     if (json) {
@@ -939,6 +946,16 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;
+    }
+}
+
+- (NSString *)getCustomDataForAnnotationForDocumentViewTag:(NSNumber *) tag annotationId:(NSString *)annotationId  pageNumber:(NSInteger)pageNumber key:(NSString *)key
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView getCustomDataForAnnotation:annotationId pageNumber:pageNumber key:key];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
 
