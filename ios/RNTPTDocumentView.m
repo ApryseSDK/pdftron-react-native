@@ -3383,23 +3383,70 @@ NS_ASSUME_NONNULL_END
                 return;
             }
             
-            // rect	        object	no	{x1: 1, y1: 2, x2: 3, y2: 4}
-            [map setObject:[annot GetRect] forKey:@"rect"];
-            // contents	    string	no	"contents"
-            [map setObject:[annot GetContents] forKey:@"contents"];
-            // strokeColor	object	no	{red: 255, green: 0, blue: 0}
-            // do i need to multiply *255F;?
-            [map setObject:[annot GetColorAsRGB] forKey:@"strokeColor"];
+            NSString *contents = [annot GetContents];
+            if (contents) {
+                [map setObject:[annot GetContents] forKey:PTContentsAnnotationPropertyKey];
+            }
+            
+            PTPDFRect *rect = [annot GetRect];
+            if (rect) {
+                NSNumber *rectX1 = [NSNumber numberWithDouble:[rect GetX1]];
+                NSNumber *rectY1 = [NSNumber numberWithDouble:[rect GetY1]];
+                NSNumber *rectX2 = [NSNumber numberWithDouble:[rect GetX2]];
+                NSNumber *rectY2 = [NSNumber numberWithDouble:[rect GetY2]];
+                if (rectX1 && rectY1 && rectX2 && rectY2) {
+                    NSDictionary *rectDict = @{
+                        PTRectX1Key: rectX1,
+                        PTRectY1Key: rectY1,
+                        PTRectX2Key: rectX2,
+                        PTRectY2Key: rectY2
+                    };
+                    [map setObject:rectDict forKey:PTRectKey];
+                }
+            }
+            
+            PTColorPt *color = [annot GetColorAsRGB];
+            if (color) {
+                double red = [color Get:0] * 255;
+                double green = [color Get:1] * 255;
+                double blue = [color Get:2] * 255;
+                NSDictionary *colorDict = @{
+                    PTColorRedKey: @(red),
+                    PTColorGreenKey: @(green),
+                    PTColorBlueKey: @(blue)
+                };
+                [map setObject:colorDict forKey:PTStrokeColorKey];
+            }
             
             if ([annot IsMarkup]) {
                 PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
                 
-                // subject	    string	yes	"subject"
-                [map setObject:[markupAnnot GetSubject] forKey:@"subject"];
-                // title	    string	yes	"title"
-                [map setObject:[markupAnnot GetTitle] forKey:@"title"];
-                // contentRect	object	yes	{x1: 1, y1: 2, x2: 3, y2: 4}
-                [map setObject:[markupAnnot GetContentRect] forKey:@"contentRect"];
+                NSString *subject = [markupAnnot GetSubject];
+                if (subject) {
+                    [map setObject:subject forKey:PTSubjectAnnotationPropertyKey];
+                }
+                
+                NSString *title = [markupAnnot GetTitle];
+                if (title) {
+                    [map setObject:title forKey:PTTitleAnnotationPropertyKey];
+                }
+                                
+                PTPDFRect *contentRect = [markupAnnot GetContentRect];
+                if (contentRect) {
+                    NSNumber *contentRectX1 = [NSNumber numberWithDouble:[contentRect GetX1]];
+                    NSNumber *contentRectY1 = [NSNumber numberWithDouble:[contentRect GetY1]];
+                    NSNumber *contentRectX2 = [NSNumber numberWithDouble:[contentRect GetX2]];
+                    NSNumber *contentRectY2 = [NSNumber numberWithDouble:[contentRect GetY2]];
+                    if (contentRectX1 && contentRectY1 && contentRectX2 && contentRectY2) {
+                        NSDictionary *contentRectDict = @{
+                            PTRectX1Key: contentRectX1,
+                            PTRectY1Key: contentRectY1,
+                            PTRectX2Key: contentRectX2,
+                            PTRectY2Key: contentRectY2
+                        };
+                        [map setObject:contentRectDict forKey:PTContentRectAnnotationPropertyKey];
+                    }
+                }
             }
         } error:&error];
     }
