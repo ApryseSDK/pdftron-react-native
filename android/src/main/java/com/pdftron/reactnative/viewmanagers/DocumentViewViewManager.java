@@ -538,7 +538,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public ReadableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+    public WritableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             return documentView.getPropertiesForAnnotation(annotId, pageNumber);

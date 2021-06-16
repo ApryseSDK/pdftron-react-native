@@ -385,7 +385,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             @Override
             public void run() {
                 try {
-                    ReadableMap propertyMap = mDocumentViewInstance.getPropertiesForAnnotation(tag, annotId, pageNumber);
+                    WritableMap propertyMap = mDocumentViewInstance.getPropertiesForAnnotation(tag, annotId, pageNumber);
                     promise.resolve(propertyMap);
                 } catch (Exception ex) {
                     promise.reject(ex);
