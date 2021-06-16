@@ -1944,7 +1944,7 @@ this._viewer.setPropertiesForAnnotation("annotation1", 2, {
   }
 }).then(() => {
   this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
-    console.log(value == "Nice annotation");
+    console.log(value === "Nice annotation");
   })
 })
 ```
