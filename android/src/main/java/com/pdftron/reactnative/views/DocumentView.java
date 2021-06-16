@@ -3034,7 +3034,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null && doc != null) {
             boolean shouldUnlockRead = false;
             try {
-                // doc.lockRead();
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
@@ -3048,13 +3047,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                     com.pdftron.pdf.Rect rect = annot.getRect();
                     if (rect != null) {
-                        double rectX1 = rect.getX1();
-                        double rectY1 = rect.getY1();
-                        double rectX2 = rect.getY1();
-                        double rectY2 = rect.getY1();
-                        double rectWidth = rect.getWidth();
-                        double rectHeight = rect.getHeight();
-
                         WritableMap rectMap = Arguments.createMap();
                         rectMap.putDouble(KEY_X1, rect.getX1());
                         rectMap.putDouble(KEY_Y1, rect.getY1());
@@ -3068,17 +3060,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     ColorPt colorPt = annot.getColorAsRGB();
                     WritableMap colorMap = Arguments.createMap();
                     if (colorPt != null) {
-                        colorMap.putDouble(COLOR_RED, colorPt.get(0)*255F);
-                        colorMap.putDouble(COLOR_GREEN, colorPt.get(1)*255F);
-                        colorMap.putDouble(COLOR_BLUE, colorPt.get(2)*255F);
+                        colorMap.putDouble(COLOR_RED, colorPt.get(0) * 255F);
+                        colorMap.putDouble(COLOR_GREEN, colorPt.get(1) * 255F);
+                        colorMap.putDouble(COLOR_BLUE, colorPt.get(2) * 255F);
                     }
                     propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
                     
                     if (annot.isMarkup()) {
                         Markup markupAnnot = new Markup(annot);
                         
-                        propertyMap.putString(KEY_ANNOTATION_SUBJECT, markupAnnot.getSubject());
-                        propertyMap.putString(KEY_ANNOTATION_TITLE, markupAnnot.getTitle());
+                        String subject = markupAnnot.getSubject();
+                        if (!subject.isEmpty()) {
+                            propertyMap.putString(KEY_ANNOTATION_SUBJECT, subject);
+                        }
+
+                        String title = markupAnnot.getTitle();
+                        if (!title.isEmpty()) {
+                            propertyMap.putString(KEY_ANNOTATION_TITLE, title);
+                        }
 
                         com.pdftron.pdf.Rect contentRect = markupAnnot.getContentRect();
                         WritableMap contentRectMap = Arguments.createMap();
@@ -3089,15 +3088,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             contentRectMap.putDouble(KEY_Y2, contentRect.getY2());
                             contentRectMap.putDouble(KEY_WIDTH, contentRect.getWidth());
                             contentRectMap.putDouble(KEY_HEIGHT, contentRect.getHeight());
+                            propertyMap.putMap(KEY_ANNOTATION_CONTENT_RECT, contentRectMap);
                         }
-                        propertyMap.putMap(KEY_ANNOTATION_CONTENT_RECT, contentRectMap);
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
                 if (shouldUnlockRead) {
-                    // doc.unlockRead();
                     pdfViewCtrl.docUnlockRead();
                 }
             }

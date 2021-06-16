@@ -3390,19 +3390,13 @@ NS_ASSUME_NONNULL_END
             
             PTPDFRect *rect = [annot GetRect];
             if (rect) {
-                double rectX1 = [rect GetX1];
-                double rectY1 = [rect GetY1];
-                double rectX2 = [rect GetX2];
-                double rectY2 = [rect GetY2];
-                double rectWidth = [rect Width];
-                double rectHeight = [rect Height];
                 NSDictionary *rectDict = @{
-                    PTRectX1Key: @(rectX1),
-                    PTRectY1Key: @(rectY1),
-                    PTRectX2Key: @(rectX2),
-                    PTRectY2Key: @(rectY2),
-                    PTRectWidthKey: @(rectWidth),
-                    PTRectHeightKey: @(rectHeight)
+                    PTRectX1Key: @([rect GetX1]),
+                    PTRectY1Key: @([rect GetY1]),
+                    PTRectX2Key: @([rect GetX2]),
+                    PTRectY2Key: @([rect GetY2]),
+                    PTRectWidthKey: @([rect Width]),
+                    PTRectHeightKey: @([rect Height])
                 };
                 [map setObject:rectDict forKey:PTRectKey];
             }
@@ -3435,19 +3429,13 @@ NS_ASSUME_NONNULL_END
                                 
                 PTPDFRect *contentRect = [markupAnnot GetContentRect];
                 if (contentRect) {
-                    double contentRectX1 = [contentRect GetX1];
-                    double contentRectY1 = [contentRect GetY1];
-                    double contentRectX2 = [contentRect GetX2];
-                    double contentRectY2 = [contentRect GetY2];
-                    double contentRectWidth = [contentRect Width];
-                    double contentRectHeight = [contentRect Height];
                     NSDictionary *contentRectDict = @{
-                        PTRectX1Key: @(contentRectX1),
-                        PTRectY1Key: @(contentRectY1),
-                        PTRectX2Key: @(contentRectX2),
-                        PTRectY2Key: @(contentRectY2),
-                        PTRectWidthKey: @(contentRectWidth),
-                        PTRectHeightKey: @(contentRectHeight)
+                        PTRectX1Key: @([contentRect GetX1]),
+                        PTRectY1Key: @([contentRect GetY1]),
+                        PTRectX2Key: @([contentRect GetX2]),
+                        PTRectY2Key: @([contentRect GetY2]),
+                        PTRectWidthKey: @([contentRect Width]),
+                        PTRectHeightKey: @([contentRect Height])
                     };
                     [map setObject:contentRectDict forKey:PTContentRectAnnotationPropertyKey];
                 }
