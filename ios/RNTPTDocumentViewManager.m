@@ -921,6 +921,16 @@ RCT_CUSTOM_VIEW_PROPERTY(verticalScrollPos, double, RNTPTDocumentView)
     }
 }
 
+- (NSString *)getCustomDataForAnnotationForDocumentViewTag:(NSNumber *) tag annotationId:(NSString *)annotationId  pageNumber:(NSInteger)pageNumber key:(NSString *)key
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView getCustomDataForAnnotation:annotationId pageNumber:pageNumber key:key];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
 {
