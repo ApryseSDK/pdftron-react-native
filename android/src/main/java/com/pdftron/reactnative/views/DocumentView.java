@@ -3058,13 +3058,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
 
                     ColorPt colorPt = annot.getColorAsRGB();
-                    WritableMap colorMap = Arguments.createMap();
                     if (colorPt != null) {
+                        WritableMap colorMap = Arguments.createMap();
                         colorMap.putDouble(COLOR_RED, colorPt.get(0) * 255F);
                         colorMap.putDouble(COLOR_GREEN, colorPt.get(1) * 255F);
                         colorMap.putDouble(COLOR_BLUE, colorPt.get(2) * 255F);
+                        propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
                     }
-                    propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
                     
                     if (annot.isMarkup()) {
                         Markup markupAnnot = new Markup(annot);
@@ -3080,8 +3080,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         }
 
                         com.pdftron.pdf.Rect contentRect = markupAnnot.getContentRect();
-                        WritableMap contentRectMap = Arguments.createMap();
-                        if (contentRect != null) {                            
+                        if (contentRect != null) {
+                            WritableMap contentRectMap = Arguments.createMap();
                             contentRectMap.putDouble(KEY_X1, contentRect.getX1());
                             contentRectMap.putDouble(KEY_Y1, contentRect.getY1());
                             contentRectMap.putDouble(KEY_X2, contentRect.getX2());
