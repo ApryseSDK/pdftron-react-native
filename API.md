@@ -1919,6 +1919,30 @@ this._viewer.getAnnotationListOnPage(2).then((annotations) => {
 })
 ```
 
+#### getCustomDataForAnnotation
+Gets an annotation's `customData` property.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+key | string | the unique key associated with the `customData` property
+
+Returns a Promise.
+
+Promise Parameters: 
+Name | Type | Description
+--- | --- | ---
+value | string | the `customData` property associated with the given key
+
+```js
+this._viewer.getCustomDataForAnnotation("Pdftron", 2, "version").then((value) => {
+  console.log('The PDFNet version is', value);
+})
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 

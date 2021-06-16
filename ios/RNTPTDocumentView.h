@@ -455,6 +455,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber;
 
+- (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
+    pageNumber:(NSInteger)pageNumber key:(NSString *)key;
+
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;

@@ -2723,6 +2723,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return annotations;
     }
 
+    public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = getPdfDoc();
+
+        String customData = "";
+
+        if (pdfViewCtrl != null && pdfDoc != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                pdfDoc.lockRead();
+                shouldUnlockRead = true;
+                ArrayList<Annot> annots = pdfViewCtrl.getAnnotationsOnPage(pageNumber);
+                for (Annot annot : annots) {
+                    if (annot.getUniqueID().getAsPDFText().equals(annotationID)) {
+                        customData = annot.getCustomData(key);
+                    }
+                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfDoc.unlockRead();
+                }
+            }
+        }
+
+        return customData;
+    }
+
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
