@@ -3384,22 +3384,22 @@ NS_ASSUME_NONNULL_END
             }
             
             // rect	        object	no	{x1: 1, y1: 2, x2: 3, y2: 4}
-            [map setObject:[annot.GetRect] forKey:@"rect"];
+            [map setObject:[annot GetRect] forKey:@"rect"];
             // contents	    string	no	"contents"
-            [map setObject:[annot.GetContents] forKey:@"contents"];
+            [map setObject:[annot GetContents] forKey:@"contents"];
             // strokeColor	object	no	{red: 255, green: 0, blue: 0}
             // do i need to multiply *255F;?
-            [map setObject:[annot.GetColorAsRGB] forKey:@"strokeColor"];
+            [map setObject:[annot GetColorAsRGB] forKey:@"strokeColor"];
             
             if ([annot IsMarkup]) {
                 PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
                 
                 // subject	    string	yes	"subject"
-                [map setObject:[markupAnnot.GetSubject] forKey:@"subject"];
+                [map setObject:[markupAnnot GetSubject] forKey:@"subject"];
                 // title	    string	yes	"title"
-                [map setObject:[markupAnnot.GetTitle] forKey:@"title"];
+                [map setObject:[markupAnnot GetTitle] forKey:@"title"];
                 // contentRect	object	yes	{x1: 1, y1: 2, x2: 3, y2: 4}
-                [map setObject:[markupAnnot.GetContentRect] forKey:@"contentRect"];
+                [map setObject:[markupAnnot GetContentRect] forKey:@"contentRect"];
             }
         } error:&error];
     }
