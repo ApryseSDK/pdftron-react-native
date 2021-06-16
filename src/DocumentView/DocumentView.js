@@ -398,9 +398,7 @@ export default class DocumentView extends PureComponent {
   getPropertiesForAnnotation = (id, pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      const properties = DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
-      console.log("MYTEST PROPERTIES OBJECT", properties);
-      return JSON.stringify(properties);
+      return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
     }
     return Promise.resolve();
   }
