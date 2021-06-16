@@ -3032,7 +3032,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         WritableMap propertyMap = Arguments.createMap();
         if (pdfViewCtrl != null && doc != null) {
-            System.out.println("cccc");
             boolean shouldUnlockRead = false;
             try {
                 doc.lockRead();
@@ -3040,24 +3039,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
 
                 if (annot != null && annot.isValid()) {
-                    System.out.println("dddd");
                     propertyMap.putString(KEY_ANNOTATION_CONTENTS, annot.getContents());
 
                     com.pdftron.pdf.Rect rect = annot.getRect();
                     WritableMap rectMap = Arguments.createMap();
-                    rectMap.putDouble(KEY_X1, rect.getX1());
-                    rectMap.putDouble(KEY_Y1, rect.getY1());
-                    rectMap.putDouble(KEY_X2, rect.getX2());
-                    rectMap.putDouble(KEY_Y2, rect.getY2());
-                    rectMap.putDouble(KEY_WIDTH, rect.getWidth());
-                    rectMap.putDouble(KEY_HEIGHT, rect.getHeight());
+                    if (rect != null) {
+                        rectMap.putDouble(KEY_X1, rect.getX1());
+                        rectMap.putDouble(KEY_Y1, rect.getY1());
+                        rectMap.putDouble(KEY_X2, rect.getX2());
+                        rectMap.putDouble(KEY_Y2, rect.getY2());
+                        rectMap.putDouble(KEY_WIDTH, rect.getWidth());
+                        rectMap.putDouble(KEY_HEIGHT, rect.getHeight());
+                    }
                     propertyMap.putMap(KEY_ANNOTATION_RECT, rectMap);
 
                     ColorPt colorPt = annot.getColorAsRGB();
                     WritableMap colorMap = Arguments.createMap();
-                    colorMap.putDouble(COLOR_RED, colorPt.get(0)*255F);
-                    colorMap.putDouble(COLOR_GREEN, colorPt.get(1)*255F);
-                    colorMap.putDouble(COLOR_BLUE, colorPt.get(2)*255F);
+                    if (colorPt != null) {
+                        colorMap.putDouble(COLOR_RED, colorPt.get(0)*255F);
+                        colorMap.putDouble(COLOR_GREEN, colorPt.get(1)*255F);
+                        colorMap.putDouble(COLOR_BLUE, colorPt.get(2)*255F);
+                    }
                     propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
                     
                     if (annot.isMarkup()) {
@@ -3068,16 +3070,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                         com.pdftron.pdf.Rect contentRect = markupAnnot.getContentRect();
                         WritableMap contentRectMap = Arguments.createMap();
-                        contentRectMap.putDouble(KEY_X1, contentRect.getX1());
-                        contentRectMap.putDouble(KEY_Y1, contentRect.getY1());
-                        contentRectMap.putDouble(KEY_X2, contentRect.getX2());
-                        contentRectMap.putDouble(KEY_Y2, contentRect.getY2());
-                        contentRectMap.putDouble(KEY_WIDTH, contentRect.getWidth());
-                        contentRectMap.putDouble(KEY_HEIGHT, contentRect.getHeight());
+                        if (contentRect != null) {                            
+                            contentRectMap.putDouble(KEY_X1, contentRect.getX1());
+                            contentRectMap.putDouble(KEY_Y1, contentRect.getY1());
+                            contentRectMap.putDouble(KEY_X2, contentRect.getX2());
+                            contentRectMap.putDouble(KEY_Y2, contentRect.getY2());
+                            contentRectMap.putDouble(KEY_WIDTH, contentRect.getWidth());
+                            contentRectMap.putDouble(KEY_HEIGHT, contentRect.getHeight());
+                        }
                         propertyMap.putMap(KEY_ANNOTATION_CONTENT_RECT, contentRectMap);
                     }
-                    System.out.println("PROOOOOPERTYMAP");
-                    System.out.println(propertyMap);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

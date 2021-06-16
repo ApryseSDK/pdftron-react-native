@@ -371,7 +371,6 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     ReadableMap propertyMap = mDocumentViewInstance.getPropertiesForAnnotation(tag, annotId, pageNumber);
-                    if (propertyMap == null) System.out.println("propertyMap: aaaaaa");
                     promise.resolve(propertyMap);
                 } catch (Exception ex) {
                     promise.reject(ex);
