@@ -3447,7 +3447,7 @@ NS_ASSUME_NONNULL_END
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 
-    return map;
+    return [map copy];
 }
 
 #pragma mark - Annotation Visibility
