@@ -395,6 +395,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getPropertiesForAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   setDrawAnnotations = (drawAnnotations) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

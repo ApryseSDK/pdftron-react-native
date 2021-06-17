@@ -538,6 +538,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPropertiesForAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
     public void setDrawAnnotations(int tag, boolean drawAnnotations) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

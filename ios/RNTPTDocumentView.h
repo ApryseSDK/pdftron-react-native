@@ -443,6 +443,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
 - (void)setDrawAnnotations:(BOOL)drawAnnotations;
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;

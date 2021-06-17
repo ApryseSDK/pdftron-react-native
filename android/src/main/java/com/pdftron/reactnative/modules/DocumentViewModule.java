@@ -380,6 +380,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void getPropertiesForAnnotation(final int tag, final String annotId, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableMap propertyMap = mDocumentViewInstance.getPropertiesForAnnotation(tag, annotId, pageNumber);
+                    promise.resolve(propertyMap);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setDrawAnnotations(final int tag, final boolean drawAnnotations, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
