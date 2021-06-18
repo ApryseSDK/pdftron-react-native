@@ -289,6 +289,22 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(getPropertiesForAnnotation,
+                 getPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *propertyMap = [[self documentViewManager] getPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(propertyMap);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_properties_for_annotation", @"Failed to get properties for annotation", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setDrawAnnotations,
                  setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
                  drawAnnotations:(BOOL)drawAnnotations
@@ -384,6 +400,24 @@ RCT_REMAP_METHOD(getAnnotationListOnPage,
     }
     @catch (NSException *exception) {
         reject(@"get_annotation_list_on_page", @"Failed to get annotation list on page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCustomDataForAnnotation,
+                  getCustomDataForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                  annotationId:(NSString *)annotationId
+                  pageNumber:(NSInteger)pageNumber
+                  key:(NSString *)key
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *customData = [[self documentViewManager]
+            getCustomDataForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber key:key];
+        resolve(customData);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_custom_data_for_annotation", @"Failed to get custom data for annotation", [self errorFromException:exception]);
     }
 }
 
@@ -560,7 +594,7 @@ RCT_REMAP_METHOD(redo,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] undoForDocumentViewTag:tag];
+        [[self documentViewManager] redoForDocumentViewTag:tag];
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);

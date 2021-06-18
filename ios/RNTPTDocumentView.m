@@ -3362,6 +3362,94 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+
+    NSError *error;
+    
+    __block NSMutableDictionary<NSString *, NSObject *> *map = [[NSMutableDictionary alloc] init];
+    if (pdfViewCtrl) {
+        NSError *error;
+
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            
+            PTAnnot *annot = [self findAnnotWithUniqueID:annotationId onPageNumber:(int)pageNumber pdfViewCtrl:pdfViewCtrl];
+            if (![annot IsValid]) {
+                NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                    annotationId, (int)pageNumber);
+                annot = nil;
+                return;
+            }
+            
+            NSString *contents = [annot GetContents];
+            if (contents) {
+                [map setObject:[annot GetContents] forKey:PTContentsAnnotationPropertyKey];
+            }
+            
+            PTPDFRect *rect = [annot GetRect];
+            if (rect) {
+                NSDictionary *rectDict = @{
+                    PTRectX1Key: @([rect GetX1]),
+                    PTRectY1Key: @([rect GetY1]),
+                    PTRectX2Key: @([rect GetX2]),
+                    PTRectY2Key: @([rect GetY2]),
+                    PTRectWidthKey: @([rect Width]),
+                    PTRectHeightKey: @([rect Height])
+                };
+                [map setObject:rectDict forKey:PTRectKey];
+            }
+            
+            PTColorPt *color = [annot GetColorAsRGB];
+            if (color) {
+                double red = [color Get:0] * 255;
+                double green = [color Get:1] * 255;
+                double blue = [color Get:2] * 255;
+                NSDictionary *colorDict = @{
+                    PTColorRedKey: @(red),
+                    PTColorGreenKey: @(green),
+                    PTColorBlueKey: @(blue)
+                };
+                [map setObject:colorDict forKey:PTStrokeColorKey];
+            }
+            
+            if ([annot IsMarkup]) {
+                PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
+                
+                NSString *subject = [markupAnnot GetSubject];
+                if (subject) {
+                    [map setObject:subject forKey:PTSubjectAnnotationPropertyKey];
+                }
+                
+                NSString *title = [markupAnnot GetTitle];
+                if (title) {
+                    [map setObject:title forKey:PTTitleAnnotationPropertyKey];
+                }
+                                
+                PTPDFRect *contentRect = [markupAnnot GetContentRect];
+                if (contentRect) {
+                    NSDictionary *contentRectDict = @{
+                        PTRectX1Key: @([contentRect GetX1]),
+                        PTRectY1Key: @([contentRect GetY1]),
+                        PTRectX2Key: @([contentRect GetX2]),
+                        PTRectY2Key: @([contentRect GetY2]),
+                        PTRectWidthKey: @([contentRect Width]),
+                        PTRectHeightKey: @([contentRect Height])
+                    };
+                    [map setObject:contentRectDict forKey:PTContentRectAnnotationPropertyKey];
+                }
+            }
+        } error:&error];
+    }
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    }
+
+    return [map copy];
+}
+
 #pragma mark - Annotation Visibility
 
 - (void)setDrawAnnotations:(BOOL)drawAnnotations
@@ -3493,6 +3581,33 @@ NS_ASSUME_NONNULL_END
     }
     
     return [annotations copy];
+}
+
+- (NSString *)getCustomDataForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber key:(NSString *)key
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    PTPDFDoc *pdfDoc = self.currentDocumentViewController.document;
+    
+    __block NSString *customData = @"";
+    if (pdfViewCtrl && pdfDoc) {
+        NSError *error;
+        
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            NSArray <PTAnnot *> *annots = [pdfViewCtrl GetAnnotationsOnPage:(int)pageNumber];
+            for (PTAnnot *annot in annots) {
+                if ([[annot GetUniqueIDAsString] isEqualToString:annotationId]) {
+                    customData = [[annot GetCustomData:key] copy];
+                }
+            }
+        } error:&error];
+        
+        // Throw error as exception to reject promise.
+        if (error) {
+            @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+        }
+    }
+    
+    return [customData copy];
 }
 
 #pragma mark - Page
