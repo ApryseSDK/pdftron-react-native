@@ -1566,6 +1566,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
+{
+   _imageInReflowEnabled = imageInReflowEnabled;
+
+   [self applyViewerSettings];
+}
+
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
 {
     _selectAnnotationAfterCreation = selectAnnotationAfterCreation;
@@ -1610,7 +1617,7 @@ NS_ASSUME_NONNULL_END
     // Thumbnail editing enabled.
     documentViewController.thumbnailsViewController.editingEnabled = self.thumbnailViewEditingEnabled;
     documentViewController.thumbnailsViewController.navigationController.toolbarHidden = !self.thumbnailViewEditingEnabled;
-    
+
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
     
@@ -1748,6 +1755,9 @@ NS_ASSUME_NONNULL_END
     
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
+
+    // Image in reflow mode enabled.
+    documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
 }
 
 - (void)applyLeadingNavButton

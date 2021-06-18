@@ -244,6 +244,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    @ReactProp(name = "imageInReflowEnabled")
+    public void setImageInReflowEnabled(DocumentView documentView, boolean imageInReflowEnabled) {
+        documentView.setImageInReflowEnabled(imageInReflowEnabled);
+    }
+
+    @ReactProp(name = "reflowOrientation")
+    public void setReflowOrientation(DocumentView documentView, String reflowOrientation) {
+        documentView.setReflowOrientation(reflowOrientation);
+    }
+
     @ReactProp(name = "selectAnnotationAfterCreation")
     public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
