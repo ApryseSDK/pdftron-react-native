@@ -539,7 +539,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 String tag = toolbars.getString(i);
                 if (isValidToolbarTag(tag)) {
                     AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag);
-                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                    // SDK Support Issue 22893
+                    // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
                     annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
@@ -579,7 +581,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                                 }
                             }
                         }
-                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
+                        // SDK Support Issue 22893
+                        // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
+                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
                         annotationToolbarBuilders.add(toolbarBuilder);
                     }
                 }
