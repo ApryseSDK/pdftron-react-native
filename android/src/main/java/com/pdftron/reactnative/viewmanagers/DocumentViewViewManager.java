@@ -493,6 +493,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getCustomDataForAnnotation(annotationID, pageNumber, key);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getCustomDataForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
     public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -526,6 +535,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
             throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPropertiesForAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPropertiesForAnnotation", "Unable to find DocumentView.");
         }
     }
 

@@ -2727,6 +2727,32 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return annotations;
     }
 
+    public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        String customData = "";
+
+        if (pdfViewCtrl != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+                Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotationID, pageNumber);
+                if (annot != null) {
+                    customData = annot.getCustomData(key);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+        }
+
+        return customData;
+    }
+
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -3028,6 +3054,83 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 pdfViewCtrl.docUnlock();
             }
         }
+    }
+
+    public WritableMap getPropertiesForAnnotation(String annotId, int pageNumber) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+
+        WritableMap propertyMap = Arguments.createMap();
+        
+        if (pdfViewCtrl != null) {
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+                Annot annot = ViewerUtils.getAnnotById(pdfViewCtrl, annotId, pageNumber);
+
+                if (annot != null && annot.isValid()) {
+
+                    String contents = annot.getContents();
+                    if (!contents.isEmpty()) {
+                        propertyMap.putString(KEY_ANNOTATION_CONTENTS, contents);
+                    }
+
+                    com.pdftron.pdf.Rect rect = annot.getRect();
+                    if (rect != null) {
+                        WritableMap rectMap = Arguments.createMap();
+                        rectMap.putDouble(KEY_X1, rect.getX1());
+                        rectMap.putDouble(KEY_Y1, rect.getY1());
+                        rectMap.putDouble(KEY_X2, rect.getX2());
+                        rectMap.putDouble(KEY_Y2, rect.getY2());
+                        rectMap.putDouble(KEY_WIDTH, rect.getWidth());
+                        rectMap.putDouble(KEY_HEIGHT, rect.getHeight());
+                        propertyMap.putMap(KEY_ANNOTATION_RECT, rectMap);
+                    }
+
+                    ColorPt colorPt = annot.getColorAsRGB();
+                    if (colorPt != null) {
+                        WritableMap colorMap = Arguments.createMap();
+                        colorMap.putDouble(COLOR_RED, colorPt.get(0) * 255F);
+                        colorMap.putDouble(COLOR_GREEN, colorPt.get(1) * 255F);
+                        colorMap.putDouble(COLOR_BLUE, colorPt.get(2) * 255F);
+                        propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
+                    }
+                    
+                    if (annot.isMarkup()) {
+                        Markup markupAnnot = new Markup(annot);
+                        
+                        String subject = markupAnnot.getSubject();
+                        if (!subject.isEmpty()) {
+                            propertyMap.putString(KEY_ANNOTATION_SUBJECT, subject);
+                        }
+
+                        String title = markupAnnot.getTitle();
+                        if (!title.isEmpty()) {
+                            propertyMap.putString(KEY_ANNOTATION_TITLE, title);
+                        }
+
+                        com.pdftron.pdf.Rect contentRect = markupAnnot.getContentRect();
+                        if (contentRect != null) {
+                            WritableMap contentRectMap = Arguments.createMap();
+                            contentRectMap.putDouble(KEY_X1, contentRect.getX1());
+                            contentRectMap.putDouble(KEY_Y1, contentRect.getY1());
+                            contentRectMap.putDouble(KEY_X2, contentRect.getX2());
+                            contentRectMap.putDouble(KEY_Y2, contentRect.getY2());
+                            contentRectMap.putDouble(KEY_WIDTH, contentRect.getWidth());
+                            contentRectMap.putDouble(KEY_HEIGHT, contentRect.getHeight());
+                            propertyMap.putMap(KEY_ANNOTATION_CONTENT_RECT, contentRectMap);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+        }
+        return propertyMap;
     }
 
     public void setFlagsForAnnotations(ReadableArray annotationFlagList) throws PDFNetException {
