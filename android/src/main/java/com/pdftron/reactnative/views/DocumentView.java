@@ -568,6 +568,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
                                 .setToolbarName(toolbarName)
                                 .setIcon(convStringToToolbarDefaultIconRes(toolbarIcon));
+                        boolean saveItemOrder = false;
                         for (int j = 0; j < toolbarItems.size(); j++) {
                             String toolStr = toolbarItems.getString(j);
                             ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
@@ -577,13 +578,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                                         buttonType == ToolbarButtonType.REDO) {
                                     toolbarBuilder.addToolStickyButton(buttonType, buttonId);
                                 } else {
+                                    if (buttonType == ToolbarButtonType.EDIT_TOOLBAR) {
+                                        // if user allow toolbar customization, then allow save order
+                                        saveItemOrder = true;
+                                    }
                                     toolbarBuilder.addToolButton(buttonType, buttonId);
                                 }
                             }
                         }
                         // SDK Support Issue 22893
                         // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
-                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
+                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(saveItemOrder);
                         annotationToolbarBuilders.add(toolbarBuilder);
                     }
                 }
@@ -1266,6 +1271,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.UNDO.value();
         } else if (BUTTON_REDO.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.REDO.value();
+        } else if (BUTTON_EDIT_MENU.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         }
         return buttonId;
     }
@@ -1349,6 +1356,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.UNDO;
         } else if (BUTTON_REDO.equals(item)) {
             buttonType = ToolbarButtonType.REDO;
+        } else if (BUTTON_EDIT_MENU.equals(item)) {
+            buttonType = ToolbarButtonType.EDIT_TOOLBAR;
         }
         return buttonType;
     }
