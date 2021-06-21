@@ -244,6 +244,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    @ReactProp(name = "imageInReflowEnabled")
+    public void setImageInReflowEnabled(DocumentView documentView, boolean imageInReflowEnabled) {
+        documentView.setImageInReflowEnabled(imageInReflowEnabled);
+    }
+
+    @ReactProp(name = "reflowOrientation")
+    public void setReflowOrientation(DocumentView documentView, String reflowOrientation) {
+        documentView.setReflowOrientation(reflowOrientation);
+    }
+
     @ReactProp(name = "selectAnnotationAfterCreation")
     public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
@@ -555,6 +565,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
             throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPropertiesForAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPropertiesForAnnotation", "Unable to find DocumentView.");
         }
     }
 

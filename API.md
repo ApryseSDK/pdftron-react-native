@@ -701,6 +701,30 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+### Reflow
+
+#### imageInReflowEnabled
+bool, optional, defaults to true
+
+Whether to show images in reflow mode. 
+
+```js
+<DocumentView
+  imageInReflowEnabled={false}
+/>
+```
+
+#### reflowOrientation
+string, optional, default value is 'Horizontal'. Android only.
+
+Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+
+```js
+<DocumentView
+  reflowOrientation={Config.ReflowOrientation.Vertical} 
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -1083,7 +1107,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 #### annotationListEditingEnabled
 bool, optional, default value is true
 
-If the document editing is enabled, then this value determines whether the annotation list is readonly.
+If document editing is enabled, then this value determines if the annotation list is editable.
 
 ```js
 <DocumentView
@@ -1113,9 +1137,10 @@ bookmarkJson | string | the list of current bookmarks in JSON format
 ```
 
 #### userBookmarksListEditingEnabled
-bool, optional, defaults to true on Android and false on iOS
+bool, optional, default value is true
 
-Defines whether the bookmark list can be edited. On iOS, if the document is readonly then the value is ignored.
+Defines whether the bookmark list can be edited. If the viewer is readonly then bookmarks on Android are 
+still editable but are saved to the device rather than the PDF.
 
 ```js
 <DocumentView
@@ -1811,6 +1836,44 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
     "blue": 0
   }
 });
+```
+
+#### getPropertiesForAnnotation
+Gets properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+
+Available Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+contents | string | no | "Contents"
+subject | string | yes | "Subject"
+title | string | yes | "Title"
+contentRect | object | yes | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
+
+Returns a promise.
+
+Promise Parameters:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+propertyMap | object | the non-null properties of the annotation | `{contents: 'Contents', strokeColor: {red: 255, green: 0, blue: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
+
+```js
+// Get properties for annotation in the current document.
+this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
+  if (properties) {
+    console.log('Properties for annotation: ', properties);
+  }
+})
 ```
 
 #### setDrawAnnotations

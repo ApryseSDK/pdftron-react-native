@@ -94,6 +94,8 @@ export default class DocumentView extends PureComponent {
     showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
     restrictDownloadUsage: PropTypes.bool,
     userBookmarksListEditingEnabled: PropTypes.bool,
+    imageInReflowEnabled: PropTypes.bool,
+    reflowOrientation: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -395,6 +397,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
+    }
+    return Promise.resolve();
+  }
+
+  getPropertiesForAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
     }
     return Promise.resolve();
   }
