@@ -1104,6 +1104,17 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 />
 ```
 
+#### annotationListEditingEnabled
+bool, optional, default value is true
+
+If document editing is enabled, then this value determines if the annotation list is editable.
+
+```js
+<DocumentView
+  annotationListEditingEnabled={true}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
@@ -1122,6 +1133,18 @@ bookmarkJson | string | the list of current bookmarks in JSON format
   onBookmarkChanged = {({bookmarkJson}) => {
     console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
   }}
+/>
+```
+
+#### userBookmarksListEditingEnabled
+bool, optional, default value is true
+
+Defines whether the bookmark list can be edited. If the viewer is readonly then bookmarks on Android are 
+still editable but are saved to the device rather than the PDF.
+
+```js
+<DocumentView
+  userBookmarksListEditingEnabled={true}
 />
 ```
 
@@ -1255,26 +1278,14 @@ Defines whether document is automatically saved by the viewer.
 />
 ```
 
-#### Example:
+#### restrictDownloadUsage
+bool, optional, defaults to false
+
+Defines whether to restrict data usage when viewing online PDFs.
 
 ```js
-import { DocumentView, Config } from 'react-native-pdftron';
 <DocumentView
-  ref={(c) => this._viewer = c}
-  document={path}
-  showLeadingNavButton={true}
-  leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-  onLeadingNavButtonPressed={() => {}}
-  onDocumentLoaded={(path) => { console.log('Document is loaded at', path); }}
-  disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
-  disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
-  customHeaders={{Foo: bar}}
-  onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
-  onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
-  annotationPermissionCheckEnabled={false}
-  onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
-  hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
-  onToolChanged={({previousTool,tool}) => { console.log('tool changed'); }}
+  restrictDownloadUsage={true}
 />
 ```
 
@@ -1299,6 +1310,17 @@ Defines whether the quick navigation buttons will appear in the viewer.
 ```js
 <DocumentView
   showQuickNavigationButton={false}
+/>
+```
+
+#### showNavigationListAsSidePanelOnLargeDevices
+bool, optional, defaults to true on Android and false on iOS
+
+Defines whether the navigation list will be displayed as a side panel on large devices such as iPads and tablets.
+
+```js
+<DocumentView
+  showNavigationListAsSidePanelOnLargeDevices={true}
 />
 ```
 

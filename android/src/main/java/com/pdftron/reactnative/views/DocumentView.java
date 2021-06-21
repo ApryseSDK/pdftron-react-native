@@ -493,6 +493,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.thumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    public void setAnnotationsListEditingEnabled(boolean annotationsListEditingEnabled) {
+        mBuilder = mBuilder.annotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
+    public void setUserBookmarksListEditingEnabled(boolean userBookmarksListEditingEnabled) {
+        mBuilder = mBuilder.userBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     public void setImageInReflowEnabled(boolean imageInReflowEnabled) {
         mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
     }
@@ -771,6 +777,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
+    }
+
+    public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
+        mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
 
     private void disableElements(ReadableArray args) {
@@ -3760,6 +3770,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             return getPdfViewCtrlTabFragment().getPdfDoc();
         }
         return null;
+    }
+
+    public void setRestrictDownloadUsage(boolean restrictDownloadUsage) {
+        mBuilder = mBuilder.restrictDownloadUsage(restrictDownloadUsage);
     }
 
     public ToolManager getToolManager() {

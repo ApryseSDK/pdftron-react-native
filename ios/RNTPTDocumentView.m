@@ -1756,6 +1756,17 @@ NS_ASSUME_NONNULL_END
     // Custom HTTP request headers.
     [self applyCustomHeaders:documentViewController];
 
+    // Set Annotation List Editing 
+    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    
+    // Hanlde displays of various sizes
+    documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
+    
+    // Data Usage
+    [documentViewController.httpRequestOptions RestrictDownloadUsage: self.restrictDownloadUsage];
+    
+    // Set User Bookmark List Editing
+    documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
 }
@@ -2130,6 +2141,20 @@ NS_ASSUME_NONNULL_END
     documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
 }
 
+- (void)setAnnotationsListEditingEnabled:(BOOL)annotationsListEditingEnabled
+{
+    _annotationsListEditingEnabled = annotationsListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
+-(void)setUserBookmarksListEditingEnabled:(BOOL)userBookmarksListEditingEnabled
+{
+    _userBookmarksListEditingEnabled = userBookmarksListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Fit mode
 
 - (void)setFitMode:(NSString *)fitMode
@@ -2211,7 +2236,7 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - zoom
+#pragma mark - Zoom
 
 - (void)setZoom:(double)zoom
 {
@@ -4421,6 +4446,24 @@ NS_ASSUME_NONNULL_END
     }
     
     return fileURL;
+}
+
+#pragma mark - Display Responsiveness
+
+-(void)setShowNavigationListAsSidePanelOnLargeDevices:(BOOL)showNavigationListAsSidePanelOnLargeDevices
+{
+    _showNavigationListAsSidePanelOnLargeDevices = showNavigationListAsSidePanelOnLargeDevices;
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Online Settings
+
+-(void)setRestictDownloadUsage:(BOOL)restrictDownloadUsage
+{
+    _restrictDownloadUsage = restrictDownloadUsage;
+    
+    [self applyViewerSettings];
 }
 
 @end

@@ -409,6 +409,14 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 
+@property (nonatomic, assign) BOOL annotationsListEditingEnabled;
+
+@property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
+
+@property (nonatomic, assign) BOOL restrictDownloadUsage;
+
+@property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

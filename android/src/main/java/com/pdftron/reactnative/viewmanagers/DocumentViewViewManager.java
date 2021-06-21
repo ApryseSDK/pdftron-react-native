@@ -349,6 +349,26 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
     }
 
+    @ReactProp(name = "annotationsListEditingEnabled")
+    public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
+        documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
+    @ReactProp(name = "userBookmarksListEditingEnabled")
+    public void setUserBookmarksListEditingEnabled(DocumentView documentView, boolean userBookmarksListEditingEnabled) {
+        documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
+    }
+
+    @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
+    public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
+        documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
+    }
+
+    @ReactProp(name = "restrictDownloadUsage")
+    public void setRestrictDownloadUsage(DocumentView documentView, boolean restrictDownloadUsage) {
+        documentView.setRestrictDownloadUsage(restrictDownloadUsage);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
