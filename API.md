@@ -701,6 +701,30 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+### Reflow
+
+#### imageInReflowEnabled
+bool, optional, defaults to true
+
+Whether to show images in reflow mode. 
+
+```js
+<DocumentView
+  imageInReflowEnabled={false}
+/>
+```
+
+#### reflowOrientation
+string, optional, default value is 'Horizontal'. Android only.
+
+Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+
+```js
+<DocumentView
+  reflowOrientation={Config.ReflowOrientation.Vertical} 
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -1080,6 +1104,17 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 />
 ```
 
+#### annotationListEditingEnabled
+bool, optional, default value is true
+
+If document editing is enabled, then this value determines if the annotation list is editable.
+
+```js
+<DocumentView
+  annotationListEditingEnabled={true}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
@@ -1098,6 +1133,18 @@ bookmarkJson | string | the list of current bookmarks in JSON format
   onBookmarkChanged = {({bookmarkJson}) => {
     console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
   }}
+/>
+```
+
+#### userBookmarksListEditingEnabled
+bool, optional, default value is true
+
+Defines whether the bookmark list can be edited. If the viewer is readonly then bookmarks on Android are 
+still editable but are saved to the device rather than the PDF.
+
+```js
+<DocumentView
+  userBookmarksListEditingEnabled={true}
 />
 ```
 
@@ -1254,25 +1301,14 @@ Defines whether to automatically resize free text when editing
 ```
 
 #### Example:
+#### restrictDownloadUsage
+bool, optional, defaults to false
+
+Defines whether to restrict data usage when viewing online PDFs.
 
 ```js
-import { DocumentView, Config } from 'react-native-pdftron';
 <DocumentView
-  ref={(c) => this._viewer = c}
-  document={path}
-  showLeadingNavButton={true}
-  leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-  onLeadingNavButtonPressed={() => {}}
-  onDocumentLoaded={(path) => { console.log('Document is loaded at', path); }}
-  disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
-  disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
-  customHeaders={{Foo: bar}}
-  onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
-  onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
-  annotationPermissionCheckEnabled={false}
-  onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
-  hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
-  onToolChanged={({previousTool,tool}) => { console.log('tool changed'); }}
+  restrictDownloadUsage={true}
 />
 ```
 
@@ -1297,6 +1333,17 @@ Defines whether the quick navigation buttons will appear in the viewer.
 ```js
 <DocumentView
   showQuickNavigationButton={false}
+/>
+```
+
+#### showNavigationListAsSidePanelOnLargeDevices
+bool, optional, defaults to true on Android and false on iOS
+
+Defines whether the navigation list will be displayed as a side panel on large devices such as iPads and tablets.
+
+```js
+<DocumentView
+  showNavigationListAsSidePanelOnLargeDevices={true}
 />
 ```
 
@@ -1784,6 +1831,8 @@ contents | string | no | "contents"
 subject | string | yes | "subject"
 title | string | yes | "title"
 contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+customData | object | no | {key: value}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
 
 Returns a promise.
 
@@ -1798,8 +1847,56 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
   },
   contents: 'Hello World',
   subject: 'Sample',
-  title: 'set-prop-for-annot'
+  title: 'set-prop-for-annot',
+  customData: {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value3'
+  },
+  strokeColor: {
+    "red": 255,
+    "green": 0,
+    "blue": 0
+  }
 });
+```
+
+#### getPropertiesForAnnotation
+Gets properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+
+Available Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+contents | string | no | "Contents"
+subject | string | yes | "Subject"
+title | string | yes | "Title"
+contentRect | object | yes | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
+
+Returns a promise.
+
+Promise Parameters:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+propertyMap | object | the non-null properties of the annotation | `{contents: 'Contents', strokeColor: {red: 255, green: 0, blue: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
+
+```js
+// Get properties for annotation in the current document.
+this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
+  if (properties) {
+    console.log('Properties for annotation: ', properties);
+  }
+})
 ```
 
 #### setDrawAnnotations
@@ -1926,6 +2023,36 @@ this._viewer.getAnnotationListOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
+})
+```
+
+#### getCustomDataForAnnotation
+Gets an annotation's `customData` property.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+key | string | the unique key associated with the `customData` property
+
+Returns a Promise.
+
+Promise Parameters: 
+Name | Type | Description
+--- | --- | ---
+value | string | the `customData` property associated with the given key
+
+```js
+this._viewer.setPropertiesForAnnotation("annotation1", 2, {
+  customData: {
+    data: "Nice annotation"
+  }
+}).then(() => {
+  this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
+    console.log(value === "Nice annotation");
+  })
 })
 ```
 

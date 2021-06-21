@@ -188,6 +188,8 @@ static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
 
+static NSString * const PTStrokeColorKey = @"strokeColor";
+
 static NSString * const PTScrollHorizontalKey = @"horizontal";
 static NSString * const PTScrollVerticalKey = @"vertical";
 
@@ -351,6 +353,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isThumbnailViewEditingEnabled) BOOL thumbnailViewEditingEnabled;
 
+@property (nonatomic, assign) BOOL imageInReflowEnabled;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
@@ -407,6 +411,14 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 
+@property (nonatomic, assign) BOOL annotationsListEditingEnabled;
+
+@property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
+
+@property (nonatomic, assign) BOOL restrictDownloadUsage;
+
+@property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -443,6 +455,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
 - (void)setDrawAnnotations:(BOOL)drawAnnotations;
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
@@ -454,6 +468,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSArray *)getAnnotationListAt:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
 
 - (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber;
+
+- (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
+    pageNumber:(NSInteger)pageNumber key:(NSString *)key;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 

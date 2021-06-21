@@ -92,6 +92,12 @@ export default class DocumentView extends PureComponent {
     showQuickNavigationButton: PropTypes.bool,
     photoPickerEnabled: PropTypes.bool,
     autoResizeFreeTextEnabled: PropTypes.bool,
+    annotationsListEditingEnabled: PropTypes.bool,
+    showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
+    restrictDownloadUsage: PropTypes.bool,
+    userBookmarksListEditingEnabled: PropTypes.bool,
+    imageInReflowEnabled: PropTypes.bool,
+    reflowOrientation: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -397,6 +403,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getPropertiesForAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   setDrawAnnotations = (drawAnnotations) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -441,6 +455,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  getCustomDataForAnnotation = (annotationID, pageNumber, key) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
     }
     return Promise.resolve();
   }

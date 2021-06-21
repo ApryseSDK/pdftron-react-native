@@ -244,6 +244,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setThumbnailViewEditingEnabled(thumbnailViewEditingEnabled);
     }
 
+    @ReactProp(name = "imageInReflowEnabled")
+    public void setImageInReflowEnabled(DocumentView documentView, boolean imageInReflowEnabled) {
+        documentView.setImageInReflowEnabled(imageInReflowEnabled);
+    }
+
+    @ReactProp(name = "reflowOrientation")
+    public void setReflowOrientation(DocumentView documentView, String reflowOrientation) {
+        documentView.setReflowOrientation(reflowOrientation);
+    }
+
     @ReactProp(name = "selectAnnotationAfterCreation")
     public void setSelectAnnotationAfterCreation(DocumentView documentView, boolean selectAnnotationAfterCreation) {
         documentView.setSelectAnnotationAfterCreation(selectAnnotationAfterCreation);
@@ -347,6 +357,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "autoResizeFreeTextEnabled")
     public void setAutoResizeFreeTextEnabled(DocumentView documentView, boolean autoResizeFreeTextEnabled) {
         documentView.setAutoResizeFreeTextEnabled(autoResizeFreeTextEnabled);
+    @ReactProp(name = "annotationsListEditingEnabled")
+    public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
+        documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
+    }
+
+    @ReactProp(name = "userBookmarksListEditingEnabled")
+    public void setUserBookmarksListEditingEnabled(DocumentView documentView, boolean userBookmarksListEditingEnabled) {
+        documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
+    }
+
+    @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
+    public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
+        documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
+    }
+
+    @ReactProp(name = "restrictDownloadUsage")
+    public void setRestrictDownloadUsage(DocumentView documentView, boolean restrictDownloadUsage) {
+        documentView.setRestrictDownloadUsage(restrictDownloadUsage);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -503,6 +531,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getCustomDataForAnnotation(annotationID, pageNumber, key);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getCustomDataForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
     public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -536,6 +573,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
         } else {
             throw new PDFNetException("", 0L, getName(), "setPropertiesForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableMap getPropertiesForAnnotation(int tag, String annotId, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getPropertiesForAnnotation(annotId, pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getPropertiesForAnnotation", "Unable to find DocumentView.");
         }
     }
 
