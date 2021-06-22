@@ -499,6 +499,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setUserBookmarksListEditingEnabled(boolean userBookmarksListEditingEnabled) {
         mBuilder = mBuilder.userBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
+    }
+
     public void setImageInReflowEnabled(boolean imageInReflowEnabled) {
         mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
     }
