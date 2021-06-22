@@ -1208,7 +1208,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
