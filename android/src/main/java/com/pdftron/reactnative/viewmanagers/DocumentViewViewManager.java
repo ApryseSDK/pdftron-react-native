@@ -357,6 +357,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "autoResizeFreeTextEnabled")
     public void setAutoResizeFreeTextEnabled(DocumentView documentView, boolean autoResizeFreeTextEnabled) {
         documentView.setAutoResizeFreeTextEnabled(autoResizeFreeTextEnabled);
+    } 
+    
     @ReactProp(name = "annotationsListEditingEnabled")
     public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
