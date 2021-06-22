@@ -787,6 +787,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
+    }
+    
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
