@@ -489,9 +489,9 @@ NS_ASSUME_NONNULL_END
 //        PTFillSignToolsButtonKey: ^{
 //
 //        },
-//        PTEditMenuButtonKey: ^{
-//
-//        },
+        PTEditMenuButtonKey: ^{
+            documentViewController.toolGroupManager.editingEnabled = NO;
+        },
 //        PTCropPageButtonKey: ^{
 //
 //        },
