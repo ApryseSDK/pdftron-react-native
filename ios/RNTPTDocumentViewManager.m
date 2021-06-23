@@ -597,7 +597,7 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
-- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand annotation:(NSDictionary *)annotation
 {
     if (sender.onChange) {
         if (xfdfCommand) {
@@ -605,6 +605,7 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
                 @"onExportAnnotationCommand": @"onExportAnnotationCommand",
                 @"action": action,
                 @"xfdfCommand": (xfdfCommand ?: @""),
+                @"annotations": @[annotation]
             });
         } else {
             sender.onChange(@{
