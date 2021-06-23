@@ -171,7 +171,12 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ## Usage
 
-Replace `App.js` with the following:
+Replace `App.js` with the code below.
+
+If you set your path variable to point to a local storage file, 
+then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
+Within this example there is a section commented code that provides this check.
+
 
 ```javascript
 import React, { Component } from 'react';
@@ -202,32 +207,32 @@ export default class App extends Component<Props> {
     RNPdftron.enableJavaScript(true);
   }
 
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestStoragePermission();
-    }
-  }
+  // componentDidMount() {
+  //   if (Platform.OS === 'android') {
+  //     this.requestStoragePermission();
+  //   }
+  // }
 
-  async requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          permissionGranted: true
-        });
-        console.log("Storage permission granted");
-      } else {
-        this.setState({
-          permissionGranted: false
-        });
-        console.log("Storage permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
+  // async requestStoragePermission() {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       this.setState({
+  //         permissionGranted: true
+  //       });
+  //       console.log("Storage permission granted");
+  //     } else {
+  //       this.setState({
+  //         permissionGranted: false
+  //       });
+  //       console.log("Storage permission denied");
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // }
 
   onLeadingNavButtonPressed = () => {
     console.log('leading nav button pressed');
