@@ -475,8 +475,11 @@ NS_ASSUME_NONNULL_END
             documentViewController.addPagesButtonHidden = YES;
         },
         PTEditMenuButtonKey: ^{
-            PTDocumentController *documentController = (PTDocumentController *)documentViewController;
-            documentController.toolGroupManager.editingEnabled = NO;
+            if( [documentViewController isKindOfClass:[PTDocumentController class]] )
+		    {
+                PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+                documentController.toolGroupManager.editingEnabled = NO;
+            }
         },
 //        PTPrintButtonKey: ^{
 //
