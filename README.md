@@ -1,6 +1,6 @@
 # PDFTron React Native Wrapper
 
-- [API](#API)
+- [API](API.md)
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
 - [Installation](#installation)
