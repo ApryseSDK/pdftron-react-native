@@ -1778,7 +1778,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Hanlde displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;

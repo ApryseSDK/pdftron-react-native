@@ -1105,7 +1105,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 ```
 
 #### annotationListEditingEnabled
-bool, optional, default value is true
+bool, optional, Android only, default value is true
 
 If document editing is enabled, then this value determines if the annotation list is editable.
 
