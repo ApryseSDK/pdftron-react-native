@@ -175,7 +175,12 @@ Replace `App.js` with the code below.
 
 If you set your path variable to point to a local storage file, 
 then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
-Within this example there is a section commented code that provides this check.
+
+Within this example there are several sections of commented out code that work together to 
+handle storage permissions.
+
+Below the example are the types of file paths that are native to iOS or Android and accepted 
+by the `DocumentView` component.
 
 
 ```javascript
@@ -199,9 +204,9 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
-    };
+    // this.state = {
+    //   permissionGranted: Platform.OS === 'ios' ? true : false
+    // };
 
     RNPdftron.initialize("Insert commercial license key here after purchase");
     RNPdftron.enableJavaScript(true);
@@ -251,15 +256,15 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    if (!this.state.permissionGranted) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Storage permission required.
-          </Text>
-        </View>
-      )
-    }
+    // if (!this.state.permissionGranted) {
+    //   return (
+    //     <View style={styles.container}>
+    //       <Text>
+    //         Storage permission required.
+    //       </Text>
+    //     </View>
+    //   )
+    // }
 
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
@@ -286,27 +291,27 @@ const styles = StyleSheet.create({
 
 - (iOS) For app bundle file path:
 
-```javascript
-document="sample"
-```
+  ```javascript
+  document="sample"
+  ```
 
 - (Android) For local storage file path:
 
-```javascript
-document="file:///storage/emulated/0/Download/sample.pdf"
-```
+  ```javascript
+  document="file:///storage/emulated/0/Download/sample.pdf"
+  ```
 
 - (Android) For raw resource path (include file extension):
 
-```javascript
-document="android.resource://mypackagename/raw/sample.pdf"
-```
+  ```javascript
+  document="android.resource://mypackagename/raw/sample.pdf"
+  ```
 
 - (Android) For content Uri:
 
-```javascript
-document="content://..."
-```
+  ```javascript
+  document="content://..."
+  ```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
