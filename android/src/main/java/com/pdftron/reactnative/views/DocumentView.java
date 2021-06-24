@@ -2419,9 +2419,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
                             if (mCollabManager != null) {
                                 WritableMap params = Arguments.createMap();
+
+                                WritableArray annotList = Arguments.createArray();
+                                for (AnnotationEntity annot : arrayList) {
+                                    String uid = null;
+                                    try {
+                                        uid = annot.getId();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (uid == null) {
+                                        uid = UUID.randomUUID().toString();
+                                        try {
+                                            annot.setId(uid);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    WritableMap annotData = Arguments.createMap();
+                                    annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
+                                    annotData.putInt(KEY_ANNOTATION_PAGE, annot.getPage());
+                                    try {
+                                        annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot.getType()));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    annotList.pushMap(annotData);
+                                }
+
                                 params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
                                 params.putString(KEY_ACTION, s);
                                 params.putString(KEY_XFDF_COMMAND, mCollabManager.getLastXfdf());
+                                params.putArray(KEY_ANNOTATIONS, annotList);
                                 onReceiveNativeEvent(params);
                             }
                         }
