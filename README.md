@@ -204,6 +204,8 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
+    // Uses the platform to determine if storage permisions have been automatically granted.
+    // The result of this check is placed in the component's state.
     // this.state = {
     //   permissionGranted: Platform.OS === 'ios' ? true : false
     // };
@@ -212,12 +214,15 @@ export default class App extends Component<Props> {
     RNPdftron.enableJavaScript(true);
   }
 
+  // Uses the platform to determine if storagge permissions need to be requested.
   // componentDidMount() {
   //   if (Platform.OS === 'android') {
   //     this.requestStoragePermission();
   //   }
   // }
 
+  // Requests storage permissions for Android and updates the component's state using 
+  // the result.
   // async requestStoragePermission() {
   //   try {
   //     const granted = await PermissionsAndroid.request(
@@ -256,6 +261,8 @@ export default class App extends Component<Props> {
   }
 
   render() {
+    // If the component's state indicates that storage permissions have not been granted, 
+    // a view is loaded prompting users to grant these permissions.
     // if (!this.state.permissionGranted) {
     //   return (
     //     <View style={styles.container}>
