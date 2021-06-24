@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="my_freetext_presets">
+        <item>@style/MyFreeTextPresetStyle1</item>
+        <item>@style/MyFreeTextPresetStyle2</item>
+        <item>@style/MyFreeTextPresetStyle3</item>
+        <item>@style/MyFreeTextPresetStyle4</item>
+    </array>
+</resources>

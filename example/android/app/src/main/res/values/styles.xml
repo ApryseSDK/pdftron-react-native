@@ -6,4 +6,27 @@
         <item name="android:textColor">#000000</item>
     </style>
 
+    <style name="MyFreeTextPresetStyle1" parent="FreeTextPresetStyle1">
+        <item name="annot_font_size">20</item>
+    </style>
+
+    <style name="MyFreeTextPresetStyle2" parent="FreeTextPresetStyle2">
+        <item name="annot_font_size">20</item>
+    </style>
+
+    <style name="MyFreeTextPresetStyle3" parent="FreeTextPresetStyle3">
+        <item name="annot_font_size">20</item>
+    </style>
+
+    <style name="MyFreeTextPresetStyle4" parent="FreeTextPresetStyle4">
+        <item name="annot_font_size">20</item>
+    </style>
+
+    <style name="RNAppTheme" parent="RNAppThemeBase">
+        <!-- Sets long press default style -->
+        <item name="freehand_default_style">@style/MyFreeTextPresetStyle1</item>
+        <!-- Sets presets -->
+        <item name="free_text_presets">@array/my_freetext_presets</item>
+    </style>
+
 </resources>
