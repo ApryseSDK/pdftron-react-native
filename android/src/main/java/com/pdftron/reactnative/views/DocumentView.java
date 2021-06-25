@@ -2440,12 +2440,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                                     WritableMap annotData = Arguments.createMap();
                                     annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
-                                    annotData.putInt(KEY_ANNOTATION_PAGE, annot.getPage());
-                                    try {
-                                        annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot.getType()));
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
                                     annotList.pushMap(annotData);
                                 }
 
