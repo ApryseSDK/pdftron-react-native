@@ -214,7 +214,7 @@ export default class App extends Component<Props> {
     RNPdftron.enableJavaScript(true);
   }
 
-  // Uses the platform to determine if storagge permissions need to be requested.
+  // Uses the platform to determine if storage permissions need to be requested.
   // componentDidMount() {
   //   if (Platform.OS === 'android') {
   //     this.requestStoragePermission();
