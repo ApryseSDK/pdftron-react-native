@@ -1033,11 +1033,11 @@ On iOS, there is currently a bug that prevents the last XFDF from being retrieve
   onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
     console.log('Annotation edit action is', action);
     console.log('The exported xfdfCommand is', xfdfCommand);
-    annotations.forEach((annotation, index) => {
-      console.log('Annotation ', index, ' id is', annotation.id);
+    annotations.forEach((annotation) => {
+      console.log('Annotation id is', annotation.id);
       if (!this.state.collabEnabled) {
-        console.log('Annotation ', index, ' pageNumber is', annotation.pageNumber);
-        console.log('Annotation ', index, ' type is', annotation.type);
+        console.log('Annotation pageNumber is', annotation.pageNumber);
+        console.log('Annotation type is', annotation.type);
       }
     });
   }}
