@@ -931,7 +931,7 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 #### collabEnabled
 bool, optional, defaults to false
 
-Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work.
+Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode
 
 ```js
 <DocumentView
@@ -1014,7 +1014,8 @@ Defines whether an annotation is selected after it is created. On iOS, this func
 #### onExportAnnotationCommand
 function, optional
 
-This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter.
+This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter. If you are modifying or deleting multiple annotations, then on Android the function is only called once, and on iOS it is called for each annotation.
+
 
 Parameters:
 
@@ -1022,13 +1023,26 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
+annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants 
+
+**Known Issues** <br/> 
+On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
 
 ```js
 <DocumentView
-  onExportAnnotationCommand = {({action, xfdfCommand}) => {
+  onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
     console.log('Annotation edit action is', action);
     console.log('The exported xfdfCommand is', xfdfCommand);
+    annotations.forEach((annotation, index) => {
+      console.log('annotation ', index, ' id', annotation.id);
+      if (!this.state.collabEnabled) {
+        console.log('annotation ', index, ' pageNumber', annotation.pageNumber);
+        console.log('annotation ', index, ' type', annotation.type);
+      }
+    });
   }}
+  collabEnabled={this.state.collabEnabled}
+  currentUser={'Pdftron'}
 />
 ```
 
