@@ -474,6 +474,13 @@ NS_ASSUME_NONNULL_END
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
         },
+        PTEditMenuButtonKey: ^{
+            if( [documentViewController isKindOfClass:[PTDocumentController class]] )
+		    {
+                PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+                documentController.toolGroupManager.editingEnabled = NO;
+            }
+        },
 //        PTPrintButtonKey: ^{
 //
 //        },
@@ -487,9 +494,6 @@ NS_ASSUME_NONNULL_END
 //
 //        },
 //        PTFillSignToolsButtonKey: ^{
-//
-//        },
-//        PTEditMenuButtonKey: ^{
 //
 //        },
 //        PTCropPageButtonKey: ^{
