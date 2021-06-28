@@ -3843,6 +3843,18 @@ NS_ASSUME_NONNULL_END
     [self.currentDocumentViewController.undoManager redo];
 }
 
+#pragma mark - Can Undo/Can Redo
+
+- (bool)canUndo
+{
+    return [self.currentDocumentViewController.undoManager canUndo];
+}
+
+- (bool)canRedo
+{
+    return [self.currentDocumentViewController.undoManager canRedo];
+}
+
 #pragma mark - Get Zoom
 
 - (double)getZoom

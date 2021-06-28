@@ -496,6 +496,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)redo;
 
+- (bool)canUndo;
+
+- (bool)canRedo;
+
 - (double)getZoom;
 
 - (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;

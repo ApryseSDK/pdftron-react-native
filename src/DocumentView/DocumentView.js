@@ -821,6 +821,22 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  canUndo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canUndo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  canRedo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canRedo(tag);
+    }
+    return Promise.resolve();
+  }
+
   showCrop = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
