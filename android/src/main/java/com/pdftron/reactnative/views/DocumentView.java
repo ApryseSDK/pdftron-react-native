@@ -2267,6 +2267,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     key.setUniqueID(uid);
                 } catch (PDFNetException e) {
                     e.printStackTrace();
+                    uid = null;
                 }
             }
 
@@ -2302,6 +2303,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 e.printStackTrace();
             }
 
+            WritableArray annotList = Arguments.createArray();
+            for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                Annot key = entry.getKey();
+
+                String uid = null;
+                try {
+                    uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (uid == null) {
+                    uid = UUID.randomUUID().toString();
+                    try {
+                        key.setUniqueID(uid);
+                    } catch (PDFNetException e) {
+                        e.printStackTrace();
+                        uid = null;
+                    }
+                }
+
+                WritableMap annotData = Arguments.createMap();
+                annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
+                annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
+                try {
+                    annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                } catch (PDFNetException e) {
+                    e.printStackTrace();
+                }
+                annotList.pushMap(annotData);
+            }
+
             WritableMap params = Arguments.createMap();
             params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
             if (xfdfCommand == null) {
@@ -2309,6 +2342,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             } else {
                 params.putString(KEY_ACTION, action);
                 params.putString(KEY_XFDF_COMMAND, xfdfCommand);
+                params.putArray(KEY_ANNOTATIONS, annotList);
             }
             onReceiveNativeEvent(params);
         }
@@ -2387,9 +2421,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         public void onSendAnnotation(String s, ArrayList<AnnotationEntity> arrayList, String s1, @Nullable String s2) {
                             if (mCollabManager != null) {
                                 WritableMap params = Arguments.createMap();
+
+                                WritableArray annotList = Arguments.createArray();
+                                for (AnnotationEntity annot : arrayList) {
+                                    String uid = null;
+                                    try {
+                                        uid = annot.getId();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (uid == null) {
+                                        uid = UUID.randomUUID().toString();
+                                        try {
+                                            annot.setId(uid);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                            uid = null;
+                                        }
+                                    }
+
+                                    WritableMap annotData = Arguments.createMap();
+                                    annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
+                                    annotList.pushMap(annotData);
+                                }
+
                                 params.putString(ON_EXPORT_ANNOTATION_COMMAND, ON_EXPORT_ANNOTATION_COMMAND);
                                 params.putString(KEY_ACTION, s);
                                 params.putString(KEY_XFDF_COMMAND, mCollabManager.getLastXfdf());
+                                params.putArray(KEY_ANNOTATIONS, annotList);
                                 onReceiveNativeEvent(params);
                             }
                         }

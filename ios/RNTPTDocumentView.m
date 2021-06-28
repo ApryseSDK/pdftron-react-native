@@ -2982,26 +2982,36 @@ NS_ASSUME_NONNULL_END
 
 - (void)localAnnotationAdded:(PTCollaborationAnnotation *)collaborationAnnotation
 {
-    [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey
-                                        xfdfCommand:collaborationAnnotation.xfdf];
+    [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collaborationAnnotation pageNumber:-1 annotType:@""];
 }
 
 - (void)localAnnotationModified:(PTCollaborationAnnotation *)collaborationAnnotation
 {
-    [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey
-                                        xfdfCommand:collaborationAnnotation.xfdf];
+    [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collaborationAnnotation pageNumber:-1 annotType:@""];
 }
 
 - (void)localAnnotationRemoved:(PTCollaborationAnnotation *)collaborationAnnotation
 {
-    [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey
-                                        xfdfCommand:collaborationAnnotation.xfdf];
+    [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collaborationAnnotation pageNumber:-1 annotType:@""];
 }
 
-- (void)rnt_sendExportAnnotationCommandWithAction:(NSString *)action xfdfCommand:(NSString *)xfdfCommand
+- (void)rnt_sendExportAnnotationCommandWithAction:(NSString *)action annotation:(PTCollaborationAnnotation *)annot pageNumber:(int)pageNumber annotType:(NSString *)annotType
 {
-    if ([self.delegate respondsToSelector:@selector(exportAnnotationCommand:action:xfdfCommand:)]) {
-        [self.delegate exportAnnotationCommand:self action:action xfdfCommand:xfdfCommand];
+    NSDictionary * annotation;
+    if (pageNumber >= 0 && ![annotType isEqualToString:@""]) {
+        annotation = @{
+            PTAnnotationIdKey: annot.annotationID,
+            PTAnnotationPageNumberKey: @(pageNumber),
+            PTAnnotationTypeKey: annotType
+        };
+    } else {
+        annotation = @{
+            PTAnnotationIdKey: annot.annotationID,
+        };
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(exportAnnotationCommand:action:xfdfCommand:annotation:)]) {
+        [self.delegate exportAnnotationCommand:self action:action xfdfCommand:annot.xfdf annotation:annotation];
     }
 }
 
@@ -3098,7 +3108,12 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey xfdfCommand:[self generateXfdfCommand:annots modified:[[PTVectorAnnot alloc] init] deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+        
+        PTCollaborationAnnotation * collabAnnot = [[PTCollaborationAnnotation alloc] init];
+        [collabAnnot setAnnotationID:annotId];
+        [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+        
+        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
     }
 }
 
@@ -3126,7 +3141,12 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+        
+        PTCollaborationAnnotation * collabAnnot = [[PTCollaborationAnnotation alloc] init];
+        [collabAnnot setAnnotationID:annotId];
+        [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+        
+        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
     }
 }
 
@@ -3154,7 +3174,12 @@ NS_ASSUME_NONNULL_END
     if (!self.collaborationManager) {
         PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
         [annots add:annot];
-        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:[[PTVectorAnnot alloc] init] deleted:annots pdfViewCtrl:pdfViewCtrl]];
+        
+        PTCollaborationAnnotation * collabAnnot = [[PTCollaborationAnnotation alloc] init];
+        [collabAnnot setAnnotationID:annotId];
+        [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+        
+        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
     }
 }
 
@@ -3166,6 +3191,10 @@ NS_ASSUME_NONNULL_END
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
 
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
     if ([annot GetType] == e_ptWidget) {
         PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
         NSError* error;
@@ -3195,7 +3224,12 @@ NS_ASSUME_NONNULL_END
         if (!self.collaborationManager) {
             PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
             [annots add:annot];
-            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey xfdfCommand:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+            
+            PTCollaborationAnnotation * collabAnnot = [[PTCollaborationAnnotation alloc] init];
+            [collabAnnot setAnnotationID:annotId];
+            [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
+            
+            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
         }
     }
 }

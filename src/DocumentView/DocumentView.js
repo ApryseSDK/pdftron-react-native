@@ -176,6 +176,7 @@ export default class DocumentView extends PureComponent {
         this.props.onExportAnnotationCommand({
           'action': event.nativeEvent.action,
           'xfdfCommand': event.nativeEvent.xfdfCommand,
+          'annotations': event.nativeEvent.annotations,
         });
       }
     } else if (event.nativeEvent.onAnnotationMenuPress) {
