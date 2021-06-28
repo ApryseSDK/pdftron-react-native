@@ -2267,6 +2267,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     key.setUniqueID(uid);
                 } catch (PDFNetException e) {
                     e.printStackTrace();
+                    uid = null;
                 }
             }
 
@@ -2319,6 +2320,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         key.setUniqueID(uid);
                     } catch (PDFNetException e) {
                         e.printStackTrace();
+                        uid = null;
                     }
                 }
 
@@ -2435,6 +2437,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                                             annot.setId(uid);
                                         } catch (Exception e) {
                                             e.printStackTrace();
+                                            uid = null;
                                         }
                                     }
 
