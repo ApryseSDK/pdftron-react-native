@@ -96,7 +96,7 @@ export default class DocumentView extends PureComponent {
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
-    onUndoRedoStateChange: PropTypes.func,
+    onUndoRedoStateChanged: PropTypes.func,
     ...ViewPropTypes,
   };
 
