@@ -380,6 +380,17 @@ Defines view mode items to be hidden in the view mode dialog. Strings should be 
 />
 ```
 
+#### tabletLayoutEnabled
+bool, optional, defaults to true
+
+Defines whether the tablet layout should be used on tablets. Otherwise uses the same layout as phones. Android only.
+
+```js
+<DocumentView
+  tabletLayoutEnabled={true}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
