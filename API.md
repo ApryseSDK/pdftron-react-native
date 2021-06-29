@@ -2716,6 +2716,40 @@ Returns a Promise.
 this._viewer.redo();
 ```
 
+#### canUndo
+Checks for the ability to perform the undo operation from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canUndo | bool | whether it is possible to undo from the current snapshot
+
+```js
+this._viewer.canUndo().then((canUndo) => {
+  console.log(canUndo ? 'undo possible' : 'undo not possible');
+});
+```
+
+#### canRedo
+Checks for the ability to perform the redo operation from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canRedo | bool | whether it is possible to redo from the current snapshot
+
+```js
+this._viewer.canRedo().then((canRedo) => {
+  console.log(canRedo ? 'redo possible' : 'redo not possible');
+});
+```
+
 #### showCrop
 Displays the page crop option. Android only.
 
