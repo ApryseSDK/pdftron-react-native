@@ -96,6 +96,7 @@ export default class DocumentView extends PureComponent {
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
+    tabletLayoutEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
