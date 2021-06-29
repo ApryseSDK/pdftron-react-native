@@ -1,6 +1,6 @@
 # PDFTron React Native Wrapper
 
-- [API](#API)
+- [API](API.md)
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
 - [Installation](#installation)
@@ -171,7 +171,17 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ## Usage
 
-Replace `App.js` with the following:
+Replace `App.js` with the code below.
+
+If you set your path variable to point to a local storage file, 
+then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
+
+Within this example there are several sections of commented out code that work together to 
+handle storage permissions.
+
+Below the example are the types of file paths that are native to iOS or Android and accepted 
+by the `DocumentView` component.
+
 
 ```javascript
 import React, { Component } from 'react';
@@ -194,40 +204,45 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
-    this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
-    };
+    // Uses the platform to determine if storage permisions have been automatically granted.
+    // The result of this check is placed in the component's state.
+    // this.state = {
+    //   permissionGranted: Platform.OS === 'ios' ? true : false
+    // };
 
     RNPdftron.initialize("Insert commercial license key here after purchase");
     RNPdftron.enableJavaScript(true);
   }
 
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestStoragePermission();
-    }
-  }
+  // Uses the platform to determine if storage permissions need to be requested.
+  // componentDidMount() {
+  //   if (Platform.OS === 'android') {
+  //     this.requestStoragePermission();
+  //   }
+  // }
 
-  async requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          permissionGranted: true
-        });
-        console.log("Storage permission granted");
-      } else {
-        this.setState({
-          permissionGranted: false
-        });
-        console.log("Storage permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
+  // Requests storage permissions for Android and updates the component's state using 
+  // the result.
+  // async requestStoragePermission() {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       this.setState({
+  //         permissionGranted: true
+  //       });
+  //       console.log("Storage permission granted");
+  //     } else {
+  //       this.setState({
+  //         permissionGranted: false
+  //       });
+  //       console.log("Storage permission denied");
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // }
 
   onLeadingNavButtonPressed = () => {
     console.log('leading nav button pressed');
@@ -246,15 +261,17 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    if (!this.state.permissionGranted) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Storage permission required.
-          </Text>
-        </View>
-      )
-    }
+    // If the component's state indicates that storage permissions have not been granted, 
+    // a view is loaded prompting users to grant these permissions.
+    // if (!this.state.permissionGranted) {
+    //   return (
+    //     <View style={styles.container}>
+    //       <Text>
+    //         Storage permission required.
+    //       </Text>
+    //     </View>
+    //   )
+    // }
 
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
@@ -281,27 +298,27 @@ const styles = StyleSheet.create({
 
 - (iOS) For app bundle file path:
 
-```javascript
-document="sample"
-```
+  ```javascript
+  document="sample"
+  ```
 
 - (Android) For local storage file path:
 
-```javascript
-document="file:///storage/emulated/0/Download/sample.pdf"
-```
+  ```javascript
+  document="file:///storage/emulated/0/Download/sample.pdf"
+  ```
 
 - (Android) For raw resource path (include file extension):
 
-```javascript
-document="android.resource://mypackagename/raw/sample.pdf"
-```
+  ```javascript
+  document="android.resource://mypackagename/raw/sample.pdf"
+  ```
 
 - (Android) For content Uri:
 
-```javascript
-document="content://..."
-```
+  ```javascript
+  document="content://..."
+  ```
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

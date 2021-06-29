@@ -90,6 +90,13 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
+    annotationsListEditingEnabled: PropTypes.bool,
+    showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
+    restrictDownloadUsage: PropTypes.bool,
+    userBookmarksListEditingEnabled: PropTypes.bool,
+    imageInReflowEnabled: PropTypes.bool,
+    reflowOrientation: PropTypes.string,
+    tabletLayoutEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -170,6 +177,7 @@ export default class DocumentView extends PureComponent {
         this.props.onExportAnnotationCommand({
           'action': event.nativeEvent.action,
           'xfdfCommand': event.nativeEvent.xfdfCommand,
+          'annotations': event.nativeEvent.annotations,
         });
       }
     } else if (event.nativeEvent.onAnnotationMenuPress) {
@@ -395,6 +403,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getPropertiesForAnnotation = (id, pageNumber) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
   setDrawAnnotations = (drawAnnotations) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -439,6 +455,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+    }
+    return Promise.resolve();
+  }
+
+  getCustomDataForAnnotation = (annotationID, pageNumber, key) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
     }
     return Promise.resolve();
   }

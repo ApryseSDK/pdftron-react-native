@@ -64,15 +64,6 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated
-{
-    if (!hidden && ![self isTopToolbarEnabled]){
-        return;
-    }
-    
-    [super setControlsHidden:hidden animated:animated];
-}
-
 - (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
 {
     return NO;
