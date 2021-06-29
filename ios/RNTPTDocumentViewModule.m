@@ -608,7 +608,6 @@ RCT_REMAP_METHOD(canUndo,
 {
     @try {
         BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
-        printf("*****aaa %d", [[self documentViewManager] canUndoForDocumentViewTag:tag]);
         resolve(@(canUndo));
     }
     @catch (NSException *exception) {

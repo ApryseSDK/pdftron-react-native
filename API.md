@@ -2688,28 +2688,7 @@ this._viewer.selectAll();
 });
 ```
 
-#### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-pageNumber | int | the page to be converted
-dpi | double | the output image resolution
-exportFormat | string | one of `Config.ExportFormat`
-
-Returns a Promise.
-
-Name | Type | Description
---- | --- | ---
-path | string | the temp path of the created image, user is responsible for clean up the cache
-
-```js
-this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
-  console.log('export', path);
-});
-```
+### Undo/Redo
 
 #### undo
 Undo the last modification.
@@ -2760,6 +2739,31 @@ canRedo | bool | whether it is possible to redo from the current snapshot
 ```js
 this._viewer.canRedo().then((canRedo) => {
   console.log(canRedo ? 'redo possible' : 'no action to redo');
+});
+```
+
+### Others
+
+#### exportAsImage
+Export a PDF page to image format defined in `Config.ExportFormat`.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page to be converted
+dpi | double | the output image resolution
+exportFormat | string | one of `Config.ExportFormat`
+
+Returns a Promise.
+
+Name | Type | Description
+--- | --- | ---
+path | string | the temp path of the created image, user is responsible for clean up the cache
+
+```js
+this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+  console.log('export', path);
 });
 ```
 
