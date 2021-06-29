@@ -1341,7 +1341,7 @@ Defines whether the navigation list will be displayed as a side panel on large d
 #### onUndoRedoStateChanged
 function, optional
 
-This function is called when the state of the undo/redo stack in the current document has been changed.
+This function is called when the state of the current document's undo/redo stack has been changed.
 
 ```js
 <DocumentView
@@ -2730,7 +2730,7 @@ this._viewer.redo();
 ```
 
 #### canUndo
-Checks for the ability to perform the undo operation from the current snapshot.
+Checks whether an undo operation can be performed from the current snapshot.
 
 Returns a Promise.
 
@@ -2747,7 +2747,7 @@ this._viewer.canUndo().then((canUndo) => {
 ```
 
 #### canRedo
-Checks for the ability to perform the redo operation from the current snapshot.
+Checks whether a redo operation can be perfromed from the current snapshot.
 
 Returns a Promise.
 
