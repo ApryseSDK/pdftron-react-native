@@ -18,6 +18,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
+import com.pdftron.sdf.Doc;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
@@ -1009,6 +1010,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.redo();
         } else {
             throw new PDFNetException("", 0L, getName(), "redo", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean canUndo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.canUndo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "canUndo", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean canRedo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.canRedo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "canRedo", "Unable to find DocumentView.");
         }
     }
 
