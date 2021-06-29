@@ -469,6 +469,7 @@ NS_ASSUME_NONNULL_END
         },
         PTLayerListButtonKey: ^{
             documentViewController.pdfLayerListHidden = YES;
+            documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityAlwaysHidden;
         },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
