@@ -2685,7 +2685,6 @@ Returns a Promise.
 
 ```js
 this._viewer.selectAll();
-});
 ```
 
 ### Undo/Redo
