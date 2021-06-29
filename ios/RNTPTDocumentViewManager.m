@@ -710,17 +710,6 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
-- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action
-{
-    if (sender.onChange) {
-        sender.onChange(@{
-            @"onAnnotationChanged" : @"onAnnotationChanged",
-            @"action": action,
-            @"annotations": @[annotation],
-        });
-    }
-}
-
 #pragma mark - Methods
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
