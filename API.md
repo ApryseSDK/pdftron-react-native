@@ -1423,6 +1423,8 @@ this._viewer.setColorPostProcessColors(whiteColor, blackColor);
 #### setToolMode
 Sets the current tool mode.
 
+Returns a Promise.
+
 Parameters:
 
 Name | Type | Description
@@ -1430,7 +1432,9 @@ Name | Type | Description
 toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
 
 ```js
-this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
+this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
+  // done switching tools
+});
 ```
 
 #### commitTool
