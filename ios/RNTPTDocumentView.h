@@ -303,6 +303,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
 @end
 
 @interface RNTPTDocumentView : UIView

@@ -96,6 +96,7 @@ export default class DocumentView extends PureComponent {
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
+    onUndoRedoStateChange: PropTypes.func,
     ...ViewPropTypes,
   };
 
@@ -223,6 +224,10 @@ export default class DocumentView extends PureComponent {
           'found': event.nativeEvent.found,
           'textSelection': event.nativeEvent.textSelection,
         });
+      }
+    } else if (event.nativeEvent.onUndoRedoStateChanged) {
+      if (this.props.onUndoRedoStateChanged) {
+        this.props.onUndoRedoStateChanged();
       }
     }
   }

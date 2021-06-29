@@ -667,6 +667,15 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onUndoRedoStateChanged": @"onUndoRedoStateChanged",
+        });
+    }
+}
+
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data {
     if (sender.onChange) {
         sender.onChange(@{
@@ -698,6 +707,17 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
         result[@"textSelection"] = textSelection;
         
         sender.onChange(result);
+    }
+}
+
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationChanged" : @"onAnnotationChanged",
+            @"action": action,
+            @"annotations": @[annotation],
+        });
     }
 }
 
