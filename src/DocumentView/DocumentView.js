@@ -238,8 +238,9 @@ export default class DocumentView extends PureComponent {
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-    	DocumentViewManager.setToolMode(tag, toolMode);
+    	return DocumentViewManager.setToolMode(tag, toolMode);
     }
+    return Promise.resolve();
   }
 
   commitTool = () => {
