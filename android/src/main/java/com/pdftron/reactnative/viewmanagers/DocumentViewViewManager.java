@@ -120,6 +120,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideToolbarsOnTap(hideToolbarsOnTap);
     }
 
+    @ReactProp(name = "tabletLayoutEnabled")
+    public void setTabletLayoutEnabled(DocumentView documentView, boolean tabletLayoutEnabled) {
+        documentView.setTabletLayoutEnabled(tabletLayoutEnabled);
+    }
+
     @ReactProp(name = "documentSliderEnabled")
     public void setDocumentSliderEnabled(DocumentView documentView, boolean documentSliderEnabled) {
         documentView.setDocumentSliderEnabled(documentSliderEnabled);

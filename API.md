@@ -380,6 +380,17 @@ Defines view mode items to be hidden in the view mode dialog. Strings should be 
 />
 ```
 
+#### tabletLayoutEnabled
+bool, optional, defaults to true
+
+Defines whether the tablet layout should be used on tablets. Otherwise uses the same layout as phones. Android only.
+
+```js
+<DocumentView
+  tabletLayoutEnabled={true}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -1425,6 +1436,8 @@ this._viewer.setColorPostProcessColors(whiteColor, blackColor);
 #### setToolMode
 Sets the current tool mode.
 
+Returns a Promise.
+
 Parameters:
 
 Name | Type | Description
@@ -1432,7 +1445,9 @@ Name | Type | Description
 toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
 
 ```js
-this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
+this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
+  // done switching tools
+});
 ```
 
 #### commitTool

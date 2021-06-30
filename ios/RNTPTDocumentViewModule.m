@@ -33,9 +33,17 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
 
 RCT_REMAP_METHOD(setToolMode,
                  setToolModeForDocumentViewTag:(nonnull NSNumber *)tag
-                 toolMode:(NSString *)toolMode)
+                 toolMode:(NSString *)toolMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+    @try {
+        [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_tool_mode_failed", @"Failed to set tool mode", [self errorFromException:exception]);
+    }
 }
 
 RCT_REMAP_METHOD(commitTool,

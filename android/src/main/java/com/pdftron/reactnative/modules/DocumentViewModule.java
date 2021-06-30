@@ -141,14 +141,15 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setToolMode(final int tag, final String item) {
+    public void setToolMode(final int tag, final String item, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     mDocumentViewInstance.setToolMode(tag, item);
+                    promise.resolve(null);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    promise.reject(e);
                 }
             }
         });

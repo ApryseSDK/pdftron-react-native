@@ -337,6 +337,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.permanentToolbars(!hideToolbarsOnTap);
     }
 
+    public void setTabletLayoutEnabled(boolean tabletLayoutEnabled) {
+        mBuilder = mBuilder.tabletLayoutEnabled(tabletLayoutEnabled);
+    }
+
     public void setReadOnly(boolean readOnly) {
         mReadOnly = readOnly;
         if (readOnly) {
