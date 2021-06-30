@@ -18,7 +18,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
-import com.pdftron.sdf.Doc;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 

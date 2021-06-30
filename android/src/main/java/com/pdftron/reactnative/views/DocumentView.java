@@ -1707,7 +1707,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().removeToolChangedListener(mToolChangedListener);
             getToolManager().getUndoRedoManger().removeUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
             getToolManager().setPreToolManagerListener(null);
-
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
