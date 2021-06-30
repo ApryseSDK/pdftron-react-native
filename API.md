@@ -144,6 +144,30 @@ RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultP
 });
 ```
 
+#### exportAsImage
+Export a PDF page to image format defined in `Config.ExportFormat`. This method should only be called before a `DocumentView` instance has created or else unexpected behaviour can occur.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page to be converted
+dpi | double | the output image resolution
+exportFormat | string | one of `Config.ExportFormat`
+filePath | string | file path to pdf
+
+Returns a Promise.
+
+Name | Type | Description
+--- | --- | ---
+resultImagePath | string | the temp path of the created image, user is responsible for clean up the cache
+
+```js
+RNPdftron.exportToImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
+  console.log('export', resultImagePath);
+});
+```
+
 ## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
@@ -1132,7 +1156,10 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 #### annotationListEditingEnabled
 bool, optional, Android only, default value is true
 
-If document editing is enabled, then this value determines if the annotation list is editable.
+If document editing is enabled, then this value determines if the annotation list is editable. 
+
+Functionality for iOS will fixed in the next official release, or a fixed version is available by pointing the iOS podfile to https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-06-30/9.0/cocoapods/pdfnet/2021-06-30_stable_rev77837.podspec as described in step one of the [iOS integration instructions](https://github.com/PDFTron/pdftron-react-native#ios).
+
 
 ```js
 <DocumentView
@@ -2691,7 +2718,7 @@ this._viewer.selectAll();
 ```
 
 #### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`.
+Export a PDF page to image format defined in `Config.ExportFormat`. This method should only be called after a `DocumentView` instance has created or else unexpected behaviour can occur.
 
 Parameters:
 

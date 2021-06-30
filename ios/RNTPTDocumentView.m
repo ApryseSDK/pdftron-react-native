@@ -1761,7 +1761,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-    // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Hanlde displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
@@ -3751,12 +3751,18 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat
+{
+    PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
+    return [self generateThumbnail:doc pageNumber:pageNumber dpi:dpi imageFormat:imageFormat];
+}
+
+- (NSString*)generateThumbnail:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
 {
     NSError* error;
     __block NSString* path;
-
-    [self.currentDocumentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+    
+    [doc LockReadWithBlock:^ {
         PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
         
         NSString* tempDir = NSTemporaryDirectory();
@@ -3767,7 +3773,6 @@ NS_ASSUME_NONNULL_END
         path = [path stringByAppendingPathExtension:imageFormat];
         
         [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:path format:imageFormat];
-
     } error:&error];
     
     if( error )

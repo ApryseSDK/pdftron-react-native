@@ -133,6 +133,29 @@ RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary 
     }    
 }
 
+RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat filePath:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        PTPDFDoc * doc = [[PTPDFDoc alloc] initWithFilepath:filePath];
+        NSString* resultImagePath;
+        
+        [doc LockRead];
+        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
+        resultImagePath = [resultImagePath stringByAppendingPathExtension:imageFormat];
+        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:resultImagePath format:imageFormat];
+        [doc UnlockRead];
+        
+        resolve(resultImagePath);
+    }
+    @catch (NSException* exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate image from file", [self errorFromException:exception]);
+    }
+}
+
 - (NSError *)errorFromException:(NSException *)exception
 {
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
