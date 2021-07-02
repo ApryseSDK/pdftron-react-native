@@ -831,6 +831,39 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showViewSettings = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        if (Platform.OS === 'ios') {
+            return DocumentViewManager.showViewSettings(tag, rect);
+        }
+      return DocumentViewManager.showViewSettings(tag);
+    }
+    return Promise.resolve();
+  }
+
+  showAddPagesView = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        if (Platform.OS === 'ios') {
+            return DocumentViewManager.showAddPagesView(tag, rect);
+        }
+      return DocumentViewManager.showAddPagesView(tag);
+    }
+    return Promise.resolve();
+  }
+
+  shareCopy = (rect, flattening) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        if (Platform.OS === 'ios') {
+            return DocumentViewManager.shareCopy(tag, rect, flattening);
+        }
+      return DocumentViewManager.shareCopy(tag, flattening);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
