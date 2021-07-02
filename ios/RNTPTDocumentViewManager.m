@@ -1192,6 +1192,37 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
+
+- (void)showViewSettingsForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView showViewSettingsFromRect:rect];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)showAddPagesViewForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView showAddPagesViewFromRect:rect];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)shareCopyForDocumentViewTag:(NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView shareCopyfromRect:rect withFlattening:flattening];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+
+}
         
 #pragma mark - Coordination
 

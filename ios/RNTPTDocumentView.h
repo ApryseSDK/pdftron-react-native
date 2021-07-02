@@ -558,6 +558,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
+- (void)showViewSettingsFromRect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect;
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
 @end
 
 

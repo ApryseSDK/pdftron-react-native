@@ -150,4 +150,10 @@
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
+- (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
 @end
