@@ -18,6 +18,8 @@ import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
 
+import static com.pdftron.reactnative.utils.Constants.*;
+
 import java.io.File;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
@@ -147,6 +149,17 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
             doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.NO_FLAGS, null);
             promise.resolve(resultPdf.getAbsolutePath());
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void exportAsImage(int pageNumber, double dpi, String exportFormat, final String filePath, final Promise promise) {
+        try {
+            PDFDoc doc = new PDFDoc(filePath);
+            String imagePath = ReactUtils.generateThumbnail(doc, pageNumber, dpi, exportFormat);
+            promise.resolve(imagePath);
         } catch (Exception e) {
             promise.reject(e);
         }
