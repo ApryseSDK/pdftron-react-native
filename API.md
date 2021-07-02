@@ -145,7 +145,9 @@ RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultP
 ```
 
 #### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`. This method should only be called before a `DocumentView` instance has created or else unexpected behaviour can occur.
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+
+Unlike DocumentView.exportAsImage, this method should only be called *before* a `DocumentView` instance has been created or else unexpected behaviour can occur.
 
 Parameters:
 
@@ -153,7 +155,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted
 dpi | double | the output image resolution
-exportFormat | string | one of `Config.ExportFormat`
+exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.js) constants
 filePath | string | file path to pdf
 
 Returns a Promise.
@@ -163,7 +165,7 @@ Name | Type | Description
 resultImagePath | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-RNPdftron.exportToImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
+RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
   console.log('export', resultImagePath);
 });
 ```
@@ -2718,7 +2720,9 @@ this._viewer.selectAll();
 ```
 
 #### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`. This method should only be called after a `DocumentView` instance has created or else unexpected behaviour can occur.
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+
+Unlike RNPdftron.exportAsImage, this method should only be called *after* a `DocumentView` instance has been created or else unexpected behaviour can occur.
 
 Parameters:
 
@@ -2726,7 +2730,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted
 dpi | double | the output image resolution
-exportFormat | string | one of `Config.ExportFormat`
+exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.js) constants
 
 Returns a Promise.
 
@@ -2735,7 +2739,7 @@ Name | Type | Description
 path | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+this._viewer.exportAsImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
 ```
