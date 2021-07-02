@@ -139,7 +139,7 @@ public class ReactUtils {
         return array;
     }
 
-    public static String generateThumbnail(PDFDoc doc, int pageNumber, double dpi, String exportFormat) {
+    public static String exportAsImageHelper(PDFDoc doc, int pageNumber, double dpi, String exportFormat) {
         PDFDraw draw = null;
         try {
             draw = new PDFDraw();
@@ -148,8 +148,8 @@ public class ReactUtils {
             String ext = "png";
             if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
                 ext = "bmp";
-            } else if (KEY_EXPORT_FORMAT_JPG.equals(exportFormat)) {
-                ext = "jpg";
+            } else if (KEY_EXPORT_FORMAT_JPEG.equals(exportFormat)) {
+                ext = "jpeg";
             }
             File tempFile = File.createTempFile("tmp", "." + ext);
             draw.export(pg, tempFile.getAbsolutePath(), exportFormat);

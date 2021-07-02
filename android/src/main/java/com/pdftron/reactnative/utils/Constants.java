@@ -346,6 +346,6 @@ public final class Constants {
 
     // Export format
     public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
-    public static final String KEY_EXPORT_FORMAT_JPG = "JPG";
+    public static final String KEY_EXPORT_FORMAT_JPEG = "JPEG";
     public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
 }

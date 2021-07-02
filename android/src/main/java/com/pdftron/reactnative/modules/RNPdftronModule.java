@@ -158,7 +158,7 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     public void exportAsImage(int pageNumber, double dpi, String exportFormat, final String filePath, final Promise promise) {
         try {
             PDFDoc doc = new PDFDoc(filePath);
-            String imagePath = ReactUtils.generateThumbnail(doc, pageNumber, dpi, exportFormat);
+            String imagePath = ReactUtils.exportAsImageHelper(doc, pageNumber, dpi, exportFormat);
             promise.resolve(imagePath);
         } catch (Exception e) {
             promise.reject(e);
