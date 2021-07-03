@@ -739,7 +739,7 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return [documentView exportAsImage:pageNumber dpi:dpi imageFormat:imageFormat];
+        return [documentView exportAsImage:pageNumber dpi:dpi exportFormat:imageFormat];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;

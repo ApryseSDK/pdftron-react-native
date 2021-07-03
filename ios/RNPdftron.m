@@ -121,9 +121,20 @@ RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary 
         
         NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"pdf"];
         NSString* resultPdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
-        [pdfDoc Lock];
-        [pdfDoc SaveToFile:resultPdfPath flags:0];
-        [pdfDoc Unlock];
+        
+        BOOL shouldUnlock = NO;
+        @try {
+            [pdfDoc Lock];
+            shouldUnlock = YES;
+            
+            [pdfDoc SaveToFile:resultPdfPath flags:0];
+        } @catch (NSException* exception) {
+            NSLog(@"Exception: %@: %@", exception.name, exception.reason);
+        } @finally {
+            if (shouldUnlock) {
+                [pdfDoc Unlock];
+            }
+        }
 
         resolve(resultPdfPath);
     }
@@ -133,20 +144,11 @@ RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary 
     }    
 }
 
-RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat filePath:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat filePath:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         PTPDFDoc * doc = [[PTPDFDoc alloc] initWithFilepath:filePath];
-        NSString* resultImagePath;
-        
-        [doc LockRead];
-        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* fileName = [NSUUID UUID].UUIDString;
-        resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
-        resultImagePath = [resultImagePath stringByAppendingPathExtension:imageFormat];
-        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:resultImagePath format:imageFormat];
-        [doc UnlockRead];
+        NSString * resultImagePath = [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
         
         resolve(resultImagePath);
     }
@@ -164,6 +166,36 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSStri
                 NSLocalizedFailureReasonErrorKey: exception.reason,
             }];
 }
+
++(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
+{
+    NSString * resultImagePath;
+    BOOL shouldUnlock = NO;
+    @try {
+        [doc LockRead];
+        shouldUnlock = YES;
+
+        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
+        resultImagePath = [resultImagePath stringByAppendingPathExtension:exportFormat];
+        PTObjSet* hintSet = [[PTObjSet alloc] init];
+        PTObj* encoderHints = [hintSet CreateArray];
+        [encoderHints PushBackName:@"JPEG"];
+        PTPage * exportPage = [doc GetPage:pageNumber];
+        [draw ExportWithObj:exportPage filename:resultImagePath format:exportFormat encoder_params:encoderHints];
+
+    } @catch (NSException *exception) {
+        NSLog(@"Exception: %@: %@", exception.name, exception.reason);
+    } @finally {
+        if (shouldUnlock) {
+            [doc UnlockRead];
+        }
+    }
+    return resultImagePath;
+}
+
 
 
 @end
