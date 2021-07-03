@@ -3,6 +3,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RNPdftron.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const PTToolsButtonKey = @"toolsButton";
@@ -429,9 +431,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (NSString *)getDocumentPath;
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
-
-- (NSString *)generateThumbnail:(PTPDFDoc *)doc pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 

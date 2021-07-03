@@ -3751,38 +3751,10 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
 {
     PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-    return [self generateThumbnail:doc pageNumber:pageNumber dpi:dpi imageFormat:imageFormat];
-}
-
-- (NSString*)generateThumbnail:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
-{
-    NSError* error;
-    __block NSString* path;
-    
-    [doc LockReadWithBlock:^ {
-        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
-        
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* fileName = [NSUUID UUID].UUIDString;
-        
-        path = [tempDir stringByAppendingPathComponent:fileName];
-        
-        path = [path stringByAppendingPathExtension:imageFormat];
-        
-        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:path format:imageFormat];
-    } error:&error];
-    
-    if( error )
-    {
-        NSException* exception = [NSException exceptionWithName:error.localizedDescription reason:error.localizedFailureReason userInfo:nil];
-        @throw exception;
-    }
-    
-    return path;
-    
+    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
 }
 
 #pragma mark - Close all tabs
