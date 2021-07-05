@@ -809,7 +809,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showUserBookmarksList(false);
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
-            } else if (BUTTON_VIEW_LAYERS_TOOLBAR.equals(item)){
+            } else if (BUTTON_VIEW_LAYERS.equals(item)){
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
