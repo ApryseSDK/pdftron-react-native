@@ -25,6 +25,7 @@ export default {
     searchButton: 'searchButton',
     shareButton: 'shareButton',
     editPagesButton: 'editPagesButton',
+    showViewLayersToolbarButton: 'showViewLayersToolbarButton',
     printButton: 'printButton',
     closeButton: 'closeButton',
     saveCopyButton: 'saveCopyButton',
