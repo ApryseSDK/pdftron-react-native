@@ -834,10 +834,7 @@ export default class DocumentView extends PureComponent {
   showViewSettings = (rect) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-        if (Platform.OS === 'ios') {
-            return DocumentViewManager.showViewSettings(tag, rect);
-        }
-      return DocumentViewManager.showViewSettings(tag);
+        return DocumentViewManager.showViewSettings(tag, rect);
     }
     return Promise.resolve();
   }
@@ -845,10 +842,7 @@ export default class DocumentView extends PureComponent {
   showAddPagesView = (rect) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-        if (Platform.OS === 'ios') {
-            return DocumentViewManager.showAddPagesView(tag, rect);
-        }
-      return DocumentViewManager.showAddPagesView(tag);
+        return DocumentViewManager.showAddPagesView(tag, rect);
     }
     return Promise.resolve();
   }
@@ -856,10 +850,7 @@ export default class DocumentView extends PureComponent {
   shareCopy = (rect, flattening) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-        if (Platform.OS === 'ios') {
-            return DocumentViewManager.shareCopy(tag, rect, flattening);
-        }
-      return DocumentViewManager.shareCopy(tag, flattening);
+        return DocumentViewManager.shareCopy(tag, rect, flattening);
     }
     return Promise.resolve();
   }
