@@ -806,8 +806,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder
                         .showAnnotationsList(false)
                         .showOutlineList(false)
-                        .showUserBookmarksList(false)
-                        .showViewLayersToolbarOption(false);
+                        .showUserBookmarksList(false);
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
@@ -838,7 +837,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showAnnotationsList(false);
             } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
-            } else if (BUTTON_LAYER_LIST.equals(item)) {
+            } else if (BUTTON_VIEW_LAYERS.equals(item)) {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
