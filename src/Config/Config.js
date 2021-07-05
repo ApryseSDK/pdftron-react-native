@@ -38,7 +38,6 @@ export default {
     outlineListButton: 'outlineListButton',
     annotationListButton: 'annotationListButton',
     userBookmarkListButton: 'userBookmarkListButton',
-    viewLayersButton: 'viewLayersButton',
     reflowButton: 'reflowButton',
     editMenuButton: 'editMenuButton',
     cropPageButton: 'cropPageButton',
