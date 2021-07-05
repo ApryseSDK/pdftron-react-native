@@ -198,7 +198,7 @@ NS_ASSUME_NONNULL_END
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
-                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController alloc] init];
+                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController allocOverridden] init];
                 documentViewController.delegate = self;
                 
                 self.viewController = documentViewController;
