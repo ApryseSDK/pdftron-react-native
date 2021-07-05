@@ -467,6 +467,10 @@ NS_ASSUME_NONNULL_END
         PTUserBookmarkListButtonKey: ^{
             documentViewController.bookmarkListHidden = YES;
         },
+        PTLayerListButtonKey: ^{
+            documentViewController.pdfLayerListHidden = YES;
+            documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityAlwaysHidden;
+        },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
             documentViewController.settingsViewController.viewModeReaderHidden = YES;
