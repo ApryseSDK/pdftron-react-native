@@ -450,6 +450,33 @@ Defines whether to show the toolbar switcher in the top toolbar.
 />
 ```
 
+#### initialToolbar
+string, optional, defaults to none
+
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
+
+```js
+<DocumentView
+  initialToolbar={Config.DefaultToolbars.Draw}
+/>
+```
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
+});
+```
+
 #### hideTopToolbars
 bool, optional, defaults to false
 
