@@ -56,6 +56,7 @@ import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
+import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
@@ -472,6 +473,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setLongPressMenuEnabled(boolean longPressMenuEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setDisableQuickMenu(!longPressMenuEnabled);
+    }
+
+    public void setEraserType(String eraserType){
+        if(ANNOTATION_ERASER.equals(eraserType)) {
+            mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.ANNOTATION_ERASER);
+        }
+        else if(HYBRID_ERASER.equals(eraserType)) {
+            mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.HYBRID_ERASER);
+        }
+        else if(INK_ERASER.equals(eraserType)) {
+            mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.INK_ERASER);
+        }
     }
 
     public void setPageChangeOnTap(boolean pageChangeOnTap) {

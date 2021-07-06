@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
 
@@ -217,6 +218,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "longPressMenuEnabled")
     public void setLongPressMenuEnabled(DocumentView documentView, boolean longPressMenuEnabled) {
         documentView.setLongPressMenuEnabled(longPressMenuEnabled);
+    }
+
+    @ReactProp(name = "eraserType")
+    public void setEraserType(DocumentView documentView, String eraserType){
+        documentView.setEraserType(eraserType);
     }
 
     @ReactProp(name = "hideAnnotationMenu")

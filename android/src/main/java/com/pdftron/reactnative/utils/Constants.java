@@ -149,6 +149,11 @@ public final class Constants {
     public static final String LAYOUT_MODE_FACING_COVER = "FacingCover";
     public static final String LAYOUT_MODE_FACING_COVER_CONTINUOUS = "FacingCoverContinuous";
 
+    // ERASER TYPES
+    public static final String ANNOTATION_ERASER = "annotationEraser";
+    public static final String HYBRID_ERASER = "hybrideEraser";
+    public static final String INK_ERASER = "inkEraser";
+
     // MENU ID STRINGS
     public static final String MENU_ID_STRING_STYLE = "style";
     public static final String MENU_ID_STRING_NOTE = "note";
