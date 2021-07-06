@@ -198,7 +198,7 @@ NS_ASSUME_NONNULL_END
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
-                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController alloc] init];
+                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController allocOverridden] init];
                 documentViewController.delegate = self;
                 
                 self.viewController = documentViewController;
@@ -466,6 +466,10 @@ NS_ASSUME_NONNULL_END
         },
         PTUserBookmarkListButtonKey: ^{
             documentViewController.bookmarkListHidden = YES;
+        },
+        PTLayerListButtonKey: ^{
+            documentViewController.pdfLayerListHidden = YES;
+            documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityAlwaysHidden;
         },
         PTReflowButtonKey: ^{
             documentViewController.readerModeButtonHidden = YES;
@@ -1901,6 +1905,34 @@ NS_ASSUME_NONNULL_END
             documentController.toolGroupManager.selectedGroup = documentController.toolGroupManager.viewItemGroup;
             documentController.toolGroupIndicatorView.hidden = YES;
         }
+
+        if (self.initialToolbar.length > 0) {
+           NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            NSMutableArray *toolGroupIdentifiers = [NSMutableArray array];
+
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title.lowercaseString];
+                [toolGroupIdentifiers addObject:toolGroup.identifier.lowercaseString];
+            }
+
+            NSInteger initialToolbarIndex = [toolGroupIdentifiers indexOfObject:self.initialToolbar.lowercaseString];
+
+            if (initialToolbarIndex == NSNotFound) {
+                // not found in identifiers, check titles
+                initialToolbarIndex = [toolGroupTitles indexOfObject:self.initialToolbar.lowercaseString];
+            }
+
+            PTToolGroup *matchedDefaultGroup = [self toolGroupForKey:self.initialToolbar toolGroupManager:documentController.toolGroupManager];
+            if (matchedDefaultGroup != nil) {
+                // use a default group if its key is found
+                [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                return;
+            }
+
+            if (initialToolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:initialToolbarIndex];
+            }
+        }
     }
     
     if (self.hideAnnotationToolbarSwitcher) {
@@ -2009,6 +2041,40 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+        if (toolbarTitle.length > 0) {
+            NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            NSMutableArray *toolGroupIdentifiers = [NSMutableArray array];
+
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title.lowercaseString];
+                [toolGroupIdentifiers addObject:toolGroup.identifier.lowercaseString];
+            }
+
+            NSInteger toolbarIndex = [toolGroupIdentifiers indexOfObject:toolbarTitle.lowercaseString];
+            if (toolbarIndex == NSNotFound) {
+                // not found in identifiers, check titles
+                toolbarIndex = [toolGroupTitles indexOfObject:toolbarTitle.lowercaseString];
+            }
+
+            PTToolGroup *matchedDefaultGroup = [self toolGroupForKey:toolbarTitle toolGroupManager:documentController.toolGroupManager];
+            if (matchedDefaultGroup != nil) {
+                // use a default group if its key is found
+                [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                return;
+            }
+
+            if (toolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:toolbarIndex];
+            }
+        }
+    }
 }
 
 - (void)applyLayoutMode:(PTPDFViewCtrl *)pdfViewCtrl

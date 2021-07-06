@@ -544,6 +544,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
     }
 
+    public void setInitialToolbar(String toolbarTag) {
+        mBuilder.initialToolbarTag(toolbarTag).rememberLastUsedToolbar(false);
+    }
+
+    public void setCurrentToolbar(String toolbarTag) {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.openToolbarWithTag(toolbarTag);
+        }
+    }
+
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
             if (mPdfViewCtrlTabHostFragment != null) {
@@ -809,6 +819,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showUserBookmarksList(false);
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
+            } else if (BUTTON_VIEW_LAYERS.equals(item)){
+                mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
