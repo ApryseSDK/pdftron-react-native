@@ -235,6 +235,14 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
+
+  getToolbarsHidden = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.getToolbarsHidden(tag);
+    }
+    return Promise.resolve();
+  }
   
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);

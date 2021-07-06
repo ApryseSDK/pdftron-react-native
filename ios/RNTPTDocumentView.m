@@ -3753,6 +3753,12 @@ NS_ASSUME_NONNULL_END
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
 }
 
+#pragma mark - Get Toolbars Hidden
+
+- (bool) getToolbarsHidden {
+    return self.currentDocumentViewController.controlsHidden;
+}
+
 #pragma mark - Export as image
 
 - (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
