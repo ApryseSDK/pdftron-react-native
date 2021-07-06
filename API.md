@@ -469,7 +469,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolbar | string | the toolbar to enable
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
 
 ```js
 this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
