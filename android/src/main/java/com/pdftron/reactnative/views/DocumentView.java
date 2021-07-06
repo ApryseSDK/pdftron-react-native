@@ -135,6 +135,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    // toolbar
+    private String mStartupToolbarTag;
+
     private boolean mReadOnly;
 
     private boolean mFragmentTransactionFinished;
@@ -542,6 +545,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
+    }
+
+    public void setInitialToolbar(String toolbarTag) {
+        mBuilder.initialToolbarTag(toolbarTag);
+        mStartupToolbarTag = toolbarTag;
+    }
+
+    public void setCurrentToolbar(String toolbarTag) {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.openToolbarWithTag(toolbarTag);
+        }
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
@@ -2375,6 +2389,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
             fragment.setReactContext((ReactContext) getContext(), getId());
+        }
+
+        if (mStartupToolbarTag != null) {
+            mPdfViewCtrlTabHostFragment.openToolbarWithTag(mStartupToolbarTag);
         }
 
         if (!mCollabEnabled && getToolManager() != null) {
