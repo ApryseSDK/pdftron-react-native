@@ -1905,6 +1905,16 @@ NS_ASSUME_NONNULL_END
             documentController.toolGroupManager.selectedGroup = documentController.toolGroupManager.viewItemGroup;
             documentController.toolGroupIndicatorView.hidden = YES;
         }
+        if (self.initialToolbar.length > 0) {
+            NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title];
+            }
+            NSInteger initialToolbarIndex = [toolGroupTitles indexOfObject:self.initialToolbar];
+            if (initialToolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:initialToolbarIndex];
+            }
+        }
     }
     
     if (self.hideAnnotationToolbarSwitcher) {
@@ -2013,6 +2023,24 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+        if (toolbarTitle.length > 0) {
+            NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title];
+            }
+            NSInteger initialToolbarIndex = [toolGroupTitles indexOfObject:toolbarTitle];
+            if (initialToolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:initialToolbarIndex];
+            }
+        }
+    }
 }
 
 - (void)applyLayoutMode:(PTPDFViewCtrl *)pdfViewCtrl

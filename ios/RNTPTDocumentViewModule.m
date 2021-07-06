@@ -93,6 +93,21 @@ RCT_REMAP_METHOD(exportAsImage,
     }
 }
 
+RCT_REMAP_METHOD(setCurrentToolbar,
+                 setCurrentToolbarForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolbarTitle:(NSString*)toolbarTitle
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setCurrentToolbarForDocumentViewTag:tag toolbarTitle:toolbarTitle];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_toolbar_failed", @"Failed to set current toolbar", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
