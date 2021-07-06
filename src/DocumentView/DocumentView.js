@@ -97,6 +97,7 @@ export default class DocumentView extends PureComponent {
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
     tabletLayoutEnabled: PropTypes.bool,
+    initialToolbar: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -831,6 +832,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  setCurrentToolbar = (toolbar) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.setCurrentToolbar(tag, toolbar);
+    }
+    return Promise.resolve();
+  }
+  
   showViewSettings = (rect) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -854,7 +863,7 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-
+  
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
