@@ -299,6 +299,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationToolbars(toolbars);
     }
 
+    @ReactProp(name = "initialToolbar")
+    public void setInitialToolbar(DocumentView documentView, String toolbarTag) {
+        documentView.setInitialToolbar(toolbarTag);
+    }
+
     @ReactProp(name = "hideDefaultAnnotationToolbars")
     public void setHideDefaultAnnotationToolbars(DocumentView documentView, ReadableArray tags) {
         documentView.setHideDefaultAnnotationToolbars(tags);
@@ -452,6 +457,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.commitTool();
         } else {
             throw new PDFNetException("", 0L, getName(), "commitTool", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setCurrentToolbar(int tag, String toolbarTag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setCurrentToolbar(toolbarTag);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setCurrentToolbar", "Unable to find DocumentView.");
         }
     }
 
