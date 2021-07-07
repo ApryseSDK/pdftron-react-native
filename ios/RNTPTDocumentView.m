@@ -72,6 +72,8 @@ NS_ASSUME_NONNULL_END
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
     
+    _inkMultiStrokeEnabled = YES;
+
     _followSystemDarkMode = YES;
 
     _useStylusAsPen = YES;
