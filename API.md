@@ -225,6 +225,30 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 
+#### exportPath
+string, optional
+
+Sets the folder path for all save options, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  exportPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### openUrlPath
+string, optional
+
+Sets the folder path for open URL files, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  openUrlPath="/data/data/com.example/cache/test"
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 

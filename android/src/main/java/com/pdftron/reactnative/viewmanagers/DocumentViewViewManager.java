@@ -379,6 +379,17 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setRestrictDownloadUsage(restrictDownloadUsage);
     }
 
+    @ReactProp(name = "exportPath")
+    public void setExportPath(DocumentView documentView, String exportPath){
+        documentView.setExportPath(exportPath);
+    }
+
+    @ReactProp(name = "openUrlPath")
+    public void setOpenUrlPath(DocumentView documentView, String openUrlPath){
+        documentView.setOpenUrlPath(openUrlPath);
+    }
+
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
