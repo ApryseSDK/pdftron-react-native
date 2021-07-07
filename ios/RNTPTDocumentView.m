@@ -537,6 +537,11 @@ NS_ASSUME_NONNULL_END
     
 }
 
+- (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
+{
+    _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
+}
+
 #pragma mark - Disabled tools
 
 - (void)setDisabledTools:(NSArray<NSString *> *)disabledTools

@@ -248,6 +248,13 @@ RCT_CUSTOM_VIEW_PROPERTY(multiTabEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(inkMultiStrokeEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.inkMultiStrokeEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(tabTitle, NSString, RNTPTDocumentView)
 {
     if (json) {
