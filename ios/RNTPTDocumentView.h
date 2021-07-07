@@ -283,6 +283,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
+- (void)toolbarVisibilityChanged:(RNTPTDocumentView *)sender visible:(BOOL)visible;
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 
@@ -417,6 +418,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL restrictDownloadUsage;
 
 @property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
+@property (nonatomic, assign) BOOL toolbarsVisible;
 
 #pragma mark - Methods
 

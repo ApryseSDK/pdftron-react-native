@@ -566,6 +566,16 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+- (void)toolbarVisibilityChanged:(RNTPTDocumentView *)sender visible:(BOOL)visible
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarVisibilityChanged" : @"onToolbarVisibilityChanged",
+            @"visible" : [NSNumber numberWithBool:visible],
+        });
+    }
+}
+
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
 {
     if (sender.onChange) {

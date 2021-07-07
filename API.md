@@ -1349,6 +1349,26 @@ Defines whether the navigation list will be displayed as a side panel on large d
 />
 ```
 
+#### onToolbarVisibilityChanged
+function, optional. iOS only.
+
+This function is called when the visibility of viewer controls has changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+visible | bool | whether the toolbars are currently visible
+
+
+```js
+<DocumentView
+  onLayoutChanged = {(visible) => {
+    console.log("Toolbars visible: ", visible);
+  }}
+/>
+```
+
 ## DocumentView - Methods
 
 ### Document
@@ -2738,4 +2758,22 @@ Returns a Promise.
 
 ```js
 this._viewer.showCrop();
+```
+
+#### getToolbarsHidden
+Returns whether or not toolbars are currently hidden in the viewer. iOS only.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+hidden | bool | whether toolbars are currently hidden
+
+
+```js
+this._viewer.getToolbarsHidden().then((hidden) => {
+  console.log("toolbars hidden: ", hidden);
+});
 ```

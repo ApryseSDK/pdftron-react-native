@@ -77,6 +77,8 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
+    _toolbarsVisible = [self getToolbarsHidden];
+    
     _maxTabCount = NSUIntegerMax;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
@@ -2627,6 +2629,13 @@ NS_ASSUME_NONNULL_END
     
     if ([self.delegate respondsToSelector:@selector(layoutChanged:)]) {
         [self.delegate layoutChanged:self];
+    }
+    
+    if (_toolbarsVisible == [self getToolbarsHidden]) {
+        _toolbarsVisible = !_toolbarsVisible;
+        if ([self.delegate respondsToSelector:@selector(toolbarVisibilityChanged:visible:)]) {
+            [self.delegate toolbarVisibilityChanged:self visible:_toolbarsVisible];
+        }
     }
 }
 
