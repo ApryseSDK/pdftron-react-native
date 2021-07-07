@@ -221,7 +221,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "defaultEraserType")
-    public void setDefaultEraserType(DocumentView documentView, String eraserType){
+    public void setDefaultEraserType(DocumentView documentView, String eraserType) {
         documentView.setDefaultEraserType(eraserType);
     }
 
@@ -386,12 +386,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "exportPath")
-    public void setExportPath(DocumentView documentView, String exportPath){
+    public void setExportPath(DocumentView documentView, String exportPath) {
         documentView.setExportPath(exportPath);
     }
 
     @ReactProp(name = "openUrlPath")
-    public void setOpenUrlPath(DocumentView documentView, String openUrlPath){
+    public void setOpenUrlPath(DocumentView documentView, String openUrlPath) {
         documentView.setOpenUrlPath(openUrlPath);
     }
 
@@ -525,7 +525,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "getField", "Unable to find DocumentView.");
         }
     }
-
 
     public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);

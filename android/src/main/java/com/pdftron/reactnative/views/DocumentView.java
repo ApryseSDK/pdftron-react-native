@@ -478,14 +478,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mToolManagerBuilder = mToolManagerBuilder.setDisableQuickMenu(!longPressMenuEnabled);
     }
 
-    public void setDefaultEraserType(String eraserType){
-        if(ANNOTATION_ERASER.equals(eraserType)) {
+    public void setDefaultEraserType(String eraserType) {
+        if (ANNOTATION_ERASER.equals(eraserType)) {
             mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.ANNOTATION_ERASER);
-        }
-        else if(HYBRID_ERASER.equals(eraserType)) {
+        } else if (HYBRID_ERASER.equals(eraserType)) {
             mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.HYBRID_ERASER);
-        }
-        else if(INK_ERASER.equals(eraserType)) {
+        } else if (INK_ERASER.equals(eraserType)) {
             mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.INK_ERASER);
         }
     }
@@ -556,11 +554,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mSignWithStamps = signWithStamps;
     }
 
-    public void setExportPath(String exportPath){
+    public void setExportPath(String exportPath) {
         mExportPath = exportPath;
     }
 
-    public void setOpenUrlPath(String openUrlPath){
+    public void setOpenUrlPath(String openUrlPath) {
         mOpenUrlPath = openUrlPath;
     }
 
@@ -843,7 +841,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showUserBookmarksList(false);
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
-            } else if (BUTTON_VIEW_LAYERS.equals(item)){
+            } else if (BUTTON_VIEW_LAYERS.equals(item)) {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
@@ -1624,7 +1622,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (mExportPath != null) {
             mBuilder.saveCopyExportPath(mExportPath);
         }
-        if(mOpenUrlPath != null){
+        if (mOpenUrlPath != null) {
             mBuilder.openUrlCachePath(mOpenUrlPath);
         }
 
@@ -3142,9 +3140,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                     if (strokeColor != null && strokeColor.hasKey(COLOR_RED) && strokeColor.hasKey(COLOR_GREEN) &&
                             strokeColor.hasKey(COLOR_BLUE)) {
-                        double red = (double) strokeColor.getInt(COLOR_RED)/255F;
-                        double green = (double) strokeColor.getInt(COLOR_GREEN)/255F;
-                        double blue = (double) strokeColor.getInt(COLOR_BLUE)/255F;
+                        double red = (double) strokeColor.getInt(COLOR_RED) / 255F;
+                        double green = (double) strokeColor.getInt(COLOR_GREEN) / 255F;
+                        double blue = (double) strokeColor.getInt(COLOR_BLUE) / 255F;
                         ColorPt colorPt = new ColorPt(red, green, blue);
                         annot.setColor(colorPt);
                         annot.refreshAppearance();
@@ -3197,7 +3195,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         WritableMap propertyMap = Arguments.createMap();
-        
+
         if (pdfViewCtrl != null) {
             boolean shouldUnlockRead = false;
             try {
@@ -3232,10 +3230,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         colorMap.putDouble(COLOR_BLUE, colorPt.get(2) * 255F);
                         propertyMap.putMap(KEY_ANNOTATION_STROKE_COLOR, colorMap);
                     }
-                    
+
                     if (annot.isMarkup()) {
                         Markup markupAnnot = new Markup(annot);
-                        
+
                         String subject = markupAnnot.getSubject();
                         if (!subject.isEmpty()) {
                             propertyMap.putString(KEY_ANNOTATION_SUBJECT, subject);

@@ -227,7 +227,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 #### defaultEraserType
 string, optional
 
-Sets the default Eraser Tool type. Android only.
+Sets the default eraser tool type. Value only applied after a clean install. Android only.
 Example:
 
 ```js
