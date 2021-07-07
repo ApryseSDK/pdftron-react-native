@@ -224,7 +224,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
   readOnly={true}
 />
 ```
-#### eraserType
+#### defaultEraserType
 string, optional
 
 Sets the default Eraser Tool type. Android only.
@@ -232,7 +232,7 @@ Example:
 
 ```js
 <DocumentView
-  eraserType={Config.EraserType.hybrideEraser}
+  defaultEraserType={Config.EraserType.hybrideEraser}
 />
 ```
 

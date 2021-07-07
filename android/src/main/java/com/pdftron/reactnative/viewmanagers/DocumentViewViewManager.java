@@ -220,9 +220,9 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setLongPressMenuEnabled(longPressMenuEnabled);
     }
 
-    @ReactProp(name = "eraserType")
-    public void setEraserType(DocumentView documentView, String eraserType){
-        documentView.setEraserType(eraserType);
+    @ReactProp(name = "defaultEraserType")
+    public void setDefaultEraserType(DocumentView documentView, String eraserType){
+        documentView.setDefaultEraserType(eraserType);
     }
 
     @ReactProp(name = "hideAnnotationMenu")

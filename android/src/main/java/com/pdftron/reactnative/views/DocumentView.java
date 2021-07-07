@@ -478,7 +478,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mToolManagerBuilder = mToolManagerBuilder.setDisableQuickMenu(!longPressMenuEnabled);
     }
 
-    public void setEraserType(String eraserType){
+    public void setDefaultEraserType(String eraserType){
         if(ANNOTATION_ERASER.equals(eraserType)) {
             mToolManagerBuilder = mToolManagerBuilder.setEraserType(Eraser.EraserType.ANNOTATION_ERASER);
         }
