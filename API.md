@@ -1363,7 +1363,7 @@ visible | bool | whether the toolbars are currently visible
 
 ```js
 <DocumentView
-  onLayoutChanged = {(visible) => {
+  onToolbarVisibilityChanged = {(visible) => {
     console.log("Toolbars visible: ", visible);
   }}
 />
