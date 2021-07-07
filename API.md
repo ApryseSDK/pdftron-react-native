@@ -224,6 +224,17 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
   readOnly={true}
 />
 ```
+#### defaultEraserType
+string, optional
+
+Sets the default eraser tool type. Value only applied after a clean install. Android only.
+Example:
+
+```js
+<DocumentView
+  defaultEraserType={Config.EraserType.hybrideEraser}
+/>
+```
 
 #### exportPath
 string, optional
@@ -240,7 +251,7 @@ Example:
 #### openUrlPath
 string, optional
 
-Sets the folder path for open URL files, this defaults to the app cache path. Android only.
+Sets the cache folder used to cache PDF files opened using a http/https link, this defaults to the app cache path. Android only.
 Example:
 
 ```js

@@ -99,6 +99,9 @@ export default class DocumentView extends PureComponent {
     tabletLayoutEnabled: PropTypes.bool,
     initialToolbar: PropTypes.string,
     inkMultiStrokeEnabled: PropTypes.bool,
+    defaultEraserType: PropTypes.string,
+    exportPath: PropTypes.string,
+    openUrlPath: PropTypes.string,
     ...ViewPropTypes,
   };
 

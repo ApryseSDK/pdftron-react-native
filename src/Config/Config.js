@@ -133,6 +133,13 @@ export default {
     calibrate: 'calibrate',
   },
 
+  // EraserType defines the type of earse that will be used when eraser is selected
+  EraserType: {
+    annotationEraser: 'annotationEraser',
+    hybrideEraser: 'hybrideEraser',
+    inkEraser: 'inkEraser'
+  },
+
   // LongPressMenu defines the menu items when a long press on empty space or text occurs
   LongPressMenu: {
     copy: 'copy',

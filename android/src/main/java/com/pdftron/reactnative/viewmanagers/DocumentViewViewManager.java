@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
 
@@ -219,6 +220,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setLongPressMenuEnabled(longPressMenuEnabled);
     }
 
+    @ReactProp(name = "defaultEraserType")
+    public void setDefaultEraserType(DocumentView documentView, String eraserType) {
+        documentView.setDefaultEraserType(eraserType);
+    }
+
     @ReactProp(name = "hideAnnotationMenu")
     public void setHideAnnotationMenu(DocumentView documentView, @NonNull ReadableArray tools) {
         documentView.setHideAnnotationMenu(tools);
@@ -380,12 +386,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "exportPath")
-    public void setExportPath(DocumentView documentView, String exportPath){
+    public void setExportPath(DocumentView documentView, String exportPath) {
         documentView.setExportPath(exportPath);
     }
 
     @ReactProp(name = "openUrlPath")
-    public void setOpenUrlPath(DocumentView documentView, String openUrlPath){
+    public void setOpenUrlPath(DocumentView documentView, String openUrlPath) {
         documentView.setOpenUrlPath(openUrlPath);
     }
 
@@ -519,7 +525,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "getField", "Unable to find DocumentView.");
         }
     }
-
 
     public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
