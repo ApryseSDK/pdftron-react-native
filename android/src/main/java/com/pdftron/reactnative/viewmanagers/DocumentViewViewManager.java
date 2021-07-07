@@ -379,6 +379,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setRestrictDownloadUsage(restrictDownloadUsage);
     }
 
+    @ReactProp(name = "exportPath")
+    public void setExportPath(DocumentView documentView, String exportPath){
+        documentView.setExportPath(exportPath);
+    }
+
+    @ReactProp(name = "openUrlPath")
+    public void setOpenUrlPath(DocumentView documentView, String openUrlPath){
+        documentView.setOpenUrlPath(openUrlPath);
+    }
+
     @ReactProp(name = "inkMultiStrokeEnabled")
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
