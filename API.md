@@ -1062,6 +1062,17 @@ If true, the active annotation creation tool will remain in the current annotati
 />
 ```
 
+#### inkMultiStrokeEnabled
+bool, optional, defaults to true
+
+If true, ink tool will use multi-stroke mode. Otherwise, each stroke is a new ink annotation.
+
+```js
+<DocumentView
+  inkMultiStrokeEnabled={true}
+/>
+```
+
 #### selectAnnotationAfterCreation
 bool, optional, defaults to true
 

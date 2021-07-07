@@ -98,6 +98,7 @@ export default class DocumentView extends PureComponent {
     reflowOrientation: PropTypes.string,
     tabletLayoutEnabled: PropTypes.bool,
     initialToolbar: PropTypes.string,
+    inkMultiStrokeEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
