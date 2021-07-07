@@ -3854,6 +3854,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.restrictDownloadUsage(restrictDownloadUsage);
     }
 
+    public void setInkMultiStrokeEnabled(boolean inkMultiStrokeEnabled) {
+        mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
     public ToolManager getToolManager() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().getToolManager();

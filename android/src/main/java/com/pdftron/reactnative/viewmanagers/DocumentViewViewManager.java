@@ -379,6 +379,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setRestrictDownloadUsage(restrictDownloadUsage);
     }
 
+    @ReactProp(name = "inkMultiStrokeEnabled")
+    public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
+        documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
