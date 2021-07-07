@@ -147,7 +147,7 @@ RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultP
 #### exportAsImage
 Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
 
-Unlike DocumentView.exportAsImage, this method should only be called *before* a `DocumentView` instance has been created or else unexpected behaviour can occur.
+Unlike DocumentView.exportAsImage, this method is static and should only be called *before* a `DocumentView` instance has been created or else unexpected behaviour can occur. This method also takes a local file path to the desired PDF.
 
 Parameters:
 
@@ -2722,7 +2722,7 @@ this._viewer.selectAll();
 #### exportAsImage
 Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
 
-Unlike RNPdftron.exportAsImage, this method should only be called *after* a `DocumentView` instance has been created or else unexpected behaviour can occur.
+Unlike RNPdftron.exportAsImage, this is a viewer method and should only be called *after* a `DocumentView` instance has been created or else unexpected behaviour can occur. This method uses the PDF that is associated with the viewer, and does not take a local file path to the desired PDF.
 
 Parameters:
 
