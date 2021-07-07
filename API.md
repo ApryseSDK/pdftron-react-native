@@ -224,6 +224,41 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
   readOnly={true}
 />
 ```
+#### eraserType
+string, optional
+
+Sets the default Eraser Tool type. Android only.
+Example:
+
+```js
+<DocumentView
+  eraserType={Config.EraserType.hybrideEraser}
+/>
+```
+
+#### exportPath
+string, optional
+
+Sets the folder path for all save options, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  exportPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### openUrlPath
+string, optional
+
+Sets the cache folder used to cache PDF files opened using a http/https link, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  openUrlPath="/data/data/com.example/cache/test"
+/>
+```
 
 #### onDocumentLoaded
 function, optional
@@ -448,6 +483,33 @@ Defines whether to show the toolbar switcher in the top toolbar.
 <DocumentView
   hideAnnotationToolbarSwitcher={false}
 />
+```
+
+#### initialToolbar
+string, optional, defaults to none
+
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
+
+```js
+<DocumentView
+  initialToolbar={Config.DefaultToolbars.Draw}
+/>
+```
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
+});
 ```
 
 #### hideTopToolbars
@@ -1008,6 +1070,17 @@ If true, the active annotation creation tool will remain in the current annotati
 ```js
 <DocumentView
   continuousAnnotationEditing={true}
+/>
+```
+
+#### inkMultiStrokeEnabled
+bool, optional, defaults to true
+
+If true, ink tool will use multi-stroke mode. Otherwise, each stroke is a new ink annotation.
+
+```js
+<DocumentView
+  inkMultiStrokeEnabled={true}
 />
 ```
 

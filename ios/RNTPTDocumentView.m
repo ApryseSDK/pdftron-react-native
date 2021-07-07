@@ -72,6 +72,8 @@ NS_ASSUME_NONNULL_END
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
     
+    _inkMultiStrokeEnabled = YES;
+
     _followSystemDarkMode = YES;
 
     _useStylusAsPen = YES;
@@ -198,7 +200,7 @@ NS_ASSUME_NONNULL_END
                 self.viewController = tabbedDocumentViewController;
                 self.tabbedDocumentViewController = tabbedDocumentViewController;
             } else {
-                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController alloc] init];
+                RNTPTDocumentController *documentViewController = [[RNTPTDocumentController allocOverridden] init];
                 documentViewController.delegate = self;
                 
                 self.viewController = documentViewController;
@@ -371,7 +373,12 @@ NS_ASSUME_NONNULL_END
     [center addObserver:self
                selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:) name:PTToolManagerFormFieldDataModifiedNotification
                  object:toolManager];
-    
+
+    [center addObserver:self
+               selector:@selector(toolManagerWillChangeToolWithNotification:)
+                   name:PTToolManagerToolWillChangeNotification
+                 object:toolManager];
+
     [center addObserver:self
                selector:@selector(toolManagerDidChangeToolWithModification:)
                    name:PTToolManagerToolDidChangeNotification
@@ -528,6 +535,11 @@ NS_ASSUME_NONNULL_END
 {
     _tabTitle = [tabTitle copy];
     
+}
+
+- (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
+{
+    _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
 }
 
 #pragma mark - Disabled tools
@@ -1905,6 +1917,34 @@ NS_ASSUME_NONNULL_END
             documentController.toolGroupManager.selectedGroup = documentController.toolGroupManager.viewItemGroup;
             documentController.toolGroupIndicatorView.hidden = YES;
         }
+
+        if (self.initialToolbar.length > 0) {
+           NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            NSMutableArray *toolGroupIdentifiers = [NSMutableArray array];
+
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title.lowercaseString];
+                [toolGroupIdentifiers addObject:toolGroup.identifier.lowercaseString];
+            }
+
+            NSInteger initialToolbarIndex = [toolGroupIdentifiers indexOfObject:self.initialToolbar.lowercaseString];
+
+            if (initialToolbarIndex == NSNotFound) {
+                // not found in identifiers, check titles
+                initialToolbarIndex = [toolGroupTitles indexOfObject:self.initialToolbar.lowercaseString];
+            }
+
+            PTToolGroup *matchedDefaultGroup = [self toolGroupForKey:self.initialToolbar toolGroupManager:documentController.toolGroupManager];
+            if (matchedDefaultGroup != nil) {
+                // use a default group if its key is found
+                [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                return;
+            }
+
+            if (initialToolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:initialToolbarIndex];
+            }
+        }
     }
     
     if (self.hideAnnotationToolbarSwitcher) {
@@ -2013,6 +2053,40 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+        if (toolbarTitle.length > 0) {
+            NSMutableArray *toolGroupTitles = [NSMutableArray array];
+            NSMutableArray *toolGroupIdentifiers = [NSMutableArray array];
+
+            for (PTToolGroup *toolGroup in documentController.toolGroupManager.groups) {
+                [toolGroupTitles addObject:toolGroup.title.lowercaseString];
+                [toolGroupIdentifiers addObject:toolGroup.identifier.lowercaseString];
+            }
+
+            NSInteger toolbarIndex = [toolGroupIdentifiers indexOfObject:toolbarTitle.lowercaseString];
+            if (toolbarIndex == NSNotFound) {
+                // not found in identifiers, check titles
+                toolbarIndex = [toolGroupTitles indexOfObject:toolbarTitle.lowercaseString];
+            }
+
+            PTToolGroup *matchedDefaultGroup = [self toolGroupForKey:toolbarTitle toolGroupManager:documentController.toolGroupManager];
+            if (matchedDefaultGroup != nil) {
+                // use a default group if its key is found
+                [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                return;
+            }
+
+            if (toolbarIndex != NSNotFound) {
+                [documentController.toolGroupManager setSelectedGroupIndex:toolbarIndex];
+            }
+        }
+    }
 }
 
 - (void)applyLayoutMode:(PTPDFViewCtrl *)pdfViewCtrl
@@ -3238,6 +3312,20 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+-(void)toolManagerWillChangeToolWithNotification:(NSNotification *)notification {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
+        return;
+    }
+
+    PTTool *previousTool = self.currentDocumentViewController.toolManager.tool;
+    if ([previousTool isKindOfClass:[PTCreateToolBase class]]) {
+        PTCreateToolBase *createTool = (PTCreateToolBase *)previousTool;
+        if ([createTool isUndoManagerEnabled]) {
+            [self endObservingUndoManager:createTool.undoManager];
+        }
+    }
+}
+
 -(void)toolManagerDidChangeToolWithModification:(NSNotification *)notification {
     if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
@@ -3248,6 +3336,78 @@ NS_ASSUME_NONNULL_END
     
     if ([self.delegate respondsToSelector:@selector(toolChanged:previousTool:tool:)]) {
         [self.delegate toolChanged:self previousTool:previousToolClass tool:toolClass];
+    }
+
+    PTTool *tool = self.currentDocumentViewController.toolManager.tool;
+    if ([tool isKindOfClass:[PTCreateToolBase class]]) {
+        PTCreateToolBase *createTool = (PTCreateToolBase *)tool;
+        if ([createTool isUndoManagerEnabled]) {
+            [self beginObservingUndoManager:createTool.undoManager];
+        }
+    }
+}
+
+- (void)beginObservingUndoManager:(NSUndoManager *)undoManager
+{
+    if (!undoManager) {
+        return;
+    }
+
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
+}
+
+- (void)endObservingUndoManager:(NSUndoManager *)undoManager
+{
+    if (!undoManager) {
+        return;
+    }
+
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center removeObserver:self
+                      name:NSUndoManagerDidCloseUndoGroupNotification
+                    object:undoManager];
+    [center removeObserver:self
+                      name:NSUndoManagerDidUndoChangeNotification
+                    object:undoManager];
+    [center removeObserver:self
+                      name:NSUndoManagerDidRedoChangeNotification
+                    object:undoManager];
+}
+
+- (void)undoManagerStateDidChange:(NSNotification *)notification
+{
+    NSUndoManager *undoManager = notification.object;
+    PTTool *tool = self.currentDocumentViewController.toolManager.tool;
+    if (undoManager != tool.undoManager) {
+        return;
+    }
+
+    if (@available(iOS 13.1, *)) {
+        if ([self.currentDocumentViewController.toolManager.tool isKindOfClass:[PTPencilDrawingCreate class]]) {
+            if (!self.inkMultiStrokeEnabled) {
+                [((PTPencilDrawingCreate*)self.currentDocumentViewController.toolManager.tool) commitAnnotation];
+            }
+        }
+    }
+
+    if ([self.currentDocumentViewController.toolManager.tool isKindOfClass:[PTFreeHandCreate class]]) {
+        if (!self.inkMultiStrokeEnabled) {
+            [((PTFreeHandCreate*)self.currentDocumentViewController.toolManager.tool) commitAnnotation];
+        }
     }
 }
 

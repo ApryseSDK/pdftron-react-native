@@ -110,7 +110,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
 
-    private String mCacheDir;
+    private String mExportPath;
+    private String mOpenUrlPath;
     private int mInitialPageNumber = -1;
 
     private boolean mPadStatusBar;
@@ -181,7 +182,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             FragmentManager fragmentManager = ((AppCompatActivity) reactContext.getCurrentActivity()).getSupportFragmentManager();
             setSupportFragmentManager(fragmentManager);
             mFragmentManagerSave = fragmentManager;
-            mCacheDir = currentActivity.getCacheDir().getAbsolutePath();
+            String cacheDir = currentActivity.getCacheDir().getAbsolutePath();
+            mExportPath = cacheDir;
+            mOpenUrlPath = cacheDir;
             mPDFViewCtrlConfig = PDFViewCtrlConfig.getDefaultConfig(currentActivity);
         } else {
             throw new IllegalStateException("FragmentActivity required.");
@@ -553,8 +556,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mSignWithStamps = signWithStamps;
     }
 
+    public void setExportPath(String exportPath){
+        mExportPath = exportPath;
+    }
+
+    public void setOpenUrlPath(String openUrlPath){
+        mOpenUrlPath = openUrlPath;
+    }
+
     public void setAnnotationPermissionCheckEnabled(boolean annotPermissionCheckEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAnnotPermission(annotPermissionCheckEnabled);
+    }
+
+    public void setInitialToolbar(String toolbarTag) {
+        mBuilder.initialToolbarTag(toolbarTag).rememberLastUsedToolbar(false);
+    }
+
+    public void setCurrentToolbar(String toolbarTag) {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.openToolbarWithTag(toolbarTag);
+        }
     }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
@@ -1600,10 +1621,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     private ViewerConfig getConfig() {
-        if (mCacheDir != null) {
-            mBuilder.openUrlCachePath(mCacheDir)
-                    .saveCopyExportPath(mCacheDir);
+        if (mExportPath != null) {
+            mBuilder.saveCopyExportPath(mExportPath);
         }
+        if(mOpenUrlPath != null){
+            mBuilder.openUrlCachePath(mOpenUrlPath);
+        }
+
         if (mDisabledTools.size() > 0) {
             ToolManager.ToolMode[] modes = mDisabledTools.toArray(new ToolManager.ToolMode[0]);
             if (modes.length > 0) {
@@ -3855,6 +3879,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setRestrictDownloadUsage(boolean restrictDownloadUsage) {
         mBuilder = mBuilder.restrictDownloadUsage(restrictDownloadUsage);
+    }
+
+    public void setInkMultiStrokeEnabled(boolean inkMultiStrokeEnabled) {
+        mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
     public ToolManager getToolManager() {
