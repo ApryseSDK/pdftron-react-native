@@ -360,6 +360,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
+@property (nonatomic) BOOL inkMultiStrokeEnabled;
+
 @property (nonatomic) BOOL useStylusAsPen;
 
 @property (nonatomic) BOOL showSavedSignatures;

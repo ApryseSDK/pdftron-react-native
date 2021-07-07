@@ -371,7 +371,12 @@ NS_ASSUME_NONNULL_END
     [center addObserver:self
                selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:) name:PTToolManagerFormFieldDataModifiedNotification
                  object:toolManager];
-    
+
+    [center addObserver:self
+               selector:@selector(toolManagerWillChangeToolWithNotification:)
+                   name:PTToolManagerToolWillChangeNotification
+                 object:toolManager];
+
     [center addObserver:self
                selector:@selector(toolManagerDidChangeToolWithModification:)
                    name:PTToolManagerToolDidChangeNotification
@@ -3300,6 +3305,20 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+-(void)toolManagerWillChangeToolWithNotification:(NSNotification *)notification {
+    if (notification.object != self.currentDocumentViewController.toolManager) {
+        return;
+    }
+
+    PTTool *previousTool = self.currentDocumentViewController.toolManager.tool;
+    if ([previousTool isKindOfClass:[PTCreateToolBase class]]) {
+        PTCreateToolBase *createTool = (PTCreateToolBase *)previousTool;
+        if ([createTool isUndoManagerEnabled]) {
+            [self endObservingUndoManager:createTool.undoManager];
+        }
+    }
+}
+
 -(void)toolManagerDidChangeToolWithModification:(NSNotification *)notification {
     if (notification.object != self.currentDocumentViewController.toolManager) {
         return;
@@ -3310,6 +3329,78 @@ NS_ASSUME_NONNULL_END
     
     if ([self.delegate respondsToSelector:@selector(toolChanged:previousTool:tool:)]) {
         [self.delegate toolChanged:self previousTool:previousToolClass tool:toolClass];
+    }
+
+    PTTool *tool = self.currentDocumentViewController.toolManager.tool;
+    if ([tool isKindOfClass:[PTCreateToolBase class]]) {
+        PTCreateToolBase *createTool = (PTCreateToolBase *)tool;
+        if ([createTool isUndoManagerEnabled]) {
+            [self beginObservingUndoManager:createTool.undoManager];
+        }
+    }
+}
+
+- (void)beginObservingUndoManager:(NSUndoManager *)undoManager
+{
+    if (!undoManager) {
+        return;
+    }
+
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChange:)
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
+}
+
+- (void)endObservingUndoManager:(NSUndoManager *)undoManager
+{
+    if (!undoManager) {
+        return;
+    }
+
+    NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+
+    [center removeObserver:self
+                      name:NSUndoManagerDidCloseUndoGroupNotification
+                    object:undoManager];
+    [center removeObserver:self
+                      name:NSUndoManagerDidUndoChangeNotification
+                    object:undoManager];
+    [center removeObserver:self
+                      name:NSUndoManagerDidRedoChangeNotification
+                    object:undoManager];
+}
+
+- (void)undoManagerStateDidChange:(NSNotification *)notification
+{
+    NSUndoManager *undoManager = notification.object;
+    PTTool *tool = self.currentDocumentViewController.toolManager.tool;
+    if (undoManager != tool.undoManager) {
+        return;
+    }
+
+    if (@available(iOS 13.1, *)) {
+        if ([self.currentDocumentViewController.toolManager.tool isKindOfClass:[PTPencilDrawingCreate class]]) {
+            if (!self.inkMultiStrokeEnabled) {
+                [((PTPencilDrawingCreate*)self.currentDocumentViewController.toolManager.tool) commitAnnotation];
+            }
+        }
+    }
+
+    if ([self.currentDocumentViewController.toolManager.tool isKindOfClass:[PTFreeHandCreate class]]) {
+        if (!self.inkMultiStrokeEnabled) {
+            [((PTFreeHandCreate*)self.currentDocumentViewController.toolManager.tool) commitAnnotation];
+        }
     }
 }
 
