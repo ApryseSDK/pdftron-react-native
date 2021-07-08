@@ -2668,7 +2668,7 @@ NS_ASSUME_NONNULL_END
     double horizontal = [pdfViewCtrl GetHScrollPos];
     double vertical = [pdfViewCtrl GetVScrollPos];
     
-    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+    if ([self.delegate respondsToSelector:@selector(scrollChanged:horizontal:vertical:)]) {
         [self.delegate scrollChanged:self horizontal:horizontal vertical:vertical];
     }
 }
@@ -2690,7 +2690,7 @@ NS_ASSUME_NONNULL_END
     
     const double zoom = pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
     
-    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+    if ([self.delegate respondsToSelector:@selector(zoomFinished:zoom:)]) {
         [self.delegate zoomFinished:self zoom:zoom];
     }
 }
