@@ -345,7 +345,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
-    PTUndoRedoManager *undoManager = toolManager.undoManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
     
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
@@ -398,7 +398,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
-    PTUndoRedoManager *undoManager = toolManager.undoManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
 
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
