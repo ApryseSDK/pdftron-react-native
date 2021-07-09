@@ -204,6 +204,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 .maximumTabCount(Integer.MAX_VALUE)
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
+                .showConversionDialog(false)
                 .skipReadOnlyCheck(true);
     }
 
