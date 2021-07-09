@@ -16,6 +16,7 @@ static NSString * const PTThumbnailSliderButtonKey = @"thumbnailSlider";
 static NSString * const PTOutlineListButtonKey = @"outlineListButton";
 static NSString * const PTAnnotationListButtonKey = @"annotationListButton";
 static NSString * const PTUserBookmarkListButtonKey = @"userBookmarkListButton";
+static NSString * const PTLayerListButtonKey = @"viewLayersButton";
 static NSString * const PTReflowButtonKey = @"reflowButton";
 static NSString * const PTEditPagesButtonKey = @"editPagesButton";
 static NSString * const PTPrintButtonKey = @"printButton";
@@ -361,6 +362,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
 
+@property (nonatomic) BOOL inkMultiStrokeEnabled;
+
 @property (nonatomic) BOOL useStylusAsPen;
 
 @property (nonatomic) BOOL showSavedSignatures;
@@ -396,6 +399,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
+@property (nonatomic, copy, nullable) NSString *initialToolbar;
 
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
@@ -563,6 +567,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)selectAll;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle;
 
 @end
 

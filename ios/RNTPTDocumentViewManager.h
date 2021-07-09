@@ -154,4 +154,6 @@
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
+- (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
 @end

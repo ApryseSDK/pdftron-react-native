@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
 
@@ -219,6 +220,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setLongPressMenuEnabled(longPressMenuEnabled);
     }
 
+    @ReactProp(name = "defaultEraserType")
+    public void setDefaultEraserType(DocumentView documentView, String eraserType) {
+        documentView.setDefaultEraserType(eraserType);
+    }
+
     @ReactProp(name = "hideAnnotationMenu")
     public void setHideAnnotationMenu(DocumentView documentView, @NonNull ReadableArray tools) {
         documentView.setHideAnnotationMenu(tools);
@@ -299,6 +305,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setAnnotationToolbars(toolbars);
     }
 
+    @ReactProp(name = "initialToolbar")
+    public void setInitialToolbar(DocumentView documentView, String toolbarTag) {
+        documentView.setInitialToolbar(toolbarTag);
+    }
+
     @ReactProp(name = "hideDefaultAnnotationToolbars")
     public void setHideDefaultAnnotationToolbars(DocumentView documentView, ReadableArray tags) {
         documentView.setHideDefaultAnnotationToolbars(tags);
@@ -372,6 +383,21 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "restrictDownloadUsage")
     public void setRestrictDownloadUsage(DocumentView documentView, boolean restrictDownloadUsage) {
         documentView.setRestrictDownloadUsage(restrictDownloadUsage);
+    }
+
+    @ReactProp(name = "exportPath")
+    public void setExportPath(DocumentView documentView, String exportPath) {
+        documentView.setExportPath(exportPath);
+    }
+
+    @ReactProp(name = "openUrlPath")
+    public void setOpenUrlPath(DocumentView documentView, String openUrlPath) {
+        documentView.setOpenUrlPath(openUrlPath);
+    }
+
+    @ReactProp(name = "inkMultiStrokeEnabled")
+    public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
+        documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -455,6 +481,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setCurrentToolbar(int tag, String toolbarTag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setCurrentToolbar(toolbarTag);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setCurrentToolbar", "Unable to find DocumentView.");
+        }
+    }
+
     public int getPageCount(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -490,7 +525,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "getField", "Unable to find DocumentView.");
         }
     }
-
 
     public void deleteAnnotations(int tag, ReadableArray annots) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
