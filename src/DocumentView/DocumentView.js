@@ -96,6 +96,7 @@ export default class DocumentView extends PureComponent {
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
+    onUndoRedoStateChanged: PropTypes.func,
     tabletLayoutEnabled: PropTypes.bool,
     initialToolbar: PropTypes.string,
     inkMultiStrokeEnabled: PropTypes.bool,
@@ -229,6 +230,10 @@ export default class DocumentView extends PureComponent {
           'found': event.nativeEvent.found,
           'textSelection': event.nativeEvent.textSelection,
         });
+      }
+    } else if (event.nativeEvent.onUndoRedoStateChanged) {
+      if (this.props.onUndoRedoStateChanged) {
+        this.props.onUndoRedoStateChanged();
       }
     }
   }
@@ -824,6 +829,22 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.redo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  canUndo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canUndo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  canRedo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canRedo(tag);
     }
     return Promise.resolve();
   }

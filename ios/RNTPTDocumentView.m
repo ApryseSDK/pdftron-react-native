@@ -347,6 +347,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
     
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
@@ -383,12 +384,28 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidChangeToolWithModification:)
                    name:PTToolManagerToolDidChangeNotification
                  object:toolManager];
+    
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
 
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
@@ -415,6 +432,18 @@ NS_ASSUME_NONNULL_END
     [center removeObserver:self
                       name:PTToolManagerToolDidChangeNotification
                     object:toolManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
 }
 
 #pragma mark - Disabling elements
@@ -3411,6 +3440,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)undoManagerStateDidChangeWithModification:(NSNotification *)notification
+{
+    if (notification.object != self.currentDocumentViewController.toolManager.undoManager) {
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(undoRedoStateChanged:)]) {
+        [self.delegate undoRedoStateChanged:self];
+    }
+}
+
 -(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl {
     NSString *fdfCommand = @"";
     
@@ -4005,6 +4045,18 @@ NS_ASSUME_NONNULL_END
 - (void)redo
 {
     [self.currentDocumentViewController.undoManager redo];
+}
+
+#pragma mark - Can Undo/Can Redo
+
+- (bool)canUndo
+{
+    return [self.currentDocumentViewController.undoManager canUndo];
+}
+
+- (bool)canRedo
+{
+    return [self.currentDocumentViewController.undoManager canRedo];
 }
 
 #pragma mark - Get Zoom

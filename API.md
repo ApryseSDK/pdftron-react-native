@@ -1004,7 +1004,7 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 #### collabEnabled
 bool, optional, defaults to false
 
-Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode
+Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
 
 ```js
 <DocumentView
@@ -1157,7 +1157,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 #### onAnnotationChanged
 function, optional
 
-This function is called if a change has been made to an annotation(s) in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
+This function is called if a change has been made to an annotation(s) in the current document.
 
 Parameters:
 
@@ -1419,6 +1419,19 @@ Defines whether the navigation list will be displayed as a side panel on large d
 ```js
 <DocumentView
   showNavigationListAsSidePanelOnLargeDevices={true}
+/>
+```
+
+#### onUndoRedoStateChanged
+function, optional
+
+This function is called when the state of the current document's undo/redo stack has been changed.
+
+```js
+<DocumentView
+  onUndoRedoStateChanged = {() => { 
+    console.log("Undo/redo stack state changed");
+  }}
 />
 ```
 
@@ -2760,8 +2773,63 @@ Returns a Promise.
 
 ```js
 this._viewer.selectAll();
+```
+
+### Undo/Redo
+
+#### undo
+Undo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.undo();
+```
+
+#### redo
+Redo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.redo();
+```
+
+#### canUndo
+Checks whether an undo operation can be performed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canUndo | bool | whether it is possible to undo from the current snapshot
+
+```js
+this._viewer.canUndo().then((canUndo) => {
+  console.log(canUndo ? 'undo possible' : 'no action to undo');
 });
 ```
+
+#### canRedo
+Checks whether a redo operation can be perfromed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canRedo | bool | whether it is possible to redo from the current snapshot
+
+```js
+this._viewer.canRedo().then((canRedo) => {
+  console.log(canRedo ? 'redo possible' : 'no action to redo');
+});
+```
+
+### Others
 
 #### exportAsImage
 Export a PDF page to image format defined in `Config.ExportFormat`.
@@ -2784,24 +2852,6 @@ path | string | the temp path of the created image, user is responsible for clea
 this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
-```
-
-#### undo
-Undo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.undo();
-```
-
-#### redo
-Redo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.redo();
 ```
 
 #### showCrop

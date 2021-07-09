@@ -304,6 +304,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -499,6 +501,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)undo;
 
 - (void)redo;
+
+- (bool)canUndo;
+
+- (bool)canRedo;
 
 - (double)getZoom;
 
