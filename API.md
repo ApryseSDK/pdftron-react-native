@@ -1173,7 +1173,7 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
-### photoPickerEnabled
+#### photoPickerEnabled
 bool, optional, defaults to true
 
 Defines whether to show the option to pick images in the signature dialog.
@@ -1289,7 +1289,7 @@ Defines whether document is automatically saved by the viewer.
 />
 ```
 
-### autoResizeFreeTextEnabled
+#### autoResizeFreeTextEnabled
 bool, optional defaults to false
 
 Defines whether to automatically resize free text when editing
@@ -1300,7 +1300,6 @@ Defines whether to automatically resize free text when editing
 />
 ```
 
-#### Example:
 #### restrictDownloadUsage
 bool, optional, defaults to false
 
