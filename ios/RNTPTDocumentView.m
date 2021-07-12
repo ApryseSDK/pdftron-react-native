@@ -1355,13 +1355,6 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
--(void)setAnnotationAuthorCheckEnabled:(BOOL)annotationAuthorCheckEnabled
-{
-    _annotationAuthorCheckEnabled = annotationAuthorCheckEnabled;
-
-    [self applyViewerSettings];
-}
-
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
     _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
@@ -1692,9 +1685,6 @@ NS_ASSUME_NONNULL_END
     
     // Annotation author.
     toolManager.annotationAuthor = self.annotationAuthor;
-    
-    // Annotation author check enabled.
-    toolManager.annotationAuthorCheckEnabled = self.annotationAuthorCheckEnabled;
     
     // Shows saved signatures.
     toolManager.showDefaultSignature = self.showSavedSignatures;

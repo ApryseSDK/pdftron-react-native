@@ -367,13 +367,6 @@ RCT_CUSTOM_VIEW_PROPERTY(longPressMenuEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotationAuthorCheckEnabled, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.annotationAuthorCheckEnabled = [RCTConvert BOOL:json];
-    }
-}
-
 RCT_CUSTOM_VIEW_PROPERTY(annotationPermissionCheckEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {

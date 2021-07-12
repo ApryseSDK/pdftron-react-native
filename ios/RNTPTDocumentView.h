@@ -384,7 +384,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
-@property (nonatomic, assign) BOOL annotationAuthorCheckEnabled;
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
 
 @property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
