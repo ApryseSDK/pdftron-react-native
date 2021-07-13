@@ -156,4 +156,6 @@
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
 
+- (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
+
 @end

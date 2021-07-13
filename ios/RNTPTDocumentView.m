@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Document Openining
+#pragma mark - Document Opening
 
 - (void)openDocument
 {
@@ -4713,11 +4713,24 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Online Settings
 
--(void)setRestictDownloadUsage:(BOOL)restrictDownloadUsage
+-(void)setRestrictDownloadUsage:(BOOL)restrictDownloadUsage
 {
     _restrictDownloadUsage = restrictDownloadUsage;
     
     [self applyViewerSettings];
+}
+
+#pragma mark - Open annotation list
+
+-(void)openAnnotationList
+{
+    PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    
+    navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController.navigationListsViewController];
+    
+    [self.documentViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end
