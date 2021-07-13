@@ -90,6 +90,10 @@
 
 - (void)redoForDocumentViewTag:(NSNumber *)tag;
 
+- (bool)canUndoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canRedoForDocumentViewTag:(NSNumber *)tag;
+
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
 - (void)zoomWithCenterForDocumentViewTag:(nonnull NSNumber *)tag zoom:(double)zoom x:(int)x y:(int)y;
@@ -149,5 +153,7 @@
 - (void)selectAllForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
+- (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
 
 @end

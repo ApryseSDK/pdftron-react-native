@@ -98,6 +98,13 @@ export default class DocumentView extends PureComponent {
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
     reflowOrientation: PropTypes.string,
+    onUndoRedoStateChanged: PropTypes.func,
+    tabletLayoutEnabled: PropTypes.bool,
+    initialToolbar: PropTypes.string,
+    inkMultiStrokeEnabled: PropTypes.bool,
+    defaultEraserType: PropTypes.string,
+    exportPath: PropTypes.string,
+    openUrlPath: PropTypes.string,
     ...ViewPropTypes,
   };
 
@@ -178,6 +185,7 @@ export default class DocumentView extends PureComponent {
         this.props.onExportAnnotationCommand({
           'action': event.nativeEvent.action,
           'xfdfCommand': event.nativeEvent.xfdfCommand,
+          'annotations': event.nativeEvent.annotations,
         });
       }
     } else if (event.nativeEvent.onAnnotationMenuPress) {
@@ -225,6 +233,10 @@ export default class DocumentView extends PureComponent {
           'textSelection': event.nativeEvent.textSelection,
         });
       }
+    } else if (event.nativeEvent.onUndoRedoStateChanged) {
+      if (this.props.onUndoRedoStateChanged) {
+        this.props.onUndoRedoStateChanged();
+      }
     }
   }
 
@@ -239,8 +251,9 @@ export default class DocumentView extends PureComponent {
   setToolMode = (toolMode) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-    	DocumentViewManager.setToolMode(tag, toolMode);
+    	return DocumentViewManager.setToolMode(tag, toolMode);
     }
+    return Promise.resolve();
   }
 
   commitTool = () => {
@@ -822,10 +835,34 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  canUndo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canUndo(tag);
+    }
+    return Promise.resolve();
+  }
+
+  canRedo = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.canRedo(tag);
+    }
+    return Promise.resolve();
+  }
+
   showCrop = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showCrop(tag);
+    }
+    return Promise.resolve();
+  }
+
+  setCurrentToolbar = (toolbar) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.setCurrentToolbar(tag, toolbar);
     }
     return Promise.resolve();
   }

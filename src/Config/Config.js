@@ -25,6 +25,7 @@ export default {
     searchButton: 'searchButton',
     shareButton: 'shareButton',
     editPagesButton: 'editPagesButton',
+    viewLayersButton: 'viewLayersButton',
     printButton: 'printButton',
     closeButton: 'closeButton',
     saveCopyButton: 'saveCopyButton',
@@ -130,6 +131,13 @@ export default {
     playSound: 'playSound',
     openAttachment: 'openAttachment',
     calibrate: 'calibrate',
+  },
+
+  // EraserType defines the type of earse that will be used when eraser is selected
+  EraserType: {
+    annotationEraser: 'annotationEraser',
+    hybrideEraser: 'hybrideEraser',
+    inkEraser: 'inkEraser'
   },
 
   // LongPressMenu defines the menu items when a long press on empty space or text occurs

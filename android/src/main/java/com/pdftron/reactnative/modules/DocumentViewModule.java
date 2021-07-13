@@ -141,14 +141,15 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setToolMode(final int tag, final String item) {
+    public void setToolMode(final int tag, final String item, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     mDocumentViewInstance.setToolMode(tag, item);
+                    promise.resolve(null);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    promise.reject(e);
                 }
             }
         });
@@ -162,6 +163,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     boolean result = mDocumentViewInstance.commitTool(tag);
                     promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setCurrentToolbar(final int tag, final String toolbarTag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setCurrentToolbar(tag, toolbarTag);
+                    promise.resolve(null);
                 } catch (Exception e) {
                     promise.reject(e);
                 }
@@ -1075,6 +1091,36 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void canUndo(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean result = mDocumentViewInstance.canUndo(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void canRedo(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean result = mDocumentViewInstance.canRedo(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
                 }
             }
         });

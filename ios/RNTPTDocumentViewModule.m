@@ -33,9 +33,17 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
 
 RCT_REMAP_METHOD(setToolMode,
                  setToolModeForDocumentViewTag:(nonnull NSNumber *)tag
-                 toolMode:(NSString *)toolMode)
+                 toolMode:(NSString *)toolMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+    @try {
+        [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_tool_mode_failed", @"Failed to set tool mode", [self errorFromException:exception]);
+    }
 }
 
 RCT_REMAP_METHOD(commitTool,
@@ -82,6 +90,21 @@ RCT_REMAP_METHOD(exportAsImage,
     }
     @catch (NSException *exception) {
         reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setCurrentToolbar,
+                 setCurrentToolbarForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolbarTitle:(NSString*)toolbarTitle
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setCurrentToolbarForDocumentViewTag:tag toolbarTitle:toolbarTitle];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_toolbar_failed", @"Failed to set current toolbar", [self errorFromException:exception]);
     }
 }
 
@@ -598,6 +621,34 @@ RCT_REMAP_METHOD(redo,
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canUndo,
+                 canUndoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
+        resolve(@(canUndo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canUndo", @"Failed to get canUndo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canRedo,
+                 canRedoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canRedo = [[self documentViewManager] canRedoForDocumentViewTag:tag];
+        resolve(@(canRedo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canRedo", @"Failed to canRedo", [self errorFromException:exception]);
     }
 }
 
