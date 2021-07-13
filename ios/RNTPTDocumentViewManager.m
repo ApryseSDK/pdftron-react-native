@@ -493,6 +493,14 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(disableEditingByAnnotationType, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        NSArray *uneditableAnnotationTypes = [RCTConvert NSArray:json];
+        view.uneditableAnnotationTypes = uneditableAnnotationTypes;
+    }
+}
+
 - (UIView *)view
 {
     RNTPTDocumentView *documentView = [[RNTPTDocumentView alloc] init];
