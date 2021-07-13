@@ -400,6 +400,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "disableEditingByAnnotationType")
+    public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
+        documentView.setDisableEditingByAnnotationType(annotationTypes);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
