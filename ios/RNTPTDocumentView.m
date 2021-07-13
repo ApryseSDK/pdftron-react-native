@@ -921,7 +921,6 @@ NS_ASSUME_NONNULL_END
             NSString *string = (NSString *)item;
             PTExtendedAnnotType typeToSetPermission = [self reactAnnotationNameToAnnotType:string];
             
-            // Disable text highlight annotation editing.
             [toolManager annotationOptionsForAnnotType:typeToSetPermission].canEdit = value;
         }
     }
