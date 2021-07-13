@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -48,10 +49,15 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
+import com.pdftron.pdf.controls.AnnotationDialogFragment;
+import com.pdftron.pdf.controls.BookmarksTabLayout;
+import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
+import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
@@ -67,6 +73,7 @@ import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.AnnotUtils;
 import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.CommonToast;
+import com.pdftron.pdf.utils.DialogFragmentTab;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -121,6 +128,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
+
+    private boolean[] mListsVisible = {true, true, true};
 
     // collab
     private CollabManager mCollabManager;
@@ -841,6 +850,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showAnnotationsList(false)
                         .showOutlineList(false)
                         .showUserBookmarksList(false);
+                mListsVisible[0] = false;
+                mListsVisible[1] = false;
+                mListsVisible[2] = false;
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
@@ -869,10 +881,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showReflowOption(false);
             } else if (BUTTON_OUTLINE_LIST.equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
+                mListsVisible[1] = false;
             } else if (BUTTON_ANNOTATION_LIST.equals(item)) {
                 mBuilder = mBuilder.showAnnotationsList(false);
+                mListsVisible[2] = false;
             } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
+                mListsVisible[0] = false;
             } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
@@ -2875,6 +2890,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return annotations;
+    }
+
+    public void openAnnotationList() {
+        if (mListsVisible[0]) {
+            if (mListsVisible[1]) {
+                if (mListsVisible[2]) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(2);
+                }
+            } else {
+                if (mListsVisible[2]) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                }
+            }
+        } else {
+            if (mListsVisible[1]) {
+                if (mListsVisible[2]) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                } 
+            } else {
+                if (mListsVisible[2]) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+                }
+            }
+        }
     }
 
     public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
