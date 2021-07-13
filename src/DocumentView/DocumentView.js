@@ -235,6 +235,10 @@ export default class DocumentView extends PureComponent {
       if (this.props.onUndoRedoStateChanged) {
         this.props.onUndoRedoStateChanged();
       }
+    } else if (event.nativeEvent.onShareScreenshotPressed) {
+      if (this.props.onShareScreenshotPressed) {
+        this.props.onShareScreenshotPressed();
+      }
     }
   }
 

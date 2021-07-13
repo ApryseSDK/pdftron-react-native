@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@id/action_viewmode"
+        android:icon="@drawable/ic_viewing_mode_white_24dp"
+        android:title="@string/action_view_mode"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/share_screenshot"
+        android:icon="@drawable/ic_annotation_image_black_24dp"
+        android:title="@string/share_screenshot"
+        app:showAsAction="never" />
+
+</menu>

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -229,8 +230,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
+            mViewerBuilder = mViewerBuilder.usingCustomToolbar(new int[] {R.menu.mymenu}).usingTheme(R.style.RNAppTheme);
         }
+    }
+
+    @Override
+    public boolean onToolbarOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.share_screenshot) {
+            onReceiveNativeEvent("onShareScreenshotPressed", "onShareScreenshotPressed");
+            return true;
+        }
+        return super.onToolbarOptionsItemSelected(item);
     }
 
     public void setDocument(String path) {
