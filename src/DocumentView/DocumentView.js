@@ -90,8 +90,6 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
-    photoPickerEnabled: PropTypes.bool,
-    autoResizeFreeTextEnabled: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
     restrictDownloadUsage: PropTypes.bool,
