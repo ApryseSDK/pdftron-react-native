@@ -4724,6 +4724,8 @@ NS_ASSUME_NONNULL_END
 
 -(void)openAnnotationList
 {
+    if (self.documentViewController.annotationListHidden) return;
+        
     PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
     
     navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
