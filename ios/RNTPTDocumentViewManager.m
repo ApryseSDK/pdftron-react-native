@@ -579,6 +579,16 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
         });
     }
 }
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPageMoved" : @"onPageMoved",
+            @"oldPageNumber" : @(oldPageNumber),
+            @"newPageNumber" : @(newPageNumber),
+        });
+    }
+}
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
 {
