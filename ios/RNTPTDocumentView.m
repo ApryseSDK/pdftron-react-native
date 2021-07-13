@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    _autoResizeFreeTextEnabled = YES;
     
     _inkMultiStrokeEnabled = YES;
 
@@ -1629,6 +1630,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoResizeFreeTextEnabled:(BOOL)autoResizeFreeTextEnabled
+{
+    _autoResizeFreeTextEnabled = autoResizeFreeTextEnabled;
+    
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -1669,6 +1677,9 @@ NS_ASSUME_NONNULL_END
 
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
+    
+    // Auto resize free text enabled.
+    toolManager.autoResizeFreeTextEnabled = self.autoResizeFreeTextEnabled;
     
     // Sticky note pop up.
     toolManager.textAnnotationOptions.opensPopupOnTap = ![self.overrideBehavior containsObject:PTStickyNoteShowPopUpKey];
