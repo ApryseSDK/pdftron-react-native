@@ -239,8 +239,8 @@ export default class DocumentView extends PureComponent {
     } else if (event.nativeEvent.onPageMoved) {
       if (this.props.onPageMoved) {
         this.props.onPageMoved({
-          'oldPageNumber': event.nativeEvent.oldPageNumber,
-          'newPageNumber': event.nativeEvent.newPageNumber,
+          'previousPageNumber': event.nativeEvent.previousPageNumber,
+          'pageNumber': event.nativeEvent.pageNumber,
         });
       }
     }

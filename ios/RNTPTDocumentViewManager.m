@@ -584,8 +584,8 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     if (sender.onChange) {
         sender.onChange(@{
             @"onPageMoved" : @"onPageMoved",
-            @"oldPageNumber" : @(oldPageNumber),
-            @"newPageNumber" : @(newPageNumber),
+            @"previousPageNumber" : @(oldPageNumber),
+            @"pageNumber" : @(newPageNumber),
         });
     }
 }
