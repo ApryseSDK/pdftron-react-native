@@ -692,6 +692,26 @@ pageNumber | int | the current page number
 />
 ```
 
+#### onPageMoved
+function, optional
+
+This function is called when a page has been moved in the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
+```js
+<DocumentView
+  onPageMoved = {({previousPageNumber, pageNumber}) => {
+    console.log('Page moved from', previousPageNumber, 'to', pageNumber);
+  }}
+/>
+```
+
 ### Zoom
 
 #### onZoomChanged
