@@ -2216,6 +2216,15 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openAnnotationList
+Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openAnnotationList();
+```
+
 ### Navigation
 
 #### handleBackButton
