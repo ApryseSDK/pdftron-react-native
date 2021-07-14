@@ -260,6 +260,18 @@ Example:
 />
 ```
 
+#### saveStateEnabled
+bool, optional, default to true
+
+Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+Example:
+
+```js
+<DocumentView
+  saveStateEnabled={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
