@@ -142,6 +142,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mFragmentTransactionFinished;
 
+    private boolean mSaveStateEnabled = true;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -2518,6 +2520,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Override
+    public void onTabHostShown() {
+        super.onTabHostShown();
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
+        }
+    }
+
+    @Override
+    public void onTabChanged(String tag) {
+        super.onTabChanged(tag);
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
+        }
+    }
+
+    @Override
     public boolean onOpenDocError() {
         super.onOpenDocError();
 
@@ -3906,6 +3924,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setInkMultiStrokeEnabled(boolean inkMultiStrokeEnabled) {
         mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
+    public void setSaveStateEnabled(boolean saveStateEnabled) {
+        mSaveStateEnabled = saveStateEnabled;
     }
 
     public ToolManager getToolManager() {
