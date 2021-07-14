@@ -1808,7 +1808,7 @@ NS_ASSUME_NONNULL_END
     // Set Annotation List Editing 
     // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
-    // Hanlde displays of various sizes
+    // Handle displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
     
     // Data Usage
@@ -4338,6 +4338,11 @@ NS_ASSUME_NONNULL_END
     if (pdfViewCtrl) {
         [pdfViewCtrl SelectAll];
     }
+}
+
+- (void)toggleReflow
+{
+    self.documentViewController.reflowHidden = !(self.documentViewController.isReflowHidden);
 }
 
 #pragma mark - Helper
