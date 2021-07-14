@@ -4724,15 +4724,12 @@ NS_ASSUME_NONNULL_END
 
 -(void)openAnnotationList
 {
-    if (self.documentViewController.annotationListHidden) return;
+    if (!self.documentViewController.annotationListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+        navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
         
-    PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
-    
-    navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.documentViewController.navigationListsViewController];
-    
-    [self.documentViewController presentViewController:navigationController animated:YES completion:nil];
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+    }
 }
 
 @end
