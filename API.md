@@ -1213,6 +1213,17 @@ If document editing is enabled, then this value determines if the annotation lis
 />
 ```
 
+#### disableEditingByAnnotationType
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none.
+
+Defines annotation types that cannot be edited after creation.
+
+```js
+<DocumentView
+  disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
