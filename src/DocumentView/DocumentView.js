@@ -278,6 +278,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openBookmarkList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openBookmarkList(tag);
+    }
+    return Promise.resolve();
+  }
+
   importAnnotationCommand = (xfdfCommand, initialLoad) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -861,6 +869,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
+    }
+    return Promise.resolve();
+  }
+
+  openOutlineList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openOutlineList(tag);
     }
     return Promise.resolve();
   }
