@@ -129,7 +129,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
 
-    private boolean[] mListsVisible = {true, true, true};
+    public boolean isBookmarkListVisible = true;
+    public boolean isOutlineListVisible = true;
+    public boolean isAnnotationListVisible = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -850,9 +852,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showAnnotationsList(false)
                         .showOutlineList(false)
                         .showUserBookmarksList(false);
-                mListsVisible[0] = false;
-                mListsVisible[1] = false;
-                mListsVisible[2] = false;
+                isBookmarkListVisible = false;
+                isOutlineListVisible = false;
+                isAnnotationListVisible = false;
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
@@ -881,13 +883,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showReflowOption(false);
             } else if (BUTTON_OUTLINE_LIST.equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
-                mListsVisible[1] = false;
+                isOutlineListVisible = false;
             } else if (BUTTON_ANNOTATION_LIST.equals(item)) {
                 mBuilder = mBuilder.showAnnotationsList(false);
-                mListsVisible[2] = false;
+                isAnnotationListVisible = false;
             } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
-                mListsVisible[0] = false;
+                isBookmarkListVisible = false;
             } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
@@ -2893,23 +2895,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void openAnnotationList() {
-        if (mListsVisible[0]) {
-            if (mListsVisible[1]) {
-                if (mListsVisible[2]) {
+        if (isBookmarkListVisible) {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(2);
                 }
             } else {
-                if (mListsVisible[2]) {
+                if (isAnnotationListVisible) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
                 }
             }
         } else {
-            if (mListsVisible[1]) {
-                if (mListsVisible[2]) {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
                 } 
             } else {
-                if (mListsVisible[2]) {
+                if (isAnnotationListVisible) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
                 }
             }
