@@ -495,22 +495,6 @@ Defines which [`annotationToolbar`](#annotationToolbars) should be selected when
   initialToolbar={Config.DefaultToolbars.Draw}
 />
 ```
-#### setCurrentToolbar
-Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
-
-Returns a Promise.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
-
-```js
-this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
-  // done switching toolbar
-});
-```
 
 #### hideTopToolbars
 bool, optional, defaults to false
@@ -2213,6 +2197,25 @@ this._viewer.getField('someFieldName').then((field) => {
     console.log('field value:', field.fieldValue);
     console.log('field type:', field.fieldType);
   }
+});
+```
+
+### Toolbar
+
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
 });
 ```
 
