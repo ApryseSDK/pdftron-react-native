@@ -1779,6 +1779,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
@@ -3958,6 +3960,11 @@ NS_ASSUME_NONNULL_END
 - (bool)gotoLastPage {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl GotoLastPage];
+}
+
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
 }
 
 #pragma mark - Get Document Path

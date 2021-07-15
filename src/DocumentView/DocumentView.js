@@ -535,6 +535,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showGoToPageView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.showGoToPageView(tag);
+    }
+    return Promise.resolve();
+  }
+
   closeAllTabs = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
