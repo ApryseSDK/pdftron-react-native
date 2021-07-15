@@ -404,6 +404,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setHideScrollbars(DocumentView documentView, boolean hideScrollbars) {
         documentView.setHideScrollbars(hideScrollbars);
     }
+    
+    @ReactProp(name = "saveStateEnabled")
+    public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
+        documentView.setSaveStateEnabled(saveState);
+    }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);

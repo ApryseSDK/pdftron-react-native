@@ -81,6 +81,8 @@ NS_ASSUME_NONNULL_END
     
     _maxTabCount = NSUIntegerMax;
     
+    _saveStateEnabled = YES;
+    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
     
@@ -1823,6 +1825,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Enable/disable restoring state (last read page).
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
 }
 
 - (void)applyLeadingNavButton
@@ -2267,6 +2273,13 @@ NS_ASSUME_NONNULL_END
 -(void)setUserBookmarksListEditingEnabled:(BOOL)userBookmarksListEditingEnabled
 {
     _userBookmarksListEditingEnabled = userBookmarksListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setSaveStateEnabled:(BOOL)enabled
+{
+    _saveStateEnabled = enabled;
     
     [self applyViewerSettings];
 }
