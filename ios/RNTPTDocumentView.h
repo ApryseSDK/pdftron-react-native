@@ -423,6 +423,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
 
+@property (nonatomic, assign) BOOL saveStateEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
