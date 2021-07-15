@@ -3475,6 +3475,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return map;
     }
 
+    public void setHideScrollbars(boolean hideScrollbars) {
+        Context context = getContext();
+        if (context != null) {
+            PdfViewCtrlSettingsManager.setShowScrollbarOption(context, !hideScrollbars);
+        }
+    }
+
     public WritableMap getCanvasSize() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 

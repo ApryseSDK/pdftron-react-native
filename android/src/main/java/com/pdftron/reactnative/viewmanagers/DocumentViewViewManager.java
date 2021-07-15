@@ -400,6 +400,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "hideScrollbars")
+    public void setHideScrollbars(DocumentView documentView, boolean hideScrollbars) {
+        documentView.setHideScrollbars(hideScrollbars);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
