@@ -399,11 +399,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
-
-    @ReactProp(name = "hideScrollbars")
-    public void setHideScrollbars(DocumentView documentView, boolean hideScrollbars) {
-        documentView.setHideScrollbars(hideScrollbars);
-    }
     
     @ReactProp(name = "saveStateEnabled")
     public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
