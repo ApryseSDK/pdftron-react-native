@@ -1125,7 +1125,7 @@ RCT_REMAP_METHOD(selectAll,
 }
 
 RCT_REMAP_METHOD(openOutlineList,
-                 openOutlineForDocumentViewTag: (nonnull NSNumber *)tag
+                 openOutlineListForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -1135,6 +1135,20 @@ RCT_REMAP_METHOD(openOutlineList,
     }
     @catch (NSException *exception) {
         reject(@"open_outline_list_failed", @"Failed to open outline list", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openLayersList,
+                 openLayersListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openLayersListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_layers_list_failed", @"Failed to open layers list", [self errorFromException:exception]);
     }
 }
 

@@ -54,6 +54,7 @@ import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.controls.ReflowControl;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
+import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.Eraser;
@@ -125,6 +126,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
     public boolean isAnnotationListVisible = true;
+    public boolean isPdfLayersListVisible = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -852,6 +854,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
+                isPdfLayersListVisible = false;
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
@@ -3900,6 +3903,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
         } else {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+        }
+    }
+
+    public void openLayersList() {
+        if (isPdfLayersListVisible) {
+            PdfLayerDialog pdfLayerDialog = new PdfLayerDialog(getPdfViewCtrl().getContext(), getPdfViewCtrl());
+            pdfLayerDialog.show();
         }
     }
 

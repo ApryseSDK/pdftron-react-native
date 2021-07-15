@@ -160,4 +160,6 @@
 
 - (void)openOutlineListForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openLayersListForDocumentViewTag:(NSNumber *)tag;
+
 @end

@@ -4740,6 +4740,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Layers
+
+-(void)openLayersList
+{
+    if (!self.documentViewController.pdfLayerListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+        navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+    }
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController
