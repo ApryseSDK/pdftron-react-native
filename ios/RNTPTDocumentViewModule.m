@@ -793,6 +793,20 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
 }
 
+RCT_REMAP_METHOD(openThumbnailsView,
+                 openThumbnailsViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openThumbnailsViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_thumbnails_view", @"Failed to open thumbnails view", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Coordinate
 
 RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
