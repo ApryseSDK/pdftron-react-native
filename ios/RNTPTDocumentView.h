@@ -412,6 +412,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;
 
+@property (nonatomic, assign) BOOL hideScrollbars;
+
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 

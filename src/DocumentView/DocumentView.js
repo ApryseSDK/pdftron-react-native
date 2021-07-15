@@ -103,6 +103,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    hideScrollbars: PropTypes.bool,
     ...ViewPropTypes,
   };
 

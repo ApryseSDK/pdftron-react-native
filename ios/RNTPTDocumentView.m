@@ -1688,6 +1688,10 @@ NS_ASSUME_NONNULL_END
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
+    // Scrollbars.
+    pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !self.hideScrollbars;
+    pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !self.hideScrollbars;
+    
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
     
@@ -4098,6 +4102,18 @@ NS_ASSUME_NONNULL_END
     };
     
     return scrollPos;
+}
+
+#pragma mark - Scrollbars
+
+- (void)setHideScrollbars:(BOOL)hideScrollbars
+{
+    _hideScrollbars = hideScrollbars;
+    _documentSliderEnabled = !hideScrollbars;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
 }
 
 #pragma mark - Canvas Size
