@@ -33,7 +33,6 @@ public final class Constants {
     public static final String BUTTON_THUMBNAIL_SLIDER = "thumbnailSlider";
     public static final String BUTTON_SAVE_COPY = "saveCopyButton";
     public static final String BUTTON_EDIT_PAGES = "editPagesButton";
-    public static final String BUTTON_DIGITAL_SIGNATURE = "digitalSignatureButton";
     public static final String BUTTON_VIEW_LAYERS = "viewLayersButton";
     public static final String BUTTON_PRINT = "printButton";
     public static final String BUTTON_CLOSE = "closeButton";

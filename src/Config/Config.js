@@ -32,7 +32,6 @@ export default {
     formToolsButton: 'formToolsButton',
     fillSignToolsButton: 'fillSignToolsButton',
     moreItemsButton: 'moreItemsButton',
-    digitalSignatureButton: 'digitalSignatureButton',
     thumbnailsButton: 'thumbnailsButton',
     listsButton: 'listsButton',
     thumbnailSlider: 'thumbnailSlider',
