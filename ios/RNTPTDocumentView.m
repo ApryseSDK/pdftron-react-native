@@ -4340,6 +4340,11 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (BOOL)isReflowMode
+{
+    return !(self.documentViewController.isReflowHidden);
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value
