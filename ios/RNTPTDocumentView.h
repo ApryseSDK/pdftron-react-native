@@ -490,6 +490,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)gotoLastPage;
 
+- (void)showGoToPageView;
+
 - (void)closeAllTabs;
 
 - (int)getPageRotation;

@@ -3949,6 +3949,11 @@ NS_ASSUME_NONNULL_END
     return [pdfViewCtrl GotoLastPage];
 }
 
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
+}
+
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
