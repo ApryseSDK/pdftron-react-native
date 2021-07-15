@@ -3908,6 +3908,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    public void openThumbnailsView() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            int currentPage = pdfViewCtrl.getCurrentPage();
+            mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, currentPage);
+        }
+    }
+
     public ToolManager getToolManager() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().getToolManager();
