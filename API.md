@@ -2254,6 +2254,15 @@ Returns a Promise.
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
+#### openBookmarkList
+Displays the bookmark tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+ Returns a Promise.
+
+ ```js
+ this._viewer.openBookmarkList();
+ ```
+
 ### Multi-tab
 
 #### closeAllTabs
@@ -2862,3 +2871,12 @@ Returns a Promise.
 ```js
 this._viewer.showCrop();
 ```
+
+#### openOutlineList
+Displays the outline tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+ Returns a Promise.
+
+ ```js
+ this._viewer.openOutlineList();
+ ```
