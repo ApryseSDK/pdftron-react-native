@@ -1777,6 +1777,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
