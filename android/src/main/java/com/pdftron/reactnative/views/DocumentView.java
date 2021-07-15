@@ -847,6 +847,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
+            } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
+                mBuilder = mBuilder.showDigitalSignaturesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
                 mBuilder = mBuilder.showPrintOption(false);
             } else if (BUTTON_CLOSE.equals(item)) {
