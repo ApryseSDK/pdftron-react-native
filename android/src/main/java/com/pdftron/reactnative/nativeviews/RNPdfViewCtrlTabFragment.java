@@ -105,8 +105,6 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
     }
 
     public void showGoToPageView() {
-        // in react native, intent must be sent from the activity
-        // to be able to receive by the activity
         FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
