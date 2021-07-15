@@ -1660,6 +1660,15 @@ this._viewer.gotoLastPage().then((success) => {
 });
 ```
 
+#### showGoToPageView
+Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+
+Returns a Promise.
+
+```js
+this._viewer.showGoToPageView();
+```
+
 #### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
