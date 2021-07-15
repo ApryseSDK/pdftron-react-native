@@ -137,6 +137,20 @@ RCT_REMAP_METHOD(importBookmarkJson,
     }
 }
 
+RCT_REMAP_METHOD(openBookmarkList,
+                 openBookmarkListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openBookmarkListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_bookmark_list_failed", @"Failed to open bookmark list", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  options:(NSDictionary *)options
@@ -1107,6 +1121,20 @@ RCT_REMAP_METHOD(selectAll,
     }
     @catch (NSException *exception) {
         reject(@"select_all", @"Failed to select all", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openOutlineList,
+                 openOutlineForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openOutlineListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_outline_list_failed", @"Failed to open outline list", [self errorFromException:exception]);
     }
 }
 

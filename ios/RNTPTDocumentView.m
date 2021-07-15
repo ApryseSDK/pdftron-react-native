@@ -926,7 +926,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Bookmark import
+#pragma mark - Bookmark
 
 - (void)importBookmarkJson:(NSString *)bookmarkJson
 {
@@ -941,6 +941,15 @@ NS_ASSUME_NONNULL_END
     
     if (error) {
         NSLog(@"Error: There was an error while trying to import bookmark json. %@", error.localizedDescription);
+    }
+}
+
+-(void)openBookmarkList
+{
+    if (!self.documentViewController.bookmarkListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+        navigationListsViewController.selectedViewController = navigationListsViewController.bookmarkViewController;
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
     }
 }
 
@@ -4718,6 +4727,17 @@ NS_ASSUME_NONNULL_END
     _restrictDownloadUsage = restrictDownloadUsage;
     
     [self applyViewerSettings];
+}
+
+#pragma mark - Outline
+
+-(void)openOutlineList
+{
+    if (!self.documentViewController.outlineListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+        navigationListsViewController.selectedViewController = navigationListsViewController.outlineViewController;
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+    }
 }
 
 @end

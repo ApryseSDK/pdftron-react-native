@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
+import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -42,6 +43,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     mDocumentViewInstance.importBookmarkJson(tag, bookmarkJson);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openBookmarkList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openBookmarkList(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -1133,6 +1149,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     mDocumentViewInstance.showCrop(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openOutlineList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openOutlineList(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

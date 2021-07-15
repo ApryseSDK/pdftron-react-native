@@ -122,6 +122,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
 
+    public boolean isBookmarkListVisible = true;
+    public boolean isOutlineListVisible = true;
+    public boolean isAnnotationListVisible = true;
+
     // collab
     private CollabManager mCollabManager;
     private boolean mCollabEnabled;
@@ -841,6 +845,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showAnnotationsList(false)
                         .showOutlineList(false)
                         .showUserBookmarksList(false);
+                isBookmarkListVisible = false;
+                isOutlineListVisible = false;
+                isAnnotationListVisible = false;
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
@@ -869,10 +876,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showReflowOption(false);
             } else if (BUTTON_OUTLINE_LIST.equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
+                isOutlineListVisible = false;
             } else if (BUTTON_ANNOTATION_LIST.equals(item)) {
                 mBuilder = mBuilder.showAnnotationsList(false);
+                isAnnotationListVisible = false;
             } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
+                isBookmarkListVisible = false;
             } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
@@ -2584,6 +2594,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openBookmarkList() {
+        if (isBookmarkListVisible) {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+        }
+    }
+
     public void importAnnotationCommand(String xfdfCommand, boolean initialLoad) throws PDFNetException {
         if (mCollabManager != null) {
             mCollabManager.importAnnotationCommand(xfdfCommand, initialLoad);
@@ -3876,6 +3892,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(
                     PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
             );
+        }
+    }
+
+    public void openOutlineList() {
+        if (isBookmarkListVisible) {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+        } else {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
         }
     }
 
