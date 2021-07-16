@@ -1744,6 +1744,17 @@ Returns a Promise.
 this._viewer.rotateCounterClockwise();
 ```
 
+#### showRotate
+Displays a rotate dialog. Android only.
+
+The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
+
+Returns a Promise.
+
+```js
+this._viewer.showRotate();
+```
+
 ### Import/Export Annotations
 
 #### importAnnotationCommand
