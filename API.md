@@ -260,6 +260,18 @@ Example:
 />
 ```
 
+#### saveStateEnabled
+bool, optional, default to true
+
+Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+Example:
+
+```js
+<DocumentView
+  saveStateEnabled={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
@@ -494,22 +506,6 @@ Defines which [`annotationToolbar`](#annotationToolbars) should be selected when
 <DocumentView
   initialToolbar={Config.DefaultToolbars.Draw}
 />
-```
-#### setCurrentToolbar
-Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
-
-Returns a Promise.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
-
-```js
-this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
-  // done switching toolbar
-});
 ```
 
 #### hideTopToolbars
@@ -1660,6 +1656,15 @@ this._viewer.gotoLastPage().then((success) => {
 });
 ```
 
+#### showGoToPageView
+Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+
+Returns a Promise.
+
+```js
+this._viewer.showGoToPageView();
+```
+
 #### getPageCropBox
 Gets the crop box for specified page as a JSON object.
 
@@ -2225,6 +2230,25 @@ Returns a Promise.
 
 ```js
 this._viewer.openThumbnailsView();
+```
+
+### Toolbar
+
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
+});
 ```
 
 ### Navigation

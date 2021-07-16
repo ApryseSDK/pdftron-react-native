@@ -103,6 +103,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    saveStateEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -530,6 +531,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoLastPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  showGoToPageView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.showGoToPageView(tag);
     }
     return Promise.resolve();
   }
