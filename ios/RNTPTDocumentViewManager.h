@@ -164,4 +164,6 @@
 
 - (void)openListsForDocumentViewTag:(NSNumber *) tag;
 
+- (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
+
 @end

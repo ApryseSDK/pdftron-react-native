@@ -274,7 +274,21 @@ RCT_REMAP_METHOD(getField,
         resolve(field);
     }
     @catch (NSException *exception) {
-        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+        reject(@"get_field", @"Failed to get field", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openAnnotationList,
+                 openAnnotationListForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openAnnotationListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_annotation_list", @"Failed to open annotation list", [self errorFromException:exception]);
     }
 }
 

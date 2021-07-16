@@ -571,6 +571,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openAnnotationList(int tag) throws PDFNetException
+    {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openAnnotationList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openAnnotationList", "Unable to find DocumentView.");
+        }
+    }
     public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

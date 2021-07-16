@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -48,10 +49,15 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
+import com.pdftron.pdf.controls.AnnotationDialogFragment;
+import com.pdftron.pdf.controls.BookmarksTabLayout;
+import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
+import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
@@ -68,6 +74,7 @@ import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.AnnotUtils;
 import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.CommonToast;
+import com.pdftron.pdf.utils.DialogFragmentTab;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -2894,6 +2901,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return annotations;
+    }
+
+    public void openAnnotationList() {
+        if (isBookmarkListVisible) {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(2);
+                }
+            } else {
+                if (isAnnotationListVisible) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                }
+            }
+        } else {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                } 
+            } else {
+                if (isAnnotationListVisible) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+                }
+            }
+        }
     }
 
     public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {

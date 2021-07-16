@@ -357,6 +357,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openAnnotationList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.openAnnotationList(tag);
+    }
+    return Promise.resolve();
+  }
+
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 

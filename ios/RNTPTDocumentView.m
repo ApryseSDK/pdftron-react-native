@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Document Openining
+#pragma mark - Document Opening
 
 - (void)openDocument
 {
@@ -3869,6 +3869,15 @@ NS_ASSUME_NONNULL_END
     return [annotations copy];
 }
 
+-(void)openAnnotationList
+{
+    if (!self.documentViewController.annotationListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+        navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+    }
+}
+
 - (NSString *)getCustomDataForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber key:(NSString *)key
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
@@ -4722,7 +4731,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Online Settings
 
--(void)setRestictDownloadUsage:(BOOL)restrictDownloadUsage
+-(void)setRestrictDownloadUsage:(BOOL)restrictDownloadUsage
 {
     _restrictDownloadUsage = restrictDownloadUsage;
     

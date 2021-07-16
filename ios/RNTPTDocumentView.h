@@ -572,11 +572,13 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
 
--(void)openOutlineList;
+- (void)openOutlineList;
 
--(void)openLayersList;
+- (void)openLayersList;
 
--(void)openLists;
+- (void)openLists;
+
+- (void)openAnnotationList;
 
 @end
 
