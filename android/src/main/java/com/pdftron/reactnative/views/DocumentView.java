@@ -3938,8 +3938,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void openThumbnailsView() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null) {
-            int currentPage = pdfViewCtrl.getCurrentPage();
-            mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, currentPage);
+            mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
         }
     }
     
