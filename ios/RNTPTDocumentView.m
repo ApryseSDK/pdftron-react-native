@@ -2224,6 +2224,12 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)showViewModeDialog
+{
+    PTDocumentBaseViewController * documentViewController = self.currentDocumentViewController;
+    [self.documentViewController presentViewController:documentViewController.settingsViewController animated:YES completion:nil];
+}
+
 #pragma mark - Custom headers
 
 - (void)setCustomHeaders:(NSDictionary<NSString *, NSString *> *)customHeaders

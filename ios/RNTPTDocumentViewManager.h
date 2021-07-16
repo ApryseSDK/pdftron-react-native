@@ -76,7 +76,9 @@
 
 - (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
 
--(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+- (void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+
+- (void)showViewModeDialogForDocumentViewTag:(NSNumber *)tag;
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
