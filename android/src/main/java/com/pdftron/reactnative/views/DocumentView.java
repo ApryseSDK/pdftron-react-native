@@ -52,6 +52,7 @@ import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.dialog.RotateDialogFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
@@ -3896,6 +3897,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(
                     PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
             );
+        }
+    }
+
+    public void showRotate() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null && mFragmentManager != null) {
+            RotateDialogFragment.newInstance()
+                    .setPdfViewCtrl(pdfViewCtrl)
+                    .show(mFragmentManager, "rotate_dialog");
         }
     }
 

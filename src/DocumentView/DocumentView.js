@@ -874,6 +874,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showRotate = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showRotate(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
