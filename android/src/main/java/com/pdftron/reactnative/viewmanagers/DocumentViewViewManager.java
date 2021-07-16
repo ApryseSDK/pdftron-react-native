@@ -410,6 +410,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "saveStateEnabled")
+    public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
+        documentView.setSaveStateEnabled(saveState);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1085,6 +1090,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.showCropDialog();
         } else {
             throw new PDFNetException("", 0L, getName(), "showCrop", "Unable to find DocumentView.");
+        }
+    }
+
+    public void showGoToPageView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showGoToPageView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showGoToPageView", "Unable to find DocumentView.");
         }
     }
 

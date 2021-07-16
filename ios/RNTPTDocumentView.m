@@ -82,6 +82,8 @@ NS_ASSUME_NONNULL_END
     
     _maxTabCount = NSUIntegerMax;
     
+    _saveStateEnabled = YES;
+    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
     
@@ -1788,6 +1790,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
@@ -1829,6 +1833,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Enable/disable restoring state (last read page).
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
 }
 
 - (void)applyLeadingNavButton
@@ -2273,6 +2281,13 @@ NS_ASSUME_NONNULL_END
 -(void)setUserBookmarksListEditingEnabled:(BOOL)userBookmarksListEditingEnabled
 {
     _userBookmarksListEditingEnabled = userBookmarksListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setSaveStateEnabled:(BOOL)enabled
+{
+    _saveStateEnabled = enabled;
     
     [self applyViewerSettings];
 }
@@ -3956,6 +3971,11 @@ NS_ASSUME_NONNULL_END
 - (bool)gotoLastPage {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl GotoLastPage];
+}
+
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
 }
 
 #pragma mark - Get Document Path

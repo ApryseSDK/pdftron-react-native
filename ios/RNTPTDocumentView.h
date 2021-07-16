@@ -424,6 +424,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
 
+@property (nonatomic, assign) BOOL saveStateEnabled;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -490,6 +492,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (bool)gotoFirstPage;
 
 - (bool)gotoLastPage;
+
+- (void)showGoToPageView;
 
 - (void)closeAllTabs;
 

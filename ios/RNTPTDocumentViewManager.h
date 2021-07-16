@@ -76,6 +76,8 @@
 
 - (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
 
+-(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
