@@ -144,7 +144,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mSaveStateEnabled = true;
 
-    private boolean mShowEditPagesOption = true;
+    private boolean mShowAddPageToolbarButton = true;
 
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
@@ -851,7 +851,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
-                mShowEditPagesOption = false;
+                mShowAddPageToolbarButton = false;
             } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
                 mBuilder = mBuilder.showDigitalSignaturesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
@@ -896,7 +896,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
             if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
-                mShowEditPagesOption = false;
+                mShowAddPageToolbarButton = false;
             }
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
@@ -2435,8 +2435,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             fragment.setReactContext((ReactContext) getContext(), getId());
         }
 
-        // Hide disabled tools
-        if (!mShowEditPagesOption) {
+        // Hide add page annotation toolbar button
+        if (!mShowAddPageToolbarButton) {
             mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
         }
 
