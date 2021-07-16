@@ -860,6 +860,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showViewModeDialog = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showViewModeDialog(tag);
+    }
+    return Promise.resolve();
+  }
+
   showCrop = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

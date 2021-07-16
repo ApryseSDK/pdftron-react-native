@@ -3899,6 +3899,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return undoRedoManger.canRedo();
     }
 
+    public void showViewModeDialog() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onViewModeOptionSelected();
+        }
+    }
+
     public void showCropDialog() {
         if (mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(

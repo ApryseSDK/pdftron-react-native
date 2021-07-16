@@ -1084,6 +1084,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void showViewModeDialog(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showViewModeDialog();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showViewModeDialog", "Unable to find DocumentView.");
+        }
+    }
+
     public void showCrop(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
