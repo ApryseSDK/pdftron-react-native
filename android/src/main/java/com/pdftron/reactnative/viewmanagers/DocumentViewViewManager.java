@@ -956,7 +956,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             documentView.openSearch();
         } else {
-            throw new PDFNetException("", 0L, getName(), "showSearch", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "openSearch", "Unable to find DocumentView.");
         }
     }
 
