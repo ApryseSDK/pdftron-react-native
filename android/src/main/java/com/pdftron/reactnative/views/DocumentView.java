@@ -133,7 +133,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
     public boolean isAnnotationListVisible = true;
-    public boolean isPdfLayersListVisible = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -861,7 +860,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
-                isPdfLayersListVisible = false;
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
@@ -2605,7 +2603,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void openBookmarkList() {
-        if (isBookmarkListVisible) {
+        if (isBookmarkListVisible && mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
         }
     }
@@ -2906,21 +2904,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void openAnnotationList() {
         if (isBookmarkListVisible) {
             if (isOutlineListVisible) {
-                if (isAnnotationListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(2);
                 }
             } else {
-                if (isAnnotationListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
                 }
             }
         } else {
             if (isOutlineListVisible) {
-                if (isAnnotationListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
                 } 
             } else {
-                if (isAnnotationListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
                 }
             }
@@ -3931,16 +3929,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void openOutlineList() {
         if (isBookmarkListVisible) {
-            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+            }
         } else {
-            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+            }
         }
     }
 
     public void openLayersList() {
-        if (isPdfLayersListVisible) {
-            PdfLayerDialog pdfLayerDialog = new PdfLayerDialog(getPdfViewCtrl().getContext(), getPdfViewCtrl());
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            PdfLayerDialog pdfLayerDialog = new PdfLayerDialog(pdfViewCtrl.getContext(), pdfViewCtrl);
             pdfLayerDialog.show();
+        }
+    }
+
+    public void openLists() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
         }
     }
 

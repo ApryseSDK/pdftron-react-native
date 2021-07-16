@@ -1114,6 +1114,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openLists(int tag)  throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openLists();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openLists", "Unable to find DocumentView");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

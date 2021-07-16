@@ -4753,15 +4753,13 @@ NS_ASSUME_NONNULL_END
 
 -(void)openLayersList
 {
-   // if (!self.documentViewController.pdfLayerListHidden) {
-        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
-        if (navigationListsViewController.pdfLayerViewController) {
-            self.documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityNeverHidden;
-            navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
-            [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
-            // [self.documentViewController showNavigationLists];
-        }
-    //}
+    PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (navigationListsViewController.pdfLayerViewController) {
+        self.documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityNeverHidden;
+        [navigationListsViewController addListViewController:navigationListsViewController.pdfLayerViewController];
+        navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
+        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+    }
 }
 
 #pragma mark - Navigation List
