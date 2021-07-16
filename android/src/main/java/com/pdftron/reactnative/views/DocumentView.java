@@ -3723,6 +3723,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openSearch() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.startSearchMode();
+        }
+    }
+
     public WritableMap getSelection(int pageNumber) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 

@@ -712,6 +712,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -870,6 +878,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
+    }
+    return Promise.resolve();
+  }
+
+  openThumbnailsView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.openThumbnailsView(tag);
     }
     return Promise.resolve();
   }

@@ -951,6 +951,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openSearch(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openSearch();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showSearch", "Unable to find DocumentView.");
+        }
+    }
+
     public WritableMap getSelection(int tag, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
