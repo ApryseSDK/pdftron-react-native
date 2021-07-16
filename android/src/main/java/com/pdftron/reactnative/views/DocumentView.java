@@ -144,6 +144,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mSaveStateEnabled = true;
 
+    private boolean mShowEditPagesOption = true;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -849,6 +851,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
+                mShowEditPagesOption = false;
             } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
                 mBuilder = mBuilder.showDigitalSignaturesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
@@ -892,6 +895,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void disableTools(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
+            if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
+                mShowEditPagesOption = false;
+            }
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
@@ -2427,6 +2433,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
             fragment.setReactContext((ReactContext) getContext(), getId());
+        }
+
+        // Hide disabled tools
+        if (!mShowEditPagesOption) {
+            mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
         }
 
         if (!mCollabEnabled && getToolManager() != null) {
