@@ -554,6 +554,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)cancelFindText;
 
+- (void)openSearch;
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
 - (BOOL)hasSelection;

@@ -1008,6 +1008,19 @@ RCT_REMAP_METHOD(cancelFindText,
     }
 }
 
+RCT_REMAP_METHOD(openSearch,
+                 openSearchForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openSearchForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"open_search", @"Failed to open search", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getSelection,
                  getSelectionForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber

@@ -4240,6 +4240,11 @@ NS_ASSUME_NONNULL_END
     [pdfViewCtrl CancelFindText];
 }
 
+- (void)openSearch
+{
+    [self.currentDocumentViewController showSearchViewController];
+}
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
