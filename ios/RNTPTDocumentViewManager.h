@@ -162,4 +162,6 @@
 
 - (void)openLayersListForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openListsForDocumentViewTag:(NSNumber *) tag;
+
 @end

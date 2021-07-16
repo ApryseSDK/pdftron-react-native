@@ -889,6 +889,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openLists = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openLists(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

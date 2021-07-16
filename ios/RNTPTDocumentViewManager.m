@@ -1255,6 +1255,26 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+-(void)openLayersListForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openLayersList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+-(void)openListsForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openLists];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 #pragma mark - Coordination
 
 - (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points
@@ -1500,16 +1520,6 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView openOutlineList];
-    } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
-    }
-}
-
--(void)openLayersListForDocumentViewTag:(NSNumber *)tag
-{
-    RNTPTDocumentView *documentView = self.documentViews[tag];
-    if (documentView) {
-        [documentView openLayersList];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

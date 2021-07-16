@@ -4744,10 +4744,24 @@ NS_ASSUME_NONNULL_END
 
 -(void)openLayersList
 {
-    if (!self.documentViewController.pdfLayerListHidden) {
+   // if (!self.documentViewController.pdfLayerListHidden) {
         PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
-        navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
-        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+        if (navigationListsViewController.pdfLayerViewController) {
+            self.documentViewController.navigationListsViewController.pdfLayerViewControllerVisibility = PTNavigationListsViewControllerVisibilityNeverHidden;
+            navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
+            [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+            // [self.documentViewController showNavigationLists];
+        }
+    //}
+}
+
+#pragma mark - Navigation List
+
+-(void)openLists
+{
+    PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (navigationListsViewController) {
+        [self.documentViewController showNavigationLists];
     }
 }
 

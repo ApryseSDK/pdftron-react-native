@@ -1152,6 +1152,22 @@ RCT_REMAP_METHOD(openLayersList,
     }
 }
 
+RCT_REMAP_METHOD(openLists,
+                 openListsForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openListsForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
+    }
+}
+
+
+
 #pragma mark - Collaboration
 
 RCT_REMAP_METHOD(importAnnotationCommand,
