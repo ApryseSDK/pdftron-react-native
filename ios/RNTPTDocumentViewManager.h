@@ -78,6 +78,8 @@
 
 -(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
 
+- (void)showCropForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;

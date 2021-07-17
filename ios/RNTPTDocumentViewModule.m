@@ -544,6 +544,20 @@ RCT_REMAP_METHOD(gotoLastPage,
     }
 }
 
+RCT_REMAP_METHOD(showCrop,
+                 showCropForDocumentViewTag: (nonnull NSNumber *) tag
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showCropForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_go_to_page_view", @"Failed to show crop dialog", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(showGoToPageView,
                 showGoToPageViewForDocumentViewTag: (nonnull NSNumber *) tag
                 resolver:(RCTPromiseResolveBlock)resolve

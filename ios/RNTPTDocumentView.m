@@ -3978,6 +3978,11 @@ NS_ASSUME_NONNULL_END
     [pageIndicator presentGoToPageController];
 }
 
+- (void)showCrop
+{
+    [self.currentDocumentViewController showPageCropViewController];
+}
+
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
