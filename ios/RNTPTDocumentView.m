@@ -557,18 +557,6 @@ NS_ASSUME_NONNULL_END
     [self setToolsPermission:disabledElements toValue:NO documentViewController:documentViewController];
 }
 
-- (void)setMultiTabEnabled:(BOOL)enabled
-{
-    _multiTabEnabled = enabled;
-    
-}
-
-- (void)setTabTitle:(NSString *)tabTitle
-{
-    _tabTitle = [tabTitle copy];
-    
-}
-
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
 {
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
@@ -4015,7 +4003,19 @@ NS_ASSUME_NONNULL_END
     
 }
 
-#pragma mark - Close all tabs
+#pragma mark - Tabs
+
+- (void)setMultiTabEnabled:(BOOL)enabled
+{
+    _multiTabEnabled = enabled;
+    
+}
+
+- (void)setTabTitle:(NSString *)tabTitle
+{
+    _tabTitle = [tabTitle copy];
+    
+}
 
 - (void)closeAllTabs
 {
@@ -4035,6 +4035,13 @@ NS_ASSUME_NONNULL_END
     // Close the selected tab last.
     if (tabManager.selectedItem) {
         [tabManager removeItem:tabManager.selectedItem];
+    }
+}
+
+- (void)openTabSwitcher
+{
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController showTabsList:self.tabbedDocumentViewController.tabBar];
     }
 }
 

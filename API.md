@@ -2303,13 +2303,23 @@ this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ### Multi-tab
 
 #### closeAllTabs
-Closes all tabs in multi-tab environment.
+Closes all tabs in a multi-tab environment.
 
 Returns a Promise.
 
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
+```
+
+#### openTabSwitcher
+Opens the tab switcher in a multi-tab environment.
+
+Returns a Promise.
+
+```js
+// Do this only when DocumentView has multiTabEnabled = true
+this._viewer.openTabSwitcher();
 ```
 
 ### Zoom
