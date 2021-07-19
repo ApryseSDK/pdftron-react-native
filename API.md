@@ -260,6 +260,30 @@ Example:
 />
 ```
 
+#### saveStateEnabled
+bool, optional, default to true
+
+Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+Example:
+
+```js
+<DocumentView
+  saveStateEnabled={false}
+/>
+```
+
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
@@ -494,22 +518,6 @@ Defines which [`annotationToolbar`](#annotationToolbars) should be selected when
 <DocumentView
   initialToolbar={Config.DefaultToolbars.Draw}
 />
-```
-#### setCurrentToolbar
-Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
-
-Returns a Promise.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
-
-```js
-this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
-  // done switching toolbar
-});
 ```
 
 #### hideTopToolbars
@@ -1282,6 +1290,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### photoPickerEnabled
+bool, optional, defaults to true. Android only.
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1306,7 +1325,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
@@ -1384,6 +1403,17 @@ Defines whether document is automatically saved by the viewer.
 ```js
 <DocumentView
   autoSaveEnabled={true}
+/>
+```
+
+#### autoResizeFreeTextEnabled
+bool, optional, defaults to false
+
+Defines whether to automatically resize the bounding box of free text annotations when editing.
+
+```js
+<DocumentView
+  autoResizeFreeTextEnabled={true}
 />
 ```
 
@@ -1669,6 +1699,15 @@ this._viewer.gotoLastPage().then((success) => {
     console.log("Go to last page.");
   }
 });
+```
+
+#### showGoToPageView
+Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+
+Returns a Promise.
+
+```js
+this._viewer.showGoToPageView();
 ```
 
 #### getPageCropBox
@@ -2224,6 +2263,25 @@ this._viewer.getField('someFieldName').then((field) => {
     console.log('field value:', field.fieldValue);
     console.log('field type:', field.fieldType);
   }
+});
+```
+
+### Toolbar
+
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
 });
 ```
 
