@@ -16,6 +16,7 @@ static NSString * const PTThumbnailSliderButtonKey = @"thumbnailSlider";
 static NSString * const PTOutlineListButtonKey = @"outlineListButton";
 static NSString * const PTAnnotationListButtonKey = @"annotationListButton";
 static NSString * const PTUserBookmarkListButtonKey = @"userBookmarkListButton";
+static NSString * const PTLayerListButtonKey = @"viewLayersButton";
 static NSString * const PTReflowButtonKey = @"reflowButton";
 static NSString * const PTEditPagesButtonKey = @"editPagesButton";
 static NSString * const PTPrintButtonKey = @"printButton";
@@ -291,7 +292,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
-- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand;
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand annotation:(NSDictionary*)annotation;
 
 - (void)annotationMenuPressed:(RNTPTDocumentView *)sender annotationMenu:(NSString *)annotationMenu annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -302,6 +303,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool;
 
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
+
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
 
 @end
 
@@ -353,9 +356,13 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isThumbnailViewEditingEnabled) BOOL thumbnailViewEditingEnabled;
 
+@property (nonatomic, assign) BOOL imageInReflowEnabled;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
+
+@property (nonatomic) BOOL inkMultiStrokeEnabled;
 
 @property (nonatomic) BOOL useStylusAsPen;
 
@@ -368,6 +375,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
 @property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
+@property (nonatomic, assign) BOOL autoResizeFreeTextEnabled;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
@@ -392,6 +400,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
+@property (nonatomic, copy, nullable) NSString *initialToolbar;
 
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
@@ -406,6 +415,16 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
+
+@property (nonatomic, assign) BOOL annotationsListEditingEnabled;
+
+@property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
+
+@property (nonatomic, assign) BOOL restrictDownloadUsage;
+
+@property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
+@property (nonatomic, assign) BOOL saveStateEnabled;
 
 #pragma mark - Methods
 
@@ -443,6 +462,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
 - (void)setDrawAnnotations:(BOOL)drawAnnotations;
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
@@ -454,6 +475,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (NSArray *)getAnnotationListAt:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
 
 - (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber;
+
+- (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
+    pageNumber:(NSInteger)pageNumber key:(NSString *)key;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
@@ -469,6 +493,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)gotoLastPage;
 
+- (void)showGoToPageView;
+
 - (void)closeAllTabs;
 
 - (int)getPageRotation;
@@ -480,6 +506,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)undo;
 
 - (void)redo;
+
+- (bool)canUndo;
+
+- (bool)canRedo;
 
 - (double)getZoom;
 
@@ -542,6 +572,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)selectAll;
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle;
 
 @end
 

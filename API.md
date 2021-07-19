@@ -224,6 +224,65 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
   readOnly={true}
 />
 ```
+#### defaultEraserType
+string, optional
+
+Sets the default eraser tool type. Value only applied after a clean install. Android only.
+Example:
+
+```js
+<DocumentView
+  defaultEraserType={Config.EraserType.hybrideEraser}
+/>
+```
+
+#### exportPath
+string, optional
+
+Sets the folder path for all save options, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  exportPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### openUrlPath
+string, optional
+
+Sets the cache folder used to cache PDF files opened using a http/https link, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  openUrlPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### saveStateEnabled
+bool, optional, default to true
+
+Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+Example:
+
+```js
+<DocumentView
+  saveStateEnabled={false}
+/>
+```
+
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
 
 #### onDocumentLoaded
 function, optional
@@ -380,6 +439,17 @@ Defines view mode items to be hidden in the view mode dialog. Strings should be 
 />
 ```
 
+#### tabletLayoutEnabled
+bool, optional, defaults to true
+
+Defines whether the tablet layout should be used on tablets. Otherwise uses the same layout as phones. Android only.
+
+```js
+<DocumentView
+  tabletLayoutEnabled={true}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled
@@ -436,6 +506,17 @@ Defines whether to show the toolbar switcher in the top toolbar.
 ```js
 <DocumentView
   hideAnnotationToolbarSwitcher={false}
+/>
+```
+
+#### initialToolbar
+string, optional, defaults to none
+
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
+
+```js
+<DocumentView
+  initialToolbar={Config.DefaultToolbars.Draw}
 />
 ```
 
@@ -701,6 +782,30 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+### Reflow
+
+#### imageInReflowEnabled
+bool, optional, defaults to true
+
+Whether to show images in reflow mode. 
+
+```js
+<DocumentView
+  imageInReflowEnabled={false}
+/>
+```
+
+#### reflowOrientation
+string, optional, default value is 'Horizontal'. Android only.
+
+Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+
+```js
+<DocumentView
+  reflowOrientation={Config.ReflowOrientation.Vertical} 
+/>
+```
+
 ### Annotation Menu
 
 #### hideAnnotationMenu
@@ -907,7 +1012,7 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 #### collabEnabled
 bool, optional, defaults to false
 
-Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work.
+Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
 
 ```js
 <DocumentView
@@ -976,6 +1081,17 @@ If true, the active annotation creation tool will remain in the current annotati
 />
 ```
 
+#### inkMultiStrokeEnabled
+bool, optional, defaults to true
+
+If true, ink tool will use multi-stroke mode. Otherwise, each stroke is a new ink annotation.
+
+```js
+<DocumentView
+  inkMultiStrokeEnabled={true}
+/>
+```
+
 #### selectAnnotationAfterCreation
 bool, optional, defaults to true
 
@@ -990,7 +1106,8 @@ Defines whether an annotation is selected after it is created. On iOS, this func
 #### onExportAnnotationCommand
 function, optional
 
-This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter.
+This function is called if a change has been made to annotations in the current document. Unlike [`onAnnotationChanged`](#onAnnotationChanged), this function has an XFDF command string as its parameter. If you are modifying or deleting multiple annotations, then on Android the function is only called once, and on iOS it is called for each annotation.
+
 
 Parameters:
 
@@ -998,13 +1115,26 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
+annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants 
+
+**Known Issues** <br/> 
+On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
 
 ```js
 <DocumentView
-  onExportAnnotationCommand = {({action, xfdfCommand}) => {
+  onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
     console.log('Annotation edit action is', action);
     console.log('The exported xfdfCommand is', xfdfCommand);
+    annotations.forEach((annotation) => {
+      console.log('Annotation id is', annotation.id);
+      if (!this.state.collabEnabled) {
+        console.log('Annotation pageNumber is', annotation.pageNumber);
+        console.log('Annotation type is', annotation.type);
+      }
+    });
   }}
+  collabEnabled={this.state.collabEnabled}
+  currentUser={'Pdftron'}
 />
 ```
 
@@ -1035,7 +1165,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 #### onAnnotationChanged
 function, optional
 
-This function is called if a change has been made to an annotation(s) in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
+This function is called if a change has been made to an annotation(s) in the current document.
 
 Parameters:
 
@@ -1080,6 +1210,17 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 />
 ```
 
+#### annotationsListEditingEnabled
+bool, optional, Android only, default value is true
+
+If document editing is enabled, then this value determines if the annotation list is editable.
+
+```js
+<DocumentView
+  annotationsListEditingEnabled={true}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
@@ -1098,6 +1239,18 @@ bookmarkJson | string | the list of current bookmarks in JSON format
   onBookmarkChanged = {({bookmarkJson}) => {
     console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
   }}
+/>
+```
+
+#### userBookmarksListEditingEnabled
+bool, optional, default value is true
+
+Defines whether the bookmark list can be edited. If the viewer is readonly then bookmarks on Android are 
+still editable but are saved to the device rather than the PDF.
+
+```js
+<DocumentView
+  userBookmarksListEditingEnabled={true}
 />
 ```
 
@@ -1126,6 +1279,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### photoPickerEnabled
+bool, optional, defaults to true. Android only.
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1150,7 +1314,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
@@ -1231,26 +1395,25 @@ Defines whether document is automatically saved by the viewer.
 />
 ```
 
-#### Example:
+#### autoResizeFreeTextEnabled
+bool, optional, defaults to false
+
+Defines whether to automatically resize the bounding box of free text annotations when editing.
 
 ```js
-import { DocumentView, Config } from 'react-native-pdftron';
 <DocumentView
-  ref={(c) => this._viewer = c}
-  document={path}
-  showLeadingNavButton={true}
-  leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
-  onLeadingNavButtonPressed={() => {}}
-  onDocumentLoaded={(path) => { console.log('Document is loaded at', path); }}
-  disabledElements={[Config.Buttons.searchButton, Config.Buttons.shareButton]}
-  disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
-  customHeaders={{Foo: bar}}
-  onPageChanged={({previousPageNumber, pageNumber}) => { console.log('page changed'); }}
-  onAnnotationChanged={({action, annotations}) => { console.log('annotations changed'); }}
-  annotationPermissionCheckEnabled={false}
-  onBookmarkChanged={({bookmarkJson}) => { console.log('bookmark changed'); }}
-  hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
-  onToolChanged={({previousTool,tool}) => { console.log('tool changed'); }}
+  autoResizeFreeTextEnabled={true}
+/>
+```
+
+#### restrictDownloadUsage
+bool, optional, defaults to false
+
+Defines whether to restrict data usage when viewing online PDFs.
+
+```js
+<DocumentView
+  restrictDownloadUsage={true}
 />
 ```
 
@@ -1275,6 +1438,30 @@ Defines whether the quick navigation buttons will appear in the viewer.
 ```js
 <DocumentView
   showQuickNavigationButton={false}
+/>
+```
+
+#### showNavigationListAsSidePanelOnLargeDevices
+bool, optional, defaults to true on Android and false on iOS
+
+Defines whether the navigation list will be displayed as a side panel on large devices such as iPads and tablets.
+
+```js
+<DocumentView
+  showNavigationListAsSidePanelOnLargeDevices={true}
+/>
+```
+
+#### onUndoRedoStateChanged
+function, optional
+
+This function is called when the state of the current document's undo/redo stack has been changed.
+
+```js
+<DocumentView
+  onUndoRedoStateChanged = {() => { 
+    console.log("Undo/redo stack state changed");
+  }}
 />
 ```
 
@@ -1352,6 +1539,8 @@ this._viewer.setColorPostProcessColors(whiteColor, blackColor);
 #### setToolMode
 Sets the current tool mode.
 
+Returns a Promise.
+
 Parameters:
 
 Name | Type | Description
@@ -1359,7 +1548,9 @@ Name | Type | Description
 toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
 
 ```js
-this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand);
+this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
+  // done switching tools
+});
 ```
 
 #### commitTool
@@ -1497,6 +1688,15 @@ this._viewer.gotoLastPage().then((success) => {
     console.log("Go to last page.");
   }
 });
+```
+
+#### showGoToPageView
+Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+
+Returns a Promise.
+
+```js
+this._viewer.showGoToPageView();
 ```
 
 #### getPageCropBox
@@ -1792,6 +1992,44 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### getPropertiesForAnnotation
+Gets properties for specified annotation in the current document, if it is valid. 
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+
+Available Properties:
+
+Name | Type | Markup exclusive | Example
+--- | --- | --- | ---
+rect | object | no | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+contents | string | no | "Contents"
+subject | string | yes | "Subject"
+title | string | yes | "Title"
+contentRect | object | yes | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+strokeColor | object | no | {red: 255, green: 0, blue: 0}
+
+Returns a promise.
+
+Promise Parameters:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+propertyMap | object | the non-null properties of the annotation | `{contents: 'Contents', strokeColor: {red: 255, green: 0, blue: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
+
+```js
+// Get properties for annotation in the current document.
+this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
+  if (properties) {
+    console.log('Properties for annotation: ', properties);
+  }
+})
+```
+
 #### setDrawAnnotations
 Sets whether all annotations and forms should be rendered in the viewer.
 
@@ -1919,6 +2157,36 @@ this._viewer.getAnnotationListOnPage(2).then((annotations) => {
 })
 ```
 
+#### getCustomDataForAnnotation
+Gets an annotation's `customData` property.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotationId | string | the unique id of the annotation
+pageNumber | integer | the page number where annotation is located. It is 1-indexed
+key | string | the unique key associated with the `customData` property
+
+Returns a Promise.
+
+Promise Parameters: 
+Name | Type | Description
+--- | --- | ---
+value | string | the `customData` property associated with the given key
+
+```js
+this._viewer.setPropertiesForAnnotation("annotation1", 2, {
+  customData: {
+    data: "Nice annotation"
+  }
+}).then(() => {
+  this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
+    console.log(value === "Nice annotation");
+  })
+})
+```
+
 #### setFlagForFields
 Sets a field flag value on one or more form fields.
 
@@ -1984,6 +2252,25 @@ this._viewer.getField('someFieldName').then((field) => {
     console.log('field value:', field.fieldValue);
     console.log('field type:', field.fieldType);
   }
+});
+```
+
+### Toolbar
+
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
 });
 ```
 
@@ -2544,8 +2831,63 @@ Returns a Promise.
 
 ```js
 this._viewer.selectAll();
+```
+
+### Undo/Redo
+
+#### undo
+Undo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.undo();
+```
+
+#### redo
+Redo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.redo();
+```
+
+#### canUndo
+Checks whether an undo operation can be performed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canUndo | bool | whether it is possible to undo from the current snapshot
+
+```js
+this._viewer.canUndo().then((canUndo) => {
+  console.log(canUndo ? 'undo possible' : 'no action to undo');
 });
 ```
+
+#### canRedo
+Checks whether a redo operation can be perfromed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canRedo | bool | whether it is possible to redo from the current snapshot
+
+```js
+this._viewer.canRedo().then((canRedo) => {
+  console.log(canRedo ? 'redo possible' : 'no action to redo');
+});
+```
+
+### Others
 
 #### exportAsImage
 Export a PDF page to image format defined in `Config.ExportFormat`.
@@ -2568,24 +2910,6 @@ path | string | the temp path of the created image, user is responsible for clea
 this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
-```
-
-#### undo
-Undo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.undo();
-```
-
-#### redo
-Redo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.redo();
 ```
 
 #### showCrop

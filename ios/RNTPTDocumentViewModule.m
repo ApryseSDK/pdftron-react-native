@@ -33,9 +33,17 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
 
 RCT_REMAP_METHOD(setToolMode,
                  setToolModeForDocumentViewTag:(nonnull NSNumber *)tag
-                 toolMode:(NSString *)toolMode)
+                 toolMode:(NSString *)toolMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+    @try {
+        [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_tool_mode_failed", @"Failed to set tool mode", [self errorFromException:exception]);
+    }
 }
 
 RCT_REMAP_METHOD(commitTool,
@@ -82,6 +90,21 @@ RCT_REMAP_METHOD(exportAsImage,
     }
     @catch (NSException *exception) {
         reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setCurrentToolbar,
+                 setCurrentToolbarForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolbarTitle:(NSString*)toolbarTitle
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setCurrentToolbarForDocumentViewTag:tag toolbarTitle:toolbarTitle];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_toolbar_failed", @"Failed to set current toolbar", [self errorFromException:exception]);
     }
 }
 
@@ -289,6 +312,22 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(getPropertiesForAnnotation,
+                 getPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *propertyMap = [[self documentViewManager] getPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(propertyMap);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_properties_for_annotation", @"Failed to get properties for annotation", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setDrawAnnotations,
                  setDrawAnnotationsForDocumentViewTag: (nonnull NSNumber *)tag
                  drawAnnotations:(BOOL)drawAnnotations
@@ -384,6 +423,24 @@ RCT_REMAP_METHOD(getAnnotationListOnPage,
     }
     @catch (NSException *exception) {
         reject(@"get_annotation_list_on_page", @"Failed to get annotation list on page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCustomDataForAnnotation,
+                  getCustomDataForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                  annotationId:(NSString *)annotationId
+                  pageNumber:(NSInteger)pageNumber
+                  key:(NSString *)key
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *customData = [[self documentViewManager]
+            getCustomDataForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber key:key];
+        resolve(customData);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_custom_data_for_annotation", @"Failed to get custom data for annotation", [self errorFromException:exception]);
     }
 }
 
@@ -487,6 +544,20 @@ RCT_REMAP_METHOD(gotoLastPage,
     }
 }
 
+RCT_REMAP_METHOD(showGoToPageView,
+                showGoToPageViewForDocumentViewTag: (nonnull NSNumber *) tag
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showGoToPageViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_go_to_page_view", @"Failed to open goto page view", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -560,10 +631,38 @@ RCT_REMAP_METHOD(redo,
                  rejector:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] undoForDocumentViewTag:tag];
+        [[self documentViewManager] redoForDocumentViewTag:tag];
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canUndo,
+                 canUndoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
+        resolve(@(canUndo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canUndo", @"Failed to get canUndo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canRedo,
+                 canRedoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canRedo = [[self documentViewManager] canRedoForDocumentViewTag:tag];
+        resolve(@(canRedo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canRedo", @"Failed to canRedo", [self errorFromException:exception]);
     }
 }
 

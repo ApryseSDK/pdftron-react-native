@@ -46,6 +46,8 @@
 
 - (void)setPropertiesForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (NSDictionary *)getPropertiesForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
 - (void)setDrawAnnotationsForDocumentViewTag:(NSNumber *)tag drawAnnotations:(BOOL)drawAnnotations;
 
 - (void)setVisibilityForAnnotationForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
@@ -57,6 +59,8 @@
 - (NSArray *)getAnnotationListAtForDocumentViewTag:(NSNumber *)tag x1:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
 
 - (NSArray *)getAnnotationListOnPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
+
+- (NSString *)getCustomDataForAnnotationForDocumentViewTag:(NSNumber *) tag annotationId:(NSString *)annotationId  pageNumber:(NSInteger)pageNumber key:(NSString *)key;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
@@ -72,6 +76,8 @@
 
 - (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
 
+-(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
@@ -85,6 +91,10 @@
 - (void)undoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)redoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canUndoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canRedoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
@@ -145,5 +155,7 @@
 - (void)selectAllForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
+- (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
 
 @end
