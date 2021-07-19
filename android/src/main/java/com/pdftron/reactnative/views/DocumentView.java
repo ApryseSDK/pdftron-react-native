@@ -3958,6 +3958,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mSaveStateEnabled = saveStateEnabled;
     }
 
+    public void setOpenSavedCopyInNewTab(boolean openSavedCopyInNewTab) {
+        mBuilder = mBuilder.openSavedCopyInNewTab(openSavedCopyInNewTab);
+    }
+
     public ToolManager getToolManager() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().getToolManager();

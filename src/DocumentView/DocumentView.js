@@ -106,6 +106,7 @@ export default class DocumentView extends PureComponent {
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
     saveStateEnabled: PropTypes.bool,
+    openSavedCopyInNewTab: PropTypes.bool,
     ...ViewPropTypes,
   };
 
