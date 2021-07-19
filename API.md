@@ -272,6 +272,18 @@ Example:
 />
 ```
 
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 

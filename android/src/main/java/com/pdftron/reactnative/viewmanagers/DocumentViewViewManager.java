@@ -415,6 +415,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setSaveStateEnabled(saveState);
     }
 
+    @ReactProp(name = "openSavedCopyInNewTab")
+    public void setOpenSavedCopyInNewTab(DocumentView documentView, boolean openSavedCopyInNewTab) {
+        documentView.setOpenSavedCopyInNewTab(openSavedCopyInNewTab);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
