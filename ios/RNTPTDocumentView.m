@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    _autoResizeFreeTextEnabled = YES;
     
     _inkMultiStrokeEnabled = YES;
 
@@ -80,6 +81,8 @@ NS_ASSUME_NONNULL_END
     _longPressMenuEnabled = YES;
     
     _maxTabCount = NSUIntegerMax;
+    
+    _saveStateEnabled = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
@@ -1629,6 +1632,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoResizeFreeTextEnabled:(BOOL)autoResizeFreeTextEnabled
+{
+    _autoResizeFreeTextEnabled = autoResizeFreeTextEnabled;
+    
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -1669,6 +1679,9 @@ NS_ASSUME_NONNULL_END
 
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
+    
+    // Auto resize free text enabled.
+    toolManager.autoResizeFreeTextEnabled = self.autoResizeFreeTextEnabled;
     
     // Sticky note pop up.
     toolManager.textAnnotationOptions.opensPopupOnTap = ![self.overrideBehavior containsObject:PTStickyNoteShowPopUpKey];
@@ -1777,6 +1790,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
@@ -1818,6 +1833,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Enable/disable restoring state (last read page).
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
 }
 
 - (void)applyLeadingNavButton
@@ -2262,6 +2281,13 @@ NS_ASSUME_NONNULL_END
 -(void)setUserBookmarksListEditingEnabled:(BOOL)userBookmarksListEditingEnabled
 {
     _userBookmarksListEditingEnabled = userBookmarksListEditingEnabled;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setSaveStateEnabled:(BOOL)enabled
+{
+    _saveStateEnabled = enabled;
     
     [self applyViewerSettings];
 }
@@ -3950,6 +3976,11 @@ NS_ASSUME_NONNULL_END
 - (bool)gotoLastPage {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     return [pdfViewCtrl GotoLastPage];
+}
+
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
 }
 
 #pragma mark - Get Document Path

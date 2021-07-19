@@ -142,6 +142,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mFragmentTransactionFinished;
 
+    private boolean mSaveStateEnabled = true;
+
+    private boolean mShowAddPageToolbarButton = true;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -819,6 +823,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
 
+    public void setPhotoPickerEnabled(boolean photoPickerEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setShowSignatureFromImage(photoPickerEnabled);
+    }
+
+    public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
+    }
+    
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
@@ -847,6 +859,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
+                mShowAddPageToolbarButton = false;
+            } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
+                mBuilder = mBuilder.showDigitalSignaturesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
                 mBuilder = mBuilder.showPrintOption(false);
             } else if (BUTTON_CLOSE.equals(item)) {
@@ -888,6 +903,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void disableTools(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
+            if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
+                mShowAddPageToolbarButton = false;
+            }
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
@@ -2430,6 +2448,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             fragment.setReactContext((ReactContext) getContext(), getId());
         }
 
+        // Hide add page annotation toolbar button
+        if (!mShowAddPageToolbarButton) {
+            mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
+        }
+
         if (!mCollabEnabled && getToolManager() != null) {
             getToolManager().setStickyNoteShowPopup(!isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP));
         }
@@ -2520,6 +2543,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+    }
+
+    @Override
+    public void onTabHostShown() {
+        super.onTabHostShown();
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
+        }
+    }
+
+    @Override
+    public void onTabChanged(String tag) {
+        super.onTabChanged(tag);
+        if (getPdfViewCtrlTabFragment() != null) {
+            getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
+        }
     }
 
     @Override
@@ -3884,6 +3923,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void showGoToPageView() {
+        if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
+            RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
+            fragment.showGoToPageView();
+        }
+    }
+
     public PdfViewCtrlTabFragment2 getPdfViewCtrlTabFragment() {
         if (mPdfViewCtrlTabHostFragment != null) {
             return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment();
@@ -3911,6 +3957,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setInkMultiStrokeEnabled(boolean inkMultiStrokeEnabled) {
         mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
+    public void setSaveStateEnabled(boolean saveStateEnabled) {
+        mSaveStateEnabled = saveStateEnabled;
+    }
+
+    public void setOpenSavedCopyInNewTab(boolean openSavedCopyInNewTab) {
+        mBuilder = mBuilder.openSavedCopyInNewTab(openSavedCopyInNewTab);
     }
 
     public ToolManager getToolManager() {
