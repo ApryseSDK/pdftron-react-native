@@ -2180,8 +2180,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     ex.printStackTrace();
                 }
             }
-            params.putArray(KEY_FIELDS, fieldsArray);
-            onReceiveNativeEvent(params);
+            if (fieldsArray.size() > 0) {
+                params.putArray(KEY_FIELDS, fieldsArray);
+                onReceiveNativeEvent(params);
+            }
         }
 
         @Override
