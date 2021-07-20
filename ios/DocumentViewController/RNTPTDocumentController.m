@@ -181,6 +181,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)toolManager:(nonnull PTToolManager *)toolManager pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
 {
+    [super toolManager:toolManager pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageDidMove:pageMovedFromPageNumber:toPageNumber:)]) {
         [self.delegate rnt_documentViewControllerPageDidMove:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
     }
