@@ -90,6 +90,8 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
+    photoPickerEnabled: PropTypes.bool,
+    autoResizeFreeTextEnabled: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
     restrictDownloadUsage: PropTypes.bool,
@@ -104,6 +106,7 @@ export default class DocumentView extends PureComponent {
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
     saveStateEnabled: PropTypes.bool,
+    openSavedCopyInNewTab: PropTypes.bool,
     ...ViewPropTypes,
   };
 

@@ -68,6 +68,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
     public static final String TOOL_BUTTON_EDIT = "editToolButton";
+    public static final String TOOL_BUTTON_ADD_PAGE = "addPageButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
