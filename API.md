@@ -2255,6 +2255,17 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openThumbnailsView
+Display a page thumbnails view. 
+
+This view allows users to navigate pages of a document. If [`thumbnailViewEditingEnabled`](#thumbnailViewEditingEnabled) is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+
+Returns a Promise.
+
+```js
+this._viewer.openThumbnailsView();
+```
+
 ### Toolbar
 
 #### setCurrentToolbar
