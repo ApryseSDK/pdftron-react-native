@@ -375,6 +375,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
 @property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
+@property (nonatomic, assign) BOOL autoResizeFreeTextEnabled;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
@@ -575,6 +576,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openThumbnailsView;
 
 @end
 

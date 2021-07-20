@@ -272,6 +272,18 @@ Example:
 />
 ```
 
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
@@ -1267,6 +1279,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### photoPickerEnabled
+bool, optional, defaults to true. Android only.
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1291,7 +1314,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
@@ -1369,6 +1392,17 @@ Defines whether document is automatically saved by the viewer.
 ```js
 <DocumentView
   autoSaveEnabled={true}
+/>
+```
+
+#### autoResizeFreeTextEnabled
+bool, optional, defaults to false
+
+Defines whether to automatically resize the bounding box of free text annotations when editing.
+
+```js
+<DocumentView
+  autoResizeFreeTextEnabled={true}
 />
 ```
 
@@ -2219,6 +2253,17 @@ this._viewer.getField('someFieldName').then((field) => {
     console.log('field type:', field.fieldType);
   }
 });
+```
+
+#### openThumbnailsView
+Display a page thumbnails view. 
+
+This view allows users to navigate pages of a document. If [`thumbnailViewEditingEnabled`](#thumbnailViewEditingEnabled) is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+
+Returns a Promise.
+
+```js
+this._viewer.openThumbnailsView();
 ```
 
 ### Toolbar

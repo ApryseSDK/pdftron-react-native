@@ -43,7 +43,8 @@ export default {
     editMenuButton: 'editMenuButton',
     cropPageButton: 'cropPageButton',
     undo: 'undo',
-    redo: 'redo'
+    redo: 'redo',
+    addPageButton: 'addPageButton'
   },
 
   // Tools define the various kinds of tools for the viewer

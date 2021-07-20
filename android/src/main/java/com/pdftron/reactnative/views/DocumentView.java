@@ -144,6 +144,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mSaveStateEnabled = true;
 
+    private boolean mShowAddPageToolbarButton = true;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -821,6 +823,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
     }
 
+    public void setPhotoPickerEnabled(boolean photoPickerEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setShowSignatureFromImage(photoPickerEnabled);
+    }
+
+    public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
+        mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
+    }
+    
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
@@ -849,6 +859,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showViewLayersToolbarOption(false);
             } else if (BUTTON_EDIT_PAGES.equals(item)) {
                 mBuilder = mBuilder.showEditPagesOption(false);
+                mShowAddPageToolbarButton = false;
             } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
                 mBuilder = mBuilder.showDigitalSignaturesOption(false);
             } else if (BUTTON_PRINT.equals(item)) {
@@ -892,6 +903,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void disableTools(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
+            if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
+                mShowAddPageToolbarButton = false;
+            }
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
@@ -2166,8 +2180,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     ex.printStackTrace();
                 }
             }
-            params.putArray(KEY_FIELDS, fieldsArray);
-            onReceiveNativeEvent(params);
+            if (fieldsArray.size() > 0) {
+                params.putArray(KEY_FIELDS, fieldsArray);
+                onReceiveNativeEvent(params);
+            }
         }
 
         @Override
@@ -2427,6 +2443,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
             fragment.setReactContext((ReactContext) getContext(), getId());
+        }
+
+        // Hide add page annotation toolbar button
+        if (!mShowAddPageToolbarButton) {
+            mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
         }
 
         if (!mCollabEnabled && getToolManager() != null) {
@@ -3941,8 +3962,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mToolManagerBuilder.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    public void openThumbnailsView() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
+        }
+    }
+    
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
+    }
+
+    public void setOpenSavedCopyInNewTab(boolean openSavedCopyInNewTab) {
+        mBuilder = mBuilder.openSavedCopyInNewTab(openSavedCopyInNewTab);
     }
 
     public ToolManager getToolManager() {
