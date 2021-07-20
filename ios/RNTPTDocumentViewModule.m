@@ -1015,6 +1015,7 @@ RCT_REMAP_METHOD(openSearch,
 {
     @try {
         [[self documentViewManager] openSearchForDocumentViewTag:tag];
+        resolve(nil);
     }
     @catch (NSException *exception) {
         reject(@"open_search", @"Failed to open search", [self errorFromException:exception]);
