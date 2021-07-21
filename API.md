@@ -2243,6 +2243,17 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+### showViewModeDialog
+Display the view mode dialog.
+
+This dialog allows users to pick page layout mode, select page color mode, rotate pages, and crop pages. Dialog items can be hidden using [`hideViewModeItems`](#hideViewModeItems).
+
+Returns a Promise.
+
+```js
+this._viewer.showViewModeDialog();
+```
+
 ### Toolbar
 
 #### setCurrentToolbar
