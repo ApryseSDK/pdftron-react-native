@@ -577,6 +577,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
 
+- (void)openThumbnailsView;
+
 @end
 
 

@@ -106,6 +106,7 @@ export default class DocumentView extends PureComponent {
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
     saveStateEnabled: PropTypes.bool,
+    openSavedCopyInNewTab: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -880,6 +881,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
+    }
+    return Promise.resolve();
+  }
+
+  openThumbnailsView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.openThumbnailsView(tag);
     }
     return Promise.resolve();
   }

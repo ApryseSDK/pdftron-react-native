@@ -4761,6 +4761,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Thumbnails
+
+- (void)openThumbnailsView
+{
+    [self.currentDocumentViewController showThumbnailsController];
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController

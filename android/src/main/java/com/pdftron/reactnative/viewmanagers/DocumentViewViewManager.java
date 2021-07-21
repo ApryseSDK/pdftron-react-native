@@ -415,6 +415,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setSaveStateEnabled(saveState);
     }
 
+    @ReactProp(name = "openSavedCopyInNewTab")
+    public void setOpenSavedCopyInNewTab(DocumentView documentView, boolean openSavedCopyInNewTab) {
+        documentView.setOpenSavedCopyInNewTab(openSavedCopyInNewTab);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1102,6 +1107,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openThumbnailsView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openThumbnailsView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openThumbnailsView", "Unable to find DocumentView.");
+        }
+    }
+    
     public void showGoToPageView(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
