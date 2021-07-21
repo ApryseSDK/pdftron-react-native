@@ -2226,8 +2226,12 @@ NS_ASSUME_NONNULL_END
 
 - (void)showViewModeDialog
 {
-    PTDocumentBaseViewController * documentViewController = self.currentDocumentViewController;
-    [self.documentViewController presentViewController:documentViewController.settingsViewController animated:YES completion:nil];
+    PTDocumentViewSettingsController *settingsViewController = self.currentDocumentViewController.settingsViewController;
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    navigationController.modalPresentationStyle = settingsViewController.modalPresentationStyle;
+
+    [self.documentViewController presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - Custom headers
