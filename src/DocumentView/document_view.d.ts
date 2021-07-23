@@ -1,3 +1,4 @@
+import { ConfigAPI } from "@babel/core";
 import { number } from "prop-types";
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
@@ -37,17 +38,18 @@ export interface FieldWithStringValue {
     fieldValue: string;
 }
 
-export interface Coords {
+export interface Point {
     x: number;
     y: number;
 }
 
-export type Quad = [Coords, Coords, Coords, Coords];
+export type Quad = [Point, Point, Point, Point];
 
 export interface TextSelectionResult {
-    html: string;
-    pageNumber: number;
-    quads: Array<Quad> | null;
+    html: string; 
+    unicode: string; 
+    pageNumber: number; 
+    quads: Array<Quad>;
 }
 
 export interface AnnotationFlag {
@@ -141,7 +143,7 @@ export interface DocumentViewProps extends ViewProps{
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
     onTextSearchStart?: () => void;
-    onTextSearchResult?: (event: {found: boolean, textSelection: TextSelectionResult}) => void;
+    onTextSearchResult?: (event: {found: boolean, textSelection: TextSelectionResult?}) => void;
     hideViewModeItems?: Array<string>;
     pageStackEnabled?: boolean;
     showQuickNavigationButton?: boolean;
@@ -213,5 +215,35 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     getPageRotation: () => Promise<void> | number;
     rotateClockwise: () => Promise<void>;
     rotateCounterClockwise: () => Promise<void>;
-    // not done adding methods
+    convertScreenPointsToPagePoints: (points: Array<Point>) => Promise<void> | Array<Point>;
+    convertPagePointsToScreenPoints: (points: Array<Point>) => Promise<void> | Array<Point>;
+    getPageNumberFromScreenPoint: (x: number, y: number) => Promise<void> | number;
+    setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
+    setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
+    setOverprint: (overprint: string) => Promise<void>;
+    setColorPostProcessMode: (colorPostProcessMode: string) => Promise<void>;
+    setColorPostProcessColors: (whiteColor: Color, blackColor: Color) => Promise<void>;
+    findText: (searchString: string, matchCase: bool, matchWholeWord: bool, searchUp: bool, regExp: bool) => Promise<void>;
+    cancelFindText: () => Promise<void>;
+    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult;
+    hasSelection: () => Promise<void> | boolean;
+    clearSelection: () => Promise<void>;
+    getSelectionPageRange: () => Promise<void> | {begin: number, end: number};
+    hasSelectionOnPage: (pageNumber: number) => Promise<void> | boolean;
+    selectInRect: (rect: Rect) => Promise<void> | boolean;
+    isThereTextInRect: (rect: Rect) => Promise<void> | boolean;
+    selectAll: () => Promise<void>;
+    setUrlExtraction: (urlExtraction: boolean) => Promise<void>;
+    setPageBorderVisibility: (pageBorderVisibility: boolean) => Promise<void>;
+    setPageTransparencyGrid: (pageTransparencyGrid: boolean) => Promise<void>;
+    setDefaultPageColor: (defaultPageColor: Color) => Promise<void>;
+    setBackgroundColor: (backgroundColor: Color) => Promise<void>;
+    exportAsImage: (pageNumber: number, dpi: number, exportFormat: string) => Promise<void> | string;
+    undo: () => Promise<void>;
+    redo: () => Promise<void>;
+    canUndo: () => Promise<void> | boolean;
+    canRedo: () => Promise<void> | boolean;
+    showCrop: () => Promise<void>;
+    setCurrentToolbar: (toolbar: string) => Promise<void>;
+    openThumbnailsView: () => Promise<void>;
 };
