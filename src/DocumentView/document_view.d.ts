@@ -1,13 +1,38 @@
+import { number } from "prop-types";
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
+import { Config } from "../Config/config";
 export interface Annotation {
     id: string;
     pageNumber: number;
     type: string;
-    rect: object
+    rect: Rect
+}
+
+export interface Rect {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+}
+
+export interface Color {
+    red: number;
+    green: number;
+    blue: number;
+}
+
+export interface CropBox extends Rect {
+    width: number;
+    height: number;
 }
 
 export interface Field {
+    fieldName: string;
+    fieldValue: string | boolean | number;
+}
+
+export interface FieldWithStringValue {
     fieldName: string;
     fieldValue: string;
 }
@@ -23,6 +48,23 @@ export interface TextSelectionResult {
     html: string;
     pageNumber: number;
     quads: Array<Quad> | null;
+}
+
+export interface AnnotationFlag {
+    id: string;
+    pageNumber: int;
+    flag: Config.AnnotationFlagsSet;
+    flagValue: boolean;
+}
+
+export interface Properties {
+    rect?: Rect;
+    contents?: string;
+    subject?: string;
+    title?: string;
+    contentRect?: Rect;
+    customData?: object;
+    strokeColor?: Color;
 }
 
 export interface DocumentViewProps extends ViewProps{
@@ -61,7 +103,7 @@ export interface DocumentViewProps extends ViewProps{
     keyboardShortcutsEnabled?: boolean;
     onAnnotationsSelected?: (event: {annotations: Array<Annotation>}) => void ;
     onAnnotationChanged?: (event: {action: string, annotations: Array<Annotation>}) => void;
-    onFormFieldValueChanged?: (event: {fields: Array<Field>}) => void;
+    onFormFieldValueChanged?: (event: {fields: Array<FieldWithStringValue>}) => void;
     readOnly?: boolean;
     thumbnailViewEditingEnabled?: boolean;
     fitMode?: string;
@@ -122,4 +164,38 @@ export interface DocumentViewProps extends ViewProps{
     openSavedCopyInNewTab?: boolean;
 }
 
-export class DocumentView extends PureComponent<DocumentViewProps, any>{};
+export class DocumentView extends PureComponent<DocumentViewProps, any>{
+    getDocumentPath: () => Promise<void> | string;
+    setToolMode: (toolMode: string) => Promise<void>;
+    commitTool: () => Promise<void> | boolean;
+    getPageCount: () => Promise<void> | number;
+    importBookmarkJson: (bookmarkJson: string) => Promise<void>;
+    importAnnotationCommand: (xfdfCommand: string, initialLoad: boolean) => Promise<void>;
+    importAnnotations: (xfdf: string) => Promise<void>;
+    exportAnnotations: (options?: {annotList: Array<Annotation>}) => Promise<void> | string;
+    flattenAnnotations: (formsOnly: boolean) => Promise<void>;
+    deleteAnnotations: (annotations: Array<Annotation>) => Promise<void>;
+    saveDocument: () => Promise<void> | string;
+    setFlagForFields: (fields: Array<String>, flag: number, value: boolean) => Promise<void>;
+    getField: (fieldName: string) => Promise<void> | {fieldName: string, fieldValue?: any, fieldType?: string};
+    setValueForFields: (fieldsMap: Map<{fieldName: string, fieldValue: any}>) => Promise<void>;
+    setValuesForFields: (fieldsMap: Map<{fieldName: string, fieldValue: any}>) => Promise<void>;
+    handleBackButton: () => Promise<void> | boolean;
+    setFlagForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
+    setFlagsForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
+    selectAnnotation: (id: string, pageNumber: number) => Promise<void>;
+    setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: Properties) => Promise<void>;
+    setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: Properties) => Promise<void>;
+    getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | Properties;
+    setDrawAnnotations: (drawAnnotations: boolean) => Promise<void>;
+    setVisibilityForAnnotation: (id: string, pageNumber: number, visibility: boolean) => Promise<void>;
+    setHighlightFields: (highlightFields: boolean) => Promise<void>;
+    getAnnotationAtPoint: (x: number, y: number, distanceThreshold: number, minimumLineWeight: number) => Promise<void> | Annotation;
+    getAnnotationListAt: (x1: number, y1: number, x2: number, y2: number) => Promise<void> | Array<Annotation>;
+    getAnnotationsOnPage: (pageNumber: number) => Promise<void> | Array<Annotation>;
+    getCustomDataForAnnotation: (annotationID: string, pageNumber: integer, key: string) => Promise<void> | string;
+    getPageCropBox: (pageNumber: number) => Promise<void> | CropBox;
+    setCurrentPage: (pageNumber: number) => Promise<void> | boolean;
+    getVisiblePages: () => Promise<void> | Array<number>;
+    // not done adding methods
+};
