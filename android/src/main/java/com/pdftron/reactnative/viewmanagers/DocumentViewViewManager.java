@@ -365,6 +365,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
     }
 
+    @ReactProp(name = "photoPickerEnabled") 
+    public void setPhotoPickerEnabled(DocumentView documentView, boolean photoPickerEnabled) {
+        documentView.setPhotoPickerEnabled(photoPickerEnabled);
+    }
+
+    @ReactProp(name = "autoResizeFreeTextEnabled")
+    public void setAutoResizeFreeTextEnabled(DocumentView documentView, boolean autoResizeFreeTextEnabled) {
+        documentView.setAutoResizeFreeTextEnabled(autoResizeFreeTextEnabled);
+    } 
+    
     @ReactProp(name = "annotationsListEditingEnabled")
     public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
@@ -398,6 +408,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "inkMultiStrokeEnabled")
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
+    @ReactProp(name = "saveStateEnabled")
+    public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
+        documentView.setSaveStateEnabled(saveState);
+    }
+
+    @ReactProp(name = "openSavedCopyInNewTab")
+    public void setOpenSavedCopyInNewTab(DocumentView documentView, boolean openSavedCopyInNewTab) {
+        documentView.setOpenSavedCopyInNewTab(openSavedCopyInNewTab);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -1069,12 +1089,48 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean canUndo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.canUndo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "canUndo", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean canRedo(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.canRedo();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "canRedo", "Unable to find DocumentView.");
+        }
+    }
+
     public void showCrop(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.showCropDialog();
         } else {
             throw new PDFNetException("", 0L, getName(), "showCrop", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openThumbnailsView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openThumbnailsView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openThumbnailsView", "Unable to find DocumentView.");
+        }
+    }
+    
+    public void showGoToPageView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showGoToPageView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showGoToPageView", "Unable to find DocumentView.");
         }
     }
 

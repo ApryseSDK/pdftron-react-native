@@ -76,6 +76,8 @@
 
 - (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
 
+-(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
@@ -89,6 +91,10 @@
 - (void)undoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)redoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canUndoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canRedoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
@@ -155,5 +161,7 @@
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
+- (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
 @end

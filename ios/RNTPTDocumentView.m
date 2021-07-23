@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    _autoResizeFreeTextEnabled = YES;
     
     _inkMultiStrokeEnabled = YES;
 
@@ -80,6 +81,8 @@ NS_ASSUME_NONNULL_END
     _longPressMenuEnabled = YES;
     
     _maxTabCount = NSUIntegerMax;
+    
+    _saveStateEnabled = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
@@ -347,6 +350,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
     
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
@@ -383,12 +387,28 @@ NS_ASSUME_NONNULL_END
                selector:@selector(toolManagerDidChangeToolWithModification:)
                    name:PTToolManagerToolDidChangeNotification
                  object:toolManager];
+    
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+
+    [center addObserver:self
+               selector:@selector(undoManagerStateDidChangeWithModification:)
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
 }
 
 - (void)deregisterForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
 {
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSUndoManager *undoManager = toolManager.undoManager;
 
     NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
     
@@ -415,6 +435,18 @@ NS_ASSUME_NONNULL_END
     [center removeObserver:self
                       name:PTToolManagerToolDidChangeNotification
                     object:toolManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidCloseUndoGroupNotification
+                 object:undoManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidUndoChangeNotification
+                 object:undoManager];
+
+    [center removeObserver:self
+                   name:NSUndoManagerDidRedoChangeNotification
+                 object:undoManager];
 }
 
 #pragma mark - Disabling elements
@@ -1600,6 +1632,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoResizeFreeTextEnabled:(BOOL)autoResizeFreeTextEnabled
+{
+    _autoResizeFreeTextEnabled = autoResizeFreeTextEnabled;
+    
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -1640,6 +1679,9 @@ NS_ASSUME_NONNULL_END
 
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
+    
+    // Auto resize free text enabled.
+    toolManager.autoResizeFreeTextEnabled = self.autoResizeFreeTextEnabled;
     
     // Sticky note pop up.
     toolManager.textAnnotationOptions.opensPopupOnTap = ![self.overrideBehavior containsObject:PTStickyNoteShowPopUpKey];
@@ -1748,6 +1790,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
@@ -1789,6 +1833,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Enable/disable restoring state (last read page).
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
 }
 
 - (void)applyLeadingNavButton
@@ -2237,6 +2285,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setSaveStateEnabled:(BOOL)enabled
+{
+    _saveStateEnabled = enabled;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Fit mode
 
 - (void)setFitMode:(NSString *)fitMode
@@ -2668,7 +2723,7 @@ NS_ASSUME_NONNULL_END
     double horizontal = [pdfViewCtrl GetHScrollPos];
     double vertical = [pdfViewCtrl GetVScrollPos];
     
-    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+    if ([self.delegate respondsToSelector:@selector(scrollChanged:horizontal:vertical:)]) {
         [self.delegate scrollChanged:self horizontal:horizontal vertical:vertical];
     }
 }
@@ -2690,7 +2745,7 @@ NS_ASSUME_NONNULL_END
     
     const double zoom = pdfViewCtrl.zoom * pdfViewCtrl.zoomScale;
     
-    if ([self.delegate respondsToSelector:@selector(zoomChanged:zoom:)]) {
+    if ([self.delegate respondsToSelector:@selector(zoomFinished:zoom:)]) {
         [self.delegate zoomFinished:self zoom:zoom];
     }
 }
@@ -3411,6 +3466,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)undoManagerStateDidChangeWithModification:(NSNotification *)notification
+{
+    if (notification.object != self.currentDocumentViewController.toolManager.undoManager) {
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(undoRedoStateChanged:)]) {
+        [self.delegate undoRedoStateChanged:self];
+    }
+}
+
 -(NSString*)generateXfdfCommand:(PTVectorAnnot*)added modified:(PTVectorAnnot*)modified deleted:(PTVectorAnnot*)deleted pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl {
     NSString *fdfCommand = @"";
     
@@ -3907,6 +3973,11 @@ NS_ASSUME_NONNULL_END
     return [pdfViewCtrl GotoLastPage];
 }
 
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
+}
+
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
@@ -4005,6 +4076,18 @@ NS_ASSUME_NONNULL_END
 - (void)redo
 {
     [self.currentDocumentViewController.undoManager redo];
+}
+
+#pragma mark - Can Undo/Can Redo
+
+- (bool)canUndo
+{
+    return [self.currentDocumentViewController.undoManager canUndo];
+}
+
+- (bool)canRedo
+{
+    return [self.currentDocumentViewController.undoManager canRedo];
 }
 
 #pragma mark - Get Zoom
@@ -4691,6 +4774,13 @@ NS_ASSUME_NONNULL_END
     _restrictDownloadUsage = restrictDownloadUsage;
     
     [self applyViewerSettings];
+}
+
+#pragma mark - Thumbnails
+
+- (void)openThumbnailsView
+{
+    [self.currentDocumentViewController showThumbnailsController];
 }
 
 @end

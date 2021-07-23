@@ -304,6 +304,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -373,6 +375,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
 @property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
+@property (nonatomic, assign) BOOL autoResizeFreeTextEnabled;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
@@ -420,6 +423,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL restrictDownloadUsage;
 
 @property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
+@property (nonatomic, assign) BOOL saveStateEnabled;
 
 #pragma mark - Methods
 
@@ -488,6 +493,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (bool)gotoLastPage;
 
+- (void)showGoToPageView;
+
 - (void)closeAllTabs;
 
 - (int)getPageRotation;
@@ -499,6 +506,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)undo;
 
 - (void)redo;
+
+- (bool)canUndo;
+
+- (bool)canRedo;
 
 - (double)getZoom;
 
@@ -567,6 +578,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openThumbnailsView;
 
 @end
 
