@@ -530,9 +530,23 @@ NS_ASSUME_NONNULL_END
 //        PTCloseButtonKey: ^{
 //
 //        },
-//        PTSaveCopyButtonKey: ^{
-//
-//        },
+        PTSaveCopyButtonKey: ^{
+            documentViewController.exportButtonHidden = YES;
+        },
+        PTSaveIdenticalCopyButtonKey: ^ {
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
+        PTSaveFlattenedCopyButtonKey: ^{
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportFlattenedCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
 //        PTFormToolsButtonKey: ^{
 //
 //        },
