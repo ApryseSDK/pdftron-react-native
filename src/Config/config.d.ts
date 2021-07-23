@@ -1,240 +1,240 @@
 export interface Buttons {
-    editToolButton: string;
-    viewControlsButton: string;
-    freeHandToolButton: string;
-    highlightToolButton: string;
-    underlineToolButton: string;
-    squigglyToolButton: string;
-    strikeoutToolButton: string;
-    rectangleToolButton: string;
-    ellipseToolButton: string;
-    lineToolButton: string;
-    arrowToolButton: string;
-    polylineToolButton: string;
-    polygonToolButton: string;
-    cloudToolButton: string;
-    signatureToolButton: string;
-    freeTextToolButton: string;
-    stickyToolButton: string;
-    calloutToolButton: string;
-    stampToolButton: string;
-    toolsButton: string;
-    searchButton: string;
-    shareButton: string;
-    editPagesButton: string;
-    viewLayersButton: string;
-    printButton: string;
-    closeButton: string;
-    saveCopyButton: string;
-    formToolsButton: string;
-    fillSignToolsButton: string;
-    moreItemsButton: string;
-    digitalSignatureButton: string;
-    thumbnailsButton: string;
-    listsButton: string;
-    thumbnailSlider: string;
-    outlineListButton: string;
-    annotationListButton: string;
-    userBookmarkListButton: string;
-    reflowButton: string;
-    editMenuButton: string;
-    cropPageButton: string;
-    undo: string;
-    redo: string;
-    addPageButton: string;
+    editToolButton: 'editToolButton';
+    viewControlsButton: 'viewControlsButton';
+    freeHandToolButton: 'freeHandToolButton';
+    highlightToolButton: 'highlightToolButton';
+    underlineToolButton: 'underlineToolButton';
+    squigglyToolButton: 'squigglyToolButton';
+    strikeoutToolButton: 'strikeoutToolButton';
+    rectangleToolButton: 'rectangleToolButton';
+    ellipseToolButton: 'ellipseToolButton';
+    lineToolButton: 'lineToolButton';
+    arrowToolButton: 'arrowToolButton';
+    polylineToolButton: 'polylineToolButton';
+    polygonToolButton: 'polygonToolButton';
+    cloudToolButton: 'cloudToolButton';
+    signatureToolButton: 'signatureToolButton';
+    freeTextToolButton: 'freeTextToolButton';
+    stickyToolButton: 'stickyToolButton';
+    calloutToolButton: 'calloutToolButton';
+    stampToolButton: 'stampToolButton';
+    toolsButton: 'toolsButton';
+    searchButton: 'searchButton';
+    shareButton: 'shareButton';
+    editPagesButton: 'editPagesButton';
+    viewLayersButton: 'viewLayersButton';
+    printButton: 'printButton';
+    closeButton: 'closeButton';
+    saveCopyButton: 'saveCopyButton';
+    formToolsButton: 'formToolsButton';
+    fillSignToolsButton: 'fillSignToolsButton';
+    moreItemsButton: 'moreItemsButton';
+    digitalSignatureButton: 'digitalSignatureButton';
+    thumbnailsButton: 'thumbnailsButton';
+    listsButton: 'listsButton';
+    thumbnailSlider: 'thumbnailSlider';
+    outlineListButton: 'outlineListButton';
+    annotationListButton: 'annotationListButton';
+    userBookmarkListButton: 'userBookmarkListButton';
+    reflowButton: 'reflowButton';
+    editMenuButton: 'editMenuButton';
+    cropPageButton: 'cropPageButton';
+    undo: 'undo';
+    redo: 'redo';
+    addPageButton: 'addPageButton';
 }
 
 export interface Tools {
-    annotationEdit: string;
-    textSelect: string;
-    pan: string;
-    annotationEraserTool: string;
-    annotationCreateSticky: string;
-    annotationCreateFreeHand: string;
-    annotationCreateTextHighlight: string;
-    annotationCreateTextUnderline: string;
-    annotationCreateTextSquiggly: string;
-    annotationCreateTextStrikeout: string;
-    annotationCreateFreeText: string;
-    annotationCreateCallout: string;
-    annotationCreateSignature: string;
-    annotationCreateLine: string;
-    annotationCreateArrow: string;
-    annotationCreatePolyline: string;
-    annotationCreateStamp: string;
-    annotationCreateRubberStamp: string;
-    annotationCreateRectangle: string;
-    annotationCreateEllipse: string;
-    annotationCreatePolygon: string;
-    annotationCreatePolygonCloud: string;
-    annotationCreateDistanceMeasurement: string;
-    annotationCreatePerimeterMeasurement: string;
-    annotationCreateAreaMeasurement: string;
-    annotationCreateFileAttachment: string;
-    annotationCreateSound: string;
-    annotationCreateRedaction: string;
-    annotationCreateLink: string;
-    annotationCreateRedactionText: string;
-    annotationCreateLinkText: string;
-    annotationCreateFreeHighlighter: string;
-    formCreateTextField: string;
-    formCreateCheckboxField: string;
-    formCreateSignatureField: string;
-    formCreateRadioField: string;
-    formCreateComboBoxField: string;
-    formCreateListBoxField: string;
-    pencilKitDrawing: string;    
+    annotationEdit: 'AnnotationEdit';
+    textSelect: 'TextSelect';
+    pan: 'Pan';
+    annotationEraserTool: 'AnnotationEraserTool';
+    annotationCreateSticky: 'AnnotationCreateSticky';
+    annotationCreateFreeHand: 'AnnotationCreateFreeHand';
+    annotationCreateTextHighlight: 'AnnotationCreateTextHighlight';
+    annotationCreateTextUnderline: 'AnnotationCreateTextUnderline';
+    annotationCreateTextSquiggly: 'AnnotationCreateTextSquiggly';
+    annotationCreateTextStrikeout: 'AnnotationCreateTextStrikeout';
+    annotationCreateFreeText: 'AnnotationCreateFreeText';
+    annotationCreateCallout: 'AnnotationCreateCallout';
+    annotationCreateSignature: 'AnnotationCreateSignature';
+    annotationCreateLine: 'AnnotationCreateLine';
+    annotationCreateArrow: 'AnnotationCreateArrow';
+    annotationCreatePolyline: 'AnnotationCreatePolyline';
+    annotationCreateStamp: 'AnnotationCreateStamp';
+    annotationCreateRubberStamp: 'AnnotationCreateRubberStamp';
+    annotationCreateRectangle: 'AnnotationCreateRectangle';
+    annotationCreateEllipse: 'AnnotationCreateEllipse';
+    annotationCreatePolygon: 'AnnotationCreatePolygon';
+    annotationCreatePolygonCloud: 'AnnotationCreatePolygonCloud';
+    annotationCreateDistanceMeasurement: 'AnnotationCreateDistanceMeasurement';
+    annotationCreatePerimeterMeasurement: 'AnnotationCreatePerimeterMeasurement';
+    annotationCreateAreaMeasurement: 'AnnotationCreateAreaMeasurement';
+    annotationCreateFileAttachment: 'AnnotationCreateFileAttachment';
+    annotationCreateSound: 'AnnotationCreateSound';
+    annotationCreateRedaction: 'AnnotationCreateRedaction';
+    annotationCreateLink: 'AnnotationCreateLink';
+    annotationCreateRedactionText: 'AnnotationCreateRedactionText';
+    annotationCreateLinkText: 'AnnotationCreateLinkText';
+    annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter';
+    formCreateTextField: 'FormCreateTextField';
+    formCreateCheckboxField: 'FormCreateCheckboxField';
+    formCreateSignatureField: 'FormCreateSignatureField';
+    formCreateRadioField: 'FormCreateRadioField';
+    formCreateComboBoxField: 'FormCreateComboBoxField';
+    formCreateListBoxField: 'FormCreateListBoxField';
+    pencilKitDrawing: 'PencilKitDrawing';
 }
 
 export interface FitMode {
-    FitPage: string;
-    FitWidth: string;
-    FitHeight: string;
-    Zoom: string;
+    FitPage: 'FitPage';
+    FitWidth: 'FitWidth';
+    FitHeight: 'FitHeight';
+    Zoom: 'Zoom';
 }
 
 export interface LayoutMode {
-    Single: string;
-    Continuous: string;
-    Facing: string,
-    FacingContinuous: string,
-    FacingCover: string,
-    FacingCoverContinuous: string,
+    Single: 'Single';
+    Continuous: 'Continuous';
+    Facing: 'Facing';
+    FacingContinuous: 'FacingContinuous';
+    FacingCover: 'FacingCover';
+    FacingCoverContinuous: 'FacingCoverContinuous';
 }
 
 export interface FieldFlags {
-    ReadOnly: number;
-    Required: number;
+    ReadOnly: 0;
+    Required: 1;
 }
 
 export interface AnnotationMenu {
-    style: string;
-    note: string;
-    copy: string;
-    delete: string;
-    flatten: string;
-    editText: string;
-    editInk: string;
-    search: string;
-    share: string;
-    markupType: string;
-    read: string;
-    screenCapture: string;
-    playSound: string;
-    openAttachment: string;
-    calibrate: string;
+    style: 'style';
+    note: 'note';
+    copy: 'copy';
+    delete: 'delete';
+    flatten: 'flatten';
+    editText: 'editText';
+    editInk: 'editInk';
+    search: 'search';
+    share: 'share';
+    markupType: 'markupType';
+    read: 'read';
+    screenCapture: 'screenCapture';
+    playSound: 'playSound';
+    openAttachment: 'openAttachment';
+    calibrate: 'calibrate';
 }
 
 export interface EraserType{
-    annotationEraser: string;
-    hybrideEraser: string;
-    inkEraser: string;
+    annotationEraser: 'annotationEraser';
+    hybrideEraser: 'hybrideEraser';
+    inkEraser: 'inkEraser';
 }
 
 export interface LongPressMenu {
-    copy: string;
-    paste: string;
-    search: string;
-    share: string;
-    read: string;
+    copy: 'copy';
+    paste: 'paste';
+    search: 'search';
+    share: 'share';
+    read: 'read';
 }
 
 export interface Actions {
-    linkPress: string;
-    stickyNoteShowPopUp: string;
+    linkPress: 'linkPress';
+    stickyNoteShowPopUp: 'stickyNoteShowPopUp';
 }
 
-export type AnnotationFlags = {
-    hidden: "hidden",
-    invisible: "invisible",
-    locked: "locked",
-    lockedContents: "lockedContents",
-    noRotate: "noRotate",
-    noView: "noView",
-    noZoom: "noZoom",
-    print: "print",
-    readOnly: "readOnly",
-    toggleNoView: "toggleNoView"
+export interface AnnotationFlags {
+    hidden: "hidden";
+    invisible: "invisible";
+    locked: "locked";
+    lockedContents: "lockedContents";
+    noRotate: "noRotate";
+    noView: "noView";
+    noZoom: "noZoom";
+    print: "print";
+    readOnly: "readOnly";
+    toggleNoView: "toggleNoView";
 }
 
 export interface DefaultToolbars {
-    View:string;
-    Annotate:string;
-    Draw:string;
-    Insert:string;
-    FillAndSign: string,
-    PrepareForm: string,
-    Measure:string;
-    Pens:string;
-    Redaction:string;
-    Favorite:string;
+    View: "PDFTron_View";
+    Annotate: "PDFTron_Annotate";
+    Draw: "PDFTron_Draw";
+    Insert: "PDFTron_Insert";
+    FillAndSign: "PDFTron_Fill_and_Sign";
+    PrepareForm: "PDFTron_Prepare_Form";
+    Measure: "PDFTron_Measure";
+    Pens: "PDFTron_Pens";
+    Redaction: "PDFTron_Redact";
+    Favorite: "PDFTron_Favorite";
   }
 
 export interface ToolbarIcons {
-    View:string;
-    Annotate:string;
-    Draw:string;
-    Insert:string;
-    FillAndSign: string;
-    PrepareForm: string;
-    Measure:string;
-    Pens:string;
-    Redaction:string;
-    Favorite:string;
+    View: "PDFTron_View";
+    Annotate: "PDFTron_Annotate";
+    Draw: "PDFTron_Draw";
+    Insert: "PDFTron_Insert";
+    FillAndSign: "PDFTron_Fill_and_Sign";
+    PrepareForm: "PDFTron_Prepare_Form";
+    Measure: "PDFTron_Measure";
+    Pens: "PDFTron_Pens";
+    Redaction: "PDFTron_Redact";
+    Favorite: "PDFTron_Favorite";
 }
 
 export interface CustomToolbarKey {
-    Id: string;
-    Name: string;
-    Icon: string;
-    Items: string;
+    Id: "id";
+    Name: "name";
+    Icon: "icon";
+    Items: "items";
 }
 
 export interface ThumbnailFilterMode {
-    Annotated: string;
-    Bookmarked: string;
+    Annotated: "annotated";
+    Bookmarked: "bookmarked";
 }
 
 export interface Conversion {
-    Screen: string;
-    Canvas: string;
-    Page: string;
+    Screen: "screen";
+    Canvas: "canvas";
+    Page: "page";
 }
 
 export interface ViewModePickerItem {
-    Crop: string;
-    Rotation: string;
-    ColorMode: string;
+    Crop: "viewModeCrop";
+    Rotation: "viewModeRotation";
+    ColorMode: "viewModeColorMode";
 }
 
 export interface ZoomLimitMode {
-    None: string;
-    Absolute: string;
-    Relative: string;
+    None: "none";
+    Absolute: "absolute";
+    Relative: "relative";
 }
 
 export interface OverprintMode {
-    On: string;
-    Off: string;
-    OnlyPDFX: string; 
+    On: "on";
+    Off: "off";
+    OnlyPDFX: "pdfx";
 }
 
 export interface ColorPostProcessMode {
-    None: string;
-    Invert: string;
-    GradientMap: string;
-    NightMode: string
+    None: "none";
+    Invert: "invert";
+    GradientMap: "gradientMap";
+    NightMode: "nightMode";
 }
 
 export interface ReflowOrientation {
-    Horizontal: string;
-    Vertical: string;
+    Horizontal: 'horizontal';
+    Vertical: 'vertical';
   }
 
 export interface ExportFormat {
-    BMP: string;
-    JPEG: string;
-    PNG: string;
+    BMP: "BMP";
+    JPEG: "JPEG";
+    PNG: "PNG";
 }
 
 export interface ConfigOptions {
@@ -253,7 +253,7 @@ export interface ConfigOptions {
     CustomToolbarKey: CustomToolbarKey;
     ThumbnailFilterMode: ThumbnailFilterMode;
     Conversion: Conversion;
-    ViewPickerItemMode: ViewModePickerItem;
+    ViewModePickerItem: ViewModePickerItem;
     ZoomLimitMode: ZoomLimitMode;
     OverprintMode: OverprintMode;
     ColorPostProcessMode: ColorPostProcessMode;
