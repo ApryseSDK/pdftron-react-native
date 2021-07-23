@@ -17,15 +17,15 @@ export interface Coords {
     y: number;
 }
 
-export type Quads = [Coords, Coords, Coords, Coords];
+export type Quad = [Coords, Coords, Coords, Coords];
 
 export interface TextSelectionResult {
     html: string;
     pageNumber: number;
-    quads: Array<Quads>
+    quads: Array<Quad> | null;
 }
 
-export interface DocumentViewProps {
+export interface DocumentViewProps extends ViewProps{
     document: string;
     password?: string;
     initialPageNumber?: number;
@@ -122,4 +122,4 @@ export interface DocumentViewProps {
     openSavedCopyInNewTab?: boolean;
 }
 
-export class DocumentView extends PureComponent<DocumentViewProps | ViewProps, any>{};
+export class DocumentView extends PureComponent<DocumentViewProps, any>{};
