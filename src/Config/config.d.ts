@@ -237,7 +237,7 @@ export interface ExportFormat {
     PNG: "PNG";
 }
 
-export interface ConfigOptions {
+export interface Config {
     Buttons: Buttons;
     Tools: Tools;
     FitMode: FitMode;
@@ -261,4 +261,4 @@ export interface ConfigOptions {
     ExportFormat: ExportFormat;
 }
 
-export const Config : ConfigOptions;
+export const Config : Config;

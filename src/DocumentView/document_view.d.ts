@@ -2,12 +2,12 @@ import { ConfigAPI } from "@babel/core";
 import { number } from "prop-types";
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
-import { Config } from "../Config/config";
+import * as ConfigOptions from "react-native-pdftron/src/Config/config.options";
 export interface Annotation {
     id: string;
     pageNumber: number;
     type: string;
-    rect: Rect
+    rect: Rect;
 }
 
 export interface Rect {
