@@ -197,5 +197,21 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     getPageCropBox: (pageNumber: number) => Promise<void> | CropBox;
     setCurrentPage: (pageNumber: number) => Promise<void> | boolean;
     getVisiblePages: () => Promise<void> | Array<number>;
+    gotoPreviousPage: () => Promise<void> | boolean;
+    gotoNextPage: () => Promise<void> | boolean;
+    gotoFirstPage: () => Promise<void> | boolean;
+    gotoLastPage: () => Promise<void> | boolean;
+    showGoToPageView: () => Promise<void>;
+    closeAllTabs: () => Promise<void>;
+    getZoom: () => Promise<void> | number;
+    setZoomLimits: (zoomLimitMode: string, minimum: number, maximum: number) => Promise<void>;
+    zoomWithCenter: (zoom: number, x: number, y: number) => Promise<void>;
+    zoomToRect: (pageNumber: number, rect: Rect) => Promise<void>;
+    smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
+    getScrollPos: () => Promise<void> | {horizontal: number, vertical: number};
+    getCanvasSize: () => Promise<void> | {width: number, height: number};
+    getPageRotation: () => Promise<void> | number;
+    rotateClockwise: () => Promise<void>;
+    rotateCounterClockwise: () => Promise<void>;
     // not done adding methods
 };
