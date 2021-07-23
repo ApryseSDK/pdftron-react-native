@@ -144,17 +144,17 @@ export interface Actions {
     stickyNoteShowPopUp: string;
 }
 
-export interface AnnotationFlags {
-    hidden: string;
-    invisible: string;
-    locked: string;
-    lockedContents: string;
-    noRotate: string;
-    noView: string;
-    noZoom: string;
-    print: string;
-    readOnly: string;
-    toggleNoView: string;
+export type AnnotationFlags = {
+    hidden: "hidden",
+    invisible: "invisible",
+    locked: "locked",
+    lockedContents: "lockedContents",
+    noRotate: "noRotate",
+    noView: "noView",
+    noZoom: "noZoom",
+    print: "print",
+    readOnly: "readOnly",
+    toggleNoView: "toggleNoView"
 }
 
 export interface DefaultToolbars {
