@@ -31,9 +31,6 @@ export default {
     saveCopyButton: 'saveCopyButton',
     saveIdenticalCopyButton: 'saveIdenticalCopyButton',
     saveFlattenedCopyButton: 'saveFlattenedCopyButton',
-    saveReducedCopyButton: 'saveReducedCopyButton',
-    saveCroppedCopyButton: 'saveCroppedCopyButton',
-    savePasswordCopyButton: 'savePasswordCopyButton',
     formToolsButton: 'formToolsButton',
     fillSignToolsButton: 'fillSignToolsButton',
     moreItemsButton: 'moreItemsButton',
@@ -49,7 +46,12 @@ export default {
     cropPageButton: 'cropPageButton',
     undo: 'undo',
     redo: 'redo',
-    addPageButton: 'addPageButton'
+    addPageButton: 'addPageButton',
+
+    // Android only
+    saveReducedCopyButton: 'saveReducedCopyButton',
+    saveCroppedCopyButton: 'saveCroppedCopyButton',
+    savePasswordCopyButton: 'savePasswordCopyButton',
   },
 
   // Tools define the various kinds of tools for the viewer
