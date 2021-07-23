@@ -2,5 +2,6 @@
   "name": "DocumentView",
   "version": "0.0.0",
   "private": true,
-  "main": "./DocumentView"
+  "main": "./DocumentView",
+  "typings": "./document_view.d.ts"
 }
