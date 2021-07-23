@@ -289,6 +289,12 @@ function, optional
 
 This function is called when the document finishes loading.
 
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
 ```js
 <DocumentView
   onDocumentLoaded = {(path) => { 
@@ -301,6 +307,12 @@ This function is called when the document finishes loading.
 function, optional
 
 This function is called when document opening encounters an error.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+error | string | Error message produced
 
 ```js
 <DocumentView
@@ -2361,7 +2373,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+zoomLimitMode | String | one of the constants in [`Config.ZoomLimitMode`](./src/Config/Config.js), defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
 minimum | double | the lower bound of the zoom limit range
 maximum | double | the upper bound of the zoom limit range
 

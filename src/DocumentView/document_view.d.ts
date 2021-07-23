@@ -1,13 +1,12 @@
-import { ConfigAPI } from "@babel/core";
-import { number } from "prop-types";
+
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
 import * as ConfigOptions from "react-native-pdftron/src/Config/config.options";
 export interface Annotation {
     id: string;
-    pageNumber: number;
-    type: string;
-    rect: Rect;
+    pageNumber?: number;
+    type?: string;
+    rect?: Rect;
 }
 
 export interface Rect {
@@ -54,12 +53,12 @@ export interface TextSelectionResult {
 
 export interface AnnotationFlag {
     id: string;
-    pageNumber: int;
-    flag: Config.AnnotationFlagsSet;
+    pageNumber: number;
+    flag: ConfigOptions.AnnotationFlags;
     flagValue: boolean;
 }
 
-export interface Properties {
+export interface AnnotationProperties {
     rect?: Rect;
     contents?: string;
     subject?: string;
@@ -69,7 +68,7 @@ export interface Properties {
     strokeColor?: Color;
 }
 
-export interface DocumentViewProps extends ViewProps{
+export interface DocumentViewProps extends ViewProps {
     document: string;
     password?: string;
     initialPageNumber?: number;
@@ -85,17 +84,17 @@ export interface DocumentViewProps extends ViewProps{
     onZoomChanged?: (event: {zoom: number}) => void;
     onZoomFinished?: (event: {zoom: number}) => void;
     zoom?: number;
-    disabledElements?: Array<string>;
-    disabledTools?: Array<string>;
-    longPressMenuItems?: Array<string>;
-    overrideLongPressMenuBehavior?: Array<string>;
+    disabledElements?: Array<ConfigOptions.Buttons>;
+    disabledTools?: Array<ConfigOptions.Tools>;
+    longPressMenuItems?: Array<ConfigOptions.LongPressMenu>;
+    overrideLongPressMenuBehavior?: Array<ConfigOptions.LongPressMenu>;
     onLongPressMenuPress?: (event: {longPressMenu: string, longPressText: string}) => void;
     longPressMenuEnabled?: boolean;
-    annotationMenuItems?: Array<string>;
-    overrideAnnotationMenuBehavior?: Array<string>;
+    annotationMenuItems?: Array<ConfigOptions.AnnotationMenu>;
+    overrideAnnotationMenuBehavior?: Array<ConfigOptions.AnnotationMenu>;
     onAnnotationMenuPress?: (event: {annotationMenu: string, annotations: Array<Annotation>}) => void;
-    hideAnnotationMenu?: Array<string>;
-    overrideBehavior?: Array<string>;
+    hideAnnotationMenu?: Array<ConfigOptions.Tools>;
+    overrideBehavior?: Array<ConfigOptions.Actions>;
     onBehaviorActivated?: (event: {action: string, data: object}) => void;
     topToolbarEnabled?: boolean;
     bottomToolbarEnabled?: boolean;
@@ -130,21 +129,21 @@ export interface DocumentViewProps extends ViewProps{
     maxTabCount?: number;
     signSignatureFieldsWithStamps?: boolean;
     annotationPermissionCheckEnabled?: boolean;
-    annotationToolbars?: Array<string | object>;
-    hideDefaultAnnotationToolbars?: Array<string>;
-    topAppNavBarRightBar?: Array<string>;
-    bottomToolbar?: Array<string>;
+    annotationToolbars?: Array<ConfigOptions.DefaultToolbars | object>;
+    hideDefaultAnnotationToolbars?: Array<ConfigOptions.DefaultToolbars>;
+    topAppNavBarRightBar?: Array<ConfigOptions.Buttons>;
+    bottomToolbar?: Array<ConfigOptions.Buttons>;
     hideAnnotationToolbarSwitcher?: boolean;
     hideTopToolbars?: boolean;
     hideTopAppNavBar?: boolean;
     onBookmarkChanged?: (event: {bookmarkJson: string}) => void;
-    hideThumbnailFilterModes?: Array<string>;
+    hideThumbnailFilterModes?: Array<ConfigOptions.ThumbnailFilterMode>;
     onToolChanged?: (event: {previousTool: string, tool: string}) => void;
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
     onTextSearchStart?: () => void;
-    onTextSearchResult?: (event: {found: boolean, textSelection: TextSelectionResult?}) => void;
-    hideViewModeItems?: Array<string>;
+    onTextSearchResult?: (event: {found: boolean, textSelection: TextSelectionResult}) => void;
+    hideViewModeItems?: Array<ConfigOptions.ViewModePickerItem>;
     pageStackEnabled?: boolean;
     showQuickNavigationButton?: boolean;
     photoPickerEnabled?: boolean;
@@ -166,7 +165,7 @@ export interface DocumentViewProps extends ViewProps{
     openSavedCopyInNewTab?: boolean;
 }
 
-export class DocumentView extends PureComponent<DocumentViewProps, any>{
+export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getDocumentPath: () => Promise<void> | string;
     setToolMode: (toolMode: string) => Promise<void>;
     commitTool: () => Promise<void> | boolean;
@@ -180,22 +179,22 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     saveDocument: () => Promise<void> | string;
     setFlagForFields: (fields: Array<String>, flag: number, value: boolean) => Promise<void>;
     getField: (fieldName: string) => Promise<void> | {fieldName: string, fieldValue?: any, fieldType?: string};
-    setValueForFields: (fieldsMap: Map<{fieldName: string, fieldValue: any}>) => Promise<void>;
-    setValuesForFields: (fieldsMap: Map<{fieldName: string, fieldValue: any}>) => Promise<void>;
+    setValueForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
+    setValuesForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
     handleBackButton: () => Promise<void> | boolean;
     setFlagForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
     setFlagsForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
     selectAnnotation: (id: string, pageNumber: number) => Promise<void>;
-    setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: Properties) => Promise<void>;
-    setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: Properties) => Promise<void>;
-    getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | Properties;
+    setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotationProperties) => Promise<void>;
+    setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotationProperties) => Promise<void>;
+    getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | AnnotationProperties;
     setDrawAnnotations: (drawAnnotations: boolean) => Promise<void>;
     setVisibilityForAnnotation: (id: string, pageNumber: number, visibility: boolean) => Promise<void>;
     setHighlightFields: (highlightFields: boolean) => Promise<void>;
     getAnnotationAtPoint: (x: number, y: number, distanceThreshold: number, minimumLineWeight: number) => Promise<void> | Annotation;
     getAnnotationListAt: (x1: number, y1: number, x2: number, y2: number) => Promise<void> | Array<Annotation>;
     getAnnotationsOnPage: (pageNumber: number) => Promise<void> | Array<Annotation>;
-    getCustomDataForAnnotation: (annotationID: string, pageNumber: integer, key: string) => Promise<void> | string;
+    getCustomDataForAnnotation: (annotationID: string, pageNumber: number, key: string) => Promise<void> | string;
     getPageCropBox: (pageNumber: number) => Promise<void> | CropBox;
     setCurrentPage: (pageNumber: number) => Promise<void> | boolean;
     getVisiblePages: () => Promise<void> | Array<number>;
@@ -206,7 +205,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     showGoToPageView: () => Promise<void>;
     closeAllTabs: () => Promise<void>;
     getZoom: () => Promise<void> | number;
-    setZoomLimits: (zoomLimitMode: string, minimum: number, maximum: number) => Promise<void>;
+    setZoomLimits: (zoomLimitMode: ConfigOptions.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
     zoomWithCenter: (zoom: number, x: number, y: number) => Promise<void>;
     zoomToRect: (pageNumber: number, rect: Rect) => Promise<void>;
     smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
@@ -221,9 +220,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
     setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
     setOverprint: (overprint: string) => Promise<void>;
-    setColorPostProcessMode: (colorPostProcessMode: string) => Promise<void>;
+    setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
     setColorPostProcessColors: (whiteColor: Color, blackColor: Color) => Promise<void>;
-    findText: (searchString: string, matchCase: bool, matchWholeWord: bool, searchUp: bool, regExp: bool) => Promise<void>;
+    findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
     getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult;
     hasSelection: () => Promise<void> | boolean;
@@ -238,7 +237,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     setPageTransparencyGrid: (pageTransparencyGrid: boolean) => Promise<void>;
     setDefaultPageColor: (defaultPageColor: Color) => Promise<void>;
     setBackgroundColor: (backgroundColor: Color) => Promise<void>;
-    exportAsImage: (pageNumber: number, dpi: number, exportFormat: string) => Promise<void> | string;
+    exportAsImage: (pageNumber: number, dpi: number, exportFormat: ConfigOptions.ExportFormat) => Promise<void> | string;
     undo: () => Promise<void>;
     redo: () => Promise<void>;
     canUndo: () => Promise<void> | boolean;
@@ -246,4 +245,4 @@ export class DocumentView extends PureComponent<DocumentViewProps, any>{
     showCrop: () => Promise<void>;
     setCurrentToolbar: (toolbar: string) => Promise<void>;
     openThumbnailsView: () => Promise<void>;
-};
+}
