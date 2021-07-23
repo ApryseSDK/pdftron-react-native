@@ -544,6 +544,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)cancelFindText;
 
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchMode;
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
 - (BOOL)hasSelection;

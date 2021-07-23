@@ -4168,6 +4168,31 @@ NS_ASSUME_NONNULL_END
     [pdfViewCtrl CancelFindText];
 }
 
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+{
+    self.currentDocumentViewController.textSearchViewController.showsKeyboardOnViewDidAppear = NO;
+    unsigned int mode = e_ptambient_string | e_ptpage_stop | e_pthighlight;
+    if (matchCase) {
+        mode |= e_ptcase_sensitive;
+    }
+    if (matchWholeWord) {
+        mode |= e_ptwhole_word;
+    }
+
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.currentDocumentViewController.textSearchViewController];
+    nav.modalPresentationStyle = UIModalPresentationCustom;
+    [self.currentDocumentViewController presentViewController:nav animated:NO completion:^{
+        [self.currentDocumentViewController.textSearchViewController findText:searchString withSearchMode:mode];
+    }];
+}
+
+- (void)exitSearchMode;
+{
+    if (self.currentDocumentViewController.textSearchViewController.presentingViewController) {
+        [self.currentDocumentViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;

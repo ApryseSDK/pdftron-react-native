@@ -966,6 +966,36 @@ RCT_REMAP_METHOD(cancelFindText,
     }
 }
 
+RCT_REMAP_METHOD(startSearchMode,
+                 startSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] startSearchModeForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"start_search_mode", @"Failed to start search mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(exitSearchMode,
+                 exitSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] exitSearchModeForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"exit_search_mode", @"Failed to exit text search mode", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getSelection,
                  getSelectionForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber
