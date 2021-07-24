@@ -22,6 +22,8 @@ export interface Color {
     blue: number;
 }
 
+export type RotationDegree = 0 | 90 | 180 | 270;
+
 export interface CropBox extends Rect {
     width: number;
     height: number;
@@ -40,6 +42,10 @@ export interface FieldWithStringValue {
 export interface Point {
     x: number;
     y: number;
+}
+
+export interface PointWithPage extends Point {
+    pageNumber?: number;
 }
 
 export type Quad = [Point, Point, Point, Point];
@@ -167,7 +173,7 @@ export interface DocumentViewProps extends ViewProps {
 
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getDocumentPath: () => Promise<void> | string;
-    setToolMode: (toolMode: string) => Promise<void>;
+    setToolMode: (toolMode: ConfigOptions.Tools) => Promise<void>;
     commitTool: () => Promise<void> | boolean;
     getPageCount: () => Promise<void> | number;
     importBookmarkJson: (bookmarkJson: string) => Promise<void>;
@@ -177,7 +183,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     flattenAnnotations: (formsOnly: boolean) => Promise<void>;
     deleteAnnotations: (annotations: Array<Annotation>) => Promise<void>;
     saveDocument: () => Promise<void> | string;
-    setFlagForFields: (fields: Array<String>, flag: number, value: boolean) => Promise<void>;
+    setFlagForFields: (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean) => Promise<void>;
     getField: (fieldName: string) => Promise<void> | {fieldName: string, fieldValue?: any, fieldType?: string};
     setValueForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
     setValuesForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
@@ -211,20 +217,20 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
     getScrollPos: () => Promise<void> | {horizontal: number, vertical: number};
     getCanvasSize: () => Promise<void> | {width: number, height: number};
-    getPageRotation: () => Promise<void> | number;
+    getPageRotation: () => Promise<void> | RotationDegree;
     rotateClockwise: () => Promise<void>;
     rotateCounterClockwise: () => Promise<void>;
-    convertScreenPointsToPagePoints: (points: Array<Point>) => Promise<void> | Array<Point>;
-    convertPagePointsToScreenPoints: (points: Array<Point>) => Promise<void> | Array<Point>;
+    convertScreenPointsToPagePoints: (points: Array<PointWithPage>) => Promise<void> | Array<Point>;
+    convertPagePointsToScreenPoints: (points: Array<PointWithPage>) => Promise<void> | Array<Point>;
     getPageNumberFromScreenPoint: (x: number, y: number) => Promise<void> | number;
     setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
     setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
-    setOverprint: (overprint: string) => Promise<void>;
+    setOverprint: (overprint: ConfigOptions.OverprintMode) => Promise<void>;
     setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
     setColorPostProcessColors: (whiteColor: Color, blackColor: Color) => Promise<void>;
     findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
-    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult;
+    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult?;
     hasSelection: () => Promise<void> | boolean;
     clearSelection: () => Promise<void>;
     getSelectionPageRange: () => Promise<void> | {begin: number, end: number};
