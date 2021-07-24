@@ -1,8 +1,8 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { ViewProps } from 'react-native';
 
 export interface PDFViewCtrlProps extends ViewProps {
-    document: PropTypes.string;
+    document: string;
 }
 
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {}
