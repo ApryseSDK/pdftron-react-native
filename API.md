@@ -782,6 +782,17 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+#### hideScrollbars
+bool, optional, iOS only, defaults to false
+
+Determines whether scrollbars will be hidden on the viewer.
+
+```js
+<DocumentView
+  hideScrollbars={true}
+/>
+```
+
 ### Reflow
 
 #### imageInReflowEnabled
