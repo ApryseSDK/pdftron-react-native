@@ -450,7 +450,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationAt = (x, y, distanceThreshold, minimumLineWeight) => {
+  getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
@@ -466,7 +466,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationListOnPage = (pageNumber) => {
+  getAnnotationsOnPage = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
