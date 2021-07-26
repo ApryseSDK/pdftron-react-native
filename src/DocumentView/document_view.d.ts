@@ -230,7 +230,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     setColorPostProcessColors: (whiteColor: Color, blackColor: Color) => Promise<void>;
     findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
-    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult?;
+    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult;
     hasSelection: () => Promise<void> | boolean;
     clearSelection: () => Promise<void>;
     getSelectionPageRange: () => Promise<void> | {begin: number, end: number};
