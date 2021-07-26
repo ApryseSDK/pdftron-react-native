@@ -908,14 +908,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             } else if (BUTTON_SAVE_PASSWORD_COPY.equals(item)) {
                 saveCopyOptions.add(R.id.menu_export_password_copy);
             }
-            if (!saveCopyOptions.isEmpty()) {
-                int[] modes = new int[saveCopyOptions.size()];
-                for (int j = 0; j < modes.length; j++) {
-                    modes[j] = saveCopyOptions.get(j);
-                }
-                mBuilder.hideSaveCopyOptions(modes);
-            }
         }
+        
+        if (!saveCopyOptions.isEmpty()) {
+            int[] modes = new int[saveCopyOptions.size()];
+            for (int j = 0; j < modes.length; j++) {
+                modes[j] = saveCopyOptions.get(j);
+            }
+            mBuilder.hideSaveCopyOptions(modes);
+        }
+
         disableTools(args);
     }
 
