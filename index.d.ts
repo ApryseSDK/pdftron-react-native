@@ -13,11 +13,8 @@ export const RNPdftron : Pdftron;
 
 export {Config} from "./src/Config/config";
 
-export {Buttons, Tools, FitMode, LayoutMode, FieldFlags,  AnnotationMenu, LongPressMenu, Actions, AnnotationFlags, 
-        DefaultToolbars, ToolbarIcons, CustomToolbarKey, ThumbnailFilterMode, Conversion, ViewModePickerItem,
-        ZoomLimitMode, OverprintMode, ColorPostProcessMode, ReflowOrientation, ExportFormat} from "./src/Config/config.options";
+export * as ConfigOptions from "./src/Config/config.options";
 
-export {DocumentView, DocumentViewProps, Annotation, AnnotationFlag, AnnotationProperties, Rect, CropBox, 
-        Field, FieldWithStringValue, Color, RotationDegree, TextSelectionResult, Quad, Point, PointWithPage} from "./src/DocumentView/document_view";
+export {DocumentView} from "./src/DocumentView/document_view";
         
-export {PDFViewCtrl, PDFViewCtrlProps} from "./src/PDFViewCtrl/pdf_view_ctrl";
+export {PDFViewCtrl} from "./src/PDFViewCtrl/pdf_view_ctrl";
