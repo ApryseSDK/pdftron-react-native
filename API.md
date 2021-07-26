@@ -272,6 +272,18 @@ Example:
 />
 ```
 
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
@@ -1278,6 +1290,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### photoPickerEnabled
+bool, optional, defaults to true. Android only.
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1302,7 +1325,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
@@ -1380,6 +1403,17 @@ Defines whether document is automatically saved by the viewer.
 ```js
 <DocumentView
   autoSaveEnabled={true}
+/>
+```
+
+#### autoResizeFreeTextEnabled
+bool, optional, defaults to false
+
+Defines whether to automatically resize the bounding box of free text annotations when editing.
+
+```js
+<DocumentView
+  autoResizeFreeTextEnabled={true}
 />
 ```
 
@@ -2232,6 +2266,17 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openThumbnailsView
+Display a page thumbnails view. 
+
+This view allows users to navigate pages of a document. If [`thumbnailViewEditingEnabled`](#thumbnailViewEditingEnabled) is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+
+Returns a Promise.
+
+```js
+this._viewer.openThumbnailsView();
+```
+
 ### Toolbar
 
 #### setCurrentToolbar
@@ -2657,6 +2702,12 @@ this._viewer.cancelFindText();
 #### getSelection
 Returns the text selection on a given page, if any.
 
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the specified page number. It is 1-indexed
+
 Returns a Promise.
 
 Promise Parameters:
@@ -2708,7 +2759,7 @@ Returns a Promise.
 this._viewer.clearSelection();
 ```
 
-#### getPageSelectionRange
+#### getSelectionPageRange
 Returns the page range (beginning and end) that has text selection on it.
 
 Returns a Promise.
@@ -2721,7 +2772,7 @@ begin | number | the first page to have selection, -1 if there are no selections
 end | number | the last page to have selection,  -1 if there are no selections
 
 ```js
-this._viewer.getPageSelectionRange().then(({begin, end}) => {
+this._viewer.getSelectionPageRange().then(({begin, end}) => {
   if (begin === -1) {
     console.log('There is no selection');
   } else {

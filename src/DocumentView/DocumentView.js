@@ -90,6 +90,8 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
+    photoPickerEnabled: PropTypes.bool,
+    autoResizeFreeTextEnabled: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
     restrictDownloadUsage: PropTypes.bool,
@@ -105,6 +107,7 @@ export default class DocumentView extends PureComponent {
     openUrlPath: PropTypes.string,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
+    openSavedCopyInNewTab: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -451,7 +454,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+      return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
     }
     return Promise.resolve();
   }
@@ -467,7 +470,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationsOnPage = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+      return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
     }
     return Promise.resolve();
   }
@@ -871,6 +874,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
+    }
+    return Promise.resolve();
+  }
+
+  openThumbnailsView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.openThumbnailsView(tag);
     }
     return Promise.resolve();
   }
