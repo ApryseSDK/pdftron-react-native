@@ -171,6 +171,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void setCurrentToolbar(final int tag, final String toolbarTag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setCurrentToolbar(tag, toolbarTag);
+                    promise.resolve(null);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void getPageCount(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -1082,12 +1097,72 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void canUndo(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean result = mDocumentViewInstance.canUndo(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void canRedo(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean result = mDocumentViewInstance.canRedo(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void showCrop(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     mDocumentViewInstance.showCrop(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openThumbnailsView(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openThumbnailsView(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void showGoToPageView(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.showGoToPageView(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

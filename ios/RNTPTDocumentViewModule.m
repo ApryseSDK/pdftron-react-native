@@ -93,6 +93,21 @@ RCT_REMAP_METHOD(exportAsImage,
     }
 }
 
+RCT_REMAP_METHOD(setCurrentToolbar,
+                 setCurrentToolbarForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolbarTitle:(NSString*)toolbarTitle
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setCurrentToolbarForDocumentViewTag:tag toolbarTitle:toolbarTitle];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_toolbar_failed", @"Failed to set current toolbar", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -529,6 +544,20 @@ RCT_REMAP_METHOD(gotoLastPage,
     }
 }
 
+RCT_REMAP_METHOD(showGoToPageView,
+                showGoToPageViewForDocumentViewTag: (nonnull NSNumber *) tag
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showGoToPageViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_go_to_page_view", @"Failed to open goto page view", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -606,6 +635,34 @@ RCT_REMAP_METHOD(redo,
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canUndo,
+                 canUndoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
+        resolve(@(canUndo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canUndo", @"Failed to get canUndo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canRedo,
+                 canRedoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canRedo = [[self documentViewManager] canRedoForDocumentViewTag:tag];
+        resolve(@(canRedo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canRedo", @"Failed to canRedo", [self errorFromException:exception]);
     }
 }
 
@@ -747,6 +804,20 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
     @catch (NSException *exception) {
         reject(@"get_canvas_size", @"Failed to get canvas size", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openThumbnailsView,
+                 openThumbnailsViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openThumbnailsViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_thumbnails_view", @"Failed to open thumbnails view", [self errorFromException:exception]);
     }
 }
 

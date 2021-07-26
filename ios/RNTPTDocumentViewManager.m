@@ -62,6 +62,13 @@ RCT_CUSTOM_VIEW_PROPERTY(initialPageNumber, int, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(initialToolbar, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.initialToolbar = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(pageNumber, int, RNTPTDocumentView)
 {
     if (json) {
@@ -241,6 +248,13 @@ RCT_CUSTOM_VIEW_PROPERTY(multiTabEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(inkMultiStrokeEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.inkMultiStrokeEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(tabTitle, NSString, RNTPTDocumentView)
 {
     if (json) {
@@ -315,6 +329,13 @@ RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.selectAnnotationAfterCreation = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(autoResizeFreeTextEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.autoResizeFreeTextEnabled = [RCTConvert BOOL:json];
     }
 }
 
@@ -476,6 +497,20 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
 {
     if (json) {
         view.userBookmarksListEditingEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideScrollbars, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideScrollbars = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.saveStateEnabled = [RCTConvert BOOL:json];
     }
 }
 
@@ -663,6 +698,15 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
             @"onToolChanged": @"onToolChanged",
             @"previousTool": previousTool ?: @"unknown tool",
             @"tool": tool ?: @"unknown tool",
+        });
+    }
+}
+
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onUndoRedoStateChanged": @"onUndoRedoStateChanged",
         });
     }
 }
@@ -1058,6 +1102,16 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+- (void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView showGoToPageView];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -1130,6 +1184,25 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+- (bool)canUndoForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView canUndo];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (bool)canRedoForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView canRedo];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
 {
@@ -1193,6 +1266,26 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
         
+- (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString *)toolbarTitle
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setCurrentToolbar:toolbarTitle];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openThumbnailsView];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 #pragma mark - Coordination
 
 - (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points
