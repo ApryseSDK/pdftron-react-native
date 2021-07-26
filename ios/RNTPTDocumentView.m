@@ -4121,7 +4121,6 @@ NS_ASSUME_NONNULL_END
 - (void)setHideScrollbars:(BOOL)hideScrollbars
 {
     _hideScrollbars = hideScrollbars;
-    _documentSliderEnabled = !hideScrollbars;
     
     if (self.documentViewController) {
         [self applyViewerSettings];
@@ -4130,14 +4129,22 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyScrollbarVisibility:(PTDocumentBaseViewController *)documentBaseViewController
 {
-    PTPDFViewCtrl* pdfViewCtrl = documentBaseViewController.pdfViewCtrl;
-    if (pdfViewCtrl) {
-        pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !self.hideScrollbars;
-        pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !self.hideScrollbars;
+    const BOOL hideScrollbars = self.hideScrollbars;
+    
+    if ([documentBaseViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentBaseViewController;
+        
+        documentController.documentSliderViewController.hidesPDFViewCtrlScrollIndicators = hideScrollbars;
     }
     
-    PTDocumentController *documentViewController = (PTDocumentController *) documentBaseViewController;
-    documentViewController.documentSliderEnabled = self.documentSliderEnabled;
+    PTPDFViewCtrl* pdfViewCtrl = documentBaseViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+        
+        pdfViewCtrl.pagingScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.pagingScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+    }
 }
 
 #pragma mark - Canvas Size
