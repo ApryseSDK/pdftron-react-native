@@ -74,6 +74,17 @@ export interface AnnotationProperties {
     strokeColor?: Color;
 }
 
+export interface LinkPressData {
+    url: string;
+}
+
+export interface StickyNoteData	{
+    id: string;
+    pageNumber: number;
+    type: string;
+    rect: Rect;
+}
+
 export interface DocumentViewProps extends ViewProps {
     document: string;
     password?: string;
@@ -101,7 +112,7 @@ export interface DocumentViewProps extends ViewProps {
     onAnnotationMenuPress?: (event: {annotationMenu: string, annotations: Array<Annotation>}) => void;
     hideAnnotationMenu?: Array<ConfigOptions.Tools>;
     overrideBehavior?: Array<ConfigOptions.Actions>;
-    onBehaviorActivated?: (event: {action: string, data: object}) => void;
+    onBehaviorActivated?: (event: {action: string, data: LinkPressData | StickyNoteData}) => void;
     topToolbarEnabled?: boolean;
     bottomToolbarEnabled?: boolean;
     hideToolbarsOnTap?: boolean;
