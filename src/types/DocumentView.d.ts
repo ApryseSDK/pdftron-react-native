@@ -74,7 +74,7 @@ export interface DocumentViewProps extends ViewProps {
     hideTopAppNavBar?: boolean;
     onBookmarkChanged?: (event: {bookmarkJson: string}) => void;
     hideThumbnailFilterModes?: Array<ConfigOptions.ThumbnailFilterMode>;
-    onToolChanged?: (event: {previousTool: string, tool: string}) => void;
+    onToolChanged?: (event: {previousTool: ConfigOptions.Tools | "unknown tool", tool: ConfigOptions.Tools | "unknown tool"}) => void;
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
     onTextSearchStart?: () => void;
