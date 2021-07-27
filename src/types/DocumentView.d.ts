@@ -108,7 +108,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     commitTool: () => Promise<void> | Promise<boolean>;
     getPageCount: () => Promise<void> | Promise<number>;
     importBookmarkJson: (bookmarkJson: string) => Promise<void>;
-    importAnnotationCommand: (xfdfCommand: string, initialLoad: boolean) => Promise<void>;
+    importAnnotationCommand: (xfdfCommand: string, initialLoad?: boolean) => Promise<void>;
     importAnnotations: (xfdf: string) => Promise<void>;
     exportAnnotations: (options?: {annotList: Array<AnnotOptions.Annotation>}) => Promise<void> | Promise<string>;
     flattenAnnotations: (formsOnly: boolean) => Promise<void>;
