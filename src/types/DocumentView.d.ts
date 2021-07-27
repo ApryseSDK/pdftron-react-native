@@ -43,8 +43,8 @@ export interface DocumentViewProps extends ViewProps {
     onFormFieldValueChanged?: (event: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void;
     readOnly?: boolean;
     thumbnailViewEditingEnabled?: boolean;
-    fitMode?: string;
-    layoutMode?: string;
+    fitMode?: ConfigOptions.FitMode;
+    layoutMode?: ConfigOptions.LayoutMode;
     onLayoutChanged?: () => void;
     padStatusBar?: boolean;
     continuousAnnotationEditing?: boolean;
