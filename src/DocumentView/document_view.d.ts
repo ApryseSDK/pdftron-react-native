@@ -94,8 +94,8 @@ export interface DocumentViewProps extends ViewProps {
     leadingNavButtonIcon?: string;
     showLeadingNavButton?: boolean;
     onLeadingNavButtonPressed?: () => void;
-    onDocumentLoaded?: (event: {path : string}) => void;
-    onDocumentError?: (event: {error: string}) => void;
+    onDocumentLoaded?: (path : string) => void;
+    onDocumentError?: (error: string) => void;
     onPageChanged?: (event: {previousPageNumber: number, pageNumber: number}) => void;
     onScrollChanged?: (event: {horizontal: number, vertical: number}) => void;
     onZoomChanged?: (event: {zoom: number}) => void;
