@@ -76,6 +76,8 @@
 
 - (BOOL)gotoLastPageForDocumentViewTag:(NSNumber *)tag;
 
+-(void)showGoToPageViewForDocumentViewTag:(NSNumber *)tag;
+
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
@@ -89,6 +91,10 @@
 - (void)undoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)redoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canUndoForDocumentViewTag:(NSNumber *)tag;
+
+- (bool)canRedoForDocumentViewTag:(NSNumber *)tag;
 
 - (void)setZoomLimitsForDocumentViewTag:(nonnull NSNumber *)tag zoomLimitMode:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
 
@@ -132,6 +138,10 @@
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
 
+- (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag;
+
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;
@@ -157,5 +167,7 @@
 - (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
 
 - (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
+- (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
 @end

@@ -32,6 +32,7 @@ export default {
     formToolsButton: 'formToolsButton',
     fillSignToolsButton: 'fillSignToolsButton',
     moreItemsButton: 'moreItemsButton',
+    digitalSignatureButton: 'digitalSignatureButton',
     thumbnailsButton: 'thumbnailsButton',
     listsButton: 'listsButton',
     thumbnailSlider: 'thumbnailSlider',
@@ -42,7 +43,8 @@ export default {
     editMenuButton: 'editMenuButton',
     cropPageButton: 'cropPageButton',
     undo: 'undo',
-    redo: 'redo'
+    redo: 'redo',
+    addPageButton: 'addPageButton'
   },
 
   // Tools define the various kinds of tools for the viewer
@@ -131,6 +133,13 @@ export default {
     playSound: 'playSound',
     openAttachment: 'openAttachment',
     calibrate: 'calibrate',
+  },
+
+  // EraserType defines the type of earse that will be used when eraser is selected
+  EraserType: {
+    annotationEraser: 'annotationEraser',
+    hybrideEraser: 'hybrideEraser',
+    inkEraser: 'inkEraser'
   },
 
   // LongPressMenu defines the menu items when a long press on empty space or text occurs

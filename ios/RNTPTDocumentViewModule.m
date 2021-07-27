@@ -544,6 +544,20 @@ RCT_REMAP_METHOD(gotoLastPage,
     }
 }
 
+RCT_REMAP_METHOD(showGoToPageView,
+                showGoToPageViewForDocumentViewTag: (nonnull NSNumber *) tag
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showGoToPageViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_go_to_page_view", @"Failed to open goto page view", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -621,6 +635,34 @@ RCT_REMAP_METHOD(redo,
     }
     @catch (NSException *exception) {
         reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canUndo,
+                 canUndoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
+        resolve(@(canUndo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canUndo", @"Failed to get canUndo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canRedo,
+                 canRedoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canRedo = [[self documentViewManager] canRedoForDocumentViewTag:tag];
+        resolve(@(canRedo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canRedo", @"Failed to canRedo", [self errorFromException:exception]);
     }
 }
 
@@ -812,6 +854,21 @@ RCT_REMAP_METHOD(shareCopy,
 }
 
 
+
+RCT_REMAP_METHOD(openThumbnailsView,
+                 openThumbnailsViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openThumbnailsViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_thumbnails_view", @"Failed to open thumbnails view", [self errorFromException:exception]);
+    }
+}
+   
 #pragma mark - Coordinate
 
 RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
@@ -1010,6 +1067,36 @@ RCT_REMAP_METHOD(cancelFindText,
     }
     @catch (NSException *exception) {
         reject(@"cancel_text", @"Failed to cancel text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(startSearchMode,
+                 startSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] startSearchModeForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"start_search_mode", @"Failed to start search mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(exitSearchMode,
+                 exitSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] exitSearchModeForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"exit_search_mode", @"Failed to exit text search mode", [self errorFromException:exception]);
     }
 }
 

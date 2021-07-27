@@ -12,6 +12,8 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.controls.PdfViewCtrlTabBaseFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.tools.ToolManager;
+import com.pdftron.pdf.utils.AnalyticsHandlerAdapter;
+import com.pdftron.pdf.utils.DialogGoToPage;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 
@@ -128,5 +130,26 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
                 mViewId,
                 "topChange",
                 event);
+    }
+
+    public void showGoToPageView() {
+        FragmentActivity activity = getActivity();
+        if (null == activity) {
+            return;
+        }
+        DialogGoToPage dlgGotoPage = new DialogGoToPage(activity, mPdfViewCtrl, new DialogGoToPage.DialogGoToPageListener() {
+            @Override
+            public void onPageSet(int pageNum) {
+                setCurrentPageHelper(pageNum, true);
+                if (mReflowControl != null) {
+                    try {
+                        mReflowControl.setCurrentPage(pageNum);
+                    } catch (Exception e) {
+                        AnalyticsHandlerAdapter.getInstance().sendException(e);
+                    }
+                }
+            }
+        });
+        dlgGotoPage.show();
     }
 }

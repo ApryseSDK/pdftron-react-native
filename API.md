@@ -224,6 +224,65 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
   readOnly={true}
 />
 ```
+#### defaultEraserType
+string, optional
+
+Sets the default eraser tool type. Value only applied after a clean install. Android only.
+Example:
+
+```js
+<DocumentView
+  defaultEraserType={Config.EraserType.hybrideEraser}
+/>
+```
+
+#### exportPath
+string, optional
+
+Sets the folder path for all save options, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  exportPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### openUrlPath
+string, optional
+
+Sets the cache folder used to cache PDF files opened using a http/https link, this defaults to the app cache path. Android only.
+Example:
+
+```js
+<DocumentView
+  openUrlPath="/data/data/com.example/cache/test"
+/>
+```
+
+#### saveStateEnabled
+bool, optional, default to true
+
+Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+Example:
+
+```js
+<DocumentView
+  saveStateEnabled={false}
+/>
+```
+
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
 
 #### onDocumentLoaded
 function, optional
@@ -459,22 +518,6 @@ Defines which [`annotationToolbar`](#annotationToolbars) should be selected when
 <DocumentView
   initialToolbar={Config.DefaultToolbars.Draw}
 />
-```
-#### setCurrentToolbar
-Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
-
-Returns a Promise.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
-
-```js
-this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
-  // done switching toolbar
-});
 ```
 
 #### hideTopToolbars
@@ -739,6 +782,17 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+#### hideScrollbars
+bool, optional, iOS only, defaults to false
+
+Determines whether scrollbars will be hidden on the viewer.
+
+```js
+<DocumentView
+  hideScrollbars={true}
+/>
+```
+
 ### Reflow
 
 #### imageInReflowEnabled
@@ -969,7 +1023,7 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 #### collabEnabled
 bool, optional, defaults to false
 
-Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode
+Defines whether to enable realtime collaboration. If true then `currentUser` must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
 
 ```js
 <DocumentView
@@ -1035,6 +1089,17 @@ If true, the active annotation creation tool will remain in the current annotati
 ```js
 <DocumentView
   continuousAnnotationEditing={true}
+/>
+```
+
+#### inkMultiStrokeEnabled
+bool, optional, defaults to true
+
+If true, ink tool will use multi-stroke mode. Otherwise, each stroke is a new ink annotation.
+
+```js
+<DocumentView
+  inkMultiStrokeEnabled={true}
 />
 ```
 
@@ -1111,7 +1176,7 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 #### onAnnotationChanged
 function, optional
 
-This function is called if a change has been made to an annotation(s) in the current document. Unlike `onExportXfdfCommand`, this function has readable annotation objects as its parameter.
+This function is called if a change has been made to an annotation(s) in the current document.
 
 Parameters:
 
@@ -1156,14 +1221,14 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 />
 ```
 
-#### annotationListEditingEnabled
+#### annotationsListEditingEnabled
 bool, optional, Android only, default value is true
 
 If document editing is enabled, then this value determines if the annotation list is editable.
 
 ```js
 <DocumentView
-  annotationListEditingEnabled={true}
+  annotationsListEditingEnabled={true}
 />
 ```
 
@@ -1225,6 +1290,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### photoPickerEnabled
+bool, optional, defaults to true. Android only.
+
+Defines whether to show the option to pick images in the signature dialog.
+
+```js
+<DocumentView
+  photoPickerEnabled={true}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
@@ -1249,7 +1325,7 @@ Defines whether user can modify the document using the thumbnail view (eg add/re
 />
 ```
 
-### TextSelection
+### Text Selection
 
 #### onTextSearchStart
 function, optional
@@ -1330,6 +1406,17 @@ Defines whether document is automatically saved by the viewer.
 />
 ```
 
+#### autoResizeFreeTextEnabled
+bool, optional, defaults to false
+
+Defines whether to automatically resize the bounding box of free text annotations when editing.
+
+```js
+<DocumentView
+  autoResizeFreeTextEnabled={true}
+/>
+```
+
 #### restrictDownloadUsage
 bool, optional, defaults to false
 
@@ -1373,6 +1460,19 @@ Defines whether the navigation list will be displayed as a side panel on large d
 ```js
 <DocumentView
   showNavigationListAsSidePanelOnLargeDevices={true}
+/>
+```
+
+#### onUndoRedoStateChanged
+function, optional
+
+This function is called when the state of the current document's undo/redo stack has been changed.
+
+```js
+<DocumentView
+  onUndoRedoStateChanged = {() => { 
+    console.log("Undo/redo stack state changed");
+  }}
 />
 ```
 
@@ -1599,6 +1699,15 @@ this._viewer.gotoLastPage().then((success) => {
     console.log("Go to last page.");
   }
 });
+```
+
+#### showGoToPageView
+Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+
+Returns a Promise.
+
+```js
+this._viewer.showGoToPageView();
 ```
 
 #### getPageCropBox
@@ -2157,6 +2266,36 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openThumbnailsView
+Display a page thumbnails view. 
+
+This view allows users to navigate pages of a document. If [`thumbnailViewEditingEnabled`](#thumbnailViewEditingEnabled) is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+
+Returns a Promise.
+
+```js
+this._viewer.openThumbnailsView();
+```
+
+### Toolbar
+
+#### setCurrentToolbar
+Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+
+```js
+this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+  // done switching toolbar
+});
+```
+
 ### Navigation
 
 #### handleBackButton
@@ -2532,12 +2671,38 @@ this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 
 ### Text Selection
 
+#### startSearchMode
+Search for a term and all matching results will be highlighted.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+
+```js
+this._viewer.startSearchMode('PDFTron', false, false);
+```
+
+#### exitSearchMode
+Finishes the current text search and remove all the highlights.
+
+Returns a Promise.
+
+```js
+this._viewer.exitSearchMode();
+```
+
 #### findText
 Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
 
 Returns a Promise.
 
-Promise Parameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -2562,6 +2727,12 @@ this._viewer.cancelFindText();
 
 #### getSelection
 Returns the text selection on a given page, if any.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the specified page number. It is 1-indexed
 
 Returns a Promise.
 
@@ -2614,7 +2785,7 @@ Returns a Promise.
 this._viewer.clearSelection();
 ```
 
-#### getPageSelectionRange
+#### getSelectionPageRange
 Returns the page range (beginning and end) that has text selection on it.
 
 Returns a Promise.
@@ -2627,7 +2798,7 @@ begin | number | the first page to have selection, -1 if there are no selections
 end | number | the last page to have selection,  -1 if there are no selections
 
 ```js
-this._viewer.getPageSelectionRange().then(({begin, end}) => {
+this._viewer.getSelectionPageRange().then(({begin, end}) => {
   if (begin === -1) {
     console.log('There is no selection');
   } else {
@@ -2714,8 +2885,63 @@ Returns a Promise.
 
 ```js
 this._viewer.selectAll();
+```
+
+### Undo/Redo
+
+#### undo
+Undo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.undo();
+```
+
+#### redo
+Redo the last modification.
+
+Returns a Promise.
+
+```js
+this._viewer.redo();
+```
+
+#### canUndo
+Checks whether an undo operation can be performed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canUndo | bool | whether it is possible to undo from the current snapshot
+
+```js
+this._viewer.canUndo().then((canUndo) => {
+  console.log(canUndo ? 'undo possible' : 'no action to undo');
 });
 ```
+
+#### canRedo
+Checks whether a redo operation can be perfromed from the current snapshot.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+canRedo | bool | whether it is possible to redo from the current snapshot
+
+```js
+this._viewer.canRedo().then((canRedo) => {
+  console.log(canRedo ? 'redo possible' : 'no action to redo');
+});
+```
+
+### Others
 
 #### exportAsImage
 Export a PDF page to image format defined in `Config.ExportFormat`.
@@ -2738,24 +2964,6 @@ path | string | the temp path of the created image, user is responsible for clea
 this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
   console.log('export', path);
 });
-```
-
-#### undo
-Undo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.undo();
-```
-
-#### redo
-Redo the last modification.
-
-Returns a Promise.
-
-```js
-this._viewer.redo();
 ```
 
 #### showCrop
