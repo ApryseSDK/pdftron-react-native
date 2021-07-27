@@ -94,7 +94,7 @@ export interface DocumentViewProps extends ViewProps {
     tabletLayoutEnabled?: boolean;
     initialToolbar?: string;
     inkMultiStrokeEnabled?: boolean;
-    defaultEraserType?: string;
+    defaultEraserType?: ConfigOptions.EraserType;
     exportPath?: string;
     openUrlPath?: string;
     saveStateEnabled?: boolean;
