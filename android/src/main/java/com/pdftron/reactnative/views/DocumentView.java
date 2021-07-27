@@ -3728,6 +3728,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return colorNumber;
     }
 
+    public void startSearchMode(String searchString, boolean matchCase, boolean matchWholeWord) {
+        PdfViewCtrlTabFragment2 fragment = getPdfViewCtrlTabFragment();
+        if (fragment != null) {
+            fragment.setSearchMode(true);
+            fragment.setSearchQuery(searchString);
+            fragment.setSearchMatchCase(matchCase);
+            fragment.setSearchWholeWord(matchWholeWord);
+            fragment.queryTextSubmit(searchString);
+        }
+    }
+
+    public void exitSearchMode() {
+        PdfViewCtrlTabFragment2 fragment = getPdfViewCtrlTabFragment();
+        if (fragment != null) {
+            fragment.setSearchMode(false);
+            fragment.cancelFindText();
+            fragment.exitSearchMode();
+        }
+    }
+
     public void findText(String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 

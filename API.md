@@ -2671,12 +2671,38 @@ this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 
 ### Text Selection
 
+#### startSearchMode
+Search for a term and all matching results will be highlighted.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+
+```js
+this._viewer.startSearchMode('PDFTron', false, false);
+```
+
+#### exitSearchMode
+Finishes the current text search and remove all the highlights.
+
+Returns a Promise.
+
+```js
+this._viewer.exitSearchMode();
+```
+
 #### findText
 Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
 
 Returns a Promise.
 
-Promise Parameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
