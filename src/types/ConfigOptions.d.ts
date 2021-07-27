@@ -1,4 +1,4 @@
-import Config from "./config";
+import Config from "./Config";
 
 type ValueOf<T> = T[keyof T];
 

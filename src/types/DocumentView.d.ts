@@ -1,8 +1,8 @@
 
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
-import * as ConfigOptions from "react-native-pdftron/src/types/ConfigOptions";
-import * as AnnotOptions from "./AnnotOptions"
+import * as ConfigOptions from "./ConfigOptions";
+import * as AnnotOptions from "./AnnotOptions";
 
 export interface DocumentViewProps extends ViewProps {
     document: string;
@@ -31,7 +31,7 @@ export interface DocumentViewProps extends ViewProps {
     onAnnotationMenuPress?: (event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void;
     hideAnnotationMenu?: Array<ConfigOptions.Tools>;
     overrideBehavior?: Array<ConfigOptions.Actions>;
-    onBehaviorActivated?: (event: {action: string, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
+    onBehaviorActivated?: (event: {action: ConfigOptions.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
     topToolbarEnabled?: boolean;
     bottomToolbarEnabled?: boolean;
     hideToolbarsOnTap?: boolean;
