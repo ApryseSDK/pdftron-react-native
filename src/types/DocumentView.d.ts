@@ -89,7 +89,7 @@ export interface DocumentViewProps extends ViewProps {
     restrictDownloadUsage?: boolean;
     userBookmarksListEditingEnabled?: boolean;
     imageInReflowEnabled?: boolean;
-    reflowOrientation?: string;
+    reflowOrientation?: ConfigOptions.ReflowOrientation;
     onUndoRedoStateChanged?: () => void;
     tabletLayoutEnabled?: boolean;
     initialToolbar?: string;
