@@ -11,10 +11,12 @@ export interface Pdftron {
 
 export const RNPdftron : Pdftron;
 
-export {Config} from "./src/Config/config";
+export {Config} from "./src/types/Config";
 
-export * as ConfigOptions from "./src/Config/config.options";
+export * as ConfigOptions from "./src/types/ConfigOptions";
 
-export {DocumentView} from "./src/DocumentView/document_view";
+export {DocumentView} from "./src/types/DocumentView";
+
+export * as AnnotOptions from "./src/types/AnnotOptions";
         
-export {PDFViewCtrl} from "./src/PDFViewCtrl/pdf_view_ctrl";
+export {PDFViewCtrl} from "./src/types/PDFViewCtrl";

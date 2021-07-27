@@ -1,89 +1,8 @@
 
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
-import * as ConfigOptions from "react-native-pdftron/src/Config/config.options";
-export interface Annotation {
-    id: string;
-    pageNumber?: number;
-    type?: string;
-    rect?: Rect;
-}
-
-export interface Rect {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-}
-
-export interface Color {
-    red: number;
-    green: number;
-    blue: number;
-}
-
-export type RotationDegree = 0 | 90 | 180 | 270;
-
-export interface CropBox extends Rect {
-    width: number;
-    height: number;
-}
-
-export interface Field {
-    fieldName: string;
-    fieldValue: string | boolean | number;
-}
-
-export interface FieldWithStringValue {
-    fieldName: string;
-    fieldValue: string;
-}
-
-export interface Point {
-    x: number;
-    y: number;
-}
-
-export interface PointWithPage extends Point {
-    pageNumber?: number;
-}
-
-export type Quad = [Point, Point, Point, Point];
-
-export interface TextSelectionResult {
-    html: string; 
-    unicode: string; 
-    pageNumber: number; 
-    quads: Array<Quad>;
-}
-
-export interface AnnotationFlag {
-    id: string;
-    pageNumber: number;
-    flag: ConfigOptions.AnnotationFlags;
-    flagValue: boolean;
-}
-
-export interface AnnotationProperties {
-    rect?: Rect;
-    contents?: string;
-    subject?: string;
-    title?: string;
-    contentRect?: Rect;
-    customData?: object;
-    strokeColor?: Color;
-}
-
-export interface LinkPressData {
-    url: string;
-}
-
-export interface StickyNoteData	{
-    id: string;
-    pageNumber: number;
-    type: string;
-    rect: Rect;
-}
+import * as ConfigOptions from "react-native-pdftron/src/types/ConfigOptions";
+import * as AnnotOptions from "./AnnotOptions"
 
 export interface DocumentViewProps extends ViewProps {
     document: string;
@@ -109,19 +28,19 @@ export interface DocumentViewProps extends ViewProps {
     longPressMenuEnabled?: boolean;
     annotationMenuItems?: Array<ConfigOptions.AnnotationMenu>;
     overrideAnnotationMenuBehavior?: Array<ConfigOptions.AnnotationMenu>;
-    onAnnotationMenuPress?: (event: {annotationMenu: string, annotations: Array<Annotation>}) => void;
+    onAnnotationMenuPress?: (event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void;
     hideAnnotationMenu?: Array<ConfigOptions.Tools>;
     overrideBehavior?: Array<ConfigOptions.Actions>;
-    onBehaviorActivated?: (event: {action: string, data: LinkPressData | StickyNoteData}) => void;
+    onBehaviorActivated?: (event: {action: string, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
     topToolbarEnabled?: boolean;
     bottomToolbarEnabled?: boolean;
     hideToolbarsOnTap?: boolean;
     documentSliderEnabled?: boolean;
     pageIndicatorEnabled?: boolean;
     keyboardShortcutsEnabled?: boolean;
-    onAnnotationsSelected?: (event: {annotations: Array<Annotation>}) => void ;
-    onAnnotationChanged?: (event: {action: string, annotations: Array<Annotation>}) => void;
-    onFormFieldValueChanged?: (event: {fields: Array<FieldWithStringValue>}) => void;
+    onAnnotationsSelected?: (event: {annotations: Array<AnnotOptions.Annotation>}) => void ;
+    onAnnotationChanged?: (event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void;
+    onFormFieldValueChanged?: (event: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void;
     readOnly?: boolean;
     thumbnailViewEditingEnabled?: boolean;
     fitMode?: string;
@@ -136,7 +55,7 @@ export interface DocumentViewProps extends ViewProps {
     collabEnabled?: boolean;
     currentUser?: string;
     currentUserName?: string;
-    onExportAnnotationCommand?: (event: {action: string, xfdfCommand: string, annotations: Array<Annotation>}) => void;
+    onExportAnnotationCommand?: (event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void;
     autoSaveEnabled?: boolean;
     pageChangeOnTap?: boolean;
     followSystemDarkMode?: boolean;
@@ -159,7 +78,7 @@ export interface DocumentViewProps extends ViewProps {
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
     onTextSearchStart?: () => void;
-    onTextSearchResult?: (event: {found: boolean, textSelection: TextSelectionResult | null}) => void;
+    onTextSearchResult?: (event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void;
     hideViewModeItems?: Array<ConfigOptions.ViewModePickerItem>;
     pageStackEnabled?: boolean;
     showQuickNavigationButton?: boolean;
@@ -190,29 +109,29 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     importBookmarkJson: (bookmarkJson: string) => Promise<void>;
     importAnnotationCommand: (xfdfCommand: string, initialLoad: boolean) => Promise<void>;
     importAnnotations: (xfdf: string) => Promise<void>;
-    exportAnnotations: (options?: {annotList: Array<Annotation>}) => Promise<void> | string;
+    exportAnnotations: (options?: {annotList: Array<AnnotOptions.Annotation>}) => Promise<void> | string;
     flattenAnnotations: (formsOnly: boolean) => Promise<void>;
-    deleteAnnotations: (annotations: Array<Annotation>) => Promise<void>;
+    deleteAnnotations: (annotations: Array<AnnotOptions.Annotation>) => Promise<void>;
     saveDocument: () => Promise<void> | string;
     setFlagForFields: (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean) => Promise<void>;
     getField: (fieldName: string) => Promise<void> | {fieldName: string, fieldValue?: any, fieldType?: string};
     setValueForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
     setValuesForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
     handleBackButton: () => Promise<void> | boolean;
-    setFlagForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
-    setFlagsForAnnotations: (annotationFlagList: Array<AnnotationFlag>) => Promise<void>;
+    setFlagForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
+    setFlagsForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
     selectAnnotation: (id: string, pageNumber: number) => Promise<void>;
-    setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotationProperties) => Promise<void>;
-    setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotationProperties) => Promise<void>;
-    getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | AnnotationProperties;
+    setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties) => Promise<void>;
+    setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties) => Promise<void>;
+    getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | AnnotOptions.AnnotationProperties;
     setDrawAnnotations: (drawAnnotations: boolean) => Promise<void>;
     setVisibilityForAnnotation: (id: string, pageNumber: number, visibility: boolean) => Promise<void>;
     setHighlightFields: (highlightFields: boolean) => Promise<void>;
-    getAnnotationAtPoint: (x: number, y: number, distanceThreshold: number, minimumLineWeight: number) => Promise<void> | Annotation;
-    getAnnotationListAt: (x1: number, y1: number, x2: number, y2: number) => Promise<void> | Array<Annotation>;
-    getAnnotationsOnPage: (pageNumber: number) => Promise<void> | Array<Annotation>;
+    getAnnotationAtPoint: (x: number, y: number, distanceThreshold: number, minimumLineWeight: number) => Promise<void> | AnnotOptions.Annotation;
+    getAnnotationListAt: (x1: number, y1: number, x2: number, y2: number) => Promise<void> | Array<AnnotOptions.Annotation>;
+    getAnnotationsOnPage: (pageNumber: number) => Promise<void> | Array<AnnotOptions.Annotation>;
     getCustomDataForAnnotation: (annotationID: string, pageNumber: number, key: string) => Promise<void> | string;
-    getPageCropBox: (pageNumber: number) => Promise<void> | CropBox;
+    getPageCropBox: (pageNumber: number) => Promise<void> | AnnotOptions.CropBox;
     setCurrentPage: (pageNumber: number) => Promise<void> | boolean;
     getVisiblePages: () => Promise<void> | Array<number>;
     gotoPreviousPage: () => Promise<void> | boolean;
@@ -224,36 +143,36 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getZoom: () => Promise<void> | number;
     setZoomLimits: (zoomLimitMode: ConfigOptions.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
     zoomWithCenter: (zoom: number, x: number, y: number) => Promise<void>;
-    zoomToRect: (pageNumber: number, rect: Rect) => Promise<void>;
+    zoomToRect: (pageNumber: number, rect: AnnotOptions.Rect) => Promise<void>;
     smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
     getScrollPos: () => Promise<void> | {horizontal: number, vertical: number};
     getCanvasSize: () => Promise<void> | {width: number, height: number};
-    getPageRotation: () => Promise<void> | RotationDegree;
+    getPageRotation: () => Promise<void> | AnnotOptions.RotationDegree;
     rotateClockwise: () => Promise<void>;
     rotateCounterClockwise: () => Promise<void>;
-    convertScreenPointsToPagePoints: (points: Array<PointWithPage>) => Promise<void> | Array<Point>;
-    convertPagePointsToScreenPoints: (points: Array<PointWithPage>) => Promise<void> | Array<Point>;
+    convertScreenPointsToPagePoints: (points: Array<AnnotOptions.PointWithPage>) => Promise<void> | Array<AnnotOptions.Point>;
+    convertPagePointsToScreenPoints: (points: Array<AnnotOptions.PointWithPage>) => Promise<void> | Array<AnnotOptions.Point>;
     getPageNumberFromScreenPoint: (x: number, y: number) => Promise<void> | number;
     setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
     setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
     setOverprint: (overprint: ConfigOptions.OverprintMode) => Promise<void>;
     setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
-    setColorPostProcessColors: (whiteColor: Color, blackColor: Color) => Promise<void>;
+    setColorPostProcessColors: (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color) => Promise<void>;
     findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
-    getSelection: (pageNumber: number) => Promise<void> | TextSelectionResult | null;
+    getSelection: (pageNumber: number) => Promise<void> | AnnotOptions.TextSelectionResult | null;
     hasSelection: () => Promise<void> | boolean;
     clearSelection: () => Promise<void>;
     getSelectionPageRange: () => Promise<void> | {begin: number, end: number};
     hasSelectionOnPage: (pageNumber: number) => Promise<void> | boolean;
-    selectInRect: (rect: Rect) => Promise<void> | boolean;
-    isThereTextInRect: (rect: Rect) => Promise<void> | boolean;
+    selectInRect: (rect: AnnotOptions.Rect) => Promise<void> | boolean;
+    isThereTextInRect: (rect: AnnotOptions.Rect) => Promise<void> | boolean;
     selectAll: () => Promise<void>;
     setUrlExtraction: (urlExtraction: boolean) => Promise<void>;
     setPageBorderVisibility: (pageBorderVisibility: boolean) => Promise<void>;
     setPageTransparencyGrid: (pageTransparencyGrid: boolean) => Promise<void>;
-    setDefaultPageColor: (defaultPageColor: Color) => Promise<void>;
-    setBackgroundColor: (backgroundColor: Color) => Promise<void>;
+    setDefaultPageColor: (defaultPageColor: AnnotOptions.Color) => Promise<void>;
+    setBackgroundColor: (backgroundColor: AnnotOptions.Color) => Promise<void>;
     exportAsImage: (pageNumber: number, dpi: number, exportFormat: ConfigOptions.ExportFormat) => Promise<void> | string;
     undo: () => Promise<void>;
     redo: () => Promise<void>;
