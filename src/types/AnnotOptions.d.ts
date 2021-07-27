@@ -5,9 +5,13 @@ export interface Annotation {
     pageNumber?: number;
     type?: string;
     rect?: Rect;
+    pageRect?: Rect;
+    screenRect?: Rect;
 }
 
 export interface Rect {
+    height?: number;
+    width?: number;
     x1: number;
     y1: number;
     x2: number;
@@ -21,11 +25,6 @@ export interface Color {
 }
 
 export type RotationDegree = 0 | 90 | 180 | 270;
-
-export interface CropBox extends Rect {
-    width: number;
-    height: number;
-}
 
 export interface Field {
     fieldName: string;

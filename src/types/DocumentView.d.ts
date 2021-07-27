@@ -132,7 +132,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getAnnotationListAt: (x1: number, y1: number, x2: number, y2: number) => Promise<void> | Promise<Array<AnnotOptions.Annotation>>;
     getAnnotationsOnPage: (pageNumber: number) => Promise<void> | Promise<Array<AnnotOptions.Annotation>>;
     getCustomDataForAnnotation: (annotationID: string, pageNumber: number, key: string) => Promise<void> | Promise<string>;
-    getPageCropBox: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.CropBox>;
+    getPageCropBox: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.Rect>;
     setCurrentPage: (pageNumber: number) => Promise<void> | Promise<boolean>;
     getVisiblePages: () => Promise<void> | Promise<Array<number>>;
     gotoPreviousPage: () => Promise<void> | Promise<boolean>;
