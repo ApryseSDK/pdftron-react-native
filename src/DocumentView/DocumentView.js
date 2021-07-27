@@ -105,6 +105,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
     openSavedCopyInNewTab: PropTypes.bool,
     ...ViewPropTypes,
@@ -453,7 +454,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+      return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
     }
     return Promise.resolve();
   }
@@ -469,7 +470,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationsOnPage = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+      return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
     }
     return Promise.resolve();
   }
