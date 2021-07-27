@@ -18,6 +18,8 @@ export interface Rect {
     y2: number;
 }
 
+export interface CropBox extends Required<Rect> {};
+
 export interface Color {
     red: number;
     green: number;
