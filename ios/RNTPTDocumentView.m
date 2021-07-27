@@ -3762,6 +3762,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     [pdfViewCtrl SetDrawAnnotations:drawAnnotations];
+    [pdfViewCtrl Update:YES];
 }
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
