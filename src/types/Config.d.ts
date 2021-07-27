@@ -125,7 +125,7 @@ export interface AnnotationMenu {
     calibrate: 'calibrate';
 }
 
-export interface EraserType{
+export interface EraserType {
     annotationEraser: 'annotationEraser';
     hybrideEraser: 'hybrideEraser';
     inkEraser: 'inkEraser';
