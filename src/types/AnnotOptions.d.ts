@@ -1,3 +1,5 @@
+import * as ConfigOptions from './ConfigOptions';
+
 export interface Annotation {
     id: string;
     pageNumber?: number;
