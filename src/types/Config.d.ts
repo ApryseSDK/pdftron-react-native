@@ -26,6 +26,8 @@ export interface Buttons {
     printButton: 'printButton';
     closeButton: 'closeButton';
     saveCopyButton: 'saveCopyButton';
+    saveIdenticalCopyButton: 'saveIdenticalCopyButton';
+    saveFlattenedCopyButton: 'saveFlattenedCopyButton';
     formToolsButton: 'formToolsButton';
     fillSignToolsButton: 'fillSignToolsButton';
     moreItemsButton: 'moreItemsButton';
@@ -42,6 +44,11 @@ export interface Buttons {
     undo: 'undo';
     redo: 'redo';
     addPageButton: 'addPageButton';
+
+    // Android only
+    saveReducedCopyButton: 'saveReducedCopyButton';
+    saveCroppedCopyButton: 'saveCroppedCopyButton';
+    savePasswordCopyButton: 'savePasswordCopyButton';
 }
 
 export interface Tools {
