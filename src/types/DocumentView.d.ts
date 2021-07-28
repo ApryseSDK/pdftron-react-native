@@ -164,7 +164,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     exitSearchMode: () => Promise<void>;
     findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
-    getSelection: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.TextSelectionResult | Promise<null>>;
+    getSelection: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.TextSelectionResult>;
     hasSelection: () => Promise<void> | Promise<boolean>;
     clearSelection: () => Promise<void>;
     getSelectionPageRange: () => Promise<void> | Promise<{begin: number, end: number}>;
