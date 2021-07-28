@@ -138,6 +138,10 @@
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
 
+- (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag;
+
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;

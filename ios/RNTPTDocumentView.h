@@ -413,6 +413,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;
 
+@property (nonatomic, assign) BOOL hideScrollbars;
+
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 
@@ -554,6 +556,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindText;
+
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchMode;
 
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 

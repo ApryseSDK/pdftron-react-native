@@ -409,7 +409,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
-
+    
     @ReactProp(name = "saveStateEnabled")
     public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
         documentView.setSaveStateEnabled(saveState);
@@ -945,6 +945,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setColorPostProcessColors(whiteColor, blackColor);
         } else {
             throw new PDFNetException("", 0L, getName(), "setColorPostProcessColors", "Unable to find DocumentView.");
+        }
+    }
+
+    public void startSearchMode(int tag, String searchString, boolean matchCase, boolean matchWholeWord) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.startSearchMode(searchString, matchCase, matchWholeWord);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "startSearchMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void exitSearchMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.exitSearchMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "exitSearchMode", "Unable to find DocumentView.");
         }
     }
 

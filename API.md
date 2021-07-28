@@ -794,6 +794,17 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+#### hideScrollbars
+bool, optional, iOS only, defaults to false
+
+Determines whether scrollbars will be hidden on the viewer.
+
+```js
+<DocumentView
+  hideScrollbars={true}
+/>
+```
+
 ### Reflow
 
 #### imageInReflowEnabled
@@ -2672,12 +2683,38 @@ this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 
 ### Text Selection
 
+#### startSearchMode
+Search for a term and all matching results will be highlighted.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+
+```js
+this._viewer.startSearchMode('PDFTron', false, false);
+```
+
+#### exitSearchMode
+Finishes the current text search and remove all the highlights.
+
+Returns a Promise.
+
+```js
+this._viewer.exitSearchMode();
+```
+
 #### findText
 Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
 
 Returns a Promise.
 
-Promise Parameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -2702,6 +2739,12 @@ this._viewer.cancelFindText();
 
 #### getSelection
 Returns the text selection on a given page, if any.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the specified page number. It is 1-indexed
 
 Returns a Promise.
 
@@ -2754,7 +2797,7 @@ Returns a Promise.
 this._viewer.clearSelection();
 ```
 
-#### getPageSelectionRange
+#### getSelectionPageRange
 Returns the page range (beginning and end) that has text selection on it.
 
 Returns a Promise.
@@ -2767,7 +2810,7 @@ begin | number | the first page to have selection, -1 if there are no selections
 end | number | the last page to have selection,  -1 if there are no selections
 
 ```js
-this._viewer.getPageSelectionRange().then(({begin, end}) => {
+this._viewer.getSelectionPageRange().then(({begin, end}) => {
   if (begin === -1) {
     console.log('There is no selection');
   } else {

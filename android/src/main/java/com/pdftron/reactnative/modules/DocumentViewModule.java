@@ -907,7 +907,39 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void findText(final int tag, final String searchString, final boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp, final Promise promise) {
+    public void startSearchMode(final int tag, final String searchString, final boolean matchCase,
+            final boolean matchWholeWord, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.startSearchMode(tag, searchString, matchCase, matchWholeWord);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void exitSearchMode(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.exitSearchMode(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void findText(final int tag, final String searchString, final boolean matchCase,
+            final boolean matchWholeWord, final boolean searchUp, final boolean regExp, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
