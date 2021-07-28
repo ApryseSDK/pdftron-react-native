@@ -22,6 +22,8 @@ static NSString * const PTEditPagesButtonKey = @"editPagesButton";
 static NSString * const PTPrintButtonKey = @"printButton";
 static NSString * const PTCloseButtonKey = @"closeButton";
 static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
+static NSString * const PTSaveIdenticalCopyButtonKey = @"saveIdenticalCopyButton";
+static NSString * const PTSaveFlattenedCopyButtonKey = @"saveFlattenedCopyButton";
 static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
@@ -556,6 +558,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindText;
+
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchMode;
 
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
