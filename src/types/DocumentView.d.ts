@@ -97,6 +97,7 @@ export interface DocumentViewProps extends ViewProps {
     defaultEraserType?: ConfigOptions.EraserType;
     exportPath?: string;
     openUrlPath?: string;
+    hideScrollbars?: boolean;
     saveStateEnabled?: boolean;
     openSavedCopyInNewTab?: boolean;
 }
@@ -159,6 +160,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     setOverprint: (overprint: ConfigOptions.OverprintMode) => Promise<void>;
     setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
     setColorPostProcessColors: (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color) => Promise<void>;
+    startSearchMode: (searchString: string, matchCase: boolean, matchWholeWord: boolean) => Promise<void>;
+    exitSearchMode: () => Promise<void>;
     findText: (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean) => Promise<void>;
     cancelFindText: () => Promise<void>;
     getSelection: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.TextSelectionResult | Promise<null>>;
