@@ -14,7 +14,6 @@ export type Actions = ValueOf<Config.Actions>;
 export type AnnotationFlags = ValueOf<Config.AnnotationFlags>;
 export type DefaultToolbars = ValueOf<Config.DefaultToolbars>;
 export type ToolbarIcons = ValueOf<Config.ToolbarIcons>;
-export type CustomToolbarKey = ValueOf<Config.CustomToolbarKey>;
 export type ThumbnailFilterMode = ValueOf<Config.ThumbnailFilterMode>;
 export type Conversion = ValueOf<Config.Conversion>;
 export type ViewModePickerItem = ValueOf<Config.ViewModePickerItem>;
@@ -23,3 +22,9 @@ export type OverprintMode = ValueOf<Config.OverprintMode>;
 export type ColorPostProcessMode = ValueOf<Config.ColorPostProcessMode>;
 export type ReflowOrientation = ValueOf<Config.ReflowOrientation>;
 export type ExportFormat = ValueOf<Config.ExportFormat>;
+
+export type CustomToolbarKey = {
+    [Property in keyof Config.CustomToolbarKey as `${Lowercase<Property>}`] : Config.CustomToolbarKey[Property] extends "items" ? 
+                                                                                Array<Tools | Buttons> : Config.CustomToolbarKey[Property] extends "icon" ? 
+                                                                                    ToolbarIcons : string;
+}

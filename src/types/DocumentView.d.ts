@@ -65,7 +65,7 @@ export interface DocumentViewProps extends ViewProps {
     maxTabCount?: number;
     signSignatureFieldsWithStamps?: boolean;
     annotationPermissionCheckEnabled?: boolean;
-    annotationToolbars?: Array<ConfigOptions.DefaultToolbars | object>;
+    annotationToolbars?: Array<ConfigOptions.DefaultToolbars | ConfigOptions.CustomToolbarKey>;
     hideDefaultAnnotationToolbars?: Array<ConfigOptions.DefaultToolbars>;
     topAppNavBarRightBar?: Array<ConfigOptions.Buttons>;
     bottomToolbar?: Array<ConfigOptions.Buttons>;
