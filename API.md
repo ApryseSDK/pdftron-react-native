@@ -2042,7 +2042,9 @@ this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
 ```
 
 #### setDrawAnnotations
-Sets whether all annotations and forms should be rendered in the viewer.
+Sets whether all annotations and forms should be rendered. This method affects the viewer and does not change the document.
+
+Unlike [setVisibilityForAnnotation](#setVisibilityForAnnotation), this method is used to show and hide all annotations and forms in the viewer. 
 
 Parameters:
 
