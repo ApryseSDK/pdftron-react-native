@@ -500,6 +500,13 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hideScrollbars, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideScrollbars = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -1428,6 +1435,26 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView cancelFindText];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView startSearchMode:searchString matchCase:matchCase matchWholeWord:matchWholeWord];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView exitSearchMode];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
