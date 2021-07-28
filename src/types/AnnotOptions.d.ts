@@ -81,5 +81,7 @@ export interface StickyNoteData	{
     id: string;
     pageNumber: number;
     type: string;
-    rect: Rect;
+    rect?: Rect;
+    pageRect?: Rect;
+    screenRect?: Rect;
 }
