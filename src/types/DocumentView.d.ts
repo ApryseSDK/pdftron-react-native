@@ -117,8 +117,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     saveDocument: () => Promise<void> | Promise<string>;
     setFlagForFields: (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean) => Promise<void>;
     getField: (fieldName: string) => Promise<void> | Promise<{fieldName: string, fieldValue?: any, fieldType?: string}>;
-    setValueForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
-    setValuesForFields: (fieldsMap: Map<string, string | boolean | number>) => Promise<void>;
+    setValueForFields: (fieldsMap: Record<string, string | boolean | number>) => Promise<void>;
+    setValuesForFields: (fieldsMap: Record<string, string | boolean | number>) => Promise<void>;
     handleBackButton: () => Promise<void> | Promise<boolean>;
     setFlagForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
     setFlagsForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
