@@ -48,6 +48,11 @@ public final class Constants {
     public static final String BUTTON_CROP_PAGE = "cropPageButton";
     public static final String BUTTON_UNDO = "undo";
     public static final String BUTTON_REDO = "redo";
+    public static final String BUTTON_SAVE_IDENTICAL_COPY = "saveIdenticalCopyButton";
+    public static final String BUTTON_SAVE_FLATTENED_COPY = "saveFlattenedCopyButton";
+    public static final String BUTTON_SAVE_REDUCED_COPY = "saveReducedCopyButton";
+    public static final String BUTTON_SAVE_CROPPED_COPY = "saveCroppedCopyButton";
+    public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
