@@ -1721,6 +1721,9 @@ NS_ASSUME_NONNULL_END
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
     
+    // Re-apply scrollbar visibility.
+    [self applyScrollbarVisibility:documentViewController];
+    
     // Page indicator.
     documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
     
