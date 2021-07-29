@@ -2,7 +2,7 @@ export interface Pdftron {
     initialize(licenseKey: string) : void;
     enableJavaScript(enabled: boolean) : void;
     getVersion() : Promise<string>;
-    gtPlatformVersion() : Promise<string>;
+    getPlatformVersion() : Promise<string>;
     getSystemFontList() : Promise<string>;
     clearRubberStampCache() : Promise<void>;
     encryptDocument(filePath: string, password: string, currentPassword: string) : Promise<void>;
