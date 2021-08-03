@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "Node",
+        "target": "ESNext",
+        "jsx": "react-native",
+        "esModuleInterop": true,
+        "outDir": "./src",
+        "skipLibCheck": true,
+        "declaration": true,
+        "rootDirs": ["types/", "./"]
+    },
+    "include": ["types/**/*", "../index.ts"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+}
