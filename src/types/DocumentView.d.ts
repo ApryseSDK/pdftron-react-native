@@ -13,38 +13,64 @@ export interface DocumentViewProps extends ViewProps {
     leadingNavButtonIcon?: string;
     showLeadingNavButton?: boolean;
     onLeadingNavButtonPressed?: () => void;
-    onDocumentLoaded?: (path : string) => void;
+    onDocumentLoaded?: (path: string) => void;
     onDocumentError?: (error: string) => void;
-    onPageChanged?: ({previousPageNumber, pageNumber}: {previousPageNumber: number, pageNumber: number}) => void;
-    onScrollChanged?: ({horizontal, vertical}: {horizontal: number, vertical: number}) => void;
-    onZoomChanged?: ({zoom}: {zoom: number}) => void;
-    onZoomFinished?: ({zoom}: {zoom: number}) => void;
+    onPageChanged?: ({ previousPageNumber, pageNumber }: {
+        previousPageNumber: number;
+        pageNumber: number;
+    }) => void;
+    onScrollChanged?: ({ horizontal, vertical }: {
+        horizontal: number;
+        vertical: number;
+    }) => void;
+    onZoomChanged?: ({ zoom }: {
+        zoom: number;
+    }) => void;
+    onZoomFinished?: ({ zoom }: {
+        zoom: number;
+    }) => void;
     zoom?: number;
-    disabledElements?: Array<ConfigOptions.Buttons>;
-    disabledTools?: Array<ConfigOptions.Tools>;
-    longPressMenuItems?: Array<ConfigOptions.LongPressMenu>;
-    overrideLongPressMenuBehavior?: Array<ConfigOptions.LongPressMenu>;
-    onLongPressMenuPress?: ({longPressMenu, longPressText}: {longPressMenu: string, longPressText: string}) => void;
+    disabledElements?: Array<Config.Tools>;
+    disabledTools?: Array<Config.Tools>;
+    longPressMenuItems?: Array<Config.LongPressMenu>;
+    overrideLongPressMenuBehavior?: Array<Config.LongPressMenu>;
+    onLongPressMenuPress?: ({ longPressMenu, longPressText }: {
+        longPressMenu: string;
+        longPressText: string;
+    }) => void;
     longPressMenuEnabled?: boolean;
-    annotationMenuItems?: Array<ConfigOptions.AnnotationMenu>;
-    overrideAnnotationMenuBehavior?: Array<ConfigOptions.AnnotationMenu>;
-    onAnnotationMenuPress?: ({annotationMenu, annotations}: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-    hideAnnotationMenu?: Array<ConfigOptions.Tools>;
-    overrideBehavior?: Array<ConfigOptions.Actions>;
-    onBehaviorActivated?: ({action, data}: {action: ConfigOptions.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
+    annotationMenuItems?: Array<Config.AnnotationMenu>;
+    overrideAnnotationMenuBehavior?: Array<Config.AnnotationMenu>;
+    onAnnotationMenuPress?: ({ annotationMenu, annotations }: {
+        annotationMenu: string;
+        annotations: Array<AnnotOptions.Annotation>;
+    }) => void;
+    hideAnnotationMenu?: Array<Config.Tools>;
+    overrideBehavior?: Array<Config.Actions>;
+    onBehaviorActivated?: ({ action, data }: {
+        action: Config.Actions;
+        data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData;
+    }) => void;
     topToolbarEnabled?: boolean;
     bottomToolbarEnabled?: boolean;
     hideToolbarsOnTap?: boolean;
     documentSliderEnabled?: boolean;
     pageIndicatorEnabled?: boolean;
     keyboardShortcutsEnabled?: boolean;
-    onAnnotationsSelected?: ({annotations}: {annotations: Array<AnnotOptions.Annotation>}) => void ;
-    onAnnotationChanged?: ({action, annotations}: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-    onFormFieldValueChanged?: ({fields}: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void;
+    onAnnotationsSelected?: ({ annotations }: {
+        annotations: Array<AnnotOptions.Annotation>;
+    }) => void;
+    onAnnotationChanged?: ({ action, annotations }: {
+        action: string;
+        annotations: Array<AnnotOptions.Annotation>;
+    }) => void;
+    onFormFieldValueChanged?: ({ fields }: {
+        fields: Array<AnnotOptions.FieldWithStringValue>;
+    }) => void;
     readOnly?: boolean;
     thumbnailViewEditingEnabled?: boolean;
-    fitMode?: ConfigOptions.FitMode;
-    layoutMode?: ConfigOptions.LayoutMode;
+    fitMode?: Config.FitMode;
+    layoutMode?: Config.LayoutMode;
     onLayoutChanged?: () => void;
     padStatusBar?: boolean;
     continuousAnnotationEditing?: boolean;
@@ -55,7 +81,11 @@ export interface DocumentViewProps extends ViewProps {
     collabEnabled?: boolean;
     currentUser?: string;
     currentUserName?: string;
-    onExportAnnotationCommand?: ({action, xfdfCommand, annotations}: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void;
+    onExportAnnotationCommand?: ({ action, xfdfCommand, annotations }: {
+        action: string;
+        xfdfCommand: string;
+        annotations: Array<AnnotOptions.Annotation>;
+    }) => void;
     autoSaveEnabled?: boolean;
     pageChangeOnTap?: boolean;
     followSystemDarkMode?: boolean;
@@ -65,21 +95,29 @@ export interface DocumentViewProps extends ViewProps {
     maxTabCount?: number;
     signSignatureFieldsWithStamps?: boolean;
     annotationPermissionCheckEnabled?: boolean;
-    annotationToolbars?: Array<ConfigOptions.DefaultToolbars | ConfigOptions.CustomToolbarKey>;
-    hideDefaultAnnotationToolbars?: Array<ConfigOptions.DefaultToolbars>;
-    topAppNavBarRightBar?: Array<ConfigOptions.Buttons>;
-    bottomToolbar?: Array<ConfigOptions.Buttons>;
+    annotationToolbars?: Array<Config.DefaultToolbars | Config.CustomToolbarKey>;
+    hideDefaultAnnotationToolbars?: Array<Config.DefaultToolbars>;
+    topAppNavBarRightBar?: Array<Config.Buttons>;
+    bottomToolbar?: Array<Config.Buttons>;
     hideAnnotationToolbarSwitcher?: boolean;
     hideTopToolbars?: boolean;
     hideTopAppNavBar?: boolean;
-    onBookmarkChanged?: ({bookmarkJson}: {bookmarkJson: string}) => void;
-    hideThumbnailFilterModes?: Array<ConfigOptions.ThumbnailFilterMode>;
-    onToolChanged?: ({previousTool, tool}: {previousTool: ConfigOptions.Tools | "unknown tool", tool: ConfigOptions.Tools | "unknown tool"}) => void;
+    onBookmarkChanged?: ({ bookmarkJson }: {
+        bookmarkJson: string;
+    }) => void;
+    hideThumbnailFilterModes?: Array<Config.ThumbnailFilterMode>;
+    onToolChanged?: ({ previousTool, tool }: {
+        previousTool: Config.Tools | "unknown tool";
+        tool: Config.Tools | "unknown tool";
+    }) => void;
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
     onTextSearchStart?: () => void;
-    onTextSearchResult?: ({found, textSelection}: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void;
-    hideViewModeItems?: Array<ConfigOptions.ViewModePickerItem>;
+    onTextSearchResult?: ({ found, textSelection }: {
+        found: boolean;
+        textSelection: AnnotOptions.TextSelectionResult | null;
+    }) => void;
+    hideViewModeItems?: Array<Config.ViewModePickerItem>;
     pageStackEnabled?: boolean;
     showQuickNavigationButton?: boolean;
     photoPickerEnabled?: boolean;
@@ -89,40 +127,211 @@ export interface DocumentViewProps extends ViewProps {
     restrictDownloadUsage?: boolean;
     userBookmarksListEditingEnabled?: boolean;
     imageInReflowEnabled?: boolean;
-    reflowOrientation?: ConfigOptions.ReflowOrientation;
+    reflowOrientation?: Config.ReflowOrientation;
     onUndoRedoStateChanged?: () => void;
     tabletLayoutEnabled?: boolean;
     initialToolbar?: string;
     inkMultiStrokeEnabled?: boolean;
-    defaultEraserType?: ConfigOptions.EraserType;
+    defaultEraserType?: Config.EraserType;
     exportPath?: string;
     openUrlPath?: string;
     hideScrollbars?: boolean;
     saveStateEnabled?: boolean;
     openSavedCopyInNewTab?: boolean;
+    onChange?(event: any): void;
 }
-
-
-export class DocumentView extends PureComponent<DocumentViewProps, any> {
+export declare class DocumentView extends PureComponent<DocumentViewProps, any> {
+    _viewerRef: any;
+    static propTypes: {
+        hitSlop?: PropTypes.Validator<import("react-native").Insets>;
+        onLayout?: PropTypes.Validator<(event: import("react-native").LayoutChangeEvent) => void>;
+        pointerEvents?: PropTypes.Validator<"none" | "box-none" | "box-only" | "auto">;
+        removeClippedSubviews?: PropTypes.Validator<boolean>;
+        style?: PropTypes.Validator<import("react-native").StyleProp<import("react-native").ViewStyle>>;
+        testID?: PropTypes.Validator<string>;
+        nativeID?: PropTypes.Validator<string>;
+        collapsable?: PropTypes.Validator<boolean>;
+        needsOffscreenAlphaCompositing?: PropTypes.Validator<boolean>;
+        renderToHardwareTextureAndroid?: PropTypes.Validator<boolean>;
+        focusable?: PropTypes.Validator<boolean>;
+        shouldRasterizeIOS?: PropTypes.Validator<boolean>;
+        isTVSelectable?: PropTypes.Validator<boolean>;
+        hasTVPreferredFocus?: PropTypes.Validator<boolean>;
+        tvParallaxProperties?: PropTypes.Validator<import("react-native").TVParallaxProperties>;
+        tvParallaxShiftDistanceX?: PropTypes.Validator<number>;
+        tvParallaxShiftDistanceY?: PropTypes.Validator<number>;
+        tvParallaxTiltAngle?: PropTypes.Validator<number>;
+        tvParallaxMagnification?: PropTypes.Validator<number>;
+        onStartShouldSetResponder?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => boolean>;
+        onMoveShouldSetResponder?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => boolean>;
+        onResponderEnd?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderGrant?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderReject?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderMove?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderRelease?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderStart?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onResponderTerminationRequest?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => boolean>;
+        onResponderTerminate?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onStartShouldSetResponderCapture?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => boolean>;
+        onMoveShouldSetResponderCapture?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => boolean>;
+        onTouchStart?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onTouchMove?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onTouchEnd?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onTouchCancel?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        onTouchEndCapture?: PropTypes.Validator<(event: import("react-native").GestureResponderEvent) => void>;
+        accessible?: PropTypes.Validator<boolean>;
+        accessibilityActions?: PropTypes.Validator<readonly Readonly<{
+            name: string;
+            label?: string;
+        }>[]>;
+        accessibilityLabel?: PropTypes.Validator<string>;
+        accessibilityRole?: PropTypes.Validator<import("react-native").AccessibilityRole>;
+        accessibilityState?: PropTypes.Validator<import("react-native").AccessibilityState>;
+        accessibilityHint?: PropTypes.Validator<string>;
+        accessibilityValue?: PropTypes.Validator<import("react-native").AccessibilityValue>;
+        onAccessibilityAction?: PropTypes.Validator<(event: import("react-native").AccessibilityActionEvent) => void>;
+        accessibilityLiveRegion?: PropTypes.Validator<"none" | "polite" | "assertive">;
+        importantForAccessibility?: PropTypes.Validator<"auto" | "yes" | "no" | "no-hide-descendants">;
+        accessibilityElementsHidden?: PropTypes.Validator<boolean>;
+        accessibilityViewIsModal?: PropTypes.Validator<boolean>;
+        onAccessibilityEscape?: PropTypes.Validator<() => void>;
+        onAccessibilityTap?: PropTypes.Validator<() => void>;
+        onMagicTap?: PropTypes.Validator<() => void>;
+        accessibilityIgnoresInvertColors?: PropTypes.Validator<boolean>;
+        document: PropTypes.Requireable<string>;
+        password: PropTypes.Requireable<string>;
+        initialPageNumber: PropTypes.Requireable<number>;
+        pageNumber: PropTypes.Requireable<number>;
+        customHeaders: PropTypes.Requireable<object>;
+        leadingNavButtonIcon: PropTypes.Requireable<string>;
+        showLeadingNavButton: PropTypes.Requireable<boolean>;
+        onLeadingNavButtonPressed: PropTypes.Requireable<(...args: any[]) => any>;
+        onDocumentLoaded: PropTypes.Requireable<(...args: any[]) => any>;
+        onDocumentError: PropTypes.Requireable<(...args: any[]) => any>;
+        onPageChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        onScrollChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        onZoomChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        onZoomFinished: PropTypes.Requireable<(...args: any[]) => any>;
+        zoom: PropTypes.Requireable<number>;
+        disabledElements: PropTypes.Requireable<any[]>;
+        disabledTools: PropTypes.Requireable<any[]>;
+        longPressMenuItems: PropTypes.Requireable<any[]>;
+        overrideLongPressMenuBehavior: PropTypes.Requireable<any[]>;
+        onLongPressMenuPress: PropTypes.Requireable<(...args: any[]) => any>;
+        longPressMenuEnabled: PropTypes.Requireable<boolean>;
+        annotationMenuItems: PropTypes.Requireable<any[]>;
+        overrideAnnotationMenuBehavior: PropTypes.Requireable<any[]>;
+        onAnnotationMenuPress: PropTypes.Requireable<(...args: any[]) => any>;
+        hideAnnotationMenu: PropTypes.Requireable<any[]>;
+        overrideBehavior: PropTypes.Requireable<any[]>;
+        onBehaviorActivated: PropTypes.Requireable<(...args: any[]) => any>;
+        topToolbarEnabled: PropTypes.Requireable<boolean>;
+        bottomToolbarEnabled: PropTypes.Requireable<boolean>;
+        hideToolbarsOnTap: PropTypes.Requireable<boolean>;
+        documentSliderEnabled: PropTypes.Requireable<boolean>;
+        pageIndicatorEnabled: PropTypes.Requireable<boolean>;
+        keyboardShortcutsEnabled: PropTypes.Requireable<boolean>;
+        onAnnotationsSelected: PropTypes.Requireable<(...args: any[]) => any>;
+        onAnnotationChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        onFormFieldValueChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        readOnly: PropTypes.Requireable<boolean>;
+        thumbnailViewEditingEnabled: PropTypes.Requireable<boolean>;
+        fitMode: PropTypes.Requireable<string>;
+        layoutMode: PropTypes.Requireable<string>;
+        onLayoutChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        padStatusBar: PropTypes.Requireable<boolean>;
+        continuousAnnotationEditing: PropTypes.Requireable<boolean>;
+        selectAnnotationAfterCreation: PropTypes.Requireable<boolean>;
+        annotationAuthor: PropTypes.Requireable<string>;
+        showSavedSignatures: PropTypes.Requireable<boolean>;
+        isBase64String: PropTypes.Requireable<boolean>;
+        collabEnabled: PropTypes.Requireable<boolean>;
+        currentUser: PropTypes.Requireable<string>;
+        currentUserName: PropTypes.Requireable<string>;
+        onExportAnnotationCommand: PropTypes.Requireable<(...args: any[]) => any>;
+        autoSaveEnabled: PropTypes.Requireable<boolean>;
+        pageChangeOnTap: PropTypes.Requireable<boolean>;
+        followSystemDarkMode: PropTypes.Requireable<boolean>;
+        useStylusAsPen: PropTypes.Requireable<boolean>;
+        multiTabEnabled: PropTypes.Requireable<boolean>;
+        tabTitle: PropTypes.Requireable<string>;
+        maxTabCount: PropTypes.Requireable<number>;
+        signSignatureFieldsWithStamps: PropTypes.Requireable<boolean>;
+        annotationPermissionCheckEnabled: PropTypes.Requireable<boolean>;
+        annotationToolbars: PropTypes.Requireable<any[]>;
+        hideDefaultAnnotationToolbars: PropTypes.Requireable<any[]>;
+        topAppNavBarRightBar: PropTypes.Requireable<any[]>;
+        bottomToolbar: PropTypes.Requireable<any[]>;
+        hideAnnotationToolbarSwitcher: PropTypes.Requireable<boolean>;
+        hideTopToolbars: PropTypes.Requireable<boolean>;
+        hideTopAppNavBar: PropTypes.Requireable<boolean>;
+        onBookmarkChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        hideThumbnailFilterModes: PropTypes.Requireable<any[]>;
+        onToolChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        horizontalScrollPos: PropTypes.Requireable<number>;
+        verticalScrollPos: PropTypes.Requireable<number>;
+        onTextSearchStart: PropTypes.Requireable<(...args: any[]) => any>;
+        onTextSearchResult: PropTypes.Requireable<(...args: any[]) => any>;
+        hideViewModeItems: PropTypes.Requireable<any[]>;
+        pageStackEnabled: PropTypes.Requireable<boolean>;
+        showQuickNavigationButton: PropTypes.Requireable<boolean>;
+        photoPickerEnabled: PropTypes.Requireable<boolean>;
+        autoResizeFreeTextEnabled: PropTypes.Requireable<boolean>;
+        annotationsListEditingEnabled: PropTypes.Requireable<boolean>;
+        showNavigationListAsSidePanelOnLargeDevices: PropTypes.Requireable<boolean>;
+        restrictDownloadUsage: PropTypes.Requireable<boolean>;
+        userBookmarksListEditingEnabled: PropTypes.Requireable<boolean>;
+        imageInReflowEnabled: PropTypes.Requireable<boolean>;
+        reflowOrientation: PropTypes.Requireable<string>;
+        onUndoRedoStateChanged: PropTypes.Requireable<(...args: any[]) => any>;
+        tabletLayoutEnabled: PropTypes.Requireable<boolean>;
+        initialToolbar: PropTypes.Requireable<string>;
+        inkMultiStrokeEnabled: PropTypes.Requireable<boolean>;
+        defaultEraserType: PropTypes.Requireable<string>;
+        exportPath: PropTypes.Requireable<string>;
+        openUrlPath: PropTypes.Requireable<string>;
+        hideScrollbars: PropTypes.Requireable<boolean>;
+        saveStateEnabled: PropTypes.Requireable<boolean>;
+        openSavedCopyInNewTab: PropTypes.Requireable<boolean>;
+    };
+    onChange: (event: any) => void;
     getDocumentPath: () => Promise<void> | Promise<string>;
-    setToolMode: (toolMode: ConfigOptions.Tools) => Promise<void>;
+    setToolMode: (toolMode: Config.Tools) => Promise<void>;
     commitTool: () => Promise<void> | Promise<boolean>;
     getPageCount: () => Promise<void> | Promise<number>;
     importBookmarkJson: (bookmarkJson: string) => Promise<void>;
     importAnnotationCommand: (xfdfCommand: string, initialLoad?: boolean) => Promise<void>;
     importAnnotations: (xfdf: string) => Promise<void>;
-    exportAnnotations: (options?: {annotList: Array<AnnotOptions.Annotation>}) => Promise<void> | Promise<string>;
+    exportAnnotations: (options?: {
+        annotList: Array<AnnotOptions.Annotation>;
+    }) => Promise<void> | Promise<string>;
     flattenAnnotations: (formsOnly: boolean) => Promise<void>;
     deleteAnnotations: (annotations: Array<AnnotOptions.Annotation>) => Promise<void>;
     saveDocument: () => Promise<void> | Promise<string>;
-    setFlagForFields: (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean) => Promise<void>;
-    getField: (fieldName: string) => Promise<void> | Promise<{fieldName: string, fieldValue?: any, fieldType?: string}>;
+    setFlagForFields: (fields: Array<String>, flag: Config.FieldFlags, value: boolean) => Promise<void>;
+    getField: (fieldName: string) => Promise<void> | Promise<{
+        fieldName: string;
+        fieldValue?: any;
+        fieldType?: string;
+    }>;
+    /**
+    * note: this function exists for supporting the old version. It simply calls setValuesForFields.
+    *
+    */
     setValueForFields: (fieldsMap: Record<string, string | boolean | number>) => Promise<void>;
     setValuesForFields: (fieldsMap: Record<string, string | boolean | number>) => Promise<void>;
     handleBackButton: () => Promise<void> | Promise<boolean>;
+    /**
+    * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
+    *
+    */
     setFlagForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
     setFlagsForAnnotations: (annotationFlagList: Array<AnnotOptions.AnnotationFlag>) => Promise<void>;
     selectAnnotation: (id: string, pageNumber: number) => Promise<void>;
+    /**
+    * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
+    *
+    */
     setPropertyForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties) => Promise<void>;
     setPropertiesForAnnotation: (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties) => Promise<void>;
     getPropertiesForAnnotation: (id: string, pageNumber: number) => Promise<void> | Promise<AnnotOptions.AnnotationProperties>;
@@ -143,12 +352,18 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     showGoToPageView: () => Promise<void>;
     closeAllTabs: () => Promise<void>;
     getZoom: () => Promise<void> | Promise<number>;
-    setZoomLimits: (zoomLimitMode: ConfigOptions.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
+    setZoomLimits: (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
     zoomWithCenter: (zoom: number, x: number, y: number) => Promise<void>;
     zoomToRect: (pageNumber: number, rect: AnnotOptions.Rect) => Promise<void>;
     smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
-    getScrollPos: () => Promise<void> | Promise<{horizontal: number, vertical: number}>;
-    getCanvasSize: () => Promise<void> | Promise<{width: number, height: number}>;
+    getScrollPos: () => Promise<void> | Promise<{
+        horizontal: number;
+        vertical: number;
+    }>;
+    getCanvasSize: () => Promise<void> | Promise<{
+        width: number;
+        height: number;
+    }>;
     getPageRotation: () => Promise<void> | Promise<AnnotOptions.RotationDegree>;
     rotateClockwise: () => Promise<void>;
     rotateCounterClockwise: () => Promise<void>;
@@ -157,8 +372,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getPageNumberFromScreenPoint: (x: number, y: number) => Promise<void> | Promise<number>;
     setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
     setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
-    setOverprint: (overprint: ConfigOptions.OverprintMode) => Promise<void>;
-    setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
+    setOverprint: (overprint: Config.OverprintMode) => Promise<void>;
+    setColorPostProcessMode: (colorPostProcessMode: Config.ColorPostProcessMode) => Promise<void>;
     setColorPostProcessColors: (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color) => Promise<void>;
     startSearchMode: (searchString: string, matchCase: boolean, matchWholeWord: boolean) => Promise<void>;
     exitSearchMode: () => Promise<void>;
@@ -167,7 +382,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     getSelection: (pageNumber: number) => Promise<void> | Promise<AnnotOptions.TextSelectionResult>;
     hasSelection: () => Promise<void> | Promise<boolean>;
     clearSelection: () => Promise<void>;
-    getSelectionPageRange: () => Promise<void> | Promise<{begin: number, end: number}>;
+    getSelectionPageRange: () => Promise<void> | Promise<{
+        begin: number;
+        end: number;
+    }>;
     hasSelectionOnPage: (pageNumber: number) => Promise<void> | Promise<boolean>;
     selectInRect: (rect: AnnotOptions.Rect) => Promise<void> | Promise<boolean>;
     isThereTextInRect: (rect: AnnotOptions.Rect) => Promise<void> | Promise<boolean>;
@@ -177,7 +395,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     setPageTransparencyGrid: (pageTransparencyGrid: boolean) => Promise<void>;
     setDefaultPageColor: (defaultPageColor: AnnotOptions.Color) => Promise<void>;
     setBackgroundColor: (backgroundColor: AnnotOptions.Color) => Promise<void>;
-    exportAsImage: (pageNumber: number, dpi: number, exportFormat: ConfigOptions.ExportFormat) => Promise<void> | Promise<string>;
+    exportAsImage: (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat) => Promise<void> | Promise<string>;
     undo: () => Promise<void>;
     redo: () => Promise<void>;
     canUndo: () => Promise<void> | Promise<boolean>;
@@ -185,4 +403,6 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     showCrop: () => Promise<void>;
     setCurrentToolbar: (toolbar: string) => Promise<void>;
     openThumbnailsView: () => Promise<void>;
+    _setNativeRef: (ref: any) => void;
+    render(): JSX.Element;
 }
