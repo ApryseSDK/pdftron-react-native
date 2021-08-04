@@ -836,6 +836,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     private void disableElements(ReadableArray args) {
+        ArrayList<Integer> saveCopyOptions = new ArrayList<>();
+
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
             if (BUTTON_TOOLS.equals(item)) {
@@ -895,8 +897,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mBuilder = mBuilder.showEditMenuOption(false);
             } else if (BUTTON_CROP_PAGE.equals(item)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
+            } else if (BUTTON_SAVE_IDENTICAL_COPY.equals(item)) {
+                saveCopyOptions.add(R.id.menu_export_copy);
+            } else if (BUTTON_SAVE_FLATTENED_COPY.equals(item)) {
+                saveCopyOptions.add(R.id.menu_export_flattened_copy);
+            } else if (BUTTON_SAVE_REDUCED_COPY.equals(item)) {
+                saveCopyOptions.add(R.id.menu_export_optimized_copy);
+            } else if (BUTTON_SAVE_CROPPED_COPY.equals(item)) {
+                saveCopyOptions.add(R.id.menu_export_cropped_copy);
+            } else if (BUTTON_SAVE_PASSWORD_COPY.equals(item)) {
+                saveCopyOptions.add(R.id.menu_export_password_copy);
             }
         }
+        
+        if (!saveCopyOptions.isEmpty()) {
+            int[] modes = new int[saveCopyOptions.size()];
+            for (int j = 0; j < modes.length; j++) {
+                modes[j] = saveCopyOptions.get(j);
+            }
+            mBuilder.hideSaveCopyOptions(modes);
+        }
+
         disableTools(args);
     }
 
