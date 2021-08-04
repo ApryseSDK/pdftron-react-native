@@ -1,4 +1,4 @@
-import Config from "react-native-pdftron/types/Config/Config";
+import Config from "./Config";
 
 type ValueOf<T> = T[keyof T];
 
