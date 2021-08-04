@@ -1,9 +1,8 @@
-
-import { PureComponent } from "react";
-import { ViewProps } from "react-native";
-import * as ConfigOptions from "./ConfigOptions";
-import * as AnnotOptions from "./AnnotOptions";
-
+import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { ViewProps } from 'react-native';
+import * as Config from "../Config/Config";
+import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 export interface DocumentViewProps extends ViewProps {
     document: string;
     password?: string;

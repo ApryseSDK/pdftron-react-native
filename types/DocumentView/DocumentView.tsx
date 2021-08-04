@@ -10,8 +10,8 @@ import {
   findNodeHandle,
 } from 'react-native';
 const { DocumentViewManager } = NativeModules;
-import * as Config from "react-native-pdftron/types/Config/Config";
-import * as AnnotOptions from "react-native-pdftron/types/AnnotOptions/AnnotOptions";
+import * as Config from "../Config/Config";
+import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 export interface DocumentViewProps extends ViewProps {
   document: string;

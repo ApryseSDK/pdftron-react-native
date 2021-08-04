@@ -1,4 +1,5 @@
 {
+    "extends": "./tsconfig",
     "compilerOptions": {
         "moduleResolution": "Node",
         "target": "ESNext",
@@ -6,8 +7,8 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "declaration": true,
-        "outDir": "./",
+        "outDir": "./src",
     },
-    "files": ["index.ts"],
+    "files": ["types/AnnotOptions/AnnotOptions.ts", "types/Config/Config.ts", "types/DocumentView/DocumentView.tsx", "types/PDFViewCtrl/PDFViewCtrl.tsx"],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }

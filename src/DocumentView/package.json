@@ -1,7 +1,0 @@
-{
-  "name": "DocumentView",
-  "version": "0.0.0",
-  "private": true,
-  "main": "./DocumentView",
-  "typings": "../types/document_view.d.ts"
-}

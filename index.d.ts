@@ -1,6 +1,6 @@
-import { PDFViewCtrl } from 'react-native-pdftron/types/PDFViewCtrl/PDFViewCtrl';
-import { DocumentView } from 'react-native-pdftron/types/DocumentView/DocumentView';
-import { Config } from 'react-native-pdftron/types/Config/Config';
+import { PDFViewCtrl } from './types/PDFViewCtrl/PDFViewCtrl';
+import { DocumentView } from './types/DocumentView/DocumentView';
+import { Config } from './types/Config/Config';
 export interface Pdftron {
     initialize?(licenseKey: string): void;
     enableJavaScript?(enabled: boolean): void;
@@ -11,15 +11,5 @@ export interface Pdftron {
     encryptDocument?(filePath: string, password: string, currentPassword: string): Promise<void>;
     pdfFromOfficeTemplate?(docxPath: string, json: object): Promise<string>;
 }
-
-export const RNPdftron : Pdftron;
-
-export {Config} from "./src/types/Config";
-
-export * as ConfigOptions from "./src/types/ConfigOptions";
-
-export {DocumentView} from "./src/types/DocumentView";
-
-export * as AnnotOptions from "./src/types/AnnotOptions";
-        
-export {PDFViewCtrl} from "./src/types/PDFViewCtrl";
+declare const RNPdftron: Pdftron;
+export { RNPdftron, PDFViewCtrl, DocumentView, Config };

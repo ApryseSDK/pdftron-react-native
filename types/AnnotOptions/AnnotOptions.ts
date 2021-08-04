@@ -1,4 +1,4 @@
-import * as Config from 'react-native-pdftron/types/Config/Config';
+import * as Config from '../Config/Config';
 
 export interface Annotation {
     id: string;
