@@ -1,8 +1,8 @@
 
 import { PureComponent } from "react";
 import { ViewProps } from "react-native";
-import * as ConfigOptions from "./ConfigOptions";
-import * as AnnotOptions from "./AnnotOptions";
+import * as ConfigOptions from "react-native-pdftron/src/types/ConfigOptions";
+import * as AnnotOptions from "react-native-pdftron/types/AnnotOptions/AnnotOptions";
 
 export interface DocumentViewProps extends ViewProps {
     document: string;

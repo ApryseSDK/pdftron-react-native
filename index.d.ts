@@ -11,12 +11,12 @@ export interface Pdftron {
 
 export const RNPdftron : Pdftron;
 
-export {Config} from "./src/types/Config";
+export {Config} from "react-native-pdftron/types/Config/Config";
 
 export * as ConfigOptions from "./src/types/ConfigOptions";
 
-export {DocumentView} from "./src/types/DocumentView";
+export {DocumentView} from "react-native-pdftron/types/DocumentView/DocumentView";
 
-export * as AnnotOptions from "./src/types/AnnotOptions";
+export * as AnnotOptions from "react-native-pdftron/types/AnnotOptions/AnnotOptions";
         
-export {PDFViewCtrl} from "./src/types/PDFViewCtrl";
+export {PDFViewCtrl} from "react-native-pdftron/types/PDFViewCtrl/PDFViewCtrl";
