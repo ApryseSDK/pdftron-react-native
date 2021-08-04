@@ -1232,6 +1232,17 @@ If document editing is enabled, then this value determines if the annotation lis
 />
 ```
 
+#### excludedAnnotationListTypes
+array of string, optional, defaults to none
+
+Defines types to be excluded from the annotation list. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
