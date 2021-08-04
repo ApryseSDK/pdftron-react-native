@@ -2976,3 +2976,55 @@ Returns a Promise.
 ```js
 this._viewer.showCrop();
 ```
+
+#### showViewSettings
+Displays the view settings.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showViewSettings({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### showAddPagesView
+Displays the add pages view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showAddPagesView({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### shareCopy
+Displays the share copy view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+flattening | bool | Whether the shared copy should be flattened before sharing.
+
+```js
+this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
+```

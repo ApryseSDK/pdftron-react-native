@@ -1106,6 +1106,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "canRedo", "Unable to find DocumentView.");
         }
     }
+    
+    public void showViewSettings(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showViewSettings();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showViewSettings", "Unable to find DocumentView.");
+        }
+    }
+
+    public void showAddPagesView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showAddPagesView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showAddPagesView", "Unable to find DocumentView.");
+        }
+    }
+
+    public void shareCopy(int tag, boolean flattening) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.shareCopy(flattening);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "shareCopy", "Unable to find DocumentView.");
+        }
+    }
 
     public void showCrop(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);

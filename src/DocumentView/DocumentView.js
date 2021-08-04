@@ -893,7 +893,31 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
+  
+  showViewSettings = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showViewSettings(tag, rect);
+    }
+    return Promise.resolve();
+  }
 
+  showAddPagesView = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showAddPagesView(tag, rect);
+    }
+    return Promise.resolve();
+  }
+
+  shareCopy = (rect, flattening) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.shareCopy(tag, rect, flattening);
+    }
+    return Promise.resolve();
+  }
+ 
   openThumbnailsView = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -901,7 +925,7 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
-
+ 
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

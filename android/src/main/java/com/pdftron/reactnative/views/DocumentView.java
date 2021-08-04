@@ -50,8 +50,8 @@ import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
-import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
@@ -3951,6 +3951,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean canRedo() {
         UndoRedoManager undoRedoManger = getToolManager().getUndoRedoManger();
         return undoRedoManger.canRedo();
+    }
+
+    public void showViewSettings() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onViewModeOptionSelected();
+        }
+    }
+
+    public void showAddPagesView() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.addNewPage();
+        }
+    }
+
+    public void shareCopy(boolean flattening) {
+        PdfViewCtrlTabFragment2 currentFragment = getPdfViewCtrlTabFragment();
+        if (mPdfViewCtrlTabHostFragment == null || !(currentFragment instanceof RNPdfViewCtrlTabFragment)) {
+            return;
+        }
+        if (!mPdfViewCtrlTabHostFragment.checkTabConversionAndAlert(R.string.cant_share_while_converting_message, true)) {
+            currentFragment.save(false, true, true);
+            ((RNPdfViewCtrlTabFragment) currentFragment).shareCopy(flattening);
+        }
     }
 
     public void showCropDialog() {
