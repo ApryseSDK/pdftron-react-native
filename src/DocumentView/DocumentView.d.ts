@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { ViewProps } from 'react-native';
-import * as Config from "../Config/Config";
+import { ConfigOptions } from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 export interface DocumentViewProps extends ViewProps {
     document: string;
@@ -29,25 +29,25 @@ export interface DocumentViewProps extends ViewProps {
         zoom: number;
     }) => void;
     zoom?: number;
-    disabledElements?: Array<Config.Tools>;
-    disabledTools?: Array<Config.Tools>;
-    longPressMenuItems?: Array<Config.LongPressMenu>;
-    overrideLongPressMenuBehavior?: Array<Config.LongPressMenu>;
+    disabledElements?: Array<ConfigOptions.Tools>;
+    disabledTools?: Array<ConfigOptions.Tools>;
+    longPressMenuItems?: Array<ConfigOptions.LongPressMenu>;
+    overrideLongPressMenuBehavior?: Array<ConfigOptions.LongPressMenu>;
     onLongPressMenuPress?: ({ longPressMenu, longPressText }: {
         longPressMenu: string;
         longPressText: string;
     }) => void;
     longPressMenuEnabled?: boolean;
-    annotationMenuItems?: Array<Config.AnnotationMenu>;
-    overrideAnnotationMenuBehavior?: Array<Config.AnnotationMenu>;
+    annotationMenuItems?: Array<ConfigOptions.AnnotationMenu>;
+    overrideAnnotationMenuBehavior?: Array<ConfigOptions.AnnotationMenu>;
     onAnnotationMenuPress?: ({ annotationMenu, annotations }: {
         annotationMenu: string;
         annotations: Array<AnnotOptions.Annotation>;
     }) => void;
-    hideAnnotationMenu?: Array<Config.Tools>;
-    overrideBehavior?: Array<Config.Actions>;
+    hideAnnotationMenu?: Array<ConfigOptions.Tools>;
+    overrideBehavior?: Array<ConfigOptions.Actions>;
     onBehaviorActivated?: ({ action, data }: {
-        action: Config.Actions;
+        action: ConfigOptions.Actions;
         data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData;
     }) => void;
     topToolbarEnabled?: boolean;
@@ -68,8 +68,8 @@ export interface DocumentViewProps extends ViewProps {
     }) => void;
     readOnly?: boolean;
     thumbnailViewEditingEnabled?: boolean;
-    fitMode?: Config.FitMode;
-    layoutMode?: Config.LayoutMode;
+    fitMode?: ConfigOptions.FitMode;
+    layoutMode?: ConfigOptions.LayoutMode;
     onLayoutChanged?: () => void;
     padStatusBar?: boolean;
     continuousAnnotationEditing?: boolean;
@@ -94,20 +94,20 @@ export interface DocumentViewProps extends ViewProps {
     maxTabCount?: number;
     signSignatureFieldsWithStamps?: boolean;
     annotationPermissionCheckEnabled?: boolean;
-    annotationToolbars?: Array<Config.DefaultToolbars | Config.CustomToolbarKey>;
-    hideDefaultAnnotationToolbars?: Array<Config.DefaultToolbars>;
-    topAppNavBarRightBar?: Array<Config.Buttons>;
-    bottomToolbar?: Array<Config.Buttons>;
+    annotationToolbars?: Array<ConfigOptions.DefaultToolbars | ConfigOptions.CustomToolbarKey>;
+    hideDefaultAnnotationToolbars?: Array<ConfigOptions.DefaultToolbars>;
+    topAppNavBarRightBar?: Array<ConfigOptions.Buttons>;
+    bottomToolbar?: Array<ConfigOptions.Buttons>;
     hideAnnotationToolbarSwitcher?: boolean;
     hideTopToolbars?: boolean;
     hideTopAppNavBar?: boolean;
     onBookmarkChanged?: ({ bookmarkJson }: {
         bookmarkJson: string;
     }) => void;
-    hideThumbnailFilterModes?: Array<Config.ThumbnailFilterMode>;
+    hideThumbnailFilterModes?: Array<ConfigOptions.ThumbnailFilterMode>;
     onToolChanged?: ({ previousTool, tool }: {
-        previousTool: Config.Tools | "unknown tool";
-        tool: Config.Tools | "unknown tool";
+        previousTool: ConfigOptions.Tools | "unknown tool";
+        tool: ConfigOptions.Tools | "unknown tool";
     }) => void;
     horizontalScrollPos?: number;
     verticalScrollPos?: number;
@@ -116,7 +116,7 @@ export interface DocumentViewProps extends ViewProps {
         found: boolean;
         textSelection: AnnotOptions.TextSelectionResult | null;
     }) => void;
-    hideViewModeItems?: Array<Config.ViewModePickerItem>;
+    hideViewModeItems?: Array<ConfigOptions.ViewModePickerItem>;
     pageStackEnabled?: boolean;
     showQuickNavigationButton?: boolean;
     photoPickerEnabled?: boolean;
@@ -126,12 +126,12 @@ export interface DocumentViewProps extends ViewProps {
     restrictDownloadUsage?: boolean;
     userBookmarksListEditingEnabled?: boolean;
     imageInReflowEnabled?: boolean;
-    reflowOrientation?: Config.ReflowOrientation;
+    reflowOrientation?: ConfigOptions.ReflowOrientation;
     onUndoRedoStateChanged?: () => void;
     tabletLayoutEnabled?: boolean;
     initialToolbar?: string;
     inkMultiStrokeEnabled?: boolean;
-    defaultEraserType?: Config.EraserType;
+    defaultEraserType?: ConfigOptions.EraserType;
     exportPath?: string;
     openUrlPath?: string;
     hideScrollbars?: boolean;
@@ -295,7 +295,7 @@ export declare class DocumentView extends PureComponent<DocumentViewProps, any> 
     };
     onChange: (event: any) => void;
     getDocumentPath: () => Promise<void> | Promise<string>;
-    setToolMode: (toolMode: Config.Tools) => Promise<void>;
+    setToolMode: (toolMode: ConfigOptions.Tools) => Promise<void>;
     commitTool: () => Promise<void> | Promise<boolean>;
     getPageCount: () => Promise<void> | Promise<number>;
     importBookmarkJson: (bookmarkJson: string) => Promise<void>;
@@ -307,7 +307,7 @@ export declare class DocumentView extends PureComponent<DocumentViewProps, any> 
     flattenAnnotations: (formsOnly: boolean) => Promise<void>;
     deleteAnnotations: (annotations: Array<AnnotOptions.Annotation>) => Promise<void>;
     saveDocument: () => Promise<void> | Promise<string>;
-    setFlagForFields: (fields: Array<String>, flag: Config.FieldFlags, value: boolean) => Promise<void>;
+    setFlagForFields: (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean) => Promise<void>;
     getField: (fieldName: string) => Promise<void> | Promise<{
         fieldName: string;
         fieldValue?: any;
@@ -351,7 +351,7 @@ export declare class DocumentView extends PureComponent<DocumentViewProps, any> 
     showGoToPageView: () => Promise<void>;
     closeAllTabs: () => Promise<void>;
     getZoom: () => Promise<void> | Promise<number>;
-    setZoomLimits: (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
+    setZoomLimits: (zoomLimitMode: ConfigOptions.ZoomLimitMode, minimum: number, maximum: number) => Promise<void>;
     zoomWithCenter: (zoom: number, x: number, y: number) => Promise<void>;
     zoomToRect: (pageNumber: number, rect: AnnotOptions.Rect) => Promise<void>;
     smartZoom: (x: number, y: number, animated: boolean) => Promise<void>;
@@ -371,8 +371,8 @@ export declare class DocumentView extends PureComponent<DocumentViewProps, any> 
     getPageNumberFromScreenPoint: (x: number, y: number) => Promise<void> | Promise<number>;
     setProgressiveRendering: (progressiveRendering: boolean, initialDelay: number, interval: number) => Promise<void>;
     setImageSmoothing: (imageSmoothing: boolean) => Promise<void>;
-    setOverprint: (overprint: Config.OverprintMode) => Promise<void>;
-    setColorPostProcessMode: (colorPostProcessMode: Config.ColorPostProcessMode) => Promise<void>;
+    setOverprint: (overprint: ConfigOptions.OverprintMode) => Promise<void>;
+    setColorPostProcessMode: (colorPostProcessMode: ConfigOptions.ColorPostProcessMode) => Promise<void>;
     setColorPostProcessColors: (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color) => Promise<void>;
     startSearchMode: (searchString: string, matchCase: boolean, matchWholeWord: boolean) => Promise<void>;
     exitSearchMode: () => Promise<void>;
@@ -394,7 +394,7 @@ export declare class DocumentView extends PureComponent<DocumentViewProps, any> 
     setPageTransparencyGrid: (pageTransparencyGrid: boolean) => Promise<void>;
     setDefaultPageColor: (defaultPageColor: AnnotOptions.Color) => Promise<void>;
     setBackgroundColor: (backgroundColor: AnnotOptions.Color) => Promise<void>;
-    exportAsImage: (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat) => Promise<void> | Promise<string>;
+    exportAsImage: (pageNumber: number, dpi: number, exportFormat: ConfigOptions.ExportFormat) => Promise<void> | Promise<string>;
     undo: () => Promise<void>;
     redo: () => Promise<void>;
     canUndo: () => Promise<void> | Promise<boolean>;

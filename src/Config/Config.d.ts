@@ -224,30 +224,32 @@ export declare const Config: {
     };
 };
 declare type ValueOf<T> = T[keyof T];
-export declare type Buttons = ValueOf<typeof Config.Buttons>;
-export declare type Tools = ValueOf<typeof Config.Tools>;
-export declare type FitMode = ValueOf<typeof Config.FitMode>;
-export declare type LayoutMode = ValueOf<typeof Config.LayoutMode>;
-export declare type FieldFlags = ValueOf<typeof Config.FieldFlags>;
-export declare type AnnotationMenu = ValueOf<typeof Config.AnnotationMenu>;
-export declare type EraserType = ValueOf<typeof Config.EraserType>;
-export declare type LongPressMenu = ValueOf<typeof Config.LongPressMenu>;
-export declare type Actions = ValueOf<typeof Config.Actions>;
-export declare type AnnotationFlags = ValueOf<typeof Config.AnnotationFlags>;
-export declare type DefaultToolbars = ValueOf<typeof Config.DefaultToolbars>;
-export declare type ToolbarIcons = ValueOf<typeof Config.ToolbarIcons>;
-export declare type ThumbnailFilterMode = ValueOf<typeof Config.ThumbnailFilterMode>;
-export declare type Conversion = ValueOf<typeof Config.Conversion>;
-export declare type ViewModePickerItem = ValueOf<typeof Config.ViewModePickerItem>;
-export declare type ZoomLimitMode = ValueOf<typeof Config.ZoomLimitMode>;
-export declare type OverprintMode = ValueOf<typeof Config.OverprintMode>;
-export declare type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
-export declare type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
-export declare type ExportFormat = ValueOf<typeof Config.ExportFormat>;
-export declare type CustomToolbarKey = {
-    id: string;
-    name: string;
-    icon: ToolbarIcons;
-    items: (Tools | Buttons)[];
-};
+export declare namespace ConfigOptions {
+    type Buttons = ValueOf<typeof Config.Buttons>;
+    type Tools = ValueOf<typeof Config.Tools>;
+    type FitMode = ValueOf<typeof Config.FitMode>;
+    type LayoutMode = ValueOf<typeof Config.LayoutMode>;
+    type FieldFlags = ValueOf<typeof Config.FieldFlags>;
+    type AnnotationMenu = ValueOf<typeof Config.AnnotationMenu>;
+    type EraserType = ValueOf<typeof Config.EraserType>;
+    type LongPressMenu = ValueOf<typeof Config.LongPressMenu>;
+    type Actions = ValueOf<typeof Config.Actions>;
+    type AnnotationFlags = ValueOf<typeof Config.AnnotationFlags>;
+    type DefaultToolbars = ValueOf<typeof Config.DefaultToolbars>;
+    type ToolbarIcons = ValueOf<typeof Config.ToolbarIcons>;
+    type ThumbnailFilterMode = ValueOf<typeof Config.ThumbnailFilterMode>;
+    type Conversion = ValueOf<typeof Config.Conversion>;
+    type ViewModePickerItem = ValueOf<typeof Config.ViewModePickerItem>;
+    type ZoomLimitMode = ValueOf<typeof Config.ZoomLimitMode>;
+    type OverprintMode = ValueOf<typeof Config.OverprintMode>;
+    type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
+    type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
+    type ExportFormat = ValueOf<typeof Config.ExportFormat>;
+    type CustomToolbarKey = {
+        id: string;
+        name: string;
+        icon: ToolbarIcons;
+        items: (Tools | Buttons)[];
+    };
+}
 export {};

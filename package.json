@@ -7,7 +7,8 @@
   "typings": "./index.d.ts",
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
-    "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd .."
+    "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
+    "start": "npx tsc && npx tsc --p ./tsconfig.src.json"
   },
   "repository": {
     "type": "git",

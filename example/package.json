@@ -3,11 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "preandroid" : "npx tsc",
     "android": "react-native run-android",
-    "preios": "npx tsc",
     "ios": "react-native run-ios",
-    "prestart": "npx tsc",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
