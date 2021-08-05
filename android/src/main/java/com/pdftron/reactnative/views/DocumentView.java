@@ -468,8 +468,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mCurrentUserName = currentUserName;
     }
 
-    public void setHideReplyReviewState(boolean hideReplyReviewState) {
-            mBuilder = mBuilder.showAnnotationReplyReviewState(!hideReplyReviewState);
+    public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
+        mBuilder = mBuilder.showAnnotationReplyReviewState(replyReviewStateEnabled);
     }
 
     public void setAnnotationMenuItems(ReadableArray items) {

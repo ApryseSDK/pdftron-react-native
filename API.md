@@ -1057,8 +1057,8 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
-#### hideReplyReviewState
-boolean, optional, defaults to false
+#### replyReviewStateEnabled
+boolean, optional, Android only, defaults to true
 
 Defines whether to show an annotation's reply review state.
 
@@ -1066,7 +1066,7 @@ Defines whether to show an annotation's reply review state.
 <DocumentView
   collabEnabled={true}
   currentUser={'Pdftron'}
-  hideReplyReviewState={true}
+  replyReviewStateEnabled={true}
 />
 ```
 

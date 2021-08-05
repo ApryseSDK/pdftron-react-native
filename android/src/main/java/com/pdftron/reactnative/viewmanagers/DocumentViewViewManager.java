@@ -419,9 +419,9 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setOpenSavedCopyInNewTab(openSavedCopyInNewTab);
     }
 
-    @ReactProp(name = "hideReplyReviewState")
-    public void setHideReplyReviewState(DocumentView documentView, boolean hideReviewState) {
-        documentView.setHideReplyReviewState(hideReviewState);
+    @ReactProp(name = "replyReviewStateEnabled")
+    public void setReplyReviewStateEnabled(DocumentView documentView, boolean replyReviewStateEnabled) {
+        documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {

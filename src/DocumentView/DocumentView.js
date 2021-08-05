@@ -108,7 +108,7 @@ export default class DocumentView extends PureComponent {
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
     openSavedCopyInNewTab: PropTypes.bool,
-    hideReplyReviewState: PropTypes.bool,
+    replyReviewStateEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
