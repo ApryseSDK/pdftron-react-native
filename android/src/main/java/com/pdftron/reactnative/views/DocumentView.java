@@ -1176,6 +1176,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.INK_ERASER;
         } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
             mode = ToolManager.ToolMode.FREE_HIGHLIGHTER;
+        } else if (TOOL_ANNOTATION_CREATE_SMART_PEN.equals(item)) {
+            mode = ToolManager.ToolMode.SMART_PEN_INK;
         }
         return mode;
     }
@@ -1186,6 +1188,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         switch (toolMode) {
             case INK_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HAND;
+                break;
+            case TEXT_HIGHLIGHT:
+                toolModeString = TOOL_ANNOTATION_CREATE_TEXT_HIGHLIGHT;
                 break;
             case TEXT_UNDERLINE:
                 toolModeString = TOOL_ANNOTATION_CREATE_TEXT_UNDERLINE;
@@ -1223,6 +1228,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             case TEXT_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_TEXT;
                 break;
+            case CALLOUT_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_CALLOUT;
+                break;
             case TEXT_ANNOT_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_STICKY;
                 break;
@@ -1240,6 +1248,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case AREA_MEASURE_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT;
+                break;
+            case RECT_AREA_MEASURE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT;
                 break;
             case FILE_ATTACHMENT_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT;
@@ -1291,6 +1302,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case FREE_HIGHLIGHTER:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
+                break;
+            case SMART_PEN_INK:
+            case SMART_PEN_TEXT_MARKUP:
+                toolModeString = TOOL_ANNOTATION_CREATE_SMART_PEN;
+                break;
+            case FREE_TEXT_SPACING_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT;
+                break;
+            case FREE_TEXT_DATE_CREATE:
+                toolModeString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
         }
 
@@ -2294,7 +2315,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
-    private ToolManager.ToolChangedListener mToolChangedListener = new ToolManager.ToolChangedListener() {
+    private final ToolManager.ToolChangedListener mToolChangedListener = new ToolManager.ToolChangedListener() {
         @Override
         public void toolChanged(ToolManager.Tool newTool, @Nullable ToolManager.Tool oldTool) {
 
@@ -2305,7 +2326,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
             String oldToolString = null;
             if (oldTool != null) {
-                oldToolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
+                oldToolString = convToolModeToString((ToolManager.ToolMode) oldTool.getToolMode());
             }
 
             String unknownString = "unknown tool";
