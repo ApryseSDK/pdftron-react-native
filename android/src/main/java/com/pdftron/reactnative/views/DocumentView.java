@@ -2305,7 +2305,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
             String oldToolString = null;
             if (oldTool != null) {
-                oldToolString = convToolModeToString((ToolManager.ToolMode) newTool.getToolMode());
+                oldToolString = convToolModeToString((ToolManager.ToolMode) oldTool.getToolMode());
             }
 
             String unknownString = "unknown tool";
