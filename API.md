@@ -1057,6 +1057,19 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### hideReplyReviewState
+boolean, optional, defaults to false
+
+Defines whether to show an annotation's reply review state.
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  hideReplyReviewState={true}
+/>
+```
+
 ### Annotations
 
 #### annotationPermissionCheckEnabled
