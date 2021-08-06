@@ -1281,6 +1281,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolModeString = TOOL_PAN;
                 break;
             case ANNOT_EDIT_RECT_GROUP:
+            case ANNOT_EDIT:
                 toolModeString = TOOL_ANNOTATION_EDIT;
                 break;
             case FORM_TEXT_FIELD_CREATE:
