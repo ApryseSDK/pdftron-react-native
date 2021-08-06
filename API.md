@@ -95,7 +95,7 @@ RNPdftron.clearRubberStampCache().then(() => {
 ```
 
 ### encryptDocument
-Encrypts (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
+Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
 Parameters:
 
@@ -512,7 +512,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 #### initialToolbar
 string, optional, defaults to none
 
-Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened. The values give should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
 
 ```js
 <DocumentView
@@ -565,13 +565,13 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 ```
 
 #### bottomToolbar
-array of strings, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
+array of strings, optional, only the navigation list, share, view mode, search, and reflow buttons are supported on Android
 
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
 <Documentview
-  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.listsButton]}
 />
 ```
 

@@ -2836,6 +2836,7 @@ NS_ASSUME_NONNULL_END
     
     PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot
                                                       page_num:pageNumber];
+    PTPDFRect *pageRect;
     
     NSString *annotationType = [RNTPTDocumentView stringForAnnotType:[annot GetType]];
     
