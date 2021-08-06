@@ -574,7 +574,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)setExcludedAnnotationListTypes:(NSArray<NSString *> *)excludedAnnotationListTypes
 {
-    _excludedAnnotationListTypes = [excludedAnnotationListTypes copy];
+    _excludedAnnotationListTypes = excludedAnnotationListTypes;
     
     if (self.currentDocumentViewController) {
         [self excludeAnnotationListTypes:excludedAnnotationListTypes documentViewController:self.currentDocumentViewController];
