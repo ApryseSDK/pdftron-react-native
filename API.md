@@ -1248,7 +1248,10 @@ If document editing is enabled, then this value determines if the annotation lis
 #### excludedAnnotationListTypes
 array of string, optional, defaults to none
 
-Defines types to be excluded from the annotation list. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+Defines types to be excluded from the annotation list. Strings should be [`Config.Tools`](./src/Config/Config.js) constants. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
 
 ```js
 <DocumentView
