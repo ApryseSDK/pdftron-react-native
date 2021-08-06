@@ -2006,6 +2006,10 @@ NS_ASSUME_NONNULL_END
             if (matchedDefaultGroup != nil) {
                 // use a default group if its key is found
                 [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                [documentController.toolGroupIndicatorView.button setTitle:matchedDefaultGroup.title forState:UIControlStateNormal];
+                if (@available(iOS 13.0, *)) {
+                    documentController.toolGroupIndicatorView.button.largeContentImage = matchedDefaultGroup.image;
+                }
                 return;
             }
 
