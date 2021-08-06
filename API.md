@@ -1057,6 +1057,19 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### replyReviewStateEnabled
+boolean, optional, Android only, defaults to true
+
+Defines whether to show an annotation's reply review state.
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  replyReviewStateEnabled={true}
+/>
+```
+
 ### Annotations
 
 #### annotationPermissionCheckEnabled

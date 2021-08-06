@@ -468,6 +468,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mCurrentUserName = currentUserName;
     }
 
+    public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
+        mBuilder = mBuilder.showAnnotationReplyReviewState(replyReviewStateEnabled);
+    }
+
     public void setAnnotationMenuItems(ReadableArray items) {
         mAnnotMenuItems = items != null ? items.toArrayList() : null;
     }
