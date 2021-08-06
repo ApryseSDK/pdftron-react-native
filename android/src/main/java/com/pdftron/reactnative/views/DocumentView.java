@@ -530,7 +530,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setExcludedAnnotationListTypes(ReadableArray excludedTypes) {
-        int [] annotTypes = new int [excludedTypes.size()];
+        int[] annotTypes = new int[excludedTypes.size()];
         for (int i = 0; i < excludedTypes.size(); i++) {
             String type = excludedTypes.getString(i);
             annotTypes[i] = convStringToAnnotType(type);
