@@ -162,6 +162,12 @@
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
 
+- (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
 - (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
 @end

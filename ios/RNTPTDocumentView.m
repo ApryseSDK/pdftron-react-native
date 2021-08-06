@@ -2411,6 +2411,42 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Controls
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showSettingsFromScreenRect:screenRect];
+}
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showAddPagesViewFromScreenRect:screenRect];
+}
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
+}
+
+
 #pragma mark - signSignatureFieldsWithStamps
 
 -(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
