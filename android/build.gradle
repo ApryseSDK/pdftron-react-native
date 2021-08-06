@@ -55,7 +55,7 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"
 
-    implementation "com.pdftron:pdftron:9.0.3-beta02"
-    implementation "com.pdftron:tools:9.0.3-beta02"
-    implementation "com.pdftron:collab:9.0.3-beta02"
+    implementation "com.pdftron:pdftron:9.0.3-beta04"
+    implementation "com.pdftron:tools:9.0.3-beta04"
+    implementation "com.pdftron:collab:9.0.3-beta04"
 }
