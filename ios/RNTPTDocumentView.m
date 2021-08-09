@@ -530,9 +530,23 @@ NS_ASSUME_NONNULL_END
 //        PTCloseButtonKey: ^{
 //
 //        },
-//        PTSaveCopyButtonKey: ^{
-//
-//        },
+        PTSaveCopyButtonKey: ^{
+            documentViewController.exportButtonHidden = YES;
+        },
+        PTSaveIdenticalCopyButtonKey: ^ {
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
+        PTSaveFlattenedCopyButtonKey: ^{
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportFlattenedCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
 //        PTFormToolsButtonKey: ^{
 //
 //        },
@@ -557,16 +571,27 @@ NS_ASSUME_NONNULL_END
     [self setToolsPermission:disabledElements toValue:NO documentViewController:documentViewController];
 }
 
-- (void)setMultiTabEnabled:(BOOL)enabled
+- (void)setExcludedAnnotationListTypes:(NSArray<NSString *> *)excludedAnnotationListTypes
 {
-    _multiTabEnabled = enabled;
+    _excludedAnnotationListTypes = excludedAnnotationListTypes;
     
+    if (self.currentDocumentViewController) {
+        [self excludeAnnotationListTypes:excludedAnnotationListTypes documentViewController:self.currentDocumentViewController];
+    }
 }
 
-- (void)setTabTitle:(NSString *)tabTitle
+- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
 {
-    _tabTitle = [tabTitle copy];
+    NSMutableArray<NSNumber *> *annotTypes = [[NSMutableArray alloc] init];
     
+    for (NSString *string in excludedAnnotationListTypes) {
+        PTAnnotType annotType = [RNTPTDocumentView annotTypeForString:string];
+        [annotTypes addObject:[NSNumber numberWithInt:annotType]];
+    }
+    
+    if (annotTypes.count > 0) {
+        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+    }
 }
 
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
@@ -902,6 +927,31 @@ NS_ASSUME_NONNULL_END
     }
     
     return NO;
+}
+
+#pragma mark - Uneditable annotation types
+
+- (void)setUneditableAnnotationTypes:(NSArray<NSString *> *)uneditableAnnotationTypes
+{
+    _uneditableAnnotationTypes = [uneditableAnnotationTypes copy];
+    
+    if (self.currentDocumentViewController) {
+        [self setAnnotationEditingPermission:uneditableAnnotationTypes toValue:NO documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)setAnnotationEditingPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    for (NSObject *item in stringsArray) {
+        if ([item isKindOfClass:[NSString class]]) {
+            NSString *string = (NSString *)item;
+            PTExtendedAnnotType typeToSetPermission = [self reactAnnotationNameToAnnotType:string];
+            
+            [toolManager annotationOptionsForAnnotType:typeToSetPermission].canEdit = value;
+        }
+    }
 }
 
 - (void)setPageNumber:(int)pageNumber
@@ -1710,8 +1760,14 @@ NS_ASSUME_NONNULL_END
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
+    // Scrollbars.
+    [self applyScrollbarVisibility:documentViewController];
+    
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
+    
+    // Re-apply scrollbar visibility.
+    [self applyScrollbarVisibility:documentViewController];
     
     // Page indicator.
     documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
@@ -1786,6 +1842,9 @@ NS_ASSUME_NONNULL_END
     // Disable tools.
     [self setToolsPermission:self.disabledTools toValue:NO documentViewController:documentViewController];
     
+    // Disable editing by annotation type.
+    [self setAnnotationEditingPermission:self.uneditableAnnotationTypes toValue:NO documentViewController:documentViewController];
+    
     if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         [self applyDocumentControllerSettings:documentController];
@@ -1831,6 +1890,9 @@ NS_ASSUME_NONNULL_END
 
     // Set Annotation List Editing 
     // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    
+    // Exclude annotation types from annotation list.
+    [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
     
     // Hanlde displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
@@ -1995,6 +2057,10 @@ NS_ASSUME_NONNULL_END
             if (matchedDefaultGroup != nil) {
                 // use a default group if its key is found
                 [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                [documentController.toolGroupIndicatorView.button setTitle:matchedDefaultGroup.title forState:UIControlStateNormal];
+                if (@available(iOS 13.0, *)) {
+                    documentController.toolGroupIndicatorView.button.largeContentImage = matchedDefaultGroup.image;
+                }
                 return;
             }
 
@@ -2372,6 +2438,42 @@ NS_ASSUME_NONNULL_END
         [self.delegate navButtonClicked:self];
     }
 }
+
+#pragma mark - Controls
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showSettingsFromScreenRect:screenRect];
+}
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showAddPagesViewFromScreenRect:screenRect];
+}
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
+}
+
 
 #pragma mark - signSignatureFieldsWithStamps
 
@@ -2915,6 +3017,12 @@ NS_ASSUME_NONNULL_END
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
         PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
+    NSArray<NSString *> *whitelist = @[
+        PTLocalizedString(PTHighlightWhiteListKey, nil),
+        PTLocalizedString(PTStrikeoutWhiteListKey, nil),
+        PTLocalizedString(PTUnderlineWhiteListKey, nil),
+        PTLocalizedString(PTSquigglyWhiteListKey, nil),
+    ];
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
@@ -2933,7 +3041,10 @@ NS_ASSUME_NONNULL_END
         if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
-        else {
+        else {if ([whitelist containsObject:menuItem.title] && [self.annotationMenuItems containsObject:PTTypeMenuItemIdentifierKey]) {
+            [permittedItems addObject:menuItem];
+        }
+        else
             if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
                 [permittedItems addObject:menuItem];
             }
@@ -3768,6 +3879,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     [pdfViewCtrl SetDrawAnnotations:drawAnnotations];
+    [pdfViewCtrl Update:YES];
 }
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
@@ -4033,7 +4145,19 @@ NS_ASSUME_NONNULL_END
     
 }
 
-#pragma mark - Close all tabs
+#pragma mark - Tabs
+
+- (void)setMultiTabEnabled:(BOOL)enabled
+{
+    _multiTabEnabled = enabled;
+    
+}
+
+- (void)setTabTitle:(NSString *)tabTitle
+{
+    _tabTitle = [tabTitle copy];
+    
+}
 
 - (void)closeAllTabs
 {
@@ -4053,6 +4177,13 @@ NS_ASSUME_NONNULL_END
     // Close the selected tab last.
     if (tabManager.selectedItem) {
         [tabManager removeItem:tabManager.selectedItem];
+    }
+}
+
+- (void)openTabSwitcher
+{
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController showTabsList:self.tabbedDocumentViewController.tabBar];
     }
 }
 
@@ -4140,6 +4271,37 @@ NS_ASSUME_NONNULL_END
     };
     
     return scrollPos;
+}
+
+#pragma mark - Scrollbars
+
+- (void)setHideScrollbars:(BOOL)hideScrollbars
+{
+    _hideScrollbars = hideScrollbars;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
+- (void)applyScrollbarVisibility:(PTDocumentBaseViewController *)documentBaseViewController
+{
+    const BOOL hideScrollbars = self.hideScrollbars;
+    
+    if ([documentBaseViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentBaseViewController;
+        
+        documentController.documentSliderViewController.hidesPDFViewCtrlScrollIndicators = hideScrollbars;
+    }
+    
+    PTPDFViewCtrl* pdfViewCtrl = documentBaseViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+        
+        pdfViewCtrl.pagingScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.pagingScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+    }
 }
 
 #pragma mark - Canvas Size
@@ -4269,6 +4431,31 @@ NS_ASSUME_NONNULL_END
     [pdfViewCtrl CancelFindText];
 }
 
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+{
+    self.currentDocumentViewController.textSearchViewController.showsKeyboardOnViewDidAppear = NO;
+    unsigned int mode = e_ptambient_string | e_ptpage_stop | e_pthighlight;
+    if (matchCase) {
+        mode |= e_ptcase_sensitive;
+    }
+    if (matchWholeWord) {
+        mode |= e_ptwhole_word;
+    }
+
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.currentDocumentViewController.textSearchViewController];
+    nav.modalPresentationStyle = UIModalPresentationCustom;
+    [self.currentDocumentViewController presentViewController:nav animated:NO completion:^{
+        [self.currentDocumentViewController.textSearchViewController findText:searchString withSearchMode:mode];
+    }];
+}
+
+- (void)exitSearchMode;
+{
+    if (self.currentDocumentViewController.textSearchViewController.presentingViewController) {
+        [self.currentDocumentViewController dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
@@ -4387,6 +4574,16 @@ NS_ASSUME_NONNULL_END
     if (pdfViewCtrl) {
         [pdfViewCtrl SelectAll];
     }
+}
+
+- (BOOL)isReflowMode
+{
+    return !(self.documentViewController.isReflowHidden);
+}
+
+- (void)toggleReflow
+{
+    self.documentViewController.reflowHidden = !(self.documentViewController.isReflowHidden);
 }
 
 #pragma mark - Helper
@@ -4739,6 +4936,69 @@ NS_ASSUME_NONNULL_END
     return @"";
 }
 
++ (PTAnnotType)annotTypeForString:(NSString *)string {
+    if ([string isEqualToString:PTAnnotationCreateStickyToolKey]) {
+        return e_ptText;
+    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+        return e_ptLink;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeTextToolKey]) {
+        return e_ptFreeText;
+    } else if ([string isEqualToString:PTAnnotationCreateLineToolKey]) {
+        return e_ptLine;
+    } else if ([string isEqualToString:PTAnnotationCreateRectangleToolKey]) {
+        return e_ptSquare;
+    } else if ([string isEqualToString:PTAnnotationCreateEllipseToolKey]) {
+        return e_ptCircle;
+    } else if ([string isEqualToString:PTAnnotationCreatePolygonToolKey]) {
+        return e_ptPolygon;
+    } else if ([string isEqualToString:PTAnnotationCreatePolylineToolKey]) {
+        return e_ptPolyline;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        return e_ptHighlight;
+    } else if ([string isEqualToString:PTAnnotationCreateTextUnderlineToolKey]) {
+        return e_ptUnderline;
+    } else if ([string isEqualToString:PTAnnotationCreateTextSquigglyToolKey]) {
+        return e_ptSquiggly;
+    } else if ([string isEqualToString:PTAnnotationCreateTextStrikeoutToolKey]) {
+        return e_ptStrikeOut;
+    } else if ([string isEqualToString:PTAnnotationCreateStampToolKey]) {
+        return e_ptStamp;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeHandToolKey]) {
+        return e_ptInk;
+    } else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
+        return e_ptFileAttachment;
+    } else if ([string isEqualToString:PTAnnotationCreateSoundToolKey]) {
+        return e_ptSound;
+    } else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
+        return e_ptWidget;
+    } else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+        return e_ptRedact;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptCaret;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptPopup;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptMovie;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptScreen;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptPrinterMark;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptTrapNet;
+//    } else if ([string isEqualToString:@"");
+//        return e_pt3D;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptProjection;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptRichMedia;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptUnknown;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptWatermark;
+    }
+    return e_ptUnknown;
+}
+
 + (NSURL *)PT_getFileURL:(NSString *)document
 {
     NSURL *fileURL = [[NSBundle mainBundle] URLForResource:document withExtension:@"pdf"];
@@ -4799,6 +5059,13 @@ NS_ASSUME_NONNULL_END
     if (navigationListsViewController) {
         [self.documentViewController showNavigationLists];
     }
+}
+
+#pragma mark - Thumbnails
+
+- (void)openThumbnailsView
+{
+    [self.currentDocumentViewController showThumbnailsController];
 }
 
 @end

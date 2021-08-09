@@ -16,7 +16,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
-import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.reactnative.views.DocumentView;
 
@@ -385,6 +384,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     }
 
+    @ReactProp(name = "excludedAnnotationListTypes")
+    public void setExcludedAnnotationListTypes(DocumentView documentView, ReadableArray excludedTypes) {
+        documentView.setExcludedAnnotationListTypes(excludedTypes);
+    }
+
     @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
     public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
         documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
@@ -410,9 +414,23 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "disableEditingByAnnotationType")
+    public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
+        documentView.setDisableEditingByAnnotationType(annotationTypes);
+    }
     @ReactProp(name = "saveStateEnabled")
     public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
         documentView.setSaveStateEnabled(saveState);
+    }
+
+    @ReactProp(name = "openSavedCopyInNewTab")
+    public void setOpenSavedCopyInNewTab(DocumentView documentView, boolean openSavedCopyInNewTab) {
+        documentView.setOpenSavedCopyInNewTab(openSavedCopyInNewTab);
+    }
+
+    @ReactProp(name = "replyReviewStateEnabled")
+    public void setReplyReviewStateEnabled(DocumentView documentView, boolean replyReviewStateEnabled) {
+        documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -682,6 +700,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.closeAllTabs();
         } else {
             throw new PDFNetException("", 0L, getName(), "closeAllTabs", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openTabSwitcher(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openTabSwitcher();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openTabSwitcher", "Unable to find DocumentView.");
         }
     }
 
@@ -961,6 +988,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void startSearchMode(int tag, String searchString, boolean matchCase, boolean matchWholeWord) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.startSearchMode(searchString, matchCase, matchWholeWord);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "startSearchMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void exitSearchMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.exitSearchMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "exitSearchMode", "Unable to find DocumentView.");
+        }
+    }
+
     public void findText(int tag, String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1101,6 +1146,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "canRedo", "Unable to find DocumentView.");
         }
     }
+    
+    public void showViewSettings(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showViewSettings();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showViewSettings", "Unable to find DocumentView.");
+        }
+    }
+
+    public void showAddPagesView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showAddPagesView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showAddPagesView", "Unable to find DocumentView.");
+        }
+    }
+
+    public void shareCopy(int tag, boolean flattening) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.shareCopy(flattening);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "shareCopy", "Unable to find DocumentView.");
+        }
+    }
 
     public void showCrop(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
@@ -1135,6 +1207,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.openLists();
         } else {
             throw new PDFNetException("", 0L, getName(), "openLists", "Unable to find DocumentView");
+        }
+    }
+    
+    public boolean isReflowMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.isReflowMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isReflowMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void toggleReflow(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.toggleReflow();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "toggleReflow", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openThumbnailsView(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openThumbnailsView();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openThumbnailsView", "Unable to find DocumentView.");
         }
     }
     

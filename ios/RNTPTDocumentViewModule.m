@@ -596,7 +596,21 @@ RCT_REMAP_METHOD(closeAllTabs,
         resolve(nil);
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
+        reject(@"close_all_tabs", @"Failed to close all tabs", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openTabSwitcher,
+                 openTabSwitcherForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openTabSwitcherForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_tab_switcher", @"Failed to open tab switcher", [self errorFromException:exception]);
     }
 }
 
@@ -835,6 +849,96 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
 }
 
+RCT_REMAP_METHOD(isReflowMode,
+                 isReflowModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL inReflow = [[self documentViewManager] isReflowModeForDocumentViewTag:tag];
+        resolve(@(inReflow));
+    }
+    @catch (NSException *exception) {
+        reject(@"is_reflow_mode", @"Failed to get is reflow mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(toggleReflow,
+                 toggleReflowForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] toggleReflow:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"toggle_reflow", @"Failed to toggle reflow", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(showViewSettings,
+                 showViewSettingsForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showViewSettingsForDocumentViewTag:tag rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_view_settings", @"Failed to show view settings", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(showAddPagesView,
+                 showAddPagesViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showAddPagesViewForDocumentViewTag:tag rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_add_pages", @"Failed to show add pages view", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(shareCopy,
+                 shareCopyForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 withFlattening:(BOOL)flattening
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] shareCopyForDocumentViewTag:tag rect:rect withFlattening:flattening];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"share_copy", @"Failed to share a copy", [self errorFromException:exception]);
+    }
+}
+
+
+
+RCT_REMAP_METHOD(openThumbnailsView,
+                 openThumbnailsViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openThumbnailsViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_thumbnails_view", @"Failed to open thumbnails view", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Coordinate
 
 RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
@@ -1033,6 +1137,36 @@ RCT_REMAP_METHOD(cancelFindText,
     }
     @catch (NSException *exception) {
         reject(@"cancel_text", @"Failed to cancel text search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(startSearchMode,
+                 startSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] startSearchModeForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"start_search_mode", @"Failed to start search mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(exitSearchMode,
+                 exitSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] exitSearchModeForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"exit_search_mode", @"Failed to exit text search mode", [self errorFromException:exception]);
     }
 }
 

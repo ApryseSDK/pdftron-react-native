@@ -1,18 +1,25 @@
 package com.pdftron.reactnative.nativeviews;
 
 import android.graphics.PointF;
-
+import android.util.Pair;
 import androidx.fragment.app.FragmentActivity;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.pdftron.pdf.PDFDoc;
+import com.pdftron.pdf.controls.PdfViewCtrlTabBaseFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.utils.AnalyticsHandlerAdapter;
 import com.pdftron.pdf.utils.DialogGoToPage;
+import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
 
 import javax.annotation.Nullable;
 
@@ -87,6 +94,27 @@ public class RNPdfViewCtrlTabFragment extends PdfViewCtrlTabFragment2 {
         params.putInt(KEY_HORIZONTAL, l);
         params.putInt(KEY_VERTICAL, t);
         onReceiveNativeEvent(params);
+    }
+
+    public void shareCopy(boolean flattening) {
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        if (flattening) {
+            File tempFile = new File(activity.getCacheDir(), getTabTitleWithExtension());
+            String tempPath = Utils.getFileNameNotInUse(tempFile.getAbsolutePath());
+            PdfViewCtrlTabBaseFragment.SaveFolderWrapper wrapper = new PdfViewCtrlTabBaseFragment.SaveFolderWrapper(
+                    activity.getCacheDir(), FilenameUtils.getName(tempPath), true, null);
+            PDFDoc copyDoc = wrapper.getDoc();
+            if (copyDoc != null) {
+                ViewerUtils.flattenDoc(copyDoc);
+                Pair<Boolean, String> result = wrapper.save(copyDoc);
+                Utils.sharePdfFile(activity, new File(result.second));
+            }
+        } else {
+            handleOnlineShare();
+        }
     }
 
     public void setReactContext(@Nullable ReactContext reactContext, int id) {

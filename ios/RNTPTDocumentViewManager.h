@@ -82,6 +82,8 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openTabSwitcherForDocumentViewTag:(NSNumber *)tag;
+
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
@@ -140,6 +142,10 @@
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
 
+- (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag;
+
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;
@@ -167,5 +173,17 @@
 - (void)openListsForDocumentViewTag:(NSNumber *) tag;
 
 - (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag;
+
+- (void)toggleReflow:(NSNumber *)tag;
+
+- (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
+- (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
 @end
