@@ -80,6 +80,8 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openTabSwitcherForDocumentViewTag:(NSNumber *)tag;
+
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;

@@ -681,6 +681,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openTabSwitcher(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openTabSwitcher();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openTabSwitcher", "Unable to find DocumentView.");
+        }
+    }
+
     public WritableMap getPageCropBox(int tag, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

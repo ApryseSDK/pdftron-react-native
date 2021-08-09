@@ -571,7 +571,6 @@ NS_ASSUME_NONNULL_END
     [self setToolsPermission:disabledElements toValue:NO documentViewController:documentViewController];
 }
 
-
 - (void)setExcludedAnnotationListTypes:(NSArray<NSString *> *)excludedAnnotationListTypes
 {
     _excludedAnnotationListTypes = excludedAnnotationListTypes;
@@ -593,18 +592,6 @@ NS_ASSUME_NONNULL_END
     if (annotTypes.count > 0) {
         documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
-}
-
-- (void)setMultiTabEnabled:(BOOL)enabled
-{
-    _multiTabEnabled = enabled;
-    
-}
-
-- (void)setTabTitle:(NSString *)tabTitle
-{
-    _tabTitle = [tabTitle copy];
-    
 }
 
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
@@ -4112,7 +4099,19 @@ NS_ASSUME_NONNULL_END
     
 }
 
-#pragma mark - Close all tabs
+#pragma mark - Tabs
+
+- (void)setMultiTabEnabled:(BOOL)enabled
+{
+    _multiTabEnabled = enabled;
+    
+}
+
+- (void)setTabTitle:(NSString *)tabTitle
+{
+    _tabTitle = [tabTitle copy];
+    
+}
 
 - (void)closeAllTabs
 {
@@ -4132,6 +4131,13 @@ NS_ASSUME_NONNULL_END
     // Close the selected tab last.
     if (tabManager.selectedItem) {
         [tabManager removeItem:tabManager.selectedItem];
+    }
+}
+
+- (void)openTabSwitcher
+{
+    if (self.tabbedDocumentViewController) {
+        [self.tabbedDocumentViewController showTabsList:self.tabbedDocumentViewController.tabBar];
     }
 }
 

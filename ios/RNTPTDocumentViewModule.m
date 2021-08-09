@@ -568,7 +568,21 @@ RCT_REMAP_METHOD(closeAllTabs,
         resolve(nil);
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
+        reject(@"close_all_tabs", @"Failed to close all tabs", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openTabSwitcher,
+                 openTabSwitcherForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openTabSwitcherForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_tab_switcher", @"Failed to open tab switcher", [self errorFromException:exception]);
     }
 }
 

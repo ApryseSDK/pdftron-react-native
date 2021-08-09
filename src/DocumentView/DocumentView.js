@@ -557,6 +557,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openTabSwitcher = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openTabSwitcher(tag);
+    }
+    return Promise.resolve();
+  }
+
   getZoom = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

@@ -3543,6 +3543,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openTabSwitcher() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOpenTabSwitcher();
+        }
+    }
+
     public int getPageRotation() {
         return getPdfViewCtrl().getPageRotation() * 90;
     }
