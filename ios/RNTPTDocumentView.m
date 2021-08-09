@@ -571,6 +571,30 @@ NS_ASSUME_NONNULL_END
     [self setToolsPermission:disabledElements toValue:NO documentViewController:documentViewController];
 }
 
+
+- (void)setExcludedAnnotationListTypes:(NSArray<NSString *> *)excludedAnnotationListTypes
+{
+    _excludedAnnotationListTypes = excludedAnnotationListTypes;
+    
+    if (self.currentDocumentViewController) {
+        [self excludeAnnotationListTypes:excludedAnnotationListTypes documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    NSMutableArray<NSNumber *> *annotTypes = [[NSMutableArray alloc] init];
+    
+    for (NSString *string in excludedAnnotationListTypes) {
+        PTAnnotType annotType = [RNTPTDocumentView annotTypeForString:string];
+        [annotTypes addObject:[NSNumber numberWithInt:annotType]];
+    }
+    
+    if (annotTypes.count > 0) {
+        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+    }
+}
+
 - (void)setMultiTabEnabled:(BOOL)enabled
 {
     _multiTabEnabled = enabled;
@@ -1842,6 +1866,9 @@ NS_ASSUME_NONNULL_END
 
     // Set Annotation List Editing 
     // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    
+    // Exclude annotation types from annotation list.
+    [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
     
     // Hanlde displays of various sizes
     documentViewController.alwaysShowNavigationListsAsModal = !self.showNavigationListAsSidePanelOnLargeDevices;
@@ -4502,6 +4529,16 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (BOOL)isReflowMode
+{
+    return !(self.documentViewController.isReflowHidden);
+}
+
+- (void)toggleReflow
+{
+    self.documentViewController.reflowHidden = !(self.documentViewController.isReflowHidden);
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value
@@ -4850,6 +4887,69 @@ NS_ASSUME_NONNULL_END
     }
     
     return @"";
+}
+
++ (PTAnnotType)annotTypeForString:(NSString *)string {
+    if ([string isEqualToString:PTAnnotationCreateStickyToolKey]) {
+        return e_ptText;
+    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+        return e_ptLink;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeTextToolKey]) {
+        return e_ptFreeText;
+    } else if ([string isEqualToString:PTAnnotationCreateLineToolKey]) {
+        return e_ptLine;
+    } else if ([string isEqualToString:PTAnnotationCreateRectangleToolKey]) {
+        return e_ptSquare;
+    } else if ([string isEqualToString:PTAnnotationCreateEllipseToolKey]) {
+        return e_ptCircle;
+    } else if ([string isEqualToString:PTAnnotationCreatePolygonToolKey]) {
+        return e_ptPolygon;
+    } else if ([string isEqualToString:PTAnnotationCreatePolylineToolKey]) {
+        return e_ptPolyline;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
+        return e_ptHighlight;
+    } else if ([string isEqualToString:PTAnnotationCreateTextUnderlineToolKey]) {
+        return e_ptUnderline;
+    } else if ([string isEqualToString:PTAnnotationCreateTextSquigglyToolKey]) {
+        return e_ptSquiggly;
+    } else if ([string isEqualToString:PTAnnotationCreateTextStrikeoutToolKey]) {
+        return e_ptStrikeOut;
+    } else if ([string isEqualToString:PTAnnotationCreateStampToolKey]) {
+        return e_ptStamp;
+    } else if ([string isEqualToString:PTAnnotationCreateFreeHandToolKey]) {
+        return e_ptInk;
+    } else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
+        return e_ptFileAttachment;
+    } else if ([string isEqualToString:PTAnnotationCreateSoundToolKey]) {
+        return e_ptSound;
+    } else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
+        return e_ptWidget;
+    } else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+        return e_ptRedact;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptCaret;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptPopup;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptMovie;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptScreen;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptPrinterMark;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptTrapNet;
+//    } else if ([string isEqualToString:@"");
+//        return e_pt3D;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptProjection;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptRichMedia;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptUnknown;
+//    } else if ([string isEqualToString:@"");
+//        return e_ptWatermark;
+    }
+    return e_ptUnknown;
 }
 
 + (NSURL *)PT_getFileURL:(NSString *)document

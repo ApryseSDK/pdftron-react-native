@@ -1265,6 +1265,20 @@ If document editing is enabled, then this value determines if the annotation lis
 />
 ```
 
+#### excludedAnnotationListTypes
+array of [`Config.Tools`](./src/Config/Config.js), optional, defaults to none
+
+Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
@@ -2488,6 +2502,34 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
 });
 ```
 
+### Reflow
+
+#### isReflowMode
+Returns whether the viewer is currently in reflow mode.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+inReflow | bool | whether the viewer is in reflow mode
+
+```js
+this._viewer.isReflowMode().then((inReflow) => {
+  console.log(inReflow ? 'in reflow mode' : 'not in reflow mode');
+});
+```
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
+```
+
 ### Canvas
 
 #### getCanvasSize
@@ -2672,7 +2714,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageTransparencyGrid | bool | whether to use the transpareny grid
+pageTransparencyGrid | bool | whether to use the transparency grid
 
 ```js
 this._viewer.setPageTransparencyGrid(true);

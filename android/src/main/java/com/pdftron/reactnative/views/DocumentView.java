@@ -529,6 +529,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.userBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     }
 
+    public void setExcludedAnnotationListTypes(ReadableArray excludedTypes) {
+        int[] annotTypes = new int[excludedTypes.size()];
+        for (int i = 0; i < excludedTypes.size(); i++) {
+            String type = excludedTypes.getString(i);
+            annotTypes[i] = convStringToAnnotType(type);
+        }
+
+        mBuilder = mBuilder.excludeAnnotationListTypes(annotTypes);
+    }
+
     public void setImageInReflowEnabled(boolean imageInReflowEnabled) {
         mBuilder = mBuilder.imageInReflowEnabled(imageInReflowEnabled);
     }
@@ -4012,6 +4022,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(
                     PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
             );
+        }
+    }
+
+    public boolean isReflowMode() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            return getPdfViewCtrlTabFragment().isReflowMode();
+        }
+        return false;
+    }
+
+    public void toggleReflow() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onToggleReflow();
         }
     }
 
