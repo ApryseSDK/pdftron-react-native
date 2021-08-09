@@ -903,7 +903,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  showRotate = () => {
+  showRotateDialog = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showRotate(tag);
