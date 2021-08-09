@@ -4011,8 +4011,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public boolean isReflowMode() {
-        if (mPdfViewCtrlTabHostFragment != null) {
-            return mPdfViewCtrlTabHostFragment.getCurrentPdfViewCtrlFragment().isReflowMode();
+        if (getPdfViewCtrlTabFragment() != null) {
+            return getPdfViewCtrlTabFragment().isReflowMode();
         }
         return false;
     }
