@@ -912,6 +912,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  toggleReflow = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.toggleReflow(tag);
+    }
+    return Promise.resolve();
+  }
+
   shareCopy = (rect, flattening) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -927,7 +935,7 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
- 
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

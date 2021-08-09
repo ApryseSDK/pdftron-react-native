@@ -585,6 +585,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
 
+- (void)toggleReflow;
+
 - (void)showViewSettingsFromRect:(NSDictionary *)rect;
 
 - (void)showAddPagesViewFromRect:(NSDictionary *)rect;

@@ -4020,6 +4020,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void toggleReflow() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onToggleReflow();
+        }
+    }
+
     public void showGoToPageView() {
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();

@@ -2482,6 +2482,17 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
 });
 ```
 
+### Reflow
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
+```
+
 ### Canvas
 
 #### getCanvasSize

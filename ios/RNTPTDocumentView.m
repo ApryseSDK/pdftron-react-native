@@ -4524,6 +4524,11 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)toggleReflow
+{
+    self.documentViewController.reflowHidden = !(self.documentViewController.isReflowHidden);
+}
+
 #pragma mark - Helper
 
 + (NSString *)PT_idAsNSString:(id)value
