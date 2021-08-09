@@ -5,9 +5,9 @@
         "jsx": "react-native",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "declaration": true,
-        "outDir": "./",
+        "declaration": false,
+        "outDir": "./lib",
     },
-    "files": ["index.ts"],
+    "include": ["index.ts", "src/**/*"],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -47,3 +47,6 @@ buck-out/
       
 example/android/app/src/main/assets/index.android.bundle
 example/android/app/src/main/assets/index.android.bundle.meta
+
+# Build
+/lib
