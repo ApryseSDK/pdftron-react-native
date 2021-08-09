@@ -90,6 +90,8 @@ export default class DocumentView extends PureComponent {
     hideViewModeItems: PropTypes.array,
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
+    photoPickerEnabled: PropTypes.bool,
+    autoResizeFreeTextEnabled: PropTypes.bool,
     annotationsListEditingEnabled: PropTypes.bool,
     showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
     restrictDownloadUsage: PropTypes.bool,
@@ -103,6 +105,10 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    hideScrollbars: PropTypes.bool,
+    saveStateEnabled: PropTypes.bool,
+    openSavedCopyInNewTab: PropTypes.bool,
+    replyReviewStateEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -449,7 +455,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationAtPoint(tag, x, y, distanceThreshold, minimumLineWeight);
+      return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
     }
     return Promise.resolve();
   }
@@ -465,7 +471,7 @@ export default class DocumentView extends PureComponent {
   getAnnotationsOnPage = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.getAnnotationsOnPage(tag, pageNumber);
+      return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
     }
     return Promise.resolve();
   }
@@ -530,6 +536,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoLastPage(tag);
+    }
+    return Promise.resolve();
+  }
+
+  showGoToPageView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.showGoToPageView(tag);
     }
     return Promise.resolve();
   }
@@ -685,7 +699,23 @@ export default class DocumentView extends PureComponent {
       return DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
     }
     return Promise.resolve();
-  }    
+  }
+
+  startSearchMode = (searchString, matchCase, matchWholeWord) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.startSearchMode(tag, searchString, matchCase, matchWholeWord);
+    }
+    return Promise.resolve();
+  }
+
+  exitSearchMode = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.exitSearchMode(tag);
+    }
+    return Promise.resolve();
+  }
 
   findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
     const tag = findNodeHandle(this._viewerRef);
@@ -864,11 +894,43 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
+  
+  showViewSettings = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showViewSettings(tag, rect);
+    }
+    return Promise.resolve();
+  }
+
+  showAddPagesView = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showAddPagesView(tag, rect);
+    }
+    return Promise.resolve();
+  }
 
   toggleReflow = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.toggleReflow(tag);
+    }
+    return Promise.resolve();
+  }
+
+  shareCopy = (rect, flattening) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.shareCopy(tag, rect, flattening);
+    }
+    return Promise.resolve();
+  }
+ 
+  openThumbnailsView = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.openThumbnailsView(tag);
     }
     return Promise.resolve();
   }

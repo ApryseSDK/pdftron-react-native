@@ -71,6 +71,7 @@ NS_ASSUME_NONNULL_END
     _pageChangeOnTap = NO;
     _thumbnailViewEditingEnabled = YES;
     _selectAnnotationAfterCreation = YES;
+    _autoResizeFreeTextEnabled = YES;
     
     _inkMultiStrokeEnabled = YES;
 
@@ -80,6 +81,8 @@ NS_ASSUME_NONNULL_END
     _longPressMenuEnabled = YES;
     
     _maxTabCount = NSUIntegerMax;
+    
+    _saveStateEnabled = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
@@ -527,9 +530,23 @@ NS_ASSUME_NONNULL_END
 //        PTCloseButtonKey: ^{
 //
 //        },
-//        PTSaveCopyButtonKey: ^{
-//
-//        },
+        PTSaveCopyButtonKey: ^{
+            documentViewController.exportButtonHidden = YES;
+        },
+        PTSaveIdenticalCopyButtonKey: ^ {
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
+        PTSaveFlattenedCopyButtonKey: ^{
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportFlattenedCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
 //        PTFormToolsButtonKey: ^{
 //
 //        },
@@ -1629,6 +1646,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAutoResizeFreeTextEnabled:(BOOL)autoResizeFreeTextEnabled
+{
+    _autoResizeFreeTextEnabled = autoResizeFreeTextEnabled;
+    
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -1670,6 +1694,9 @@ NS_ASSUME_NONNULL_END
     // Select after creation.
     toolManager.selectAnnotationAfterCreation = self.selectAnnotationAfterCreation;
     
+    // Auto resize free text enabled.
+    toolManager.autoResizeFreeTextEnabled = self.autoResizeFreeTextEnabled;
+    
     // Sticky note pop up.
     toolManager.textAnnotationOptions.opensPopupOnTap = ![self.overrideBehavior containsObject:PTStickyNoteShowPopUpKey];
     
@@ -1688,8 +1715,14 @@ NS_ASSUME_NONNULL_END
     
     documentViewController.hidesControlsOnTap = self.hideToolbarsOnTap;
     
+    // Scrollbars.
+    [self applyScrollbarVisibility:documentViewController];
+    
     // Document slider.
     ((PTDocumentController*)documentViewController).documentSliderEnabled = self.documentSliderEnabled;
+    
+    // Re-apply scrollbar visibility.
+    [self applyScrollbarVisibility:documentViewController];
     
     // Page indicator.
     documentViewController.pageIndicatorEnabled = self.pageIndicatorEnabled;
@@ -1777,6 +1810,8 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.colorModeSepiaHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeRotationKey]) {
             documentViewController.settingsViewController.pageRotationHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
+            documentViewController.settingsViewController.cropPagesHidden = YES;
         }
     }
 
@@ -1818,6 +1853,10 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+
+    // Enable/disable restoring state (last read page).
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
 }
 
 - (void)applyLeadingNavButton
@@ -1967,6 +2006,10 @@ NS_ASSUME_NONNULL_END
             if (matchedDefaultGroup != nil) {
                 // use a default group if its key is found
                 [documentController.toolGroupManager setSelectedGroup:matchedDefaultGroup];
+                [documentController.toolGroupIndicatorView.button setTitle:matchedDefaultGroup.title forState:UIControlStateNormal];
+                if (@available(iOS 13.0, *)) {
+                    documentController.toolGroupIndicatorView.button.largeContentImage = matchedDefaultGroup.image;
+                }
                 return;
             }
 
@@ -2266,6 +2309,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setSaveStateEnabled:(BOOL)enabled
+{
+    _saveStateEnabled = enabled;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Fit mode
 
 - (void)setFitMode:(NSString *)fitMode
@@ -2337,6 +2387,42 @@ NS_ASSUME_NONNULL_END
         [self.delegate navButtonClicked:self];
     }
 }
+
+#pragma mark - Controls
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showSettingsFromScreenRect:screenRect];
+}
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController showAddPagesViewFromScreenRect:screenRect];
+}
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    NSNumber *rectX1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX1Key]];
+    NSNumber *rectY1 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY1Key]];
+    NSNumber *rectX2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectX2Key]];
+    NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
+    CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
+    [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
+}
+
 
 #pragma mark - signSignatureFieldsWithStamps
 
@@ -2880,6 +2966,12 @@ NS_ASSUME_NONNULL_END
         PTOpenMenuItemTitleKey: PTOpenMenuItemIdentifierKey,
         PTCalibrateMenuItemTitleKey: PTCalibrateMenuItemIdentifierKey,
     };
+    NSArray<NSString *> *whitelist = @[
+        PTLocalizedString(PTHighlightWhiteListKey, nil),
+        PTLocalizedString(PTStrikeoutWhiteListKey, nil),
+        PTLocalizedString(PTUnderlineWhiteListKey, nil),
+        PTLocalizedString(PTSquigglyWhiteListKey, nil),
+    ];
     // Get the localized title for each menu item.
     NSMutableDictionary<NSString *, NSString *> *localizedMap = [NSMutableDictionary dictionary];
     for (NSString *key in map) {
@@ -2898,7 +2990,10 @@ NS_ASSUME_NONNULL_END
         if (!self.annotationMenuItems) {
             [permittedItems addObject:menuItem];
         }
-        else {
+        else {if ([whitelist containsObject:menuItem.title] && [self.annotationMenuItems containsObject:PTTypeMenuItemIdentifierKey]) {
+            [permittedItems addObject:menuItem];
+        }
+        else
             if (menuItemId && [self.annotationMenuItems containsObject:menuItemId]) {
                 [permittedItems addObject:menuItem];
             }
@@ -3733,6 +3828,7 @@ NS_ASSUME_NONNULL_END
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     [pdfViewCtrl SetDrawAnnotations:drawAnnotations];
+    [pdfViewCtrl Update:YES];
 }
 
 - (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility
@@ -3947,6 +4043,11 @@ NS_ASSUME_NONNULL_END
     return [pdfViewCtrl GotoLastPage];
 }
 
+- (void) showGoToPageView {
+    PTPageIndicatorViewController * pageIndicator = self.currentDocumentViewController.pageIndicatorViewController;
+    [pageIndicator presentGoToPageController];
+}
+
 #pragma mark - Get Document Path
 
 - (NSString *) getDocumentPath {
@@ -4093,6 +4194,37 @@ NS_ASSUME_NONNULL_END
     return scrollPos;
 }
 
+#pragma mark - Scrollbars
+
+- (void)setHideScrollbars:(BOOL)hideScrollbars
+{
+    _hideScrollbars = hideScrollbars;
+    
+    if (self.documentViewController) {
+        [self applyViewerSettings];
+    }
+}
+
+- (void)applyScrollbarVisibility:(PTDocumentBaseViewController *)documentBaseViewController
+{
+    const BOOL hideScrollbars = self.hideScrollbars;
+    
+    if ([documentBaseViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentBaseViewController;
+        
+        documentController.documentSliderViewController.hidesPDFViewCtrlScrollIndicators = hideScrollbars;
+    }
+    
+    PTPDFViewCtrl* pdfViewCtrl = documentBaseViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        pdfViewCtrl.contentScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.contentScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+        
+        pdfViewCtrl.pagingScrollView.showsHorizontalScrollIndicator = !hideScrollbars;
+        pdfViewCtrl.pagingScrollView.showsVerticalScrollIndicator = !hideScrollbars;
+    }
+}
+
 #pragma mark - Canvas Size
 
 - (NSDictionary<NSString *, NSNumber *> *)getCanvasSize
@@ -4218,6 +4350,31 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     
     [pdfViewCtrl CancelFindText];
+}
+
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+{
+    self.currentDocumentViewController.textSearchViewController.showsKeyboardOnViewDidAppear = NO;
+    unsigned int mode = e_ptambient_string | e_ptpage_stop | e_pthighlight;
+    if (matchCase) {
+        mode |= e_ptcase_sensitive;
+    }
+    if (matchWholeWord) {
+        mode |= e_ptwhole_word;
+    }
+
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:self.currentDocumentViewController.textSearchViewController];
+    nav.modalPresentationStyle = UIModalPresentationCustom;
+    [self.currentDocumentViewController presentViewController:nav animated:NO completion:^{
+        [self.currentDocumentViewController.textSearchViewController findText:searchString withSearchMode:mode];
+    }];
+}
+
+- (void)exitSearchMode;
+{
+    if (self.currentDocumentViewController.textSearchViewController.presentingViewController) {
+        [self.currentDocumentViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (NSDictionary *)getSelection:(NSInteger)pageNumber
@@ -4723,6 +4880,13 @@ NS_ASSUME_NONNULL_END
     _restrictDownloadUsage = restrictDownloadUsage;
     
     [self applyViewerSettings];
+}
+
+#pragma mark - Thumbnails
+
+- (void)openThumbnailsView
+{
+    [self.currentDocumentViewController showThumbnailsController];
 }
 
 @end
