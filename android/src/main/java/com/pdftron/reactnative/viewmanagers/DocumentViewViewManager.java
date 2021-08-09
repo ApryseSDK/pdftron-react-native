@@ -384,6 +384,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     }
 
+    @ReactProp(name = "excludedAnnotationListTypes")
+    public void setExcludedAnnotationListTypes(DocumentView documentView, ReadableArray excludedTypes) {
+        documentView.setExcludedAnnotationListTypes(excludedTypes);
+    }
+
     @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
     public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
         documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
