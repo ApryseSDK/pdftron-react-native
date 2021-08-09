@@ -821,6 +821,20 @@ RCT_REMAP_METHOD(isReflowMode,
     }
 }
 
+RCT_REMAP_METHOD(toggleReflow,
+                 toggleReflowForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] toggleReflow:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"toggle_reflow", @"Failed to toggle reflow", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(showViewSettings,
                  showViewSettingsForDocumentViewTag: (nonnull NSNumber *)tag
                  rect:(NSDictionary *)rect
