@@ -162,6 +162,10 @@
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
 
+- (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag;
+
+- (void)toggleReflow:(NSNumber *)tag;
+
 - (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
 
 - (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;

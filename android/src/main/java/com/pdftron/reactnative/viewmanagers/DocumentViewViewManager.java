@@ -384,6 +384,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setUserBookmarksListEditingEnabled(userBookmarksListEditingEnabled);
     }
 
+    @ReactProp(name = "excludedAnnotationListTypes")
+    public void setExcludedAnnotationListTypes(DocumentView documentView, ReadableArray excludedTypes) {
+        documentView.setExcludedAnnotationListTypes(excludedTypes);
+    }
+
     @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
     public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
         documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
@@ -1153,6 +1158,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.showRotateDialog();
         } else {
             throw new PDFNetException("", 0L, getName(), "showRotateDialog", "Unable to find DocumentView.");
+        }
+    }
+
+    public boolean isReflowMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.isReflowMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isReflowMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void toggleReflow(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.toggleReflow();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "toggleReflow", "Unable to find DocumentView.");
         }
     }
 

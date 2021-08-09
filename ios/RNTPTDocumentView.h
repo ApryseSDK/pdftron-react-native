@@ -430,6 +430,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -582,6 +584,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (BOOL)isReflowMode;
+
+- (void)toggleReflow;
 
 - (void)showViewSettingsFromRect:(NSDictionary *)rect;
 
