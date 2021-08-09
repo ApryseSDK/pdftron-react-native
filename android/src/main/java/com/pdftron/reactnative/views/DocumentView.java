@@ -428,6 +428,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setDisableEditingByAnnotationType(ReadableArray annotationTypes) {
+        int[] annotTypes = new int[annotationTypes.size()];
+        for (int i = 0; i < annotationTypes.size(); i++) {
+            String item = annotationTypes.getString(i);
+            annotTypes[i] = convStringToAnnotType(item);
+        }
+
+        if (annotTypes.length > 0) {
+            mToolManagerBuilder = mToolManagerBuilder.disableAnnotEditing(annotTypes);
+        }
+    }
+
     public void setAnnotationAuthor(String author) {
         Context context = getContext();
         if (context != null && !Utils.isNullOrEmpty(author)) {

@@ -929,6 +929,31 @@ NS_ASSUME_NONNULL_END
     return NO;
 }
 
+#pragma mark - Uneditable annotation types
+
+- (void)setUneditableAnnotationTypes:(NSArray<NSString *> *)uneditableAnnotationTypes
+{
+    _uneditableAnnotationTypes = [uneditableAnnotationTypes copy];
+    
+    if (self.currentDocumentViewController) {
+        [self setAnnotationEditingPermission:uneditableAnnotationTypes toValue:NO documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)setAnnotationEditingPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    for (NSObject *item in stringsArray) {
+        if ([item isKindOfClass:[NSString class]]) {
+            NSString *string = (NSString *)item;
+            PTExtendedAnnotType typeToSetPermission = [self reactAnnotationNameToAnnotType:string];
+            
+            [toolManager annotationOptionsForAnnotType:typeToSetPermission].canEdit = value;
+        }
+    }
+}
+
 - (void)setPageNumber:(int)pageNumber
 {
     if (_pageNumber == pageNumber) {
@@ -1807,6 +1832,9 @@ NS_ASSUME_NONNULL_END
     
     // Disable tools.
     [self setToolsPermission:self.disabledTools toValue:NO documentViewController:documentViewController];
+    
+    // Disable editing by annotation type.
+    [self setAnnotationEditingPermission:self.uneditableAnnotationTypes toValue:NO documentViewController:documentViewController];
     
     if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
