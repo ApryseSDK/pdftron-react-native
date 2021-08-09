@@ -590,7 +590,7 @@ NS_ASSUME_NONNULL_END
     }
     
     if (annotTypes.count > 0) {
-        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+        // documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
 }
 
@@ -5053,7 +5053,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Navigation List
 
--(void)openLists
+-(void)openNavigationLists
 {
     PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
     if (navigationListsViewController) {

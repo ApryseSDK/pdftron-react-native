@@ -3091,13 +3091,13 @@ Returns a Promise.
 this._viewer.openLayersList();
 ```
 
-#### openLists
+#### openNavigationLists
 Displays the existing list container. Its current tab will be the one last opened. 
 
 Returns a Promise.
 
 ```js
-this._viewer.openLists();
+this._viewer.openNavigationLists();
 ```
 
 #### showViewSettings

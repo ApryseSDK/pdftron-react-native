@@ -1354,12 +1354,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void openLists(final int tag, final Promise promise) {
+    public void openNavigationLists(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.openLists(tag);
+                    mDocumentViewInstance.openNavigationLists(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

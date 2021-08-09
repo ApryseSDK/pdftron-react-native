@@ -4106,7 +4106,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void openLists() {
+    public void openNavigationLists() {
         if (mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
         }

@@ -1314,17 +1314,17 @@ RCT_REMAP_METHOD(openLayersList,
     }
 }
 
-RCT_REMAP_METHOD(openLists,
-                 openListsForDocumentViewTag: (nonnull NSNumber *)tag
+RCT_REMAP_METHOD(openNavigationLists,
+                 openNavigationListsForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] openListsForDocumentViewTag:tag];
+        [[self documentViewManager] openNavigationListsForDocumentViewTag:tag];
         resolve(nil);
     }
     @catch (NSException *exception) {
-        reject(@"open_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
+        reject(@"open_navigation_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
     }
 }
 

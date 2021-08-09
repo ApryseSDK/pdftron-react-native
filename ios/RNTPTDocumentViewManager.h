@@ -170,7 +170,7 @@
 
 - (void)openLayersListForDocumentViewTag:(NSNumber *)tag;
 
-- (void)openListsForDocumentViewTag:(NSNumber *) tag;
+- (void)openNavigationListsForDocumentViewTag:(NSNumber *) tag;
 
 - (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
 

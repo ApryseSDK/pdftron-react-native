@@ -985,10 +985,10 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openLists = () => {
+  openNavigationLists = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.openLists(tag);
+      return DocumentViewManager.openNavigationLists(tag);
     }
     return Promise.resolve();
   }

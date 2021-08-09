@@ -594,7 +594,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)openLayersList;
 
-- (void)openLists;
+- (void)openNavigationLists;
 
 - (void)openAnnotationList;
 
