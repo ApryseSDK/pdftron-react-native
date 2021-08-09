@@ -430,6 +430,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;

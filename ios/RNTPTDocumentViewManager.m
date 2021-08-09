@@ -479,6 +479,14 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationsListEditingEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(excludedAnnotationListTypes, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        NSArray *excludedAnnotationListTypes = [RCTConvert NSArray:json];
+        view.excludedAnnotationListTypes = excludedAnnotationListTypes;
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showNavigationListAsSidePanelOnLargeDevices, BOOL, RNTPTDocumentView)
 {
     if (json) {
