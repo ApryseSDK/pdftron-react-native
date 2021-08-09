@@ -272,6 +272,18 @@ Example:
 />
 ```
 
+#### openSavedCopyInNewTab
+bool, optional, default to true, Android only.
+
+Sets whether the new saved file should open after saving.
+Example:
+
+```js
+<DocumentView
+  openSavedCopyInNewTab={false}
+/>
+```
+
 #### onDocumentLoaded
 function, optional
 
@@ -770,6 +782,17 @@ vertical | number | the vertical position of the scroll
   }}
 ```
 
+#### hideScrollbars
+bool, optional, iOS only, defaults to false
+
+Determines whether scrollbars will be hidden on the viewer.
+
+```js
+<DocumentView
+  hideScrollbars={true}
+/>
+```
+
 ### Reflow
 
 #### imageInReflowEnabled
@@ -1034,6 +1057,19 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### replyReviewStateEnabled
+boolean, optional, Android only, defaults to true
+
+Defines whether to show an annotation's reply review state.
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  replyReviewStateEnabled={true}
+/>
+```
+
 ### Annotations
 
 #### annotationPermissionCheckEnabled
@@ -1206,6 +1242,20 @@ If document editing is enabled, then this value determines if the annotation lis
 ```js
 <DocumentView
   annotationsListEditingEnabled={true}
+/>
+```
+
+#### excludedAnnotationListTypes
+array of [`Config.Tools`](./src/Config/Config.js), optional, defaults to none
+
+Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
 />
 ```
 
@@ -1782,7 +1832,7 @@ Returns a Promise.
 
 ```js
 const xfdfCommand = '<?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
-this._viewer.importAnnotationCommand(xfdf);
+this._viewer.importAnnotationCommand(xfdfCommand);
 
 ```
 
@@ -2019,7 +2069,9 @@ this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
 ```
 
 #### setDrawAnnotations
-Sets whether all annotations and forms should be rendered in the viewer.
+Sets whether all annotations and forms should be rendered. This method affects the viewer and does not change the document.
+
+Unlike [setVisibilityForAnnotation](#setVisibilityForAnnotation), this method is used to show and hide all annotations and forms in the viewer. 
 
 Parameters:
 
@@ -2243,6 +2295,17 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openThumbnailsView
+Display a page thumbnails view. 
+
+This view allows users to navigate pages of a document. If [`thumbnailViewEditingEnabled`](#thumbnailViewEditingEnabled) is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+
+Returns a Promise.
+
+```js
+this._viewer.openThumbnailsView();
+```
+
 ### Toolbar
 
 #### setCurrentToolbar
@@ -2427,6 +2490,17 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
   console.log('Current horizontal scroll position is:', horizontal);
   console.log('Current vertical scroll position is:', vertical);
 });
+```
+
+### Reflow
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
 ```
 
 ### Canvas
@@ -2647,12 +2721,38 @@ this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
 
 ### Text Selection
 
+#### startSearchMode
+Search for a term and all matching results will be highlighted.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+searchString | string | the text to search for
+matchCase | bool | indicates if it is case sensitive
+matchWholeWord | bool | indicates if it matches an entire word only
+
+```js
+this._viewer.startSearchMode('PDFTron', false, false);
+```
+
+#### exitSearchMode
+Finishes the current text search and remove all the highlights.
+
+Returns a Promise.
+
+```js
+this._viewer.exitSearchMode();
+```
+
 #### findText
 Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
 
 Returns a Promise.
 
-Promise Parameters:
+Parameters:
 
 Name | Type | Description
 --- | --- | ---
@@ -2677,6 +2777,12 @@ this._viewer.cancelFindText();
 
 #### getSelection
 Returns the text selection on a given page, if any.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | number | the specified page number. It is 1-indexed
 
 Returns a Promise.
 
@@ -2729,7 +2835,7 @@ Returns a Promise.
 this._viewer.clearSelection();
 ```
 
-#### getPageSelectionRange
+#### getSelectionPageRange
 Returns the page range (beginning and end) that has text selection on it.
 
 Returns a Promise.
@@ -2742,7 +2848,7 @@ begin | number | the first page to have selection, -1 if there are no selections
 end | number | the last page to have selection,  -1 if there are no selections
 
 ```js
-this._viewer.getPageSelectionRange().then(({begin, end}) => {
+this._viewer.getSelectionPageRange().then(({begin, end}) => {
   if (begin === -1) {
     console.log('There is no selection');
   } else {
@@ -2917,4 +3023,56 @@ Returns a Promise.
 
 ```js
 this._viewer.showCrop();
+```
+
+#### showViewSettings
+Displays the view settings.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showViewSettings({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### showAddPagesView
+Displays the add pages view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showAddPagesView({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### shareCopy
+Displays the share copy view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+flattening | bool | Whether the shared copy should be flattened before sharing.
+
+```js
+this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
 ```

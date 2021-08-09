@@ -140,6 +140,10 @@
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
 
+- (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag;
+
 - (NSDictionary *)getSelectionForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (BOOL)hasSelectionForDocumentViewTag:(NSNumber *)tag;
@@ -159,5 +163,15 @@
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
+- (void)toggleReflow:(NSNumber *)tag;
+
+- (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
+
+- (void)shareCopyForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
+- (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
 @end

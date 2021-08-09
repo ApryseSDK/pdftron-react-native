@@ -22,6 +22,8 @@ static NSString * const PTEditPagesButtonKey = @"editPagesButton";
 static NSString * const PTPrintButtonKey = @"printButton";
 static NSString * const PTCloseButtonKey = @"closeButton";
 static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
+static NSString * const PTSaveIdenticalCopyButtonKey = @"saveIdenticalCopyButton";
+static NSString * const PTSaveFlattenedCopyButtonKey = @"saveFlattenedCopyButton";
 static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
@@ -413,6 +415,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;
 
+@property (nonatomic, assign) BOOL hideScrollbars;
+
 @property (nonatomic) double canvasWidth;
 @property (nonatomic) double canvasHeight;
 
@@ -425,6 +429,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
 
 #pragma mark - Methods
 
@@ -557,6 +563,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)cancelFindText;
 
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchMode;
+
 - (NSDictionary *)getSelection:(NSInteger)pageNumber;
 
 - (BOOL)hasSelection;
@@ -576,6 +586,16 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)toggleReflow;
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect;
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
+- (void)openThumbnailsView;
 
 @end
 
