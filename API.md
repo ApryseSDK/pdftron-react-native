@@ -1256,6 +1256,20 @@ Defines annotation types that cannot be edited after creation.
 />
 ```
 
+#### excludedAnnotationListTypes
+array of [`Config.Tools`](./src/Config/Config.js), optional, defaults to none
+
+Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
+/>
+```
+
 ### Bookmark
 
 #### onBookmarkChanged
@@ -2363,13 +2377,23 @@ this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ### Multi-tab
 
 #### closeAllTabs
-Closes all tabs in multi-tab environment.
+Closes all tabs in a multi-tab environment.
 
 Returns a Promise.
 
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
+```
+
+#### openTabSwitcher
+Opens the tab switcher in a multi-tab environment.
+
+Returns a Promise.
+
+```js
+// Do this only when DocumentView has multiTabEnabled = true
+this._viewer.openTabSwitcher();
 ```
 
 ### Zoom
@@ -2477,6 +2501,34 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
   console.log('Current horizontal scroll position is:', horizontal);
   console.log('Current vertical scroll position is:', vertical);
 });
+```
+
+### Reflow
+
+#### isReflowMode
+Returns whether the viewer is currently in reflow mode.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+inReflow | bool | whether the viewer is in reflow mode
+
+```js
+this._viewer.isReflowMode().then((inReflow) => {
+  console.log(inReflow ? 'in reflow mode' : 'not in reflow mode');
+});
+```
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
 ```
 
 ### Canvas
@@ -2663,7 +2715,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageTransparencyGrid | bool | whether to use the transpareny grid
+pageTransparencyGrid | bool | whether to use the transparency grid
 
 ```js
 this._viewer.setPageTransparencyGrid(true);

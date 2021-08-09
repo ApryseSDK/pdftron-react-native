@@ -80,6 +80,8 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openTabSwitcherForDocumentViewTag:(NSNumber *)tag;
+
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
@@ -161,6 +163,10 @@
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
+- (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag;
+
+- (void)toggleReflow:(NSNumber *)tag;
 
 - (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
 
