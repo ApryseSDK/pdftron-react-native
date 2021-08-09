@@ -554,7 +554,7 @@ RCT_REMAP_METHOD(showViewModeDialog,
         resolve(nil);
     }
     @catch (NSException *exception) {
-        reject(@"show_go_to_page_view", @"Failed to show view mode dialog", [self errorFromException:exception]);
+        reject(@"show_view_mode_dialog", @"Failed to show view mode dialog", [self errorFromException:exception]);
     }
 }
 
