@@ -862,7 +862,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [`Config.Tools`](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
+annotations | array | An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.<br><br>`id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`. Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
 
 ```js
 <DocumentView
@@ -872,7 +872,8 @@ annotations | array | An array of `{id: string, pageNumber: number, type: string
       console.log('The id of selected annotation is', annotation.id);
       console.log('The page number of selected annotation is', annotation.pageNumber);
       console.log('The type of selected annotation is', annotation.type);
-      console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
+      console.log('The screenRect of selected annotation is', annotation.screenRect);
+      console.log('The pageRect of selected annotation is', annotation.pageRect);
     });
   }}
 />
@@ -966,7 +967,7 @@ Data param table:
 Action | Data param
 --- | ---
 [`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
-[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1158,7 +1159,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1167,7 +1168,6 @@ annotations | array | array of annotation data in the format `{id: string, pageN
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
       console.log('Its type is', annotation.type);
-      console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
 />
@@ -2089,7 +2089,7 @@ this._viewer.setHighlightFields(true);
 ```
 
 
-#### getAnnotationAt
+#### getAnnotationAtPoint
 Gets an annotation at the (x, y) position in screen coordinates, if any.
 
 Parameters:
@@ -2107,10 +2107,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
+this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
   if (annotation) {
     console.log('Annotation found at point (167, 287) has id:', annotation.id);
   }
@@ -2118,7 +2118,7 @@ this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
 ```
 
 #### getAnnotationListAt
-Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAt`](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
+Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAtPoint`](#getAnnotationAtPoint), except that this should be used when you want to get multiple annotations which are overlaying with each other.
 
 Parameters:
 
@@ -2135,7 +2135,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
@@ -2145,7 +2145,7 @@ this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
 })
 ```
 
-#### getAnnotationListOnPage
+#### getAnnotationsOnPage
 Gets the list of annotations on a given page.
 
 Parameters:
@@ -2160,10 +2160,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationListOnPage(2).then((annotations) => {
+this._viewer.getAnnotationsOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
