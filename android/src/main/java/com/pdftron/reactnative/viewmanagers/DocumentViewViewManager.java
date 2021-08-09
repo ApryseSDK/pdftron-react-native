@@ -1147,12 +1147,12 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void showRotate(int tag) throws PDFNetException {
+    public void showRotateDialog(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.showRotate();
+            documentView.showRotateDialog();
         } else {
-            throw new PDFNetException("", 0L, getName(), "showRotate", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "showRotateDialog", "Unable to find DocumentView.");
         }
     }
 

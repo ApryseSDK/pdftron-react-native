@@ -1219,12 +1219,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void showRotate(final int tag, final Promise promise) {
+    public void showRotateDialog(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.showRotate(tag);
+                    mDocumentViewInstance.showRotateDialog(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

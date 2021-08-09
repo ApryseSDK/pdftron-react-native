@@ -4011,7 +4011,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void showRotate() {
+    public void showRotateDialog() {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null && mFragmentManager != null) {
             RotateDialogFragment.newInstance()
