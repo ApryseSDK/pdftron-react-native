@@ -1152,6 +1152,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public boolean isReflowMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.isReflowMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isReflowMode", "Unable to find DocumentView.");
+        }
+    }
+
     public void toggleReflow(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

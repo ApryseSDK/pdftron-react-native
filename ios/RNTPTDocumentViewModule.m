@@ -807,6 +807,20 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
 }
 
+RCT_REMAP_METHOD(isReflowMode,
+                 isReflowModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL inReflow = [[self documentViewManager] isReflowModeForDocumentViewTag:tag];
+        resolve(@(inReflow));
+    }
+    @catch (NSException *exception) {
+        reject(@"is_reflow_mode", @"Failed to get is reflow mode", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(toggleReflow,
                  toggleReflowForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve

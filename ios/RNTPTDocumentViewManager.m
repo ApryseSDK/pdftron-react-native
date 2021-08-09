@@ -1585,6 +1585,17 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+- (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        BOOL inReflow = [documentView isReflowMode];
+        return inReflow;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (void)toggleReflow:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];

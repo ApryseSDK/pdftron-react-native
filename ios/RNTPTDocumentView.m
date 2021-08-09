@@ -4524,6 +4524,11 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (BOOL)isReflowMode
+{
+    return !(self.documentViewController.isReflowHidden);
+}
+
 - (void)toggleReflow
 {
     self.documentViewController.reflowHidden = !(self.documentViewController.isReflowHidden);
