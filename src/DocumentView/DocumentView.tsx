@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, {Requireable} from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
@@ -13,221 +13,135 @@ const { DocumentViewManager } = NativeModules;
 import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
-export interface DocumentViewProps extends ViewProps {
-  document: string;
-  password?: string;
-  initialPageNumber?: number;
-  pageNumber?: number;
-  customHeaders?: object;
-  leadingNavButtonIcon?: string;
-  showLeadingNavButton?: boolean;
-  onLeadingNavButtonPressed?: () => void;
-  onDocumentLoaded?: (path : string) => void;
-  onDocumentError?: (error: string) => void;
-  onPageChanged?: ({previousPageNumber, pageNumber}: {previousPageNumber: number, pageNumber: number}) => void;
-  onScrollChanged?: ({horizontal, vertical}: {horizontal: number, vertical: number}) => void;
-  onZoomChanged?: ({zoom}: {zoom: number}) => void;
-  onZoomFinished?: ({zoom}: {zoom: number}) => void;
-  zoom?: number;
-  disabledElements?: Array<Config.Tools>;
-  disabledTools?: Array<Config.Tools>;
-  longPressMenuItems?: Array<Config.LongPressMenu>;
-  overrideLongPressMenuBehavior?: Array<Config.LongPressMenu>;
-  onLongPressMenuPress?: ({longPressMenu, longPressText}: {longPressMenu: string, longPressText: string}) => void;
-  longPressMenuEnabled?: boolean;
-  annotationMenuItems?: Array<Config.AnnotationMenu>;
-  overrideAnnotationMenuBehavior?: Array<Config.AnnotationMenu>;
-  onAnnotationMenuPress?: ({annotationMenu, annotations}: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-  hideAnnotationMenu?: Array<Config.Tools>;
-  overrideBehavior?: Array<Config.Actions>;
-  onBehaviorActivated?: ({action, data}: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
-  topToolbarEnabled?: boolean;
-  bottomToolbarEnabled?: boolean;
-  hideToolbarsOnTap?: boolean;
-  documentSliderEnabled?: boolean;
-  pageIndicatorEnabled?: boolean;
-  keyboardShortcutsEnabled?: boolean;
-  onAnnotationsSelected?: ({annotations}: {annotations: Array<AnnotOptions.Annotation>}) => void ;
-  onAnnotationChanged?: ({action, annotations}: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-  onFormFieldValueChanged?: ({fields}: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void;
-  readOnly?: boolean;
-  thumbnailViewEditingEnabled?: boolean;
-  fitMode?: Config.FitMode;
-  layoutMode?: Config.LayoutMode;
-  onLayoutChanged?: () => void;
-  padStatusBar?: boolean;
-  continuousAnnotationEditing?: boolean;
-  selectAnnotationAfterCreation?: boolean;
-  annotationAuthor?: string;
-  showSavedSignatures?: boolean;
-  isBase64String?: boolean;
-  collabEnabled?: boolean;
-  currentUser?: string;
-  currentUserName?: string;
-  onExportAnnotationCommand?: ({action, xfdfCommand, annotations}: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-  autoSaveEnabled?: boolean;
-  pageChangeOnTap?: boolean;
-  followSystemDarkMode?: boolean;
-  useStylusAsPen?: boolean;
-  multiTabEnabled?: boolean;
-  tabTitle?: string;
-  maxTabCount?: number;
-  signSignatureFieldsWithStamps?: boolean;
-  annotationPermissionCheckEnabled?: boolean;
-  annotationToolbars?: Array<Config.DefaultToolbars | Config.CustomToolbarKey>;
-  hideDefaultAnnotationToolbars?: Array<Config.DefaultToolbars>;
-  topAppNavBarRightBar?: Array<Config.Buttons>;
-  bottomToolbar?: Array<Config.Buttons>;
-  hideAnnotationToolbarSwitcher?: boolean;
-  hideTopToolbars?: boolean;
-  hideTopAppNavBar?: boolean;
-  onBookmarkChanged?: ({bookmarkJson}: {bookmarkJson: string}) => void;
-  hideThumbnailFilterModes?: Array<Config.ThumbnailFilterMode>;
-  onToolChanged?: ({previousTool, tool}: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void;
-  horizontalScrollPos?: number;
-  verticalScrollPos?: number;
-  onTextSearchStart?: () => void;
-  onTextSearchResult?: ({found, textSelection}: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void;
-  hideViewModeItems?: Array<Config.ViewModePickerItem>;
-  pageStackEnabled?: boolean;
-  showQuickNavigationButton?: boolean;
-  photoPickerEnabled?: boolean;
-  autoResizeFreeTextEnabled?: boolean;
-  annotationsListEditingEnabled?: boolean;
-  showNavigationListAsSidePanelOnLargeDevices?: boolean;
-  restrictDownloadUsage?: boolean;
-  userBookmarksListEditingEnabled?: boolean;
-  imageInReflowEnabled?: boolean;
-  reflowOrientation?: Config.ReflowOrientation;
-  onUndoRedoStateChanged?: () => void;
-  tabletLayoutEnabled?: boolean;
-  initialToolbar?: string;
-  inkMultiStrokeEnabled?: boolean;
-  defaultEraserType?: Config.EraserType;
-  exportPath?: string;
-  openUrlPath?: string;
-  hideScrollbars?: boolean;
-  saveStateEnabled?: boolean;
-  openSavedCopyInNewTab?: boolean;
+const propTypes = {
+  document: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  password: PropTypes.string,
+  initialPageNumber: PropTypes.number,
+  pageNumber: PropTypes.number,
+  customHeaders: PropTypes.object,
+  leadingNavButtonIcon: PropTypes.string,
+  showLeadingNavButton: PropTypes.bool,
+  onLeadingNavButtonPressed: PropTypes.func,
+  onDocumentLoaded: funcProp<(path: string) => void>(),
+  onDocumentError: funcProp<(error: string) => void>(),
+  onPageChanged: funcProp<({previousPageNumber, pageNumber}: {previousPageNumber: number, pageNumber: number}) => void>(),
+  onScrollChanged: funcProp<({horizontal, vertical}: {horizontal: number, vertical: number}) => void>(),
+  onZoomChanged: funcProp<({zoom}: {zoom: number}) => void>(),
+  onZoomFinished: funcProp<({zoom}: {zoom: number}) => void>(),
+  zoom: PropTypes.number,
+  disabledElements: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+  disabledTools: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+  longPressMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
+  overrideLongPressMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
+  onLongPressMenuPress: funcProp<({longPressMenu, longPressText}: {longPressMenu: string, longPressText: string}) => void>(),
+  longPressMenuEnabled: PropTypes.bool,
+  annotationMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
+  overrideAnnotationMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
+  onAnnotationMenuPress: funcProp<({annotationMenu, annotations}: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  hideAnnotationMenu: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+  overrideBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Actions))),
+  onBehaviorActivated: funcProp<({action, data}: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
+  topToolbarEnabled: PropTypes.bool,
+  bottomToolbarEnabled: PropTypes.bool,
+  hideToolbarsOnTap: PropTypes.bool,
+  documentSliderEnabled: PropTypes.bool,
+  pageIndicatorEnabled: PropTypes.bool,
+  keyboardShortcutsEnabled: PropTypes.bool,
+  onAnnotationsSelected: funcProp<({annotations}: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  onAnnotationChanged: funcProp<({action, annotations}: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  onFormFieldValueChanged: funcProp<({fields}: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void>(),
+  readOnly: PropTypes.bool,
+  thumbnailViewEditingEnabled: PropTypes.bool,
+  fitMode: PropTypes.oneOf(Object.values(Config.FitMode)),
+  layoutMode: PropTypes.oneOf(Object.values(Config.LayoutMode)),
+  onLayoutChanged: funcProp<() => void>(),
+  padStatusBar: PropTypes.bool,
+  continuousAnnotationEditing: PropTypes.bool,
+  selectAnnotationAfterCreation: PropTypes.bool,
+  annotationAuthor: PropTypes.string,
+  showSavedSignatures: PropTypes.bool,
+  isBase64String: PropTypes.bool,
+  collabEnabled: PropTypes.bool,
+  currentUser: PropTypes.string,
+  currentUserName: PropTypes.string,
+  onExportAnnotationCommand: funcProp<({action, xfdfCommand, annotations}: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  autoSaveEnabled: PropTypes.bool,
+  pageChangeOnTap: PropTypes.bool,
+  followSystemDarkMode: PropTypes.bool,
+  useStylusAsPen: PropTypes.bool,
+  multiTabEnabled: PropTypes.bool,
+  tabTitle: PropTypes.string,
+  maxTabCount: PropTypes.number,
+  signSignatureFieldsWithStamps: PropTypes.bool,
+  annotationPermissionCheckEnabled: PropTypes.bool,
+  annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.oneOf(Object.values(Config.DefaultToolbars)),
+    PropTypes.exact({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.oneOf(Object.values(Config.ToolbarIcons)).isRequired,
+      items: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.oneOf(Object.values(Config.Tools)),
+        PropTypes.oneOf(Object.values(Config.Buttons))
+      ])).isRequired
+    })
+  ])),
+  hideDefaultAnnotationToolbars: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.DefaultToolbars))),
+  topAppNavBarRightBar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
+  bottomToolbar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
+  hideAnnotationToolbarSwitcher: PropTypes.bool,
+  hideTopToolbars: PropTypes.bool,
+  hideTopAppNavBar: PropTypes.bool,
+  onBookmarkChanged: funcProp<({bookmarkJson}: {bookmarkJson: string}) => void>(),
+  hideThumbnailFilterModes: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ThumbnailFilterMode))),
+  onToolChanged: funcProp<({previousTool, tool}: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
+  horizontalScrollPos: PropTypes.number,
+  verticalScrollPos: PropTypes.number,
+  onTextSearchStart: funcProp<() => void>(),
+  onTextSearchResult: funcProp<({found, textSelection}: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
+  hideViewModeItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ViewModePickerItem))),
+  pageStackEnabled: PropTypes.bool,
+  showQuickNavigationButton: PropTypes.bool,
+  photoPickerEnabled: PropTypes.bool,
+  autoResizeFreeTextEnabled: PropTypes.bool,
+  annotationsListEditingEnabled: PropTypes.bool,
+  showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
+  restrictDownloadUsage: PropTypes.bool,
+  userBookmarksListEditingEnabled: PropTypes.bool,
+  imageInReflowEnabled: PropTypes.bool,
+  reflowOrientation: PropTypes.oneOf(Object.values(Config.ReflowOrientation)),
+  onUndoRedoStateChanged: funcProp<() => void>(),
+  tabletLayoutEnabled: PropTypes.bool,
+  initialToolbar: PropTypes.string,
+  inkMultiStrokeEnabled: PropTypes.bool,
+  defaultEraserType: PropTypes.oneOf(Object.values(Config.EraserType)),
+  exportPath: PropTypes.string,
+  openUrlPath: PropTypes.string,
+  hideScrollbars: PropTypes.bool,
+  saveStateEnabled: PropTypes.bool,
+  openSavedCopyInNewTab: PropTypes.bool,
+  ...ViewPropTypes,
+};
 
-  onChange?(event): void;
+type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
+
+function funcProp<T> () : Requireable<T> {
+  let validator = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error {
+    if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
+      return new Error ("Invalid prop `" + propName + "` of type `" + typeof props[propName] + "` supplied to `" + componentName + "`, expected a function");
+    }
+  }
+  
+  const t : Requireable<T> = validator as Requireable<T>;
+  t.isRequired =  validator;
+  return t;
 }
-
-
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef;
 
-  static propTypes = {
-    document: PropTypes.string.isRequired,
-    onChange: PropTypes.func,
-    password: PropTypes.string,
-    initialPageNumber: PropTypes.number,
-    pageNumber: PropTypes.number,
-    customHeaders: PropTypes.object,
-    leadingNavButtonIcon: PropTypes.string,
-    showLeadingNavButton: PropTypes.bool,
-    onLeadingNavButtonPressed: PropTypes.func,
-    onDocumentLoaded: PropTypes.func,
-    onDocumentError: PropTypes.func,
-    onPageChanged: PropTypes.func,
-    onScrollChanged: PropTypes.func,
-    onZoomChanged: PropTypes.func,
-    onZoomFinished: PropTypes.func,
-    zoom: PropTypes.number,
-    disabledElements: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-    disabledTools: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-    longPressMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
-    overrideLongPressMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
-    onLongPressMenuPress: PropTypes.func,
-    longPressMenuEnabled: PropTypes.bool,
-    annotationMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
-    overrideAnnotationMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
-    onAnnotationMenuPress: PropTypes.func,
-    hideAnnotationMenu: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-    overrideBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Actions))),
-    onBehaviorActivated: PropTypes.func,
-    topToolbarEnabled: PropTypes.bool,
-    bottomToolbarEnabled: PropTypes.bool,
-    hideToolbarsOnTap: PropTypes.bool,
-    documentSliderEnabled: PropTypes.bool,
-    pageIndicatorEnabled: PropTypes.bool,
-    keyboardShortcutsEnabled: PropTypes.bool,
-    onAnnotationsSelected: PropTypes.func,
-    onAnnotationChanged: PropTypes.func,
-    onFormFieldValueChanged: PropTypes.func,
-    readOnly: PropTypes.bool,
-    thumbnailViewEditingEnabled: PropTypes.bool,
-    fitMode: PropTypes.oneOf(Object.values(Config.FitMode)),
-    layoutMode: PropTypes.oneOf(Object.values(Config.LayoutMode)),
-    onLayoutChanged: PropTypes.func,
-    padStatusBar: PropTypes.bool,
-    continuousAnnotationEditing: PropTypes.bool,
-    selectAnnotationAfterCreation: PropTypes.bool,
-    annotationAuthor: PropTypes.string,
-    showSavedSignatures: PropTypes.bool,
-    isBase64String: PropTypes.bool,
-    collabEnabled: PropTypes.bool,
-    currentUser: PropTypes.string,
-    currentUserName: PropTypes.string,
-    onExportAnnotationCommand: PropTypes.func,
-    autoSaveEnabled: PropTypes.bool,
-    pageChangeOnTap: PropTypes.bool,
-    followSystemDarkMode: PropTypes.bool,
-    useStylusAsPen: PropTypes.bool,
-    multiTabEnabled: PropTypes.bool,
-    tabTitle: PropTypes.string,
-    maxTabCount: PropTypes.number,
-    signSignatureFieldsWithStamps: PropTypes.bool,
-    annotationPermissionCheckEnabled: PropTypes.bool,
-    annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
-      PropTypes.oneOf(Object.values(Config.DefaultToolbars)),
-      PropTypes.exact({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        icon: PropTypes.oneOf(Object.values(Config.ToolbarIcons)).isRequired,
-        items: PropTypes.arrayOf(PropTypes.oneOfType([
-          PropTypes.oneOf(Object.values(Config.Tools)),
-          PropTypes.oneOf(Object.values(Config.Buttons))
-        ])).isRequired
-      })
-    ])),
-    hideDefaultAnnotationToolbars: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.DefaultToolbars))),
-    topAppNavBarRightBar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
-    bottomToolbar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
-    hideAnnotationToolbarSwitcher: PropTypes.bool,
-    hideTopToolbars: PropTypes.bool,
-    hideTopAppNavBar: PropTypes.bool,
-    onBookmarkChanged: PropTypes.func,
-    hideThumbnailFilterModes: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ThumbnailFilterMode))),
-    onToolChanged: PropTypes.func,
-    horizontalScrollPos: PropTypes.number,
-    verticalScrollPos: PropTypes.number,
-    onTextSearchStart: PropTypes.func,
-    onTextSearchResult: PropTypes.func,
-    hideViewModeItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ViewModePickerItem))),
-    pageStackEnabled: PropTypes.bool,
-    showQuickNavigationButton: PropTypes.bool,
-    photoPickerEnabled: PropTypes.bool,
-    autoResizeFreeTextEnabled: PropTypes.bool,
-    annotationsListEditingEnabled: PropTypes.bool,
-    showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
-    restrictDownloadUsage: PropTypes.bool,
-    userBookmarksListEditingEnabled: PropTypes.bool,
-    imageInReflowEnabled: PropTypes.bool,
-    reflowOrientation: PropTypes.oneOf(Object.values(Config.ReflowOrientation)),
-    onUndoRedoStateChanged: PropTypes.func,
-    tabletLayoutEnabled: PropTypes.bool,
-    initialToolbar: PropTypes.string,
-    inkMultiStrokeEnabled: PropTypes.bool,
-    defaultEraserType: PropTypes.oneOf(Object.values(Config.EraserType)),
-    exportPath: PropTypes.string,
-    openUrlPath: PropTypes.string,
-    hideScrollbars: PropTypes.bool,
-    saveStateEnabled: PropTypes.bool,
-    openSavedCopyInNewTab: PropTypes.bool,
-    ...ViewPropTypes,
-  };
+  static propTypes = propTypes;
 
   onChange = (event) => {
     if (event.nativeEvent.onLeadingNavButtonPressed) {

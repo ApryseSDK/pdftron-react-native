@@ -8,7 +8,7 @@
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "npx tsc"
+    "start": "tsc"
   },
   "repository": {
     "type": "git",
