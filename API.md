@@ -1225,10 +1225,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
-    console.log('Annotation edit action is', action);
-    annotations.forEach(annotation => {
-      console.log('The id of changed annotation is', annotation.id);
-      console.log('It is in page', annotation.pageNumber);
+    fields.forEach(field => {
+      console.log('The name of the changed field is', field.fieldName);
+      console.log('The value of the changed field is', field.fieldValue);
     });
   }}
 />
