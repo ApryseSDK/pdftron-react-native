@@ -10,7 +10,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 const { DocumentViewManager } = NativeModules;
-import {ConfigOptions} from "../Config/Config";
+import {Config, ConfigOptions} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 export interface DocumentViewProps extends ViewProps {
@@ -119,7 +119,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   _viewerRef;
 
   static propTypes = {
-    document: PropTypes.string,
+    document: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
     password: PropTypes.string,
     initialPageNumber: PropTypes.number,
     pageNumber: PropTypes.number,
@@ -134,17 +135,17 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     onZoomChanged: PropTypes.func,
     onZoomFinished: PropTypes.func,
     zoom: PropTypes.number,
-    disabledElements: PropTypes.array,
-    disabledTools: PropTypes.array,
-    longPressMenuItems: PropTypes.array,
-    overrideLongPressMenuBehavior: PropTypes.array,
+    disabledElements: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+    disabledTools: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+    longPressMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
+    overrideLongPressMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
     onLongPressMenuPress: PropTypes.func,
     longPressMenuEnabled: PropTypes.bool,
-    annotationMenuItems: PropTypes.array,
-    overrideAnnotationMenuBehavior: PropTypes.array,
+    annotationMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
+    overrideAnnotationMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
     onAnnotationMenuPress: PropTypes.func,
-    hideAnnotationMenu: PropTypes.array,
-    overrideBehavior: PropTypes.array,
+    hideAnnotationMenu: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
+    overrideBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Actions))),
     onBehaviorActivated: PropTypes.func,
     topToolbarEnabled: PropTypes.bool,
     bottomToolbarEnabled: PropTypes.bool,
@@ -157,8 +158,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     onFormFieldValueChanged: PropTypes.func,
     readOnly: PropTypes.bool,
     thumbnailViewEditingEnabled: PropTypes.bool,
-    fitMode: PropTypes.string,
-    layoutMode: PropTypes.string,
+    fitMode: PropTypes.oneOf(Object.values(Config.FitMode)),
+    layoutMode: PropTypes.oneOf(Object.values(Config.LayoutMode)),
     onLayoutChanged: PropTypes.func,
     padStatusBar: PropTypes.bool,
     continuousAnnotationEditing: PropTypes.bool,
@@ -179,21 +180,32 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     maxTabCount: PropTypes.number,
     signSignatureFieldsWithStamps: PropTypes.bool,
     annotationPermissionCheckEnabled: PropTypes.bool,
-    annotationToolbars: PropTypes.array,
-    hideDefaultAnnotationToolbars: PropTypes.array,
-    topAppNavBarRightBar: PropTypes.array,
-    bottomToolbar: PropTypes.array,
+    annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.oneOf(Object.values(Config.DefaultToolbars)),
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        icon: PropTypes.oneOf(Object.values(Config.ToolbarIcons)).isRequired,
+        items: PropTypes.arrayOf(PropTypes.oneOfType([
+          PropTypes.oneOf(Object.values(Config.Tools)),
+          PropTypes.oneOf(Object.values(Config.Buttons))
+        ])).isRequired
+      })
+    ])),
+    hideDefaultAnnotationToolbars: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.DefaultToolbars))),
+    topAppNavBarRightBar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
+    bottomToolbar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
     hideAnnotationToolbarSwitcher: PropTypes.bool,
     hideTopToolbars: PropTypes.bool,
     hideTopAppNavBar: PropTypes.bool,
     onBookmarkChanged: PropTypes.func,
-    hideThumbnailFilterModes: PropTypes.array,
+    hideThumbnailFilterModes: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ThumbnailFilterMode))),
     onToolChanged: PropTypes.func,
     horizontalScrollPos: PropTypes.number,
     verticalScrollPos: PropTypes.number,
     onTextSearchStart: PropTypes.func,
     onTextSearchResult: PropTypes.func,
-    hideViewModeItems: PropTypes.array,
+    hideViewModeItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ViewModePickerItem))),
     pageStackEnabled: PropTypes.bool,
     showQuickNavigationButton: PropTypes.bool,
     photoPickerEnabled: PropTypes.bool,
@@ -203,12 +215,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     restrictDownloadUsage: PropTypes.bool,
     userBookmarksListEditingEnabled: PropTypes.bool,
     imageInReflowEnabled: PropTypes.bool,
-    reflowOrientation: PropTypes.string,
+    reflowOrientation: PropTypes.oneOf(Object.values(Config.ReflowOrientation)),
     onUndoRedoStateChanged: PropTypes.func,
     tabletLayoutEnabled: PropTypes.bool,
     initialToolbar: PropTypes.string,
     inkMultiStrokeEnabled: PropTypes.bool,
-    defaultEraserType: PropTypes.string,
+    defaultEraserType: PropTypes.oneOf(Object.values(Config.EraserType)),
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
     hideScrollbars: PropTypes.bool,
