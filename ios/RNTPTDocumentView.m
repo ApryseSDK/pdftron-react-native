@@ -191,6 +191,7 @@ NS_ASSUME_NONNULL_END
             
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
+            [self addMissingPencilToolToDocumentController:collaborationViewController];
         } else {
             if ([self isMultiTabEnabled]) {
                 PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
@@ -208,6 +209,7 @@ NS_ASSUME_NONNULL_END
                 
                 self.viewController = documentViewController;
                 self.documentViewController = documentViewController;
+                [self addMissingPencilToolToDocumentController:documentViewController];
             }
         }
         
@@ -2290,6 +2292,66 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Missing PencilKit workaround
+
+-(void)addMissingPencilToolToDocumentController:(PTDocumentController*)documentController
+{
+    NSMutableArray<UIBarButtonItem*>* defaultAnnotateGroupTools = [documentController.toolGroupManager.annotateItemGroup.barButtonItems mutableCopy];
+    NSMutableArray<UIBarButtonItem*>* defaultDrawGroupTools = [documentController.toolGroupManager.drawItemGroup.barButtonItems mutableCopy];
+    NSMutableArray<UIBarButtonItem*>* newAnnotateGroupTools = [[NSMutableArray alloc] init];
+    NSMutableArray<UIBarButtonItem*>* newDrawGroupTools = [[NSMutableArray alloc] init];
+    if (@available(iOS 13.1, *)) {
+        for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
+        {
+            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            {
+                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
+                {
+                    continue;
+                }
+                else
+                {
+                    [newAnnotateGroupTools addObject:defaultToolItem];
+                }
+            }
+            else
+            {
+                [newAnnotateGroupTools addObject:defaultToolItem];
+            }
+        }
+
+        for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
+        {
+            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            {
+                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
+                {
+                    continue;
+                }
+                else
+                {
+                    [newDrawGroupTools addObject:defaultToolItem];
+                }
+            }
+            else
+            {
+                [newDrawGroupTools addObject:defaultToolItem];
+            }
+        }
+
+        if (documentController.toolManager.freehandUsesPencilKit) {
+            UIBarButtonItem* pencilItem = [documentController.toolGroupManager createItemForToolClass:[PTPencilDrawingCreate class]];
+            [newAnnotateGroupTools insertObject:pencilItem atIndex:2];
+            [newDrawGroupTools insertObject:pencilItem atIndex:0];
+        }
+    }
+
+    documentController.toolGroupManager.annotateItemGroup.barButtonItems = newAnnotateGroupTools;
+    documentController.toolGroupManager.drawItemGroup.barButtonItems = newDrawGroupTools;
+}
+
 #pragma mark - Custom headers
 
 - (void)setCustomHeaders:(NSDictionary<NSString *, NSString *> *)customHeaders
@@ -2675,6 +2737,7 @@ NS_ASSUME_NONNULL_END
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         
         documentController.delegate = self;
+        [self addMissingPencilToolToDocumentController:documentController];
     }
     
     [self applyViewerSettings:documentViewController];
