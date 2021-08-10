@@ -1103,13 +1103,11 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
-        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
-        [[pdfViewCtrl GetDoc] FDFUpdate:fdfDoc];
-        [pdfViewCtrl Update:YES];
-    } error:&error];
+    PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
     
-    if (error) {
+    const BOOL updateSuccess = [annotationManager updateAnnotationsWithXFDFString:xfdfString
+                                                                            error:&error];
+    if (!updateSuccess || error) {
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
@@ -1469,45 +1467,26 @@ NS_ASSUME_NONNULL_END
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
 {
-    if (self.collaborationManager) {
-        [self.collaborationManager importAnnotationsWithXFDFCommand:xfdfCommand
-                                                          isInitial:initialLoad];
-    } else {
-        PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
-        if (!pdfViewCtrl) {
-            return;
-        }
-        
-        PTPDFDoc *pdfDoc = [pdfViewCtrl GetDoc];
-        BOOL shouldUnlockRead = NO;
-        @try {
-            [pdfViewCtrl DocLockRead];
-            shouldUnlockRead = YES;
-            if (pdfDoc.HasDownloader) {
-                return;
-            }
-        }
-        @finally {
-            if (shouldUnlockRead) {
-                [pdfViewCtrl DocUnlockRead];
-            }
-        }
-
-        BOOL shouldUnlock = NO;
-        @try {
-            [pdfViewCtrl DocLock:YES];
-            shouldUnlock = YES;
-
-            PTFDFDoc *fdfDoc = [pdfDoc FDFExtract:e_ptboth];
-            [fdfDoc MergeAnnots:xfdfCommand permitted_user:@""];
-            [pdfDoc FDFUpdate:fdfDoc];
-            [pdfViewCtrl Update:YES];
-        }
-        @finally {
-            if (shouldUnlock) {
-                [pdfViewCtrl DocUnlock];
-            }
-        }
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    
+    NSError *error;
+    __block BOOL hasDownloader = false;
+    
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        hasDownloader = [[pdfViewCtrl GetDoc] HasDownloader];
+    } error:&error];
+    
+    if (hasDownloader || error) {
+        return;
+    }
+    
+    PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
+    
+    const BOOL updateSuccess = [annotationManager updateAnnotationsWithXFDFCommand:xfdfCommand
+                                                                             error:&error];
+    if (!updateSuccess || error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
 
