@@ -1264,6 +1264,19 @@ Defines types to be excluded from the annotation list. This feature will be soon
 pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
 ```
 
+and uncomment the following line in `ios/RNTPTDocumentView.m`:
+```objc
+- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    ...
+    if (annotTypes.count > 0) {
+        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+    }
+}
+```
+
+Example use:
+
 ```js
 <DocumentView
   excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
