@@ -590,7 +590,7 @@ NS_ASSUME_NONNULL_END
     }
     
     if (annotTypes.count > 0) {
-        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
 }
 
