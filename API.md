@@ -483,7 +483,7 @@ const myToolbar = {
 };
 
 ...
-<Documentview
+<DocumentView
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
@@ -559,7 +559,7 @@ array of strings, optional, iOS only
 Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
-<Documentview
+<DocumentView
   topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
@@ -570,7 +570,7 @@ array of strings, optional, only the outline list, thumbnail list, share, view m
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
-<Documentview
+<DocumentView
   bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
@@ -1225,10 +1225,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
-    console.log('Annotation edit action is', action);
-    annotations.forEach(annotation => {
-      console.log('The id of changed annotation is', annotation.id);
-      console.log('It is in page', annotation.pageNumber);
+    fields.forEach(field => {
+      console.log('The name of the changed field is', field.fieldName);
+      console.log('The value of the changed field is', field.fieldValue);
     });
   }}
 />
