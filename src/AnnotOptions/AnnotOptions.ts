@@ -1,4 +1,4 @@
-import {ConfigOptions} from '../Config/Config';
+import {Config} from '../Config/Config';
 
 export interface Annotation {
     id: string;
@@ -59,7 +59,7 @@ export interface TextSelectionResult {
 export interface AnnotationFlag {
     id: string;
     pageNumber: number;
-    flag: ConfigOptions.AnnotationFlags;
+    flag: Config.AnnotationFlags;
     flagValue: boolean;
 }
 

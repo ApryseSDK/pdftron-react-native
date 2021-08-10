@@ -272,7 +272,7 @@ export const Config = {
 
 type ValueOf<T> = T[keyof T];
 
-export module ConfigOptions {
+export module Config {
   export type Buttons = ValueOf<typeof Config.Buttons>;
   export type Tools = ValueOf<typeof Config.Tools>;
   export type FitMode = ValueOf<typeof Config.FitMode>;

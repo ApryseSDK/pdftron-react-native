@@ -10,7 +10,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 const { DocumentViewManager } = NativeModules;
-import {Config, ConfigOptions} from "../Config/Config";
+import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 export interface DocumentViewProps extends ViewProps {
@@ -29,18 +29,18 @@ export interface DocumentViewProps extends ViewProps {
   onZoomChanged?: ({zoom}: {zoom: number}) => void;
   onZoomFinished?: ({zoom}: {zoom: number}) => void;
   zoom?: number;
-  disabledElements?: Array<ConfigOptions.Tools>;
-  disabledTools?: Array<ConfigOptions.Tools>;
-  longPressMenuItems?: Array<ConfigOptions.LongPressMenu>;
-  overrideLongPressMenuBehavior?: Array<ConfigOptions.LongPressMenu>;
+  disabledElements?: Array<Config.Tools>;
+  disabledTools?: Array<Config.Tools>;
+  longPressMenuItems?: Array<Config.LongPressMenu>;
+  overrideLongPressMenuBehavior?: Array<Config.LongPressMenu>;
   onLongPressMenuPress?: ({longPressMenu, longPressText}: {longPressMenu: string, longPressText: string}) => void;
   longPressMenuEnabled?: boolean;
-  annotationMenuItems?: Array<ConfigOptions.AnnotationMenu>;
-  overrideAnnotationMenuBehavior?: Array<ConfigOptions.AnnotationMenu>;
+  annotationMenuItems?: Array<Config.AnnotationMenu>;
+  overrideAnnotationMenuBehavior?: Array<Config.AnnotationMenu>;
   onAnnotationMenuPress?: ({annotationMenu, annotations}: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void;
-  hideAnnotationMenu?: Array<ConfigOptions.Tools>;
-  overrideBehavior?: Array<ConfigOptions.Actions>;
-  onBehaviorActivated?: ({action, data}: {action: ConfigOptions.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
+  hideAnnotationMenu?: Array<Config.Tools>;
+  overrideBehavior?: Array<Config.Actions>;
+  onBehaviorActivated?: ({action, data}: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void;
   topToolbarEnabled?: boolean;
   bottomToolbarEnabled?: boolean;
   hideToolbarsOnTap?: boolean;
@@ -52,8 +52,8 @@ export interface DocumentViewProps extends ViewProps {
   onFormFieldValueChanged?: ({fields}: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void;
   readOnly?: boolean;
   thumbnailViewEditingEnabled?: boolean;
-  fitMode?: ConfigOptions.FitMode;
-  layoutMode?: ConfigOptions.LayoutMode;
+  fitMode?: Config.FitMode;
+  layoutMode?: Config.LayoutMode;
   onLayoutChanged?: () => void;
   padStatusBar?: boolean;
   continuousAnnotationEditing?: boolean;
@@ -74,21 +74,21 @@ export interface DocumentViewProps extends ViewProps {
   maxTabCount?: number;
   signSignatureFieldsWithStamps?: boolean;
   annotationPermissionCheckEnabled?: boolean;
-  annotationToolbars?: Array<ConfigOptions.DefaultToolbars | ConfigOptions.CustomToolbarKey>;
-  hideDefaultAnnotationToolbars?: Array<ConfigOptions.DefaultToolbars>;
-  topAppNavBarRightBar?: Array<ConfigOptions.Buttons>;
-  bottomToolbar?: Array<ConfigOptions.Buttons>;
+  annotationToolbars?: Array<Config.DefaultToolbars | Config.CustomToolbarKey>;
+  hideDefaultAnnotationToolbars?: Array<Config.DefaultToolbars>;
+  topAppNavBarRightBar?: Array<Config.Buttons>;
+  bottomToolbar?: Array<Config.Buttons>;
   hideAnnotationToolbarSwitcher?: boolean;
   hideTopToolbars?: boolean;
   hideTopAppNavBar?: boolean;
   onBookmarkChanged?: ({bookmarkJson}: {bookmarkJson: string}) => void;
-  hideThumbnailFilterModes?: Array<ConfigOptions.ThumbnailFilterMode>;
-  onToolChanged?: ({previousTool, tool}: {previousTool: ConfigOptions.Tools | "unknown tool", tool: ConfigOptions.Tools | "unknown tool"}) => void;
+  hideThumbnailFilterModes?: Array<Config.ThumbnailFilterMode>;
+  onToolChanged?: ({previousTool, tool}: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void;
   horizontalScrollPos?: number;
   verticalScrollPos?: number;
   onTextSearchStart?: () => void;
   onTextSearchResult?: ({found, textSelection}: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void;
-  hideViewModeItems?: Array<ConfigOptions.ViewModePickerItem>;
+  hideViewModeItems?: Array<Config.ViewModePickerItem>;
   pageStackEnabled?: boolean;
   showQuickNavigationButton?: boolean;
   photoPickerEnabled?: boolean;
@@ -98,12 +98,12 @@ export interface DocumentViewProps extends ViewProps {
   restrictDownloadUsage?: boolean;
   userBookmarksListEditingEnabled?: boolean;
   imageInReflowEnabled?: boolean;
-  reflowOrientation?: ConfigOptions.ReflowOrientation;
+  reflowOrientation?: Config.ReflowOrientation;
   onUndoRedoStateChanged?: () => void;
   tabletLayoutEnabled?: boolean;
   initialToolbar?: string;
   inkMultiStrokeEnabled?: boolean;
-  defaultEraserType?: ConfigOptions.EraserType;
+  defaultEraserType?: Config.EraserType;
   exportPath?: string;
   openUrlPath?: string;
   hideScrollbars?: boolean;
@@ -372,7 +372,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
   
 
-  setToolMode = (toolMode: ConfigOptions.Tools): Promise<void> => {
+  setToolMode = (toolMode: Config.Tools): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
     	return DocumentViewManager.setToolMode(tag, toolMode);
@@ -459,7 +459,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setFlagForFields = (fields: Array<String>, flag: ConfigOptions.FieldFlags, value: boolean): Promise<void> => {
+  setFlagForFields = (fields: Array<String>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
@@ -684,7 +684,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setZoomLimits = (zoomLimitMode: ConfigOptions.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
+  setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
@@ -797,7 +797,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setOverprint = (overprint: ConfigOptions.OverprintMode): Promise<void> => {
+  setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setOverprint(tag, overprint);
@@ -805,7 +805,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setColorPostProcessMode = (colorPostProcessMode: ConfigOptions.ColorPostProcessMode): Promise<void> => {
+  setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
@@ -959,7 +959,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber: number, dpi: number, exportFormat: ConfigOptions.ExportFormat): Promise<void> | Promise<string> => {
+  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void> | Promise<string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);

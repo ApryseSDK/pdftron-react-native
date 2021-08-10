@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 import { PDFViewCtrl } from './src/PDFViewCtrl/PDFViewCtrl';
 import { DocumentView } from './src/DocumentView/DocumentView';
-import { Config, ConfigOptions } from './src/Config/Config';
+import { Config } from './src/Config/Config';
 import * as AnnotOptions from './src/AnnotOptions/AnnotOptions';
 
 export interface Pdftron {
@@ -23,5 +23,4 @@ export {
     DocumentView,
     Config,
     AnnotOptions,
-    ConfigOptions
 };
