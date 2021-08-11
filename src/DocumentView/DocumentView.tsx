@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes, { Requireable } from 'prop-types';
+import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
@@ -124,34 +124,47 @@ const propTypes = {
   ...ViewPropTypes,
 };
 
-// Generates the prop types for TypeScript users, from PropTypes. 
+/** Generates the prop types for TypeScript users, from PropTypes. */
 type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 
-// Creates a custom PropType for functions.
-// When the prop types are generated for TS users, type checking for 
-// function parameters and return values is provided.
-// Usage: func<(arg: argType) => returnType>()
+/**
+* Creates a custom PropType for functions.
+*
+* If the resulting PropType is used to generate prop types for TS users, 
+* type checking for function parameters and return values will be provided.
+* Usage: func<(arg: argType) => returnType>()
+*/
 function func<T> () : Requireable<T> {
-
-  // Creates a validator, similar to Validator<T> from prop-types.
-  let validator = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error | null{
+  
+  let validator : Validator<T> = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error | null {
     if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
       return new Error ("Invalid prop `" + propName + "` of type `" + typeof props[propName] + "` supplied to `" + componentName + "`, expected a function");
     }
   }
   
   const t : Requireable<T> = validator as Requireable<T>;
-  t.isRequired =  validator;
+  t.isRequired = validator as Validator<NonNullable<T>>;
   return t;
 }
 
+/** 
+ * Returns a PropType representing any value from a given object.
+ * @param {object} val
+ * @returns {Requireable<T>}
+*/
 function oneOf<T>(val : object) : Requireable<T> {
   return PropTypes.oneOf(Object.values(val));
 }
 
+/** 
+ * Returns a PropType representing any array containing values from a given object.
+ * @param {object} val
+ * @returns {Requireable<T[]}
+*/
 function arrayOf<T>(val : object) : Requireable<T[]> {
   return PropTypes.arrayOf(oneOf<T>(val));
 }
+
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef;
