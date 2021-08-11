@@ -53,8 +53,8 @@ const propTypes = {
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
-  fitMode: oneOfProp<Config.FitMode>(Config.FitMode),
-  layoutMode: oneOfProp<Config.LayoutMode>(Config.LayoutMode),
+  fitMode: oneOf<Config.FitMode>(Config.FitMode),
+  layoutMode: oneOf<Config.LayoutMode>(Config.LayoutMode),
   onLayoutChanged: func<() => void>(),
   padStatusBar: PropTypes.bool,
   continuousAnnotationEditing: PropTypes.bool,
@@ -76,14 +76,14 @@ const propTypes = {
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
-    oneOfProp<Config.DefaultToolbars>(Config.DefaultToolbars),
+    oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: oneOfProp<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
+      icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
       items: PropTypes.arrayOf(PropTypes.oneOfType([
-        oneOfProp<Config.Tools>(Config.Tools),
-        oneOfProp<Config.Buttons>(Config.Buttons)
+        oneOf<Config.Tools>(Config.Tools),
+        oneOf<Config.Buttons>(Config.Buttons)
       ])).isRequired
     })
   ])),
@@ -110,12 +110,12 @@ const propTypes = {
   restrictDownloadUsage: PropTypes.bool,
   userBookmarksListEditingEnabled: PropTypes.bool,
   imageInReflowEnabled: PropTypes.bool,
-  reflowOrientation: oneOfProp<Config.ReflowOrientation>(Config.ReflowOrientation),
+  reflowOrientation: oneOf<Config.ReflowOrientation>(Config.ReflowOrientation),
   onUndoRedoStateChanged: func<() => void>(),
   tabletLayoutEnabled: PropTypes.bool,
   initialToolbar: PropTypes.string,
   inkMultiStrokeEnabled: PropTypes.bool,
-  defaultEraserType: oneOfProp<Config.EraserType>(Config.EraserType),
+  defaultEraserType: oneOf<Config.EraserType>(Config.EraserType),
   exportPath: PropTypes.string,
   openUrlPath: PropTypes.string,
   hideScrollbars: PropTypes.bool,
@@ -145,12 +145,12 @@ function func<T> () : Requireable<T> {
   return t;
 }
 
-function oneOfProp<T>(val : object) : Requireable<T> {
+function oneOf<T>(val : object) : Requireable<T> {
   return PropTypes.oneOf(Object.values(val));
 }
 
 function arrayOf<T>(val : object) : Requireable<T[]> {
-  return PropTypes.arrayOf(oneOfProp<T>(val));
+  return PropTypes.arrayOf(oneOf<T>(val));
 }
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
