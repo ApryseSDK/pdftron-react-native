@@ -154,7 +154,7 @@ function func<T> () : Requireable<T> {
 }
 
 /** 
- * Returns a custom PropType representing any value from given object(s).
+ * Creates a custom PropType representing any value from given object(s).
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
  * @returns {Requireable<T>} A custom PropType constant.
@@ -162,13 +162,12 @@ function func<T> () : Requireable<T> {
 function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
   if (rest.length > 0) {
     return PropTypes.oneOf(Object.values(Object.assign({}, obj, ...rest)));
-  } else {
-    return PropTypes.oneOf(Object.values(obj));
   }
+  return PropTypes.oneOf(Object.values(obj));
 }
 
 /** 
- * Returns a custom PropType representing any array containing values from given object(s).
+ * Creates a custom PropType representing any array containing values from given object(s).
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
  * @returns {Requireable<T[]>} A custom PropType constant.
@@ -176,9 +175,8 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   if (rest.length > 0) {
     return PropTypes.arrayOf(oneOf<T>(Object.assign({}, obj, ...rest)));
-  } else {
-    return PropTypes.arrayOf(oneOf<T>(obj));
   }
+  return PropTypes.arrayOf(oneOf<T>(obj));
 }
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
