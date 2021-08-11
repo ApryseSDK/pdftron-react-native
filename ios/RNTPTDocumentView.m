@@ -999,10 +999,10 @@ NS_ASSUME_NONNULL_END
 
 -(void)openBookmarkList
 {
-    if (!self.documentViewController.bookmarkListHidden) {
-        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (!self.currentDocumentViewController.bookmarkListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.currentDocumentViewController.navigationListsViewController;
         navigationListsViewController.selectedViewController = navigationListsViewController.bookmarkViewController;
-        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+        [self.currentDocumentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
     }
 }
 
@@ -4009,10 +4009,10 @@ NS_ASSUME_NONNULL_END
 
 -(void)openAnnotationList
 {
-    if (!self.documentViewController.annotationListHidden) {
-        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (!self.currentDocumentViewController.annotationListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.currentDocumentViewController.navigationListsViewController;
         navigationListsViewController.selectedViewController = navigationListsViewController.annotationViewController;
-        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+        [self.currentDocumentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
     }
 }
 
@@ -5033,10 +5033,10 @@ NS_ASSUME_NONNULL_END
 
 -(void)openOutlineList
 {
-    if (!self.documentViewController.outlineListHidden) {
-        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (!self.currentDocumentViewController.outlineListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.currentDocumentViewController.navigationListsViewController;
         navigationListsViewController.selectedViewController = navigationListsViewController.outlineViewController;
-        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+        [self.currentDocumentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
     }
 }
 
@@ -5044,10 +5044,10 @@ NS_ASSUME_NONNULL_END
 
 -(void)openLayersList
 {
-    if (!self.documentViewController.pdfLayerListHidden) {
-        PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    if (!self.currentDocumentViewController.pdfLayerListHidden) {
+        PTNavigationListsViewController *navigationListsViewController = self.currentDocumentViewController.navigationListsViewController;
         navigationListsViewController.selectedViewController = navigationListsViewController.pdfLayerViewController;
-        [self.documentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
+        [self.currentDocumentViewController presentViewController:navigationListsViewController animated:YES completion:nil];
     }
 }
 
@@ -5055,9 +5055,9 @@ NS_ASSUME_NONNULL_END
 
 -(void)openNavigationLists
 {
-    PTNavigationListsViewController *navigationListsViewController = self.documentViewController.navigationListsViewController;
+    PTNavigationListsViewController *navigationListsViewController = self.currentDocumentViewController.navigationListsViewController;
     if (navigationListsViewController) {
-        [self.documentViewController showNavigationLists];
+        [self.currentDocumentViewController showNavigationLists];
     }
 }
 
