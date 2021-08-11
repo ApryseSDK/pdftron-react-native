@@ -3,7 +3,6 @@ import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
-  ViewProps,
   Platform,
   Alert,
   NativeModules,
@@ -13,6 +12,14 @@ const { DocumentViewManager } = NativeModules;
 import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
+/** 
+ * Object containing PropTypes types for {@link DocumentView} class.
+ * Also used to generate prop types for TS users.
+ * 
+ * To represent functions, please use {@link func}.
+ * To represent "one of Config.Buttons values" or "an array of 
+ * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
+ */
 const propTypes = {
   document: PropTypes.string.isRequired,
   onChange: func<(event : any) => void>(),
@@ -81,10 +88,7 @@ const propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: PropTypes.arrayOf(PropTypes.oneOfType([
-        oneOf<Config.Tools>(Config.Tools),
-        oneOf<Config.Buttons>(Config.Buttons)
-      ])).isRequired
+      items: arrayOf<Config.Tools | Config.Buttons>(Object.assign({}, Config.Tools, Config.Buttons)).isRequired
     })
   ])),
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
@@ -140,7 +144,7 @@ function func<T> () : Requireable<T> {
   
   let validator : Validator<T> = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error | null {
     if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
-      return new Error ("Invalid prop `" + propName + "` of type `" + typeof props[propName] + "` supplied to `" + componentName + "`, expected a function");
+      return new Error (`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`${componentName}\`, expected a function.`);
     }
   }
   
