@@ -161,7 +161,9 @@ function func<T> () : Requireable<T> {
 */
 function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
   if (rest.length > 0) {
-    return PropTypes.oneOf(Object.values(Object.assign({}, obj, rest.values)));
+    let temp: object = Object.assign({}, obj);
+    rest.forEach((val: object) => { Object.assign(temp, val)});
+    return PropTypes.oneOf(Object.values(temp));
   } else {
     return PropTypes.oneOf(Object.values(obj));
   }
@@ -175,7 +177,9 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   if (rest.length > 0) {
-    return PropTypes.arrayOf(oneOf<T>(Object.assign({}, obj, rest.values)));
+    let temp: object = Object.assign({}, obj);
+    rest.forEach((val: object) => { Object.assign(temp, val)});
+    return PropTypes.arrayOf(oneOf<T>(temp));
   } else {
     return PropTypes.arrayOf(oneOf<T>(obj));
   }
