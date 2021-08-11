@@ -26,7 +26,7 @@ jobs:
           npm run start 
 
       - name: Force add JS files to override .gitignore
-        run: git add --force /lib # <-- Change this to your build path
+        run: git add --force ./lib # <-- Change this to your build path
 
       - name: Commit files
         run: | # Change last line to your preferred commit message (I like `chore: build js files`)
