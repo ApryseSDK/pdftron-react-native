@@ -173,10 +173,7 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
  * @returns {Requireable<T[]>} A custom PropType constant.
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
-  if (rest.length > 0) {
-    return PropTypes.arrayOf(oneOf<T>(Object.assign({}, obj, ...rest)));
-  }
-  return PropTypes.arrayOf(oneOf<T>(obj));
+  return PropTypes.arrayOf(oneOf<T>(obj, ...rest));
 }
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
