@@ -3051,6 +3051,7 @@ NS_ASSUME_NONNULL_END
         PTNoteMenuItemTitleKey: PTNoteMenuItemIdentifierKey,
         PTCommentsMenuItemTitleKey: PTNoteMenuItemIdentifierKey, // "Comments" has same id as "Note".
         PTCopyMenuItemTitleKey: PTCopyMenuItemIdentifierKey,
+        PTDuplicateMenuItemTitleKey: PTDuplicateMenuItemIdentifierKey,
         PTDeleteMenuItemTitleKey: PTDeleteMenuItemIdentifierKey,
         PTTypeMenuItemTitleKey: PTTypeMenuItemIdentifierKey,
         PTSearchMenuItemTitleKey: PTSearchMenuItemIdentifierKey,
