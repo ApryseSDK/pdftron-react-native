@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes, {Requireable} from 'prop-types';
+import PropTypes, { Requireable } from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
@@ -124,9 +124,16 @@ const propTypes = {
   ...ViewPropTypes,
 };
 
+// Generates the prop types for TypeScript users, from PropTypes. 
 type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 
+// Creates a custom PropType for functions.
+// When the prop types are generated for TS users, type checking for 
+// function parameters and return values is provided.
+// Usage: funcProp<(arg: argType) => returnType>()
 function funcProp<T> () : Requireable<T> {
+
+  // Creates a validator, similar to Validator<T> from prop-types.
   let validator = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error {
     if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
       return new Error ("Invalid prop `" + propName + "` of type `" + typeof props[propName] + "` supplied to `" + componentName + "`, expected a function");
@@ -137,6 +144,7 @@ function funcProp<T> () : Requireable<T> {
   t.isRequired =  validator;
   return t;
 }
+
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef;
