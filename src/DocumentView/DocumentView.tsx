@@ -15,14 +15,14 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 const propTypes = {
   document: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
+  onChange: funcProp<(event : any) => void>(),
   password: PropTypes.string,
   initialPageNumber: PropTypes.number,
   pageNumber: PropTypes.number,
   customHeaders: PropTypes.object,
   leadingNavButtonIcon: PropTypes.string,
   showLeadingNavButton: PropTypes.bool,
-  onLeadingNavButtonPressed: PropTypes.func,
+  onLeadingNavButtonPressed: funcProp<() => void>(),
   onDocumentLoaded: funcProp<(path: string) => void>(),
   onDocumentError: funcProp<(error: string) => void>(),
   onPageChanged: funcProp<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
@@ -30,17 +30,17 @@ const propTypes = {
   onZoomChanged: funcProp<(event: {zoom: number}) => void>(),
   onZoomFinished: funcProp<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
-  disabledElements: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-  disabledTools: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-  longPressMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
-  overrideLongPressMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.LongPressMenu))),
+  disabledElements: arrayOfProp<Config.Buttons>(Config.Buttons),
+  disabledTools: arrayOfProp<Config.Tools>(Config.Tools),
+  longPressMenuItems: arrayOfProp<Config.LongPressMenu>(Config.LongPressMenu),
+  overrideLongPressMenuBehavior: arrayOfProp<Config.LongPressMenu>(Config.LongPressMenu),
   onLongPressMenuPress: funcProp<(event: {longPressMenu: string, longPressText: string}) => void>(),
   longPressMenuEnabled: PropTypes.bool,
-  annotationMenuItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
-  overrideAnnotationMenuBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.AnnotationMenu))),
+  annotationMenuItems: arrayOfProp<Config.AnnotationMenu>(Config.AnnotationMenu),
+  overrideAnnotationMenuBehavior: arrayOfProp<Config.AnnotationMenu>(Config.AnnotationMenu),
   onAnnotationMenuPress: funcProp<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  hideAnnotationMenu: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Tools))),
-  overrideBehavior: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Actions))),
+  hideAnnotationMenu: arrayOfProp<Config.Tools>(Config.Tools),
+  overrideBehavior: arrayOfProp<Config.Actions>(Config.Actions),
   onBehaviorActivated: funcProp<(event: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
   topToolbarEnabled: PropTypes.bool,
   bottomToolbarEnabled: PropTypes.bool,
@@ -53,8 +53,8 @@ const propTypes = {
   onFormFieldValueChanged: funcProp<(event: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
-  fitMode: PropTypes.oneOf(Object.values(Config.FitMode)),
-  layoutMode: PropTypes.oneOf(Object.values(Config.LayoutMode)),
+  fitMode: oneOfProp<Config.FitMode>(Config.FitMode),
+  layoutMode: oneOfProp<Config.LayoutMode>(Config.LayoutMode),
   onLayoutChanged: funcProp<() => void>(),
   padStatusBar: PropTypes.bool,
   continuousAnnotationEditing: PropTypes.bool,
@@ -76,31 +76,31 @@ const propTypes = {
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.oneOf(Object.values(Config.DefaultToolbars)),
+    oneOfProp<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: PropTypes.oneOf(Object.values(Config.ToolbarIcons)).isRequired,
+      icon: oneOfProp<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
       items: PropTypes.arrayOf(PropTypes.oneOfType([
-        PropTypes.oneOf(Object.values(Config.Tools)),
-        PropTypes.oneOf(Object.values(Config.Buttons))
+        oneOfProp<Config.Tools>(Config.Tools),
+        oneOfProp<Config.Buttons>(Config.Buttons)
       ])).isRequired
     })
   ])),
-  hideDefaultAnnotationToolbars: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.DefaultToolbars))),
-  topAppNavBarRightBar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
-  bottomToolbar: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.Buttons))),
+  hideDefaultAnnotationToolbars: arrayOfProp<Config.DefaultToolbars>(Config.DefaultToolbars),
+  topAppNavBarRightBar: arrayOfProp<Config.Buttons>(Config.Buttons),
+  bottomToolbar: arrayOfProp<Config.Buttons>(Config.Buttons),
   hideAnnotationToolbarSwitcher: PropTypes.bool,
   hideTopToolbars: PropTypes.bool,
   hideTopAppNavBar: PropTypes.bool,
   onBookmarkChanged: funcProp<(event: {bookmarkJson: string}) => void>(),
-  hideThumbnailFilterModes: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ThumbnailFilterMode))),
+  hideThumbnailFilterModes: arrayOfProp<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
   onToolChanged: funcProp<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
   horizontalScrollPos: PropTypes.number,
   verticalScrollPos: PropTypes.number,
   onTextSearchStart: funcProp<() => void>(),
   onTextSearchResult: funcProp<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
-  hideViewModeItems: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Config.ViewModePickerItem))),
+  hideViewModeItems: arrayOfProp<Config.ViewModePickerItem>(Config.ViewModePickerItem),
   pageStackEnabled: PropTypes.bool,
   showQuickNavigationButton: PropTypes.bool,
   photoPickerEnabled: PropTypes.bool,
@@ -110,12 +110,12 @@ const propTypes = {
   restrictDownloadUsage: PropTypes.bool,
   userBookmarksListEditingEnabled: PropTypes.bool,
   imageInReflowEnabled: PropTypes.bool,
-  reflowOrientation: PropTypes.oneOf(Object.values(Config.ReflowOrientation)),
+  reflowOrientation: oneOfProp<Config.ReflowOrientation>(Config.ReflowOrientation),
   onUndoRedoStateChanged: funcProp<() => void>(),
   tabletLayoutEnabled: PropTypes.bool,
   initialToolbar: PropTypes.string,
   inkMultiStrokeEnabled: PropTypes.bool,
-  defaultEraserType: PropTypes.oneOf(Object.values(Config.EraserType)),
+  defaultEraserType: oneOfProp<Config.EraserType>(Config.EraserType),
   exportPath: PropTypes.string,
   openUrlPath: PropTypes.string,
   hideScrollbars: PropTypes.bool,
@@ -134,7 +134,7 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 function funcProp<T> () : Requireable<T> {
 
   // Creates a validator, similar to Validator<T> from prop-types.
-  let validator = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error {
+  let validator = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error | null{
     if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
       return new Error ("Invalid prop `" + propName + "` of type `" + typeof props[propName] + "` supplied to `" + componentName + "`, expected a function");
     }
@@ -145,6 +145,13 @@ function funcProp<T> () : Requireable<T> {
   return t;
 }
 
+function oneOfProp<T>(val : object) : Requireable<T> {
+  return PropTypes.oneOf(Object.values(val));
+}
+
+function arrayOfProp<T>(val : object) : Requireable<T[]> {
+  return PropTypes.arrayOf(oneOfProp<T>(val));
+}
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef;

@@ -5,7 +5,6 @@
 - [Preview](#preview)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Components](#components)
 - [License](#license)
 
 ## API
