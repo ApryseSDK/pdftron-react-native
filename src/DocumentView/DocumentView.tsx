@@ -124,7 +124,7 @@ const propTypes = {
   ...ViewPropTypes,
 };
 
-/** Generates the prop types for TypeScript users, from PropTypes. */
+// Generates the prop types for TypeScript users, from PropTypes.
 type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 
 /**
@@ -132,6 +132,7 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 *
 * If the resulting PropType is used to generate prop types for TS users, 
 * type checking for function parameters and return values will be provided.
+* 
 * Usage: func<(arg: argType) => returnType>()
 */
 function func<T> () : Requireable<T> {
@@ -148,21 +149,21 @@ function func<T> () : Requireable<T> {
 }
 
 /** 
- * Returns a PropType representing any value from a given object.
- * @param {object} val
- * @returns {Requireable<T>}
+ * Returns a custom PropType representing any value from a given object.
+ * @param {object} obj An object containing values.
+ * @returns {Requireable<T>} A custom PropType constant.
 */
-function oneOf<T>(val : object) : Requireable<T> {
-  return PropTypes.oneOf(Object.values(val));
+function oneOf<T>(obj : object) : Requireable<T> {
+  return PropTypes.oneOf(Object.values(obj));
 }
 
 /** 
- * Returns a PropType representing any array containing values from a given object.
- * @param {object} val
- * @returns {Requireable<T[]}
+ * Returns a custom PropType representing any array containing values from a given object.
+ * @param {object} obj An object containing values.
+ * @returns {Requireable<T[]} A custom PropType constant.
 */
-function arrayOf<T>(val : object) : Requireable<T[]> {
-  return PropTypes.arrayOf(oneOf<T>(val));
+function arrayOf<T>(obj : object) : Requireable<T[]> {
+  return PropTypes.arrayOf(oneOf<T>(obj));
 }
 
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
