@@ -442,6 +442,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openBookmarkList(int tag) throws PDFNetException{
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openBookmarkList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openBookmarkList", "Unable to find DocumentView.");
+        }
+    }
+
     public void importAnnotationCommand(int tag, String xfdfCommand, boolean initialLoad) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -595,6 +604,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openAnnotationList(int tag) throws PDFNetException
+    {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openAnnotationList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openAnnotationList", "Unable to find DocumentView.");
+        }
+    }
     public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1165,6 +1183,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openOutlineList(int tag) throws PDFNetException{
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openOutlineList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openOutlineList", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openLayersList(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openLayersList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openLayersList", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openNavigationLists(int tag)  throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openNavigationLists();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openNavigationLists", "Unable to find DocumentView");
+        }
+    }
+    
     public boolean isReflowMode(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

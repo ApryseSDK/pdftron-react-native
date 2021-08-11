@@ -19,11 +19,13 @@
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
--(NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importBookmarkJsonForDocumentViewTag:(NSNumber *)tag bookmarkJson:(NSString *)bookmarkJson;
+
+- (void)openBookmarkListForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
@@ -163,6 +165,14 @@
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
+- (void)openOutlineListForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openLayersListForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openNavigationListsForDocumentViewTag:(NSNumber *) tag;
+
+- (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
 
 - (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag;
 

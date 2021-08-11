@@ -137,6 +137,20 @@ RCT_REMAP_METHOD(importBookmarkJson,
     }
 }
 
+RCT_REMAP_METHOD(openBookmarkList,
+                 openBookmarkListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openBookmarkListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_bookmark_list_failed", @"Failed to open bookmark list", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  options:(NSDictionary *)options
@@ -260,7 +274,21 @@ RCT_REMAP_METHOD(getField,
         resolve(field);
     }
     @catch (NSException *exception) {
-        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+        reject(@"get_field", @"Failed to get field", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openAnnotationList,
+                 openAnnotationListForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openAnnotationListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_annotation_list", @"Failed to open annotation list", [self errorFromException:exception]);
     }
 }
 
@@ -1257,6 +1285,50 @@ RCT_REMAP_METHOD(selectAll,
         reject(@"select_all", @"Failed to select all", [self errorFromException:exception]);
     }
 }
+
+RCT_REMAP_METHOD(openOutlineList,
+                 openOutlineListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openOutlineListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_outline_list_failed", @"Failed to open outline list", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openLayersList,
+                 openLayersListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openLayersListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_layers_list_failed", @"Failed to open layers list", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openNavigationLists,
+                 openNavigationListsForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openNavigationListsForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_navigation_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
+    }
+}
+
+
 
 #pragma mark - Collaboration
 

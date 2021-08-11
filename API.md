@@ -2318,6 +2318,15 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openAnnotationList
+Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openAnnotationList();
+```
+
 #### openThumbnailsView
 Display a page thumbnails view. 
 
@@ -2384,6 +2393,15 @@ Returns a Promise.
 
 ```js
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
+```
+
+#### openBookmarkList
+Displays the bookmark tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openBookmarkList();
 ```
 
 ### Multi-tab
@@ -3063,6 +3081,35 @@ Returns a Promise.
 
 ```js
 this._viewer.showCrop();
+```
+
+#### openOutlineList
+Displays the outline tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openOutlineList();
+```
+
+#### openLayersList
+On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
+
+**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
+
+Returns a Promise.
+
+```js
+this._viewer.openLayersList();
+```
+
+#### openNavigationLists
+Displays the existing list container. Its current tab will be the one last opened. 
+
+Returns a Promise.
+
+```js
+this._viewer.openNavigationLists();
 ```
 
 #### showViewSettings
