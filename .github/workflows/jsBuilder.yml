@@ -1,8 +1,7 @@
 name: Transpile TS
 
-on:
-  push:
-    branches: [ts-support-js-to-ts] # <-- Change this to whatever the primary branch is (ex: master)
+on: [push, pull_request]
+      branches: [ts-support-js-to-ts] # <-- Change this to whatever the primary branch is (ex: master)
 
 jobs:
   build:
