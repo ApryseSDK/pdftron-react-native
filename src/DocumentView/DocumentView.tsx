@@ -30,17 +30,17 @@ const propTypes = {
   onZoomChanged: func<(event: {zoom: number}) => void>(),
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
-  disabledElements: arrayOfProp<Config.Buttons>(Config.Buttons),
-  disabledTools: arrayOfProp<Config.Tools>(Config.Tools),
-  longPressMenuItems: arrayOfProp<Config.LongPressMenu>(Config.LongPressMenu),
-  overrideLongPressMenuBehavior: arrayOfProp<Config.LongPressMenu>(Config.LongPressMenu),
+  disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
+  disabledTools: arrayOf<Config.Tools>(Config.Tools),
+  longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
+  overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
   onLongPressMenuPress: func<(event: {longPressMenu: string, longPressText: string}) => void>(),
   longPressMenuEnabled: PropTypes.bool,
-  annotationMenuItems: arrayOfProp<Config.AnnotationMenu>(Config.AnnotationMenu),
-  overrideAnnotationMenuBehavior: arrayOfProp<Config.AnnotationMenu>(Config.AnnotationMenu),
+  annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
+  overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
   onAnnotationMenuPress: func<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  hideAnnotationMenu: arrayOfProp<Config.Tools>(Config.Tools),
-  overrideBehavior: arrayOfProp<Config.Actions>(Config.Actions),
+  hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
+  overrideBehavior: arrayOf<Config.Actions>(Config.Actions),
   onBehaviorActivated: func<(event: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
   topToolbarEnabled: PropTypes.bool,
   bottomToolbarEnabled: PropTypes.bool,
@@ -87,20 +87,20 @@ const propTypes = {
       ])).isRequired
     })
   ])),
-  hideDefaultAnnotationToolbars: arrayOfProp<Config.DefaultToolbars>(Config.DefaultToolbars),
-  topAppNavBarRightBar: arrayOfProp<Config.Buttons>(Config.Buttons),
-  bottomToolbar: arrayOfProp<Config.Buttons>(Config.Buttons),
+  hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+  topAppNavBarRightBar: arrayOf<Config.Buttons>(Config.Buttons),
+  bottomToolbar: arrayOf<Config.Buttons>(Config.Buttons),
   hideAnnotationToolbarSwitcher: PropTypes.bool,
   hideTopToolbars: PropTypes.bool,
   hideTopAppNavBar: PropTypes.bool,
   onBookmarkChanged: func<(event: {bookmarkJson: string}) => void>(),
-  hideThumbnailFilterModes: arrayOfProp<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
+  hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
   onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
   horizontalScrollPos: PropTypes.number,
   verticalScrollPos: PropTypes.number,
   onTextSearchStart: func<() => void>(),
   onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
-  hideViewModeItems: arrayOfProp<Config.ViewModePickerItem>(Config.ViewModePickerItem),
+  hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
   pageStackEnabled: PropTypes.bool,
   showQuickNavigationButton: PropTypes.bool,
   photoPickerEnabled: PropTypes.bool,
@@ -149,7 +149,7 @@ function oneOfProp<T>(val : object) : Requireable<T> {
   return PropTypes.oneOf(Object.values(val));
 }
 
-function arrayOfProp<T>(val : object) : Requireable<T[]> {
+function arrayOf<T>(val : object) : Requireable<T[]> {
   return PropTypes.arrayOf(oneOfProp<T>(val));
 }
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
