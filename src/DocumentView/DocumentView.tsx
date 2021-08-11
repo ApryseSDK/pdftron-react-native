@@ -88,7 +88,7 @@ const propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: arrayOf<Config.Tools | Config.Buttons>(Object.assign({}, Config.Tools, Config.Buttons)).isRequired
+      items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
     })
   ])),
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
@@ -154,21 +154,31 @@ function func<T> () : Requireable<T> {
 }
 
 /** 
- * Returns a custom PropType representing any value from a given object.
+ * Returns a custom PropType representing any value from given object(s).
  * @param {object} obj An object containing values.
+ * @param {...object} rest Indefinite number of other objects containing values.
  * @returns {Requireable<T>} A custom PropType constant.
 */
-function oneOf<T>(obj : object) : Requireable<T> {
-  return PropTypes.oneOf(Object.values(obj));
+function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
+  if (rest.length > 0) {
+    return PropTypes.oneOf(Object.values(Object.assign({}, obj, rest.values)));
+  } else {
+    return PropTypes.oneOf(Object.values(obj));
+  }
 }
 
 /** 
- * Returns a custom PropType representing any array containing values from a given object.
+ * Returns a custom PropType representing any array containing values from given object(s).
  * @param {object} obj An object containing values.
- * @returns {Requireable<T[]} A custom PropType constant.
+ * @param {...object} rest Indefinite number of other objects containing values.
+ * @returns {Requireable<T[]>} A custom PropType constant.
 */
-function arrayOf<T>(obj : object) : Requireable<T[]> {
-  return PropTypes.arrayOf(oneOf<T>(obj));
+function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
+  if (rest.length > 0) {
+    return PropTypes.arrayOf(oneOf<T>(Object.assign({}, obj, rest.values)));
+  } else {
+    return PropTypes.arrayOf(oneOf<T>(obj));
+  }
 }
 
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
