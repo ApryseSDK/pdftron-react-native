@@ -136,8 +136,8 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 *
 * If the resulting PropType is used to generate prop types for TS users, 
 * type checking for function parameters and return values will be provided.
-* 
-* Usage: func<(arg: argType) => returnType>()
+* @example
+* func<(path: string) => void>()
 * @returns {Requireable<T>} A custom PropType constant.
 */
 function func<T> () : Requireable<T> {
@@ -158,6 +158,10 @@ function func<T> () : Requireable<T> {
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
  * @returns {Requireable<T>} A custom PropType constant.
+ * 
+ * @example
+ * oneOf<Config.Tools>(Config.Tools)
+ * oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
 */
 function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
   if (rest.length > 0) {
@@ -171,6 +175,10 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
  * @returns {Requireable<T[]>} A custom PropType constant.
+ * 
+ * @example
+ * arrayOf<Config.Tools>(Config.Tools)
+ * arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   return PropTypes.arrayOf(oneOf<T>(obj, ...rest));
