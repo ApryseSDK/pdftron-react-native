@@ -134,6 +134,7 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 * type checking for function parameters and return values will be provided.
 * 
 * Usage: func<(arg: argType) => returnType>()
+* @returns {Requireable<T>} A custom PropType constant.
 */
 function func<T> () : Requireable<T> {
   
