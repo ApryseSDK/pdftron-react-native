@@ -161,9 +161,7 @@ function func<T> () : Requireable<T> {
 */
 function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
   if (rest.length > 0) {
-    let temp: object = Object.assign({}, obj);
-    rest.forEach((val: object) => { Object.assign(temp, val)});
-    return PropTypes.oneOf(Object.values(temp));
+    return PropTypes.oneOf(Object.values(Object.assign({}, obj, ...rest)));
   } else {
     return PropTypes.oneOf(Object.values(obj));
   }
@@ -177,14 +175,11 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   if (rest.length > 0) {
-    let temp: object = Object.assign({}, obj);
-    rest.forEach((val: object) => { Object.assign(temp, val)});
-    return PropTypes.arrayOf(oneOf<T>(temp));
+    return PropTypes.arrayOf(oneOf<T>(Object.assign({}, obj, ...rest)));
   } else {
     return PropTypes.arrayOf(oneOf<T>(obj));
   }
 }
-
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef;
