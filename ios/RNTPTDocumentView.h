@@ -147,6 +147,7 @@ static NSString * const PTNoteMenuItemTitleKey = @"Note";
 static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
 static NSString * const PTPasteMenuItemTitleKey = @"Paste";
+static NSString * const PTDuplicateMenuItemTitleKey = @"Duplicate";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
 static NSString * const PTSearchMenuItemTitleKey = @"Search";
@@ -161,6 +162,7 @@ static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
 static NSString * const PTCopyMenuItemIdentifierKey = @"copy";
 static NSString * const PTPasteMenuItemIdentifierKey = @"paste";
+static NSString * const PTDuplicateMenuItemIdentifierKey = @"duplicate";
 static NSString * const PTDeleteMenuItemIdentifierKey = @"delete";
 static NSString * const PTTypeMenuItemIdentifierKey = @"markupType";
 static NSString * const PTSearchMenuItemIdentifierKey = @"search";
@@ -314,6 +316,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *uneditableAnnotationTypes;
 
 
 // annotation selection menu customization
@@ -430,6 +433,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -439,6 +444,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (int)getPageCount;
 
 - (void)importBookmarkJson:(NSString *)bookmarkJson;
+
+- (void)openBookmarkList;
 
 - (NSString *)getDocumentPath;
 
@@ -500,6 +507,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)showGoToPageView;
 
 - (void)closeAllTabs;
+
+- (void)openTabSwitcher;
 
 - (int)getPageRotation;
 
@@ -582,6 +591,24 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openOutlineList;
+
+- (void)openLayersList;
+
+- (void)openNavigationLists;
+
+- (void)openAnnotationList;
+
+- (BOOL)isReflowMode;
+
+- (void)toggleReflow;
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect;
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
 
 - (void)openThumbnailsView;
 

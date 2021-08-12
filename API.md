@@ -495,7 +495,7 @@ const myToolbar = {
 };
 
 ...
-<Documentview
+<DocumentView
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
@@ -571,7 +571,7 @@ array of strings, optional, iOS only
 Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
-<Documentview
+<DocumentView
   topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
@@ -582,7 +582,7 @@ array of strings, optional, only the outline list, thumbnail list, share, view m
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
 
 ```js
-<Documentview
+<DocumentView
   bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
@@ -1069,6 +1069,19 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### replyReviewStateEnabled
+boolean, optional, Android only, defaults to true
+
+Defines whether to show an annotation's reply review state.
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  replyReviewStateEnabled={true}
+/>
+```
+
 ### Annotations
 
 #### annotationPermissionCheckEnabled
@@ -1224,10 +1237,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldVal
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
-    console.log('Annotation edit action is', action);
-    annotations.forEach(annotation => {
-      console.log('The id of changed annotation is', annotation.id);
-      console.log('It is in page', annotation.pageNumber);
+    fields.forEach(field => {
+      console.log('The name of the changed field is', field.fieldName);
+      console.log('The value of the changed field is', field.fieldValue);
     });
   }}
 />
@@ -1241,6 +1253,44 @@ If document editing is enabled, then this value determines if the annotation lis
 ```js
 <DocumentView
   annotationsListEditingEnabled={true}
+/>
+```
+
+#### disableEditingByAnnotationType
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none.
+
+Defines annotation types that cannot be edited after creation.
+
+```js
+<DocumentView
+  disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+/>
+```
+
+#### excludedAnnotationListTypes
+array of [`Config.Tools`](./src/Config/Config.js), optional, defaults to none
+
+Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
+
+and uncomment the following line in `ios/RNTPTDocumentView.m`:
+```objc
+- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    ...
+    if (annotTypes.count > 0) {
+        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+    }
+}
+```
+
+Example use:
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
 />
 ```
 
@@ -1817,7 +1867,7 @@ Returns a Promise.
 
 ```js
 const xfdfCommand = '<?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
-this._viewer.importAnnotationCommand(xfdf);
+this._viewer.importAnnotationCommand(xfdfCommand);
 
 ```
 
@@ -2054,7 +2104,9 @@ this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
 ```
 
 #### setDrawAnnotations
-Sets whether all annotations and forms should be rendered in the viewer.
+Sets whether all annotations and forms should be rendered. This method affects the viewer and does not change the document.
+
+Unlike [setVisibilityForAnnotation](#setVisibilityForAnnotation), this method is used to show and hide all annotations and forms in the viewer. 
 
 Parameters:
 
@@ -2278,6 +2330,15 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openAnnotationList
+Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openAnnotationList();
+```
+
 #### openThumbnailsView
 Display a page thumbnails view. 
 
@@ -2346,16 +2407,35 @@ Returns a Promise.
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
+#### openBookmarkList
+Displays the bookmark tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openBookmarkList();
+```
+
 ### Multi-tab
 
 #### closeAllTabs
-Closes all tabs in multi-tab environment.
+Closes all tabs in a multi-tab environment.
 
 Returns a Promise.
 
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
+```
+
+#### openTabSwitcher
+Opens the tab switcher in a multi-tab environment.
+
+Returns a Promise.
+
+```js
+// Do this only when DocumentView has multiTabEnabled = true
+this._viewer.openTabSwitcher();
 ```
 
 ### Zoom
@@ -2463,6 +2543,34 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
   console.log('Current horizontal scroll position is:', horizontal);
   console.log('Current vertical scroll position is:', vertical);
 });
+```
+
+### Reflow
+
+#### isReflowMode
+Returns whether the viewer is currently in reflow mode.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+inReflow | bool | whether the viewer is in reflow mode
+
+```js
+this._viewer.isReflowMode().then((inReflow) => {
+  console.log(inReflow ? 'in reflow mode' : 'not in reflow mode');
+});
+```
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
 ```
 
 ### Canvas
@@ -2649,7 +2757,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageTransparencyGrid | bool | whether to use the transpareny grid
+pageTransparencyGrid | bool | whether to use the transparency grid
 
 ```js
 this._viewer.setPageTransparencyGrid(true);
@@ -2985,4 +3093,85 @@ Returns a Promise.
 
 ```js
 this._viewer.showCrop();
+```
+
+#### openOutlineList
+Displays the outline tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openOutlineList();
+```
+
+#### openLayersList
+On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
+
+**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
+
+Returns a Promise.
+
+```js
+this._viewer.openLayersList();
+```
+
+#### openNavigationLists
+Displays the existing list container. Its current tab will be the one last opened. 
+
+Returns a Promise.
+
+```js
+this._viewer.openNavigationLists();
+```
+
+#### showViewSettings
+Displays the view settings.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showViewSettings({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### showAddPagesView
+Displays the add pages view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showAddPagesView({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### shareCopy
+Displays the share copy view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+flattening | bool | Whether the shared copy should be flattened before sharing.
+
+```js
+this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
 ```
