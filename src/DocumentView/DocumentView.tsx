@@ -149,6 +149,7 @@ function func<T> () : Requireable<T> {
     if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
       return new Error (`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`${componentName}\`, expected a function.`);
     }
+    return null;
   }
   
   const t : Requireable<T> = validator as Requireable<T>;
@@ -190,7 +191,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   static propTypes = propTypes;
 
-  onChange = (event) => {
+  onChange = (event: any) => {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
