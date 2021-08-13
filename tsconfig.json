@@ -3,6 +3,7 @@
         "moduleResolution": "Node",
         "target": "ESNext",
         "jsx": "react-native",
+        "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "declaration": false,
