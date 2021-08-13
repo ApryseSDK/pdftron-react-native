@@ -1457,16 +1457,6 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction
-{
-    RNTPTDocumentView *documentView = self.documentViews[tag];
-    if (documentView) {
-        [documentView setUrlExtraction:urlExtraction];
-    } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
-    }
-}
-
 - (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];

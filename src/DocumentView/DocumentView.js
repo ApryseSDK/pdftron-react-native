@@ -824,15 +824,6 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-
-  setUrlExtraction = (urlExtraction) => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
-    }
-    return Promise.resolve();
-  }
-
   setPageBorderVisibility = (pageBorderVisibility) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

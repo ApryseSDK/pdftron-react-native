@@ -1002,21 +1002,6 @@ RCT_REMAP_METHOD(setOverprint,
     }
 }
 
-RCT_REMAP_METHOD(setUrlExtraction,
-                 setUrlExtractionForDocumentViewTag: (nonnull NSNumber *) tag
-                 urlExtraction:(BOOL)urlExtraction
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejector:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        [[self documentViewManager] setUrlExtractionForDocumentViewTag:tag urlExtraction:urlExtraction];
-        resolve(nil);
-    }
-    @catch (NSException *exception) {
-        reject(@"set_url_extraction", @"Failed to set url extraction", [self errorFromException:exception]);
-    }
-}
-
 RCT_REMAP_METHOD(setPageBorderVisibility,
                  setPageBorderVisibilityForDocumentViewTag: (nonnull NSNumber *) tag
                  pageBorderVisibility:(BOOL)pageBorderVisibility

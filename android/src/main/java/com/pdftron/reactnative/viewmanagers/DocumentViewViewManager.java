@@ -925,15 +925,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setUrlExtraction(int tag, boolean urlExtraction) throws PDFNetException {
-        DocumentView documentView = mDocumentViews.get(tag);
-        if (documentView != null) {
-            documentView.setUrlExtraction(urlExtraction);
-        } else {
-            throw new PDFNetException("", 0L, getName(), "setUrlExtraction", "Unable to find DocumentView.");
-        }
-    }
-
     public void setPageBorderVisibility(int tag, boolean pageBorderVisibility) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

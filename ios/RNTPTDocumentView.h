@@ -550,8 +550,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setOverprint:(NSString *)overprint;
 
-- (void)setUrlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
