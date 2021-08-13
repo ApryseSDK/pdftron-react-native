@@ -324,7 +324,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   // Methods
 
-  getDocumentPath = (): Promise<void> | Promise<string> => {
+  getDocumentPath = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getDocumentPath(tag);
@@ -341,7 +341,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  commitTool = (): Promise<void> | Promise<boolean> => {
+  commitTool = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.commitTool(tag);
@@ -349,7 +349,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageCount = (): Promise<void> | Promise<number> => {
+  getPageCount = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
@@ -396,7 +396,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void> | Promise<string> => {
+  exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.exportAnnotations(tag, options);
@@ -420,7 +420,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  saveDocument = (): Promise<void> | Promise<string> => {
+  saveDocument = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.saveDocument(tag);
@@ -436,7 +436,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getField = (fieldName: string): Promise<void> | Promise<{fieldName: string, fieldValue?: any, fieldType?: string}> => {
+  getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: any, fieldType?: string}> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
@@ -468,7 +468,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  handleBackButton = (): Promise<void> | Promise<boolean> => {
+  handleBackButton = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.handleBackButton(tag);
@@ -517,7 +517,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void> | Promise<AnnotOptions.AnnotationProperties> => {
+  getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
@@ -549,7 +549,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void> | Promise<AnnotOptions.Annotation> => {
+  getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
@@ -557,7 +557,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void> | Promise<Array<AnnotOptions.Annotation>> => {
+  getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListAt(tag, x1, y1, x2, y2);
@@ -565,7 +565,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationsOnPage = (pageNumber: number): Promise<void> | Promise<Array<AnnotOptions.Annotation>> => {
+  getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
@@ -573,7 +573,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void> | Promise<string> => {
+  getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
@@ -581,7 +581,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageCropBox = (pageNumber: number): Promise<void> | Promise<AnnotOptions.CropBox> => {
+  getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCropBox(tag, pageNumber);
@@ -589,7 +589,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setCurrentPage = (pageNumber: number): Promise<void> | Promise<boolean> => {
+  setCurrentPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
@@ -597,7 +597,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getVisiblePages = (): Promise<void> | Promise<Array<number>> => {
+  getVisiblePages = (): Promise<void | Array<number>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getVisiblePages(tag);
@@ -605,7 +605,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoPreviousPage = (): Promise<void> | Promise<boolean> => {
+  gotoPreviousPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoPreviousPage(tag);
@@ -613,7 +613,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoNextPage = (): Promise<void> | Promise<boolean> => {
+  gotoNextPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoNextPage(tag);
@@ -621,7 +621,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoFirstPage = (): Promise<void> | Promise<boolean> => {
+  gotoFirstPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoFirstPage(tag);
@@ -629,7 +629,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoLastPage = (): Promise<void> | Promise<boolean> => {
+  gotoLastPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoLastPage(tag);
@@ -661,7 +661,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getZoom = (): Promise<void> | Promise<number> => {
+  getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
@@ -701,7 +701,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
-  getScrollPos = (): Promise<void> | Promise<{horizontal: number, vertical: number}> => {
+  getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getScrollPos(tag);
@@ -709,7 +709,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
     
-  getCanvasSize = (): Promise<void> | Promise<{width: number, height: number}> => {
+  getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
@@ -717,7 +717,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageRotation = (): Promise<void> | Promise<AnnotOptions.RotationDegree> => {
+  getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageRotation(tag);
@@ -742,7 +742,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
 
-  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void> | Promise<Array<AnnotOptions.Point>> => {
+  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
@@ -750,7 +750,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void> | Promise<Array<AnnotOptions.Point>> => {
+  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
@@ -758,7 +758,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageNumberFromScreenPoint = (x: number, y: number): Promise<void> | Promise<number> => {
+  getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
@@ -838,7 +838,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getSelection = (pageNumber: number): Promise<void> | Promise<AnnotOptions.TextSelectionResult> => {
+  getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getSelection(tag, pageNumber);
@@ -846,7 +846,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  hasSelection = (): Promise<void> | Promise<boolean> => {
+  hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelection(tag);
@@ -862,7 +862,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getSelectionPageRange = (): Promise<void> | Promise<{begin: number, end: number}> => {
+  getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getSelectionPageRange(tag);
@@ -870,7 +870,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  hasSelectionOnPage = (pageNumber: number): Promise<void> | Promise<boolean> => {
+  hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelectionOnPage(tag, pageNumber);
@@ -879,7 +879,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
   
-  selectInRect = (rect: AnnotOptions.Rect): Promise<void> | Promise<boolean> => {
+  selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectInRect(tag, rect);
@@ -887,7 +887,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void> | Promise<boolean> => {
+  isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.isThereTextInRect(tag, rect);
@@ -944,7 +944,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void> | Promise<string> => {
+  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
@@ -968,7 +968,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  canUndo = (): Promise<void> | Promise<boolean> => {
+  canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canUndo(tag);
@@ -976,7 +976,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  canRedo = (): Promise<void> | Promise<boolean> => {
+  canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canRedo(tag);
@@ -1016,7 +1016,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  isReflowMode = (): Promise<void> | Promise<boolean> => {
+  isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.isReflowMode(tag);
