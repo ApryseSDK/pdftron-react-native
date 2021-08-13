@@ -22,7 +22,6 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  */
 const propTypes = {
   document: PropTypes.string.isRequired,
-  onChange: func<(event : any) => void>(),
   password: PropTypes.string,
   initialPageNumber: PropTypes.number,
   pageNumber: PropTypes.number,
@@ -507,7 +506,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   * 
   */
   setPropertyForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
-    return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap); // check this._viewerRef
+    return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
   }
 
   setPropertiesForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
@@ -1073,7 +1072,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  _setNativeRef = (ref) => { // check ref type.
+  _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
 
@@ -1082,7 +1081,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       <RCTDocumentView
         ref={this._setNativeRef}
         style={{ flex:1 }}
-        onChange={this.onChange} // needed to add onChange to props
+        // @ts-ignore // Intentionally exclude `onChange` from being exposed as a prop.
+        onChange={this.onChange}
         {...this.props}
       />
     )
