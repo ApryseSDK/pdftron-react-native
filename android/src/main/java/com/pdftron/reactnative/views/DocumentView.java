@@ -2252,14 +2252,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 try {
                     if (annot != null && annot.isValid()) {
                         if (annot.getType() == Annot.e_Widget) {
-                            WritableMap resultMap = Arguments.createMap();
-
                             Widget widget = new Widget(annot);
                             Field field = widget.getField();
                             String name = field.getName();
 
+                            WritableMap resultMap = getField(name);
                             resultMap.putString(KEY_FIELD_NAME, name);
-                            resultMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
                             fieldsArray.pushMap(resultMap);
                         }
                     }
