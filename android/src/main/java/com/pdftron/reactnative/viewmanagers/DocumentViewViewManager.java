@@ -1255,6 +1255,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public String getSavedSignatureFolder(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getSavedSignatureFolder();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getSavedSignatureFolder", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

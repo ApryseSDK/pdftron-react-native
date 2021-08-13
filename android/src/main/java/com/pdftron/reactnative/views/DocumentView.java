@@ -4173,9 +4173,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             File[] files = StampManager.getInstance().getSavedSignatures(context);
             WritableArray signatures = Arguments.createArray();
             for (int i = 0; i < files.length; i++) {
-                signatures.pushString(files[i].getPath());
+                signatures.pushString(files[i].getAbsolutePath());
             }
             return signatures;
+        }
+        return null;
+    }
+
+    public String getSavedSignatureFolder() {
+        Context context = getContext();
+        if (context != null) {
+            File file = StampManager.getInstance().getSavedSignatureFolder(context);
+            return file.getAbsolutePath();
         }
         return null;
     }
