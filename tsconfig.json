@@ -8,6 +8,7 @@
         "skipLibCheck": true,
         "declaration": false,
         "outDir": "./lib",
+        "strict": true,
     },
     "include": ["index.ts", "src/**/*"],
     "exclude": ["node_modules", "**/*.spec.ts"]

@@ -182,11 +182,11 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
  * arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
-  return PropTypes.arrayOf(oneOf<T>(obj, ...rest));
+  return PropTypes.arrayOf(oneOf<T>(obj, ...rest)) as Requireable<T[]>;
 }
 export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
-  _viewerRef;
+  _viewerRef: any;
 
   static propTypes = propTypes;
 
@@ -1072,7 +1072,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  _setNativeRef = (ref) => {
+  _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
 
