@@ -1220,13 +1220,14 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`, representing the fields that have been changed
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
 
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
     fields.forEach(field => {
       console.log('The name of the changed field is', field.fieldName);
+      console.log('The type of the changed field is', field.fieldType);
       console.log('The value of the changed field is', field.fieldValue);
     });
   }}
