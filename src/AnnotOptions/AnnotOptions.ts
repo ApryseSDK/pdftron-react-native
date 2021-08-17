@@ -30,12 +30,8 @@ export type RotationDegree = 0 | 90 | 180 | 270;
 
 export interface Field {
     fieldName: string;
-    fieldValue: string | boolean | number;
-}
-
-export interface FieldWithStringValue {
-    fieldName: string;
-    fieldValue: string;
+    fieldType: string;
+    fieldValue?: string | boolean | number | undefined;
 }
 
 export interface Point {

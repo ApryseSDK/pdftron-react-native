@@ -56,7 +56,7 @@ const propTypes = {
   keyboardShortcutsEnabled: PropTypes.bool,
   onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.FieldWithStringValue>}) => void>(),
+  onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
@@ -1091,14 +1091,4 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
 const name = Platform.OS === 'ios' ? 'RNTPTDocumentView' : 'RCTDocumentView';
 
-
-const RCTDocumentView = requireNativeComponent( // https://github.com/facebook/react-native/issues/28351
-  name,
-  // @ts-ignore
-  DocumentView,
-  {
-    nativeOnly: {
-      onChange: true
-    }
-  }
-);
+const RCTDocumentView = requireNativeComponent(name);

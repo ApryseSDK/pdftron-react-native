@@ -8,9 +8,9 @@
 
 ## Pull requests
 1. Fork the repository.
-2. Create a branch from `master`.
+2. Create a branch from `dev`.
 3. Update the source code.
 4. Commit and push the changes with descriptive messages.
-5. Create a pull request to `master`.
+5. Create a pull request to `dev`.
 
 \* Please note that all pull requests should be tied to an issue, and all but the most trivial pull requests should be discussed beforehand.
