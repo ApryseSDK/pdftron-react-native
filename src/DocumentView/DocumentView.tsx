@@ -428,7 +428,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setFlagForFields = (fields: Array<String>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
+  setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
