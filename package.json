@@ -28,11 +28,9 @@
     "prop-types": "*"
   },
   "devDependencies": {
-    "react": "*"
-  },
-  "dependencies": {
-    "@types/react": "^17.0.15",
-    "@types/react-native": "^0.64.12",
-    "typescript": "^4.3.5"
+    "react": "*",
+    "@types/react": "*",
+    "@types/react-native": "*",
+    "typescript": "*"
   }
 }
