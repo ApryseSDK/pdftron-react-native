@@ -2257,7 +2257,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             String name = field.getName();
 
                             WritableMap resultMap = getField(name);
-                            resultMap.putString(KEY_FIELD_NAME, name);
                             fieldsArray.pushMap(resultMap);
                         }
                     }

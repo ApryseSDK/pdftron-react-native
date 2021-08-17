@@ -3498,13 +3498,13 @@ NS_ASSUME_NONNULL_END
         __block PTWidget *widget;
         __block PTField *field;
         __block NSString *fieldName;
-        __block NSString *fieldValue;
+        __block NSDictionary *fieldMap;
 
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
             widget = [[PTWidget alloc] initWithAnn:annot];
             field = [widget GetField];
             fieldName = [field IsValid] ? [field GetName] : @"";
-            fieldValue = [field IsValid] ? [field GetValueAsString] : @"";
+            fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
         } error:&error];
         if (error) {
             NSLog(@"An error occurred: %@", error);
@@ -3512,10 +3512,7 @@ NS_ASSUME_NONNULL_END
         }
 
         if ([self.delegate respondsToSelector:@selector(formFieldValueChanged:fields:)]) {
-            [self.delegate formFieldValueChanged:self fields:@{
-                PTFormFieldNameKey: fieldName,
-                PTFormFieldValueKey: fieldValue,
-            }];
+            [self.delegate formFieldValueChanged:self fields:fieldMap];
         }
         if (!self.collaborationManager) {
             PTVectorAnnot *annots = [[PTVectorAnnot alloc] init];
