@@ -19,11 +19,13 @@
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
--(NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
 - (void)importBookmarkJsonForDocumentViewTag:(NSNumber *)tag bookmarkJson:(NSString *)bookmarkJson;
+
+- (void)openBookmarkListForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
@@ -82,6 +84,8 @@
 
 - (void)closeAllTabsForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openTabSwitcherForDocumentViewTag:(NSNumber *)tag;
+
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag;
 
 - (int)getPageRotationForDocumentViewTag:(NSNumber *)tag;
@@ -122,8 +126,6 @@
 
 - (void)setOverprintforDocumentViewTag:(NSNumber *)tag overprint:(NSString *)overprint;
 
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -139,6 +141,8 @@
 - (void)findTextForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openSearchForDocumentViewTag:(NSNumber *)tag;
 
 - (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 
@@ -163,6 +167,18 @@
 - (void)importAnnotationCommandForDocumentViewTag:(NSNumber *)tag xfdfCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbarForDocumentViewTag:(NSNumber *)tag toolbarTitle:(NSString*)toolbarTitle;
+
+- (void)openOutlineListForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openLayersListForDocumentViewTag:(NSNumber *)tag;
+
+- (void)openNavigationListsForDocumentViewTag:(NSNumber *) tag;
+
+- (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag;
+
+- (BOOL)isReflowModeForDocumentViewTag:(NSNumber *)tag;
+
+- (void)toggleReflow:(NSNumber *)tag;
 
 - (void)showViewSettingsForDocumentViewTag:(nonnull NSNumber *)tag rect:(NSDictionary *)rect;
 

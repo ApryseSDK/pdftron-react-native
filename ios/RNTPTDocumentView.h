@@ -147,6 +147,7 @@ static NSString * const PTNoteMenuItemTitleKey = @"Note";
 static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
 static NSString * const PTPasteMenuItemTitleKey = @"Paste";
+static NSString * const PTDuplicateMenuItemTitleKey = @"Duplicate";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
 static NSString * const PTSearchMenuItemTitleKey = @"Search";
@@ -161,6 +162,7 @@ static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
 static NSString * const PTCopyMenuItemIdentifierKey = @"copy";
 static NSString * const PTPasteMenuItemIdentifierKey = @"paste";
+static NSString * const PTDuplicateMenuItemIdentifierKey = @"duplicate";
 static NSString * const PTDeleteMenuItemIdentifierKey = @"delete";
 static NSString * const PTTypeMenuItemIdentifierKey = @"markupType";
 static NSString * const PTSearchMenuItemIdentifierKey = @"search";
@@ -184,6 +186,8 @@ static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
 static NSString * const PTRelativeZoomLimitModeKey = @"relative";
 
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
@@ -287,6 +291,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -314,6 +319,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *uneditableAnnotationTypes;
 
 
 // annotation selection menu customization
@@ -430,6 +436,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -439,6 +447,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (int)getPageCount;
 
 - (void)importBookmarkJson:(NSString *)bookmarkJson;
+
+- (void)openBookmarkList;
 
 - (NSString *)getDocumentPath;
 
@@ -503,6 +513,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)closeAllTabs;
 
+- (void)openTabSwitcher;
+
 - (int)getPageRotation;
 
 - (void)rotateClockwise;
@@ -543,8 +555,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setOverprint:(NSString *)overprint;
 
-- (void)setUrlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -560,6 +570,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindText;
+
+- (void)openSearch;
 
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 
@@ -584,6 +596,18 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openOutlineList;
+
+- (void)openLayersList;
+
+- (void)openNavigationLists;
+
+- (void)openAnnotationList;
+
+- (BOOL)isReflowMode;
+
+- (void)toggleReflow;
 
 - (void)showViewSettingsFromRect:(NSDictionary *)rect;
 
