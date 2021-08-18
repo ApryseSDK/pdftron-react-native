@@ -4489,6 +4489,11 @@ NS_ASSUME_NONNULL_END
     [pdfViewCtrl CancelFindText];
 }
 
+- (void)openSearch
+{
+    [self.currentDocumentViewController showSearchViewController];
+}
+
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 {
     self.currentDocumentViewController.textSearchViewController.showsKeyboardOnViewDidAppear = NO;

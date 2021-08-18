@@ -759,6 +759,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

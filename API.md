@@ -2821,6 +2821,15 @@ Returns a Promise.
 this._viewer.cancelFindText();
 ```
 
+#### openSearch
+Displays a search bar that allows the user to enter and search text within a document.
+
+Returns a Promise.
+
+```js
+this._viewer.openSearch();
+```
+
 #### getSelection
 Returns the text selection on a given page, if any.
 
