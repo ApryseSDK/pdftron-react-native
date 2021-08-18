@@ -96,6 +96,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT = "AnnotationCreateDistanceMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT = "AnnotationCreatePerimeterMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT = "AnnotationCreateAreaMeasurement";
+    public static final String TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT = "AnnotationCreateRectAreaMeasurement";
     public static final String TOOL_TEXT_SELECT = "TextSelect";
     public static final String TOOL_ANNOTATION_EDIT = "AnnotationEdit";
     public static final String TOOL_ANNOTATION_CREATE_SOUND = "AnnotationCreateSound";
@@ -115,6 +116,9 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_RUBBER_STAMP = "AnnotationCreateRubberStamp";
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
     public static final String TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER = "AnnotationCreateFreeHighlighter";
+    public static final String TOOL_ANNOTATION_CREATE_SMART_PEN = "AnnotationCreateSmartPen";
+    public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
+    public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";

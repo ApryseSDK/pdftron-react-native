@@ -105,9 +105,12 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
     openSavedCopyInNewTab: PropTypes.bool,
+    excludedAnnotationListTypes: PropTypes.array,
+    replyReviewStateEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
 
@@ -283,6 +286,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openBookmarkList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openBookmarkList(tag);
+    }
+    return Promise.resolve();
+  }
+
   importAnnotationCommand = (xfdfCommand, initialLoad) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -350,6 +361,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
+  openAnnotationList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.openAnnotationList(tag);
     }
     return Promise.resolve();
   }
@@ -551,6 +570,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.closeAllTabs(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openTabSwitcher = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openTabSwitcher(tag);
     }
     return Promise.resolve();
   }
@@ -893,11 +920,75 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
+  
+  showViewSettings = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showViewSettings(tag, rect);
+    }
+    return Promise.resolve();
+  }
 
+  showAddPagesView = (rect) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.showAddPagesView(tag, rect);
+    }
+    return Promise.resolve();
+  }
+
+  isReflowMode = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.isReflowMode(tag);
+    }
+    return Promise.resolve();
+  }
+
+  toggleReflow = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.toggleReflow(tag);
+    }
+    return Promise.resolve();
+  }
+
+  shareCopy = (rect, flattening) => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.shareCopy(tag, rect, flattening);
+    }
+    return Promise.resolve();
+  }
+ 
   openThumbnailsView = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.openThumbnailsView(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openOutlineList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openOutlineList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openLayersList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openLayersList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openNavigationLists = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openNavigationLists(tag);
     }
     return Promise.resolve();
   }

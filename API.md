@@ -313,9 +313,9 @@ This function is called when document opening encounters an error.
 ### UI Customization
 
 #### disabledElements
-array of string, optional, defaults to none
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines buttons to be disabled for the viewer. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Defines buttons to be disabled for the viewer.
 
 ```js
 <DocumentView
@@ -324,9 +324,9 @@ Defines buttons to be disabled for the viewer. Strings should be [`Config.Button
 ```
 
 #### disabledTools
-array of string, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines tools to be disabled for the viewer. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+Defines tools to be disabled for the viewer.
 
 ```js
 <DocumentView
@@ -425,9 +425,9 @@ Defines whether the document slider of the viewer is enabled.
 ```
 
 #### hideViewModeItems
-array of string, optional, defaults to none.
+array of [`Config.ViewModePickerItem`](./src/Config/Config.js) constants, optional, defaults to none.
 
-Defines view mode items to be hidden in the view mode dialog. Strings should be [`Config.ViewModePickerItem`](./src/Config/Config.js) constants.
+Defines view mode items to be hidden in the view mode dialog.
 
 ```js
 <DocumentView
@@ -469,7 +469,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 #### annotationToolbars
-array of objects, options (one of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar object)
+array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar objects, optional, defaults to none
 
 Defines custom toolbars. If passed in, the default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -483,14 +483,14 @@ const myToolbar = {
 };
 
 ...
-<Documentview
+<DocumentView
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
 #### hideDefaultAnnotationToolbars
-array of strings, optional, defaults to none
+array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [`Config.DefaultToolbars`](./src/Config/Config.js) constants
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined.
 
 ```js
 <DocumentView
@@ -554,24 +554,24 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```
 
 #### topAppNavBarRightBar
-array of strings, optional, iOS only
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, iOS only
 
-Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used.
 
 ```js
-<Documentview
+<DocumentView
   topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
 #### bottomToolbar
-array of strings, optional, only the navigation list, share, view mode, search, and reflow buttons are supported on Android
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
-Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used.
 
 ```js
-<Documentview
-  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.listsButton]}
+<DocumentView
+  bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
 />
 ```
 
@@ -589,9 +589,9 @@ Defines whether the viewer will add padding to take account of the system status
 ### Layout
 
 #### fitMode
-string, optional, default value is 'FitWidth'
+one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is 'FitWidth'
 
-Defines the fit mode (default zoom level) of the viewer. String should be one of [`Config.FitMode`](./src/Config/Config.js) constants.
+Defines the fit mode (default zoom level) of the viewer.
 
 ```js
 <DocumentView
@@ -600,9 +600,9 @@ Defines the fit mode (default zoom level) of the viewer. String should be one of
 ```
 
 #### layoutMode
-string, optional, default value is 'Continuous'
+one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is 'Continuous'
 
-Defines the layout mode of the viewer. String should be one of [`Config.LayoutMode`](./src/Config/Config.js) constants.
+Defines the layout mode of the viewer.
 
 ```js
 <DocumentView
@@ -807,9 +807,9 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-string, optional, default value is 'Horizontal'. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is 'Horizontal'. Android only.
 
-Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+Sets the scrolling direction of the reflow control.
 
 ```js
 <DocumentView
@@ -820,9 +820,9 @@ Sets the scrolling direction of the reflow control. Strings should be [`Config.R
 ### Annotation Menu
 
 #### hideAnnotationMenu
-array of strings, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+Defines annotation types that will not show in the annotation (long-press) menu.
 
 ```js
 <DocumentView
@@ -831,9 +831,9 @@ Defines annotation types that will not show in the annotation (long-press) menu.
 ```
 
 #### annotationMenuItems
-array of strings, optional, default contains all the items
+array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, default contains all the items
 
-Defines the menu items that can show when an annotation is selected. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants.
+Defines the menu items that can show when an annotation is selected.
 
 ```js
 <DocumentView
@@ -842,9 +842,9 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 ```
 
 #### overrideAnnotationMenuBehavior
-array of strings, optional, defaults to none
+array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines the menu items that will skip default behavior when pressed. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -893,9 +893,9 @@ Defines whether to show the popup menu of options when the user long presses on 
 ```
 
 #### longPressMenuItems
-array of strings, optional, default contains all the items
+array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, default contains all the items
 
-Defines menu items that can show when long press on text or blank space. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants.
+Defines menu items that can show when long press on text or blank space.
 
 ```js
 <DocumentView
@@ -904,9 +904,9 @@ Defines menu items that can show when long press on text or blank space. Strings
 ```
 
 #### overrideLongPressMenuBehavior
-array of strings, optional, defaults to none
+array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines the menu items on long press that will skip default behavior when pressed. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -940,9 +940,9 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ### Custom Behavior
 
 #### overrideBehavior
-array of string, optional, defaults to none
+array of [`Config.Actions`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [`Config.Actions`](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -1058,6 +1058,19 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### replyReviewStateEnabled
+boolean, optional, Android only, defaults to true
+
+Defines whether to show an annotation's reply review state.
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  replyReviewStateEnabled={true}
+/>
+```
+
 ### Annotations
 
 #### annotationPermissionCheckEnabled
@@ -1127,7 +1140,7 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
-annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants 
+annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants 
 
 **Known Issues** <br/> 
 On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
@@ -1183,7 +1196,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1207,15 +1220,15 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`, representing the fields that have been changed
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
 
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
-    console.log('Annotation edit action is', action);
-    annotations.forEach(annotation => {
-      console.log('The id of changed annotation is', annotation.id);
-      console.log('It is in page', annotation.pageNumber);
+    fields.forEach(field => {
+      console.log('The name of the changed field is', field.fieldName);
+      console.log('The type of the changed field is', field.fieldType);
+      console.log('The value of the changed field is', field.fieldValue);
     });
   }}
 />
@@ -1229,6 +1242,44 @@ If document editing is enabled, then this value determines if the annotation lis
 ```js
 <DocumentView
   annotationsListEditingEnabled={true}
+/>
+```
+
+#### disableEditingByAnnotationType
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none.
+
+Defines annotation types that cannot be edited after creation.
+
+```js
+<DocumentView
+  disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+/>
+```
+
+#### excludedAnnotationListTypes
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
+
+Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+```
+pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+```
+
+and uncomment the following line in `ios/RNTPTDocumentView.m`:
+```objc
+- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    ...
+    if (annotTypes.count > 0) {
+        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+    }
+}
+```
+
+Example use:
+
+```js
+<DocumentView
+  excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
 />
 ```
 
@@ -1304,9 +1355,9 @@ Defines whether to show the option to pick images in the signature dialog.
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
-array of strings, optional
+array of [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants, optional
 
-Defines filter modes that should be hidden in the thumbnails browser. Strings should be [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants
+Defines filter modes that should be hidden in the thumbnails browser. 
 
 ```js
 <DocumentView
@@ -1556,7 +1607,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
+toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
@@ -1805,7 +1856,7 @@ Returns a Promise.
 
 ```js
 const xfdfCommand = '<?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
-this._viewer.importAnnotationCommand(xfdf);
+this._viewer.importAnnotationCommand(xfdfCommand);
 
 ```
 
@@ -1929,7 +1980,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
 
 Returns a Promise.
 
@@ -2268,6 +2319,15 @@ this._viewer.getField('someFieldName').then((field) => {
 });
 ```
 
+#### openAnnotationList
+Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openAnnotationList();
+```
+
 #### openThumbnailsView
 Display a page thumbnails view. 
 
@@ -2336,16 +2396,35 @@ Returns a Promise.
 this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
 ```
 
+#### openBookmarkList
+Displays the bookmark tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openBookmarkList();
+```
+
 ### Multi-tab
 
 #### closeAllTabs
-Closes all tabs in multi-tab environment.
+Closes all tabs in a multi-tab environment.
 
 Returns a Promise.
 
 ```js
 // Do this only when DocumentView has multiTabEnabled = true
 this._viewer.closeAllTabs();
+```
+
+#### openTabSwitcher
+Opens the tab switcher in a multi-tab environment.
+
+Returns a Promise.
+
+```js
+// Do this only when DocumentView has multiTabEnabled = true
+this._viewer.openTabSwitcher();
 ```
 
 ### Zoom
@@ -2374,7 +2453,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+zoomLimitMode | String | one of the constants in [`Config.ZoomLimitMode`](./src/Config/Config.js), defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
 minimum | double | the lower bound of the zoom limit range
 maximum | double | the upper bound of the zoom limit range
 
@@ -2453,6 +2532,34 @@ this._viewer.getScrollPos().then(({horizontal, vertical}) => {
   console.log('Current horizontal scroll position is:', horizontal);
   console.log('Current vertical scroll position is:', vertical);
 });
+```
+
+### Reflow
+
+#### isReflowMode
+Returns whether the viewer is currently in reflow mode.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+inReflow | bool | whether the viewer is in reflow mode
+
+```js
+this._viewer.isReflowMode().then((inReflow) => {
+  console.log(inReflow ? 'in reflow mode' : 'not in reflow mode');
+});
+```
+
+#### toggleReflow
+Allows the user to programmatically enter and exit reflow mode.
+
+Returns a promise.
+
+```js
+this._viewer.toggleReflow();
 ```
 
 ### Canvas
@@ -2639,7 +2746,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageTransparencyGrid | bool | whether to use the transpareny grid
+pageTransparencyGrid | bool | whether to use the transparency grid
 
 ```js
 this._viewer.setPageTransparencyGrid(true);
@@ -2946,7 +3053,7 @@ this._viewer.canRedo().then((canRedo) => {
 ### Others
 
 #### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`.
+Export a PDF page to image format defined in [`Config.ExportFormat`](./src/Config/Config.js).
 
 Parameters:
 
@@ -2954,7 +3061,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted
 dpi | double | the output image resolution
-exportFormat | string | one of `Config.ExportFormat`
+exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.js) constants
 
 Returns a Promise.
 
@@ -2975,4 +3082,85 @@ Returns a Promise.
 
 ```js
 this._viewer.showCrop();
+```
+
+#### openOutlineList
+Displays the outline tab of the existing list container. If this tab has been disabled, the method does nothing.
+
+Returns a Promise.
+
+```js
+this._viewer.openOutlineList();
+```
+
+#### openLayersList
+On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
+
+**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
+
+Returns a Promise.
+
+```js
+this._viewer.openLayersList();
+```
+
+#### openNavigationLists
+Displays the existing list container. Its current tab will be the one last opened. 
+
+Returns a Promise.
+
+```js
+this._viewer.openNavigationLists();
+```
+
+#### showViewSettings
+Displays the view settings.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showViewSettings({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### showAddPagesView
+Displays the add pages view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+
+```js
+this._viewer.showAddPagesView({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
+```
+
+#### shareCopy
+Displays the share copy view.
+
+Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+rect | map | The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+flattening | bool | Whether the shared copy should be flattened before sharing.
+
+```js
+this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
 ```
