@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
+import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -42,6 +43,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     mDocumentViewInstance.importBookmarkJson(tag, bookmarkJson);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openBookmarkList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openBookmarkList(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -306,6 +322,20 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void openAnnotationList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openAnnotationList(tag);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void getCustomDataForAnnotation(final int tag, final String annotationID, final int pageNumber, final String key, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -342,6 +372,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     mDocumentViewInstance.closeAllTabs(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openTabSwitcher(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openTabSwitcher(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -802,21 +847,6 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setUrlExtraction(final int tag, final boolean urlExtraction, final Promise promise) {
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mDocumentViewInstance.setUrlExtraction(tag, urlExtraction);
-                    promise.resolve(null);
-                } catch (Exception ex) {
-                    promise.reject(ex);
-                }
-            }
-        });
-    }
-
-    @ReactMethod
     public void setPageBorderVisibility(final int tag, final boolean pageBorderVisibility, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -1219,6 +1249,36 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void isReflowMode(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean result = mDocumentViewInstance.isReflowMode(tag);
+                    promise.resolve(result);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void toggleReflow(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.toggleReflow(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void openThumbnailsView(final int tag, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
@@ -1240,6 +1300,51 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             public void run() {
                 try {
                     mDocumentViewInstance.showGoToPageView(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openOutlineList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openOutlineList(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openLayersList(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openLayersList(tag);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void openNavigationLists(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.openNavigationLists(tag);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

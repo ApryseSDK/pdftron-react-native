@@ -413,7 +413,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
-    
+
+    @ReactProp(name = "disableEditingByAnnotationType")
+    public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
+        documentView.setDisableEditingByAnnotationType(annotationTypes);
+    }
     @ReactProp(name = "saveStateEnabled")
     public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
         documentView.setSaveStateEnabled(saveState);
@@ -435,6 +439,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.importBookmarkJson(bookmarkJson);
         } else {
             throw new PDFNetException("", 0L, getName(), "importBookmarkJson", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openBookmarkList(int tag) throws PDFNetException{
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openBookmarkList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openBookmarkList", "Unable to find DocumentView.");
         }
     }
 
@@ -591,6 +604,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void openAnnotationList(int tag) throws PDFNetException
+    {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openAnnotationList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openAnnotationList", "Unable to find DocumentView.");
+        }
+    }
     public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -678,6 +700,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.closeAllTabs();
         } else {
             throw new PDFNetException("", 0L, getName(), "closeAllTabs", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openTabSwitcher(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openTabSwitcher();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openTabSwitcher", "Unable to find DocumentView.");
         }
     }
 
@@ -891,15 +922,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.setOverprint(overprint);
         } else {
             throw new PDFNetException("", 0L, getName(), "setOverprint", "Unable to find DocumentView.");
-        }
-    }
-
-    public void setUrlExtraction(int tag, boolean urlExtraction) throws PDFNetException {
-        DocumentView documentView = mDocumentViews.get(tag);
-        if (documentView != null) {
-            documentView.setUrlExtraction(urlExtraction);
-        } else {
-            throw new PDFNetException("", 0L, getName(), "setUrlExtraction", "Unable to find DocumentView.");
         }
     }
 
@@ -1149,6 +1171,51 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.showCropDialog();
         } else {
             throw new PDFNetException("", 0L, getName(), "showCrop", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openOutlineList(int tag) throws PDFNetException{
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openOutlineList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openOutlineList", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openLayersList(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openLayersList();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openLayersList", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openNavigationLists(int tag)  throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openNavigationLists();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openNavigationLists", "Unable to find DocumentView");
+        }
+    }
+    
+    public boolean isReflowMode(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.isReflowMode();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "isReflowMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public void toggleReflow(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.toggleReflow();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "toggleReflow", "Unable to find DocumentView.");
         }
     }
 
