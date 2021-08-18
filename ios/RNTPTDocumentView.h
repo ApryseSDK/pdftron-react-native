@@ -612,6 +612,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)openThumbnailsView;
 
+-(NSArray *)getSavedSignatures;
+
+-(NSString *)getSavedSignaturesFolder;
+
 @end
 
 

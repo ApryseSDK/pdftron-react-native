@@ -1328,6 +1328,34 @@ RCT_REMAP_METHOD(openNavigationLists,
     }
 }
 
+RCT_REMAP_METHOD(getSavedSignatures,
+                 getSavedSignaturesForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *signatures = [[self documentViewManager] getSavedSignaturesForDocumentViewTag:tag];
+        resolve(signatures);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signatures_failed", @"Failed to get saved signatures", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSavedSignaturesFolder,
+                 getSavedSignaturesFolderForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *folder = [[self documentViewManager] getSavedSignaturesFolderForDocumentViewTag:tag];
+        resolve(folder);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signatures_folder_failed", @"Failed to get saved signatures folder", [self errorFromException:exception]);
+    }
+}
+
 
 
 #pragma mark - Collaboration

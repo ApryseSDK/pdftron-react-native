@@ -2444,13 +2444,35 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Show saved signatures
+#pragma mark - Saved signatures
 
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
     _showSavedSignatures = showSavedSignatures;
     
     [self applyViewerSettings];
+}
+
+- (NSArray *)getSavedSignatures
+{
+//    PTSavedSignaturesViewController *signaturesViewController = [[PTSavedSignaturesViewController alloc] init];
+//    PTSignaturesManager *signaturesManager = signaturesViewController.signaturesManager;
+    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
+    NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
+    
+    for (NSInteger i = 0; i < numOfSignatures; i++) {
+        signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+    }
+    
+    return signatures;
+}
+
+-(NSString *)getSavedSignaturesFolder
+{
+    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    PTPDFDoc * signature = [signaturesManager savedSignatureAtIndex:0];
+    return @"";
 }
 
 # pragma mark - Dark Mode
