@@ -313,9 +313,9 @@ This function is called when document opening encounters an error.
 ### UI Customization
 
 #### disabledElements
-array of string, optional, defaults to none
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines buttons to be disabled for the viewer. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Defines buttons to be disabled for the viewer.
 
 ```js
 <DocumentView
@@ -324,9 +324,9 @@ Defines buttons to be disabled for the viewer. Strings should be [`Config.Button
 ```
 
 #### disabledTools
-array of string, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines tools to be disabled for the viewer. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+Defines tools to be disabled for the viewer.
 
 ```js
 <DocumentView
@@ -425,9 +425,9 @@ Defines whether the document slider of the viewer is enabled.
 ```
 
 #### hideViewModeItems
-array of string, optional, defaults to none.
+array of [`Config.ViewModePickerItem`](./src/Config/Config.js) constants, optional, defaults to none.
 
-Defines view mode items to be hidden in the view mode dialog. Strings should be [`Config.ViewModePickerItem`](./src/Config/Config.js) constants.
+Defines view mode items to be hidden in the view mode dialog.
 
 ```js
 <DocumentView
@@ -469,7 +469,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 #### annotationToolbars
-array of objects, options (one of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar object)
+array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar objects, optional, defaults to none
 
 Defines custom toolbars. If passed in, the default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -488,9 +488,9 @@ const myToolbar = {
 />
 ```
 #### hideDefaultAnnotationToolbars
-array of strings, optional, defaults to none
+array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined. Strings should be [`Config.DefaultToolbars`](./src/Config/Config.js) constants
+Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined.
 
 ```js
 <DocumentView
@@ -554,9 +554,9 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```
 
 #### topAppNavBarRightBar
-array of strings, optional, iOS only
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, iOS only
 
-Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used.
 
 ```js
 <DocumentView
@@ -565,9 +565,9 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 ```
 
 #### bottomToolbar
-array of strings, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
+array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
-Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used. Strings should be [`Config.Buttons`](./src/Config/Config.js) constants.
+Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used.
 
 ```js
 <DocumentView
@@ -589,9 +589,9 @@ Defines whether the viewer will add padding to take account of the system status
 ### Layout
 
 #### fitMode
-string, optional, default value is 'FitWidth'
+one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is 'FitWidth'
 
-Defines the fit mode (default zoom level) of the viewer. String should be one of [`Config.FitMode`](./src/Config/Config.js) constants.
+Defines the fit mode (default zoom level) of the viewer.
 
 ```js
 <DocumentView
@@ -600,9 +600,9 @@ Defines the fit mode (default zoom level) of the viewer. String should be one of
 ```
 
 #### layoutMode
-string, optional, default value is 'Continuous'
+one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is 'Continuous'
 
-Defines the layout mode of the viewer. String should be one of [`Config.LayoutMode`](./src/Config/Config.js) constants.
+Defines the layout mode of the viewer.
 
 ```js
 <DocumentView
@@ -807,9 +807,9 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-string, optional, default value is 'Horizontal'. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is 'Horizontal'. Android only.
 
-Sets the scrolling direction of the reflow control. Strings should be [`Config.ReflowOrientation`](./src/Config/Config.js) constants.
+Sets the scrolling direction of the reflow control.
 
 ```js
 <DocumentView
@@ -820,9 +820,9 @@ Sets the scrolling direction of the reflow control. Strings should be [`Config.R
 ### Annotation Menu
 
 #### hideAnnotationMenu
-array of strings, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines annotation types that will not show in the annotation (long-press) menu. Strings should be [`Config.Tools`](./src/Config/Config.js) constants.
+Defines annotation types that will not show in the annotation (long-press) menu.
 
 ```js
 <DocumentView
@@ -831,9 +831,9 @@ Defines annotation types that will not show in the annotation (long-press) menu.
 ```
 
 #### annotationMenuItems
-array of strings, optional, default contains all the items
+array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, default contains all the items
 
-Defines the menu items that can show when an annotation is selected. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants.
+Defines the menu items that can show when an annotation is selected.
 
 ```js
 <DocumentView
@@ -842,9 +842,9 @@ Defines the menu items that can show when an annotation is selected. Strings sho
 ```
 
 #### overrideAnnotationMenuBehavior
-array of strings, optional, defaults to none
+array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines the menu items that will skip default behavior when pressed. Strings should be [`Config.AnnotationMenu`](./src/Config/Config.js) constants. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -892,9 +892,9 @@ Defines whether to show the popup menu of options when the user long presses on 
 ```
 
 #### longPressMenuItems
-array of strings, optional, default contains all the items
+array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, default contains all the items
 
-Defines menu items that can show when long press on text or blank space. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants.
+Defines menu items that can show when long press on text or blank space.
 
 ```js
 <DocumentView
@@ -903,9 +903,9 @@ Defines menu items that can show when long press on text or blank space. Strings
 ```
 
 #### overrideLongPressMenuBehavior
-array of strings, optional, defaults to none
+array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines the menu items on long press that will skip default behavior when pressed. Strings should be [`Config.LongPressMenu`](./src/Config/Config.js) constants. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
@@ -939,9 +939,9 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ### Custom Behavior
 
 #### overrideBehavior
-array of string, optional, defaults to none
+array of [`Config.Actions`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines actions that will skip default behavior, such as external link click. Strings should be [`Config.Actions`](./src/Config/Config.js) constants. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
+Defines actions that will skip default behavior, such as external link click. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
 ```js
 <DocumentView
@@ -1139,7 +1139,7 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
-annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants 
+annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants 
 
 **Known Issues** <br/> 
 On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
@@ -1171,7 +1171,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1196,7 +1196,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
 
 ```js
 <DocumentView
@@ -1220,13 +1220,14 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldValue: string}`, representing the fields that have been changed
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
 
 ```js
 <DocumentView
   onFormFieldValueChanged = {({fields}) => {
     fields.forEach(field => {
       console.log('The name of the changed field is', field.fieldName);
+      console.log('The type of the changed field is', field.fieldType);
       console.log('The value of the changed field is', field.fieldValue);
     });
   }}
@@ -1256,7 +1257,7 @@ Defines annotation types that cannot be edited after creation.
 ```
 
 #### excludedAnnotationListTypes
-array of [`Config.Tools`](./src/Config/Config.js), optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
 Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
 ```
@@ -1354,9 +1355,9 @@ Defines whether to show the option to pick images in the signature dialog.
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
-array of strings, optional
+array of [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants, optional
 
-Defines filter modes that should be hidden in the thumbnails browser. Strings should be [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants
+Defines filter modes that should be hidden in the thumbnails browser. 
 
 ```js
 <DocumentView
@@ -1606,7 +1607,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) string constants, representing to tool mode to set
+toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
@@ -1979,7 +1980,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
 
 Returns a Promise.
 
@@ -2452,7 +2453,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-zoomLimitMode | String | one of the constants in `Config.ZoomLimitMode`, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+zoomLimitMode | String | one of the constants in [`Config.ZoomLimitMode`](./src/Config/Config.js), defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
 minimum | double | the lower bound of the zoom limit range
 maximum | double | the upper bound of the zoom limit range
 
@@ -3094,7 +3095,7 @@ this._viewer.getSavedSignatureFolder().then((path) => {
 ### Others
 
 #### exportAsImage
-Export a PDF page to image format defined in `Config.ExportFormat`.
+Export a PDF page to image format defined in [`Config.ExportFormat`](./src/Config/Config.js).
 
 Parameters:
 
@@ -3102,7 +3103,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted
 dpi | double | the output image resolution
-exportFormat | string | one of `Config.ExportFormat`
+exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.js) constants
 
 Returns a Promise.
 
