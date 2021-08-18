@@ -1342,17 +1342,17 @@ RCT_REMAP_METHOD(getSavedSignatures,
     }
 }
 
-RCT_REMAP_METHOD(getSavedSignaturesFolder,
-                 getSavedSignaturesFolderForDocumentViewTag: (nonnull NSNumber *)tag
+RCT_REMAP_METHOD(getSavedSignatureFolder,
+                 getSavedSignatureFolderForDocumentViewTag: (nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *folder = [[self documentViewManager] getSavedSignaturesFolderForDocumentViewTag:tag];
+        NSString *folder = [[self documentViewManager] getSavedSignatureFolderForDocumentViewTag:tag];
         resolve(folder);
     }
     @catch (NSException *exception) {
-        reject(@"get_saved_signatures_folder_failed", @"Failed to get saved signatures folder", [self errorFromException:exception]);
+        reject(@"get_saved_signature_folder_failed", @"Failed to get saved signatures folder", [self errorFromException:exception]);
     }
 }
 

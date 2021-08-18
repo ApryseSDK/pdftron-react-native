@@ -1404,11 +1404,11 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-- (NSString *)getSavedSignaturesFolderForDocumentViewTag:(NSNumber *)tag
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        NSString * folder = [documentView getSavedSignaturesFolder];
+        NSString * folder = [documentView getSavedSignatureFolder];
         return folder;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];

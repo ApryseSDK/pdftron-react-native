@@ -614,7 +614,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 -(NSArray *)getSavedSignatures;
 
--(NSString *)getSavedSignaturesFolder;
+-(NSString *)getSavedSignatureFolder;
 
 @end
 

@@ -2468,7 +2468,7 @@ NS_ASSUME_NONNULL_END
     return signatures;
 }
 
--(NSString *)getSavedSignaturesFolder
+-(NSString *)getSavedSignatureFolder
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
     PTPDFDoc * signature = [signaturesManager savedSignatureAtIndex:0];

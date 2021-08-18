@@ -188,6 +188,6 @@
 
 - (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag;
 
-- (NSString *)getSavedSignaturesFolderForDocumentViewTag:(NSNumber *)tag;
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag;
 
 @end
