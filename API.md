@@ -2282,7 +2282,7 @@ this._viewer.getField('someFieldName').then((field) => {
 ```
 
 ### showViewModeDialog
-Display the view mode dialog.
+Display the view mode dialog. If the dialog is already open, this method has no effect.
 
 This dialog allows users to pick page layout mode, select page color mode, rotate pages, and crop pages. Dialog items can be hidden using [`hideViewModeItems`](#hideViewModeItems).
 
