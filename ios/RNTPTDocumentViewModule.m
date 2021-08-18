@@ -80,12 +80,12 @@ RCT_REMAP_METHOD(exportAsImage,
                  exportAsImageForDocumentViewTag:(nonnull NSNumber *)tag
                  pageNumber:(int)pageNumber
                  dpi:(int)dpi
-                 imageFormat:(NSString*)imageFormat
+                 exportFormat:(NSString*)exportFormat
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *path = [[self documentViewManager] exportAsImageForDocumentViewTag:tag pageNumber:pageNumber dpi:dpi imageFormat:imageFormat];
+        NSString *path = [[self documentViewManager] exportAsImageForDocumentViewTag:tag pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
         resolve(path);
     }
     @catch (NSException *exception) {

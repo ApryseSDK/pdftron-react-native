@@ -169,23 +169,21 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
 
 +(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
 {
-    NSString * resultImagePath;
+    NSString * resultImagePath = nil;
     BOOL shouldUnlock = NO;
     @try {
         [doc LockRead];
         shouldUnlock = YES;
 
-        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* fileName = [NSUUID UUID].UUIDString;
-        resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
-        resultImagePath = [resultImagePath stringByAppendingPathExtension:exportFormat];
-        PTObjSet* hintSet = [[PTObjSet alloc] init];
-        PTObj* encoderHints = [hintSet CreateArray];
-        [encoderHints PushBackName:@"JPEG"];
-        PTPage * exportPage = [doc GetPage:pageNumber];
-        [draw ExportWithObj:exportPage filename:resultImagePath format:exportFormat encoder_params:encoderHints];
-
+        if (pageNumber <= [doc GetPageCount] && pageNumber >= 1) {
+            PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
+            NSString* tempDir = NSTemporaryDirectory();
+            NSString* fileName = [NSUUID UUID].UUIDString;
+            resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
+            resultImagePath = [resultImagePath stringByAppendingPathExtension:exportFormat];
+            PTPage * exportPage = [doc GetPage:pageNumber];
+            [draw Export:exportPage filename:resultImagePath format:exportFormat];
+        }
     } @catch (NSException *exception) {
         NSLog(@"Exception: %@: %@", exception.name, exception.reason);
     } @finally {

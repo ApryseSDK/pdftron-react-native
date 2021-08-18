@@ -144,16 +144,19 @@ public class ReactUtils {
         try {
             draw = new PDFDraw();
             draw.setDPI(dpi);
-            Page pg = doc.getPage(pageNumber);
-            String ext = "png";
-            if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
-                ext = "bmp";
-            } else if (KEY_EXPORT_FORMAT_JPEG.equals(exportFormat)) {
-                ext = "jpeg";
+            if (pageNumber <= doc.getPageCount() && pageNumber >= 1) {
+                Page pg = doc.getPage(pageNumber);
+                String ext = "png";
+                if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
+                    ext = "bmp";
+                } else if (KEY_EXPORT_FORMAT_JPEG.equals(exportFormat)) {
+                    ext = "jpeg";
+                }
+                File tempFile = File.createTempFile("tmp", "." + ext);
+                draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
+                return tempFile.getAbsolutePath();
             }
-            File tempFile = File.createTempFile("tmp", "." + ext);
-            draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
-            return tempFile.getAbsolutePath();
+            return null;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         } finally {

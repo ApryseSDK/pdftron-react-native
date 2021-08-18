@@ -153,7 +153,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | int | the page to be converted
+pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
 exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.js) constants
 filePath | string | local file path to pdf
@@ -3077,7 +3077,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | int | the page to be converted
+pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
 exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.js) constants
 
