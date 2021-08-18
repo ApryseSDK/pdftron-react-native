@@ -2250,6 +2250,11 @@ NS_ASSUME_NONNULL_END
 
 - (void)showViewModeDialog
 {
+
+    if( [self.currentDocumentViewController.settingsViewController isBeingPresented] )
+    {
+        return;
+    }
     PTDocumentViewSettingsController *settingsViewController = self.currentDocumentViewController.settingsViewController;
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
