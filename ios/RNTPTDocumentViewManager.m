@@ -508,6 +508,14 @@ RCT_CUSTOM_VIEW_PROPERTY(userBookmarksListEditingEnabled, BOOL, RNTPTDocumentVie
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(disableEditingByAnnotationType, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        NSArray *uneditableAnnotationTypes = [RCTConvert NSArray:json];
+        view.uneditableAnnotationTypes = uneditableAnnotationTypes;
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(hideScrollbars, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -830,6 +838,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     
 }
 
+-(void)openBookmarkListForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openBookmarkList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -923,7 +941,7 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     if (documentView) {
         return [documentView getField:fieldName];
     } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;
     }
 }
@@ -1140,6 +1158,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+- (void)openTabSwitcherForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openTabSwitcher];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (double)getZoomForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -1325,6 +1353,46 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+-(void)openLayersListForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openLayersList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+-(void)openNavigationListsForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openNavigationLists];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+-(void)openOutlineListForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openOutlineList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)openAnnotationListForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openAnnotationList];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
 - (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
@@ -1394,16 +1462,6 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView setOverprint:overprint];
-    } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
-    }
-}
-
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction
-{
-    RNTPTDocumentView *documentView = self.documentViews[tag];
-    if (documentView) {
-        [documentView setUrlExtraction:urlExtraction];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
@@ -1484,6 +1542,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView cancelFindText];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (void)openSearchForDocumentViewTag:(NSNumber *)tag;
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView openSearch];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

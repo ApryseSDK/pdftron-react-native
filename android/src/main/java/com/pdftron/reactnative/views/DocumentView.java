@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -48,12 +49,19 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
+import com.pdftron.pdf.controls.AnnotationDialogFragment;
+import com.pdftron.pdf.controls.BookmarksTabLayout;
+import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.dialog.RotateDialogFragment;
+import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
+import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
+import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.Eraser;
@@ -67,6 +75,7 @@ import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.AnnotUtils;
 import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.CommonToast;
+import com.pdftron.pdf.utils.DialogFragmentTab;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
@@ -121,6 +130,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
+
+    public boolean isBookmarkListVisible = true;
+    public boolean isOutlineListVisible = true;
+    public boolean isAnnotationListVisible = true;
 
     // collab
     private CollabManager mCollabManager;
@@ -425,6 +438,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         Context context = getContext();
         if (context != null) {
             PdfViewCtrlSettingsManager.setContinuousAnnotationEdit(context, contEditing);
+        }
+    }
+
+    public void setDisableEditingByAnnotationType(ReadableArray annotationTypes) {
+        int[] annotTypes = new int[annotationTypes.size()];
+        for (int i = 0; i < annotationTypes.size(); i++) {
+            String item = annotationTypes.getString(i);
+            annotTypes[i] = convStringToAnnotType(item);
+        }
+
+        if (annotTypes.length > 0) {
+            mToolManagerBuilder = mToolManagerBuilder.disableAnnotEditing(annotTypes);
         }
     }
 
@@ -869,6 +894,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showAnnotationsList(false)
                         .showOutlineList(false)
                         .showUserBookmarksList(false);
+                isBookmarkListVisible = false;
+                isOutlineListVisible = false;
+                isAnnotationListVisible = false;
             } else if (BUTTON_THUMBNAIL_SLIDER.equals(item)) {
                 mBuilder = mBuilder.showBottomNavBar(false);
             } else if (BUTTON_VIEW_LAYERS.equals(item)) {
@@ -900,10 +928,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         .showReflowOption(false);
             } else if (BUTTON_OUTLINE_LIST.equals(item)) {
                 mBuilder = mBuilder.showOutlineList(false);
+                isOutlineListVisible = false;
             } else if (BUTTON_ANNOTATION_LIST.equals(item)) {
                 mBuilder = mBuilder.showAnnotationsList(false);
+                isAnnotationListVisible = false;
             } else if (BUTTON_USER_BOOKMARK_LIST.equals(item)) {
                 mBuilder = mBuilder.showUserBookmarksList(false);
+                isBookmarkListVisible = false;
             } else if (BUTTON_REFLOW.equals(item)) {
                 mBuilder = mBuilder.showReflowOption(false);
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_REFLOW);
@@ -1887,7 +1918,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                 if (annotationData != null) {
                     if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
-                        WritableMap annotationDataCopy = annotationData.copy();
+                        WritableMap annotationDataCopy = Arguments.createMap();
+                        annotationDataCopy.merge(annotationData);
                         try {
                             if (entry.getKey().getType() == Annot.e_Text) {
                                 WritableMap params = Arguments.createMap();
@@ -2222,14 +2254,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 try {
                     if (annot != null && annot.isValid()) {
                         if (annot.getType() == Annot.e_Widget) {
-                            WritableMap resultMap = Arguments.createMap();
-
                             Widget widget = new Widget(annot);
                             Field field = widget.getField();
                             String name = field.getName();
 
-                            resultMap.putString(KEY_FIELD_NAME, name);
-                            resultMap.putString(KEY_FIELD_VALUE, field.getValueAsString());
+                            WritableMap resultMap = getField(name);
                             fieldsArray.pushMap(resultMap);
                         }
                     }
@@ -2687,6 +2716,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openBookmarkList() {
+        if (isBookmarkListVisible && mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+        }
+    }
+
     public void importAnnotationCommand(String xfdfCommand, boolean initialLoad) throws PDFNetException {
         if (mCollabManager != null) {
             mCollabManager.importAnnotationCommand(xfdfCommand, initialLoad);
@@ -2978,6 +3013,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return annotations;
+    }
+
+    public void openAnnotationList() {
+        if (isBookmarkListVisible) {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(2);
+                }
+            } else {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                }
+            }
+        } else {
+            if (isOutlineListVisible) {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+                } 
+            } else {
+                if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
+                    mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+                }
+            }
+        }
     }
 
     public String getCustomDataForAnnotation(String annotationID, int pageNumber, String key) throws PDFNetException {
@@ -3548,6 +3607,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openTabSwitcher() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOpenTabSwitcher();
+        }
+    }
+
     public int getPageRotation() {
         return getPdfViewCtrl().getPageRotation() * 90;
     }
@@ -3689,12 +3754,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void setUrlExtraction(boolean urlExtraction) throws PDFNetException {
-        if (getPdfViewCtrl() != null) {
-            getPdfViewCtrl().setUrlExtraction(urlExtraction);
-        }
-    }
-
     public void setPageBorderVisibility(boolean pageBorderVisibility) throws PDFNetException {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().setPageBorderVisibility(pageBorderVisibility);
@@ -3823,6 +3882,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (pdfViewCtrl != null) {
             pdfViewCtrl.cancelFindText();
+        }
+    }
+
+    public void openSearch() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onSearchOptionSelected();
         }
     }
 
@@ -4025,6 +4090,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void showRotateDialog() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null && mFragmentManager != null) {
+            RotateDialogFragment.newInstance()
+                    .setPdfViewCtrl(pdfViewCtrl)
+                    .show(mFragmentManager, "rotate_dialog");
+        }
+    }
+
+    public void openOutlineList() {
+        if (isBookmarkListVisible) {
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
+            }
+        } else {
+            if (mPdfViewCtrlTabHostFragment != null) {
+                mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
+            }
+        }
+    }
+
+    public void openLayersList() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null) {
+            PdfLayerDialog pdfLayerDialog = new PdfLayerDialog(pdfViewCtrl.getContext(), pdfViewCtrl);
+            pdfLayerDialog.show();
+        }
+    }
+
+    public void openNavigationLists() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
+        }
+    }
+    
     public boolean isReflowMode() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().isReflowMode();

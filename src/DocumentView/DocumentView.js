@@ -106,6 +106,7 @@ export default class DocumentView extends PureComponent {
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
     onPageMoved: PropTypes.func,
+    disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
     openSavedCopyInNewTab: PropTypes.bool,
@@ -230,7 +231,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onTextSearchStart) {
       if (this.props.onTextSearchStart) {
-        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+        this.props.onTextSearchStart();
       }
     } else if (event.nativeEvent.onTextSearchResult) {
       if (this.props.onTextSearchResult) {
@@ -289,6 +290,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
+    }
+    return Promise.resolve();
+  }
+
+  openBookmarkList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openBookmarkList(tag);
     }
     return Promise.resolve();
   }
@@ -360,6 +369,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
+  openAnnotationList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.openAnnotationList(tag);
     }
     return Promise.resolve();
   }
@@ -565,6 +582,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openTabSwitcher = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openTabSwitcher(tag);
+    }
+    return Promise.resolve();
+  }
+
   getZoom = () => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -742,6 +767,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -803,15 +836,6 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAll(tag);
-    }
-    return Promise.resolve();
-  }
-
-
-  setUrlExtraction = (urlExtraction) => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
     }
     return Promise.resolve();
   }
@@ -912,6 +936,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  showRotateDialog = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showRotateDialog(tag);
+    }
+    return Promise.resolve();
+  }
+
   showAddPagesView = (rect) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -948,6 +980,30 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.openThumbnailsView(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openOutlineList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openOutlineList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openLayersList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openLayersList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openNavigationLists = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openNavigationLists(tag);
     }
     return Promise.resolve();
   }

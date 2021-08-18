@@ -128,6 +128,7 @@ export default {
     style: 'style',
     note: 'note',
     copy: 'copy',
+    duplicate: 'duplicate',
     delete: 'delete',
     flatten: 'flatten',
     editText: 'editText',
