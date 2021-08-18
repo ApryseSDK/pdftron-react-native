@@ -105,6 +105,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    onPageMoved: PropTypes.func,
     disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
@@ -242,6 +243,13 @@ export default class DocumentView extends PureComponent {
     } else if (event.nativeEvent.onUndoRedoStateChanged) {
       if (this.props.onUndoRedoStateChanged) {
         this.props.onUndoRedoStateChanged();
+      }
+    } else if (event.nativeEvent.onPageMoved) {
+      if (this.props.onPageMoved) {
+        this.props.onPageMoved({
+          'previousPageNumber': event.nativeEvent.previousPageNumber,
+          'pageNumber': event.nativeEvent.pageNumber,
+        });
       }
     }
   }

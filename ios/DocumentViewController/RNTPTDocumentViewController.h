@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection;
 
+- (void)rnt_documentViewControllerPageDidMove:(PTDocumentBaseViewController *)documentViewController pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+
 @end
 
 @class RNTPTDocumentViewController;

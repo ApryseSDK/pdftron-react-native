@@ -2339,8 +2339,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         @Override
-        public void onPageMoved(int i, int i1) {
+        public void onPageMoved(int from, int to) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_PAGE_MOVED, ON_PAGE_MOVED);
+            params.putInt(PREV_PAGE_KEY, from);
+            params.putInt(PAGE_CURRENT_KEY, to);
 
+            onReceiveNativeEvent(params);
         }
 
         @Override
