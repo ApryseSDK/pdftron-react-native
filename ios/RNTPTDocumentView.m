@@ -2215,11 +2215,6 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-- (void)setUrlExtraction:(BOOL)urlExtraction
-{
-    [self.documentViewController.pdfViewCtrl SetUrlExtraction:urlExtraction];
-}
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility
 {
     PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;

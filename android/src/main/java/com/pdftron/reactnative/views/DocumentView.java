@@ -3748,12 +3748,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void setUrlExtraction(boolean urlExtraction) throws PDFNetException {
-        if (getPdfViewCtrl() != null) {
-            getPdfViewCtrl().setUrlExtraction(urlExtraction);
-        }
-    }
-
     public void setPageBorderVisibility(boolean pageBorderVisibility) throws PDFNetException {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().setPageBorderVisibility(pageBorderVisibility);

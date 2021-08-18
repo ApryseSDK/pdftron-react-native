@@ -2713,19 +2713,6 @@ this._viewer.setOverprint(Config.OverprintMode.Off);
 
 ### Viewer Options
 
-#### setUrlExtraction
-Sets whether to extract urls from the current document, which is disabled by default. It is recommended to set this value before document is opened.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-urlExtraction | bool | whether to extract urls from the current document
-
-```js
-this._viewer.setUrlExtraction(true);
-```
-
 #### setPageBorderVisibility
 Sets whether borders of each page are visible in the viewer, which is disabled by default.
 

@@ -124,8 +124,6 @@
 
 - (void)setOverprintforDocumentViewTag:(NSNumber *)tag overprint:(NSString *)overprint;
 
-- (void)setUrlExtractionForDocumentViewTag:(NSNumber *)tag urlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibilityForDocumentViewTag:(NSNumber *)tag pageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGridForDocumentViewTag:(NSNumber *)tag pageTransparencyGrid:(BOOL)pageTransparencyGrid;
