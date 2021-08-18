@@ -147,6 +147,7 @@ static NSString * const PTNoteMenuItemTitleKey = @"Note";
 static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
 static NSString * const PTPasteMenuItemTitleKey = @"Paste";
+static NSString * const PTDuplicateMenuItemTitleKey = @"Duplicate";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
 static NSString * const PTSearchMenuItemTitleKey = @"Search";
@@ -161,6 +162,7 @@ static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
 static NSString * const PTCopyMenuItemIdentifierKey = @"copy";
 static NSString * const PTPasteMenuItemIdentifierKey = @"paste";
+static NSString * const PTDuplicateMenuItemIdentifierKey = @"duplicate";
 static NSString * const PTDeleteMenuItemIdentifierKey = @"delete";
 static NSString * const PTTypeMenuItemIdentifierKey = @"markupType";
 static NSString * const PTSearchMenuItemIdentifierKey = @"search";
@@ -184,6 +186,8 @@ static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
 static NSString * const PTRelativeZoomLimitModeKey = @"relative";
 
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
@@ -314,6 +318,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *uneditableAnnotationTypes;
 
 
 // annotation selection menu customization
@@ -442,6 +447,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)importBookmarkJson:(NSString *)bookmarkJson;
 
+- (void)openBookmarkList;
+
 - (NSString *)getDocumentPath;
 
 - (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
@@ -503,6 +510,8 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)closeAllTabs;
 
+- (void)openTabSwitcher;
+
 - (int)getPageRotation;
 
 - (void)rotateClockwise;
@@ -543,8 +552,6 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setOverprint:(NSString *)overprint;
 
-- (void)setUrlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -584,6 +591,14 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openOutlineList;
+
+- (void)openLayersList;
+
+- (void)openNavigationLists;
+
+- (void)openAnnotationList;
 
 - (BOOL)isReflowMode;
 
