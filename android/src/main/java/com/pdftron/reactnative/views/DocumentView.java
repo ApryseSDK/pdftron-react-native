@@ -1917,7 +1917,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                 if (annotationData != null) {
                     if (overrideAction && isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP)) {
-                        WritableMap annotationDataCopy = annotationData.copy();
+                        WritableMap annotationDataCopy = Arguments.createMap();
+                        annotationDataCopy.merge(annotationData);
                         try {
                             if (entry.getKey().getType() == Annot.e_Text) {
                                 WritableMap params = Arguments.createMap();
