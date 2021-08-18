@@ -2466,16 +2466,13 @@ NS_ASSUME_NONNULL_END
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
     NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
-    if (numOfSignatures > 0) {
-        NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
-        for (NSInteger i = 0; i < numOfSignatures; i++) {
-            signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
-        }
-
-        return signatures;
-    }
+    NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
     
-    return nil;
+    for (NSInteger i = 0; i < numOfSignatures; i++) {
+        signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+    }
+
+    return signatures;
 }
 
 -(NSString *)getSavedSignatureFolder

@@ -3061,11 +3061,11 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-signatures | array | an array of string containing the absolute file paths; if there are no saved signatures, the value is null
+signatures | array | an array of string containing the absolute file paths; if there are no saved signatures, the value is an empty array
 
 ```js
 this._viewer.getSavedSignatures().then((signatures) => {
-  if (signatures != null) {
+  if (signatures.length > 0) {
     signatures.forEach((signature) => {
       console.log(signature);
     });
