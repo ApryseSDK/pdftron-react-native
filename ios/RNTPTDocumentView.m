@@ -88,6 +88,8 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTThumbnailsViewController class]];
     
     _tempFilePaths = [[NSMutableArray alloc] init];
+    
+    _showSavedSignatures = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -2444,7 +2446,7 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Saved signatures
+#pragma mark - Signatures
 
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
@@ -2453,26 +2455,41 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
+{
+    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
+    
+    [self applyViewerSettings];
+}
+
 - (NSArray *)getSavedSignatures
 {
-//    PTSavedSignaturesViewController *signaturesViewController = [[PTSavedSignaturesViewController alloc] init];
-//    PTSignaturesManager *signaturesManager = signaturesViewController.signaturesManager;
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
     NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
-    NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
-    
-    for (NSInteger i = 0; i < numOfSignatures; i++) {
-        signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+    if (numOfSignatures > 0) {
+        NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
+        for (NSInteger i = 0; i < numOfSignatures; i++) {
+            signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+        }
+
+        return signatures;
     }
     
-    return signatures;
+    return nil;
 }
 
 -(NSString *)getSavedSignatureFolder
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
-    PTPDFDoc * signature = [signaturesManager savedSignatureAtIndex:0];
-    return @"";
+    
+    if ([signaturesManager numberOfSavedSignatures] > 0)  {
+        NSString *signature = [[signaturesManager savedSignatureAtIndex:0] GetFileName];
+        NSRange lastPos = [signature rangeOfString:@"/" options:NSBackwardsSearch];
+        signature = [signature substringToIndex:lastPos.location];
+        return signature;
+    }
+    
+    return nil;
 }
 
 # pragma mark - Dark Mode
@@ -2535,16 +2552,6 @@ NS_ASSUME_NONNULL_END
     NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
     CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
     [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
-}
-
-
-#pragma mark - signSignatureFieldsWithStamps
-
--(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
-{
-    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
-    
-    [self applyViewerSettings];
 }
 
 #pragma mark - Zoom
