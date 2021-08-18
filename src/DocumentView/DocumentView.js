@@ -230,7 +230,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onTextSearchStart) {
       if (this.props.onTextSearchStart) {
-        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+        this.props.onTextSearchStart();
       }
     } else if (event.nativeEvent.onTextSearchResult) {
       if (this.props.onTextSearchResult) {

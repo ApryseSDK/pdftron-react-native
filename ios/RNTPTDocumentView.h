@@ -186,6 +186,8 @@ static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
 static NSString * const PTRelativeZoomLimitModeKey = @"relative";
 
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
