@@ -105,9 +105,11 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
     openSavedCopyInNewTab: PropTypes.bool,
+    excludedAnnotationListTypes: PropTypes.array,
     replyReviewStateEnabled: PropTypes.bool,
     ...ViewPropTypes,
   };
@@ -228,7 +230,7 @@ export default class DocumentView extends PureComponent {
       }
     } else if (event.nativeEvent.onTextSearchStart) {
       if (this.props.onTextSearchStart) {
-        this.props.onTextSearchStart(event.nativeEvent.onTextSearchStart);
+        this.props.onTextSearchStart();
       }
     } else if (event.nativeEvent.onTextSearchResult) {
       if (this.props.onTextSearchResult) {
@@ -280,6 +282,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
+    }
+    return Promise.resolve();
+  }
+
+  openBookmarkList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openBookmarkList(tag);
     }
     return Promise.resolve();
   }
@@ -351,6 +361,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
+    }
+    return Promise.resolve();
+  }
+
+  openAnnotationList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.openAnnotationList(tag);
     }
     return Promise.resolve();
   }
@@ -552,6 +570,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.closeAllTabs(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openTabSwitcher = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openTabSwitcher(tag);
     }
     return Promise.resolve();
   }
@@ -806,15 +832,6 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-
-  setUrlExtraction = (urlExtraction) => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
-    }
-    return Promise.resolve();
-  }
-
   setPageBorderVisibility = (pageBorderVisibility) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -919,6 +936,22 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  isReflowMode = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+        return DocumentViewManager.isReflowMode(tag);
+    }
+    return Promise.resolve();
+  }
+
+  toggleReflow = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.toggleReflow(tag);
+    }
+    return Promise.resolve();
+  }
+
   shareCopy = (rect, flattening) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -934,7 +967,31 @@ export default class DocumentView extends PureComponent {
     }
     return Promise.resolve();
   }
- 
+
+  openOutlineList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openOutlineList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openLayersList = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openLayersList(tag);
+    }
+    return Promise.resolve();
+  }
+
+  openNavigationLists = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openNavigationLists(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };
