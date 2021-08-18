@@ -55,6 +55,7 @@ import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.dialog.RotateDialogFragment;
 import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
 import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
@@ -4081,6 +4082,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(
                     PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
             );
+        }
+    }
+
+    public void showRotateDialog() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null && mFragmentManager != null) {
+            RotateDialogFragment.newInstance()
+                    .setPdfViewCtrl(pdfViewCtrl)
+                    .show(mFragmentManager, "rotate_dialog");
         }
     }
 
