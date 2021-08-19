@@ -726,6 +726,26 @@ pageNumber | int | the current page number
 />
 ```
 
+#### onPageMoved
+function, optional
+
+This function is called when a page has been moved in the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
+```js
+<DocumentView
+  onPageMoved = {({previousPageNumber, pageNumber}) => {
+    console.log('Page moved from', previousPageNumber, 'to', pageNumber);
+  }}
+/>
+```
+
 ### Zoom
 
 #### onZoomChanged
@@ -1869,6 +1889,17 @@ Returns a Promise.
 this._viewer.rotateCounterClockwise();
 ```
 
+#### showRotateDialog
+Displays a rotate dialog. Android only.
+
+The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
+
+Returns a Promise.
+
+```js
+this._viewer.showRotateDialog();
+```
+
 ### Import/Export Annotations
 
 #### importAnnotationCommand
@@ -2848,6 +2879,15 @@ Returns a Promise.
 
 ```js
 this._viewer.cancelFindText();
+```
+
+#### openSearch
+Displays a search bar that allows the user to enter and search text within a document.
+
+Returns a Promise.
+
+```js
+this._viewer.openSearch();
 ```
 
 #### getSelection

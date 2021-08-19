@@ -2900,10 +2900,15 @@ NS_ASSUME_NONNULL_END
 
 - (void)rnt_documentViewControllerLayoutDidChange:(PTDocumentBaseViewController *)documentViewController
 {
-    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
-    
     if ([self.delegate respondsToSelector:@selector(layoutChanged:)]) {
         [self.delegate layoutChanged:self];
+    }
+}
+
+- (void)rnt_documentViewControllerPageDidMove:(PTDocumentBaseViewController *)documentViewController pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    if ([self.delegate respondsToSelector:@selector(pageMoved:pageMovedFromPageNumber:toPageNumber:)]) {
+        [self.delegate pageMoved:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
     }
 }
 
@@ -4464,6 +4469,11 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     
     [pdfViewCtrl CancelFindText];
+}
+
+- (void)openSearch
+{
+    [self.currentDocumentViewController showSearchViewController];
 }
 
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;

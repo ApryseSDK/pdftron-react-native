@@ -105,6 +105,7 @@ export default class DocumentView extends PureComponent {
     defaultEraserType: PropTypes.string,
     exportPath: PropTypes.string,
     openUrlPath: PropTypes.string,
+    onPageMoved: PropTypes.func,
     disableEditingByAnnotationType: PropTypes.array,
     hideScrollbars: PropTypes.bool,
     saveStateEnabled: PropTypes.bool,
@@ -242,6 +243,13 @@ export default class DocumentView extends PureComponent {
     } else if (event.nativeEvent.onUndoRedoStateChanged) {
       if (this.props.onUndoRedoStateChanged) {
         this.props.onUndoRedoStateChanged();
+      }
+    } else if (event.nativeEvent.onPageMoved) {
+      if (this.props.onPageMoved) {
+        this.props.onPageMoved({
+          'previousPageNumber': event.nativeEvent.previousPageNumber,
+          'pageNumber': event.nativeEvent.pageNumber,
+        });
       }
     }
   }
@@ -759,6 +767,14 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  openSearch = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+
   getSelection = (pageNumber) => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -916,6 +932,14 @@ export default class DocumentView extends PureComponent {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.showViewSettings(tag, rect);
+    }
+    return Promise.resolve();
+  }
+
+  showRotateDialog = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showRotateDialog(tag);
     }
     return Promise.resolve();
   }

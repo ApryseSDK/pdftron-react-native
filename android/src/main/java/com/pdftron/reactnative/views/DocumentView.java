@@ -55,6 +55,7 @@ import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ReflowControl;
+import com.pdftron.pdf.dialog.RotateDialogFragment;
 import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
 import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
@@ -2338,8 +2339,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         @Override
-        public void onPageMoved(int i, int i1) {
+        public void onPageMoved(int from, int to) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_PAGE_MOVED, ON_PAGE_MOVED);
+            params.putInt(PREV_PAGE_KEY, from);
+            params.putInt(PAGE_CURRENT_KEY, to);
 
+            onReceiveNativeEvent(params);
         }
 
         @Override
@@ -3879,6 +3885,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void openSearch() {
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onSearchOptionSelected();
+        }
+    }
+
     public WritableMap getSelection(int pageNumber) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -4055,6 +4067,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onViewModeSelected(
                     PdfViewCtrlSettingsManager.KEY_PREF_VIEWMODE_USERCROP_VALUE
             );
+        }
+    }
+
+    public void showRotateDialog() {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (pdfViewCtrl != null && mFragmentManager != null) {
+            RotateDialogFragment.newInstance()
+                    .setPdfViewCtrl(pdfViewCtrl)
+                    .show(mFragmentManager, "rotate_dialog");
         }
     }
 

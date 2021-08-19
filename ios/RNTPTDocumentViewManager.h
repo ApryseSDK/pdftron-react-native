@@ -141,6 +141,8 @@
 
 - (void)cancelFindTextForDocumentViewTag:(NSNumber *)tag;
 
+- (void)openSearchForDocumentViewTag:(NSNumber *)tag;
+
 - (void)startSearchModeForDocumentViewTag:(NSNumber *)tag searchString:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 
 - (void)exitSearchModeForDocumentViewTag:(NSNumber *)tag;
