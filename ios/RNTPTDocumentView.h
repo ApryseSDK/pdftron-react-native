@@ -272,6 +272,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// To access the saved signatures folder
+static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>

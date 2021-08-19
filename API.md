@@ -3082,7 +3082,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-path | string | the absolute file path to the folder; if there are no saved signatures, the value is null
+path | string | the absolute file path to the folder
 
 ```js
 this._viewer.getSavedSignatureFolder().then((path) => {

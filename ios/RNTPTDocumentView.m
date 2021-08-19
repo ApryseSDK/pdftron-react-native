@@ -2477,17 +2477,11 @@ NS_ASSUME_NONNULL_END
 
 -(NSString *)getSavedSignatureFolder
 {
-    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
-    
-    if ([signaturesManager numberOfSavedSignatures] > 0)  {
-        NSString *signature = [[signaturesManager savedSignatureAtIndex:0] GetFileName];
-//        NSRange lastPos = [signature rangeOfString:@"/" options:NSBackwardsSearch];
-//        signature = [signature substringToIndex:lastPos.location];
-        signature = signature.stringByDeletingLastPathComponent;
-        return signature;
-    }
-    
-    return nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryDirectory = paths[0];
+
+    NSString* fullPath = [libraryDirectory stringByAppendingPathComponent:PTSignaturesManager_signatureDirectory];
+    return fullPath;
 }
 
 # pragma mark - Dark Mode
