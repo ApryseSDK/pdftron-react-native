@@ -220,6 +220,7 @@ NS_ASSUME_NONNULL_END
             [self registerForPDFViewCtrlNotifications:self.documentViewController];
         } else {
             // Using tabbed viewer.
+            [self registerForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
         }
     }
     
@@ -322,6 +323,7 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
+        [self deregisterForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -450,6 +452,17 @@ NS_ASSUME_NONNULL_END
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
 }
+
+- (void)registerForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController addObserver:self forKeyPath:@"selectedIndex" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:TabChangedContext];
+}
+
+- (void)deregisterForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController removeObserver:self forKeyPath:@"selectedIndex" context:TabChangedContext];
+}
+
 
 #pragma mark - Disabling elements
 
@@ -2744,6 +2757,17 @@ NS_ASSUME_NONNULL_END
 {
     // Always show tab bar when using tabbed viewer.
     return NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == TabChangedContext) {
+        if ([self.delegate respondsToSelector:@selector(tabChanged:currentTab:)]) {
+            [self.delegate tabChanged:self currentTab:self.tabbedDocumentViewController.selectedIndex];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>
