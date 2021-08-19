@@ -4185,7 +4185,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             File file = StampManager.getInstance().getSavedSignatureFolder(context);
             return file.getAbsolutePath();
         }
-        return null;
+        return "";
     }
     
     public void setSaveStateEnabled(boolean saveStateEnabled) {
