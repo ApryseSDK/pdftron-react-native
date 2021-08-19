@@ -2481,8 +2481,9 @@ NS_ASSUME_NONNULL_END
     
     if ([signaturesManager numberOfSavedSignatures] > 0)  {
         NSString *signature = [[signaturesManager savedSignatureAtIndex:0] GetFileName];
-        NSRange lastPos = [signature rangeOfString:@"/" options:NSBackwardsSearch];
-        signature = [signature substringToIndex:lastPos.location];
+//        NSRange lastPos = [signature rangeOfString:@"/" options:NSBackwardsSearch];
+//        signature = [signature substringToIndex:lastPos.location];
+        signature = signature.stringByDeletingLastPathComponent;
         return signature;
     }
     
