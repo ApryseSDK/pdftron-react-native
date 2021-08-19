@@ -1039,6 +1039,27 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 />
 ```
 
+#### onTabChanged
+function, optional
+
+The function is activated when a tab is changed, except for when the document is first loaded.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+currentTab | string | The title of the current tab
+
+
+```js
+<DocumentView
+  multiTabEnabled={true}
+  onTabChanged={({currentTab}) => {
+    console.log("The current tab is ", currentTab);
+  }}
+/>
+```
+
 ### Collaboration
 
 #### collabEnabled

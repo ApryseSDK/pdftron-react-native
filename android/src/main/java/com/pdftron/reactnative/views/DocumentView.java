@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -63,6 +66,7 @@ import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
+import com.pdftron.pdf.model.FileInfo;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
@@ -2410,6 +2414,102 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+//    private PdfViewCtrlTabHostFragment2.TabHostListener mTabHostListener = new PdfViewCtrlTabHostFragment2.TabHostListener() {
+//        @Override
+//        public void onTabHostShown() {
+//
+//        }
+//
+//        @Override
+//        public void onTabHostHidden() {
+//
+//        }
+//
+//        @Override
+//        public void onLastTabClosed() {
+//
+//        }
+//
+//        @Override
+//        public void onTabChanged(String tag) {
+//            WritableMap params = Arguments.createMap();
+//            params.putString(ON_TAB_CHANGED, ON_TAB_CHANGED);
+//            params.putString(KEY_CURRENT_TAB, tag);
+//
+//            onReceiveNativeEvent(params);
+//        }
+//
+//        @Override
+//        public boolean onOpenDocError() {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onNavButtonPressed() {
+//
+//        }
+//
+//        @Override
+//        public void onShowFileInFolder(String fileName, String filepath, int itemSource) {
+//
+//        }
+//
+//        @Override
+//        public boolean canShowFileInFolder() {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean canShowFileCloseSnackbar() {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onToolbarCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onToolbarPrepareOptionsMenu(Menu menu) {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onToolbarOptionsItemSelected(MenuItem item) {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onStartSearchMode() {
+//
+//        }
+//
+//        @Override
+//        public void onExitSearchMode() {
+//
+//        }
+//
+//        @Override
+//        public boolean canRecreateActivity() {
+//            return false;
+//        }
+//
+//        @Override
+//        public void onTabPaused(FileInfo fileInfo, boolean isDocModifiedAfterOpening) {
+//
+//        }
+//
+//        @Override
+//        public void onJumpToSdCardFolder() {
+//
+//        }
+//
+//        @Override
+//        public void onTabDocumentLoaded(String tag) {
+//
+//        }
+//    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -2578,6 +2678,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
+
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
@@ -2646,6 +2747,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         super.onTabChanged(tag);
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
+
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_TAB_CHANGED, ON_TAB_CHANGED);
+            params.putString(KEY_CURRENT_TAB, tag);
+
+            onReceiveNativeEvent(params);
         }
     }
 
