@@ -324,16 +324,16 @@ const styles = StyleSheet.create({
 
 ## TypeScript
 
-PDFTron React Native now has support for TypeScript. This update mainly benefits those who already use TypeScript in their applications. It also provides certain benefits to all customers, including those who use JavaScript without TypeScript.
+PDFTron React Native introduced support for TypeScript in version 3.0.0. This update mainly benefits those who already use TypeScript in their applications. It also provides certain benefits to all customers, including those who use JavaScript without TypeScript.
 
-To get access to this update, simply update your PDFTron React Native dependency to version ___ or higher.
+To get access to this update, simply update your PDFTron React Native dependency to version 3.0.0 or higher.
 
 ### All Users
 
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper typings for our APIs which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
 - Greater type safety and reliability because we have migrated our source files from JavaScript to TypeScript. 
-- Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs will now be made to the `dev` branch (see <wiki title and link>).
+- Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs will now be made to the `dev` branch (see [Contributing](./CONTRIBUTING.md)).
 
 If you have questions, head to our FAQ's Integration section for [Android](https://www.pdftron.com/documentation/android/faq) and [iOS](https://www.pdftron.com/documentation/ios/faq/).
 
