@@ -717,12 +717,12 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSInteger)currentTab
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab
 {
     if (sender.onChange) {
         sender.onChange(@{
             @"onTabChanged": @"onTabChanged",
-            @"currentTab": @(currentTab),
+            @"currentTab": currentTab,
         });
     }
 }
