@@ -27,14 +27,6 @@ export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
   }
 }
 
-var iface = {
-  name: 'PDFViewCtrl',
-  propTypes: {
-    document: PropTypes.string,
-    ...ViewPropTypes, // include the default view properties
-  },
-};
-
 const name = Platform.OS === 'ios' ? 'RNTPTPDFViewCtrl' : 'RCTPDFViewCtrl';
 
 const RCTPDFViewCtrl = requireNativeComponent(name);
