@@ -37,5 +37,4 @@ var iface = {
 
 const name = Platform.OS === 'ios' ? 'RNTPTPDFViewCtrl' : 'RCTPDFViewCtrl';
 
-// @ts-ignore
-const RCTPDFViewCtrl = requireNativeComponent(name, PDFViewCtrl, iface); // https://github.com/facebook/react-native/issues/28351
+const RCTPDFViewCtrl = requireNativeComponent(name);
