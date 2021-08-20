@@ -22,6 +22,7 @@ public final class Constants {
     public static final String ON_TEXT_SEARCH_START = "onTextSearchStart";
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
+    public static final String ON_PAGE_MOVED = "onPageMoved";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";

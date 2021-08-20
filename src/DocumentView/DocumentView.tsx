@@ -127,6 +127,7 @@ const propTypes = {
   openSavedCopyInNewTab: PropTypes.bool,
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
   replyReviewStateEnabled: PropTypes.bool,
+  onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   ...ViewPropTypes,
 };
 
@@ -318,6 +319,13 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onUndoRedoStateChanged) {
       if (this.props.onUndoRedoStateChanged) {
         this.props.onUndoRedoStateChanged();
+      }
+    } else if (event.nativeEvent.onPageMoved) {
+      if (this.props.onPageMoved) {
+        this.props.onPageMoved({
+          'previousPageNumber': event.nativeEvent.previousPageNumber,
+          'pageNumber': event.nativeEvent.pageNumber,
+        });
       }
     }
   }
@@ -838,6 +846,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  openSearch = (): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.openSearch(tag);
+    }
+    return Promise.resolve();
+  }
+  
   getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -899,15 +915,6 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAll(tag);
-    }
-    return Promise.resolve();
-  }
-
-
-  setUrlExtraction = (urlExtraction: boolean): Promise<void> => {
-    const tag = findNodeHandle(this._viewerRef);
-    if (tag != null) {
-       return DocumentViewManager.setUrlExtraction(tag, urlExtraction);
     }
     return Promise.resolve();
   }
@@ -1008,6 +1015,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  showRotateDialog = (): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.showRotateDialog(tag);
+    }
+    return Promise.resolve();
+  }
+  
   showAddPagesView = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

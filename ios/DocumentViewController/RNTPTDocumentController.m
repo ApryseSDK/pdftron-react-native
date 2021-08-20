@@ -179,6 +179,14 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
+- (void)toolManager:(nonnull PTToolManager *)toolManager pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    [super toolManager:toolManager pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageDidMove:pageMovedFromPageNumber:toPageNumber:)]) {
+        [self.delegate rnt_documentViewControllerPageDidMove:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    }
+}
+
 #pragma mark - <PTPDFViewCtrlDelegate>
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
