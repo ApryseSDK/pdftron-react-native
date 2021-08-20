@@ -2765,8 +2765,8 @@ NS_ASSUME_NONNULL_END
         if ([self.delegate respondsToSelector:@selector(tabChanged:currentTab:)]) {
             PTDocumentTabItem *selectedItem = self.tabbedDocumentViewController.tabManager.selectedItem;
             if (selectedItem != nil) {
-                NSString *currentTab = selectedItem.displayName ?: [[selectedItem.sourceURL URLByDeletingPathExtension] lastPathComponent];
-                [self.delegate tabChanged:self currentTab:currentTab];
+                NSURL *currentTab = selectedItem.documentURL ?: selectedItem.sourceURL;
+                [self.delegate tabChanged:self currentTab:[currentTab absoluteString]];
             }
         }
     } else {
