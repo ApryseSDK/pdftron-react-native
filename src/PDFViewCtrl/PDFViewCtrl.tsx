@@ -1,21 +1,21 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { InferProps } from 'prop-types';
 import {
   requireNativeComponent,
-  ViewProps,
   ViewPropTypes,
-  Dimensions,
   Platform
 } from 'react-native';
 
-const { height, width } = Dimensions.get('window');
-
-export interface PDFViewCtrlProps extends ViewProps { // needed to add style to props
-  document: string;
-  style?: object;
+const propTypes = {
+  document: PropTypes.string,
+  ...ViewPropTypes,
 }
 
+type PDFViewCtrlProps = InferProps<typeof propTypes>;
+
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
+
+  static propTypes = propTypes;
 
   render() {
     return (
