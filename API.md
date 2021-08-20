@@ -1050,7 +1050,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-currentTab | string | The title of the current tab
+currentTab | string | The file path of current tab's document
 
 
 ```js
