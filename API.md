@@ -95,7 +95,7 @@ RNPdftron.clearRubberStampCache().then(() => {
 ```
 
 ### encryptDocument
-Encrypts (password-protect) a document. **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
+Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
 Parameters:
 
@@ -512,7 +512,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 #### initialToolbar
 string, optional, defaults to none
 
-Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened. The values give should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
 
 ```js
 <DocumentView
@@ -700,6 +700,26 @@ pageNumber | int | the current page number
 />
 ```
 
+#### onPageMoved
+function, optional
+
+This function is called when a page has been moved in the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+previousPageNumber | int | the previous page number
+pageNumber | int | the current page number
+
+```js
+<DocumentView
+  onPageMoved = {({previousPageNumber, pageNumber}) => {
+    console.log('Page moved from', previousPageNumber, 'to', pageNumber);
+  }}
+/>
+```
+
 ### Zoom
 
 #### onZoomChanged
@@ -862,7 +882,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id: string, pageNumber: number, type: string, rect: object}` objects, where `id` is the annotation identifier, `pageNumber` is the page number, type is one of the [`Config.Tools`](./src/Config/Config.js) constants and `rect={x1, y1, x2, y2}` specifies the annotation's screen rect
+annotations | array | An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.<br><br>`id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`. Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
 
 ```js
 <DocumentView
@@ -872,7 +892,8 @@ annotations | array | An array of `{id: string, pageNumber: number, type: string
       console.log('The id of selected annotation is', annotation.id);
       console.log('The page number of selected annotation is', annotation.pageNumber);
       console.log('The type of selected annotation is', annotation.type);
-      console.log('The lower left corner of selected annotation is', annotation.x1, annotation.y1);
+      console.log('The screenRect of selected annotation is', annotation.screenRect);
+      console.log('The pageRect of selected annotation is', annotation.pageRect);
     });
   }}
 />
@@ -966,7 +987,7 @@ Data param table:
 Action | Data param
 --- | ---
 [`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
-[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1171,7 +1192,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`, representing the selected annotations. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1180,7 +1201,6 @@ annotations | array | array of annotation data in the format `{id: string, pageN
       console.log('The id of selected annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
       console.log('Its type is', annotation.type);
-      console.log('Its lower left corner has coordinate', annotation.rect.x1, annotation.rect.y1);
     });
   }}
 />
@@ -1840,6 +1860,17 @@ Returns a Promise.
 this._viewer.rotateCounterClockwise();
 ```
 
+#### showRotateDialog
+Displays a rotate dialog. Android only.
+
+The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
+
+Returns a Promise.
+
+```js
+this._viewer.showRotateDialog();
+```
+
 ### Import/Export Annotations
 
 #### importAnnotationCommand
@@ -2140,7 +2171,7 @@ this._viewer.setHighlightFields(true);
 ```
 
 
-#### getAnnotationAt
+#### getAnnotationAtPoint
 Gets an annotation at the (x, y) position in screen coordinates, if any.
 
 Parameters:
@@ -2158,10 +2189,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
+this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
   if (annotation) {
     console.log('Annotation found at point (167, 287) has id:', annotation.id);
   }
@@ -2169,7 +2200,7 @@ this._viewer.getAnnotationAt(167, 287, 100, 10).then((annotation) => {
 ```
 
 #### getAnnotationListAt
-Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAt`](#getAnnotationAt), except that this should be used when you want to get multiple annotations which are overlaying with each other.
+Gets the list of annotations at a given line in screen coordinates. Note that this is not an area selection. It should be used similar to [`getAnnotationAtPoint`](#getAnnotationAtPoint), except that this should be used when you want to get multiple annotations which are overlaying with each other.
 
 Parameters:
 
@@ -2186,7 +2217,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
@@ -2196,7 +2227,7 @@ this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
 })
 ```
 
-#### getAnnotationListOnPage
+#### getAnnotationsOnPage
 Gets the list of annotations on a given page.
 
 Parameters:
@@ -2211,10 +2242,10 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, rect: {x1: number, y1: number, x2: number, y2: number}}`
+annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
-this._viewer.getAnnotationListOnPage(2).then((annotations) => {
+this._viewer.getAnnotationsOnPage(2).then((annotations) => {
   for (const annotation of annotations) {
     console.log('Annotation found on page 2 has id:', annotation.id);
   }
@@ -2713,19 +2744,6 @@ this._viewer.setOverprint(Config.OverprintMode.Off);
 
 ### Viewer Options
 
-#### setUrlExtraction
-Sets whether to extract urls from the current document, which is disabled by default. It is recommended to set this value before document is opened.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-urlExtraction | bool | whether to extract urls from the current document
-
-```js
-this._viewer.setUrlExtraction(true);
-```
-
 #### setPageBorderVisibility
 Sets whether borders of each page are visible in the viewer, which is disabled by default.
 
@@ -2832,6 +2850,15 @@ Returns a Promise.
 
 ```js
 this._viewer.cancelFindText();
+```
+
+#### openSearch
+Displays a search bar that allows the user to enter and search text within a document.
+
+Returns a Promise.
+
+```js
+this._viewer.openSearch();
 ```
 
 #### getSelection

@@ -925,15 +925,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setUrlExtraction(int tag, boolean urlExtraction) throws PDFNetException {
-        DocumentView documentView = mDocumentViews.get(tag);
-        if (documentView != null) {
-            documentView.setUrlExtraction(urlExtraction);
-        } else {
-            throw new PDFNetException("", 0L, getName(), "setUrlExtraction", "Unable to find DocumentView.");
-        }
-    }
-
     public void setPageBorderVisibility(int tag, boolean pageBorderVisibility) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1021,6 +1012,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.cancelFindText();
         } else {
             throw new PDFNetException("", 0L, getName(), "cancelFindText", "Unable to find DocumentView.");
+        }
+    }
+
+    public void openSearch(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.openSearch();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "openSearch", "Unable to find DocumentView.");
         }
     }
 
@@ -1180,6 +1180,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             documentView.showCropDialog();
         } else {
             throw new PDFNetException("", 0L, getName(), "showCrop", "Unable to find DocumentView.");
+        }
+    }
+
+    public void showRotateDialog(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.showRotateDialog();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "showRotateDialog", "Unable to find DocumentView.");
         }
     }
 

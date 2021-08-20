@@ -186,6 +186,8 @@ static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
 static NSString * const PTRelativeZoomLimitModeKey = @"relative";
 
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
@@ -292,6 +294,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)layoutChanged:(RNTPTDocumentView *)sender;
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -553,8 +556,6 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)setOverprint:(NSString *)overprint;
 
-- (void)setUrlExtraction:(BOOL)urlExtraction;
-
 - (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
 
 - (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
@@ -570,6 +571,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
 
 - (void)cancelFindText;
+
+- (void)openSearch;
 
 - (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
 
