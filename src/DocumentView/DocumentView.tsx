@@ -1093,6 +1093,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   render() {
     return (
+      // @ts-ignore
       <RCTDocumentView
         ref={this._setNativeRef}
         style={{ flex:1 }}
