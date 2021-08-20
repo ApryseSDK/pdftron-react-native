@@ -61,7 +61,7 @@ If you would like to migrate, [here](https://reactnative.dev/docs/typescript#add
 
 0. If using yarn, do: `yarn global add react-native-cli`
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup), the following steps will assume your app is created through `react-native init MyApp`.
+1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup). The following steps will assume your app is created through `react-native init MyApp`. This guide also applies if you are using the [TypeScript template](https://reactnative.dev/docs/environment-setup#optional-using-a-specific-version-or-template).
 
 2. In `MyApp` folder, install `react-native-pdftron` by calling:
     ```shell
@@ -177,7 +177,7 @@ If you would like to migrate, [here](https://reactnative.dev/docs/typescript#add
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-6. Replace `App.js` with what is shown [here](#usage)
+6. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
 7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
@@ -193,13 +193,13 @@ If you would like to migrate, [here](https://reactnative.dev/docs/typescript#add
     ```
 
 2. In the `ios` folder, run `pod install`.
-3. Replace `App.js` with what is shown [here](#usage).
+3. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
 4. Finally in the root project directory, run `react-native run-ios`.
 5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
 ## Usage
 
-Replace `App.js` with the code below.
+Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
 If you set your path variable to point to a local storage file, 
 then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
@@ -229,7 +229,7 @@ import { DocumentView, RNPdftron } from 'react-native-pdftron';
 type Props = {};
 export default class App extends Component<Props> {
 
-  constructor(props) {
+  constructor(props) { // may need to use `props: Props` in TypeScript
     super(props);
 
     // Uses the platform to determine if storage permisions have been automatically granted.
