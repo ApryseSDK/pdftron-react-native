@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -48,6 +49,7 @@ import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
+import com.pdftron.pdf.config.ViewerBuilder2;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.AnnotationDialogFragment;
 import com.pdftron.pdf.controls.BookmarksTabLayout;
@@ -227,15 +229,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     protected PdfViewCtrlTabHostFragment2 getViewer() {
-        if (mCollabEnabled) {
-            // Create the Fragment using CollabViewerBuilder
-            return CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
-                    .usingConfig(mViewerConfig)
-                    .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
-                    .usingCustomHeaders(mCustomHeaders)
-                    .build(getContext());
+        return ViewerBuilder2.withUri(mDocumentUri, mPassword)
+                .usingConfig(mViewerConfig)
+                .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
+                .usingCustomHeaders(mCustomHeaders)
+                .usingCustomToolbar(new int[] {R.menu.my_custom_toolbar})
+                .build(getContext());
+    }
+
+    @Override
+    public boolean onToolbarOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            openSearch();
         }
-        return super.getViewer();
+        return false;
     }
 
     @Override
@@ -459,6 +466,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             PdfViewCtrlSettingsManager.updateAuthorName(context, author);
             PdfViewCtrlSettingsManager.setAnnotListShowAuthor(context, true);
         }
+    }
+
+    @Override
+    public boolean onToolbarOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_search) {
+            openSearch();
+        }
+        return false;
     }
 
     public void setShowSavedSignatures(boolean showSavedSignatures) {
