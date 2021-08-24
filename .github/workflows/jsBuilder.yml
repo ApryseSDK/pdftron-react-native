@@ -39,4 +39,4 @@ jobs:
         with:
           force: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ts-support # <-- Change this to the new branch where you want builds to be
+          branch: ts-master # <-- Change this to the new branch where you want builds to be
