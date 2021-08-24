@@ -330,6 +330,8 @@ To get access to this update, simply update your PDFTron React Native dependency
 
 ### All Users
 
+For non-TypeScript users, this update will not automatically install TypeScript, and they can continue to use the library as before.
+
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper typings for our APIs which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
 - Greater type safety and reliability because we have migrated our source files from JavaScript to TypeScript. 
@@ -343,7 +345,7 @@ If you are an existing TypeScript user, then our custom typings will be availabl
 
 Note:
 - We recommend that our library is used with at least TypeScript v3.4.1. Although it can be compiled using lower versions, our typings will begin degrading to `any`.
-- Due to the introduction of proper typings to PDFTron's APIs, your compiler may now give warnings or errors about your usage of these APIs. In most cases these will not break your app but it is advised that you address them to take full advantage of TypeScript. It is particularly important to address them if you use TypeScript to emit files and have enabled `noEmitOnError` in your `tsconfig.json`.
+- Due to the introduction of proper typings to PDFTron's APIs, your compiler may now give warnings or errors about your usage of these APIs. In most cases these will not prevent your app from running but it is advised that you address them to take full advantage of TypeScript. It is particularly important to address them if you use TypeScript to emit files and have enabled `noEmitOnError` in your `tsconfig.json`.
 
 ### Migrating to TypeScript
 
