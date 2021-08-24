@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 const propTypes = {
-  document: PropTypes.string,
+  document: PropTypes.string.isRequired,
   ...ViewPropTypes,
 }
 
