@@ -88,6 +88,7 @@ import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
+import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
@@ -230,6 +231,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     protected PdfViewCtrlTabHostFragment2 getViewer() {
         return ViewerBuilder2.withUri(mDocumentUri, mPassword)
+                .usingTabHostClass(RNPdfViewCtrlTabHostFragment.class)
                 .usingConfig(mViewerConfig)
                 .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                 .usingCustomHeaders(mCustomHeaders)
@@ -884,7 +886,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
     }
-    
+
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
@@ -969,7 +971,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 saveCopyOptions.add(R.id.menu_export_password_copy);
             }
         }
-        
+
         if (!saveCopyOptions.isEmpty()) {
             int[] modes = new int[saveCopyOptions.size()];
             for (int j = 0; j < modes.length; j++) {
@@ -3045,7 +3047,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (isOutlineListVisible) {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
-                } 
+                }
             } else {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
@@ -4139,7 +4141,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
         }
     }
-    
+
     public boolean isReflowMode() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().isReflowMode();
@@ -4195,7 +4197,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
         }
     }
-    
+
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
     }
