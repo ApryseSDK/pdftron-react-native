@@ -13,7 +13,6 @@ public class RNPdfViewCtrlTabHostFragment extends PdfViewCtrlTabHostFragment2 {
         mSwitcherButton = mToolbar.findViewById(R.id.switcher_button);
         Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
-        TextView text = mSwitcherButton.findViewById()
         mSwitcherButton.setLayoutParams(layoutParams);
     }
 }
