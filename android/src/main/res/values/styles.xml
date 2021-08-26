@@ -6,6 +6,11 @@
 
     <style name="RNAppThemeBase" parent="PDFTronAppTheme">
         <item name="search_toolbar">@style/RNSearchToolbarStyle</item>
+        <item name="sticky_note_presets">@array/custom_presets</item>
+    </style>
+
+    <style name="CustomPresetStyle1">
+        <item name="annot_color">#ffcd45</item> <item name="annot_icon">Comment</item>
     </style>
 
     <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
