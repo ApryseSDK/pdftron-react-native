@@ -4,7 +4,6 @@ export interface Annotation {
     id: string;
     pageNumber?: number;
     type?: string;
-    rect?: Rect;
     pageRect?: Rect;
     screenRect?: Rect;
 }
