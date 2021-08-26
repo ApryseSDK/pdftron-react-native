@@ -750,7 +750,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
 
-  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
+  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
@@ -758,7 +758,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
+  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
