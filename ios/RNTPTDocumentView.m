@@ -2283,47 +2283,47 @@ NS_ASSUME_NONNULL_END
     NSMutableArray<UIBarButtonItem*>* defaultDrawGroupTools = [documentController.toolGroupManager.drawItemGroup.barButtonItems mutableCopy];
     NSMutableArray<UIBarButtonItem*>* newAnnotateGroupTools = [[NSMutableArray alloc] init];
     NSMutableArray<UIBarButtonItem*>* newDrawGroupTools = [[NSMutableArray alloc] init];
-    if (@available(iOS 13.1, *)) {
-        for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
+
+    for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
+    {
+        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
         {
-            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
             {
-                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-                {
-                    continue;
-                }
-                else
-                {
-                    [newAnnotateGroupTools addObject:defaultToolItem];
-                }
+                continue;
             }
             else
             {
                 [newAnnotateGroupTools addObject:defaultToolItem];
             }
         }
-
-        for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
+        else
         {
-            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            [newAnnotateGroupTools addObject:defaultToolItem];
+        }
+    }
+
+    for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
+    {
+        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+        {
+            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
             {
-                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-                {
-                    continue;
-                }
-                else
-                {
-                    [newDrawGroupTools addObject:defaultToolItem];
-                }
+                continue;
             }
             else
             {
                 [newDrawGroupTools addObject:defaultToolItem];
             }
         }
-
+        else
+        {
+            [newDrawGroupTools addObject:defaultToolItem];
+        }
+    }
+    if (@available(iOS 13.1, *)) {
         if (documentController.toolManager.freehandUsesPencilKit) {
             UIBarButtonItem* pencilItem = [documentController.toolGroupManager createItemForToolClass:[PTPencilDrawingCreate class]];
             [newAnnotateGroupTools insertObject:pencilItem atIndex:2];
