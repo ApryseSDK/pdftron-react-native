@@ -88,6 +88,8 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTThumbnailsViewController class]];
     
     _tempFilePaths = [[NSMutableArray alloc] init];
+    
+    _showSavedSignatures = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -2439,13 +2441,42 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Show saved signatures
+#pragma mark - Signatures
 
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
     _showSavedSignatures = showSavedSignatures;
     
     [self applyViewerSettings];
+}
+
+-(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
+{
+    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
+    
+    [self applyViewerSettings];
+}
+
+- (NSArray *)getSavedSignatures
+{
+    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
+    NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
+    
+    for (NSInteger i = 0; i < numOfSignatures; i++) {
+        signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+    }
+
+    return signatures;
+}
+
+-(NSString *)getSavedSignatureFolder
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryDirectory = paths[0];
+
+    NSString* fullPath = [libraryDirectory stringByAppendingPathComponent:PTSignaturesManager_signatureDirectory];
+    return fullPath;
 }
 
 # pragma mark - Dark Mode
@@ -2508,16 +2539,6 @@ NS_ASSUME_NONNULL_END
     NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
     CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
     [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
-}
-
-
-#pragma mark - signSignatureFieldsWithStamps
-
--(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
-{
-    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
-    
-    [self applyViewerSettings];
 }
 
 #pragma mark - Zoom

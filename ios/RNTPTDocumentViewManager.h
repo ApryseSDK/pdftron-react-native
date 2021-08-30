@@ -186,4 +186,8 @@
 
 - (void)openThumbnailsViewForDocumentViewTag:(NSNumber *)tag;
 
+- (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag;
+
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag;
+
 @end
