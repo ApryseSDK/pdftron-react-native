@@ -1087,6 +1087,22 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  getSavedSignatures = (): Promise<void | Array<string>> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatures(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureFolder = (): Promise<void | string> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureFolder(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
