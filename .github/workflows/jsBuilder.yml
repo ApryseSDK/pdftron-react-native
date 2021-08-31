@@ -2,7 +2,7 @@ name: Transpile TS
 
 on:
   push:
-    branches: [ts-support-js-to-ts] # <-- Change this to whatever the primary branch is (ex: master)
+    branches: [ts-support-js-to-ts] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
 
 jobs:
   build:
@@ -11,8 +11,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token.
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo.
 
       - name: Node setup
         uses: actions/setup-node@v2
@@ -21,15 +21,15 @@ jobs:
           cache: 'npm'
 
       - name: Build JavaScript files
-        run: | # Change last line to your build script command #
+        run: | # Change last line to your build script command #.
           npm i
           npm run start 
 
       - name: Force add JS files to override .gitignore
-        run: git add --force ./lib # <-- Change this to your build path
+        run: git add --force ./lib # <-- Change this to your build path.
 
       - name: Commit files
-        run: | # Change last line to your preferred commit message (I like `chore: build js files`)
+        run: | # Change last line to your preferred commit message (I like `chore: build js files`).
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "Updating JS files" -a 
@@ -39,4 +39,4 @@ jobs:
         with:
           force: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ts-master # <-- Change this to the new branch where you want builds to be
+          branch: ts-master # <-- Change this to the branch where you want builds to be (for example, "master" if you want changes to the primary branch to be applied to `master`).
