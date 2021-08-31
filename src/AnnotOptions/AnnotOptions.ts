@@ -36,9 +36,6 @@ export interface Field {
 export interface Point {
     x: number;
     y: number;
-}
-
-export interface PointWithPage extends Point {
     pageNumber?: number;
 }
 
