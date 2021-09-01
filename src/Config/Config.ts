@@ -1,3 +1,11 @@
+/**
+ * @constant
+ * @module
+ * @name Config
+ * @description Defines configuration constants for the viewer. 
+ * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.js) 
+ * for the full list of constants.
+ */
 export const Config = {
 
   // Buttons define the various kinds of buttons for the viewer

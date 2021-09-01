@@ -1,0 +1,29 @@
+{
+    "tags": {
+        "allowUnknownTags": ["optional", "category"]
+    },
+    "plugins": ["plugins/markdown",
+        "node_modules/better-docs/typescript",
+        "node_modules/better-docs/category"
+    ],
+    "source": {
+        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "include": ["lib/", "index.ts"],
+        "exclude": ["lib/index.js"]
+    },
+    "templates": {
+        "systemName"            : "PDFTron React Native",
+        "includeDate"           : "false",
+        "navType"               : "vertical",
+        "theme"                 : "lumen",
+        "linenums"              : "false",
+        "collapseSymbols"       : "true",
+        "syntaxTheme"           : "default",
+        "sort"                  : "true",
+        "search"                : "true",
+        "inverseNav"            : "false",
+        "outputSourceFiles"     : "false" ,
+	    "outputSourcePath"      : "false",
+        "useLongnameInNav": 1
+    }
+}

@@ -28,9 +28,14 @@
     "prop-types": "*"
   },
   "devDependencies": {
-    "react": "*",
     "@types/react": "*",
     "@types/react-native": "*",
+    "better-docs": "^2.3.2",
+    "jsdoc": "^3.6.7",
     "typescript": "*"
+  },
+  "dependencies": {
+    "ink-docstrap": "https://github.com/lbittner-pdftron/docstrap.git",
+    "typedoc": "^0.21.6"
   }
 }

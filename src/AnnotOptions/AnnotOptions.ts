@@ -1,5 +1,14 @@
 import {Config} from '../Config/Config';
 
+/**
+ * @typedef
+ * @category AnnotOptions
+ * @property {string} id
+ * @property {number} [pageNumber]
+ * @property {string} [type]
+ * @property {Rect} [pageRect]
+ * @property {Rect} [screenRect]
+ */
 export interface Annotation {
     id: string;
     pageNumber?: number;
@@ -8,6 +17,16 @@ export interface Annotation {
     screenRect?: Rect;
 }
 
+/**
+ * @typedef
+ * @category AnnotOptions
+ * @property {number} [height]
+ * @property {number} [width]
+ * @property {number} x1
+ * @property {number} y1
+ * @property {number} x2
+ * @property {number} y2
+ */
 export interface Rect {
     height?: number;
     width?: number;
@@ -17,27 +36,66 @@ export interface Rect {
     y2: number;
 }
 
-export type CropBox = Required<Rect>;
+/**
+ * @typedef
+ * @category AnnotOptions
+ * @augments Rect
+ */
+export interface CropBox extends Rect {
+    height: number;
+    width: number;
+};
 
+/**
+ * @interface
+ * @category AnnotOptions
+ * @property {number} red
+ * @property {number} green
+ * @property {number} blue
+ */
 export interface Color {
     red: number;
     green: number;
     blue: number;
 }
 
+/**
+ * ActionRequest
+ * @memberof AnnotOptions
+ * @alias RotationDegree
+ */
 export type RotationDegree = 0 | 90 | 180 | 270;
 
+/**
+ * @typedef
+ * @category AnnotOptions
+ * @property {string} fieldName
+ * @property {string} fieldType
+ * @property {string | boolean | number | undefined} [fieldValue]
+ */
 export interface Field {
     fieldName: string;
     fieldType: string;
     fieldValue?: string | boolean | number | undefined;
 }
 
+/**
+ * @typedef 
+ * @category AnnotOptions
+ * @property {number} x
+ * @property {number} y
+ */
 export interface Point {
     x: number;
     y: number;
 }
 
+/**
+ * @typedef
+ * @category AnnotOptions
+ * @augments Point
+ * @property {number} [pageNumber]
+ */
 export interface PointWithPage extends Point {
     pageNumber?: number;
 }

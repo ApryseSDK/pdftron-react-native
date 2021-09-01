@@ -13,6 +13,13 @@ const propTypes = {
 
 type PDFViewCtrlProps = InferProps<typeof propTypes>;
 
+/**
+  * @class
+  * @classdesc A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats. 
+  * 
+  * PDFViewCtrl is useful when a higher level of customization is required. For easy all-in-one document viewing and editing, use {@link DocumentView}.
+  * @hideconstructor
+  */
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
   static propTypes = propTypes;

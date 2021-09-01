@@ -13,54 +13,607 @@ import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 /** 
- * Object containing PropTypes types for {@link DocumentView} class.
- * Also used to generate prop types for TS users.
+ * For Users: {@link DocumentView} class props.
  * 
+ * For Contributors: Object containing PropTypes types for {@link DocumentView} class.
+ * Also used to generate prop types for TS users.
  * To represent functions, please use {@link func}.
  * To represent "one of Config.Buttons values" or "an array of 
  * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
+ * @interface propTypes
  */
-const propTypes = {
+export const propTypes = {
+  /**
+   * @type {string}
+   * @description The path or url to the document. Required.
+   * @example
+   * <DocumentView
+   *   document={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
+   * />
+   */
   document: PropTypes.string.isRequired,
+  /**
+   * @type {string}
+   * @optional
+   * @description The password of the document, if any. 
+   * @example
+   * <DocumentView
+   *   password={'password'}
+   * />
+   */
   password: PropTypes.string,
+
+  /**
+   * @type {number}
+   * @optional
+   * @description Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed. 
+   * @example
+   * <DocumentView
+   *   initialPageNumber={5}
+   * />
+   */
   initialPageNumber: PropTypes.number,
+
+  /**
+   * @type {number}
+   * @optional
+   * @description Defines the currently displayed page number. Different from {@link propTypes.initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
+   * @example
+   * <DocumentView
+   *   pageNumber={5}
+   * />
+   */
   pageNumber: PropTypes.number,
+
+  /**
+   * @type {object}
+   * @optional
+   * @description Defines custom headers to use with HTTP/HTTPS requests. 
+   * @example
+   * <DocumentView
+   *   customHeaders={{headerKey: 'headerValue'}}
+   * />
+   */
   customHeaders: PropTypes.object,
+
+  /**
+   * @type {string}
+   * @optional
+   * @description The file name of the icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise. 
+   * 
+   * **Note**: to add the image file to your application, please follow the steps below:
+   * 
+   * ##### Android
+   * 1. Add the image resource to the drawable directory in [`example/android/app/src/main/res`](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
+   * 
+   * <img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
+   * 
+   * 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
+   * 
+   * ##### iOS
+   * 1. After pods has been installed, open the `.xcworkspace` file for this application in Xcode (in this case, it's [`example.xcworkspace`](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
+   * - "Project navigator"
+   * - "example" (or the app name)
+   * - "Build Phases"
+   * - "Copy Bundle Resources"
+   * - "+".
+   * 
+   * <img alt='demo-ios' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/ios_add_resources.png'/>
+   * 
+   * 2. Now you can use the image in the viewer. For example, if you add `button_open.png` to the bundle, you could use `'button_open.png'` in leadingNavButtonIcon.
+   * 
+   * @example
+   * <DocumentView
+   *   leadingNavButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
+   * />
+   */
   leadingNavButtonIcon: PropTypes.string,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether to show the leading navigation button. 
+   * @example
+   * <DocumentView
+   *   showLeadingNavButton={true}
+   * />
+   */
   showLeadingNavButton: PropTypes.bool,
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when the leading navigation button is pressed. 
+   * @example
+   * <DocumentView
+   *   onLeadingNavButtonPressed = {() => {
+   *       console.log('The leading nav has been pressed');
+   *   }}
+   * />
+   */
   onLeadingNavButtonPressed: func<() => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when the document finishes loading.
+   * @param {string} path
+   * @example
+   * <DocumentView
+   *   onDocumentLoaded = {(path) => { 
+   *     console.log('The document has finished loading:', path); 
+   *   }}
+   * />
+   */  
   onDocumentLoaded: func<(path: string) => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when document opening encounters an error.
+   * @param {string} error
+   * @example
+   * <DocumentView
+   *   onDocumentError = {(error) => { 
+   *     console.log('Error occured during document opening:', error); 
+   *   }}
+   * />
+   */  
   onDocumentError: func<(error: string) => void>(),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when the page number has been changed.
+   * @param {object} event
+   * @param {int} event.previousPageNumber the previous page number
+   * @param {int} event.pageNumber the current page number
+   * @example
+   * <DocumentView
+   *   onPageChanged = {({previousPageNumber, pageNumber}) => {
+   *     console.log('Page number changes from', previousPageNumber, 'to', pageNumber);
+   *   }}
+   * />
+   */  
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when the scroll position has been changed.
+   * @param {object} event
+   * @param {number} event.horizontal the horizontal position of the scroll
+   * @param {number} event.vertical the vertical position of the scroll
+   * @example
+   * <DocumentView
+   *   onScrollChanged = {({horizontal, vertical}) => {
+   *     console.log('Current scroll position is', horizontal, 'horizontally, and', vertical, 'vertically.');
+   *   }}
+   * />
+   */  
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when the zoom scale has been changed.
+   * @param {object} event
+   * @param {double} event.zoom the current zoom ratio of the document
+   * @example
+   * <DocumentView
+   *   onZoomChanged = {(zoom) => {
+   *     console.log('Current zoom ratio is', zoom);
+   *   }}
+   * />
+   */  
   onZoomChanged: func<(event: {zoom: number}) => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
+   * @param {object} event
+   * @param {number} event.zoom the current zoom ratio of the document
+   * @example (temp)
+   */  
   onZoomFinished: func<(event: {zoom: number}) => void>(),
+  
+  /**
+   * @type {number}
+   * @optional
+   */
   zoom: PropTypes.number,
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.Buttons`](./src/Config/Config.js) constants, defaults to none.
+   * 
+   * Defines buttons to be disabled for the viewer.
+   * @example
+   * <DocumentView
+   *   disabledElements={[Config.Buttons.userBookmarkListButton]}
+   * />
+   */
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.Tools`](./src/Config/Config.js) constants, defaults to none.
+   * 
+   * Defines tools to be disabled for the viewer.
+   * @example
+   * <DocumentView
+   *   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
+   * />
+   */
   disabledTools: arrayOf<Config.Tools>(Config.Tools),
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, default contains all the items
+   * 
+   * Defines menu items that can show when long press on text or blank space.
+   * @example
+   * <DocumentView
+   *   longPressMenuItems={[Config.LongPressMenu.copy, Config.LongPressMenu.read]}
+   * />
+   */
   longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, defaults to none.
+   * 
+   * Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function {onLongPressMenuPress}`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+   * @example
+   * <DocumentView
+   *   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
+   * />
+   */
   overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called if the pressed long press menu item is passed in to [`overrideLongPressMenuBehavior`](#overrideLongPressMenuBehavior)
+   * @param {object} event
+   * @param {string} longPressMenu One of [`Config.LongPressMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+   * @param {string} longPressText the selected text if pressed on text, empty otherwise
+   * @example
+   * <DocumentView
+   *   onLongPressMenuPress = {({longPressMenu, longPressText}) => {
+   *     console.log('Long press menu item', longPressMenu, 'has been pressed');
+   *     if (longPressText !== '') {
+   *       console.log('The selected text is', longPressText);
+   *     }
+   *   }}
+   * />
+   */  
   onLongPressMenuPress: func<(event: {longPressMenu: string, longPressText: string}) => void>(),
+  
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether to show the popup menu of options when the user long presses on text or blank space on the document.
+   * @example
+   * <DocumentView
+   *   longPressMenuEnabled={true}
+   * />
+   */
   longPressMenuEnabled: PropTypes.bool,
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, default contains all the items.
+   * 
+   * Defines the menu items that can show when an annotation is selected.
+   * @example
+   * <DocumentView
+   *   annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
+   * />
+   */
   annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
+
+  /** 
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, defaults to none.
+   * 
+   * Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
+   * @example 
+   * <DocumentView
+   *   overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
+   * />
+   */
   overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when an annotation menu item passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior) is pressed.
+   * @param {string} annotationMenu One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+   * @param {object[]} annotations An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.
+   * 
+   * `id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. 
+   * 
+   * `screenRect` was formerly called `rect`. 
+   * 
+   * Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
+   * @example
+   * <DocumentView
+   *   onAnnotationMenuPress = {({annotationMenu, annotations}) => {
+   *     console.log('Annotation menu item', annotationMenu, 'has been pressed');
+   *     annotations.forEach(annotation => {
+   *       console.log('The id of selected annotation is', annotation.id);
+   *       console.log('The page number of selected annotation is', annotation.pageNumber);
+   *       console.log('The type of selected annotation is', annotation.type);
+   *       console.log('The screenRect of selected annotation is', annotation.screenRect);
+   *       console.log('The pageRect of selected annotation is', annotation.pageRect);
+   *     });
+   *   }}
+   * />
+   */  
   onAnnotationMenuPress: func<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
+   * 
+   * Defines annotation types that will not show in the annotation (long-press) menu.
+   * @example 
+   * <DocumentView
+   *   hideAnnotationMenu={[Config.Tools.annotationCreateArrow, Config.Tools.annotationEraserTool]}
+   * />
+   */
   hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
+
+  /**
+   * @type {string[]}
+   * @optional
+   * @description Array of [`Config.Actions`](./src/Config/Config.js) constants, defaults to none
+   * 
+   * Defines actions that will skip default behavior, such as external link click. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
+   * @example
+   * <DocumentView
+   *   overrideBehavior={[Config.Actions.linkPress]}
+   * />
+   */
   overrideBehavior: arrayOf<Config.Actions>(Config.Actions),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called if the activated behavior is passed in to [`overrideBehavior`](#overrideBehavior)
+   * @param {string} action One of [`Config.Actions`](./src/Config/Config.js) constants, representing which action has been activated
+   * @param {object} data A JSON object that varies depending on the action.
+   * 
+   * If action is `Config.Actions.linkPress`, data type is `{url: string}`.
+   * 
+   * If action is `Config.Actions.stickyNoteShowPopUp`, data type is `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, 
+   * where `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants, and `screenRect` was formerly called `rect`.
+   * @example
+   * <DocumentView
+   *   onBehaviorActivated = {({action, data}) => {
+   *     console.log('Activated action is', action);
+   *     if (action === Config.Actions.linkPress) {
+   *       console.log('The external link pressed is', data.url);
+   *     } else if (action === Config.Actions.stickyNoteShowPopUp) {
+   *       console.log('Sticky note has been activated, but it would not show a pop up window.');
+   *     }
+   *   }}
+   * />
+   */
   onBehaviorActivated: func<(event: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
+  
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @deprecated Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
+   */
   topToolbarEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether the bottom toolbar of the viewer is enabled.
+   * @example
+   * <DocumentView
+   *   bottomToolbarEnabled={false}
+   * />
+   */
   bottomToolbarEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether an unhandled tap in the viewer should toggle the visibility of the top and bottom toolbars. When false, the top and bottom toolbar visibility will not be toggled and the page content will fit between the bars, if any.
+   * @example
+   * <DocumentView
+   *   hideToolbarsOnTap={false}
+   * />
+   */
   hideToolbarsOnTap: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether the document slider of the viewer is enabled.
+   * @example
+   * <DocumentView
+   *   documentSliderEnabled={false}
+   * />
+   */
   documentSliderEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether to show the page indicator for the viewer.
+   * @example
+   * <DocumentView
+   *   pageIndicatorEnabled={true}
+   * />
+   */
   pageIndicatorEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description iOS only
+   * 
+   * Defines whether the keyboard shortcuts of the viewer are enabled.
+   * @example
+   * <DocumentView
+   *   keyboardShortcutsEnabled={false}
+   * />
+   */
   keyboardShortcutsEnabled: PropTypes.bool,
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called when an annotation(s) is selected.
+   * @param {object} event
+   * @param {object[]} annotations array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+   * @example
+   * <DocumentView
+   *   onAnnotationsSelected = {({annotations}) => {
+   *     annotations.forEach(annotation => {
+   *       console.log('The id of selected annotation is', annotation.id);
+   *       console.log('It is in page', annotation.pageNumber);
+   *       console.log('Its type is', annotation.type);
+   *     });
+   *   }}
+   * />
+   */  
   onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called if a change has been made to an annotation(s) in the current document.
+   * @param {object} event 
+   * @param {string} event.action the action that occurred (add, delete, modify)
+   * @param {object[]} event.annotations array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
+   * @example
+   * <DocumentView
+   *   onAnnotationChanged = {({action, annotations}) => {
+   *     console.log('Annotation edit action is', action);
+   *     annotations.forEach(annotation => {
+   *       console.log('The id of changed annotation is', annotation.id);
+   *       console.log('It is in page', annotation.pageNumber);
+   *       console.log('Its type is', annotation.type);
+   *     });
+   *   }}
+   * />
+   */  
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description This function is called if a change has been made to form field values.
+   * @param {object} event
+   * @param {object[]} event.fields array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
+   * @example
+   * <DocumentView
+   *   onFormFieldValueChanged = {({fields}) => {
+   *     fields.forEach(field => {
+   *       console.log('The name of the changed field is', field.fieldName);
+   *       console.log('The type of the changed field is', field.fieldType);
+   *       console.log('The value of the changed field is', field.fieldValue);
+   *     });
+   *   }}
+   * />
+   */  
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether the viewer is read-only. If true, the UI will not allow the user to change the document.
+   * @example
+   * <DocumentView
+   *   readOnly={true}
+   * />
+   */
   readOnly: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether user can modify the document using the thumbnail view (eg add/remove/rotate pages).
+   * @example
+   * <DocumentView
+   *   thumbnailViewEditingEnabled={true}
+   * />
+   */
   thumbnailViewEditingEnabled: PropTypes.bool,
+
+  /**
+   * @type {string}
+   * @optional
+   * @default 'FitWidth'
+   * @description One of the [`Config.FitMode`](./src/Config/Config.js) constants.
+   * 
+   * Defines the fit mode (default zoom level) of the viewer.
+   * @example
+   * <DocumentView
+   *   fitMode={Config.FitMode.FitPage}
+   * />
+   */
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
+
+  /**
+   * @type {string}
+   * @optional
+   * @default 'Continuous'
+   * @description One of the [`Config.LayoutMode`](./src/Config/Config.js) constants.
+   * 
+   * Defines the layout mode of the viewer.
+   * @example
+   * <DocumentView
+   *   layoutMode={Config.LayoutMode.FacingContinuous}
+   * />
+   */
   layoutMode: oneOf<Config.LayoutMode>(Config.LayoutMode),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onLayoutChanged: func<() => void>(),
   padStatusBar: PropTypes.bool,
   continuousAnnotationEditing: PropTypes.bool,
@@ -71,6 +624,14 @@ const propTypes = {
   collabEnabled: PropTypes.bool,
   currentUser: PropTypes.string,
   currentUserName: PropTypes.string,
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onExportAnnotationCommand: func<(event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   autoSaveEnabled: PropTypes.bool,
   pageChangeOnTap: PropTypes.bool,
@@ -96,12 +657,43 @@ const propTypes = {
   hideAnnotationToolbarSwitcher: PropTypes.bool,
   hideTopToolbars: PropTypes.bool,
   hideTopAppNavBar: PropTypes.bool,
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onBookmarkChanged: func<(event: {bookmarkJson: string}) => void>(),
   hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
   horizontalScrollPos: PropTypes.number,
   verticalScrollPos: PropTypes.number,
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onTextSearchStart: func<() => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
   hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
   pageStackEnabled: PropTypes.bool,
@@ -114,6 +706,14 @@ const propTypes = {
   userBookmarksListEditingEnabled: PropTypes.bool,
   imageInReflowEnabled: PropTypes.bool,
   reflowOrientation: oneOf<Config.ReflowOrientation>(Config.ReflowOrientation),
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onUndoRedoStateChanged: func<() => void>(),
   tabletLayoutEnabled: PropTypes.bool,
   initialToolbar: PropTypes.string,
@@ -127,12 +727,20 @@ const propTypes = {
   openSavedCopyInNewTab: PropTypes.bool,
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
   replyReviewStateEnabled: PropTypes.bool,
+  
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description (temp)
+   * @example (temp)
+   */  
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
-  ...ViewPropTypes,
+  //...ViewPropTypes,
 };
 
 // Generates the prop types for TypeScript users, from PropTypes.
-type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
+export type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 
 /**
 * Creates a custom PropType for functions.
@@ -142,6 +750,7 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 * @returns {Requireable<T>} A custom PropType constant.
 * @example
 * func<(path: string) => void>()
+* @ignore
 */
 function func<T> () : Requireable<T> {
   
@@ -165,7 +774,8 @@ function func<T> () : Requireable<T> {
  * @example
  * oneOf<Config.Tools>(Config.Tools)
  * oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
-*/
+ * @ignore
+ */
 function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
   if (rest.length > 0) {
     return PropTypes.oneOf(Object.values(Object.assign({}, obj, ...rest)));
@@ -181,15 +791,24 @@ function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
  * @example
  * arrayOf<Config.Tools>(Config.Tools)
  * arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
+ * @ignore
 */
 function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   return PropTypes.arrayOf(oneOf<T>(obj, ...rest)) as Requireable<T[]>;
 }
-export class DocumentView extends PureComponent<DocumentViewProps, any> {
+/**
+  * @class
+  * @classdesc An all-in-one React component for displaying and editing documents of different types such as PDF, docx, pptx, xlsx and various image formats.
+  * @hideconstructor
+  */
+ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   _viewerRef: any;
 
-  static propTypes = propTypes;
+  /**
+   * Properties to pass into {@link DocumentView}. See {@link propTypes} for the full list of properties and their documentation.
+   */
+  static propTypes = Object.assign(propTypes, {...ViewPropTypes});
 
   onChange = (event: any) => {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
@@ -332,6 +951,15 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   // Methods
 
+  /**
+   * @method
+   * @description Returns the path of the current document. If {@link propTypes.document document} is true, this would be the path to the temporary pdf file converted from the base64 string in {@link propTypes.document document}.
+   * @returns {Promise<void | string>} path - the document path. 
+   * @example
+   * this._viewer.getDocumentPath().then((path) => {
+   *   console.log('The path to current document is: ' + path);
+   * });
+   */
   getDocumentPath = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -340,7 +968,16 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
-
+/**
+ * @method
+ * @description Sets the current tool mode.
+ * @param {string} toolMode One of [`Config.Tools`](./src/Config/Config.js) constants, representing the tool mode to set.
+ * @returns {Promise<void>}
+ * @example
+ * this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
+ *   // done switching tools
+ * });
+ */
   setToolMode = (toolMode: Config.Tools): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -349,7 +986,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  commitTool = (): Promise<void | boolean> => {
+  /** @method */
+commitTool = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.commitTool(tag);
@@ -357,7 +995,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageCount = (): Promise<void | number> => {
+  /** @method */
+getPageCount = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
@@ -365,7 +1004,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  importBookmarkJson = (bookmarkJson: string): Promise<void> => {
+  /** @method */
+importBookmarkJson = (bookmarkJson: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
@@ -373,6 +1013,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /** @method */
   openBookmarkList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -381,6 +1022,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  
+/**
+   * @method
+   * @description Imports remote annotation command to local document.
+   * @param {string} xfdfCommand the XFDF command string
+   * @param {boolean} [initialLoad=false] whether this is for initial load.
+   * @returns {Promise<void>}
+   */
   importAnnotationCommand = (xfdfCommand: string, initialLoad?: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -396,7 +1045,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  importAnnotations = (xfdf: string): Promise<void> => {
+  /** @method */
+importAnnotations = (xfdf: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importAnnotations(tag, xfdf);
@@ -404,7 +1054,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void | string> => {
+  /** @method */
+exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.exportAnnotations(tag, options);
@@ -412,6 +1063,16 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+
+/**
+   * @method
+   * @description Flattens the forms and (optionally) annotations in the current document.
+   * @param {boolean} formsOnly Defines whether only forms are flattened. If false, all annotations will be flattened
+   * @returns {Promise<void>}
+   * @example
+   * // flatten forms and annotations in the current document.
+   * this._viewer.flattenAnnotations(false);
+   */
   flattenAnnotations = (formsOnly: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -420,7 +1081,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void> => {
+  /** @method */
+deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.deleteAnnotations(tag, annotations);
@@ -428,7 +1090,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  saveDocument = (): Promise<void | string> => {
+  /** @method */
+saveDocument = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.saveDocument(tag);
@@ -436,7 +1099,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
+  /** @method */
+setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
@@ -444,7 +1108,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: any, fieldType?: string}> => {
+  /** @method */
+getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: any, fieldType?: string}> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
@@ -452,7 +1117,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  openAnnotationList = (): Promise<void> => {
+  /** @method */
+openAnnotationList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.openAnnotationList(tag);
@@ -460,7 +1126,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  /**
+/**
+  * @method
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
   */
@@ -468,6 +1135,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return this.setValuesForFields(fieldsMap);
   }
 
+  /** @method */
   setValuesForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
@@ -476,7 +1144,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  handleBackButton = (): Promise<void | boolean> => {
+  /** @method */
+handleBackButton = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.handleBackButton(tag);
@@ -484,15 +1153,20 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  
   /**
-  * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
+  * @method
+  * @description Sets flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
+  * Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
+  * 
+  * @param {object} annotationFlagList A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of AnnotationFlags constants, flagValue: bool}
+  * @returns {Promise<void>}
   * 
   */
   setFlagForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     return this.setFlagsForAnnotations(annotationFlagList);  
   }
   
+  /** @method */
   setFlagsForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -501,7 +1175,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
+  /** @method */
+selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAnnotation(tag, id, pageNumber);
@@ -509,7 +1184,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  /**
+/**
+  * @method
+  * @description
   * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
   * 
   */
@@ -517,6 +1194,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
   }
 
+  /** @method */
   setPropertiesForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -525,7 +1203,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
+  /** @method */
+getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
@@ -533,7 +1212,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
+  /** @method */
+setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
@@ -541,7 +1221,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolean): Promise<void> => {
+  /** @method */
+setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
@@ -549,6 +1230,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /** @method */
   setHighlightFields = (highlightFields: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -557,7 +1239,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
+  /** @method */
+getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
@@ -565,7 +1248,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
+  /** @method */
+getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListAt(tag, x1, y1, x2, y2);
@@ -573,7 +1257,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
+  /** @method */
+getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
@@ -581,7 +1266,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
+  /** @method */
+getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
@@ -589,7 +1275,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
+  /** @method */
+getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCropBox(tag, pageNumber);
@@ -597,6 +1284,18 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+/**
+   * @method
+   * @description Sets current page of the document.
+   * @param {integer} pageNumber the page number to be set as the current page; 1-indexed
+   * @returns {boolean} whether the setting process was successful
+   * @example
+   * this._viewer.setCurrentPage(4).then((success) => {
+   *   if (success) {
+   *     console.log("Current page is set to 4.");
+   *   }
+   * });
+   */
   setCurrentPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -605,7 +1304,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getVisiblePages = (): Promise<void | Array<number>> => {
+  /** @method */
+getVisiblePages = (): Promise<void | Array<number>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getVisiblePages(tag);
@@ -613,7 +1313,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoPreviousPage = (): Promise<void | boolean> => {
+  /** @method */
+gotoPreviousPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoPreviousPage(tag);
@@ -621,7 +1322,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoNextPage = (): Promise<void | boolean> => {
+  /** @method */
+gotoNextPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoNextPage(tag);
@@ -629,7 +1331,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoFirstPage = (): Promise<void | boolean> => {
+  /** @method */
+gotoFirstPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoFirstPage(tag);
@@ -637,7 +1340,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  gotoLastPage = (): Promise<void | boolean> => {
+  /** @method */
+gotoLastPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoLastPage(tag);
@@ -645,7 +1349,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  showGoToPageView = (): Promise<void> => {
+  /** @method */
+showGoToPageView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.showGoToPageView(tag);
@@ -653,7 +1358,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  closeAllTabs = (): Promise<void> => {
+  /** @method */
+closeAllTabs = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.closeAllTabs(tag);
@@ -661,7 +1367,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  openTabSwitcher = (): Promise<void> => {
+  /** @method */
+openTabSwitcher = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openTabSwitcher(tag);
@@ -669,7 +1376,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getZoom = (): Promise<void | number> => {
+  /** @method */
+getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
@@ -677,7 +1385,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
+  /** @method */
+setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
@@ -685,7 +1394,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
+  /** @method */
+zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.zoomWithCenter(tag, zoom, x, y);
@@ -693,7 +1403,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
+  /** @method */
+zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.zoomToRect(tag, pageNumber, rect);
@@ -701,7 +1412,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
+  /** @method */
+smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.smartZoom(tag, x, y, animated);
@@ -709,6 +1421,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /** @method */
   getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -717,6 +1430,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
     
+  /** @method */
   getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -725,7 +1439,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
+  /** @method */
+getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageRotation(tag);
@@ -733,7 +1448,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  rotateClockwise = (): Promise<void> => {
+  /** @method */
+rotateClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.rotateClockwise(tag);
@@ -741,7 +1457,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  rotateCounterClockwise = (): Promise<void> => {
+  /** @method */
+rotateCounterClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.rotateCounterClockwise(tag);
@@ -749,7 +1466,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-
+  /** @method */
   convertScreenPointsToPagePoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -758,7 +1475,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
+  /** @method */
+convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
@@ -766,7 +1484,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
+  /** @method */
+getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
@@ -774,7 +1493,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
+  /** @method */
+setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
@@ -782,7 +1502,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
+  /** @method */
+setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
@@ -790,7 +1511,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
+  /** @method */
+setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setOverprint(tag, overprint);
@@ -798,7 +1520,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
+  /** @method */
+setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
@@ -806,7 +1529,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
+  /** @method */
+setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
@@ -814,7 +1538,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
+  /** @method */
+startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.startSearchMode(tag, searchString, matchCase, matchWholeWord);
@@ -822,7 +1547,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exitSearchMode = (): Promise<void> => {
+  /** @method */
+exitSearchMode = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.exitSearchMode(tag);
@@ -830,7 +1556,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
+  /** @method */
+findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
@@ -838,7 +1565,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  cancelFindText = (): Promise<void> => {
+  /** @method */
+cancelFindText = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.cancelFindText(tag);
@@ -846,7 +1574,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  openSearch = (): Promise<void> => {
+  /** @method */
+openSearch = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openSearch(tag);
@@ -854,6 +1583,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /** @method */
   getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -862,7 +1592,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  hasSelection = (): Promise<void | boolean> => {
+  /** @method */
+hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelection(tag);
@@ -870,7 +1601,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  clearSelection = (): Promise<void> => {
+  /** @method */
+clearSelection = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.clearSelection(tag);
@@ -878,7 +1610,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
+  /** @method */
+getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getSelectionPageRange(tag);
@@ -886,7 +1619,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
+  /** @method */
+hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelectionOnPage(tag, pageNumber);
@@ -894,7 +1628,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  
+  /** @method */
+
   selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -903,7 +1638,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
+  /** @method */
+isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.isThereTextInRect(tag, rect);
@@ -911,7 +1647,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  selectAll = (): Promise<void> => {
+  /** @method */
+selectAll = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAll(tag);
@@ -919,7 +1656,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
+  /** @method */
+setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setPageBorderVisibility(tag, pageBorderVisibility);
@@ -927,7 +1665,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
+  /** @method */
+setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setPageTransparencyGrid(tag, pageTransparencyGrid);
@@ -935,7 +1674,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
+  /** @method */
+setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setDefaultPageColor(tag, defaultPageColor);
@@ -943,7 +1683,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
+  /** @method */
+setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setBackgroundColor(tag, backgroundColor);
@@ -951,7 +1692,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
+  /** @method */
+exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
@@ -959,7 +1701,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  undo = (): Promise<void> => {
+  /** @method */
+undo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.undo(tag);
@@ -967,7 +1710,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  redo = (): Promise<void> => {
+  /** @method */
+redo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.redo(tag);
@@ -975,7 +1719,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  canUndo = (): Promise<void | boolean> => {
+  /** @method */
+canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canUndo(tag);
@@ -983,7 +1728,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  canRedo = (): Promise<void | boolean> => {
+  /** @method */
+canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canRedo(tag);
@@ -991,7 +1737,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  showCrop = (): Promise<void> => {
+  /** @method */
+showCrop = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showCrop(tag);
@@ -999,7 +1746,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setCurrentToolbar = (toolbar: string): Promise<void> => {
+  /** @method */
+setCurrentToolbar = (toolbar: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
@@ -1007,6 +1755,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /** @method */
   showViewSettings = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1015,7 +1764,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  showRotateDialog = (): Promise<void> => {
+  /** @method */
+showRotateDialog = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showRotateDialog(tag);
@@ -1023,6 +1773,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /**
+   * @method
+   */
   showAddPagesView = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1031,7 +1784,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  isReflowMode = (): Promise<void | boolean> => {
+  /** @method */
+isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.isReflowMode(tag);
@@ -1039,7 +1793,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  toggleReflow = (): Promise<void> => {
+  /** @method */
+toggleReflow = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.toggleReflow(tag);
@@ -1047,7 +1802,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
+  /** @method */
+shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.shareCopy(tag, rect, flattening);
@@ -1063,7 +1819,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  openOutlineList = (): Promise<void> => {
+  /** @method */
+openOutlineList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openOutlineList(tag);
@@ -1071,7 +1828,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  openLayersList = (): Promise<void> => {
+  /** @method */
+openLayersList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openLayersList(tag);
@@ -1079,6 +1837,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+/**
+   * @method
+   * @description Displays the existing list container. Its current tab will be the one last opened. 
+   * @example this._viewer.openNavigationLists();
+   */
+  
   openNavigationLists = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1087,15 +1851,21 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  _setNativeRef = (ref: any) => {
+  /** @ignore */
+_setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
 
+  /**
+   * @ignore
+   * 
+   */
   render() {
     return (
       // @ts-ignore
       <RCTDocumentView
         ref={this._setNativeRef}
+        // @ts-ignore
         style={{ flex:1 }}
         // @ts-ignore: Intentionally exclude `onChange` from being exposed as a prop.
         onChange={this.onChange}
