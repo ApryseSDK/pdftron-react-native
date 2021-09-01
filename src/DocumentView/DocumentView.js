@@ -1015,6 +1015,22 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
+  getSavedSignatures = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatures(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureFolder = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureFolder(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref) => {
     this._viewerRef = ref;
   };

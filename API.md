@@ -3100,6 +3100,48 @@ this._viewer.canRedo().then((canRedo) => {
 });
 ```
 
+### Signatures
+
+#### getSavedSignatures
+Gets a list of absolute file paths to PDFs containing the saved signatures.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+signatures | array | an array of string containing the absolute file paths; if there are no saved signatures, the value is an empty array
+
+```js
+this._viewer.getSavedSignatures().then((signatures) => {
+  if (signatures.length > 0) {
+    signatures.forEach((signature) => {
+      console.log(signature);
+    });
+  }
+})
+```
+
+#### getSavedSignatureFolder
+Retrieves the absolute file path to the folder containing the saved signatures
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the absolute file path to the folder
+
+```js
+this._viewer.getSavedSignatureFolder().then((path) => {
+  if (path != null) {
+    console.log(path);
+  }
+})
+```
+
 ### Others
 
 #### exportAsImage

@@ -84,6 +84,7 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
@@ -4190,6 +4191,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null) {
             mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
         }
+    }
+
+    public ReadableArray getSavedSignatures() {
+        WritableArray signatures = Arguments.createArray();
+        Context context = getContext();
+        if (context != null) {
+            File[] files = StampManager.getInstance().getSavedSignatures(context);    
+            for (int i = 0; i < files.length; i++) {
+                signatures.pushString(files[i].getAbsolutePath());
+            }
+        }
+        return signatures;
+    }
+
+    public String getSavedSignatureFolder() {
+        Context context = getContext();
+        if (context != null) {
+            File file = StampManager.getInstance().getSavedSignatureFolder(context);
+            return file.getAbsolutePath();
+        }
+        return "";
     }
     
     public void setSaveStateEnabled(boolean saveStateEnabled) {

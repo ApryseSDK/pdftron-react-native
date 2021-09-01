@@ -277,6 +277,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 // Contexts.
 static void *TabChangedContext = &TabChangedContext;
 
+// To access the saved signatures folder
+static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -618,6 +621,10 @@ static void *TabChangedContext = &TabChangedContext;
 - (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
 
 - (void)openThumbnailsView;
+
+-(NSArray *)getSavedSignatures;
+
+-(NSString *)getSavedSignatureFolder;
 
 @end
 
