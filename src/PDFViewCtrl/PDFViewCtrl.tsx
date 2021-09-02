@@ -11,6 +11,7 @@ const propTypes = {
   ...ViewPropTypes,
 }
 
+// Generates the prop types for TypeScript users, from PropTypes.
 type PDFViewCtrlProps = InferProps<typeof propTypes>;
 
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
