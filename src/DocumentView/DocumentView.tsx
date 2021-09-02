@@ -23,9 +23,9 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  */
 
 /** 
- * @interface propTypes
- * This object outlines valid {@link DocumentView} class props. These
- * can be passed into {@link DocumentView} to customize the viewer.
+ * @interface
+ * @description This object outlines valid {@link DocumentView} class props. 
+ * These can be passed into {@link DocumentView} to customize the viewer.
  */
 export const propTypes = {
   /**
