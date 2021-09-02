@@ -50,3 +50,6 @@ example/android/app/src/main/assets/index.android.bundle.meta
 
 # Build
 /lib
+
+# Auto-gen Docs
+/out
