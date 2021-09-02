@@ -15,5 +15,11 @@
         "systemName"            : "PDFTron React Native",
         "collapseSymbols"       : false,
         "hideAttribs"           : true
+    },
+    "opts": {
+        "template": "./node_modules/ink-docstrap/template-algolia",
+        "destination": "./docs/",
+        "recurse": true,
+        "readme": "./docs/DocHome.md"
     }
 }
