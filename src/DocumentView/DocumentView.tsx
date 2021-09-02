@@ -12,15 +12,20 @@ const { DocumentViewManager } = NativeModules;
 import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
-/** 
- * For Users: {@link DocumentView} class props.
+/**
+ * For Contributors: The propTypes interface below contains PropTypes types for 
+ * the {@link DocumentView} class.
+ * It is also used to generate custom types for TS users.
  * 
- * For Contributors: Object containing PropTypes types for {@link DocumentView} class.
- * Also used to generate prop types for TS users.
  * To represent functions, please use {@link func}.
  * To represent "one of Config.Buttons values" or "an array of 
  * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
+ */
+
+/** 
  * @interface propTypes
+ * This object outlines valid {@link DocumentView} class props. These
+ * can be passed into {@link DocumentView} to customize the viewer.
  */
 export const propTypes = {
   /**

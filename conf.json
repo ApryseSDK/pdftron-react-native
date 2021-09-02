@@ -13,6 +13,7 @@
     },
     "templates": {
         "systemName"            : "PDFTron React Native",
-        "collapseSymbols"       : "true"
+        "collapseSymbols"       : true,
+        "hideAttribs"           : true
     }
 }
