@@ -1022,7 +1022,7 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   tabTitle={'tab1'}
 />
 ```
@@ -1034,8 +1034,31 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   maxTabCount={5}
+/>
+```
+
+#### onTabChanged
+function, optional
+
+The function is activated when a tab is changed. 
+
+Please note that this API is meant for tab-specific changes. If you would like to know when the document finishes loading instead, see the [`onDocumentLoaded`](#onDocumentLoaded) event.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+currentTab | string | The file path of current tab's document
+
+
+```js
+<DocumentView
+  multiTabEnabled={true}
+  onTabChanged={({currentTab}) => {
+    console.log("The current tab is ", currentTab);
+  }}
 />
 ```
 
