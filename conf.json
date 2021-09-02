@@ -13,17 +13,6 @@
     },
     "templates": {
         "systemName"            : "PDFTron React Native",
-        "includeDate"           : "false",
-        "navType"               : "vertical",
-        "theme"                 : "lumen",
-        "linenums"              : "false",
-        "collapseSymbols"       : "true",
-        "syntaxTheme"           : "default",
-        "sort"                  : "true",
-        "search"                : "true",
-        "inverseNav"            : "false",
-        "outputSourceFiles"     : "false" ,
-	    "outputSourcePath"      : "false",
-        "useLongnameInNav": 1
+        "collapseSymbols"       : "true"
     }
 }

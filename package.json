@@ -35,7 +35,7 @@
     "typescript": "*"
   },
   "dependencies": {
-    "ink-docstrap": "https://github.com/lbittner-pdftron/docstrap.git",
+    "ink-docstrap": "git+https://github.com/akwanpdf/docstrap.git#pdftron-react-native",
     "typedoc": "^0.21.6"
   }
 }
