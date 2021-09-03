@@ -16,7 +16,8 @@
         "collapseSymbols"       : false,
         "hideAttribs"           : true,
         "detailsSameLine"       : true,
-        "returnsInTable"        : true
+        "returnsInTable"        : true,
+        "hideMethodSignature"   : true
     },
     "opts": {
         "template": "./node_modules/ink-docstrap/template-algolia",
