@@ -53,6 +53,7 @@ export interface Pdftron
      * @description Gets the font list available on the OS (Android only).
      * This is typically useful when you are mostly working with non-ascii characters in the viewer.
      * @returns {Promise<string>} fontList - the font list available on Android
+     * @returns {Promise<number>} fontNumber - the font number available on iOS
      * @example
      * RNPdftron.getSystemFontList().then((fontList) => {
      *   console.log("OS font list:", fontList);

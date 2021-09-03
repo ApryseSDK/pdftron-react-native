@@ -15,7 +15,8 @@
         "systemName"            : "PDFTron React Native",
         "collapseSymbols"       : false,
         "hideAttribs"           : true,
-        "detailsSameLine"       : true
+        "detailsSameLine"       : true,
+        "returnsInTable"        : true
     },
     "opts": {
         "template": "./node_modules/ink-docstrap/template-algolia",
