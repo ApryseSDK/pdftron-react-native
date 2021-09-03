@@ -128,6 +128,7 @@ const propTypes = {
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
+  onTabChanged: func<(event: {currentTab: string}) => void>(),
   ...ViewPropTypes,
 };
 
@@ -325,6 +326,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
         this.props.onPageMoved({
           'previousPageNumber': event.nativeEvent.previousPageNumber,
           'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
+    } else if (event.nativeEvent.onTabChanged) {
+      if (this.props.onTabChanged) {
+        this.props.onTabChanged({
+          'currentTab' : event.nativeEvent.currentTab
         });
       }
     }
