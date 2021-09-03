@@ -1,6 +1,6 @@
 /**
  * @constant
- * @module
+ * @class
  * @name Config
  * @description Defines configuration constants for the viewer. 
  * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.js) 
