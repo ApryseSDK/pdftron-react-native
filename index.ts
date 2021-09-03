@@ -5,10 +5,10 @@ import { Config } from './src/Config/Config';
 import * as AnnotOptions from './src/AnnotOptions/AnnotOptions';
 
 /**
- * @typedef Pdftron
- * @description Contains {@link RNPdftron} methods. The Pdftron interface is implemented internally by PDFTron.
+ * @typedef RNPdftron
+ * @description RNPdftron contains static methods for global library initialization, configuration, and utility methods.
  */
-export interface Pdftron 
+interface RNPdftron 
 {
     /**
      * @method
@@ -103,11 +103,9 @@ export interface Pdftron
 
 /**
  * @class
- * @classdesc RNPdftron contains static methods for global library initialization, configuration, and utility methods.
- * @see {@link Pdftron} interface for RNPdftron method descriptions.
  * @hideconstructor
  */
-const RNPdftron : Pdftron = NativeModules.RNPdftron;
+const RNPdftron : RNPdftron = NativeModules.RNPdftron;
 
 export {
     RNPdftron,
