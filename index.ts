@@ -29,7 +29,7 @@ export interface Pdftron
     /**
      * @method
      * @description Gets the current PDFNet version.
-     * @returns version - currentPDFNet version
+     * @returns {Promise<string>} version - currentPDFNet version
      * @example
      * RNPdftron.getVersion().then((version) => {
      *   console.log("Current PDFNet version:", version);
@@ -40,7 +40,7 @@ export interface Pdftron
     /**
      * @method
      * @description Gets the version of current platform (Android/iOS).
-     * @returns platformVersion - current platform version (Android/iOS)
+     * @returns {Promise<string>} platformVersion - current platform version (Android/iOS)
      * @example
      * RNPdftron.getPlatformVersion().then((platformVersion) => {
      *   console.log("App currently running on:", platformVersion);
@@ -52,7 +52,7 @@ export interface Pdftron
      * @method
      * @description Gets the font list available on the OS (Android only).
      * This is typically useful when you are mostly working with non-ascii characters in the viewer.
-     * @returns fontList - the font list available on Android
+     * @returns {Promise<string>} fontList - the font list available on Android
      * @example
      * RNPdftron.getSystemFontList().then((fontList) => {
      *   console.log("OS font list:", fontList);
@@ -92,7 +92,7 @@ export interface Pdftron
      * The user is responsible for cleaning up the temporary file that is generated.
      * @param {string} docxPath the local file path to the template file
      * @param {object} json the replacement data in the form of a JSON object
-     * @returns resultPdfPath - the local file path to the generated PDF 
+     * @returns {Promise<string>} resultPdfPath - the local file path to the generated PDF 
      * @example
      * RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultPdfPath) => {
      *   console.log(resultPdfPath);
