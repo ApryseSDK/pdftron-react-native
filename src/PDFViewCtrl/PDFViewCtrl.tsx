@@ -6,12 +6,24 @@ import {
   Platform
 } from 'react-native';
 
-const propTypes = {
+/** 
+ * @interface
+ * @description This object outlines valid {@link PDFViewCtrl} class props. 
+ * These can be passed into {@link PDFViewCtrl} to customize the viewer.
+ */
+const PDFViewCtrlPropTypes = {
+    /**
+   * @type {string}
+   * @description The path or url to the document. Required.
+   * @example
+   * <PDFViewCtrl
+   *   document={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
+   * />
+   */
   document: PropTypes.string.isRequired,
-  ...ViewPropTypes,
 }
 
-type PDFViewCtrlProps = InferProps<typeof propTypes>;
+type PDFViewCtrlProps = InferProps<typeof PDFViewCtrlPropTypes>;
 
 /**
   * @class
@@ -22,11 +34,15 @@ type PDFViewCtrlProps = InferProps<typeof propTypes>;
   */
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
-  static propTypes = propTypes;
+    /**
+   * Properties to pass into {@link PDFViewCtrl}. See {@link PDFViewCtrlPropTypes} for the full list of properties and their documentation.
+   */
+     static propTypes = Object.assign(PDFViewCtrlPropTypes, {...ViewPropTypes});
 
   render() {
     return (
       <RCTPDFViewCtrl
+        // @ts-ignore
         style={{ flex:1 }}
         {...this.props}
       />

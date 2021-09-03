@@ -27,7 +27,7 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  * @description This object outlines valid {@link DocumentView} class props. 
  * These can be passed into {@link DocumentView} to customize the viewer.
  */
-export const propTypes = {
+export const DocumentViewPropTypes = {
   /**
    * @type {string}
    * @description The path or url to the document. Required.
@@ -745,7 +745,7 @@ export const propTypes = {
 };
 
 // Generates the prop types for TypeScript users, from PropTypes.
-export type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
+export type DocumentViewProps = PropTypes.InferProps<typeof DocumentViewPropTypes>;
 
 /**
 * Creates a custom PropType for functions.
@@ -811,9 +811,9 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   _viewerRef: any;
 
   /**
-   * Properties to pass into {@link DocumentView}. See {@link propTypes} for the full list of properties and their documentation.
+   * Properties to pass into {@link DocumentView}. See {@link DocumentViewPropTypes} for the full list of properties and their documentation.
    */
-  static propTypes = Object.assign(propTypes, {...ViewPropTypes});
+  static propTypes = Object.assign(DocumentViewPropTypes, {...ViewPropTypes});
 
   onChange = (event: any) => {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
@@ -1293,7 +1293,7 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
    * @method
    * @description Sets current page of the document.
    * @param {integer} pageNumber the page number to be set as the current page; 1-indexed
-   * @returns {boolean} whether the setting process was successful
+   * @returns {boolean} success - whether the setting process was successful
    * @example
    * this._viewer.setCurrentPage(4).then((success) => {
    *   if (success) {
