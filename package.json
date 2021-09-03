@@ -8,7 +8,9 @@
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "tsc"
+    "start": "tsc",
+    "build-docs": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json",
+    "build-docs-vanilla-theme": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json -t ./node_modules/ink-docstrap/template-vanilla"
   },
   "repository": {
     "type": "git",
