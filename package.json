@@ -33,11 +33,9 @@
     "@types/react": "*",
     "@types/react-native": "*",
     "better-docs": "^2.3.2",
-    "jsdoc": "^3.6.7",
-    "typescript": "*"
-  },
-  "dependencies": {
     "ink-docstrap": "git+https://github.com/akwanpdf/docstrap.git#pdftron-react-native",
-    "typedoc": "^0.21.6"
+    "jsdoc": "^3.6.7",
+    "typedoc": "^0.21.6",
+    "typescript": "*"
   }
 }
