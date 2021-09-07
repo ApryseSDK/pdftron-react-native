@@ -17,7 +17,11 @@
         "hideAttribs"           : true,
         "detailsSameLine"       : true,
         "returnsInTable"        : true,
-        "hideMethodSignature"   : true
+        "hideMethodSignature"   : true,
+        "outputSourceFiles"     : true, 
+	    "outputSourcePath"      : true,
+        "linenums"              : true,
+        "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-master/"
     },
     "opts": {
         "template": "./node_modules/ink-docstrap/template-algolia",

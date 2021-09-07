@@ -62,7 +62,7 @@ export const DocumentViewPropTypes = {
   /**
    * @type {number}
    * @optional
-   * @description Defines the currently displayed page number. Different from {@link DocumentViewPropTypes.initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
+   * @description Defines the currently displayed page number. Different from {@link DocumentViewPropTypes.initialPageNumber initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
    * @example
    * <DocumentView
    *   pageNumber={5}
@@ -175,9 +175,8 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called when the page number has been changed.
-   * @param {object} event
-   * @param {int} event.previousPageNumber the previous page number
-   * @param {int} event.pageNumber the current page number
+   * @param {int} previousPageNumber the previous page number
+   * @param {int} pageNumber the current page number
    * @example
    * <DocumentView
    *   onPageChanged = {({previousPageNumber, pageNumber}) => {
@@ -192,9 +191,8 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called when the scroll position has been changed.
-   * @param {object} event
-   * @param {number} event.horizontal the horizontal position of the scroll
-   * @param {number} event.vertical the vertical position of the scroll
+   * @param {number} horizontal the horizontal position of the scroll
+   * @param {number} vertical the vertical position of the scroll
    * @example
    * <DocumentView
    *   onScrollChanged = {({horizontal, vertical}) => {
@@ -209,8 +207,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called when the zoom scale has been changed.
-   * @param {object} event
-   * @param {double} event.zoom the current zoom ratio of the document
+   * @param {double} zoom the current zoom ratio of the document
    * @example
    * <DocumentView
    *   onZoomChanged = {(zoom) => {
@@ -225,9 +222,13 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called when a zooming has been finished. For example, if zoom via gesture, this is called on gesture release.
-   * @param {object} event
-   * @param {number} event.zoom the current zoom ratio of the document
-   * @example (temp)
+   * @param {double} zoom the current zoom ratio of the document
+   * @example 
+   * <DocumentView
+   *   onZoomFinished = {(zoom) => {
+   *     console.log('Current zoom ratio is', zoom);
+   *   }}
+   * />
    */  
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   
@@ -238,11 +239,10 @@ export const DocumentViewPropTypes = {
   zoom: PropTypes.number,
 
   /**
-   * @type {string[]}
+   * @type {Config.Buttons[]}
    * @optional
-   * @description Array of [`Config.Buttons`](./src/Config/Config.js) constants, defaults to none.
-   * 
-   * Defines buttons to be disabled for the viewer.
+   * @default Defaults to none.
+   * @description Defines buttons to be disabled for the viewer.
    * @example
    * <DocumentView
    *   disabledElements={[Config.Buttons.userBookmarkListButton]}
@@ -251,11 +251,10 @@ export const DocumentViewPropTypes = {
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
 
   /**
-   * @type {string[]}
+   * @type {Config.Tools[]}
    * @optional
-   * @description Array of [`Config.Tools`](./src/Config/Config.js) constants, defaults to none.
-   * 
-   * Defines tools to be disabled for the viewer.
+   * @default Defaults to none.
+   * @description Defines tools to be disabled for the viewer.
    * @example
    * <DocumentView
    *   disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
@@ -264,11 +263,10 @@ export const DocumentViewPropTypes = {
   disabledTools: arrayOf<Config.Tools>(Config.Tools),
 
   /**
-   * @type {string[]}
+   * @type {Config.LongPressMenu[]}
    * @optional
-   * @description Array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, default contains all the items
-   * 
-   * Defines menu items that can show when long press on text or blank space.
+   * @default Contains all the items.
+   * @description Defines menu items that can show when long press on text or blank space.
    * @example
    * <DocumentView
    *   longPressMenuItems={[Config.LongPressMenu.copy, Config.LongPressMenu.read]}
@@ -277,11 +275,10 @@ export const DocumentViewPropTypes = {
   longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
 
   /**
-   * @type {string[]}
+   * @type {Config.LongPressMenu[]}
    * @optional
-   * @description Array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, defaults to none.
-   * 
-   * Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function {onLongPressMenuPress}`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+   * @default Defaults to none.
+   * @description Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function {onLongPressMenuPress}`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
    * @example
    * <DocumentView
    *   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
@@ -293,9 +290,8 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description This function is called if the pressed long press menu item is passed in to [`overrideLongPressMenuBehavior`](#overrideLongPressMenuBehavior)
-   * @param {object} event
-   * @param {string} longPressMenu One of [`Config.LongPressMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+   * @description This function is called if the pressed long press menu item is passed in to {@link DocumentViewPropTypes.overrideLongPressMenuBehavior overrideLongPressMenuBehavior}.
+   * @param {string} longPressMenu One of {@link Config.LongPressMenu} constants, representing which item has been pressed
    * @param {string} longPressText the selected text if pressed on text, empty otherwise
    * @example
    * <DocumentView
@@ -322,11 +318,10 @@ export const DocumentViewPropTypes = {
   longPressMenuEnabled: PropTypes.bool,
 
   /**
-   * @type {string[]}
+   * @type {Config.AnnotationMenu[]}
    * @optional
-   * @description Array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, default contains all the items.
-   * 
-   * Defines the menu items that can show when an annotation is selected.
+   * @default Contains all the items.
+   * @description Defines the menu items that can show when an annotation is selected.
    * @example
    * <DocumentView
    *   annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
@@ -335,11 +330,10 @@ export const DocumentViewPropTypes = {
   annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
 
   /** 
-   * @type {string[]}
+   * @type {Config.AnnotationMenu[]}
    * @optional
-   * @description Array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, defaults to none.
-   * 
-   * Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
+   * @default Defaults to none.
+   * @description Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function {@link DocumentViewPropTypes.onAnnotationMenuPress onAnnotationMenuPress} will be called where custom behavior can be implemented.
    * @example 
    * <DocumentView
    *   overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
@@ -351,11 +345,11 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description This function is called when an annotation menu item passed in to [`overrideAnnotationMenuBehavior`](#overrideAnnotationMenuBehavior) is pressed.
-   * @param {string} annotationMenu One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+   * @description This function is called when an annotation menu item passed in to {@link DocumentViewPropTypes.overrideAnnotationMenuBehavior overrideAnnotationMenuBehavior} is pressed.
+   * @param {string} annotationMenu One of {@link Config.AnnotationMenu} constants, representing which item has been pressed
    * @param {object[]} annotations An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.
    * 
-   * `id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. 
+   * `id` is the annotation identifier and `type` is one of the {@link Config.Tools} constants. 
    * 
    * `screenRect` was formerly called `rect`. 
    * 
@@ -377,11 +371,10 @@ export const DocumentViewPropTypes = {
   onAnnotationMenuPress: func<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   
   /**
-   * @type {string[]}
+   * @type {Config.Tools[]}
    * @optional
-   * @description Array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
-   * 
-   * Defines annotation types that will not show in the annotation (long-press) menu.
+   * @default Defaults to none.
+   * @description Defines annotation types that will not show in the annotation (long-press) menu.
    * @example 
    * <DocumentView
    *   hideAnnotationMenu={[Config.Tools.annotationCreateArrow, Config.Tools.annotationEraserTool]}
@@ -390,11 +383,10 @@ export const DocumentViewPropTypes = {
   hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
 
   /**
-   * @type {string[]}
-   * @optional
-   * @description Array of [`Config.Actions`](./src/Config/Config.js) constants, defaults to none
-   * 
-   * Defines actions that will skip default behavior, such as external link click. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
+   * @type {Config.Actions[]}
+   * @optional 
+   * @default Defaults to none.
+   * @description Defines actions that will skip default behavior, such as external link click. The function {@link DocumentViewPropTypes.onBehaviorActivated onBehaviorActivated} will be called where custom behavior can be implemented, whenever the defined actions occur.
    * @example
    * <DocumentView
    *   overrideBehavior={[Config.Actions.linkPress]}
@@ -406,14 +398,14 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description This function is called if the activated behavior is passed in to [`overrideBehavior`](#overrideBehavior)
-   * @param {string} action One of [`Config.Actions`](./src/Config/Config.js) constants, representing which action has been activated
+   * @description This function is called if the activated behavior is passed in to {@link DocumentViewPropTypes.overrideBehavior overrideBehavior}
+   * @param {string} action One of {@link Config.Actions} constants, representing which action has been activated
    * @param {object} data A JSON object that varies depending on the action.
    * 
    * If action is `Config.Actions.linkPress`, data type is `{url: string}`.
    * 
    * If action is `Config.Actions.stickyNoteShowPopUp`, data type is `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, 
-   * where `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants, and `screenRect` was formerly called `rect`.
+   * where `type` is one of the {@link Config.Tools} constants, and `screenRect` was formerly called `rect`.
    * @example
    * <DocumentView
    *   onBehaviorActivated = {({action, data}) => {
@@ -432,7 +424,7 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
-   * @deprecated Use [`hideTopAppNavBar`](#hideTopAppNavBar) prop instead.
+   * @deprecated Use {@link DocumentViewPropTypes.hideTopAppNavBar hideTopAppNavBar} prop instead.
    */
   topToolbarEnabled: PropTypes.bool,
 
@@ -503,8 +495,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called when an annotation(s) is selected.
-   * @param {object} event
-   * @param {object[]} annotations array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+   * @param {object[]} annotations array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
    * @example
    * <DocumentView
    *   onAnnotationsSelected = {({annotations}) => {
@@ -523,9 +514,8 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called if a change has been made to an annotation(s) in the current document.
-   * @param {object} event 
-   * @param {string} event.action the action that occurred (add, delete, modify)
-   * @param {object[]} event.annotations array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
+   * @param {string} action the action that occurred (add, delete, modify)
+   * @param {object[]} annotations array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the {@link Config.Tools} constants
    * @example
    * <DocumentView
    *   onAnnotationChanged = {({action, annotations}) => {
@@ -545,8 +535,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called if a change has been made to form field values.
-   * @param {object} event
-   * @param {object[]} event.fields array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
+   * @param {object[]} fields array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
    * @example
    * <DocumentView
    *   onFormFieldValueChanged = {({fields}) => {
@@ -585,12 +574,10 @@ export const DocumentViewPropTypes = {
   thumbnailViewEditingEnabled: PropTypes.bool,
 
   /**
-   * @type {string}
+   * @type {Config.FitMode}
    * @optional
-   * @default 'FitWidth'
-   * @description One of the [`Config.FitMode`](./src/Config/Config.js) constants.
-   * 
-   * Defines the fit mode (default zoom level) of the viewer.
+   * @default Config.FitMode.FitWidth
+   * @description Defines the fit mode (default zoom level) of the viewer.
    * @example
    * <DocumentView
    *   fitMode={Config.FitMode.FitPage}
@@ -599,12 +586,10 @@ export const DocumentViewPropTypes = {
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
 
   /**
-   * @type {string}
+   * @type {Config.LayoutMode}
    * @optional
-   * @default 'Continuous'
-   * @description One of the [`Config.LayoutMode`](./src/Config/Config.js) constants.
-   * 
-   * Defines the layout mode of the viewer.
+   * @default Config.LayoutMode.Continuous
+   * @description Defines the layout mode of the viewer.
    * @example
    * <DocumentView
    *   layoutMode={Config.LayoutMode.FacingContinuous}
@@ -616,26 +601,167 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called when the layout of the viewer has been changed.
+   * @example 
+   * <DocumentView
+   *   onLayoutChanged = {() => {
+   *     console.log('Layout has been updated.');
+   *   }}
+   * />
    */  
   onLayoutChanged: func<() => void>(),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Android only
+   * 
+   * Defines whether the viewer will add padding to take account of the system status bar.
+   * @example
+   * <DocumentView
+   *   padStatusBar={true}
+   * />
+   */
   padStatusBar: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description If true, the active annotation creation tool will remain in the current annotation creation tool. Otherwise, it will revert to the "pan tool" after an annotation is created.
+   * @example
+   * <DocumentView
+   *   continuousAnnotationEditing={true}
+   * />
+   */
   continuousAnnotationEditing: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether an annotation is selected after it is created. On iOS, this functions for shape and text markup annotations only.
+   * @example
+   * <DocumentView
+   *   selectAnnotationAfterCreation={true}
+   * />
+   */
   selectAnnotationAfterCreation: PropTypes.bool,
+
+  /**
+   * @type {string}
+   * @optional
+   * @description Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this piece of information.
+   * @example
+   * <DocumentView
+   *   annotationAuthor={'PDFTron'}
+   * />
+   */
   annotationAuthor: PropTypes.string,
+
+  /** 
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether to show saved signatures for re-use when using the signing tool.
+   * @example
+   * <DocumentView
+   *   showSavedSignatures={true}
+   * />
+   */
   showSavedSignatures: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description If true, {@link DocumentViewPropTypes.document document} prop will be treated as a base64 string. If it is not the base64 string of a pdf file, {@link DocumentViewPropTypes.base64FileExtension base64FileExtension} is required. 
+   * 
+   * When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
+   * @example
+   * <DocumentView
+   *   isBase64String={true}
+   *   document={'...'} // base 64 string
+   * />
+   */
   isBase64String: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to enable realtime collaboration. If true then {@link DocumentViewPropTypes.currentUser currentUser} must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   * />
+   */
   collabEnabled: PropTypes.bool,
+
+  /**
+   * @type {string}
+   * @description Required if {@link DocumentViewPropTypes.collabEnabled collabEnabled} is set to true.
+   * 
+   * Defines the current user. Created annotations will have their title (author) set to this string.
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   * />
+   */
   currentUser: PropTypes.string,
+
+  /**
+   * @type {string}
+   * @optional
+   * @description Defines the current user name. 
+   * Will set the user name only if {@link DocumentViewPropTypes.collabEnabled collabEnabled} is true and {@link DocumentViewPropTypes.currentUser currentUser} is defined.
+   * This should be used only if you want the user's display name to be different than the annotation's title/author 
+   * (in the case that {@link DocumentViewPropTypes.currentUser currentUser} is an ID rather than a human-friendly name.)
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   *   currentUserName={'Hello_World'}
+   * />
+   */
   currentUserName: PropTypes.string,
 
   /**
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called if a change has been made to annotations in the current document. 
+   * Unlike {@link DocumentViewPropTypes.onAnnotationChanged onAnnotationChanged}, this function has an XFDF command string as its parameter. 
+   * If you are modifying or deleting multiple annotations, then on Android the function is only called once, and on iOS it is called for each annotation.
+   * 
+   * **Known Issues**
+   * 
+   * On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
+   * @param {string} action the action that occurred (add, delete, modify)
+   * @param {string} xfdfCommand an xfdf string containing info about the edit
+   * @param {array} annotations an array of annotation data. 
+   * When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. 
+   * In both cases, the data represents the annotations that have been changed. 
+   * `type` is one of the {@link Config.Tools} constants.
+   * @example
+   * <DocumentView
+   *   onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
+   *     console.log('Annotation edit action is', action);
+   *     console.log('The exported xfdfCommand is', xfdfCommand);
+   *     annotations.forEach((annotation) => {
+   *       console.log('Annotation id is', annotation.id);
+   *     if (!this.state.collabEnabled) {
+   *         console.log('Annotation pageNumber is', annotation.pageNumber);
+   *         console.log('Annotation type is', annotation.type);
+   *       }
+   *     });
+   *     }}
+   *     collabEnabled={this.state.collabEnabled}
+   *     currentUser={'Pdftron'}
+   * />
    */  
   onExportAnnotationCommand: func<(event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   autoSaveEnabled: PropTypes.bool,
@@ -976,7 +1102,7 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 /**
  * @method
  * @description Sets the current tool mode.
- * @param {string} toolMode One of [`Config.Tools`](./src/Config/Config.js) constants, representing the tool mode to set.
+ * @param {string} toolMode One of {@link Config.Tools} constants, representing the tool mode to set.
  * @returns {Promise<void>}
  * @example
  * this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
