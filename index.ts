@@ -73,7 +73,7 @@ interface RNPdftron
 
     /**
      * @method
-     * @description Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
+     * @description Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used while the document is opened in the viewer.
      * @param {string} filePath the local file path to the file
      * @param {string} password the password you would like to set
      * @param {string} currentPassword the current password, use empty string if no password
