@@ -1028,15 +1028,41 @@ export const DocumentViewPropTypes = {
    * />
    */  
   onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
+
+  /**
+   * @type {number}
+   * @optional
+   * @description Defines the horizontal scroll position in the current document viewer.
+   * @example
+   * <DocumentView
+   *   horizontalScrollPos={50}
+   * />
+   */
   horizontalScrollPos: PropTypes.number,
+
+  /**
+   * @type {number}
+   * @optional
+   * @description Defines the vertical scroll position in the current document viewer.
+   * @example
+   * <DocumentView
+   *   verticalScrollPos={50}
+   * />
+   */
   verticalScrollPos: PropTypes.number,
 
   /**
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called immediately before a text search begins, 
+   * either through user actions, or function calls such as {@link DocumentViewPropTypes.findText findText}.
+   * @example
+   * <DocumentView
+   *   onTextSearchStart = {() => {
+   *     console.log('Text search has started');
+   *   }}
+   * />
    */  
   onTextSearchStart: func<() => void>(),
 
@@ -1044,20 +1070,174 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called after a text search is finished or canceled.
+   * @param {boolean} found whether a result is found. If no, it could be caused by not finding a matching result in the document, invalid text input, or action cancellation (user actions or {@link DocumentViewPropTypes.cancelFindText cancelFindText}
+   * @param {object} textSelection the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+   * 
+   * Quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+   * @example
+   * <DocumentView
+   *   onTextSearchResult = {({found, textSelection}) => {
+   *     if (found) {
+   *       console.log('Found selection on page', textSelection.pageNumber);
+   *       for (let i = 0; i < textSelection.quads.length; i ++) {
+   *         const quad = textSelection.quads[i];
+   *         console.log('selection boundary quad', i);
+   *         for (const quadPoint of quad) {
+   *           console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+   *         }
+   *       }
+   *     }
+   *   }}
+   * />
    */  
   onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
+
+  /**
+   * @type {Config.ViewModePickerItem[]}
+   * @optional
+   * @defaults Defaults to none.
+   * @description Defines view mode items to be hidden in the view mode dialog.
+   * @example
+   * <DocumentView
+   *   hideViewModeItems={[
+   *     Config.ViewModePickerItem.Crop,
+   *     Config.ViewModePickerItem.Rotation,
+   *     Config.ViewModePickerItem.ColorMode
+   *   ]}
+   * />
+   */
   hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Android only.
+   * 
+   * Defines whether the page stack navigation buttons will appear in the viewer.
+   * @example
+   * <DocumentView
+   *   pageStackEnabled={false}
+   * />
+   */
   pageStackEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Android only
+   * 
+   * Defines whether the quick navigation buttons will appear in the viewer.
+   * @example
+   * <DocumentView
+   *   showQuickNavigationButton={false}
+   * />
+   */
   showQuickNavigationButton: PropTypes.bool,
+  
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true.
+   * @description Android only.
+   * 
+   * Defines whether to show the option to pick images in the signature dialog.
+   * @example
+   * <DocumentView
+   *   photoPickerEnabled={true}
+   * />
+   */
   photoPickerEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to automatically resize the bounding box of free text annotations when editing.
+   * @example
+   * <DocumentView
+   *   autoResizeFreeTextEnabled={true}
+   * />
+   */
   autoResizeFreeTextEnabled: PropTypes.bool,
+
+  /**
+   * @type {bool}
+   * @optional
+   * @default true
+   * @description Android only
+   * 
+   * If document editing is enabled, then this value determines if the annotation list is editable.
+   * @example
+   * <DocumentView
+   *   annotationsListEditingEnabled={true}
+   * />
+   */
   annotationsListEditingEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true on Android and false on iOS
+   * @description Defines whether the navigation list will be displayed as a side panel on large devices such as iPads and tablets.
+   * @example
+   * <DocumentView
+   *   showNavigationListAsSidePanelOnLargeDevices={true}
+   * />
+   */
   showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to restrict data usage when viewing online PDFs.
+   * @example
+   * <DocumentView
+   *   restrictDownloadUsage={true}
+   * />
+   */
   restrictDownloadUsage: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether the bookmark list can be edited. If the viewer is readonly then bookmarks on Android are 
+   * still editable but are saved to the device rather than the PDF.
+   * @example
+   * <DocumentView
+   *   userBookmarksListEditingEnabled={true}
+   * />
+   */
   userBookmarksListEditingEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Whether to show images in reflow mode. 
+   * @example
+   * <DocumentView
+   *   imageInReflowEnabled={false}
+   * />
+   */
   imageInReflowEnabled: PropTypes.bool,
+
+  /**
+   * @type {Config.ReflowOrientation}
+   * @optional
+   * @default Config.ReflowOrientation.Horizontal 
+   * @description Android only.
+   * 
+   * Sets the scrolling direction of the reflow control.
+   * @example
+   * <DocumentView
+   *   reflowOrientation={Config.ReflowOrientation.Vertical} 
+   * />
+   */
   reflowOrientation: oneOf<Config.ReflowOrientation>(Config.ReflowOrientation),
   
   /**
