@@ -8,6 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -63,6 +66,7 @@ import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
+import com.pdftron.pdf.model.FileInfo;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
@@ -80,6 +84,7 @@ import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
@@ -2578,6 +2583,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
+
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
@@ -2647,6 +2653,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().setStateEnabled(mSaveStateEnabled);
         }
+
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_TAB_CHANGED, ON_TAB_CHANGED);
+        params.putString(KEY_CURRENT_TAB, tag);
+
+        onReceiveNativeEvent(params);
     }
 
     @Override
@@ -4179,6 +4191,27 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (pdfViewCtrl != null) {
             mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
         }
+    }
+
+    public ReadableArray getSavedSignatures() {
+        WritableArray signatures = Arguments.createArray();
+        Context context = getContext();
+        if (context != null) {
+            File[] files = StampManager.getInstance().getSavedSignatures(context);    
+            for (int i = 0; i < files.length; i++) {
+                signatures.pushString(files[i].getAbsolutePath());
+            }
+        }
+        return signatures;
+    }
+
+    public String getSavedSignatureFolder() {
+        Context context = getContext();
+        if (context != null) {
+            File file = StampManager.getInstance().getSavedSignatureFolder(context);
+            return file.getAbsolutePath();
+        }
+        return "";
     }
     
     public void setSaveStateEnabled(boolean saveStateEnabled) {

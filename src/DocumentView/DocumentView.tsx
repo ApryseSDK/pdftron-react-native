@@ -1446,6 +1446,26 @@ export const DocumentViewPropTypes = {
    * />
    */  
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
+
+  /**
+   * @event
+   * @type {function}
+   * @optional
+   * @description The function is activated when a tab is changed. 
+   * 
+   * Please note that this API is meant for tab-specific changes. 
+   * If you would like to know when the document finishes loading instead, see 
+   * the {@link DocumentViewPropTypes.onDocumentLoaded onDocumentLoaded} event.
+   * @param {string} currentTab The file path of current tab's document
+   * @example
+   * <DocumentView
+   *   multiTabEnabled={true}
+   *   onTabChanged={({currentTab}) => {
+   *     console.log("The current tab is ", currentTab);
+   *   }}
+   * />
+   */
+  onTabChanged: func<(event: {currentTab: string}) => void>(),
   //...ViewPropTypes,
 };
 
@@ -1654,6 +1674,12 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
         this.props.onPageMoved({
           'previousPageNumber': event.nativeEvent.previousPageNumber,
           'pageNumber': event.nativeEvent.pageNumber,
+        });
+      }
+    } else if (event.nativeEvent.onTabChanged) {
+      if (this.props.onTabChanged) {
+        this.props.onTabChanged({
+          'currentTab' : event.nativeEvent.currentTab
         });
       }
     }
@@ -2176,8 +2202,8 @@ rotateCounterClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
-  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
+
+  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
@@ -2185,8 +2211,7 @@ rotateCounterClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
-convertPagePointsToScreenPoints = (points: Array<AnnotOptions.PointWithPage>): Promise<void | Array<AnnotOptions.Point>> => {
+  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
@@ -2561,8 +2586,24 @@ openLayersList = (): Promise<void> => {
     return Promise.resolve();
   }
 
+  getSavedSignatures = (): Promise<void | Array<string>> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatures(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureFolder = (): Promise<void | string> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureFolder(tag);
+    }
+    return Promise.resolve();
+  }
+
   /** @ignore */
-_setNativeRef = (ref: any) => {
+  _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
 

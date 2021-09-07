@@ -1383,6 +1383,36 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
+    public void getSavedSignatures(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ReadableArray result = mDocumentViewInstance.getSavedSignatures(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getSavedSignatureFolder(final int tag, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String result = mDocumentViewInstance.getSavedSignatureFolder(tag);
+                    promise.resolve(result);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);

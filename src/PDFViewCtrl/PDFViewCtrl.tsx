@@ -23,6 +23,7 @@ const PDFViewCtrlPropTypes = {
   document: PropTypes.string.isRequired,
 }
 
+// Generates the prop types for TypeScript users, from PropTypes.
 type PDFViewCtrlProps = InferProps<typeof PDFViewCtrlPropTypes>;
 
 /**

@@ -343,8 +343,36 @@ export const Config = {
   },
 } as const;
 
+/**
+ * A generic used to create the custom types defined in the module below.
+ * 
+ * The variable `T` represents the type information being passed into the generic.
+ * This generic accepts type information about the `Config` object above. We pass this
+ * information in using `typeof Config.*`, * is any object nested in the `Config` object.
+ * 
+ * `keyof T` creates a union of the object's keys e.g 
+ * `keyof typeof Config.ReflowOrientation == 'Horizonal' | 'Vertical'`
+ * 
+ * `T[]` is the indexed access type and takes the union produced by a `keyof T` and outputs
+ * a union of value types corresponding to those keys, e.g.
+ * `ValueOf<typeof Config.ReflowOrientation> == "horizontal" | "vertical"`
+ * 
+ * The above union is made up of string literal types because the `as const` operator sets the 
+ * properties of the `Config` object to have literal types.
+ * 
+ * You can learn more about these special operators here:
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/typeof-types.html Typeof}
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/keyof-types.html Keyof} 
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html Index Acess Types}
+ * - {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions Const Assertions}
+ */
 type ValueOf<T> = T[keyof T];
 
+/**
+ * A module containing custom types formed from the constants in the Config object.
+ * 
+ * These types are used for props such as `disabledElements` and methods such as `exportAsImage`
+ */
 export module Config {
   export type Buttons = ValueOf<typeof Config.Buttons>;
   export type Tools = ValueOf<typeof Config.Tools>;

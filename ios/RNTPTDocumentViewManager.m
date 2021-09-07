@@ -717,6 +717,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onTabChanged": @"onTabChanged",
+            @"currentTab": currentTab,
+        });
+    }
+}
+
 - (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool
 {
     if (sender.onChange) {
@@ -1398,6 +1408,28 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView openThumbnailsView];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray * signatures = [documentView getSavedSignatures];
+        return signatures;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSString * folder = [documentView getSavedSignatureFolder];
+        return folder;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

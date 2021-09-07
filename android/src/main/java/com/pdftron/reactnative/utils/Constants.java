@@ -23,6 +23,7 @@ public final class Constants {
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
+    public static final String ON_TAB_CHANGED = "onTabChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -328,6 +329,8 @@ public final class Constants {
 
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";
+
+    public static final String KEY_CURRENT_TAB = "currentTab";
 
     // Color RGBA
     public static final String COLOR_RED = "red";

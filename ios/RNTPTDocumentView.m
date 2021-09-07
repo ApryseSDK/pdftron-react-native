@@ -88,6 +88,8 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTThumbnailsViewController class]];
     
     _tempFilePaths = [[NSMutableArray alloc] init];
+    
+    _showSavedSignatures = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -220,6 +222,7 @@ NS_ASSUME_NONNULL_END
             [self registerForPDFViewCtrlNotifications:self.documentViewController];
         } else {
             // Using tabbed viewer.
+            [self registerForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
         }
     }
     
@@ -322,6 +325,7 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
+        [self deregisterForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -450,6 +454,17 @@ NS_ASSUME_NONNULL_END
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
 }
+
+- (void)registerForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController addObserver:self forKeyPath:@"tabManager.selectedIndex" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:TabChangedContext];
+}
+
+- (void)deregisterForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController removeObserver:self forKeyPath:@"tabManager.selectedIndex" context:TabChangedContext];
+}
+
 
 #pragma mark - Disabling elements
 
@@ -2283,47 +2298,47 @@ NS_ASSUME_NONNULL_END
     NSMutableArray<UIBarButtonItem*>* defaultDrawGroupTools = [documentController.toolGroupManager.drawItemGroup.barButtonItems mutableCopy];
     NSMutableArray<UIBarButtonItem*>* newAnnotateGroupTools = [[NSMutableArray alloc] init];
     NSMutableArray<UIBarButtonItem*>* newDrawGroupTools = [[NSMutableArray alloc] init];
-    if (@available(iOS 13.1, *)) {
-        for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
+
+    for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
+    {
+        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
         {
-            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
             {
-                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-                {
-                    continue;
-                }
-                else
-                {
-                    [newAnnotateGroupTools addObject:defaultToolItem];
-                }
+                continue;
             }
             else
             {
                 [newAnnotateGroupTools addObject:defaultToolItem];
             }
         }
-
-        for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
+        else
         {
-            if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+            [newAnnotateGroupTools addObject:defaultToolItem];
+        }
+    }
+
+    for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
+    {
+        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
+        {
+            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
+            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
             {
-                PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-                if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-                {
-                    continue;
-                }
-                else
-                {
-                    [newDrawGroupTools addObject:defaultToolItem];
-                }
+                continue;
             }
             else
             {
                 [newDrawGroupTools addObject:defaultToolItem];
             }
         }
-
+        else
+        {
+            [newDrawGroupTools addObject:defaultToolItem];
+        }
+    }
+    if (@available(iOS 13.1, *)) {
         if (documentController.toolManager.freehandUsesPencilKit) {
             UIBarButtonItem* pencilItem = [documentController.toolGroupManager createItemForToolClass:[PTPencilDrawingCreate class]];
             [newAnnotateGroupTools insertObject:pencilItem atIndex:2];
@@ -2439,13 +2454,42 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Show saved signatures
+#pragma mark - Signatures
 
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
     _showSavedSignatures = showSavedSignatures;
     
     [self applyViewerSettings];
+}
+
+-(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
+{
+    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
+    
+    [self applyViewerSettings];
+}
+
+- (NSArray *)getSavedSignatures
+{
+    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
+    NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
+    
+    for (NSInteger i = 0; i < numOfSignatures; i++) {
+        signatures[i] = [[signaturesManager savedSignatureAtIndex:i] GetFileName];
+    }
+
+    return signatures;
+}
+
+-(NSString *)getSavedSignatureFolder
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryDirectory = paths[0];
+
+    NSString* fullPath = [libraryDirectory stringByAppendingPathComponent:PTSignaturesManager_signatureDirectory];
+    return fullPath;
 }
 
 # pragma mark - Dark Mode
@@ -2508,16 +2552,6 @@ NS_ASSUME_NONNULL_END
     NSNumber *rectY2 = [RNTPTDocumentView PT_idAsNSNumber:rect[PTRectY2Key]];
     CGRect screenRect = CGRectMake([rectX1 doubleValue], [rectY1 doubleValue], [rectX2 doubleValue]-[rectX1 doubleValue], [rectY2 doubleValue]-[rectY1 doubleValue]);
     [documentViewController shareCopyFromScreenRect:screenRect withFlattening:flattening];
-}
-
-
-#pragma mark - signSignatureFieldsWithStamps
-
--(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
-{
-    _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
-    
-    [self applyViewerSettings];
 }
 
 #pragma mark - Zoom
@@ -2744,6 +2778,21 @@ NS_ASSUME_NONNULL_END
 {
     // Always show tab bar when using tabbed viewer.
     return NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == TabChangedContext) {
+        if ([self.delegate respondsToSelector:@selector(tabChanged:currentTab:)]) {
+            PTDocumentTabItem *selectedItem = self.tabbedDocumentViewController.tabManager.selectedItem;
+            if (selectedItem != nil) {
+                NSURL *currentTab = selectedItem.documentURL ?: selectedItem.sourceURL;
+                [self.delegate tabChanged:self currentTab:[currentTab absoluteString]];
+            }
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>

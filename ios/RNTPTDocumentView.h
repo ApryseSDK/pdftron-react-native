@@ -274,6 +274,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// Contexts.
+static void *TabChangedContext = &TabChangedContext;
+
+// To access the saved signatures folder
+static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
+
 @class RNTPTDocumentView;
 
 @protocol RNTPTDocumentViewDelegate <NSObject>
@@ -292,6 +298,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 - (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -614,6 +621,10 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
 
 - (void)openThumbnailsView;
+
+-(NSArray *)getSavedSignatures;
+
+-(NSString *)getSavedSignatureFolder;
 
 @end
 

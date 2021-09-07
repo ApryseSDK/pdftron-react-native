@@ -229,7 +229,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-string, optional
+one of [`Config.EraserType`](./src/Config/Config.js) constants, optional
 
 Sets the default eraser tool type. Value only applied after a clean install. Android only.
 Example:
@@ -526,9 +526,9 @@ Defines whether to show the toolbar switcher in the top toolbar.
 ```
 
 #### initialToolbar
-string, optional, defaults to none
+one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object, optional, defaults to none
 
-Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened. The values give should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
 
 ```js
 <DocumentView
@@ -605,7 +605,7 @@ Defines whether the viewer will add padding to take account of the system status
 ### Layout
 
 #### fitMode
-one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is 'FitWidth'
+one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is `Config.FitMode.FitWidth`
 
 Defines the fit mode (default zoom level) of the viewer.
 
@@ -616,7 +616,7 @@ Defines the fit mode (default zoom level) of the viewer.
 ```
 
 #### layoutMode
-one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is 'Continuous'
+one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is `Config.LayoutMode.Continuous`
 
 Defines the layout mode of the viewer.
 
@@ -843,7 +843,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is 'Horizontal'. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
 
 Sets the scrolling direction of the reflow control.
 
@@ -1038,7 +1038,7 @@ Set the tab title if [`multiTabEnabled`](#multiTabEnabled) is true.
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   tabTitle={'tab1'}
 />
 ```
@@ -1050,8 +1050,31 @@ Sets the limit on the maximum number of tabs that the viewer could have at a tim
 
 ```js
 <DocumentView
-  multiTabEnabled={true} // requirement
+  multiTabEnabled={true}
   maxTabCount={5}
+/>
+```
+
+#### onTabChanged
+function, optional
+
+The function is activated when a tab is changed. 
+
+Please note that this API is meant for tab-specific changes. If you would like to know when the document finishes loading instead, see the [`onDocumentLoaded`](#onDocumentLoaded) event.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+currentTab | string | The file path of current tab's document
+
+
+```js
+<DocumentView
+  multiTabEnabled={true}
+  onTabChanged={({currentTab}) => {
+    console.log("The current tab is ", currentTab);
+  }}
 />
 ```
 
@@ -2205,7 +2228,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
@@ -2233,7 +2256,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
@@ -2258,7 +2281,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationsOnPage(2).then((annotations) => {
@@ -3091,6 +3114,48 @@ canRedo | bool | whether it is possible to redo from the current snapshot
 this._viewer.canRedo().then((canRedo) => {
   console.log(canRedo ? 'redo possible' : 'no action to redo');
 });
+```
+
+### Signatures
+
+#### getSavedSignatures
+Gets a list of absolute file paths to PDFs containing the saved signatures.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+signatures | array | an array of string containing the absolute file paths; if there are no saved signatures, the value is an empty array
+
+```js
+this._viewer.getSavedSignatures().then((signatures) => {
+  if (signatures.length > 0) {
+    signatures.forEach((signature) => {
+      console.log(signature);
+    });
+  }
+})
+```
+
+#### getSavedSignatureFolder
+Retrieves the absolute file path to the folder containing the saved signatures
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the absolute file path to the folder
+
+```js
+this._viewer.getSavedSignatureFolder().then((path) => {
+  if (path != null) {
+    console.log(path);
+  }
+})
 ```
 
 ### Others

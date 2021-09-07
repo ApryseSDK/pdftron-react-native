@@ -84,19 +84,11 @@ export interface Field {
  * @category AnnotOptions
  * @property {number} x
  * @property {number} y
+ * @property {number} [pageNumber]
  */
 export interface Point {
     x: number;
     y: number;
-}
-
-/**
- * @typedef
- * @category AnnotOptions
- * @augments Point
- * @property {number} [pageNumber]
- */
-export interface PointWithPage extends Point {
     pageNumber?: number;
 }
 
@@ -134,7 +126,6 @@ export interface StickyNoteData	{
     id: string;
     pageNumber: number;
     type: string;
-    rect?: Rect;
     pageRect?: Rect;
     screenRect?: Rect;
 }
