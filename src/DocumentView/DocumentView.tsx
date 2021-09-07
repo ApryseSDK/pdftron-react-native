@@ -764,15 +764,145 @@ export const DocumentViewPropTypes = {
    * />
    */  
   onExportAnnotationCommand: func<(event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether document is automatically saved by the viewer.
+   * @example
+   * <DocumentView
+   *   autoSaveEnabled={true}
+   * />
+   */
   autoSaveEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether the viewer should change pages when the user taps the edge of a page, when the viewer is in a horizontal viewing mode.
+   * @example
+   * <DocumentView
+   *   pageChangeOnTap={true}
+   * />
+   */
   pageChangeOnTap: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Android and iOS 13+ only
+   * 
+   * Defines whether the UI will appear in a dark color when the system is dark mode. If false, it will use viewer setting instead.
+   * @example
+   * <DocumentView
+   *   followSystemDarkMode={false}
+   * />
+   */
   followSystemDarkMode: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Defines whether a stylus should act as a pen when in pan mode. If false, it will act as a finger.
+   * @example
+   * <DocumentView
+   *   useStylusAsPen={true}
+   * />
+   */
   useStylusAsPen: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether viewer will use tabs in order to have more than one document open simultaneously (like a web browser). 
+   * Changing the {@link DocumentViewPropTypes.document document} prop value will cause a new tab to be opened with the associated file.
+   * @example
+   * <DocumentView
+   *   multiTabEnabled={true}
+   * />
+   */
   multiTabEnabled: PropTypes.bool,
+
+  /**
+   * @type {string}
+   * @optional
+   * @default the file name
+   * @description Set the tab title if {@link DocumentViewPropTypes.multiTabEnabled multiTabEnabled} is true.
+   * @example
+   * <DocumentView
+   *   multiTabEnabled={true}
+   *   tabTitle={'tab1'}
+   * />
+   */
   tabTitle: PropTypes.string,
+
+  /**
+   * @type {number}
+   * @optional
+   * @default unlimited
+   * @description Sets the limit on the maximum number of tabs that the viewer could have at a time. 
+   * Open more documents after reaching this limit will overwrite the old tabs.
+   * @example
+   * <DocumentView
+   *   multiTabEnabled={true}
+   *   maxTabCount={5}
+   * />
+   */
   maxTabCount: PropTypes.number,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description
+   * Defines whether signature fields will be signed with image stamps.
+   * This is useful if you are saving XFDF to remote source.
+   * @example
+   * <DocumentView
+   *   signSignatureFieldsWithStamps={true}
+   * />
+   */
   signSignatureFieldsWithStamps: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether an annotation's permission flags will be respected when it is selected. 
+   * For example, a locked annotation can not be resized or moved.
+   * @example
+   * <DocumentView
+   *   annotationPermissionCheckEnabled={true}
+   * />
+   */
   annotationPermissionCheckEnabled: PropTypes.bool,
+
+  /**
+   * @type {Config.DefaultToolbars[]}
+   * @optional
+   * @default Defaults to none.
+   * @description Type can be array of {@link Config.DefaultToolbars} constants or custom toolbar objects.
+   * 
+   * Defines custom toolbars. If passed in, the default toolbars will no longer appear.
+   * It is possible to mix and match with default toolbars. See example below.
+   * @example
+   * const myToolbar = {
+   *   [Config.CustomToolbarKey.Id]: 'myToolbar',
+   *   [Config.CustomToolbarKey.Name]: 'myToolbar',
+   *   [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
+   *   [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, 
+   *      Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+   * };
+   * ...
+   * <DocumentView
+   *   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
+   * />
+   */
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
     oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({
