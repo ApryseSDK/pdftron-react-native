@@ -1689,7 +1689,8 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   /**
    * @method
-   * @description Returns the path of the current document. If {@link DocumentViewPropTypes.document document} is true, this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentViewPropTypes.document document}.
+   * @description Returns the path of the current document. If {@link DocumentViewPropTypes.isBase64String isBase64String} is true, 
+   * this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentViewPropTypes.document document}.
    * @returns {Promise<void | string>} path - the document path. 
    * @example
    * this._viewer.getDocumentPath().then((path) => {
@@ -1704,16 +1705,16 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
     return Promise.resolve();
   }
   
-/**
- * @method
- * @description Sets the current tool mode.
- * @param {string} toolMode One of {@link Config.Tools} constants, representing the tool mode to set.
- * @returns {Promise<void>}
- * @example
- * this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
- *   // done switching tools
- * });
- */
+  /**
+   * @method
+   * @description Sets the current tool mode.
+   * @param {string} toolMode One of {@link Config.Tools} constants, representing the tool mode to set.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
+   *   // done switching tools
+   * });
+   */
   setToolMode = (toolMode: Config.Tools): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1722,7 +1723,15 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method 
+   * @description Commits the current tool, only available for multi-stroke ink and poly-shape.
+   * @returns {Promise<void | boolean>} committed - true if either ink or poly-shape tool is committed, false otherwise
+   * @example
+   * this._viewer.commitTool().then((committed) => {
+   *   // committed: true if either ink or poly-shape tool is committed, false otherwise
+   * });
+   */
 commitTool = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1731,7 +1740,15 @@ commitTool = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Gets the current page count of the document.
+   * @returns {Promise<void | number>} pageCount - the current page count of the document
+   * @example
+   * this._viewer.getPageCount().then((pageCount) => {
+   *   console.log('pageCount', pageCount);
+   * });
+   */
 getPageCount = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1740,7 +1757,14 @@ getPageCount = (): Promise<void | number> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method 
+   * @description Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
+   * @param {string} bookmarkJson needs to be in valid bookmark JSON format, for example {"0": "Page 1"}. The page numbers are 1-indexed
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.importBookmarkJson("{\"0\": \"Page 1\", \"3\": \"Page 4\"}");
+   */
 importBookmarkJson = (bookmarkJson: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1749,7 +1773,14 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
     return Promise.resolve();
   }
   
-  /** @method */
+  /** 
+   * @method 
+   * @description Displays the bookmark tab of the existing list container. 
+   * If this tab has been disabled, the method does nothing.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openBookmarkList();
+   */
   openBookmarkList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1765,6 +1796,9 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
    * @param {string} xfdfCommand the XFDF command string
    * @param {boolean} [initialLoad=false] whether this is for initial load.
    * @returns {Promise<void>}
+   * @example
+   * const xfdfCommand = '<?xml version="1.0" encoding="UTF-8"?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><add><circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20201218025606Z" flags="print" date="D:20201218025606Z" name="9d0f2d63-a0cc-4f06-b786-58178c4bd2b1" page="0" rect="56.4793,584.496,208.849,739.369" title="PDF" /></add><modify /><delete /><pdf-info import-version="3" version="2" xmlns="http://www.pdftron.com/pdfinfo" /></xfdf>';
+   * this._viewer.importAnnotationCommand(xfdfCommand);
    */
   importAnnotationCommand = (xfdfCommand: string, initialLoad?: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -1781,7 +1815,15 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Imports XFDF annotation string to the current document.
+   * @param {string} xfdf annotation string in XFDF format for import
+   * @returns Promise<void>
+   * @example
+   * const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">\n\t<annots>\n\t\t<circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20190729202215Z" flags="print" date="D:20190729202215Z" page="0" rect="138.824,653.226,236.28,725.159" title="" /></annots>\n\t<pages>\n\t\t<defmtx matrix="1.333333,0.000000,0.000000,-1.333333,0.000000,1056.000000" />\n\t</pages>\n\t<pdf-info version="2" xmlns="http://www.pdftron.com/pdfinfo" />\n</xfdf>';
+   * this._viewer.importAnnotations(xfdf);
+   */
 importAnnotations = (xfdf: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1790,7 +1832,24 @@ importAnnotations = (xfdf: string): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Extracts XFDF from the current document.
+   * @param {object} options key: annotList, type: array. 
+   * If specified, annotations with the matching id and pageNumber will be exported; 
+   * otherwise, all annotations in the current document will be exported.
+   * @returns {Promise<void | string>} xfdf - annotation string in XFDF format
+   * @example <caption>Without options:</caption>
+   * this._viewer.exportAnnotations().then((xfdf) => {
+   *   console.log('XFDF for all annotations:', xfdf);
+   * });
+   * @example <caption>With options:</caption>
+   * // annotList is an array of annotation data in the format {id: string, pageNumber: int}
+   * const annotations = [{id: 'annot1', pageNumber: 1}, {id: 'annot2', pageNumber: 3}];
+   * this._viewer.exportAnnotations({annotList: annotations}).then((xfdf) => {
+   *   console.log('XFDF for 2 specified annotations', xfdf);
+   * });
+   */
 exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
