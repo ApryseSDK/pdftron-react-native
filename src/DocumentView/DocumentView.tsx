@@ -912,28 +912,120 @@ export const DocumentViewPropTypes = {
       items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
     })
   ])),
+
+  /**
+   * @type {Config.DefaultToolbars[]}
+   * @optional
+   * @default Defaults to none.
+   * @description Defines which default annotation toolbars should be hidden. 
+   * Note that this prop should be used when {@link DocumentViewPropTypes.annotationToolbars annotationToolbars} is not defined.
+   * @example
+   * <DocumentView
+   *   hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
+   * />
+   */
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+  
+  /**
+   * @type {Config.Buttons[]}
+   * @optional
+   * @description iOS only
+   * 
+   * Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used.
+   * @example
+   * <DocumentView
+   *   topAppNavBarRightBar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+   * />
+   */
   topAppNavBarRightBar: arrayOf<Config.Buttons>(Config.Buttons),
+
+  /** 
+   * @type {Config.Buttons[]}
+   * @optional
+   * @description Only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android.
+   * 
+   * Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used.
+   * @example
+   * <DocumentView
+   *   bottomToolbar={[Config.Buttons.reflowButton, Config.Buttons.outlineListButton]}
+   * />
+  */
   bottomToolbar: arrayOf<Config.Buttons>(Config.Buttons),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to show the toolbar switcher in the top toolbar.
+   * @example
+   * <DocumentView
+   *   hideAnnotationToolbarSwitcher={false}
+   * />
+   */
   hideAnnotationToolbarSwitcher: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to hide both the top app nav bar and the annotation toolbar.
+   * @example
+   * <DocumentView
+   *   hideTopToolbars={false}
+   * />
+   */
   hideTopToolbars: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default false
+   * @description Defines whether to hide the top navigation app bar.
+   * @example
+   * <DocumentView
+   *   hideTopAppNavBar={true}
+   * />
+   */
   hideTopAppNavBar: PropTypes.bool,
   /**
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called if a change has been made to user bookmarks.
+   * @param {string} bookmarkJson the list of current bookmarks in JSON format
+   * @example
+   * <DocumentView
+   *   onBookmarkChanged = {({bookmarkJson}) => {
+   *     console.log('Bookmarks have been changed. Current bookmark collection is', bookmarkJson);
+   *   }}
+   * />
    */  
   onBookmarkChanged: func<(event: {bookmarkJson: string}) => void>(),
+
+  /**
+   * @type {Config.ThumbnailFilterMode[]}
+   * @optional
+   * @description Defines filter modes that should be hidden in the thumbnails browser. 
+   * @example
+   * <DocumentView
+   *   hideThumbnailFilterModes={[Config.ThumbnailFilterMode.Annotated]}
+   * />
+   */
   hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
 
   /**
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called when the current tool changes to a new tool
+   * @param {string} previousTool the previous tool (one of the {@link Config.Tools} constants or "unknown tool"), representing the tool before change
+   * @param {string} tool the current tool (one of the {@link Config.Tools} constants or "unknown tool"), representing the current tool
+   * @example
+   * <DocumentView
+   *   onToolChanged = {({previousTool, tool}) => {
+   *     console.log('Tool has been changed from', previousTool, 'to', tool);
+   *   }}
+   * />
    */  
   onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
   horizontalScrollPos: PropTypes.number,
