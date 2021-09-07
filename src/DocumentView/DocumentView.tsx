@@ -89,7 +89,7 @@ export const DocumentViewPropTypes = {
    * **Note**: to add the image file to your application, please follow the steps below:
    * 
    * ##### Android
-   * 1. Add the image resource to the drawable directory in [`example/android/app/src/main/res`](./example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
+   * 1. Add the image resource to the drawable directory in [`example/android/app/src/main/res`](https://github.com/PDFTron/pdftron-react-native/blob/master/example/android/app/src/main/res). For details about supported file types and potential compression, check out [here](https://developer.android.com/guide/topics/graphics/drawables#drawables-from-images).
    * 
    * <img alt='demo-android' src='https://pdftron.s3.amazonaws.com/custom/websitefiles/react-native/android_add_resources.png'/>
    * <br/><br/>
@@ -278,7 +278,8 @@ export const DocumentViewPropTypes = {
    * @type {Config.LongPressMenu[]}
    * @optional
    * @default Defaults to none.
-   * @description Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function {onLongPressMenuPress}`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
+   * @description Defines the menu items on long press that will skip default behavior when pressed. 
+   * They will still be displayed in the long press menu, and the function {@link DocumentViewPropTypes.onLongPressMenuPress onLongPressMenuPress} will be called where custom behavior can be implemented.
    * @example
    * <DocumentView
    *   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
@@ -1096,7 +1097,7 @@ export const DocumentViewPropTypes = {
   /**
    * @type {Config.ViewModePickerItem[]}
    * @optional
-   * @defaults Defaults to none.
+   * @default Defaults to none.
    * @description Defines view mode items to be hidden in the view mode dialog.
    * @example
    * <DocumentView
@@ -1244,29 +1245,205 @@ export const DocumentViewPropTypes = {
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called when the state of the current document's undo/redo stack has been changed.
+   * @example
+   * <DocumentView
+   *   onUndoRedoStateChanged = {() => { 
+   *     console.log("Undo/redo stack state changed");
+   *   }}
+   * />
    */  
   onUndoRedoStateChanged: func<() => void>(),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Android only.
+   * 
+   * Defines whether the tablet layout should be used on tablets. Otherwise uses the same layout as phones. 
+   * @example
+   * <DocumentView
+   *   tabletLayoutEnabled={true}
+   * />
+   */
   tabletLayoutEnabled: PropTypes.bool,
+
+  /**
+   * @type {Config.DefaultToolbars}
+   * @optional
+   * @default Defaults to none.
+   * @description Type can be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
+   * 
+   * Defines which {@link DocumentViewPropTypes.annotationToolbar annotationToolbar} should be selected when the document is opened.
+   * @example
+   * <DocumentView
+   *   initialToolbar={Config.DefaultToolbars.Draw}
+   * />
+   */
   initialToolbar: PropTypes.string,
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description If true, ink tool will use multi-stroke mode. Otherwise, each stroke is a new ink annotation.
+   * @example
+   * <DocumentView
+   *   inkMultiStrokeEnabled={true}
+   * />
+   */
   inkMultiStrokeEnabled: PropTypes.bool,
+
+  /**
+   * @type {Config.EraserType}
+   * @optional
+   * @description Android only. 
+   * 
+   * Sets the default eraser tool type. Value only applied after a clean install. 
+   * @example
+   * <DocumentView
+   *   defaultEraserType={Config.EraserType.hybrideEraser}
+   * />
+   */
   defaultEraserType: oneOf<Config.EraserType>(Config.EraserType),
+
+  /**
+   * @type {string}
+   * @optional
+   * @description Android only.
+   * 
+   * Sets the folder path for all save options, this defaults to the app cache path. 
+   * Example:
+   * @example
+   * <DocumentView
+   *   exportPath="/data/data/com.example/cache/test"
+   * />
+   */
   exportPath: PropTypes.string,
+
+  /**
+   * @type {string}
+   * @optional
+   * @description Android only.
+   * 
+   * Sets the cache folder used to cache PDF files opened using a http/https link, this defaults to the app cache path. 
+   * @example
+   * <DocumentView
+   *   openUrlPath="/data/data/com.example/cache/test"
+   * />
+   */
   openUrlPath: PropTypes.string,
+
+  /**
+   * @type {Config.Tools[]}
+   * @optional
+   * @default Defaults to none.
+   * @description Defines annotation types that cannot be edited after creation.
+   * @example
+   * <DocumentView
+   *   disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+   * />
+   */
   disableEditingByAnnotationType: arrayOf<Config.Tools>(Config.Tools),
+
+  /**
+   * @type {boolean}
+   * @optional 
+   * @default false
+   * @description iOS only.
+   * 
+   * Determines whether scrollbars will be hidden on the viewer.
+   * @example
+   * <DocumentView
+   *   hideScrollbars={true}
+   * />
+   */
   hideScrollbars: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional 
+   * @default true
+   * @description Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+   * @example
+   * <DocumentView
+   *   saveStateEnabled={false}
+   * />
+   */
   saveStateEnabled: PropTypes.bool,
+
+  /**
+   * @type {boolean}
+   * @optional 
+   * @default true
+   * @description Android only.
+   * 
+   * Sets whether the new saved file should open after saving.
+   * @example
+   * <DocumentView
+   *   openSavedCopyInNewTab={false}
+   * />
+   */
   openSavedCopyInNewTab: PropTypes.bool,
+
+  /**
+   * @type {Config.Tools[]}
+   * @optional
+   * @default Defaults to none.
+   * @description
+   * Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
+   * ```
+   * pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
+   * ```
+   * 
+   * and uncomment the following line in `ios/RNTPTDocumentView.m`:
+   * ```objc
+   * - (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
+   * {
+   *     ...
+   *     if (annotTypes.count > 0) {
+   *         //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+   *     }
+   * }
+   * ```
+   * 
+   * @example
+   * <DocumentView
+   *   excludedAnnotationListTypes={[Config.Tools.annotationCreateEllipse, Config.Tools.annotationCreateRectangle, Config.Tools.annotationCreateRedaction]}
+   * />
+   */
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
+
+  /**
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @description Android only.
+   * 
+   * Defines whether to show an annotation's reply review state.
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   *   replyReviewStateEnabled={true}
+   * />
+   */
   replyReviewStateEnabled: PropTypes.bool,
   
   /**
    * @event
    * @type {function}
    * @optional
-   * @description (temp)
-   * @example (temp)
+   * @description This function is called when a page has been moved in the document.
+   * @param {int} previousPageNumber the previous page number
+   * @param {int} pageNumber the current page number
+   * @example
+   * <DocumentView
+   *   onPageMoved = {({previousPageNumber, pageNumber}) => {
+   *     console.log('Page moved from', previousPageNumber, 'to', pageNumber);
+   *   }}
+   * />
    */  
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   //...ViewPropTypes,
