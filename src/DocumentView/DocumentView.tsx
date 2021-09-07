@@ -1876,7 +1876,24 @@ exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Pro
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Deletes the specified annotations in the current document.
+   * @param {object[]} annotations Defines which annotation to be deleted. Each element is in the format {id: string, pageNumber: int}
+   * @returns {Promise<void>}
+   * @example
+   * // delete annotations in the current document.
+   * this._viewer.deleteAnnotations([
+   *     {
+   *         id: 'annotId1',
+   *         pageNumber: 1,
+   *     },
+   *     {
+   *         id: 'annotId2',
+   *         pageNumber: 2,
+   *     }
+   * ]);
+   */
 deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1885,7 +1902,17 @@ deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void>
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Saves the current document. If {@link DocumentViewPropTypes.isBase64String isBase64String} is true, 
+   * this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string 
+   * in {@link DocumentViewPropTypes.document document}.
+   * @returns {Promise<void | string>} filePath - the location of the saved document, or the base64 string of the pdf in the case of base64
+   * @example
+   * this._viewer.saveDocument().then((filePath) => {
+   *   console.log('saveDocument:', filePath);
+   * });
+   */
 saveDocument = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1894,7 +1921,16 @@ saveDocument = (): Promise<void | string> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Sets a field flag value on one or more form fields.
+   * @param {string[]} fields list of field names for which the flag should be set
+   * @param {int} flag flag to be set. Number should be a {@link Config.FieldFlags} constant
+   * @param {bool} value value to set for flag
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
+   */
 setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
@@ -1903,7 +1939,21 @@ setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boole
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * @description Get type and value information of a field using its name.
+   * @param {string} fieldName name of the field
+   * @returns {Promise<void | object>} field - an object with information keys: `fieldName`, `fieldValue` (undefined for fields with no values) and `fieldType`(one of button, checkbox, radio, text, choice,  signature and unknown), or undefined if such field does not exist
+   * 
+   * @example
+   * this._viewer.getField('someFieldName').then((field) => {
+   *   if (field !== undefined) {
+   *     console.log('field name:', field.fieldName);
+   *     console.log('field value:', field.fieldValue);
+   *     console.log('field type:', field.fieldType);
+   *   }
+   * });
+   */
 getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: any, fieldType?: string}> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
@@ -1912,7 +1962,10 @@ getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: 
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 openAnnotationList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
@@ -1930,7 +1983,10 @@ openAnnotationList = (): Promise<void> => {
     return this.setValuesForFields(fieldsMap);
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   setValuesForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
@@ -1939,7 +1995,10 @@ openAnnotationList = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 handleBackButton = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1961,7 +2020,10 @@ handleBackButton = (): Promise<void | boolean> => {
     return this.setFlagsForAnnotations(annotationFlagList);  
   }
   
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   setFlagsForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1970,7 +2032,10 @@ handleBackButton = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1989,7 +2054,10 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   setPropertiesForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -1998,7 +2066,10 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2007,7 +2078,10 @@ getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | An
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2016,7 +2090,10 @@ setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2025,7 +2102,10 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
     return Promise.resolve();
   }
   
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   setHighlightFields = (highlightFields: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2034,7 +2114,10 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2043,7 +2126,10 @@ getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimum
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2052,7 +2138,10 @@ getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2061,7 +2150,10 @@ getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.A
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2070,7 +2162,10 @@ getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: str
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2099,7 +2194,10 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getVisiblePages = (): Promise<void | Array<number>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2108,7 +2206,10 @@ getVisiblePages = (): Promise<void | Array<number>> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 gotoPreviousPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2117,7 +2218,10 @@ gotoPreviousPage = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 gotoNextPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2126,7 +2230,10 @@ gotoNextPage = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 gotoFirstPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2135,7 +2242,10 @@ gotoFirstPage = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 gotoLastPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2144,7 +2254,10 @@ gotoLastPage = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 showGoToPageView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2153,7 +2266,10 @@ showGoToPageView = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 closeAllTabs = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2162,7 +2278,10 @@ closeAllTabs = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 openTabSwitcher = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2171,7 +2290,10 @@ openTabSwitcher = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2180,7 +2302,10 @@ getZoom = (): Promise<void | number> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2189,7 +2314,10 @@ setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: 
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2198,7 +2326,10 @@ zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2207,7 +2338,10 @@ zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2216,7 +2350,10 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     return Promise.resolve();
   }
   
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2225,7 +2362,10 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     return Promise.resolve();
   }
     
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2234,7 +2374,10 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2243,7 +2386,10 @@ getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 rotateClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2252,7 +2398,10 @@ rotateClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 rotateCounterClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2278,7 +2427,10 @@ rotateCounterClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2287,7 +2439,10 @@ getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> =>
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2296,7 +2451,10 @@ setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, 
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2305,7 +2463,10 @@ setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2314,7 +2475,10 @@ setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2323,7 +2487,10 @@ setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): P
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2332,7 +2499,10 @@ setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOp
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2341,7 +2511,10 @@ startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boo
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 exitSearchMode = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2350,7 +2523,10 @@ exitSearchMode = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2359,7 +2535,10 @@ findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, s
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 cancelFindText = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2368,7 +2547,10 @@ cancelFindText = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 openSearch = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2377,7 +2559,10 @@ openSearch = (): Promise<void> => {
     return Promise.resolve();
   }
   
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2386,7 +2571,10 @@ openSearch = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2395,7 +2583,10 @@ hasSelection = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 clearSelection = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2404,7 +2595,10 @@ clearSelection = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2413,7 +2607,10 @@ getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2422,7 +2619,10 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 
   selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2432,7 +2632,10 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2441,7 +2644,10 @@ isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 selectAll = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2450,7 +2656,10 @@ selectAll = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2459,7 +2668,10 @@ setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2468,7 +2680,10 @@ setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2477,7 +2692,10 @@ setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2486,7 +2704,10 @@ setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2495,7 +2716,10 @@ exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFor
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 undo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2504,7 +2728,10 @@ undo = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 redo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2513,7 +2740,10 @@ redo = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2522,7 +2752,10 @@ canUndo = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2531,7 +2764,10 @@ canRedo = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 showCrop = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2540,7 +2776,10 @@ showCrop = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 setCurrentToolbar = (toolbar: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2549,7 +2788,10 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
     return Promise.resolve();
   }
   
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
   showViewSettings = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2558,7 +2800,10 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 showRotateDialog = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2578,7 +2823,10 @@ showRotateDialog = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2587,7 +2835,10 @@ isReflowMode = (): Promise<void | boolean> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 toggleReflow = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2596,7 +2847,10 @@ toggleReflow = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2613,7 +2867,10 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 openOutlineList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2622,7 +2879,10 @@ openOutlineList = (): Promise<void> => {
     return Promise.resolve();
   }
 
-  /** @method */
+  /** 
+   * @method
+   * 
+   */
 openLayersList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
