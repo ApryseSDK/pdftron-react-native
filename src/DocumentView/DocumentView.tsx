@@ -62,7 +62,7 @@ export const DocumentViewPropTypes = {
   /**
    * @type {number}
    * @optional
-   * @description Defines the currently displayed page number. Different from {@link propTypes.initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
+   * @description Defines the currently displayed page number. Different from {@link DocumentViewPropTypes.initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
    * @example
    * <DocumentView
    *   pageNumber={5}
@@ -958,7 +958,7 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   /**
    * @method
-   * @description Returns the path of the current document. If {@link propTypes.document document} is true, this would be the path to the temporary pdf file converted from the base64 string in {@link propTypes.document document}.
+   * @description Returns the path of the current document. If {@link DocumentViewPropTypes.document document} is true, this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentViewPropTypes.document document}.
    * @returns {Promise<void | string>} path - the document path. 
    * @example
    * this._viewer.getDocumentPath().then((path) => {

@@ -1,6 +1,6 @@
 /**
  * @constant
- * @class
+ * @class (Assigned to class for documentation purposes.)
  * @hideconstructor
  * @name Config
  * @classdesc Defines configuration constants for the viewer. 
