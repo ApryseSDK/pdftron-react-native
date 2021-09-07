@@ -1964,7 +1964,10 @@ getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: 
 
   /** 
    * @method
-   * 
+   * @description Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openAnnotationList();
    */
 openAnnotationList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -1976,8 +1979,8 @@ openAnnotationList = (): Promise<void> => {
 
 /**
   * @method
-  * note: this function exists for supporting the old version. It simply calls setValuesForFields.
-  * 
+  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentViewPropTypes.setValuesForFields setValuesForFields}.
+  * @ignore
   */
    setValueForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     return this.setValuesForFields(fieldsMap);
@@ -1985,7 +1988,20 @@ openAnnotationList = (): Promise<void> => {
 
   /** 
    * @method
+   * @description Sets field values on one or more form fields.
    * 
+   * Note: the old function `setValueForFields` is deprecated. Please use this one instead.
+   * @param {object} fieldsMap map of field names and values which should be set
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setValuesForFields({
+   *   'textField1': 'Test',
+   *   'textField2': 1234,
+   *   'checkboxField1': true,
+   *   'checkboxField2': false,
+   *   'radioButton1': 'Yes',
+   *   'radioButton2': 'No'
+   * });
    */
   setValuesForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -1997,7 +2013,14 @@ openAnnotationList = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description Handles the back button in search mode. Android only.
+   * @returns {Promise<void | boolean>} handled - whether the back button is handled successfully
+   * @example
+   * this._viewer.handleBackButton().then((handled) => {
+   *   if (!handled) {
+   *     BackHandler.exitApp();
+   *   }
+   * });
    */
 handleBackButton = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2009,12 +2032,8 @@ handleBackButton = (): Promise<void | boolean> => {
 
   /**
   * @method
-  * @description Sets flags for specified annotations in the current document. The `flagValue` controls whether a flag will be set to or removed from the annotation.
-  * Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
-  * 
-  * @param {object} annotationFlagList A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of AnnotationFlags constants, flagValue: bool}
-  * @returns {Promise<void>}
-  * 
+  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentViewPropTypes.setFlagsForAnnotations setFlagsForAnnotations}.
+  * @ignore
   */
   setFlagForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     return this.setFlagsForAnnotations(annotationFlagList);  
@@ -2022,7 +2041,29 @@ handleBackButton = (): Promise<void | boolean> => {
   
   /** 
    * @method
+   * @description Sets flags for specified annotations in the current document. 
+   * The `flagValue` controls whether a flag will be set to or removed from the annotation.
    * 
+   * Note: the old function `setFlagForAnnotations` is deprecated. Please use this one.
+   * 
+   * @param {object[]} annotationFlagList A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of {@link Config.AnnotationFlags} constants, flagValue: bool}
+   * @returns {Promise<void>}
+   * @example
+   * //  Set flag for annotations in the current document.
+   * this._viewer.setFlagsForAnnotations([
+   *     {
+   *         id: 'annotId1',
+   *         pageNumber: 1,
+   *         flag: Config.AnnotationFlags.noView,
+   *         flagValue: true
+   *     },
+   *     {
+   *         id: 'annotId2',
+   *         pageNumber: 5,
+   *         flag: Config.AnnotationFlags.lockedContents,
+   *         flagValue: false
+   *     }
+   * ]);
    */
   setFlagsForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2034,7 +2075,13 @@ handleBackButton = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description Selects the specified annotation in the current document.
+   * @param {string} id the id of the target annotation
+   * @param {integer} pageNumber the page number where the targe annotation is located. It is 1-indexed
+   * @returns {Promise<void>}
+   * @example
+   * // select annotation in the current document.
+   * this._viewer.selectAnnotation('annotId1', 1);
    */
 selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
