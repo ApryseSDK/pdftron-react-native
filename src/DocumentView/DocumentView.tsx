@@ -249,6 +249,11 @@ export const DocumentViewPropTypes = {
    * @memberof DocumentView
    * @type {number}
    * @optional
+   * @description Zoom factor used to display the page content.
+   * @example
+   * <DocumentView
+   *   zoom={1}
+   * />
    */
   zoom: PropTypes.number,
 
