@@ -4213,6 +4213,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return "";
     }
+
+    public String getSavedSignatureJpgFolder() {
+        Context context = getContext();
+        if (context != null) {
+            File file = StampManager.getInstance().getSavedSignatureJpgFolder(context);
+            return file.getAbsolutePath();
+        }
+        return "";
+    }
     
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
