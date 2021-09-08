@@ -26,6 +26,8 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  * @interface
  * @description This object outlines valid {@link DocumentView} class props. 
  * These can be passed into {@link DocumentView} to customize the viewer.
+ * 
+ * Due to the length of the source file, we have included links to the exact lines of the source code where these APIs have been implemented.
  */
 export const DocumentViewPropTypes = {
   /**
@@ -1529,6 +1531,8 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 /**
   * @class
   * @classdesc An all-in-one React component for displaying and editing documents of different types such as PDF, docx, pptx, xlsx and various image formats.
+  * 
+  * Due to the length of the source file, we have included links to the exact lines of the source code where these APIs have been implemented.
   * @hideconstructor
   */
  export class DocumentView extends PureComponent<DocumentViewProps, any> {
