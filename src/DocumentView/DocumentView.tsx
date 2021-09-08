@@ -886,7 +886,7 @@ export const DocumentViewPropTypes = {
   annotationPermissionCheckEnabled: PropTypes.bool,
 
   /**
-   * @type {Config.DefaultToolbars[]}
+   * @type {Config.DefaultToolbars[]|object}
    * @optional
    * @default Defaults to none.
    * @description Type can be array of {@link Config.DefaultToolbars} constants or custom toolbar objects.
@@ -1272,7 +1272,7 @@ export const DocumentViewPropTypes = {
   tabletLayoutEnabled: PropTypes.bool,
 
   /**
-   * @type {Config.DefaultToolbars}
+   * @type {Config.DefaultToolbars|string}
    * @optional
    * @default Defaults to none.
    * @description Type can be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
