@@ -96,7 +96,7 @@ export const DocumentViewPropTypes = {
    * 2. Now you can use the image in the viewer. For example, if you add `button_close.png` to drawable, you could use `'button_close'` in leadingNavButtonIcon.
    * 
    * ##### iOS
-   * 1. After pods has been installed, open the `.xcworkspace` file for this application in Xcode (in this case, it's [`example.xcworkspace`](./example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
+   * 1. After pods has been installed, open the `.xcworkspace` file for this application in Xcode (in this case, it's [`example.xcworkspace`](https://github.com/PDFTron/pdftron-react-native/tree/master/example/ios/example.xcworkspace)), and navigate through the list below. This would allow you to add resources, in this case, an image, to your project.
    * - "Project navigator"
    * - "example" (or the app name)
    * - "Build Phases"
@@ -3254,7 +3254,7 @@ showCrop = (): Promise<void> => {
 
   /** 
    * @method
-   * @description Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+   * @description Sets the current {@link DocumentViewPropTypes.annotationToolbars annotationToolbars} for the viewer.
    * @param {string} toolbar the toolbar to enable. Should be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * @returns {Promise<void>}
    * @example
