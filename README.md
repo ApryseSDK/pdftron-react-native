@@ -49,6 +49,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     npm install @react-native-community/cli --save-dev
     npm install @react-native-community/cli-platform-android --save-dev
     npm install @react-native-community/cli-platform-ios --save-dev
+    npm install
     ```
 
 ### Android
