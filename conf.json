@@ -21,7 +21,9 @@
         "outputSourceFiles"     : true, 
 	    "outputSourcePath"      : true,
         "linenums"              : true,
-        "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-master/"
+        "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-master/",
+        "renderConstantsFor"    : ["Config.js"]
+
     },
     "opts": {
         "template": "./node_modules/ink-docstrap/template-algolia",
