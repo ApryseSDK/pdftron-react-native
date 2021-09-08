@@ -1,6 +1,6 @@
 {
     "tags": {
-        "allowUnknownTags": ["optional", "category"]
+        "allowUnknownTags": ["optional", "category", "hidesource"]
     },
     "plugins": ["plugins/markdown",
         "node_modules/better-docs/typescript",

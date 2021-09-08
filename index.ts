@@ -6,6 +6,7 @@ import * as AnnotOptions from './src/AnnotOptions/AnnotOptions';
 
 /**
  * @typedef RNPdftron
+ * @hidesource
  * @description RNPdftron contains static methods for global library initialization, configuration, and utility methods.
  */
 interface RNPdftron 

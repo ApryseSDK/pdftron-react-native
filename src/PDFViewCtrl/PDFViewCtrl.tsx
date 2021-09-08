@@ -8,6 +8,7 @@ import {
 
 /** 
  * @interface
+ * @hidesource
  * @description This object outlines valid {@link PDFViewCtrl} class props. 
  * These can be passed into {@link PDFViewCtrl} to customize the viewer.
  */
@@ -32,6 +33,7 @@ type PDFViewCtrlProps = InferProps<typeof PDFViewCtrlPropTypes>;
   * 
   * PDFViewCtrl is useful when a higher level of customization is required. For easy all-in-one document viewing and editing, use {@link DocumentView}.
   * @hideconstructor
+  * @hidesource
   */
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
