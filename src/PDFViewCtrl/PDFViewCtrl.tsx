@@ -6,14 +6,14 @@ import {
   Platform
 } from 'react-native';
 
-/** 
- * @interface
- * @hidesource
+/**
  * @description This object outlines valid {@link PDFViewCtrl} class props. 
  * These can be passed into {@link PDFViewCtrl} to customize the viewer.
+ * @ignore
  */
 const PDFViewCtrlPropTypes = {
-    /**
+  /**
+   * @memberof PDFViewCtrl
    * @type {string}
    * @description The path or url to the document. Required.
    * @example
@@ -37,9 +37,6 @@ type PDFViewCtrlProps = InferProps<typeof PDFViewCtrlPropTypes>;
   */
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
-    /**
-   * Properties to pass into {@link PDFViewCtrl}. See {@link PDFViewCtrlPropTypes} for the full list of properties and their documentation.
-   */
      static propTypes = Object.assign(PDFViewCtrlPropTypes, {...ViewPropTypes});
 
   render() {

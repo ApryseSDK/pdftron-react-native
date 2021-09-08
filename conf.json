@@ -27,6 +27,6 @@
         "template": "./node_modules/ink-docstrap/template-algolia",
         "destination": "./docs/",
         "recurse": true,
-        "readme": "./docs/DocHome.md"
+        "readme": "DocHome.md"
     }
 }

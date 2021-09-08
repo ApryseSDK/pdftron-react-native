@@ -13,6 +13,9 @@ import {Config} from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
 /**
+ * @description This object outlines valid {@link DocumentView} class props. 
+ * These can be passed into {@link DocumentView} to customize the viewer.
+ * 
  * For Contributors: The propTypes interface below contains PropTypes types for 
  * the {@link DocumentView} class.
  * It is also used to generate custom types for TS users.
@@ -20,17 +23,12 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  * To represent functions, please use {@link func}.
  * To represent "one of Config.Buttons values" or "an array of 
  * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
- */
-
-/** 
- * @interface
- * @description This object outlines valid {@link DocumentView} class props. 
- * These can be passed into {@link DocumentView} to customize the viewer.
  * 
- * Due to the length of the source file, we have included links to the exact lines of the source code where these APIs have been implemented.
+ * @ignore
  */
 export const DocumentViewPropTypes = {
   /**
+   * @memberof DocumentView
    * @type {string}
    * @description The path or url to the document. Required.
    * @example
@@ -40,6 +38,7 @@ export const DocumentViewPropTypes = {
    */
   document: PropTypes.string.isRequired,
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description The password of the document, if any. 
@@ -51,6 +50,7 @@ export const DocumentViewPropTypes = {
   password: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
    * @description Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed. 
@@ -62,9 +62,10 @@ export const DocumentViewPropTypes = {
   initialPageNumber: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
-   * @description Defines the currently displayed page number. Different from {@link DocumentViewPropTypes.initialPageNumber initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
+   * @description Defines the currently displayed page number. Different from {@link DocumentView.initialPageNumber initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
    * @example
    * <DocumentView
    *   pageNumber={5}
@@ -73,6 +74,7 @@ export const DocumentViewPropTypes = {
   pageNumber: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @type {object}
    * @optional
    * @description Defines custom headers to use with HTTP/HTTPS requests. 
@@ -84,6 +86,7 @@ export const DocumentViewPropTypes = {
   customHeaders: PropTypes.object,
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description The file name of the icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise. 
@@ -117,6 +120,7 @@ export const DocumentViewPropTypes = {
   leadingNavButtonIcon: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -129,6 +133,7 @@ export const DocumentViewPropTypes = {
   showLeadingNavButton: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -143,6 +148,7 @@ export const DocumentViewPropTypes = {
   onLeadingNavButtonPressed: func<() => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -158,6 +164,7 @@ export const DocumentViewPropTypes = {
   onDocumentLoaded: func<(path: string) => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -173,6 +180,7 @@ export const DocumentViewPropTypes = {
   onDocumentError: func<(error: string) => void>(),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -189,6 +197,7 @@ export const DocumentViewPropTypes = {
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -205,6 +214,7 @@ export const DocumentViewPropTypes = {
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -220,6 +230,7 @@ export const DocumentViewPropTypes = {
   onZoomChanged: func<(event: {zoom: number}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -235,12 +246,14 @@ export const DocumentViewPropTypes = {
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
    */
   zoom: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @type {Config.Buttons[]}
    * @optional
    * @default Defaults to none.
@@ -253,6 +266,7 @@ export const DocumentViewPropTypes = {
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
 
   /**
+   * @memberof DocumentView
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -265,6 +279,7 @@ export const DocumentViewPropTypes = {
   disabledTools: arrayOf<Config.Tools>(Config.Tools),
 
   /**
+   * @memberof DocumentView
    * @type {Config.LongPressMenu[]}
    * @optional
    * @default Contains all the items.
@@ -277,11 +292,12 @@ export const DocumentViewPropTypes = {
   longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
 
   /**
+   * @memberof DocumentView
    * @type {Config.LongPressMenu[]}
    * @optional
    * @default Defaults to none.
    * @description Defines the menu items on long press that will skip default behavior when pressed. 
-   * They will still be displayed in the long press menu, and the function {@link DocumentViewPropTypes.onLongPressMenuPress onLongPressMenuPress} will be called where custom behavior can be implemented.
+   * They will still be displayed in the long press menu, and the function {@link DocumentView.onLongPressMenuPress onLongPressMenuPress} will be called where custom behavior can be implemented.
    * @example
    * <DocumentView
    *   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
@@ -290,10 +306,11 @@ export const DocumentViewPropTypes = {
   overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
-   * @description This function is called if the pressed long press menu item is passed in to {@link DocumentViewPropTypes.overrideLongPressMenuBehavior overrideLongPressMenuBehavior}.
+   * @description This function is called if the pressed long press menu item is passed in to {@link DocumentView.overrideLongPressMenuBehavior overrideLongPressMenuBehavior}.
    * @param {string} longPressMenu One of {@link Config.LongPressMenu} constants, representing which item has been pressed
    * @param {string} longPressText the selected text if pressed on text, empty otherwise
    * @example
@@ -309,6 +326,7 @@ export const DocumentViewPropTypes = {
   onLongPressMenuPress: func<(event: {longPressMenu: string, longPressText: string}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -321,6 +339,7 @@ export const DocumentViewPropTypes = {
   longPressMenuEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Contains all the items.
@@ -336,7 +355,7 @@ export const DocumentViewPropTypes = {
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Defaults to none.
-   * @description Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function {@link DocumentViewPropTypes.onAnnotationMenuPress onAnnotationMenuPress} will be called where custom behavior can be implemented.
+   * @description Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function {@link DocumentView.onAnnotationMenuPress onAnnotationMenuPress} will be called where custom behavior can be implemented.
    * @example 
    * <DocumentView
    *   overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
@@ -345,10 +364,11 @@ export const DocumentViewPropTypes = {
   overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
-   * @description This function is called when an annotation menu item passed in to {@link DocumentViewPropTypes.overrideAnnotationMenuBehavior overrideAnnotationMenuBehavior} is pressed.
+   * @description This function is called when an annotation menu item passed in to {@link DocumentView.overrideAnnotationMenuBehavior overrideAnnotationMenuBehavior} is pressed.
    * @param {string} annotationMenu One of {@link Config.AnnotationMenu} constants, representing which item has been pressed
    * @param {object[]} annotations An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.
    * 
@@ -374,6 +394,7 @@ export const DocumentViewPropTypes = {
   onAnnotationMenuPress: func<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -386,10 +407,11 @@ export const DocumentViewPropTypes = {
   hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
 
   /**
+   * @memberof DocumentView
    * @type {Config.Actions[]}
    * @optional 
    * @default Defaults to none.
-   * @description Defines actions that will skip default behavior, such as external link click. The function {@link DocumentViewPropTypes.onBehaviorActivated onBehaviorActivated} will be called where custom behavior can be implemented, whenever the defined actions occur.
+   * @description Defines actions that will skip default behavior, such as external link click. The function {@link DocumentView.onBehaviorActivated onBehaviorActivated} will be called where custom behavior can be implemented, whenever the defined actions occur.
    * @example
    * <DocumentView
    *   overrideBehavior={[Config.Actions.linkPress]}
@@ -398,10 +420,11 @@ export const DocumentViewPropTypes = {
   overrideBehavior: arrayOf<Config.Actions>(Config.Actions),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
-   * @description This function is called if the activated behavior is passed in to {@link DocumentViewPropTypes.overrideBehavior overrideBehavior}
+   * @description This function is called if the activated behavior is passed in to {@link DocumentView.overrideBehavior overrideBehavior}
    * @param {string} action One of {@link Config.Actions} constants, representing which action has been activated
    * @param {object} data A JSON object that varies depending on the action.
    * 
@@ -424,14 +447,16 @@ export const DocumentViewPropTypes = {
   onBehaviorActivated: func<(event: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
-   * @deprecated Use {@link DocumentViewPropTypes.hideTopAppNavBar hideTopAppNavBar} prop instead.
+   * @deprecated Use {@link DocumentView.hideTopAppNavBar hideTopAppNavBar} prop instead.
    */
   topToolbarEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -444,6 +469,7 @@ export const DocumentViewPropTypes = {
   bottomToolbarEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -456,6 +482,7 @@ export const DocumentViewPropTypes = {
   hideToolbarsOnTap: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -468,6 +495,7 @@ export const DocumentViewPropTypes = {
   documentSliderEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -480,6 +508,7 @@ export const DocumentViewPropTypes = {
   pageIndicatorEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -494,6 +523,7 @@ export const DocumentViewPropTypes = {
   keyboardShortcutsEnabled: PropTypes.bool,
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -513,6 +543,7 @@ export const DocumentViewPropTypes = {
   onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -534,6 +565,7 @@ export const DocumentViewPropTypes = {
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -553,6 +585,7 @@ export const DocumentViewPropTypes = {
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -565,6 +598,7 @@ export const DocumentViewPropTypes = {
   readOnly: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -577,6 +611,7 @@ export const DocumentViewPropTypes = {
   thumbnailViewEditingEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.FitMode}
    * @optional
    * @default Config.FitMode.FitWidth
@@ -589,6 +624,7 @@ export const DocumentViewPropTypes = {
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
 
   /**
+   * @memberof DocumentView
    * @type {Config.LayoutMode}
    * @optional
    * @default Config.LayoutMode.Continuous
@@ -601,6 +637,7 @@ export const DocumentViewPropTypes = {
   layoutMode: oneOf<Config.LayoutMode>(Config.LayoutMode),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -615,6 +652,7 @@ export const DocumentViewPropTypes = {
   onLayoutChanged: func<() => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -629,6 +667,7 @@ export const DocumentViewPropTypes = {
   padStatusBar: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -641,6 +680,7 @@ export const DocumentViewPropTypes = {
   continuousAnnotationEditing: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -653,6 +693,7 @@ export const DocumentViewPropTypes = {
   selectAnnotationAfterCreation: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this piece of information.
@@ -676,10 +717,11 @@ export const DocumentViewPropTypes = {
   showSavedSignatures: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
-   * @description If true, {@link DocumentViewPropTypes.document document} prop will be treated as a base64 string. If it is not the base64 string of a pdf file, {@link DocumentViewPropTypes.base64FileExtension base64FileExtension} is required. 
+   * @description If true, {@link DocumentView.document document} prop will be treated as a base64 string. If it is not the base64 string of a pdf file, {@link DocumentView.base64FileExtension base64FileExtension} is required. 
    * 
    * When viewing a document initialized with a base64 string (i.e. a memory buffer), a temporary file is created on Android and iOS.
    * @example
@@ -691,10 +733,11 @@ export const DocumentViewPropTypes = {
   isBase64String: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
-   * @description Defines whether to enable realtime collaboration. If true then {@link DocumentViewPropTypes.currentUser currentUser} must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
+   * @description Defines whether to enable realtime collaboration. If true then {@link DocumentView.currentUser currentUser} must be set as well for collaboration mode to work. Feature set may vary between local and collaboration mode.
    * @example
    * <DocumentView
    *   collabEnabled={true}
@@ -704,8 +747,9 @@ export const DocumentViewPropTypes = {
   collabEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {string}
-   * @description Required if {@link DocumentViewPropTypes.collabEnabled collabEnabled} is set to true.
+   * @description Required if {@link DocumentView.collabEnabled collabEnabled} is set to true.
    * 
    * Defines the current user. Created annotations will have their title (author) set to this string.
    * @example
@@ -717,12 +761,13 @@ export const DocumentViewPropTypes = {
   currentUser: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description Defines the current user name. 
-   * Will set the user name only if {@link DocumentViewPropTypes.collabEnabled collabEnabled} is true and {@link DocumentViewPropTypes.currentUser currentUser} is defined.
+   * Will set the user name only if {@link DocumentView.collabEnabled collabEnabled} is true and {@link DocumentView.currentUser currentUser} is defined.
    * This should be used only if you want the user's display name to be different than the annotation's title/author 
-   * (in the case that {@link DocumentViewPropTypes.currentUser currentUser} is an ID rather than a human-friendly name.)
+   * (in the case that {@link DocumentView.currentUser currentUser} is an ID rather than a human-friendly name.)
    * @example
    * <DocumentView
    *   collabEnabled={true}
@@ -733,11 +778,12 @@ export const DocumentViewPropTypes = {
   currentUserName: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
    * @description This function is called if a change has been made to annotations in the current document. 
-   * Unlike {@link DocumentViewPropTypes.onAnnotationChanged onAnnotationChanged}, this function has an XFDF command string as its parameter. 
+   * Unlike {@link DocumentView.onAnnotationChanged onAnnotationChanged}, this function has an XFDF command string as its parameter. 
    * If you are modifying or deleting multiple annotations, then on Android the function is only called once, and on iOS it is called for each annotation.
    * 
    * **Known Issues**
@@ -769,6 +815,7 @@ export const DocumentViewPropTypes = {
   onExportAnnotationCommand: func<(event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -781,6 +828,7 @@ export const DocumentViewPropTypes = {
   autoSaveEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -793,6 +841,7 @@ export const DocumentViewPropTypes = {
   pageChangeOnTap: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -807,6 +856,7 @@ export const DocumentViewPropTypes = {
   followSystemDarkMode: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -819,11 +869,12 @@ export const DocumentViewPropTypes = {
   useStylusAsPen: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
    * @description Defines whether viewer will use tabs in order to have more than one document open simultaneously (like a web browser). 
-   * Changing the {@link DocumentViewPropTypes.document document} prop value will cause a new tab to be opened with the associated file.
+   * Changing the {@link DocumentView.document document} prop value will cause a new tab to be opened with the associated file.
    * @example
    * <DocumentView
    *   multiTabEnabled={true}
@@ -832,10 +883,11 @@ export const DocumentViewPropTypes = {
   multiTabEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @default the file name
-   * @description Set the tab title if {@link DocumentViewPropTypes.multiTabEnabled multiTabEnabled} is true.
+   * @description Set the tab title if {@link DocumentView.multiTabEnabled multiTabEnabled} is true.
    * @example
    * <DocumentView
    *   multiTabEnabled={true}
@@ -845,6 +897,7 @@ export const DocumentViewPropTypes = {
   tabTitle: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
    * @default unlimited
@@ -859,6 +912,7 @@ export const DocumentViewPropTypes = {
   maxTabCount: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -873,6 +927,7 @@ export const DocumentViewPropTypes = {
   signSignatureFieldsWithStamps: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -887,6 +942,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @type {Config.DefaultToolbars[]|object}
+   * @memberof DocumentView
    * @optional
    * @default Defaults to none.
    * @description Type can be array of {@link Config.DefaultToolbars} constants or custom toolbar objects.
@@ -917,11 +973,12 @@ export const DocumentViewPropTypes = {
   ])),
 
   /**
+   * @memberof DocumentView
    * @type {Config.DefaultToolbars[]}
    * @optional
    * @default Defaults to none.
    * @description Defines which default annotation toolbars should be hidden. 
-   * Note that this prop should be used when {@link DocumentViewPropTypes.annotationToolbars annotationToolbars} is not defined.
+   * Note that this prop should be used when {@link DocumentView.annotationToolbars annotationToolbars} is not defined.
    * @example
    * <DocumentView
    *   hideDefaultAnnotationToolbars={[Config.DefaultToolbars.Annotate, Config.DefaultToolbars.Favorite]}
@@ -930,6 +987,7 @@ export const DocumentViewPropTypes = {
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
   
   /**
+   * @memberof DocumentView
    * @type {Config.Buttons[]}
    * @optional
    * @description iOS only
@@ -956,6 +1014,7 @@ export const DocumentViewPropTypes = {
   bottomToolbar: arrayOf<Config.Buttons>(Config.Buttons),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -968,6 +1027,7 @@ export const DocumentViewPropTypes = {
   hideAnnotationToolbarSwitcher: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -980,6 +1040,7 @@ export const DocumentViewPropTypes = {
   hideTopToolbars: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -991,6 +1052,7 @@ export const DocumentViewPropTypes = {
    */
   hideTopAppNavBar: PropTypes.bool,
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1006,6 +1068,7 @@ export const DocumentViewPropTypes = {
   onBookmarkChanged: func<(event: {bookmarkJson: string}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {Config.ThumbnailFilterMode[]}
    * @optional
    * @description Defines filter modes that should be hidden in the thumbnails browser. 
@@ -1017,6 +1080,7 @@ export const DocumentViewPropTypes = {
   hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1033,6 +1097,7 @@ export const DocumentViewPropTypes = {
   onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
    * @description Defines the horizontal scroll position in the current document viewer.
@@ -1044,6 +1109,7 @@ export const DocumentViewPropTypes = {
   horizontalScrollPos: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @type {number}
    * @optional
    * @description Defines the vertical scroll position in the current document viewer.
@@ -1055,6 +1121,7 @@ export const DocumentViewPropTypes = {
   verticalScrollPos: PropTypes.number,
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1070,6 +1137,7 @@ export const DocumentViewPropTypes = {
   onTextSearchStart: func<() => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1097,6 +1165,7 @@ export const DocumentViewPropTypes = {
   onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {Config.ViewModePickerItem[]}
    * @optional
    * @default Defaults to none.
@@ -1113,6 +1182,7 @@ export const DocumentViewPropTypes = {
   hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1127,6 +1197,7 @@ export const DocumentViewPropTypes = {
   pageStackEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1141,6 +1212,7 @@ export const DocumentViewPropTypes = {
   showQuickNavigationButton: PropTypes.bool,
   
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true.
@@ -1155,6 +1227,7 @@ export const DocumentViewPropTypes = {
   photoPickerEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -1167,6 +1240,7 @@ export const DocumentViewPropTypes = {
   autoResizeFreeTextEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {bool}
    * @optional
    * @default true
@@ -1181,6 +1255,7 @@ export const DocumentViewPropTypes = {
   annotationsListEditingEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true on Android and false on iOS
@@ -1193,6 +1268,7 @@ export const DocumentViewPropTypes = {
   showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default false
@@ -1205,6 +1281,7 @@ export const DocumentViewPropTypes = {
   restrictDownloadUsage: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1218,6 +1295,7 @@ export const DocumentViewPropTypes = {
   userBookmarksListEditingEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1230,6 +1308,7 @@ export const DocumentViewPropTypes = {
   imageInReflowEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.ReflowOrientation}
    * @optional
    * @default Config.ReflowOrientation.Horizontal 
@@ -1244,6 +1323,7 @@ export const DocumentViewPropTypes = {
   reflowOrientation: oneOf<Config.ReflowOrientation>(Config.ReflowOrientation),
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1258,6 +1338,7 @@ export const DocumentViewPropTypes = {
   onUndoRedoStateChanged: func<() => void>(),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1272,12 +1353,13 @@ export const DocumentViewPropTypes = {
   tabletLayoutEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.DefaultToolbars|string}
    * @optional
    * @default Defaults to none.
    * @description Type can be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * 
-   * Defines which {@link DocumentViewPropTypes.annotationToolbars annotationToolbar} should be selected when the document is opened.
+   * Defines which {@link DocumentView.annotationToolbars annotationToolbar} should be selected when the document is opened.
    * @example
    * <DocumentView
    *   initialToolbar={Config.DefaultToolbars.Draw}
@@ -1286,6 +1368,7 @@ export const DocumentViewPropTypes = {
   initialToolbar: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1298,6 +1381,7 @@ export const DocumentViewPropTypes = {
   inkMultiStrokeEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.EraserType}
    * @optional
    * @description Android only. 
@@ -1311,6 +1395,7 @@ export const DocumentViewPropTypes = {
   defaultEraserType: oneOf<Config.EraserType>(Config.EraserType),
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description Android only.
@@ -1325,6 +1410,7 @@ export const DocumentViewPropTypes = {
   exportPath: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {string}
    * @optional
    * @description Android only.
@@ -1338,6 +1424,7 @@ export const DocumentViewPropTypes = {
   openUrlPath: PropTypes.string,
 
   /**
+   * @memberof DocumentView
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -1350,6 +1437,7 @@ export const DocumentViewPropTypes = {
   disableEditingByAnnotationType: arrayOf<Config.Tools>(Config.Tools),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional 
    * @default false
@@ -1364,6 +1452,7 @@ export const DocumentViewPropTypes = {
   hideScrollbars: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional 
    * @default true
@@ -1376,6 +1465,7 @@ export const DocumentViewPropTypes = {
   saveStateEnabled: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional 
    * @default true
@@ -1390,6 +1480,7 @@ export const DocumentViewPropTypes = {
   openSavedCopyInNewTab: PropTypes.bool,
 
   /**
+   * @memberof DocumentView
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -1418,6 +1509,7 @@ export const DocumentViewPropTypes = {
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
 
   /**
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
@@ -1434,6 +1526,7 @@ export const DocumentViewPropTypes = {
   replyReviewStateEnabled: PropTypes.bool,
   
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1450,6 +1543,7 @@ export const DocumentViewPropTypes = {
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
 
   /**
+   * @memberof DocumentView
    * @event
    * @type {function}
    * @optional
@@ -1457,7 +1551,7 @@ export const DocumentViewPropTypes = {
    * 
    * Please note that this API is meant for tab-specific changes. 
    * If you would like to know when the document finishes loading instead, see 
-   * the {@link DocumentViewPropTypes.onDocumentLoaded onDocumentLoaded} event.
+   * the {@link DocumentView.onDocumentLoaded onDocumentLoaded} event.
    * @param {string} currentTab The file path of current tab's document
    * @example
    * <DocumentView
@@ -1539,9 +1633,6 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   _viewerRef: any;
 
-  /**
-   * Properties to pass into {@link DocumentView}. See {@link DocumentViewPropTypes} for the full list of properties and their documentation.
-   */
   static propTypes = Object.assign(DocumentViewPropTypes, {...ViewPropTypes});
 
   onChange = (event: any) => {
@@ -1693,8 +1784,8 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   /**
    * @method
-   * @description Returns the path of the current document. If {@link DocumentViewPropTypes.isBase64String isBase64String} is true, 
-   * this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentViewPropTypes.document document}.
+   * @description Returns the path of the current document. If {@link DocumentView.isBase64String isBase64String} is true, 
+   * this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentView.document document}.
    * @returns {Promise<void | string>} path - the document path. 
    * @example
    * this._viewer.getDocumentPath().then((path) => {
@@ -1908,9 +1999,9 @@ deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void>
 
   /** 
    * @method
-   * @description Saves the current document. If {@link DocumentViewPropTypes.isBase64String isBase64String} is true, 
+   * @description Saves the current document. If {@link DocumentView.isBase64String isBase64String} is true, 
    * this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string 
-   * in {@link DocumentViewPropTypes.document document}.
+   * in {@link DocumentView.document document}.
    * @returns {Promise<void | string>} filePath - the location of the saved document, or the base64 string of the pdf in the case of base64
    * @example
    * this._viewer.saveDocument().then((filePath) => {
@@ -3254,7 +3345,7 @@ showCrop = (): Promise<void> => {
 
   /** 
    * @method
-   * @description Sets the current {@link DocumentViewPropTypes.annotationToolbars annotationToolbars} for the viewer.
+   * @description Sets the current {@link DocumentView.annotationToolbars annotationToolbars} for the viewer.
    * @param {string} toolbar the toolbar to enable. Should be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * @returns {Promise<void>}
    * @example
@@ -3378,7 +3469,7 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
    * @method
    * @description Display a page thumbnails view. 
    * 
-   * This view allows users to navigate pages of a document. If {@link DocumentViewPropTypes.thumbnailViewEditingEnabled thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+   * This view allows users to navigate pages of a document. If {@link DocumentView.thumbnailViewEditingEnabled thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
    * @returns {Promise<void>}
    * @example
    * this._viewer.openThumbnailsView();
