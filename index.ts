@@ -30,7 +30,7 @@ interface RNPdftron
     /**
      * @method
      * @description Gets the current PDFNet version.
-     * @returns {Promise<string>} version - currentPDFNet version
+     * @returns {Promise<string>} version - current PDFNet version
      * @example
      * RNPdftron.getVersion().then((version) => {
      *   console.log("Current PDFNet version:", version);

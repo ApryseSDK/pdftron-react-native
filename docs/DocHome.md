@@ -15,7 +15,7 @@ The typings used in these API docs will be described using normal JavaScript typ
 ## Frequently used
 
 - [DocumentView](DocumentView.html) - An all-in-one React component for displaying and editing documents of different types.
-- [Props](propTypes.html) - Properties to customize the viewer.
+- [Props](DocumentViewPropTypes.html) - Properties to customize the viewer.
 - [Config](Config.html) - Defines configuration constants for the viewer.
 - [PDFViewCtrl](PDFViewCtrl.html) - A React component for displaying documents when a higher level of customization is required.
 - [RNPdftron](RNPdftron.html) - Contains static methods for global library initialization, configuration, and utility methods.
