@@ -2492,7 +2492,11 @@ showGoToPageView = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Closes all tabs in a multi-tab environment.
+   * @returns {Promise<void>}
+   * @example
+   * // Do this only when DocumentView has multiTabEnabled = true
+   * this._viewer.closeAllTabs();
    */
 closeAllTabs = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2504,7 +2508,11 @@ closeAllTabs = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Opens the tab switcher in a multi-tab environment.
+   * @returns {Promise<void>}
+   * @example
+   * // Do this only when DocumentView has multiTabEnabled = true
+   * this._viewer.openTabSwitcher();
    */
 openTabSwitcher = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2516,7 +2524,12 @@ openTabSwitcher = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns the current zoom scale of current document viewer.
+   * @returns {Promise<void | number>} zoom - current zoom scale in the viewer
+   * @example
+   * this._viewer.getZoom().then((zoom) => {
+   *   console.log('Zoom scale of the current document is:', zoom);
+   * });
    */
 getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2528,7 +2541,13 @@ getZoom = (): Promise<void | number> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the minimum and maximum zoom bounds of current viewer.
+   * @param {string} zoomLimitMode one of the constants in {@link Config.ZoomLimitMode}, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+   * @param {double} minimum the lower bound of the zoom limit range
+   * @param {double} maximum the upper bound of the zoom limit range
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setZoomLimits(Config.ZoomLimitMode.Absolute, 1.0, 3.5);
    */
 setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2540,7 +2559,13 @@ setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: 
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the zoom scale in the current document viewer with a zoom center.
+   * @param {double} zoom the zoom ratio to be set
+   * @param {int} x the x-coordinate of the zoom center
+   * @param {int} y the y-coordinate of the zoom center
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.zoomWithCenter(3.0, 100, 300);
    */
 zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2552,7 +2577,12 @@ zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Zoom the viewer to a specific rectangular area in a page.
+   * @param {int} pageNumber the page number of the zooming area (1-indexed)
+   * @param {map} rect The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.zoomToRect(3, {'x1': 1.0, 'y1': 2.0, 'x2': 3.0, 'y2': 4.0});
    */
 zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2564,7 +2594,13 @@ zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
+   * @param {int} x the x-coordinate of the target coordinate
+   * @param {int} y the y-coordinate of the target coordinate
+   * @param {bool} animated whether the transition is animated
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.smartZoom(100, 200, true);
    */
 smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2576,7 +2612,19 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
   
   /** 
    * @method
-   * @description temp
+   * @description Returns the horizontal and vertical scroll position of current document viewer.
+   * @returns {Promise<void | object>} 
+   * 
+   * Name | Type | Description
+   * --- | --- | ---
+   * horizontal | number | current horizontal scroll position
+   * vertical | number | current vertical scroll position
+   * 
+   * @example
+   * this._viewer.getScrollPos().then(({horizontal, vertical}) => {
+   *   console.log('Current horizontal scroll position is:', horizontal);
+   *   console.log('Current vertical scroll position is:', vertical);
+   * });
    */
   getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2588,7 +2636,19 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     
   /** 
    * @method
-   * @description temp
+   * @description Returns the canvas size of current document viewer.
+   * @returns {Promise<void | object>}
+   * 
+   * Name | Type | Description
+   * --- | --- | ---
+   * width | number | current width of canvas
+   * height | number | current height of canvas
+   * 
+   * @example
+   * this._viewer.getCanvasSize().then(({width, height}) => {
+   *   console.log('Current canvas width is:', width);
+   *   console.log('Current canvas height is:', height);
+   * });
    */
   getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2600,7 +2660,12 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Gets the rotation value of all pages in the current document.
+   * @returns {Promise<void | number>} pageRotation - the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
+   * @example
+   * this._viewer.getPageRotation().then((pageRotation) => {
+   *   console.log('The current page rotation degree is' + pageRotation);
+   * });
    */
 getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2612,7 +2677,10 @@ getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Rotates all pages in the current document in clockwise direction (by 90 degrees).
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.rotateClockwise();
    */
 rotateClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2624,7 +2692,10 @@ rotateClockwise = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.rotateCounterClockwise();
    */
 rotateCounterClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2634,7 +2705,19 @@ rotateCounterClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
-
+  /**
+   * @method
+   * @description Converts points from screen coordinates to page coordinates in the viewer.
+   * @param {object[]} points list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+   * @returns {Promise<void | object[]>} convertedPoints - list of converted points in page system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+   * @example
+   * // convert (50, 50) and (100, 100) from screen system to page system, on current page and page 1 respectively
+   * this._viewer.convertScreenPointsToPagePoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
+   *   convertedPoints.forEach(point => {
+   *     console.log(point);
+   *   })
+   * }); 
+   */
   convertScreenPointsToPagePoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2643,6 +2726,19 @@ rotateCounterClockwise = (): Promise<void> => {
     return Promise.resolve();
   }
 
+  /**
+   * @method
+   * @description Converts points from page coordinates to screen coordinates in the viewer.
+   * @param {object[]} points list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
+   * @returns {Promise<void | object[]>} convertedPoints - list of converted points in screen system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
+   * @example
+   * // convert (50, 50) on current page and (100, 100) on page 1 from page system to screen system
+   * this._viewer.convertPagePointsToScreenPoints([{x: 50, y: 50}, {x: 100, y:100, pageNumber: 1}]).then((convertedPoints) => {
+   *   convertedPoints.forEach(point => {
+   *     console.log(point);
+   *   })
+   * });
+   */
   convertPagePointsToScreenPoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -2653,7 +2749,14 @@ rotateCounterClockwise = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns the page number that contains the point on screen.
+   * @param {number} x the x-coordinate of the screen point
+   * @param {number} y the y-coordinate of the screen point
+   * @returns {Promise<void | number>} pageNumber - the page number of the screen point
+   * @example
+   * this._viewer.getPageNumberFromScreenPoint(10.0,50.5).then((pageNumber) => {
+   *   console.log('The page number of the screen point is', pageNumber);
+   * });
    */
 getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2665,7 +2768,14 @@ getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> =>
 
   /** 
    * @method
-   * @description temp
+   * @description Sets whether the control will render progressively or will just draw once the entire view has been rendered.
+   * @param {boolean} progressiveRendering whether to render progressively
+   * @param {number} initialDelay delay before the progressive rendering timer is started, in milliseconds
+   * @param {number} interval delay between refreshes, in milliseconds
+   * @returns {Promise<void>}
+   * @example
+   * // delay for 10s before start, and refresh every 1s
+   * this._viewer.setProgressiveRendering(true, 10000, 1000);
    */
 setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2677,7 +2787,11 @@ setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, 
 
   /** 
    * @method
-   * @description temp
+   * @description Enables or disables image smoothing. The rasterizer allows a trade-off between rendering quality and rendering speed. This function can be used to indicate the preference between rendering speed and quality.
+   * @param {boolean} imageSmoothing whether to enable image smoothing
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setImageSmoothing(false);
    */
 setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2689,7 +2803,11 @@ setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Enables or disables support for overprint and overprint simulation. Overprint is a device dependent feature and the results will vary depending on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
+   * @param {string} overprint the mode of overprint, should be a {@link Config.OverprintMode} constant
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setOverprint(Config.OverprintMode.Off);
    */
 setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2701,7 +2819,10 @@ setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the color post processing transformation mode for the viewer.
+   * @param {string} colorPostProcessMode color post processing transformation mode, should be a {@link Config.ColorPostProcessMode} constant
+   * @example
+   * this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
    */
 setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2713,7 +2834,13 @@ setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): P
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the white and black color for the color post processing transformation.
+   * @param {object} whiteColor the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (only Android would apply alpha), and all numbers should be in range [0, 255]
+   * @param {object} blackColor the black color for the color post processing transformation, in the same format as whiteColor
+   * @example
+   * const whiteColor = {"red": 0, "green": 0, "blue": 255};
+   * const blackColor = {"red": 255, "green": 0, "blue": 0};
+   * this._viewer.setColorPostProcessColors(whiteColor, blackColor);
    */
 setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2725,7 +2852,13 @@ setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOp
 
   /** 
    * @method
-   * @description temp
+   * @description Search for a term and all matching results will be highlighted.
+   * @param {string} searchString the text to search for
+   * @param {boolean} matchCase indicates if it is case sensitive
+   * @param {boolean} matchWholeWord indicates if it matches an entire word only
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.startSearchMode('PDFTron', false, false);
    */
 startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2737,7 +2870,10 @@ startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boo
 
   /** 
    * @method
-   * @description temp
+   * @description Finishes the current text search and remove all the highlights.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.exitSearchMode();
    */
 exitSearchMode = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2749,7 +2885,15 @@ exitSearchMode = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
+   * @param {string} searchString the text to search for
+   * @param {bool} matchCase indicates if it is case sensitive
+   * @param {bool} matchWholeWord indicates if it matches an entire word only
+   * @param {bool} searchUp indicates if it searches upward
+   * @param {bool} regExp indicates if searchString is a regular expression
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.findText('PDFTron', false, false, true, false);
    */
 findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2761,7 +2905,10 @@ findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, s
 
   /** 
    * @method
-   * @description temp
+   * @description Cancels the current text search thread, if exists.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.cancelFindText();
    */
 cancelFindText = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2773,7 +2920,10 @@ cancelFindText = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Displays a search bar that allows the user to enter and search text within a document.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openSearch();
    */
 openSearch = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2785,7 +2935,24 @@ openSearch = (): Promise<void> => {
   
   /** 
    * @method
-   * @description temp
+   * @description Returns the text selection on a given page, if any.
+   * @param {number} pageNumber the specified page number. It is 1-indexed
+   * @returns {Promise<void | object>} selection - the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
+   * 
+   * Quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
+   * @example
+   * this._viewer.getSelection(2).then((selection) => {
+   *   if (selection) {
+   *     console.log('Found selection on page', selection.pageNumber);
+   *     for (let i = 0; i < selection.quads.length; i ++) {
+   *       const quad = selection.quads[i];
+   *       console.log('selection boundary quad', i);
+   *       for (const quadPoint of quad) {
+   *         console.log('A quad point has coordinates', quadPoint.x, quadPoint.y);
+   *       }
+   *     }
+   *   }
+   * });
    */
   getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2797,7 +2964,12 @@ openSearch = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns whether there is a text selection in the current document.
+   * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists
+   * @example
+   * this._viewer.hasSelection().then((hasSelection) => {
+   *   console.log('There is a selection in the document.');
+   * });
    */
 hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2809,7 +2981,10 @@ hasSelection = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Clears any text selection in the current document.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.clearSelection();
    */
 clearSelection = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2821,7 +2996,22 @@ clearSelection = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns the page range (beginning and end) that has text selection on it.
+   * @returns {Promise<void | object>}
+   * 
+   * Name | Type | Description
+   * --- | --- | ---
+   * begin | number | the first page to have selection, -1 if there are no selections
+   * end | number | the last page to have selection,  -1 if there are no selections
+   * 
+   * @example
+   * this._viewer.getSelectionPageRange().then(({begin, end}) => {
+   *   if (begin === -1) {
+   *     console.log('There is no selection');
+   *   } else {
+   *     console.log('The selection range is from', begin, 'to', end);
+   *   }
+   * });
    */
 getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2833,7 +3023,15 @@ getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns whether there is a text selection on the specified page in the current document.
+   * @param {number} pageNumber the specified page number. It is 1-indexed
+   * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists on the specified page
+   * @example
+   * this._viewer.hasSelectionOnPage(5).then((hasSelection) => {
+   *   if (hasSelection) {
+   *     console.log('There is a selection on page 5 in the document.');
+   *   }
+   * });
    */
 hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2845,7 +3043,13 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Selects the text within the given rectangle region.
+   * @param {object} rect the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+   * @returns {Promise<void | boolean>} selected - whether there is text selected
+   * @example
+   * this._viewer.selectInRect({x1: 0, y1: 0, x2: 200.5, y2: 200.5}).then((selected) => {
+   *         console.log(selected);
+   * });
    */
 
   selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
@@ -2858,7 +3062,13 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns whether there is text in given rectangle region.
+   * @param {object} rect the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+   * @returns {Promise<void | boolean>} hasText - whether there is text in the region
+   * @example
+   * this._viewer.isThereTextInRect({x1: 0, y1: 0, x2: 200, y2: 200}).then((hasText) => {
+   *         console.log(hasText);
+   * });
    */
 isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2870,7 +3080,10 @@ isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Selects all text on the page.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.selectAll();
    */
 selectAll = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2882,7 +3095,10 @@ selectAll = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets whether borders of each page are visible in the viewer, which is disabled by default.
+   * @param {boolean} pageBorderVisibility whether borders of each page are visible in the viewer
+   * @example
+   * this._viewer.setPageBorderVisibility(true);
    */
 setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2894,7 +3110,10 @@ setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Enables or disables transparency grid (check board pattern) to reflect page transparency, which is disabled by default.
+   * @param {boolean} pageTransparencyGrid whether to use the transparency grid
+   * @example
+   * this._viewer.setPageTransparencyGrid(true);
    */
 setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2906,7 +3125,10 @@ setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the default page color of the viewer.
+   * @param {object} defaultPageColor the default page color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+   * @example
+   * this._viewer.setDefaultPageColor({red: 0, green: 255, blue: 0}); // green color
    */
 setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2918,7 +3140,10 @@ setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the background color of the viewer.
+   * @param {object} backgroundColor the background color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
+   * @example
+   * this._viewer.setBackgroundColor({red: 0, green: 0, blue: 255}); // blue color
    */
 setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2930,7 +3155,15 @@ setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Export a PDF page to image format defined in {@link Config.ExportFormat}.
+   * @param {int} pageNumber the page to be converted
+   * @param {double} dpi the output image resolution
+   * @param {string} exportFormat one of the {@link Config.ExportFormat} constants
+   * @returns {Promise<void | string>} path - the temp path of the created image, user is responsible for clean up the cache
+   * @example
+   * this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+   *   console.log('export', path);
+   * });
    */
 exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2942,7 +3175,10 @@ exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFor
 
   /** 
    * @method
-   * @description temp
+   * @description Undo the last modification.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.undo();
    */
 undo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2954,7 +3190,10 @@ undo = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Redo the last modification.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.redo();
    */
 redo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2966,7 +3205,12 @@ redo = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Checks whether an undo operation can be performed from the current snapshot.
+   * @returns {Promise<void | boolean>} canUndo - whether it is possible to undo from the current snapshot
+   * @example
+   * this._viewer.canUndo().then((canUndo) => {
+   *   console.log(canUndo ? 'undo possible' : 'no action to undo');
+   * });
    */
 canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2978,7 +3222,12 @@ canUndo = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Checks whether a redo operation can be perfromed from the current snapshot.
+   * @returns {Promise<void | boolean>} canRedo - whether it is possible to redo from the current snapshot
+   * @example
+   * this._viewer.canRedo().then((canRedo) => {
+   *   console.log(canRedo ? 'redo possible' : 'no action to redo');
+   * });
    */
 canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2990,7 +3239,10 @@ canRedo = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Displays the page crop option. Android only.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.showCrop();
    */
 showCrop = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3002,7 +3254,13 @@ showCrop = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Sets the current [`annotationToolbar`](#annotationToolbars) for the viewer.
+   * @param {string} toolbar the toolbar to enable. Should be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
+   *   // done switching toolbar
+   * });
    */
 setCurrentToolbar = (toolbar: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3014,7 +3272,13 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
   
   /** 
    * @method
-   * @description temp
+   * @description Displays the view settings.
+   * 
+   * Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+   * @param {map} rect The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.showViewSettings({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
    */
   showViewSettings = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3026,7 +3290,12 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Displays a rotate dialog. Android only.
+   * 
+   * The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.showRotateDialog();
    */
 showRotateDialog = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3038,6 +3307,13 @@ showRotateDialog = (): Promise<void> => {
   
   /**
    * @method
+   * @description Displays the add pages view.
+   * 
+   * Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+   * @param {map} rect The rectangular area in screen co-ordinates with keys `x1` (left), `y1` (bottom), `y1` (right), `y2`(top). Coordinates are in double format.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.showAddPagesView({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0});
    */
   showAddPagesView = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3049,7 +3325,12 @@ showRotateDialog = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Returns whether the viewer is currently in reflow mode.
+   * @returns {Promise<void | boolean>} inReflow - whether the viewer is in reflow mode
+   * @example
+   * this._viewer.isReflowMode().then((inReflow) => {
+   *   console.log(inReflow ? 'in reflow mode' : 'not in reflow mode');
+   * });
    */
 isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3061,7 +3342,10 @@ isReflowMode = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Allows the user to programmatically enter and exit reflow mode.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.toggleReflow();
    */
 toggleReflow = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3073,7 +3357,14 @@ toggleReflow = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Displays the share copy view.
+   * 
+   * Requires a source rect in screen co-ordinates. On iOS this rect will be the anchor point for the view. The rect is ignored on Android.
+   * @returns {Promise<void>}
+   * @param {map} rect The rectangular area in screen co-ordinates with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double format.
+   * @param {boolean} flattening Whether the shared copy should be flattened before sharing.
+   * @example
+   * this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
    */
 shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3083,6 +3374,15 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     return Promise.resolve();
   }
  
+  /**
+   * @method
+   * @description Display a page thumbnails view. 
+   * 
+   * This view allows users to navigate pages of a document. If {@link DocumentViewPropTypes.thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openThumbnailsView();
+   */
   openThumbnailsView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -3093,7 +3393,10 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description Displays the outline tab of the existing list container. If this tab has been disabled, the method does nothing.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openOutlineList();
    */
 openOutlineList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3105,7 +3408,12 @@ openOutlineList = (): Promise<void> => {
 
   /** 
    * @method
-   * @description temp
+   * @description On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
+   * 
+   * **Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openLayersList();
    */
 openLayersList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -3118,9 +3426,10 @@ openLayersList = (): Promise<void> => {
 /**
    * @method
    * @description Displays the existing list container. Its current tab will be the one last opened. 
-   * @example this._viewer.openNavigationLists();
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.openNavigationLists();
    */
-  
   openNavigationLists = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -3129,6 +3438,19 @@ openLayersList = (): Promise<void> => {
     return Promise.resolve();
   }
 
+  /**
+   * @method
+   * @description Gets a list of absolute file paths to PDFs containing the saved signatures.
+   * @returns {Promise<void | Array<string>>} signatures - an array of string containing the absolute file paths; if there are no saved signatures, the value is an empty array
+   * @example
+   * this._viewer.getSavedSignatures().then((signatures) => {
+   *   if (signatures.length > 0) {
+   *     signatures.forEach((signature) => {
+   *       console.log(signature);
+   *     });
+   *   }
+   * }) 
+   */
   getSavedSignatures = (): Promise<void | Array<string>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
@@ -3137,6 +3459,17 @@ openLayersList = (): Promise<void> => {
     return Promise.resolve();
   }
 
+  /**
+   * @method
+   * @description Retrieves the absolute file path to the folder containing the saved signatures
+   * @returns {Promise<void | string>} path - the absolute file path to the folder
+   * @example
+   * this._viewer.getSavedSignatureFolder().then((path) => {
+   *   if (path != null) {
+   *     console.log(path);
+   *   }
+   * })
+   */
   getSavedSignatureFolder = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
