@@ -1819,7 +1819,7 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
    * @method
    * @description Imports XFDF annotation string to the current document.
    * @param {string} xfdf annotation string in XFDF format for import
-   * @returns Promise<void>
+   * @returns {Promise<void>}
    * @example
    * const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">\n\t<annots>\n\t\t<circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20190729202215Z" flags="print" date="D:20190729202215Z" page="0" rect="138.824,653.226,236.28,725.159" title="" /></annots>\n\t<pages>\n\t\t<defmtx matrix="1.333333,0.000000,0.000000,-1.333333,0.000000,1056.000000" />\n\t</pages>\n\t<pdf-info version="2" xmlns="http://www.pdftron.com/pdfinfo" />\n</xfdf>';
    * this._viewer.importAnnotations(xfdf);
@@ -3044,7 +3044,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
   /** 
    * @method
    * @description Selects the text within the given rectangle region.
-   * @param {object} rect the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+   * @param {object} rect the rectangle region in the format of `{x1: number, x2: number, y1: number, y2: number}`
    * @returns {Promise<void | boolean>} selected - whether there is text selected
    * @example
    * this._viewer.selectInRect({x1: 0, y1: 0, x2: 200.5, y2: 200.5}).then((selected) => {
@@ -3063,7 +3063,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
   /** 
    * @method
    * @description Returns whether there is text in given rectangle region.
-   * @param {object} rect the rectangle region in the format of `x1: number, x2: number, y1: number, y2: number`
+   * @param {object} rect the rectangle region in the format of `{x1: number, x2: number, y1: number, y2: number}`
    * @returns {Promise<void | boolean>} hasText - whether there is text in the region
    * @example
    * this._viewer.isThereTextInRect({x1: 0, y1: 0, x2: 200, y2: 200}).then((hasText) => {
@@ -3378,7 +3378,7 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
    * @method
    * @description Display a page thumbnails view. 
    * 
-   * This view allows users to navigate pages of a document. If {@link DocumentViewPropTypes.thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
+   * This view allows users to navigate pages of a document. If {@link DocumentViewPropTypes.thumbnailViewEditingEnabled thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
    * @returns {Promise<void>}
    * @example
    * this._viewer.openThumbnailsView();
