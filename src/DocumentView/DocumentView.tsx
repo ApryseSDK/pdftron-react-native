@@ -1057,7 +1057,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called immediately before a text search begins, 
-   * either through user actions, or function calls such as {@link DocumentViewPropTypes.findText findText}.
+   * either through user actions, or function calls such as {@link DocumentView#findText findText}.
    * @example
    * <DocumentView
    *   onTextSearchStart = {() => {
@@ -1072,7 +1072,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called after a text search is finished or canceled.
-   * @param {boolean} found whether a result is found. If no, it could be caused by not finding a matching result in the document, invalid text input, or action cancellation (user actions or {@link DocumentViewPropTypes.cancelFindText cancelFindText}
+   * @param {boolean} found whether a result is found. If no, it could be caused by not finding a matching result in the document, invalid text input, or action cancellation (user actions or {@link DocumentView#cancelFindText cancelFindText}
    * @param {object} textSelection the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
    * 
    * Quads indicate the quad boundary boxes for the selection, which could have a size larger than 1 if selection spans across different lines. Each quad have 4 points with x, y coordinates specified in number, representing a boundary box. The 4 points are in counter-clockwise order, though the first point is not guaranteed to be on lower-left relatively to the box.
@@ -1275,7 +1275,7 @@ export const DocumentViewPropTypes = {
    * @default Defaults to none.
    * @description Type can be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * 
-   * Defines which {@link DocumentViewPropTypes.annotationToolbar annotationToolbar} should be selected when the document is opened.
+   * Defines which {@link DocumentViewPropTypes.annotationToolbars annotationToolbar} should be selected when the document is opened.
    * @example
    * <DocumentView
    *   initialToolbar={Config.DefaultToolbars.Draw}
@@ -1979,7 +1979,7 @@ openAnnotationList = (): Promise<void> => {
 
 /**
   * @method
-  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentViewPropTypes.setValuesForFields setValuesForFields}.
+  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentView#setValuesForFields setValuesForFields}.
   * @ignore
   */
    setValueForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
@@ -2032,7 +2032,7 @@ handleBackButton = (): Promise<void | boolean> => {
 
   /**
   * @method
-  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentViewPropTypes.setFlagsForAnnotations setFlagsForAnnotations}.
+  * @deprecated note: this function exists for supporting the old version. It simply calls {@link DocumentView#setFlagsForAnnotations setFlagsForAnnotations}.
   * @ignore
   */
   setFlagForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
@@ -2095,7 +2095,7 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
   * @method
   * @description
   * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
-  * 
+  * @ignore
   */
   setPropertyForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
@@ -2103,7 +2103,50 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
 
   /** 
    * @method
+   * @description Sets properties for specified annotation in the current document, if it is valid.
    * 
+   * Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
+   * 
+   * @param {string} annotationId the unique id of the annotation
+   * @param {integer} pageNumber the page number where annotation is located. It is 1-indexed
+   * @param {object} propertyMap an object containing properties to be set. Available properties are listed below
+   * 
+   * Properties in propertyMap:
+   * 
+   * Name | Type | Markup exclusive | Example
+   * --- | --- | --- | ---
+   * rect | object | no | {x1: 1, y1: 2, x2: 3, y2: 4}
+   * contents | string | no | "contents"
+   * subject | string | yes | "subject"
+   * title | string | yes | "title"
+   * contentRect | object | yes | {x1: 1, y1: 2, x2: 3, y2: 4}
+   * customData | object | no | {key: value}
+   * strokeColor | object | no | {red: 255, green: 0, blue: 0}
+   * 
+   * @returns {Promise<void>}
+   * @example
+   * // Set properties for annotation in the current document.
+   * this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
+   *   rect: {
+   *     x1: 1.1,    // left
+   *     y1: 3,      // bottom
+   *     x2: 100.9,  // right
+   *     y2: 99.8    // top
+   *   },
+   *   contents: 'Hello World',
+   *   subject: 'Sample',
+   *   title: 'set-prop-for-annot',
+   *   customData: {
+   *     key1: 'value1',
+   *     key2: 'value2',
+   *     key3: 'value3'
+   *   },
+   *   strokeColor: {
+   *     "red": 255,
+   *     "green": 0,
+   *     "blue": 0
+   *   }
+   * });
    */
   setPropertiesForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2115,7 +2158,31 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
 
   /** 
    * @method
+   * @description Gets properties for specified annotation in the current document, if it is valid. 
    * 
+   * @param {string} annotationId the unique id of the annotation
+   * @param {integer} pageNumber the page number where annotation is located. It is 1-indexed
+   * 
+   * Available Properties:
+   * 
+   * Name | Type | Markup exclusive | Example
+   * --- | --- | --- | ---
+   * rect | object | no | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+   * contents | string | no | "Contents"
+   * subject | string | yes | "Subject"
+   * title | string | yes | "Title"
+   * contentRect | object | yes | {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}
+   * strokeColor | object | no | {red: 255, green: 0, blue: 0}
+   * 
+   * @returns {Promise<void | object>} propertyMap - the non-null properties of the annotation `{contents: 'Contents', strokeColor: {red: 255, green: 0, blue: 0}, rect: {x1: 1, y1: 1, x2: 2, y2: 2, width: 1, height: 1}}`
+   * 
+   * @example
+   * // Get properties for annotation in the current document.
+   * this._viewer.getPropertiesForAnnotation('Pdftron', 1).then((properties) => {
+   *   if (properties) {
+   *     console.log('Properties for annotation: ', properties);
+   *   }
+   * })
    */
 getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2127,7 +2194,13 @@ getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | An
 
   /** 
    * @method
+   * @description Sets whether all annotations and forms should be rendered. This method affects the viewer and does not change the document.
    * 
+   * Unlike {@link DocumentView#setVisibilityForAnnotation setVisibilityForAnnotation}, this method is used to show and hide all annotations and forms in the viewer. 
+   * @param {boolean} drawAnnotations whether all annotations and forms should be rendered
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setDrawAnnotations(false);
    */
 setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2139,7 +2212,15 @@ setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @description Sets visibility for specified annotation in the current document, if it is valid. 
+   * Note that if {@link DocumentView#setDrawAnnotations drawAnnotations} is set to false in the viewer, this function would not render the annotation even if visibility is true.
    * 
+   * @param {string} annotationId the unique id of the annotation
+   * @param {integer}pageNumber the page number where annotation is located. It is 1-indexed
+   * @param {boolean }visibility whether the annotation should be visible
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.setVisibilityForAnnotation('Pdftron', 1, true);
    */
 setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2151,7 +2232,10 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
   
   /** 
    * @method
-   * 
+   * @description Enables or disables highlighting form fields. It is disabled by default.
+   * @param {bool} highlightFields whether form fields should be highlighted
+   * @example
+   * this._viewer.setHighlightFields(true);
    */
   setHighlightFields = (highlightFields: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2163,7 +2247,18 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
 
   /** 
    * @method
-   * 
+   * @description Gets an annotation at the (x, y) position in screen coordinates, if any.
+   * @param {integer} x the x-coordinate of the point
+   * @param {integer} y the y-coordinate of the point
+   * @param {double} distanceThreshold maximum distance from the point (x, y) to the annotation for it to be considered a hit (in dp)
+   * @param {double} minimumLineWeight For very thin lines, it is almost impossible to hit the actual line. This specifies a minimum line thickness (in screen coordinates) for the purpose of calculating whether a point is inside the annotation or not (in dp)
+   * @returns {Promise<void | object>} annotation - the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * @example
+   * this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
+   *   if (annotation) {
+   *     console.log('Annotation found at point (167, 287) has id:', annotation.id);
+   *   }
+   * })
    */
 getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2175,7 +2270,21 @@ getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimum
 
   /** 
    * @method
-   * 
+   * @description Gets the list of annotations at a given line in screen coordinates. 
+   * Note that this is not an area selection. It should be used similar 
+   * to {@link DocumentView#getAnnotationAtPoint getAnnotationAtPoint}, except that this should 
+   * be used when you want to get multiple annotations which are overlaying with each other.
+   * @param {integer} x1 x-coordinate of an endpoint on the line
+   * @param {integer} y1 y-coordinate of an endpoint on the line
+   * @param {integer} x2 x-coordinate of the other endpoint on the line, usually used as a threshold
+   * @param {integer} y2 y-coordinate of the other endpoint on the line, usually used as a threshold
+   * @returns {Promise<void | object[]>} annotations - list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * @example
+   * this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
+   *   for (const annotation of annotations) {
+   *     console.log('Annotation found at line has id:', annotation.id);
+   *   }
+   * })
    */
 getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2187,7 +2296,15 @@ getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<
 
   /** 
    * @method
-   * 
+   * @description Gets the list of annotations on a given page.
+   * @param {integer} pageNumber the page number where annotations are located. It is 1-indexed
+   * @returns {Promise<void | Array<object>>} annotations - list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * @example
+   * this._viewer.getAnnotationsOnPage(2).then((annotations) => {
+   *   for (const annotation of annotations) {
+   *     console.log('Annotation found on page 2 has id:', annotation.id);
+   *   }
+   * })
    */
 getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2199,7 +2316,21 @@ getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.A
 
   /** 
    * @method
-   * 
+   * @description Gets an annotation's `customData` property.
+   * @param {string} annotationId the unique id of the annotation
+   * @param {integer} pageNumber the page number where annotation is located. It is 1-indexed
+   * @param {string} key the unique key associated with the `customData` property
+   * @returns {Promise<void | string>} value - the `customData` property associated with the given key
+   * @example
+   * this._viewer.setPropertiesForAnnotation("annotation1", 2, {
+   *   customData: {
+   *     data: "Nice annotation"
+   *   }
+   * }).then(() => {
+   *   this._viewer.getCustomDataForAnnotation("annotation1", 2, "data").then((value) => {
+   *     console.log(value === "Nice annotation");
+   *   })
+   * })
    */
 getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2211,7 +2342,15 @@ getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: str
 
   /** 
    * @method
-   * 
+   * @description Gets the crop box for specified page as a JSON object.
+   * @param pageNumber | integer | the page number for the target crop box. It is 1-indexed
+   * @returns {Promise<void | object>} cropBox - an object with information about position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
+   * @example
+   * this._viewer.getPageCropBox(1).then((cropBox) => {
+   *   console.log('bottom-left coordinate:', cropBox.x1, cropBox.y1);
+   *   console.log('top-right coordinate:', cropBox.x2, cropBox.y2);
+   *   console.log('width and height:', cropBox.width, cropBox.height);
+   * });
    */
 getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2225,7 +2364,7 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
    * @method
    * @description Sets current page of the document.
    * @param {integer} pageNumber the page number to be set as the current page; 1-indexed
-   * @returns {boolean} success - whether the setting process was successful
+   * @returns {Promise<void | boolean>} success - whether the setting process was successful
    * @example
    * this._viewer.setCurrentPage(4).then((success) => {
    *   if (success) {
@@ -2243,7 +2382,14 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
 
   /** 
    * @method
-   * 
+   * @description Gets the visible pages in the current viewer as an array.
+   * @returns {Promise<void | Array<number>>} visiblePages - a list of visible pages in the current viewer
+   * @example
+   * this._viewer.getVisiblePages().then((visiblePages) => {
+   *   for (const page of visiblePages) {
+   *     console.log('page', page, 'is visible.')
+   *   }
+   * });
    */
 getVisiblePages = (): Promise<void | Array<number>> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2255,7 +2401,14 @@ getVisiblePages = (): Promise<void | Array<number>> => {
 
   /** 
    * @method
-   * 
+   * @description Go to the previous page of the document. If on first page, it would stay on first page.
+   * @returns {Promise<void | boolean>} success - whether the setting process was successful (no change due to staying in first page counts as being successful)
+   * @example
+   * this._viewer.gotoPreviousPage().then((success) => {
+   *   if (success) {
+   *     console.log("Go to previous page.");
+   *   }
+   * });
    */
 gotoPreviousPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2267,7 +2420,14 @@ gotoPreviousPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description Go to the next page of the document. If on last page, it would stay on last page.
+   * @returns {Promise<void | boolean>} success - whether the setting process was successful (no change due to staying in last page counts as being successful)
+   * @example
+   * this._viewer.gotoNextPage().then((success) => {
+   *   if (success) {
+   *     console.log("Go to next page.");
+   *   }
+   * });
    */
 gotoNextPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2279,7 +2439,14 @@ gotoNextPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description Go to the first page of the document.
+   * @returns {Promise<void | boolean>} success - whether the setting process was successful
+   * @example
+   * this._viewer.gotoFirstPage().then((success) => {
+   *   if (success) {
+   *     console.log("Go to first page.");
+   *   }
+   * });
    */
 gotoFirstPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2291,7 +2458,14 @@ gotoFirstPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description Go to the last page of the document.
+   * @returns {Promise<void | boolean>} success - whether the setting process was successful
+   * @example
+   * this._viewer.gotoLastPage().then((success) => {
+   *   if (success) {
+   *     console.log("Go to last page.");
+   *   }
+   * });
    */
 gotoLastPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2303,7 +2477,10 @@ gotoLastPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
+   * @returns {Promise<void>}
+   * @example
+   * this._viewer.showGoToPageView();
    */
 showGoToPageView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2315,7 +2492,7 @@ showGoToPageView = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 closeAllTabs = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2327,7 +2504,7 @@ closeAllTabs = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 openTabSwitcher = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2339,7 +2516,7 @@ openTabSwitcher = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2351,7 +2528,7 @@ getZoom = (): Promise<void | number> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2363,7 +2540,7 @@ setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: 
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2375,7 +2552,7 @@ zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2387,7 +2564,7 @@ zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2399,7 +2576,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
   
   /** 
    * @method
-   * 
+   * @description temp
    */
   getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2411,7 +2588,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     
   /** 
    * @method
-   * 
+   * @description temp
    */
   getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2423,7 +2600,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2435,7 +2612,7 @@ getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 rotateClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2447,7 +2624,7 @@ rotateClockwise = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 rotateCounterClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2476,7 +2653,7 @@ rotateCounterClockwise = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2488,7 +2665,7 @@ getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> =>
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2500,7 +2677,7 @@ setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, 
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2512,7 +2689,7 @@ setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2524,7 +2701,7 @@ setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2536,7 +2713,7 @@ setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): P
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2548,7 +2725,7 @@ setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOp
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2560,7 +2737,7 @@ startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boo
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 exitSearchMode = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2572,7 +2749,7 @@ exitSearchMode = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2584,7 +2761,7 @@ findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, s
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 cancelFindText = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2596,7 +2773,7 @@ cancelFindText = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 openSearch = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2608,7 +2785,7 @@ openSearch = (): Promise<void> => {
   
   /** 
    * @method
-   * 
+   * @description temp
    */
   getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2620,7 +2797,7 @@ openSearch = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2632,7 +2809,7 @@ hasSelection = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 clearSelection = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2644,7 +2821,7 @@ clearSelection = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2656,7 +2833,7 @@ getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2668,7 +2845,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 
   selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
@@ -2681,7 +2858,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2693,7 +2870,7 @@ isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 selectAll = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2705,7 +2882,7 @@ selectAll = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2717,7 +2894,7 @@ setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2729,7 +2906,7 @@ setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2741,7 +2918,7 @@ setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2753,7 +2930,7 @@ setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2765,7 +2942,7 @@ exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFor
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 undo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2777,7 +2954,7 @@ undo = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 redo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2789,7 +2966,7 @@ redo = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2801,7 +2978,7 @@ canUndo = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2813,7 +2990,7 @@ canRedo = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 showCrop = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2825,7 +3002,7 @@ showCrop = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 setCurrentToolbar = (toolbar: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2837,7 +3014,7 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
   
   /** 
    * @method
-   * 
+   * @description temp
    */
   showViewSettings = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2849,7 +3026,7 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 showRotateDialog = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2872,7 +3049,7 @@ showRotateDialog = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2884,7 +3061,7 @@ isReflowMode = (): Promise<void | boolean> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 toggleReflow = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2896,7 +3073,7 @@ toggleReflow = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2916,7 +3093,7 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 openOutlineList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -2928,7 +3105,7 @@ openOutlineList = (): Promise<void> => {
 
   /** 
    * @method
-   * 
+   * @description temp
    */
 openLayersList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
