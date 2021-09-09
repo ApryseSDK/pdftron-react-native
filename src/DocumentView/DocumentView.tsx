@@ -1123,6 +1123,7 @@ export const DocumentViewPropTypes = {
   hideTopAppNavBar: PropTypes.bool,
   /**
    * @memberof DocumentView
+   * @category Bookmark
    * @event
    * @type {function}
    * @optional
@@ -1258,6 +1259,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Navigation
    * @type {boolean}
    * @optional
    * @default true
@@ -1273,6 +1275,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Navigation
    * @type {boolean}
    * @optional
    * @default true
@@ -1332,6 +1335,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Navigation
    * @type {boolean}
    * @optional
    * @default true on Android and false on iOS
@@ -1358,6 +1362,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Bookmark
    * @type {boolean}
    * @optional
    * @default true
@@ -1947,6 +1952,7 @@ getPageCount = (): Promise<void | number> => {
 
   /** 
    * @method 
+   * @category Bookmark
    * @description Imports user bookmarks into the document. The input needs to be a valid bookmark JSON format.
    * @param {string} bookmarkJson needs to be in valid bookmark JSON format, for example {"0": "Page 1"}. The page numbers are 1-indexed
    * @returns {Promise<void>}
@@ -1963,6 +1969,7 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
   
   /** 
    * @method 
+   * @category Bookmark
    * @description Displays the bookmark tab of the existing list container. 
    * If this tab has been disabled, the method does nothing.
    * @returns {Promise<void>}
@@ -2207,6 +2214,7 @@ openAnnotationList = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Navigation
    * @description Handles the back button in search mode. Android only.
    * @returns {Promise<void | boolean>} handled - whether the back button is handled successfully
    * @example
@@ -3476,6 +3484,7 @@ showCrop = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Toolbar
    * @description Sets the current {@link DocumentView.annotationToolbars annotationToolbars} for the viewer.
    * @param {string} toolbar the toolbar to enable. Should be one of the {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * @returns {Promise<void>}
