@@ -302,6 +302,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Long Press Menu
    * @type {Config.LongPressMenu[]}
    * @optional
    * @default Contains all the items.
@@ -315,6 +316,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Long Press Menu
    * @type {Config.LongPressMenu[]}
    * @optional
    * @default Defaults to none.
@@ -329,6 +331,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Long Press Menu
    * @event
    * @type {function}
    * @optional
@@ -349,6 +352,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Long Press Menu
    * @type {boolean}
    * @optional
    * @default true
@@ -362,6 +366,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotation Menu
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Contains all the items.
@@ -375,6 +380,7 @@ export const DocumentViewPropTypes = {
 
   /** 
    * @memberof DocumentView
+   * @category Annotation Menu
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Defaults to none.
@@ -388,6 +394,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Annotation Menu
    * @event
    * @type {function}
    * @optional
@@ -418,6 +425,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Annotation Menu
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
