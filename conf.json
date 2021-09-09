@@ -22,7 +22,9 @@
 	    "outputSourcePath"      : true,
         "linenums"              : true,
         "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-master/",
-        "renderConstantsFor"    : ["Config.js"]
+        "renderConstantsFor"    : ["Config.js"],
+        "sort"                  : "category",
+        "categories"            : true
 
     },
     "opts": {
