@@ -1412,6 +1412,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Undo/Redo
    * @event
    * @type {function}
    * @optional
@@ -1886,6 +1887,7 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   /**
    * @method
+   * @category Document
    * @description Returns the path of the current document. If {@link DocumentView.isBase64String isBase64String} is true, 
    * this would be the path to the temporary pdf file converted from the base64 string in {@link DocumentView.document document}.
    * @returns {Promise<void | string>} path - the document path. 
@@ -2106,6 +2108,7 @@ deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void>
 
   /** 
    * @method
+   * @category Document
    * @description Saves the current document. If {@link DocumentView.isBase64String isBase64String} is true, 
    * this would be the base64 string encoded from the temporary pdf file, which is created from the base64 string 
    * in {@link DocumentView.document document}.
@@ -3423,6 +3426,7 @@ exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFor
 
   /** 
    * @method
+   * @category Undo/Redo
    * @description Undo the last modification.
    * @returns {Promise<void>}
    * @example
@@ -3438,6 +3442,7 @@ undo = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @description Redo the last modification.
    * @returns {Promise<void>}
    * @example
@@ -3453,6 +3458,7 @@ redo = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @description Checks whether an undo operation can be performed from the current snapshot.
    * @returns {Promise<void | boolean>} canUndo - whether it is possible to undo from the current snapshot
    * @example
@@ -3470,6 +3476,7 @@ canUndo = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @description Checks whether a redo operation can be perfromed from the current snapshot.
    * @returns {Promise<void | boolean>} canRedo - whether it is possible to redo from the current snapshot
    * @example
