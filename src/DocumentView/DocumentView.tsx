@@ -2874,6 +2874,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     
   /** 
    * @method
+   * @category Canvas
    * @description Returns the canvas size of current document viewer.
    * @returns {Promise<void | object>}
    * 
@@ -2948,6 +2949,7 @@ rotateCounterClockwise = (): Promise<void> => {
 
   /**
    * @method
+   * @category Coordinate
    * @description Converts points from screen coordinates to page coordinates in the viewer.
    * @param {object[]} points list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
    * @returns {Promise<void | object[]>} convertedPoints - list of converted points in page system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
@@ -2969,6 +2971,7 @@ rotateCounterClockwise = (): Promise<void> => {
 
   /**
    * @method
+   * @category Coordinate
    * @description Converts points from page coordinates to screen coordinates in the viewer.
    * @param {object[]} points list of points, each in the format `{x: number, y: number}`. You could optionally have a `pageNumber: number` in the object. Without specifying, the page system is referring to the current page
    * @returns {Promise<void | object[]>} convertedPoints - list of converted points in screen system, each in the format `{x: number, y: number}`. It would be empty if conversion is unsuccessful
@@ -2990,6 +2993,7 @@ rotateCounterClockwise = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Coordinate
    * @description Returns the page number that contains the point on screen.
    * @param {number} x the x-coordinate of the screen point
    * @param {number} y the y-coordinate of the screen point
@@ -3009,6 +3013,7 @@ getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> =>
 
   /** 
    * @method
+   * @category Rendering Options
    * @description Sets whether the control will render progressively or will just draw once the entire view has been rendered.
    * @param {boolean} progressiveRendering whether to render progressively
    * @param {number} initialDelay delay before the progressive rendering timer is started, in milliseconds
@@ -3028,6 +3033,7 @@ setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, 
 
   /** 
    * @method
+   * @category Rendering Options
    * @description Enables or disables image smoothing. The rasterizer allows a trade-off between rendering quality and rendering speed. This function can be used to indicate the preference between rendering speed and quality.
    * @param {boolean} imageSmoothing whether to enable image smoothing
    * @returns {Promise<void>}
@@ -3044,6 +3050,7 @@ setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @category Rendering Options
    * @description Enables or disables support for overprint and overprint simulation. Overprint is a device dependent feature and the results will vary depending on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
    * @param {string} overprint the mode of overprint, should be a {@link Config.OverprintMode} constant
    * @returns {Promise<void>}
@@ -3351,6 +3358,7 @@ selectAll = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Viewer Options
    * @description Sets whether borders of each page are visible in the viewer, which is disabled by default.
    * @param {boolean} pageBorderVisibility whether borders of each page are visible in the viewer
    * @example
@@ -3366,6 +3374,7 @@ setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @category Viewer Options
    * @description Enables or disables transparency grid (check board pattern) to reflect page transparency, which is disabled by default.
    * @param {boolean} pageTransparencyGrid whether to use the transparency grid
    * @example
@@ -3381,6 +3390,7 @@ setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @category Viewer Options
    * @description Sets the default page color of the viewer.
    * @param {object} defaultPageColor the default page color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
    * @example
@@ -3396,6 +3406,7 @@ setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
 
   /** 
    * @method
+   * @category Viewer Options
    * @description Sets the background color of the viewer.
    * @param {object} backgroundColor the background color, in the format `{red: number, green: number, blue: number}`, each number in range [0, 255]
    * @example
