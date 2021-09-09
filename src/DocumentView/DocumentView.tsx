@@ -209,6 +209,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Scroll
    * @event
    * @type {function}
    * @optional
@@ -1143,6 +1144,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Scroll
    * @type {number}
    * @optional
    * @description Defines the horizontal scroll position in the current document viewer.
@@ -1155,6 +1157,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Scroll
    * @type {number}
    * @optional
    * @description Defines the vertical scroll position in the current document viewer.
@@ -1489,6 +1492,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Scroll
    * @type {boolean}
    * @optional 
    * @default false
@@ -2771,6 +2775,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
   
   /** 
    * @method
+   * @category Scroll
    * @description Returns the horizontal and vertical scroll position of current document viewer.
    * @returns {Promise<void | object>} 
    * 
