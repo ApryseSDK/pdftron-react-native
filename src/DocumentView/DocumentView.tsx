@@ -53,6 +53,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Page
    * @type {number}
    * @optional
    * @description Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed. 
@@ -65,6 +66,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Page
    * @type {number}
    * @optional
    * @description Defines the currently displayed page number. Different from {@link DocumentView.initialPageNumber initialPageNumber}, changing this prop value at runtime will change the page accordingly. 
@@ -189,6 +191,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Page
    * @event
    * @type {function}
    * @optional
@@ -516,6 +519,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Page
    * @type {boolean}
    * @optional
    * @default true
@@ -529,6 +533,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Page
    * @type {boolean}
    * @optional
    * @default true
@@ -633,6 +638,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Layout
    * @type {Config.FitMode}
    * @optional
    * @default Config.FitMode.FitWidth
@@ -646,6 +652,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Layout
    * @type {Config.LayoutMode}
    * @optional
    * @default Config.LayoutMode.Continuous
@@ -659,6 +666,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Layout
    * @event
    * @type {function}
    * @optional
@@ -853,6 +861,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Page
    * @type {boolean}
    * @optional
    * @default true
@@ -1568,6 +1577,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Page
    * @event
    * @type {function}
    * @optional
@@ -1878,6 +1888,7 @@ commitTool = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Page
    * @description Gets the current page count of the document.
    * @returns {Promise<void | number>} pageCount - the current page count of the document
    * @example
@@ -2474,6 +2485,7 @@ getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: str
 
   /** 
    * @method
+   * @category Page
    * @description Gets the crop box for specified page as a JSON object.
    * @param pageNumber | integer | the page number for the target crop box. It is 1-indexed
    * @returns {Promise<void | object>} cropBox - an object with information about position (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
@@ -2494,6 +2506,7 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
 
 /**
    * @method
+   * @category Page
    * @description Sets current page of the document.
    * @param {integer} pageNumber the page number to be set as the current page; 1-indexed
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
@@ -2514,6 +2527,7 @@ getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
 
   /** 
    * @method
+   * @category Page
    * @description Gets the visible pages in the current viewer as an array.
    * @returns {Promise<void | Array<number>>} visiblePages - a list of visible pages in the current viewer
    * @example
@@ -2533,6 +2547,7 @@ getVisiblePages = (): Promise<void | Array<number>> => {
 
   /** 
    * @method
+   * @category Page
    * @description Go to the previous page of the document. If on first page, it would stay on first page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful (no change due to staying in first page counts as being successful)
    * @example
@@ -2552,6 +2567,7 @@ gotoPreviousPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Page
    * @description Go to the next page of the document. If on last page, it would stay on last page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful (no change due to staying in last page counts as being successful)
    * @example
@@ -2571,6 +2587,7 @@ gotoNextPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Page
    * @description Go to the first page of the document.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
    * @example
@@ -2590,6 +2607,7 @@ gotoFirstPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Page
    * @description Go to the last page of the document.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
    * @example
@@ -2609,6 +2627,7 @@ gotoLastPage = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Page
    * @description Opens a go-to page dialog. If the user inputs a valid page number into the dialog, the viewer will go to that page.
    * @returns {Promise<void>}
    * @example
@@ -2792,6 +2811,7 @@ smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @category Page
    * @description Gets the rotation value of all pages in the current document.
    * @returns {Promise<void | number>} pageRotation - the rotation degree of all pages, one of 0, 90, 180 or 270 (clockwise).
    * @example
@@ -2809,6 +2829,7 @@ getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
 
   /** 
    * @method
+   * @category Page
    * @description Rotates all pages in the current document in clockwise direction (by 90 degrees).
    * @returns {Promise<void>}
    * @example
@@ -2824,6 +2845,7 @@ rotateClockwise = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Page
    * @description Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
    * @returns {Promise<void>}
    * @example
@@ -3424,6 +3446,7 @@ setCurrentToolbar = (toolbar: string): Promise<void> => {
 
   /** 
    * @method
+   * @category Page
    * @description Displays a rotate dialog. Android only.
    * 
    * The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. It also displays a thumbnail of the current page at the selected rotation angle.
