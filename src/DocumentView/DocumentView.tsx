@@ -226,6 +226,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Zoom
    * @event
    * @type {function}
    * @optional
@@ -242,6 +243,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Zoom
    * @event
    * @type {function}
    * @optional
@@ -258,6 +260,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Zoom
    * @type {number}
    * @optional
    * @description Zoom factor used to display the page content.
@@ -2675,6 +2678,7 @@ openTabSwitcher = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Zoom
    * @description Returns the current zoom scale of current document viewer.
    * @returns {Promise<void | number>} zoom - current zoom scale in the viewer
    * @example
@@ -2692,6 +2696,7 @@ getZoom = (): Promise<void | number> => {
 
   /** 
    * @method
+   * @category Zoom
    * @description Sets the minimum and maximum zoom bounds of current viewer.
    * @param {string} zoomLimitMode one of the constants in {@link Config.ZoomLimitMode}, defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
    * @param {double} minimum the lower bound of the zoom limit range
@@ -2710,6 +2715,7 @@ setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: 
 
   /** 
    * @method
+   * @category Zoom
    * @description Sets the zoom scale in the current document viewer with a zoom center.
    * @param {double} zoom the zoom ratio to be set
    * @param {int} x the x-coordinate of the zoom center
@@ -2728,6 +2734,7 @@ zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
 
   /** 
    * @method
+   * @category Zoom
    * @description Zoom the viewer to a specific rectangular area in a page.
    * @param {int} pageNumber the page number of the zooming area (1-indexed)
    * @param {map} rect The rectangular area with keys x1 (left), y1(bottom), y1(right), y2(top). Coordinates are in double
@@ -2745,6 +2752,7 @@ zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
 
   /** 
    * @method
+   * @category Zoom
    * @description Zoom to a paragraph that contains the specified coordinate. If no paragraph contains the coordinate, the zooming would not happen.
    * @param {int} x the x-coordinate of the target coordinate
    * @param {int} y the y-coordinate of the target coordinate
