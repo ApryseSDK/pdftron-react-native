@@ -29,6 +29,7 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 export const DocumentViewPropTypes = {
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {string}
    * @description The path or url to the document. Required.
    * @example
@@ -39,6 +40,7 @@ export const DocumentViewPropTypes = {
   document: PropTypes.string.isRequired,
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {string}
    * @optional
    * @description The password of the document, if any. 
@@ -75,6 +77,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {object}
    * @optional
    * @description Defines custom headers to use with HTTP/HTTPS requests. 
@@ -149,6 +152,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @event
    * @type {function}
    * @optional
@@ -165,6 +169,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @event
    * @type {function}
    * @optional
@@ -591,6 +596,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {boolean}
    * @optional
    * @default false
@@ -723,6 +729,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {boolean}
    * @optional
    * @default false
@@ -1387,6 +1394,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {Config.EraserType}
    * @optional
    * @description Android only. 
@@ -1401,6 +1409,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {string}
    * @optional
    * @description Android only.
@@ -1416,6 +1425,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {string}
    * @optional
    * @description Android only.
@@ -1458,6 +1468,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {boolean}
    * @optional 
    * @default true
@@ -1471,6 +1482,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
    * @type {boolean}
    * @optional 
    * @default true
