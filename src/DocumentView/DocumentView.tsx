@@ -836,7 +836,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
-   * @category Annotations
+   * @category Import/Export Annotations
    * @event
    * @type {function}
    * @optional
@@ -1906,6 +1906,7 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
   
   /**
    * @method
+   * @category Annotation Tools
    * @description Sets the current tool mode.
    * @param {string} toolMode One of {@link Config.Tools} constants, representing the tool mode to set.
    * @returns {Promise<void>}
@@ -1924,6 +1925,7 @@ function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
 
   /** 
    * @method 
+   * @category Annotation Tools
    * @description Commits the current tool, only available for multi-stroke ink and poly-shape.
    * @returns {Promise<void | boolean>} committed - true if either ink or poly-shape tool is committed, false otherwise
    * @example
@@ -1994,6 +1996,7 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
   
 /**
    * @method
+   * @category Import/Export Annotations
    * @description Imports remote annotation command to local document.
    * @param {string} xfdfCommand the XFDF command string
    * @param {boolean} [initialLoad=false] whether this is for initial load.
@@ -2019,6 +2022,7 @@ importBookmarkJson = (bookmarkJson: string): Promise<void> => {
 
   /** 
    * @method
+   * @category Import/Export Annotations
    * @description Imports XFDF annotation string to the current document.
    * @param {string} xfdf annotation string in XFDF format for import
    * @returns {Promise<void>}
@@ -2036,6 +2040,7 @@ importAnnotations = (xfdf: string): Promise<void> => {
 
   /** 
    * @method
+   * @category Import/Export Annotations
    * @description Extracts XFDF from the current document.
    * @param {object} options key: annotList, type: array. 
    * If specified, annotations with the matching id and pageNumber will be exported; 
