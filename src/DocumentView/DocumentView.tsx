@@ -463,6 +463,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -472,6 +473,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -485,6 +487,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -670,6 +673,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default false
@@ -960,6 +964,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @type {Config.DefaultToolbars[]|object}
+   * @category Toolbar Customization
    * @memberof DocumentView
    * @optional
    * @default Defaults to none.
@@ -992,6 +997,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {Config.DefaultToolbars[]}
    * @optional
    * @default Defaults to none.
@@ -1006,6 +1012,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {Config.Buttons[]}
    * @optional
    * @description iOS only
@@ -1019,7 +1026,9 @@ export const DocumentViewPropTypes = {
   topAppNavBarRightBar: arrayOf<Config.Buttons>(Config.Buttons),
 
   /** 
+   * @memberof DocumentView
    * @type {Config.Buttons[]}
+   * @category Toolbar Customization
    * @optional
    * @description Only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android.
    * 
@@ -1033,6 +1042,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default false
@@ -1046,6 +1056,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default false
@@ -1059,6 +1070,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {boolean}
    * @optional
    * @default false
@@ -1375,6 +1387,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Toolbar Customization
    * @type {Config.DefaultToolbars|string}
    * @optional
    * @default Defaults to none.
