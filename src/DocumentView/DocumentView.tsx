@@ -1199,6 +1199,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Text Selection
    * @event
    * @type {function}
    * @optional
@@ -1215,6 +1216,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Text Selection
    * @event
    * @type {function}
    * @optional
@@ -3085,6 +3087,7 @@ setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOp
 
   /** 
    * @method
+   * @category Text Selection
    * @description Search for a term and all matching results will be highlighted.
    * @param {string} searchString the text to search for
    * @param {boolean} matchCase indicates if it is case sensitive
@@ -3103,6 +3106,7 @@ startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boo
 
   /** 
    * @method
+   * @category Text Selection
    * @description Finishes the current text search and remove all the highlights.
    * @returns {Promise<void>}
    * @example
@@ -3118,6 +3122,7 @@ exitSearchMode = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Searches asynchronously, starting from the current page, for the given text. PDFViewCtrl automatically scrolls to the position so that the found text is visible.
    * @param {string} searchString the text to search for
    * @param {bool} matchCase indicates if it is case sensitive
@@ -3138,6 +3143,7 @@ findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, s
 
   /** 
    * @method
+   * @category Text Selection
    * @description Cancels the current text search thread, if exists.
    * @returns {Promise<void>}
    * @example
@@ -3153,6 +3159,7 @@ cancelFindText = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Displays a search bar that allows the user to enter and search text within a document.
    * @returns {Promise<void>}
    * @example
@@ -3168,6 +3175,7 @@ openSearch = (): Promise<void> => {
   
   /** 
    * @method
+   * @category Text Selection
    * @description Returns the text selection on a given page, if any.
    * @param {number} pageNumber the specified page number. It is 1-indexed
    * @returns {Promise<void | object>} selection - the text selection, in the format `{html: string, unicode: string, pageNumber: number, quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number}, {x: number, y: number}], ...]}`. If no such selection could be found, this would be null
@@ -3197,6 +3205,7 @@ openSearch = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Returns whether there is a text selection in the current document.
    * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists
    * @example
@@ -3214,6 +3223,7 @@ hasSelection = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Clears any text selection in the current document.
    * @returns {Promise<void>}
    * @example
@@ -3229,6 +3239,7 @@ clearSelection = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Returns the page range (beginning and end) that has text selection on it.
    * @returns {Promise<void | object>}
    * 
@@ -3256,6 +3267,7 @@ getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Returns whether there is a text selection on the specified page in the current document.
    * @param {number} pageNumber the specified page number. It is 1-indexed
    * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists on the specified page
@@ -3276,6 +3288,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Selects the text within the given rectangle region.
    * @param {object} rect the rectangle region in the format of `{x1: number, x2: number, y1: number, y2: number}`
    * @returns {Promise<void | boolean>} selected - whether there is text selected
@@ -3295,6 +3308,7 @@ hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Returns whether there is text in given rectangle region.
    * @param {object} rect the rectangle region in the format of `{x1: number, x2: number, y1: number, y2: number}`
    * @returns {Promise<void | boolean>} hasText - whether there is text in the region
@@ -3313,6 +3327,7 @@ isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Text Selection
    * @description Selects all text on the page.
    * @returns {Promise<void>}
    * @example
