@@ -563,6 +563,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @event
    * @type {function}
    * @optional
@@ -583,6 +584,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @event
    * @type {function}
    * @optional
@@ -605,6 +607,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @event
    * @type {function}
    * @optional
@@ -639,6 +642,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Thumbnails
    * @type {boolean}
    * @optional
    * @default true
@@ -712,6 +716,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {boolean}
    * @optional
    * @default true
@@ -725,6 +730,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {boolean}
    * @optional
    * @default true
@@ -738,6 +744,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {string}
    * @optional
    * @description Defines the author name for all annotations created on the current document. Exported xfdfCommand will include this piece of information.
@@ -828,6 +835,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @event
    * @type {function}
    * @optional
@@ -981,6 +989,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {boolean}
    * @optional
    * @default false
@@ -1130,6 +1139,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Thumbnails
    * @type {Config.ThumbnailFilterMode[]}
    * @optional
    * @description Defines filter modes that should be hidden in the thumbnails browser. 
@@ -1306,6 +1316,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {bool}
    * @optional
    * @default true
@@ -1438,6 +1449,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {boolean}
    * @optional
    * @default true
@@ -1497,6 +1509,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -1556,6 +1569,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Annotations
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -2035,6 +2049,7 @@ exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Pro
 
 /**
    * @method
+   * @category Annotations
    * @description Flattens the forms and (optionally) annotations in the current document.
    * @param {boolean} formsOnly Defines whether only forms are flattened. If false, all annotations will be flattened
    * @returns {Promise<void>}
@@ -2052,6 +2067,7 @@ exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Pro
 
   /** 
    * @method
+   * @category Annotations
    * @description Deletes the specified annotations in the current document.
    * @param {object[]} annotations Defines which annotation to be deleted. Each element is in the format {id: string, pageNumber: int}
    * @returns {Promise<void>}
@@ -2097,6 +2113,7 @@ saveDocument = (): Promise<void | string> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Sets a field flag value on one or more form fields.
    * @param {string[]} fields list of field names for which the flag should be set
    * @param {int} flag flag to be set. Number should be a {@link Config.FieldFlags} constant
@@ -2115,6 +2132,7 @@ setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boole
 
   /** 
    * @method
+   * @category Annotations
    * @description Get type and value information of a field using its name.
    * @param {string} fieldName name of the field
    * @returns {Promise<void | object>} field - an object with information keys: `fieldName`, `fieldValue` (undefined for fields with no values) and `fieldType`(one of button, checkbox, radio, text, choice,  signature and unknown), or undefined if such field does not exist
@@ -2138,6 +2156,7 @@ getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: 
 
   /** 
    * @method
+   * @category Annotations
    * @description Displays the annotation tab of the existing list container. If this tab has been disabled, the method does nothing.
    * @returns {Promise<void>}
    * @example
@@ -2162,6 +2181,7 @@ openAnnotationList = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Sets field values on one or more form fields.
    * 
    * Note: the old function `setValueForFields` is deprecated. Please use this one instead.
@@ -2215,6 +2235,7 @@ handleBackButton = (): Promise<void | boolean> => {
   
   /** 
    * @method
+   * @category Annotations
    * @description Sets flags for specified annotations in the current document. 
    * The `flagValue` controls whether a flag will be set to or removed from the annotation.
    * 
@@ -2249,6 +2270,7 @@ handleBackButton = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Selects the specified annotation in the current document.
    * @param {string} id the id of the target annotation
    * @param {integer} pageNumber the page number where the targe annotation is located. It is 1-indexed
@@ -2277,6 +2299,7 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Sets properties for specified annotation in the current document, if it is valid.
    * 
    * Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
@@ -2332,6 +2355,7 @@ selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Gets properties for specified annotation in the current document, if it is valid. 
    * 
    * @param {string} annotationId the unique id of the annotation
@@ -2364,6 +2388,7 @@ getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | An
 
   /** 
    * @method
+   * @category Annotations
    * @description Sets whether all annotations and forms should be rendered. This method affects the viewer and does not change the document.
    * 
    * Unlike {@link DocumentView#setVisibilityForAnnotation setVisibilityForAnnotation}, this method is used to show and hide all annotations and forms in the viewer. 
@@ -2382,6 +2407,7 @@ setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
 
   /** 
    * @method
+   * @category Annotations
    * @description Sets visibility for specified annotation in the current document, if it is valid. 
    * Note that if {@link DocumentView#setDrawAnnotations drawAnnotations} is set to false in the viewer, this function would not render the annotation even if visibility is true.
    * 
@@ -2402,6 +2428,7 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
   
   /** 
    * @method
+   * @category Annotations
    * @description Enables or disables highlighting form fields. It is disabled by default.
    * @param {bool} highlightFields whether form fields should be highlighted
    * @example
@@ -2417,6 +2444,7 @@ setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolea
 
   /** 
    * @method
+   * @category Annotations
    * @description Gets an annotation at the (x, y) position in screen coordinates, if any.
    * @param {integer} x the x-coordinate of the point
    * @param {integer} y the y-coordinate of the point
@@ -2440,6 +2468,7 @@ getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimum
 
   /** 
    * @method
+   * @category Annotations
    * @description Gets the list of annotations at a given line in screen coordinates. 
    * Note that this is not an area selection. It should be used similar 
    * to {@link DocumentView#getAnnotationAtPoint getAnnotationAtPoint}, except that this should 
@@ -2466,6 +2495,7 @@ getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<
 
   /** 
    * @method
+   * @category Annotations
    * @description Gets the list of annotations on a given page.
    * @param {integer} pageNumber the page number where annotations are located. It is 1-indexed
    * @returns {Promise<void | Array<object>>} annotations - list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
@@ -2486,6 +2516,7 @@ getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.A
 
   /** 
    * @method
+   * @category Annotations
    * @description Gets an annotation's `customData` property.
    * @param {string} annotationId the unique id of the annotation
    * @param {integer} pageNumber the page number where annotation is located. It is 1-indexed
@@ -3570,6 +3601,7 @@ shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
  
   /**
    * @method
+   * @category Thumbnails
    * @description Display a page thumbnails view. 
    * 
    * This view allows users to navigate pages of a document. If {@link DocumentView.thumbnailViewEditingEnabled thumbnailViewEditingEnabled} is true, the user can also manipulate the document, including add, remove, re-arrange, rotate and duplicate pages.
