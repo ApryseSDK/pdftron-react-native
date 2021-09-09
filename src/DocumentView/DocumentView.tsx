@@ -917,6 +917,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Multi-tab
    * @type {boolean}
    * @optional
    * @default false
@@ -931,6 +932,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Multi-tab
    * @type {string}
    * @optional
    * @default the file name
@@ -945,6 +947,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Multi-tab
    * @type {number}
    * @optional
    * @default unlimited
@@ -1614,6 +1617,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Multi-tab
    * @event
    * @type {function}
    * @optional
@@ -2662,6 +2666,7 @@ showGoToPageView = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Multi-tab
    * @description Closes all tabs in a multi-tab environment.
    * @returns {Promise<void>}
    * @example
@@ -2678,6 +2683,7 @@ closeAllTabs = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Multi-tab
    * @description Opens the tab switcher in a multi-tab environment.
    * @returns {Promise<void>}
    * @example
