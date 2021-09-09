@@ -321,7 +321,7 @@ export const DocumentViewPropTypes = {
    * @optional
    * @default Defaults to none.
    * @description Defines the menu items on long press that will skip default behavior when pressed. 
-   * They will still be displayed in the long press menu, and the function {@link DocumentView.onLongPressMenuPress onLongPressMenuPress} will be called where custom behavior can be implemented.
+   * They will still be displayed in the long press menu, and the function {@link DocumentView.event:onLongPressMenuPress onLongPressMenuPress} will be called where custom behavior can be implemented.
    * @example
    * <DocumentView
    *   overrideLongPressMenuBehavior={[Config.LongPressMenu.search]}
@@ -384,7 +384,7 @@ export const DocumentViewPropTypes = {
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Defaults to none.
-   * @description Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function {@link DocumentView.onAnnotationMenuPress onAnnotationMenuPress} will be called where custom behavior can be implemented.
+   * @description Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function {@link DocumentView.event:onAnnotationMenuPress onAnnotationMenuPress} will be called where custom behavior can be implemented.
    * @example 
    * <DocumentView
    *   overrideAnnotationMenuBehavior={[Config.AnnotationMenu.copy]}
@@ -439,10 +439,11 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Custom Behavior
    * @type {Config.Actions[]}
    * @optional 
    * @default Defaults to none.
-   * @description Defines actions that will skip default behavior, such as external link click. The function {@link DocumentView.onBehaviorActivated onBehaviorActivated} will be called where custom behavior can be implemented, whenever the defined actions occur.
+   * @description Defines actions that will skip default behavior, such as external link click. The function {@link DocumentView.event:onBehaviorActivated onBehaviorActivated} will be called where custom behavior can be implemented, whenever the defined actions occur.
    * @example
    * <DocumentView
    *   overrideBehavior={[Config.Actions.linkPress]}
@@ -452,6 +453,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Custom Behavior
    * @event
    * @type {function}
    * @optional
@@ -827,7 +829,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @description This function is called if a change has been made to annotations in the current document. 
-   * Unlike {@link DocumentView.onAnnotationChanged onAnnotationChanged}, this function has an XFDF command string as its parameter. 
+   * Unlike {@link DocumentView.event:onAnnotationChanged onAnnotationChanged}, this function has an XFDF command string as its parameter. 
    * If you are modifying or deleting multiple annotations, then on Android the function is only called once, and on iOS it is called for each annotation.
    * 
    * **Known Issues**
@@ -1619,7 +1621,7 @@ export const DocumentViewPropTypes = {
    * 
    * Please note that this API is meant for tab-specific changes. 
    * If you would like to know when the document finishes loading instead, see 
-   * the {@link DocumentView.onDocumentLoaded onDocumentLoaded} event.
+   * the {@link DocumentView.event:onDocumentLoaded onDocumentLoaded} event.
    * @param {string} currentTab The file path of current tab's document
    * @example
    * <DocumentView
