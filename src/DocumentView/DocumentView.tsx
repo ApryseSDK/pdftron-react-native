@@ -780,6 +780,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Collaboration
    * @type {boolean}
    * @optional
    * @default false
@@ -794,6 +795,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Collaboration
    * @type {string}
    * @description Required if {@link DocumentView.collabEnabled collabEnabled} is set to true.
    * 
@@ -808,6 +810,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Collaboration
    * @type {string}
    * @optional
    * @description Defines the current user name. 
@@ -1582,6 +1585,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Collaboration
    * @type {boolean}
    * @optional
    * @default true
