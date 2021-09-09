@@ -1345,6 +1345,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Reflow
    * @type {boolean}
    * @optional
    * @default true
@@ -1358,6 +1359,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Reflow
    * @type {Config.ReflowOrientation}
    * @optional
    * @default Config.ReflowOrientation.Horizontal 
@@ -3495,6 +3497,7 @@ showRotateDialog = (): Promise<void> => {
 
   /** 
    * @method
+   * @category Reflow
    * @description Returns whether the viewer is currently in reflow mode.
    * @returns {Promise<void | boolean>} inReflow - whether the viewer is in reflow mode
    * @example
@@ -3512,6 +3515,7 @@ isReflowMode = (): Promise<void | boolean> => {
 
   /** 
    * @method
+   * @category Reflow
    * @description Allows the user to programmatically enter and exit reflow mode.
    * @returns {Promise<void>}
    * @example
