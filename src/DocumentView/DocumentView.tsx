@@ -367,6 +367,7 @@ export const DocumentViewPropTypes = {
   annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
 
   /** 
+   * @memberof DocumentView
    * @type {Config.AnnotationMenu[]}
    * @optional
    * @default Defaults to none.
@@ -726,6 +727,7 @@ export const DocumentViewPropTypes = {
   annotationAuthor: PropTypes.string,
 
   /** 
+   * @memberof DocumentView
    * @type {boolean}
    * @optional
    * @default true
