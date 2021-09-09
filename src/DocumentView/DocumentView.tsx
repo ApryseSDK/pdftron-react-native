@@ -757,6 +757,7 @@ export const DocumentViewPropTypes = {
 
   /** 
    * @memberof DocumentView
+   * @category Signature
    * @type {boolean}
    * @optional
    * @default true
@@ -974,6 +975,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Signature
    * @type {boolean}
    * @optional
    * @default false
@@ -1291,6 +1293,7 @@ export const DocumentViewPropTypes = {
   
   /**
    * @memberof DocumentView
+   * @category Signature
    * @type {boolean}
    * @optional
    * @default true.
@@ -3675,6 +3678,7 @@ openLayersList = (): Promise<void> => {
 
   /**
    * @method
+   * @category Signature
    * @description Gets a list of absolute file paths to PDFs containing the saved signatures.
    * @returns {Promise<void | Array<string>>} signatures - an array of string containing the absolute file paths; if there are no saved signatures, the value is an empty array
    * @example
@@ -3696,6 +3700,7 @@ openLayersList = (): Promise<void> => {
 
   /**
    * @method
+   * @category Signature
    * @description Retrieves the absolute file path to the folder containing the saved signatures
    * @returns {Promise<void | string>} path - the absolute file path to the folder
    * @example
