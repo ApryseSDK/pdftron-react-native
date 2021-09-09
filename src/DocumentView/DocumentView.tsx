@@ -90,6 +90,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {string}
    * @optional
    * @description The file name of the icon to be used for the leading navigation button. The button will use the specified icon if it is valid, and the default icon otherwise. 
@@ -124,6 +125,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -137,6 +139,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @event
    * @type {function}
    * @optional
@@ -264,6 +267,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {Config.Buttons[]}
    * @optional
    * @default Defaults to none.
@@ -277,6 +281,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {Config.Tools[]}
    * @optional
    * @default Defaults to none.
@@ -493,6 +498,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -1093,6 +1099,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @event
    * @type {function}
    * @optional
@@ -1178,6 +1185,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {Config.ViewModePickerItem[]}
    * @optional
    * @default Defaults to none.
@@ -1351,6 +1359,7 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
    * @type {boolean}
    * @optional
    * @default true
@@ -2927,6 +2936,7 @@ setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
 
   /** 
    * @method
+   * @category UI Customization
    * @description Sets the color post processing transformation mode for the viewer.
    * @param {string} colorPostProcessMode color post processing transformation mode, should be a {@link Config.ColorPostProcessMode} constant
    * @example
@@ -2942,6 +2952,7 @@ setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): P
 
   /** 
    * @method
+   * @category UI Customization
    * @description Sets the white and black color for the color post processing transformation.
    * @param {object} whiteColor the white color for the color post processing transformation, in the format `{red: number, green: number, blue: number}`. `alpha` could be optionally included (only Android would apply alpha), and all numbers should be in range [0, 255]
    * @param {object} blackColor the black color for the color post processing transformation, in the same format as whiteColor
