@@ -1,6 +1,0 @@
-{
-    "entryPoints": ["index.ts", "src/"],
-    "out": "docs",
-    "disableSources": "true",
-    "readme": "DocHome.md"
-}

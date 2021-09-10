@@ -52,5 +52,4 @@ example/android/app/src/main/assets/index.android.bundle.meta
 /lib
 
 # Auto-gen Docs
-docs/*
-!docs/DocHome.md
+docs
