@@ -333,7 +333,7 @@ To get access to TypeScript support, simply update your PDFTron React Native dep
 
 ### All Users
 
-For non-TypeScript users, updating their PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and they can continue to use the library as before (without TypeScript support).
+For non-TypeScript users, updating their PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and they can continue to use the library as before (without TypeScript support). If you currently do not use TypeScript itself in your project and would like to, see [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project).
 
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
@@ -349,10 +349,6 @@ If you are an existing TypeScript user, then the custom typings will be availabl
 Note:
 - Recommended TypeScript version: 3.4.1+. Although compilation still works with lower versions, typings may degrade to `any`.
 - Due to the introduction of proper typings to PDFTron's APIs, your compiler may now give warnings or errors about your usage of these APIs. In most cases these will not prevent your app from running but it is advised that you address them to take full advantage of TypeScript. It is particularly important to address them if you use TypeScript to emit files and have enabled `noEmitOnError` in your `tsconfig.json`.
-
-### Migrating to TypeScript
-
-If you would like to migrate, [here](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project) is a guide on how to add TypeScript to an existing React Native project and [here](https://www.typescriptlang.org/docs/) is documentation for you to learn about the language.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)
