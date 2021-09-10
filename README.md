@@ -329,11 +329,11 @@ const styles = StyleSheet.create({
 
 PDFTron React Native introduced support for TypeScript in version 3.0.0. This update mainly benefits those who already use TypeScript in their applications. It also provides certain benefits to all customers, including those who use JavaScript without TypeScript.
 
-To get access to this update, simply update your PDFTron React Native dependency to version 3.0.0 or higher.
+To get access to TypeScript support, simply update your PDFTron React Native dependency to version 3.0.0 or higher.
 
 ### All Users
 
-For non-TypeScript users, this update will not automatically install TypeScript, and they can continue to use the library as before.
+For non-TypeScript users, updating their PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and they can continue to use the library as before (without TypeScript support).
 
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper typings for our APIs which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
@@ -344,7 +344,7 @@ If you have questions, head to our FAQ's Integration section for [Android](https
 
 ### TypeScript Users
 
-If you are an existing TypeScript user, then our custom typings will be available to you simply by updating your dependencies.
+If you are an existing TypeScript user, then our custom typings will be available to you simply by updating your PDFTron React Native dependency to version 3.0.0 or higher.
 
 Note:
 - We recommend that our library is used with at least TypeScript v3.4.1. Although it can be compiled using lower versions, our typings will begin degrading to `any`.
