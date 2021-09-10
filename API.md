@@ -2,7 +2,7 @@
 
 ## TypeScript
 
-PDFTron React Native now has support for TypeScript. Since not all customers use the language, the typings used in this document will be described using normal JavaScript types. For TypeScript users, type information is automatically provided while coding. They can also be found in our [TypeScript source files](src).
+PDFTron React Native now has support for TypeScript. Since not all customers use the language, the typings used in this document will be described using normal JavaScript types. For TypeScript users, type information is automatically provided while coding. If you would like to refer to the exact type aliases and constants used in our custom typings, you can look at [AnnotOptions](src/AnnotOptions) and [Config](src/Config) source folders.
 
 ## RNPdftron
 
@@ -3140,7 +3140,9 @@ this._viewer.getSavedSignatures().then((signatures) => {
 ```
 
 #### getSavedSignatureFolder
-Retrieves the absolute file path to the folder containing the saved signatures
+Retrieves the absolute file path to the folder containing the saved signature PDFs.
+
+For Android, to get the folder containing the saved signature JPGs, use [`getSavedSignatureJpgFolder`](#getSavedSignatureJpgFolder).
 
 Returns a Promise.
 
@@ -3152,6 +3154,27 @@ path | string | the absolute file path to the folder
 
 ```js
 this._viewer.getSavedSignatureFolder().then((path) => {
+  if (path != null) {
+    console.log(path);
+  }
+})
+```
+
+#### getSavedSignatureJpgFolder
+Retrieves the absolute file path to the folder containing the saved signature JPGs. Android only.
+
+To get the folder containing the saved signature PDFs, use [`getSavedSignatureFolder`](#getSavedSignatureFolder).
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the absolute file path to the folder
+
+```js
+this._viewer.getSavedSignatureJpgFolder().then((path) => {
   if (path != null) {
     console.log(path);
   }

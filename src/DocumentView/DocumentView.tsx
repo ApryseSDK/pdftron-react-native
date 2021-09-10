@@ -3923,6 +3923,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     }
     return Promise.resolve();
   }
+  
+  getSavedSignatureJpgFolder = () => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureJpgFolder(tag);
+    }
+    return Promise.resolve();
+  }
 
   /** @ignore */
   _setNativeRef = (ref: any) => {
