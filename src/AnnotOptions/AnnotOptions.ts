@@ -1,4 +1,4 @@
-import {Config} from '../Config/Config';
+import { Config } from '../Config/Config';
 
 /**
  * @typedef
@@ -44,7 +44,7 @@ export interface Rect {
 export interface CropBox extends Rect {
     height: number;
     width: number;
-};
+}
 
 /**
  * @interface
@@ -122,7 +122,7 @@ export interface LinkPressData {
     url: string;
 }
 
-export interface StickyNoteData	{
+export interface StickyNoteData {
     id: string;
     pageNumber: number;
     type: string;

@@ -20,6 +20,7 @@
         "prettier/prettier": "off",
         "no-use-before-define": "off",
         "padded-blocks": "off",
-        "react-native/no-inline-styles": "off"
+        "react-native/no-inline-styles": "off",
+        "import/export": "off"
     }
 }
