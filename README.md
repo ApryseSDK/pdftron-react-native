@@ -204,7 +204,9 @@ import { DocumentView, RNPdftron } from 'react-native-pdftron';
 type Props = {};
 export default class App extends Component<Props> {
 
-  constructor(props) { // may need to use `props: Props` in TypeScript
+  // If you are using TypeScript, use `constructor(props: Props) {`
+  // Otherwise, use:
+  constructor(props) {
     super(props);
 
     // Uses the platform to determine if storage permisions have been automatically granted.
