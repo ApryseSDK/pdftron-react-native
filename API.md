@@ -3140,7 +3140,9 @@ this._viewer.getSavedSignatures().then((signatures) => {
 ```
 
 #### getSavedSignatureFolder
-Retrieves the absolute file path to the folder containing the saved signatures
+Retrieves the absolute file path to the folder containing the saved signature PDFs.
+
+For Android, to get the folder containing the saved signature JPGs, use [`getSavedSignatureJpgFolder`](#getSavedSignatureJpgFolder).
 
 Returns a Promise.
 
@@ -3152,6 +3154,27 @@ path | string | the absolute file path to the folder
 
 ```js
 this._viewer.getSavedSignatureFolder().then((path) => {
+  if (path != null) {
+    console.log(path);
+  }
+})
+```
+
+#### getSavedSignatureJpgFolder
+Retrieves the absolute file path to the folder containing the saved signature JPGs. Android only.
+
+To get the folder containing the saved signature PDFs, use [`getSavedSignatureFolder`](#getSavedSignatureFolder).
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | the absolute file path to the folder
+
+```js
+this._viewer.getSavedSignatureJpgFolder().then((path) => {
   if (path != null) {
     console.log(path);
   }
