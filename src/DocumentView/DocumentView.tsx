@@ -1980,6 +1980,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Document
    * @desc Returns the path of the current document. 
    * If {@link DocumentView.isBase64String isBase64String} is true, 
    * this would be the path to the temporary pdf file converted from 
@@ -2000,6 +2001,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /**
    * @method
+   * @category Annotation Tools
    * @desc Sets the current tool mode.
    * @param {string} toolMode One of {@link Config.Tools} constants, 
    * representing the tool mode to set.
@@ -2019,6 +2021,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method 
+   * @category Annotation Tools
    * @desc Commits the current tool, only available for multi-stroke ink and poly-shape.
    * @returns {Promise<void | boolean>} committed - true if either ink or poly-shape tool is 
    * committed, false otherwise
@@ -2037,6 +2040,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Gets the current page count of the document.
    * @returns {Promise<void | number>} pageCount - the current page count of the document
    * @example
@@ -2054,6 +2058,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method 
+   * @category Bookmark
    * @desc Imports user bookmarks into the document. 
    * The input needs to be a valid bookmark JSON format.
    * @param {string} bookmarkJson needs to be in valid bookmark JSON format, 
@@ -2072,6 +2077,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /** 
    * @method 
+   * @category Bookmark
    * @desc Displays the bookmark tab of the existing list container. 
    * If this tab has been disabled, the method does nothing.
    * @returns {Promise<void>}
@@ -2088,6 +2094,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Import/Export Annotations
    * @desc Imports remote annotation command to local document.
    * @param {string} xfdfCommand the XFDF command string
    * @param {boolean} [initialLoad=false] whether this is for initial load.
@@ -2119,6 +2126,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Import/Export Annotations
    * @desc Imports XFDF annotation string to the current document.
    * @param {string} xfdf annotation string in XFDF format for import
    * @returns {Promise<void>}
@@ -2142,6 +2150,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Import/Export Annotations
    * @desc Extracts XFDF from the current document.
    * @param {object} options key: annotList, type: array. 
    * If specified, annotations with the matching id and pageNumber will be exported; 
@@ -2169,6 +2178,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Annotations
    * @desc Flattens the forms and (optionally) annotations in the current document.
    * @param {boolean} formsOnly Defines whether only forms are flattened. 
    * If false, all annotations will be flattened.
@@ -2187,6 +2197,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Deletes the specified annotations in the current document.
    * @param {object[]} annotations Defines which annotation to be deleted. 
    * Each element is in the format {id: string, pageNumber: int}
@@ -2214,6 +2225,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Document
    * @desc Saves the current document. 
    * If {@link DocumentView.isBase64String isBase64String} is true, 
    * this would be the base64 string encoded from the temporary pdf file, 
@@ -2235,6 +2247,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Sets a field flag value on one or more form fields.
    * @param {string[]} fields list of field names for which the flag should be set
    * @param {int} flag flag to be set. Number should be a {@link Config.FieldFlags} constant
@@ -2254,6 +2267,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Get type and value information of a field using its name.
    * @param {string} fieldName name of the field
    * @returns {Promise<void | object>} field - an object with information keys: 
@@ -2281,6 +2295,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Displays the annotation tab of the existing list container. 
    * If this tab has been disabled, the method does nothing.
    * @returns {Promise<void>}
@@ -2307,6 +2322,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Sets field values on one or more form fields.
    * 
    * Note: the old function `setValueForFields` is deprecated. Please use this one instead.
@@ -2332,6 +2348,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Navigation
    * @desc Handles the back button in search mode. Android only.
    * @returns {Promise<void | boolean>} handled - whether the back button is handled successfully
    * @example
@@ -2362,6 +2379,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /** 
    * @method
+   * @category Annotations
    * @desc Sets flags for specified annotations in the current document. 
    * The `flagValue` controls whether a flag will be set to or removed from the annotation.
    * 
@@ -2400,6 +2418,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Selects the specified annotation in the current document.
    * @param {string} id the id of the target annotation
    * @param {integer} pageNumber the page number where the targe annotation is located.
@@ -2430,6 +2449,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Sets properties for specified annotation in the current document, if it is valid.
    * 
    * Note: the old function `setPropertyForAnnotation` is deprecated. Please use this one.
@@ -2487,6 +2507,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Gets properties for specified annotation in the current document, if it is valid. 
    * 
    * @param {string} annotationId the unique id of the annotation
@@ -2520,6 +2541,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Sets whether all annotations and forms should be rendered. 
    * This method affects the viewer and does not change the document.
    * 
@@ -2540,6 +2562,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Sets visibility for specified annotation in the current document, if it is valid. 
    * Note that if {@link DocumentView#setDrawAnnotations drawAnnotations} 
    * is set to false in the viewer, this function would not render the annotation even 
@@ -2563,6 +2586,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /** 
    * @method
+   * @category Annotations
    * @desc Enables or disables highlighting form fields. It is disabled by default.
    * @param {bool} highlightFields whether form fields should be highlighted
    * @example
@@ -2578,6 +2602,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Gets an annotation at the (x, y) position in screen coordinates, if any.
    * @param {integer} x the x-coordinate of the point
    * @param {integer} y the y-coordinate of the point
@@ -2610,6 +2635,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Gets the list of annotations at a given line in screen coordinates. 
    * Note that this is not an area selection. It should be used similar 
    * to {@link DocumentView#getAnnotationAtPoint getAnnotationAtPoint}, except that this should 
@@ -2641,6 +2667,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Gets the list of annotations on a given page.
    * @param {integer} pageNumber the page number where annotations are located. It is 1-indexed
    * @returns {Promise<void | Array<object>>} annotations - list of annotations on the target page, 
@@ -2665,6 +2692,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Annotations
    * @desc Gets an annotation's `customData` property.
    * @param {string} annotationId the unique id of the annotation
    * @param {integer} pageNumber the page number where annotation is located. It is 1-indexed
@@ -2693,6 +2721,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Gets the crop box for specified page as a JSON object.
    * @param pageNumber | integer | the page number for the target crop box. It is 1-indexed
    * @returns {Promise<void | object>} cropBox - an object with information about position 
@@ -2714,6 +2743,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Page
    * @desc Sets current page of the document.
    * @param {integer} pageNumber the page number to be set as the current page; 1-indexed
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
@@ -2734,6 +2764,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Gets the visible pages in the current viewer as an array.
    * @returns {Promise<void | Array<number>>} visiblePages - a list of visible pages in the 
    * current viewer
@@ -2754,6 +2785,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Go to the previous page of the document. If on first page, it would stay on first page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful 
    * (no change due to staying in first page counts as being successful)
@@ -2774,6 +2806,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Go to the next page of the document. If on last page, it would stay on last page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful 
    * (no change due to staying in last page counts as being successful)
@@ -2794,6 +2827,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Go to the first page of the document.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
    * @example
@@ -2813,6 +2847,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Go to the last page of the document.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful
    * @example
@@ -2832,6 +2867,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Opens a go-to page dialog. If the user inputs a valid page number into the dialog, 
    * the viewer will go to that page.
    * @returns {Promise<void>}
@@ -2848,6 +2884,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Multi-tab
    * @desc Closes all tabs in a multi-tab environment.
    * @returns {Promise<void>}
    * @example
@@ -2864,6 +2901,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Multi-tab
    * @desc Opens the tab switcher in a multi-tab environment.
    * @returns {Promise<void>}
    * @example
@@ -2880,6 +2918,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Zoom
    * @desc Returns the current zoom scale of current document viewer.
    * @returns {Promise<void | number>} zoom - current zoom scale in the viewer
    * @example
@@ -2897,6 +2936,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Zoom
    * @desc Sets the minimum and maximum zoom bounds of current viewer.
    * @param {string} zoomLimitMode one of the constants in {@link Config.ZoomLimitMode}, 
    * defines whether bounds are relative to the standard zoom scale in the current viewer 
@@ -2918,6 +2958,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Zoom
    * @desc Sets the zoom scale in the current document viewer with a zoom center.
    * @param {double} zoom the zoom ratio to be set
    * @param {int} x the x-coordinate of the zoom center
@@ -2936,6 +2977,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Zoom
    * @desc Zoom the viewer to a specific rectangular area in a page.
    * @param {int} pageNumber the page number of the zooming area (1-indexed)
    * @param {map} rect The rectangular area with keys 
@@ -2954,6 +2996,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Zoom
    * @desc Zoom to a paragraph that contains the specified coordinate. 
    * If no paragraph contains the coordinate, the zooming would not happen.
    * @param {int} x the x-coordinate of the target coordinate
@@ -2973,6 +3016,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /** 
    * @method
+   * @category Scroll
    * @desc Returns the horizontal and vertical scroll position of current document viewer.
    * @returns {Promise<void | object>} 
    * 
@@ -2997,6 +3041,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     
   /** 
    * @method
+   * @category Canvas
    * @desc Returns the canvas size of current document viewer.
    * @returns {Promise<void | object>}
    * 
@@ -3021,6 +3066,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Gets the rotation value of all pages in the current document.
    * @returns {Promise<void | number>} pageRotation - the rotation degree of all pages, 
    * one of 0, 90, 180 or 270 (clockwise).
@@ -3039,6 +3085,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Rotates all pages in the current document in clockwise direction (by 90 degrees).
    * @returns {Promise<void>}
    * @example
@@ -3054,6 +3101,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Rotates all pages in the current document in counter-clockwise direction (by 90 degrees).
    * @returns {Promise<void>}
    * @example
@@ -3069,6 +3117,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Coordinate
    * @desc Converts points from screen coordinates to page coordinates in the viewer.
    * @param {object[]} points list of points, each in the format `{x: number, y: number}`. 
    * You could optionally have a `pageNumber: number` in the object. 
@@ -3096,6 +3145,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Coordinate
    * @desc Converts points from page coordinates to screen coordinates in the viewer.
    * @param {object[]} points list of points, each in the format `{x: number, y: number}`. 
    * You could optionally have a `pageNumber: number` in the object. 
@@ -3123,6 +3173,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Coordinate
    * @desc Returns the page number that contains the point on screen.
    * @param {number} x the x-coordinate of the screen point
    * @param {number} y the y-coordinate of the screen point
@@ -3142,6 +3193,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Rendering Options
    * @desc Sets whether the control will render progressively 
    * or will just draw once the entire view has been rendered.
    * @param {boolean} progressiveRendering whether to render progressively
@@ -3165,6 +3217,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Rendering Options
    * @desc Enables or disables image smoothing. 
    * The rasterizer allows a trade-off between rendering quality and rendering speed. 
    * This function can be used to indicate the preference between rendering speed and quality.
@@ -3183,6 +3236,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Rendering Options
    * @desc Enables or disables support for overprint and overprint simulation. 
    * Overprint is a device dependent feature and the results will vary depending 
    * on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
@@ -3202,6 +3256,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category UI Customization
    * @desc Sets the color post processing transformation mode for the viewer.
    * @param {string} colorPostProcessMode color post processing transformation mode, 
    * should be a {@link Config.ColorPostProcessMode} constant
@@ -3218,6 +3273,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category UI Customization
    * @desc Sets the white and black color for the color post processing transformation.
    * @param {object} whiteColor the white color for the color post processing transformation, 
    * in the format `{red: number, green: number, blue: number}`. 
@@ -3241,6 +3297,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Search for a term and all matching results will be highlighted.
    * @param {string} searchString the text to search for
    * @param {boolean} matchCase indicates if it is case sensitive
@@ -3260,6 +3317,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Finishes the current text search and remove all the highlights.
    * @returns {Promise<void>}
    * @example
@@ -3275,6 +3333,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Searches asynchronously, starting from the current page, for the given text. 
    * PDFViewCtrl automatically scrolls to the position so that the found text is visible.
    * @param {string} searchString the text to search for
@@ -3298,6 +3357,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Cancels the current text search thread, if exists.
    * @returns {Promise<void>}
    * @example
@@ -3313,6 +3373,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Displays a search bar that allows the user to enter and search text within a document.
    * @returns {Promise<void>}
    * @example
@@ -3328,6 +3389,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /** 
    * @method
+   * @category Text Selection
    * @desc Returns the text selection on a given page, if any.
    * @param {number} pageNumber the specified page number. It is 1-indexed
    * @returns {Promise<void | object>} selection - the text selection, in the format 
@@ -3365,6 +3427,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Returns whether there is a text selection in the current document.
    * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists
    * @example
@@ -3382,6 +3445,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Clears any text selection in the current document.
    * @returns {Promise<void>}
    * @example
@@ -3397,6 +3461,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Returns the page range (beginning and end) that has text selection on it.
    * @returns {Promise<void | object>}
    * 
@@ -3424,6 +3489,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Returns whether there is a text selection on the specified page in the current document.
    * @param {number} pageNumber the specified page number. It is 1-indexed
    * @returns {Promise<void | boolean>} hasSelection - whether a text selection exists on 
@@ -3445,6 +3511,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Selects the text within the given rectangle region.
    * @param {object} rect the rectangle region in the format of 
    * `{x1: number, x2: number, y1: number, y2: number}`
@@ -3465,6 +3532,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Returns whether there is text in given rectangle region.
    * @param {object} rect the rectangle region in the format of 
    * `{x1: number, x2: number, y1: number, y2: number}`
@@ -3484,6 +3552,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Text Selection
    * @desc Selects all text on the page.
    * @returns {Promise<void>}
    * @example
@@ -3499,6 +3568,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Viewer Options
    * @desc Sets whether borders of each page are visible in the viewer, 
    * which is disabled by default.
    * @param {boolean} pageBorderVisibility whether borders of each page are visible in the viewer
@@ -3515,6 +3585,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Viewer Options
    * @desc Enables or disables transparency grid (check board pattern) to reflect page transparency,
    * which is disabled by default.
    * @param {boolean} pageTransparencyGrid whether to use the transparency grid
@@ -3531,6 +3602,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Viewer Options
    * @desc Sets the default page color of the viewer.
    * @param {object} defaultPageColor the default page color, in the format 
    * `{red: number, green: number, blue: number}`, each number in range [0, 255]
@@ -3547,6 +3619,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Viewer Options
    * @desc Sets the background color of the viewer.
    * @param {object} backgroundColor the background color, in the format 
    * `{red: number, green: number, blue: number}`, each number in range [0, 255]
@@ -3585,6 +3658,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @desc Undo the last modification.
    * @returns {Promise<void>}
    * @example
@@ -3600,6 +3674,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @desc Redo the last modification.
    * @returns {Promise<void>}
    * @example
@@ -3615,6 +3690,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @desc Checks whether an undo operation can be performed from the current snapshot.
    * @returns {Promise<void | boolean>} canUndo - whether it is possible to undo from 
    * the current snapshot
@@ -3633,6 +3709,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Undo/Redo
    * @desc Checks whether a redo operation can be perfromed from the current snapshot.
    * @returns {Promise<void | boolean>} canRedo - whether it is possible to redo from 
    * the current snapshot
@@ -3666,6 +3743,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Toolbar
    * @desc Sets the current {@link DocumentView.annotationToolbars annotationToolbars} 
    * for the viewer.
    * @param {string} toolbar the toolbar to enable. Should be one of the 
@@ -3706,6 +3784,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Page
    * @desc Displays a rotate dialog. Android only.
    * 
    * The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. 
@@ -3744,6 +3823,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Reflow
    * @desc Returns whether the viewer is currently in reflow mode.
    * @returns {Promise<void | boolean>} inReflow - whether the viewer is in reflow mode
    * @example
@@ -3761,6 +3841,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /** 
    * @method
+   * @category Reflow
    * @desc Allows the user to programmatically enter and exit reflow mode.
    * @returns {Promise<void>}
    * @example
@@ -3797,6 +3878,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
  
   /**
    * @method
+   * @category Thumbnails
    * @desc Display a page thumbnails view. 
    * 
    * This view allows users to navigate pages of a document. 
@@ -3865,6 +3947,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
+   * @category Signature
    * @desc Gets a list of absolute file paths to PDFs containing the saved signatures.
    * @returns {Promise<void | Array<string>>} signatures - an array of string containing the 
    * absolute file paths; if there are no saved signatures, the value is an empty array
@@ -3887,7 +3970,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
    * @method
-   * @desc Retrieves the absolute file path to the folder containing the saved signatures
+   * @category Signature
+   * @desc Retrieves the absolute file path to the folder containing the saved signatures.
+   * For Android, to get the folder containing the saved signature JPGs, use 
+   * {@link DocumentView.getSavedSignatureJpgFolder getSavedSignatureJpgFolder}.
    * @returns {Promise<void | string>} path - the absolute file path to the folder
    * @example
    * this._viewer.getSavedSignatureFolder().then((path) => {
@@ -3904,6 +3990,22 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
   
+  /**
+   * @method
+   * @category Signature
+   * @desc Android only.
+   * 
+   * Retrieves the absolute file path to the folder containing the saved signature JPGs.
+   * For Android, to get the folder containing the saved signature PDFs, use 
+   * {@link DocumentView.getSavedSignatureFolder getSavedSignatureFolder}.
+   * @returns {Promise<void | string>} path - the absolute file path to the folder
+   * @example
+   * this._viewer.getSavedSignatureJpgFolder().then((path) => {
+   *   if (path != null) {
+   *     console.log(path);
+   *   }
+   * })
+   */
   getSavedSignatureJpgFolder = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
