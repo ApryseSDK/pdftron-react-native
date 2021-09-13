@@ -90,6 +90,8 @@ NS_ASSUME_NONNULL_END
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
+
+    _userBookmarksListEditingEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
