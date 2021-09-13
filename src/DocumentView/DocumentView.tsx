@@ -4009,7 +4009,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   getSavedSignatureJpgFolder = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-       return DocumentViewManager.getSavedSignatureJpgFolder(tag);
+      return DocumentViewManager.getSavedSignatureJpgFolder(tag);
     }
     return Promise.resolve();
   }

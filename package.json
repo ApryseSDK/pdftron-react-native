@@ -11,7 +11,7 @@
     "start": "tsc",
     "build-docs": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json",
     "build-docs-vanilla-theme": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json -t ./node_modules/ink-docstrap/template-vanilla",
-    "upload-docs": "cd scripts && python3 -m pip install pwinput && python3 buildDocs.py && cd .."
+    "upload-docs": "cd scripts && python3 -m pip install pwinput && python3 buildDocs.py $BRANCH && cd .."
   },
   "repository": {
     "type": "git",
