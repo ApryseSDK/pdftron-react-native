@@ -1302,22 +1302,7 @@ Defines annotation types that cannot be edited after creation.
 #### excludedAnnotationListTypes
 array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
-```
-pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
-```
-
-and uncomment the following line in `ios/RNTPTDocumentView.m`:
-```objc
-- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
-{
-    ...
-    if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
-    }
-}
-```
-
+Defines types to be excluded from the annotation list.
 Example use:
 
 ```js
@@ -3210,8 +3195,6 @@ this._viewer.openOutlineList();
 
 #### openLayersList
 On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
-
-**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
 
 Returns a Promise.
 
