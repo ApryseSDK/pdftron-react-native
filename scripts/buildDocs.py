@@ -4,17 +4,24 @@ import pwinput
 import subprocess
 import os
 import shutil
+import json
 
 # Constants
 rn_api_root = "pdftron-api-docs/src/api/react-native"
 new_docs_src = "docs"
 scripts_dir = os.getcwd()
 
+def get_version():
+    package_json = open("../package.json")
+    json_data = json.load(package_json)
+    return json_data["version"]
+
 def retrieve_args():
     # Set up argument parser
     parser = argparse.ArgumentParser(prog="BuildDocs", 
         description="Automatically generates React Native API documentation for the website")
-    parser.add_argument("branch", help="Branch to build documentation on", nargs="?", default="build-rn-api-docs")
+    parser.add_argument("branch", help="Branch to build documentation on", nargs="?", 
+        default="react-native-{0}".format(get_version()))
 
     # Retrieve arguments
     args = parser.parse_args()
