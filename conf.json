@@ -24,7 +24,8 @@
         "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-master/",
         "renderConstantsFor"    : ["Config.js"],
         "sort"                  : "category",
-        "categories"            : true
+        "categories"            : true,
+        "collapseCategories"    : true
 
     },
     "opts": {
