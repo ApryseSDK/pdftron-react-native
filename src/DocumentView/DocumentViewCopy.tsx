@@ -115,7 +115,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   
   /**
    * Selects the text within the given rectangle region.
-   * @param rect the rectangle region in the format of x1: number, x2: number, y1: number, y2: number
+   * @param rect the rectangle region in the format of x1: number, y1: number, x2: number, y2: number
    * @returns bool; whether there is text selected
    */
   selectInRect = (rect) => {
