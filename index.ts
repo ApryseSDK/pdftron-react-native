@@ -23,8 +23,8 @@ interface RNPdftron
   
   /**
    * @method
-   * @desc Enables JavaScript for PDFTron SDK, by default it is enabled.
-   * @param {boolean} enabled whether to enable or disable JavaScript
+   * @desc Enables JavaScript engine for PDFTron SDK, by default it is enabled.
+   * @param {boolean} enabled whether to enable or disable JavaScript engine
    * @example RNPdftron.enableJavaScript(true);
    */
   enableJavaScript(enabled: boolean) : void;
