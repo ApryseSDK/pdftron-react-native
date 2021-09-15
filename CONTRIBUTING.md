@@ -14,4 +14,4 @@
 5. Create a pull request to `dev`.
 
 \* Please note that all pull requests should be tied to an issue, and all but the most trivial pull requests should be discussed beforehand.
-\*\* Changes made to `dev` will automatically be applied to `master`. For more detailed information on developing post-TypeScript migration, see the wiki.
+\*\* Changes made to `dev` will automatically be applied to `master`. For more detailed information on developing post-TypeScript migration, see the [wiki](https://github.com/PDFTron/pdftron-react-native/wiki).
