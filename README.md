@@ -333,7 +333,7 @@ To get access to TypeScript support, simply update your PDFTron React Native dep
 
 ### All Users
 
-For non-TypeScript users, updating their PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and they can continue to use the library as before (without TypeScript support). If you currently do not use TypeScript itself in your project and would like to, see [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project).
+For non-TypeScript users, updating your PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and you can continue to use the library as before (without TypeScript support). If you currently do not use TypeScript itself in your project and would like to, see [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project).
 
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
