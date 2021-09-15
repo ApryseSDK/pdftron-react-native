@@ -525,7 +525,7 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
-   * @deprecated Use {@link DocumentView.hideTopAppNavBar hideTopAppNavBar} prop instead.
+   * @deprecated Use the {@link DocumentView.hideTopAppNavBar hideTopAppNavBar} prop instead.
    */
   topToolbarEnabled: PropTypes.bool,
 
@@ -1419,7 +1419,7 @@ export const DocumentViewPropTypes = {
   /**
    * @memberof DocumentView
    * @category Annotations
-   * @type {bool}
+   * @type {boolean}
    * @optional
    * @default true
    * @desc Android only
@@ -2251,7 +2251,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @desc Sets a field flag value on one or more form fields.
    * @param {string[]} fields list of field names for which the flag should be set
    * @param {int} flag flag to be set. Number should be a {@link Config.FieldFlags} constant
-   * @param {bool} value value to set for flag
+   * @param {boolean} value value to set for flag
    * @returns {Promise<void>}
    * @example
    * this._viewer.setFlagForFields(['First Name', 'Last Name'], Config.FieldFlags.ReadOnly, true);
@@ -2388,7 +2388,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @param {object[]} annotationFlagList A list of annotation flag operations. 
    * Each element is in the format 
    * `{id: string, pageNumber: int, 
-   * flag: One of {@link Config.AnnotationFlags} constants, flagValue: bool}`
+   * flag: One of {@link Config.AnnotationFlags} constants, flagValue: boolean}`
    * @returns {Promise<void>}
    * @example
    * //  Set flag for annotations in the current document.
@@ -2588,7 +2588,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @method
    * @category Annotations
    * @desc Enables or disables highlighting form fields. It is disabled by default.
-   * @param {bool} highlightFields whether form fields should be highlighted
+   * @param {boolean} highlightFields whether form fields should be highlighted
    * @example
    * this._viewer.setHighlightFields(true);
    */
@@ -3001,7 +3001,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * If no paragraph contains the coordinate, the zooming would not happen.
    * @param {int} x the x-coordinate of the target coordinate
    * @param {int} y the y-coordinate of the target coordinate
-   * @param {bool} animated whether the transition is animated
+   * @param {boolean} animated whether the transition is animated
    * @returns {Promise<void>}
    * @example
    * this._viewer.smartZoom(100, 200, true);
@@ -3337,10 +3337,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @desc Searches asynchronously, starting from the current page, for the given text. 
    * PDFViewCtrl automatically scrolls to the position so that the found text is visible.
    * @param {string} searchString the text to search for
-   * @param {bool} matchCase indicates if it is case sensitive
-   * @param {bool} matchWholeWord indicates if it matches an entire word only
-   * @param {bool} searchUp indicates if it searches upward
-   * @param {bool} regExp indicates if searchString is a regular expression
+   * @param {boolean} matchCase indicates if it is case sensitive
+   * @param {boolean} matchWholeWord indicates if it matches an entire word only
+   * @param {boolean} searchUp indicates if it searches upward
+   * @param {boolean} regExp indicates if searchString is a regular expression
    * @returns {Promise<void>}
    * @example
    * this._viewer.findText('PDFTron', false, false, true, false);

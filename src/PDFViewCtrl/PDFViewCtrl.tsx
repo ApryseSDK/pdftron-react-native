@@ -16,6 +16,7 @@ const PDFViewCtrlPropTypes = {
    * @memberof PDFViewCtrl
    * @type {string}
    * @desc The path or url to the document. Required.
+   * @hidesource
    * @example
    * <PDFViewCtrl
    *   document={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
