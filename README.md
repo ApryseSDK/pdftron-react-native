@@ -338,7 +338,7 @@ For non-TypeScript users, updating your PDFTron React Native dependency to versi
 Regardless of whether you use TypeScript, the following benefits are available:
 - Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
 - Greater type safety and reliability due to the migration of source files from JavaScript to TypeScript. 
-- Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs will now be made to the `dev` branch (see [Contributing](./CONTRIBUTING.md)).
+- Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs must now be made to the `dev` branch (see [Contributing](./CONTRIBUTING.md)).
 
 If you have questions, head to the FAQ's Integration section for [Android](https://www.pdftron.com/documentation/android/faq) and [iOS](https://www.pdftron.com/documentation/ios/faq/).
 
