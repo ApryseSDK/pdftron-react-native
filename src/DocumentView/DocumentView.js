@@ -113,6 +113,7 @@ export default class DocumentView extends PureComponent {
     openSavedCopyInNewTab: PropTypes.bool,
     excludedAnnotationListTypes: PropTypes.array,
     replyReviewStateEnabled: PropTypes.bool,
+    annotationManagerMode: PropTypes.string,
     ...ViewPropTypes,
   };
 

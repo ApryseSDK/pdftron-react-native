@@ -1101,6 +1101,24 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### annotationManagerMode
+one of the [`Config.AnnotationManagerMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerMode.Own`
+
+Sets annotation manager mode.
+
+Mode | Description
+--- | ---
+`Config.AnnotationManagerMode.Own` | In this mode, you can edit and undo only your own changes 
+`Config.AnnotationManagerMode.Others` | In this mode, you can edit and undo everyone's changes 
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  annotationManagerMode={Config.AnnotationManagerMode.Others}
+/>
+```
+
 #### replyReviewStateEnabled
 boolean, optional, Android only, defaults to true
 

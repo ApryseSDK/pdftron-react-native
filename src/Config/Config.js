@@ -269,4 +269,10 @@ export default {
     JPEG: "JPEG",
     PNG: "PNG",
   },
+
+  // AnnotationManagerMode determines whose changes can be undone.
+  AnnotationManagerMode: {
+    Own: "own",
+    Others: "others",
+  },
 };

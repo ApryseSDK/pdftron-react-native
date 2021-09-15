@@ -204,6 +204,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setCurrentUserName(currentUserName);
     }
 
+    @ReactProp(name = "annotationManagerMode")
+    public void annotationManagerMode(DocumentView documentView, String annotationManagerMode) {
+        documentView.setAnnotationManagerMode(annotationManagerMode);
+    }
+
     @ReactProp(name = "annotationMenuItems")
     public void setAnnotationMenuItems(DocumentView documentView, @NonNull ReadableArray items) {
         documentView.setAnnotationMenuItems(items);

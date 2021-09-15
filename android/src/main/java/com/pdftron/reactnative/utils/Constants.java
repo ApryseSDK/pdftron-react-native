@@ -370,4 +370,8 @@ public final class Constants {
     public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
     public static final String KEY_EXPORT_FORMAT_JPG = "JPG";
     public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
+
+    // AnnotationManagerMode
+    public static final String KEY_ANNOTATION_MANAGER_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_MODE_OTHERS = "others";
 }

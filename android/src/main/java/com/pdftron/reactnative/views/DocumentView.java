@@ -145,6 +145,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mCollabEnabled;
     private String mCurrentUser;
     private String mCurrentUserName;
+    private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerMode;
 
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
@@ -238,6 +239,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
+                    .usingAnnotationManagerMode(mAnnotationManagerMode)
                     .build(getContext());
         }
         return super.getViewer();
@@ -496,6 +498,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setCurrentUserName(String currentUserName) {
         mCurrentUserName = currentUserName;
+    }
+
+    public void setAnnotationManagerMode(String annotationManagerMode) {
+        if (KEY_ANNOTATION_MANAGER_MODE_OTHERS.equals(annotationManagerMode)) {
+            mAnnotationManagerMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OTHERS;
+        } else {
+            mAnnotationManagerMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
+        }
     }
 
     public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
