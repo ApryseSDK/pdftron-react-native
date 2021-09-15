@@ -347,7 +347,7 @@ If you have questions, head to the FAQ's Integration section for [Android](https
 If you are an existing TypeScript user, then the custom typings will be available to you simply by updating your PDFTron React Native dependency to version 3.0.0 or higher.
 
 Note:
-- Recommended TypeScript version: 3.4.1+. Although compilation still works with lower versions, typings may degrade to `any`.
+- TypeScript version 3.4.1+ is recommended. Although compilation still works with lower versions, typings may degrade to `any`.
 - Due to the introduction of proper typings to PDFTron's APIs, your compiler may now give warnings or errors about your usage of these APIs. In most cases these will not prevent your app from running but it is advised that you address them to take full advantage of TypeScript. It is particularly important to address them if you use TypeScript to emit files and have enabled `noEmitOnError` in your `tsconfig.json`.
 
 ## Contributing
