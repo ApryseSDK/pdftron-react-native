@@ -254,6 +254,10 @@ static NSString * const PTTextSelectionQuadPointYKey = @"y";
 static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
 static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
+// DefaultEraserType keys
+static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybridEraser";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -444,6 +448,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
+@property (nonatomic, copy, nullable) NSString *defaultEraserType;
 
 #pragma mark - Methods
 

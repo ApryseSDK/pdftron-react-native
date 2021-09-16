@@ -616,6 +616,26 @@ NS_ASSUME_NONNULL_END
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
 }
 
+- (void)setDefaultEraserType:(NSString *)defaultEraserType
+{
+    _defaultEraserType = defaultEraserType;
+    
+    if (self.currentDocumentViewController) {
+        [self applyDefaultEraserType:defaultEraserType documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)applyDefaultEraserType:(NSString *)defaultEraserType documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([defaultEraserType isEqualToString:PTInkEraserModeAllKey]) {
+        toolManager.eraserMode = PTInkEraserModeAll;
+    } else if ([defaultEraserType isEqualToString:PTInkEraserModePointsKey]) {
+        toolManager.eraserMode = PTInkEraserModePoints;
+    }
+}
+
 #pragma mark - Disabled tools
 
 - (void)setDisabledTools:(NSArray<NSString *> *)disabledTools
@@ -1900,6 +1920,9 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    
+    // Set Default Eraser Type
+    [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled

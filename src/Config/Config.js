@@ -269,4 +269,10 @@ export default {
     JPEG: "JPEG",
     PNG: "PNG",
   },
+
+  DefaultEraserType: {
+    annotationEraser: "annotationEraser",
+    hybridEraser: "hybridEraser",
+    inkEraser: "inkEraser",
+  }
 };
