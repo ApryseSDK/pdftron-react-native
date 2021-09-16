@@ -2786,7 +2786,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   /** 
    * @method
    * @category Page
-   * @desc Go to the previous page of the document. If on first page, it would stay on first page.
+   * @desc Go to the previous page of the document. If on first page, it will stay on first page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful 
    * (no change due to staying in first page counts as being successful)
    * @example
@@ -2807,7 +2807,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   /** 
    * @method
    * @category Page
-   * @desc Go to the next page of the document. If on last page, it would stay on last page.
+   * @desc Go to the next page of the document. If on last page, it will stay on last page.
    * @returns {Promise<void | boolean>} success - whether the setting process was successful 
    * (no change due to staying in last page counts as being successful)
    * @example
