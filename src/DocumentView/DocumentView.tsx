@@ -2723,7 +2723,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @method
    * @category Page
    * @desc Gets the crop box for specified page as a JSON object.
-   * @param pageNumber | integer | the page number for the target crop box. It is 1-indexed
+   * @param {integer} pageNumber the page number for the target crop box. It is 1-indexed
    * @returns {Promise<void | object>} cropBox - an object with information about position 
    * (`x1`, `y1`, `x2` and `y2`) and size (`width` and `height`)
    * @example
