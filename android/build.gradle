@@ -15,7 +15,7 @@ rootProject.allprojects {
         google()
         jcenter()
         maven {
-            url "https://pdftron-maven.s3.amazonaws.com/release"
+            url "https://pdftron-maven.s3.amazonaws.com/snapshot"
         }
     }
 }
@@ -55,7 +55,7 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"
 
-    implementation "com.pdftron:pdftron:9.1.0"
-    implementation "com.pdftron:tools:9.1.0"
-    implementation "com.pdftron:collab:9.1.0"
+    implementation "com.pdftron:pdftron:9.1.1-beta02"
+    implementation "com.pdftron:tools:9.1.1-beta02"
+    implementation "com.pdftron:collab:9.1.1-beta02"
 }
