@@ -20,10 +20,10 @@ jobs:
           node-version: '16'
           cache: 'npm'
 
-      - name: Build JavaScript files
+      - name: Build JavaScript files and API documentation website
         run: | # Change last line to your build script command #.
           npm i
-          npm run start 
+          npm run build-js-and-docs
 
       - name: Force add JS files to override .gitignore
         run: git add --force ./lib # <-- Change this to your build path.

@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PDFTron React Native Interface: RNPdftron</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.pdftron.css">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PDFTron React Native</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Config.html">Config</a></li><li><a href="DocumentView.html">DocumentView</a></li><li><a href="PDFViewCtrl.html">PDFViewCtrl</a></li><li><a href="RNPdftron.html">RNPdftron</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3" style="align-items: center; justify-content: center">
+                <form class="navbar-form" role="search">
+                    <div class="input-group search-with-icon">	
+											<i class="glyphicon glyphicon-search"></i>				
+											<input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+											
+                        <!-- <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"></button>
+												</div> -->
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+
+<section>
+
+<header>
+    
+        <h1 class="page-title">
+        RNPdftron
+        </h1>
+        
+    
+</header>
+
+
+<article>
+    
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>RNPdftron contains static methods for global library initialization, configuration, and
+utility methods.</p></div>
+        
+
+        
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <br><h2 style="font-weight: bold;" class="subsection-title">Methods</h2>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="initialize">initialize</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Initializes PDFTron SDK with your PDFTron commercial license key.
+You can run PDFTron in demo mode by passing an empty string.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>licenseKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">string</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>your PDFTron license key</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+      
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.initialize(&#x27;your_license_key&#x27;);</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="enableJavaScript">enableJavaScript</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Enables JavaScript engine for PDFTron SDK, by default it is enabled.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">boolean</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>whether to enable or disable JavaScript engine</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+      
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.enableJavaScript(true);</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="getVersion">getVersion</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Gets the current PDFNet version.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;string></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+            <td class="description last">
+            
+                current PDFNet version</p>
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.getVersion().then((version) =&gt; {
+  console.log(&quot;Current PDFNet version:&quot;, version);
+});</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="getPlatformVersion">getPlatformVersion</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Gets the version of current platform (Android/iOS).</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>platformVersion</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;string></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+            <td class="description last">
+            
+                current platform version (Android/iOS)</p>
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.getPlatformVersion().then((platformVersion) =&gt; {
+  console.log(&quot;App currently running on:&quot;, platformVersion);
+});</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="getSystemFontList">getSystemFontList</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Gets the font list available on the OS (Android only).
+This is typically useful when you are mostly working with non-ascii characters in the viewer.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fontList</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;string></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+            <td class="description last">
+            
+                the font list available on Android</p>
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.getSystemFontList().then((fontList) =&gt; {
+  console.log(&quot;OS font list:&quot;, fontList);
+});</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="clearRubberStampCache">clearRubberStampCache</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Clear the information and bitmap cache for rubber stamps (Android only).
+This is typically useful when the content of rubber stamps has been changed in the viewer.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;void></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.clearRubberStampCache().then(() =&gt; {
+  console.log(&quot;Rubber stamp cache cleared&quot;);
+});</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="encryptDocument">encryptDocument</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Encrypts (password-protect) a document (must be a PDF).</p>
+<p><strong>Note</strong>: This function does not lock the document,
+it cannot be used while the document is opened in the viewer.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">string</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>the local file path to the file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">string</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>the password you would like to set</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentPassword</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">string</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>the current password, use empty string if no password</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;void></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.encryptDocument(&quot;/sdcard/Download/new.pdf&quot;, &quot;1111&quot;, &quot;&quot;).then(() =&gt; {
+  console.log(&quot;done password&quot;);
+});</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="pdfFromOfficeTemplate">pdfFromOfficeTemplate</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Generates a PDF using a template in the form of an Office document
+and replacement data in the form of a JSON object.
+For more information please see our
+<a href="https://www.pdftron.com/documentation/core/guides/generate-via-template/">template guide</a>.</p>
+<p>The user is responsible for cleaning up the temporary file that is generated.</p>
+    </div>
+    
+
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>docxPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">string</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>the local file path to the template file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>json</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">object</code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>the replacement data in the form of a JSON object</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+            <h5>Returns:</h5>
+                
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>resultPdfPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Promise&lt;string></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+            <td class="description last">
+            
+                the local file path to the generated PDF</p>
+            
+
+        </tr>
+    </tbody>
+</table>
+
+             
+          
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">RNPdftron.pdfFromOfficeTemplate(&quot;/sdcard/Download/red.docx&quot;, json).then((resultPdfPath) =&gt; {
+  console.log(resultPdfPath);
+});</pre>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+	
+		on 2021-09-17T12:21:09-07:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+
+    <script src="scripts/toc-collapse.js"></script>
+
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+	docsearch({
+		apiKey: 'f9d712e43c1978feb1df68f5e63a868c',
+		indexName: 'pdftron',
+		inputSelector: '#search-input',
+		algoliaOptions: { 'facetFilters': ["tags:web"] },
+		debug: false // Set debug to true if you want to inspect the dropdown
+		});
+</script>
+</body>
+</html>

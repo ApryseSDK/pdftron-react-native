@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>PDFTron React Native Source: index.ts</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.pdftron.css">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">PDFTron React Native</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Config.html">Config</a></li><li><a href="DocumentView.html">DocumentView</a></li><li><a href="PDFViewCtrl.html">PDFViewCtrl</a></li><li><a href="RNPdftron.html">RNPdftron</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3" style="align-items: center; justify-content: center">
+                <form class="navbar-form" role="search">
+                    <div class="input-group search-with-icon">	
+											<i class="glyphicon glyphicon-search"></i>				
+											<input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+											
+                        <!-- <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"></button>
+												</div> -->
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: index.ts</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">import { NativeModules } from 'react-native';
+import { PDFViewCtrl } from './src/PDFViewCtrl/PDFViewCtrl';
+import { DocumentView } from './src/DocumentView/DocumentView';
+import { Config } from './src/Config/Config';
+import * as AnnotOptions from './src/AnnotOptions/AnnotOptions';
+
+/**
+ * @typedef RNPdftron
+ * @hidesource
+ * @desc RNPdftron contains static methods for global library initialization, configuration, and 
+ * utility methods.
+ */
+interface RNPdftron 
+{
+  /**
+   * @method
+   * @desc Initializes PDFTron SDK with your PDFTron commercial license key. 
+   * You can run PDFTron in demo mode by passing an empty string.
+   * @param {string} licenseKey your PDFTron license key
+   * @example RNPdftron.initialize('your_license_key');
+   */
+  initialize(licenseKey: string) : void;
+  
+  /**
+   * @method
+   * @desc Enables JavaScript engine for PDFTron SDK, by default it is enabled.
+   * @param {boolean} enabled whether to enable or disable JavaScript engine
+   * @example RNPdftron.enableJavaScript(true);
+   */
+  enableJavaScript(enabled: boolean) : void;
+
+  /**
+   * @method
+   * @desc Gets the current PDFNet version.
+   * @returns {Promise&lt;string>} version - current PDFNet version
+   * @example
+   * RNPdftron.getVersion().then((version) => {
+   *   console.log("Current PDFNet version:", version);
+   * });
+   */
+  getVersion() : Promise&lt;string>;
+
+  /**
+   * @method
+   * @desc Gets the version of current platform (Android/iOS).
+   * @returns {Promise&lt;string>} platformVersion - current platform version (Android/iOS)
+   * @example
+   * RNPdftron.getPlatformVersion().then((platformVersion) => {
+   *   console.log("App currently running on:", platformVersion);
+   * });
+   */
+  getPlatformVersion() : Promise&lt;string>;
+
+  /**
+   * @method
+   * @desc Gets the font list available on the OS (Android only).
+   * This is typically useful when you are mostly working with non-ascii characters in the viewer.
+   * @returns {Promise&lt;string>} fontList - the font list available on Android
+   * @example
+   * RNPdftron.getSystemFontList().then((fontList) => {
+   *   console.log("OS font list:", fontList);
+   * });
+   */
+  getSystemFontList() : Promise&lt;string>;
+
+  /**
+   * @method
+   * @desc Clear the information and bitmap cache for rubber stamps (Android only).
+   * This is typically useful when the content of rubber stamps has been changed in the viewer.
+   * @example
+   * RNPdftron.clearRubberStampCache().then(() => {
+   *   console.log("Rubber stamp cache cleared");
+   * });
+   */
+  clearRubberStampCache() : Promise&lt;void>;
+
+  /**
+   * @method
+   * @desc Encrypts (password-protect) a document (must be a PDF). 
+   * 
+   * **Note**: This function does not lock the document, 
+   * it cannot be used while the document is opened in the viewer.
+   * @param {string} filePath the local file path to the file
+   * @param {string} password the password you would like to set
+   * @param {string} currentPassword the current password, use empty string if no password
+   * @example
+   * RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
+   *   console.log("done password");
+   * });
+   */
+  encryptDocument(filePath: string, password: string, currentPassword: string) : Promise&lt;void>;
+
+  /**
+   * @method
+   * @desc Generates a PDF using a template in the form of an Office document 
+   * and replacement data in the form of a JSON object.
+   * For more information please see our 
+   * [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
+   * 
+   * The user is responsible for cleaning up the temporary file that is generated.
+   * @param {string} docxPath the local file path to the template file
+   * @param {object} json the replacement data in the form of a JSON object
+   * @returns {Promise&lt;string>} resultPdfPath - the local file path to the generated PDF 
+   * @example
+   * RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultPdfPath) => {
+   *   console.log(resultPdfPath);
+   * });
+   */
+  pdfFromOfficeTemplate(docxPath: string, json: object) : Promise&lt;string>;
+}
+
+/**
+ * @class
+ * @hideconstructor
+ */
+// eslint-disable-next-line no-redeclare
+const RNPdftron : RNPdftron = NativeModules.RNPdftron;
+
+export {
+  RNPdftron,
+  PDFViewCtrl,
+  DocumentView,
+  Config,
+  AnnotOptions
+};
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
+	
+		on 2021-09-17T12:21:09-07:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+
+    <script src="scripts/toc-collapse.js"></script>
+
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+	docsearch({
+		apiKey: 'f9d712e43c1978feb1df68f5e63a868c',
+		indexName: 'pdftron',
+		inputSelector: '#search-input',
+		algoliaOptions: { 'facetFilters': ["tags:web"] },
+		debug: false // Set debug to true if you want to inspect the dropdown
+		});
+</script>
+</body>
+</html>

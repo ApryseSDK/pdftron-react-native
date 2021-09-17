@@ -6,11 +6,8 @@
   "main": "./lib/index.js",
   "typings": "index.ts",
   "scripts": {
-    "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
-    "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "tsc",
-    "build-docs": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json",
-    "build-docs-vanilla-theme": "npx tsc && ./node_modules/.bin/jsdoc -c conf.json -t ./node_modules/ink-docstrap/template-vanilla",
+    "build-js-and-docs": "rm -rf docs && tsc && ./node_modules/.bin/jsdoc -c conf.json",
+    "build-js-and-docs-vanilla-theme": "rm -rf docs && tsc && ./node_modules/.bin/jsdoc -c conf.json -t ./node_modules/ink-docstrap/template-vanilla",
     "upload-docs": "cd scripts && python3 -m pip install pwinput && python3 buildDocs.py $BRANCH && cd .."
   },
   "repository": {
@@ -43,7 +40,6 @@
     "eslint-plugin-promise": "^5.1.0",
     "ink-docstrap": "git+https://github.com/akwanpdf/docstrap.git#pdftron-react-native",
     "jsdoc": "^3.6.7",
-    "typedoc": "^0.21.6",
     "typescript": "*"
   }
 }

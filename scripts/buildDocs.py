@@ -69,11 +69,8 @@ def delete_old_docs():
 # Creates latest version of API documentation and then copies it over to the repo
 def copy_over_new_docs():
     print("Creating latest version of documentation")
-    os.chdir("..")
-    # Removes docs folder so that a clean version can be copied over
-    shutil.rmtree(new_docs_src)
     # Runs script to create new documentation
-    subprocess.check_call(["npm", "run", "build-docs"])
+    subprocess.check_call(["npm", "run", "build-js-and-docs"])
     new_docs = os.listdir(new_docs_src)
     os.chdir(scripts_dir)
     

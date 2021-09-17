@@ -2993,7 +2993,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @category Zoom
    * @desc Zoom the viewer to a specific rectangular area in a page.
    * @param {int} pageNumber the page number of the zooming area (1-indexed)
-   * @param {map} rect The rectangular area with keys 
+   * @param {object} rect The rectangular area with keys 
    * `x1` (left), `y1` (bottom), `y1` (right), `y2` (top). Coordinates are in double
    * @returns {Promise<void>}
    * @example
