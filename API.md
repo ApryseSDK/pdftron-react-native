@@ -225,10 +225,15 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-one of [`Config.EraserType`](./src/Config/Config.js) constants, optional
+one of the [`Config.EraserType`](./src/Config/Config.js) constants, optional
 
-Sets the default eraser tool type. Value only applied after a clean install. Android only.
-Example:
+Sets the default eraser tool type. Value only applied after a clean install.
+
+Eraser Type | Description
+--- | ---
+`annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+`hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
+`inkEraser` | Erases ink by pixel only. Android only.
 
 ```js
 <DocumentView
