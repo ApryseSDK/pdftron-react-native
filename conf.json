@@ -25,7 +25,8 @@
         "renderConstantsFor"    : ["Config.js"],
         "sort"                  : "category",
         "categories"            : true,
-        "collapseCategories"    : true
+        "collapseCategories"    : true,
+        "categoriesFor"         : ["DocumentView"]
 
     },
     "opts": {
