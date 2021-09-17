@@ -256,7 +256,7 @@ static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
 // DefaultEraserType keys
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
-static NSString * const PTInkEraserModePointsKey = @"hybridEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
