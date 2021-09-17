@@ -1900,7 +1900,7 @@ this._viewer.showRotateDialog();
 ### Import/Export Annotations
 
 #### importAnnotationCommand
-Imports remote annotation command to local document.
+Imports remote annotation command to local document. Can be used in both local and collaboration mode.
 
 Parameters:
 
@@ -1919,6 +1919,8 @@ this._viewer.importAnnotationCommand(xfdfCommand);
 
 #### importAnnotations
 Imports XFDF annotation string to the current document.
+
+`importAnnotations` should only be used in local mode. To import annotations in collaboration mode, use [`importAnnotationCommand`](#importAnnotationCommand).
 
 Parameters:
 
