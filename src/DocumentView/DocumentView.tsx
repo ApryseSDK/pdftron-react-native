@@ -340,7 +340,7 @@ export const DocumentViewPropTypes = {
    * @default Defaults to none.
    * @desc Defines the menu items on long press that will skip default behavior when pressed. 
    * They will still be displayed in the long press menu, 
-   * and the function {@link DocumentView.onLongPressMenuPress onLongPressMenuPress} 
+   * and the function {@link DocumentView.event:onLongPressMenuPress onLongPressMenuPress} 
    * will be called where custom behavior can be implemented.
    * @example
    * <DocumentView
@@ -408,7 +408,7 @@ export const DocumentViewPropTypes = {
    * @default Defaults to none.
    * @desc Defines the menu items that will skip default behavior when pressed. 
    * They will still be displayed in the annotation menu, 
-   * and the function {@link DocumentView.onAnnotationMenuPress onAnnotationMenuPress} 
+   * and the function {@link DocumentView.event:onAnnotationMenuPress onAnnotationMenuPress} 
    * will be called where custom behavior can be implemented.
    * @example 
    * <DocumentView
@@ -473,7 +473,7 @@ export const DocumentViewPropTypes = {
    * @optional 
    * @default Defaults to none.
    * @desc Defines actions that will skip default behavior, such as external link click. 
-   * The function {@link DocumentView.onBehaviorActivated onBehaviorActivated} will be 
+   * The function {@link DocumentView.event:onBehaviorActivated onBehaviorActivated} will be 
    * called where custom behavior can be implemented, whenever the defined actions occur.
    * @example
    * <DocumentView
@@ -911,7 +911,7 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @desc This function is called if a change has been made to annotations in the current document.
-   * Unlike {@link DocumentView.onAnnotationChanged onAnnotationChanged}, this function has an XFDF 
+   * Unlike {@link DocumentView.event:onAnnotationChanged onAnnotationChanged}, this function has an XFDF 
    * command string as its parameter. If you are modifying or deleting multiple annotations, 
    * then on Android the function is only called once, and on iOS it is called for each annotation.
    * 
