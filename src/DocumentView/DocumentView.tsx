@@ -357,8 +357,7 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc This function is called if the pressed long press menu item is passed in to 
    * {@link DocumentView.overrideLongPressMenuBehavior overrideLongPressMenuBehavior}.
-   * @param {string} longPressMenu One of {@link Config.LongPressMenu} constants, 
-   * representing which item has been pressed.
+   * @param {Config.LongPressMenu} longPressMenu the menu item that has been pressed.
    * @param {string} longPressText the selected text if pressed on text, empty otherwise
    * @example
    * <DocumentView
@@ -426,8 +425,7 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc This function is called when an annotation menu item passed in to 
    * {@link DocumentView.overrideAnnotationMenuBehavior overrideAnnotationMenuBehavior} is pressed.
-   * @param {string} annotationMenu One of {@link Config.AnnotationMenu} constants, 
-   * representing which item has been pressed.
+   * @param {Config.AnnotationMenu} annotationMenu the menu item that has been pressed.
    * @param {object[]} annotations An array of 
    * `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.
    * 
@@ -492,8 +490,7 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc This function is called if the activated behavior is passed in to 
    * {@link DocumentView.overrideBehavior overrideBehavior}
-   * @param {string} action One of {@link Config.Actions} constants, 
-   * representing which action has been activated.
+   * @param {Config.Actions} action the action which has been activated.
    * @param {object} data A JSON object that varies depending on the action.
    * 
    * If action is `Config.Actions.linkPress`, data type is `{url: string}`.
@@ -501,9 +498,11 @@ export const DocumentViewPropTypes = {
    * If action is `Config.Actions.stickyNoteShowPopUp`, data type is 
    * `{id: string, pageNumber: number, type: string, 
    * screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, 
-   * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, 
-   * where `type` is one of the {@link Config.Tools} constants, 
-   * and `screenRect` was formerly called `rect`.
+   * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`
+   * 
+   * `type` is one of the {@link Config.Tools} constants, 
+   * 
+   * `screenRect` was formerly called `rect`.
    * @example
    * <DocumentView
    *   onBehaviorActivated = {({action, data}) => {
@@ -614,7 +613,10 @@ export const DocumentViewPropTypes = {
    * `{id: string, pageNumber: number, type: string, 
    * screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, 
    * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, 
-   * representing the selected annotations. Type is one of the {@link Config.Tools} constants. 
+   * representing the selected annotations. 
+   * 
+   * `type` is one of the {@link Config.Tools} constants. 
+   * 
    * `screenRect` was formerly called `rect`.
    * @example
    * <DocumentView
@@ -641,6 +643,7 @@ export const DocumentViewPropTypes = {
    * @param {object[]} annotations array of annotation data in the format 
    * `{id: string, pageNumber: number, type: string}`, 
    * representing the annotations that have been changed. 
+   * 
    * `type` is one of the {@link Config.Tools} constants
    * @example
    * <DocumentView
@@ -922,6 +925,7 @@ export const DocumentViewPropTypes = {
    * When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is 
    * `{id: string, pageNumber: number, type: string}`. 
    * In both cases, the data represents the annotations that have been changed. 
+   * 
    * `type` is one of the {@link Config.Tools} constants.
    * @example
    * <DocumentView
@@ -1240,9 +1244,10 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @desc This function is called when the current tool changes to a new tool
-   * @param {string} previousTool the previous tool (one of the {@link Config.Tools} constants
-   * or "unknown tool"), representing the tool before change
-   * @param {string} tool the current tool (one of the {@link Config.Tools} constants
+   * @param {Config.Tools|string} previousTool the previous tool 
+   * (one of the {@link Config.Tools} constants or "unknown tool"), 
+   * representing the tool before change
+   * @param {Config.Tools|string} tool the current tool (one of the {@link Config.Tools} constants
    * or "unknown tool"), representing the current tool
    * @example
    * <DocumentView
@@ -1305,8 +1310,9 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc This function is called after a text search is finished or canceled.
    * @param {boolean} found whether a result is found. 
-   * If no, it could be caused by not finding a matching result in the document, invalid text input,
-   * or action cancellation (user actions or {@link DocumentView#cancelFindText cancelFindText}
+   * If false, it could be caused by not finding a matching result in the document, 
+   * invalid text input, or action cancellation 
+   * (user actions or {@link DocumentView#cancelFindText cancelFindText})
    * @param {object} textSelection the text selection, in the format 
    * `{html: string, unicode: string, pageNumber: number, 
    * quads: [[{x: number, y: number}, {x: number, y: number}, {x: number, y: number},
@@ -1742,7 +1748,7 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc The function is activated when a tab is changed. 
    * 
-   * Please note that this API is meant for tab-specific changes. 
+   * This API is meant for tab-specific changes. 
    * If you would like to know when the document finishes loading instead, see 
    * the {@link DocumentView.event:onDocumentLoaded onDocumentLoaded} event.
    * @param {string} currentTab The file path of current tab's document
@@ -2003,8 +2009,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @method
    * @category Annotation Tools
    * @desc Sets the current tool mode.
-   * @param {string} toolMode One of {@link Config.Tools} constants, 
-   * representing the tool mode to set.
+   * @param {Config.Tools} toolMode the tool mode to set.
    * @returns {Promise<void>}
    * @example
    * this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
@@ -2250,7 +2255,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @category Annotations
    * @desc Sets a field flag value on one or more form fields.
    * @param {string[]} fields list of field names for which the flag should be set
-   * @param {int} flag flag to be set. Number should be a {@link Config.FieldFlags} constant
+   * @param {Config.FieldFlags} flag flag to be set
    * @param {boolean} value value to set for flag
    * @returns {Promise<void>}
    * @example
@@ -2616,7 +2621,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * `{id: string, pageNumber: number, type: string, 
    * screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, 
    * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. 
-   * `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * 
+   * `type` is one of the {@link Config.Tools} constants. 
+   * 
+   * `screenRect` was formerly called `rect`.
    * @example
    * this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
    *   if (annotation) {
@@ -2648,7 +2656,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * each in the format of `{id: string, pageNumber: number, type: string, 
    * screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, 
    * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. 
-   * `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * 
+   * `type` is one of the {@link Config.Tools} constants. 
+   * 
+   * `screenRect` was formerly called `rect`.
    * @example
    * this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
    *   for (const annotation of annotations) {
@@ -2674,7 +2685,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * each in the format of `{id: string, pageNumber: number, type: string, 
    * screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, 
    * pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. 
-   * `type` is one of the {@link Config.Tools} constants. `screenRect` was formerly called `rect`.
+   * 
+   * `type` is one of the {@link Config.Tools} constants. 
+   * 
+   * `screenRect` was formerly called `rect`.
    * @example
    * this._viewer.getAnnotationsOnPage(2).then((annotations) => {
    *   for (const annotation of annotations) {
@@ -2938,9 +2952,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @method
    * @category Zoom
    * @desc Sets the minimum and maximum zoom bounds of current viewer.
-   * @param {string} zoomLimitMode one of the constants in {@link Config.ZoomLimitMode}, 
-   * defines whether bounds are relative to the standard zoom scale in the current viewer 
-   * or absolute
+   * @param {Config.ZoomLimitMode} zoomLimitMode defines whether bounds are relative to the 
+   * standard zoom scale in the current viewer or absolute
    * @param {double} minimum the lower bound of the zoom limit range
    * @param {double} maximum the upper bound of the zoom limit range
    * @returns {Promise<void>}
@@ -3240,8 +3253,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @desc Enables or disables support for overprint and overprint simulation. 
    * Overprint is a device dependent feature and the results will vary depending 
    * on the output color space and supported colorants (i.e. CMYK, CMYK+spot, RGB, etc).
-   * @param {string} overprint the mode of overprint, 
-   * should be a {@link Config.OverprintMode} constant
+   * @param {Config.OverprintMode} overprint the mode of overprint
    * @returns {Promise<void>}
    * @example
    * this._viewer.setOverprint(Config.OverprintMode.Off);
@@ -3258,8 +3270,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @method
    * @category UI Customization
    * @desc Sets the color post processing transformation mode for the viewer.
-   * @param {string} colorPostProcessMode color post processing transformation mode, 
-   * should be a {@link Config.ColorPostProcessMode} constant
+   * @param {Config.ColorPostProcessMode} colorPostProcessMode color post processing 
+   * transformation mode
    * @example
    * this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
    */
@@ -3639,7 +3651,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @desc Export a PDF page to image format defined in {@link Config.ExportFormat}.
    * @param {int} pageNumber the page to be converted
    * @param {double} dpi the output image resolution
-   * @param {string} exportFormat one of the {@link Config.ExportFormat} constants
+   * @param {Config.ExportFormat} exportFormat image format to be exported to
    * @returns {Promise<void | string>} path - the temp path of the created image, 
    * user is responsible for clean up the cache
    * @example
@@ -3746,7 +3758,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @category Toolbar
    * @desc Sets the current {@link DocumentView.annotationToolbars annotationToolbars} 
    * for the viewer.
-   * @param {string} toolbar the toolbar to enable. Should be one of the 
+   * @param {Config.DefaultToolbars|string} toolbar the toolbar to enable. Should be one of the 
    * {@link Config.DefaultToolbars} constants or the `id` of a custom toolbar object.
    * @returns {Promise<void>}
    * @example
@@ -3785,9 +3797,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   /** 
    * @method
    * @category Page
-   * @desc Displays a rotate dialog. Android only.
+   * @desc Android only.
    * 
-   * The dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. 
+   * Displays a rotate dialog. 
+   * This dialog allows users to rotate pages of the opened document by 90, 180 and 270 degrees. 
    * It also displays a thumbnail of the current page at the selected rotation angle.
    * @returns {Promise<void>}
    * @example
