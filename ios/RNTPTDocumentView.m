@@ -190,7 +190,17 @@ NS_ASSUME_NONNULL_END
 {
     if (!self.documentViewController && !self.tabbedDocumentViewController) {
         if ([self isCollabEnabled]) {
-            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self];
+            PTExternalAnnotManagerMode collabMode = e_ptadmin_undo_own;
+            
+            if ([PTAnnotationManagerModeOwn isEqualToString:self.annotationManagerMode]) {
+                collabMode = e_ptadmin_undo_own;
+            }
+            
+            if ([PTAnnotationManangerModeOthers isEqualToString:self.annotationManagerMode]) {
+                collabMode = e_ptadmin_undo_others;
+            }
+            
+            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self collaborationMode:collabMode];
             collaborationViewController.delegate = self;
             
             self.viewController = collaborationViewController;
@@ -1480,6 +1490,8 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
+#pragma mark - Annotation
+
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
     _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
@@ -1487,7 +1499,6 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Collaboration
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
 {
@@ -1513,6 +1524,13 @@ NS_ASSUME_NONNULL_END
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
+
+-(void)setAnnotationManagerMode:(NSString *)annotationManagerMode
+{
+    _annotationManagerMode = annotationManagerMode;
+}
+
+#pragma mark - Toolbar
 
 - (void)setAnnotationToolbars:(NSArray<id> *)annotationToolbars
 {
@@ -1885,7 +1903,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-    // documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Exclude annotation types from annotation list.
     [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
@@ -1898,9 +1916,10 @@ NS_ASSUME_NONNULL_END
     
     // Set User Bookmark List Editing
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
+    
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
-
+    
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
