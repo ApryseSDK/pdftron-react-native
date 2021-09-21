@@ -176,7 +176,7 @@ export const Config = {
 
   /** 
    * @member
-   * @desc EraserType defines the type of earse that will be used when eraser is selected
+   * @desc EraserType defines the type of eraser that will be used when eraser is selected
    */
   EraserType: {
     annotationEraser: 'annotationEraser',
