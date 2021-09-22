@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_END
     _showSavedSignatures = YES;
 
     _userBookmarksListEditingEnabled = YES;
+    
+    _showQuickNavigationButton = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1918,11 +1920,15 @@ NS_ASSUME_NONNULL_END
     
     // Set User Bookmark List Editing
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
+    
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
     
     // Set Default Eraser Type
     [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
+    
+    // Show Quick Navigation Button
+    documentViewController.navigationHistoryEnabled = self.showQuickNavigationButton;
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
@@ -5130,7 +5136,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Navigation List
+#pragma mark - Navigation
+
+-(void)setShowQuickNavigationButton:(BOOL)showQuickNavigationButton
+{
+    _showQuickNavigationButton = showQuickNavigationButton;
+    
+    [self applyViewerSettings];
+}
 
 -(void)openNavigationLists
 {
