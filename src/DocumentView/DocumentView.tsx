@@ -1382,9 +1382,7 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
-   * @desc Android only
-   * 
-   * Defines whether the quick navigation buttons will appear in the viewer.
+   * @desc Defines whether the quick navigation buttons will appear in the viewer.
    * @example
    * <DocumentView
    *   showQuickNavigationButton={false}
