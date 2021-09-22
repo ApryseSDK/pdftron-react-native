@@ -103,6 +103,33 @@
       });
     }
 
+    const getAncestors = function (child, list) {
+      const attributes = child[0].attributes;
+      const attribLength = attributes.length;
+      const hasCategory = attributes.item(attribLength - 2).name.includes("data-in-category");
+      let catArray = [];
+      const ancestors = [];
+
+      if (hasCategory) {
+        catArray = [attributes.item(attribLength - 2).value, attributes.item(attribLength - 1).value];
+      } else {
+        catArray = [null, attributes.item(attribLength - 1).value];
+      }
+
+      catArray.forEach((cat) => {
+        if (cat !== null) {
+          for (const item of list) {
+            if (item[0].attributes.href.value.includes(cat)) {
+              ancestors.push(item);
+              break;
+            }
+          }
+        }
+      });
+
+      return ancestors;
+    };
+
     //highlight on scroll
     var timeout;
     var highlightOnScroll = function(e) {
@@ -131,7 +158,23 @@
             $('a', self).removeClass(activeClassName);
             if (i >= 0) {
               highlighted = tocs[i].addClass(activeClassName);
+              const ancestors = getAncestors(highlighted, tocs);
               opts.onHighlight(highlighted);
+              let style = highlighted[0].attributes.getNamedItem("style");
+              if (style !== null) {
+                style = style.value;
+                if (style.includes("none") === true || ancestors.length !== 2) {
+                  ancestors.forEach((ancestor) => {
+                    ancestor.addClass(activeClassName);
+                    opts.onHighlight(ancestor);
+                  });
+                }
+              } else {
+                ancestors.forEach((ancestor) => {
+                  ancestor.addClass(activeClassName);
+                  opts.onHighlight(ancestor);
+                });
+              }
             }
             break;
           }

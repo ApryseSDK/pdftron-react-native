@@ -97,6 +97,9 @@ hr {
   box-sizing: content-box;
   height: 0;
 }
+hr.category-line {
+  border-top: 3px solid #ddd;
+}
 pre {
   overflow: auto;
 }
