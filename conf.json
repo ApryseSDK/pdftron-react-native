@@ -21,7 +21,7 @@
         "outputSourceFiles"     : true, 
 	    "outputSourcePath"      : true,
         "linenums"              : true,
-        "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs/",
+        "sourceRoot"            : "https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/",
         "renderConstantsFor"    : ["Config.js"],
         "sort"                  : "category",
         "categories"            : true,
