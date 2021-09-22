@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_END
     _showSavedSignatures = YES;
 
     _userBookmarksListEditingEnabled = YES;
+    
+    _showQuickNavigationButton = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame

@@ -1526,7 +1526,7 @@ Defines whether the page stack navigation buttons will appear in the viewer.
 ```
 
 #### showQuickNavigationButton
-bool, optional, defaults to true on Android and false on iOS
+bool, optional, defaults to true
 
 Defines whether the quick navigation buttons will appear in the viewer.
 
