@@ -25,13 +25,13 @@ const propTypes = {
   initialPageNumber: PropTypes.number,
 
   // Any Config.FitMode constant.
-  fitMode: PropTypes.string,
+  fitMode: oneOf<Config.FitMode>(Config.FitMode),
 
   // Array of Config.Tools constants.
-  disabledTools: PropTypes.array,
+  disabledTools: arrayOf<Config.Tools>(Config.Tools),
 
   // A function with parameter "path" of type string.
-  onDocumentLoaded: PropTypes.func,
+  onDocumentLoaded: func< (path: string) => void >(),
 
   ...ViewPropTypes,
 };
@@ -118,7 +118,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
    * @param rect the rectangle region in the format of x1: number, y1: number, x2: number, y2: number
    * @returns bool; whether there is text selected
    */
-  selectInRect = (rect) => {
+  selectInRect = (rect: AnnotOptions.Rect) : Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectInRect(tag, rect);
