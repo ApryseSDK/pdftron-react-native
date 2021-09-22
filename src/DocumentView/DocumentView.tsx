@@ -1584,9 +1584,13 @@ export const DocumentViewPropTypes = {
    * @category Open a Document
    * @type {Config.EraserType}
    * @optional
-   * @desc Android only. 
-   * 
-   * Sets the default eraser tool type. Value only applied after a clean install. 
+   * @desc Sets the default eraser tool type. Value only applied after a clean 
+   * install.
+   * Eraser Type | Description
+   * --- | ---
+   * `annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+   * `hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
+   * `inkEraser` | Erases ink by pixel only. Android only.
    * @example
    * <DocumentView
    *   defaultEraserType={Config.EraserType.hybrideEraser}

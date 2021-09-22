@@ -8,7 +8,7 @@ The application UI is rendered using native views to provide users the fluid loo
 
 Starting with version 3.0.0, PDFTron React Native provides support for TypeScript! 
 
-For TypeScript users, type information is automatically provided while coding. They can also be found in our [TypeScript source files](https://github.com/PDFTron/pdftron-react-native/tree/master/src).
+For TypeScript users, type information is automatically provided while coding. Exact type aliases and constants used in our custom typings can also be found in our [TypeScript source files](https://github.com/PDFTron/pdftron-react-native/tree/master/src).
 
 The typings used in these API docs will be described using normal JavaScript types. 
 
