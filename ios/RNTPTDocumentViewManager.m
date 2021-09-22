@@ -487,6 +487,13 @@ RCT_CUSTOM_VIEW_PROPERTY(excludedAnnotationListTypes, NSArray, RNTPTDocumentView
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(showQuickNavigationButton, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.showQuickNavigationButton = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showNavigationListAsSidePanelOnLargeDevices, BOOL, RNTPTDocumentView)
 {
     if (json) {
