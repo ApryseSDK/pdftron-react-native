@@ -2,7 +2,7 @@ name: Transpile TS
 
 on:
   push:
-    branches: [ts-typedocs-remove-package-lock] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
+    branches: [ts-typedocs] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
 
 jobs:
   build:
