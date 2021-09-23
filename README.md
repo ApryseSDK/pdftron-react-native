@@ -1,6 +1,6 @@
 # PDFTron React Native Wrapper
 
-- [API](API.md)
+- [API](https://raw.githack.com/PDFTron/pdftron-react-native/ts-typedocs-master/docs/index.html)
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
 - [Installation](#installation)
@@ -10,7 +10,7 @@
 - [License](#license)
 
 ## API
-APIs are available on the [API page](API.md).
+APIs are available on the [API page](https://raw.githack.com/PDFTron/pdftron-react-native/ts-typedocs-master/docs/index.html).
 
 ## Prerequisites
 - No license key is required for trial. However, a valid commercial license key is required after trial.
@@ -336,7 +336,7 @@ To get access to TypeScript support, simply update your PDFTron React Native dep
 For non-TypeScript users, updating your PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and you can continue to use the library as before (without TypeScript support). If you currently do not use TypeScript itself in your project and would like to, see [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project).
 
 Regardless of whether you use TypeScript, the following benefits are available:
-- Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
+- Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](https://raw.githack.com/PDFTron/pdftron-react-native/ts-typedocs-master/docs/index.html).
 - Greater type safety and reliability due to the migration of source files from JavaScript to TypeScript. 
 - Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs must now be made to the `dev` branch (see [Contributing](./CONTRIBUTING.md)).
 
