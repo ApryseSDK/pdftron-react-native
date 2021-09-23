@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'npm'
+        run: npm i
 
       - name: Build JavaScript files and API documentation website
         run: | # Change last line to your build script command #.
