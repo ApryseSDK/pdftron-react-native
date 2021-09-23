@@ -90,6 +90,10 @@ NS_ASSUME_NONNULL_END
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
+
+    _userBookmarksListEditingEnabled = YES;
+    
+    _showQuickNavigationButton = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -605,13 +609,33 @@ NS_ASSUME_NONNULL_END
     }
     
     if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
 }
 
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
 {
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
+}
+
+- (void)setDefaultEraserType:(NSString *)defaultEraserType
+{
+    _defaultEraserType = defaultEraserType;
+    
+    if (self.currentDocumentViewController) {
+        [self applyDefaultEraserType:defaultEraserType documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)applyDefaultEraserType:(NSString *)defaultEraserType documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([defaultEraserType isEqualToString:PTInkEraserModeAllKey]) {
+        toolManager.eraserMode = PTInkEraserModeAll;
+    } else if ([defaultEraserType isEqualToString:PTInkEraserModePointsKey]) {
+        toolManager.eraserMode = PTInkEraserModePoints;
+    }
 }
 
 #pragma mark - Disabled tools
@@ -1896,8 +1920,15 @@ NS_ASSUME_NONNULL_END
     
     // Set User Bookmark List Editing
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
+    
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    
+    // Set Default Eraser Type
+    [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
+    
+    // Show Quick Navigation Button
+    documentViewController.navigationHistoryEnabled = self.showQuickNavigationButton;
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
@@ -5105,7 +5136,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Navigation List
+#pragma mark - Navigation
+
+-(void)setShowQuickNavigationButton:(BOOL)showQuickNavigationButton
+{
+    _showQuickNavigationButton = showQuickNavigationButton;
+    
+    [self applyViewerSettings];
+}
 
 -(void)openNavigationLists
 {

@@ -1,5 +1,9 @@
 # PDFTron React Native API
 
+## TypeScript
+
+PDFTron React Native supports TypeScript. Since not all customers use the language, the typings used in this document will be described using normal JavaScript types. For TypeScript users, type information is automatically provided while coding, and exact type aliases and constants used in our custom typings can be found in [AnnotOptions](src/AnnotOptions) and [Config](src/Config) source folders.
+
 ## RNPdftron
 
 RNPdftron contains static methods for global library initialization, configuration, and utility methods.
@@ -225,10 +229,15 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-one of [`Config.EraserType`](./src/Config/Config.js) constants, optional
+one of the [`Config.EraserType`](./src/Config/Config.js) constants, optional
 
-Sets the default eraser tool type. Value only applied after a clean install. Android only.
-Example:
+Sets the default eraser tool type. Value only applied after a clean install.
+
+Eraser Type | Description
+--- | ---
+`annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+`hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
+`inkEraser` | Erases ink by pixel only. Android only.
 
 ```js
 <DocumentView
@@ -289,6 +298,12 @@ function, optional
 
 This function is called when the document finishes loading.
 
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
 ```js
 <DocumentView
   onDocumentLoaded = {(path) => { 
@@ -301,6 +316,12 @@ This function is called when the document finishes loading.
 function, optional
 
 This function is called when document opening encounters an error.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+error | string | Error message produced
 
 ```js
 <DocumentView
@@ -1302,22 +1323,7 @@ Defines annotation types that cannot be edited after creation.
 #### excludedAnnotationListTypes
 array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
 
-Defines types to be excluded from the annotation list. This feature will be soon be added to the official iOS release; to access it in the meantime, you can use the following podspec in the Podfile:
-```
-pod 'PDFNet', podspec: 'https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-08-04/9.0/cocoapods/xcframeworks/pdfnet/2021-08-04_stable_rev77892.podspec'
-```
-
-and uncomment the following line in `ios/RNTPTDocumentView.m`:
-```objc
-- (void)excludeAnnotationListTypes:(NSArray<NSString*> *)excludedAnnotationListTypes documentViewController:(PTDocumentBaseViewController *)documentViewController
-{
-    ...
-    if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
-    }
-}
-```
-
+Defines types to be excluded from the annotation list.
 Example use:
 
 ```js
@@ -1536,7 +1542,7 @@ Defines whether the page stack navigation buttons will appear in the viewer.
 ```
 
 #### showQuickNavigationButton
-bool, optional, defaults to true, Android only
+bool, optional, defaults to true
 
 Defines whether the quick navigation buttons will appear in the viewer.
 
@@ -3210,8 +3216,6 @@ this._viewer.openOutlineList();
 
 #### openLayersList
 On Android it displays the layers dialog while on iOS it displays the layers tab of the existing list container. If this tab has been disabled or there are no layers in the document, the method does nothing.
-
-**Note** For proper functionality the PDFNet podspec with: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-07-16/9.0/cocoapods/pdfnet/2021-07-16_stable_rev77863.podspec
 
 Returns a Promise.
 

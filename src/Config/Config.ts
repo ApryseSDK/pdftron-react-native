@@ -1,4 +1,4 @@
-export default {
+export const Config = {
 
   // Buttons define the various kinds of buttons for the viewer
   Buttons: {
@@ -143,7 +143,7 @@ export default {
     calibrate: 'calibrate',
   },
 
-  // EraserType defines the type of earse that will be used when eraser is selected
+  // EraserType defines the type of eraser that will be used when eraser is selected
   EraserType: {
     annotationEraser: 'annotationEraser',
     hybrideEraser: 'hybrideEraser',
@@ -269,4 +269,63 @@ export default {
     JPEG: "JPEG",
     PNG: "PNG",
   },
-};
+} as const;
+
+/**
+ * A generic used to create the custom types defined in the module below.
+ * 
+ * The variable `T` represents the type information being passed into the generic.
+ * This generic accepts type information about the `Config` object above. We pass this
+ * information in using `typeof Config.*`, * is any object nested in the `Config` object.
+ * 
+ * `keyof T` creates a union of the object's keys e.g 
+ * `keyof typeof Config.ReflowOrientation == 'Horizonal' | 'Vertical'`
+ * 
+ * `T[]` is the indexed access type and takes the union produced by a `keyof T` and outputs
+ * a union of value types corresponding to those keys, e.g.
+ * `ValueOf<typeof Config.ReflowOrientation> == "horizontal" | "vertical"`
+ * 
+ * The above union is made up of string literal types because the `as const` operator sets the 
+ * properties of the `Config` object to have literal types.
+ * 
+ * You can learn more about these special operators here:
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/typeof-types.html Typeof}
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/keyof-types.html Keyof} 
+ * - {@link https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html Index Acess Types}
+ * - {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions Const Assertions}
+ */
+type ValueOf<T> = T[keyof T];
+
+/**
+ * A module containing custom types formed from the constants in the Config object.
+ * 
+ * These types are used for props such as `disabledElements` and methods such as `exportAsImage`
+ */
+export module Config {
+  export type Buttons = ValueOf<typeof Config.Buttons>;
+  export type Tools = ValueOf<typeof Config.Tools>;
+  export type FitMode = ValueOf<typeof Config.FitMode>;
+  export type LayoutMode = ValueOf<typeof Config.LayoutMode>;
+  export type FieldFlags = ValueOf<typeof Config.FieldFlags>;
+  export type AnnotationMenu = ValueOf<typeof Config.AnnotationMenu>;
+  export type EraserType = ValueOf<typeof Config.EraserType>;
+  export type LongPressMenu = ValueOf<typeof Config.LongPressMenu>;
+  export type Actions = ValueOf<typeof Config.Actions>;
+  export type AnnotationFlags = ValueOf<typeof Config.AnnotationFlags>;
+  export type DefaultToolbars = ValueOf<typeof Config.DefaultToolbars>;
+  export type ToolbarIcons = ValueOf<typeof Config.ToolbarIcons>;
+  export type ThumbnailFilterMode = ValueOf<typeof Config.ThumbnailFilterMode>;
+  export type Conversion = ValueOf<typeof Config.Conversion>;
+  export type ViewModePickerItem = ValueOf<typeof Config.ViewModePickerItem>;
+  export type ZoomLimitMode = ValueOf<typeof Config.ZoomLimitMode>;
+  export type OverprintMode = ValueOf<typeof Config.OverprintMode>;
+  export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
+  export type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
+  export type ExportFormat = ValueOf<typeof Config.ExportFormat>;
+  export type CustomToolbarKey = {
+    id : string;
+    name: string;
+    icon: ToolbarIcons;
+    items: (Tools | Buttons)[];
+  }
+}
