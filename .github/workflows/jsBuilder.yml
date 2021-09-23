@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo.
 
       - name: Install dependencies
-        run: | # Change last line to your build script command #.
+        run: | 
           npm i
       
       - name: Node setup
