@@ -105,7 +105,7 @@ def commit_and_push(branch_name: str):
     print("Committing changes on branch: {0}".format(branch_name))
     subprocess.check_call(["git", "add", rn_api_root[17:]])
     subprocess.check_call(["git", "commit", "-m", "Updating React Native API documentation"])
-    # subprocess.check_call(["git", "push", "origin", branch_name])
+    subprocess.check_call(["git", "push", "origin", branch_name])
     os.chdir("..")
 
 def clean_up():
