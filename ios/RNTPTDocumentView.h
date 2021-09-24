@@ -254,6 +254,10 @@ static NSString * const PTTextSelectionQuadPointYKey = @"y";
 static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
 static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
+// DefaultEraserType keys
+static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -273,6 +277,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
+
+// Contexts.
+static void *TabChangedContext = &TabChangedContext;
 
 // To access the saved signatures folder
 static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
@@ -295,6 +302,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 - (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -431,6 +439,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign) BOOL annotationsListEditingEnabled;
 
+@property (nonatomic, assign) BOOL showQuickNavigationButton;
+
 @property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
 
 @property (nonatomic, assign) BOOL restrictDownloadUsage;
@@ -440,6 +450,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
+@property (nonatomic, copy, nullable) NSString *defaultEraserType;
 
 #pragma mark - Methods
 
