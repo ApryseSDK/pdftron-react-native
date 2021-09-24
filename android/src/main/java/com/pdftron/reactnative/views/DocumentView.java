@@ -4010,39 +4010,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public String exportToImage(int pageNumber, double dpi, String exportFormat) {
+    public String exportAsImage(int pageNumber, double dpi, String exportFormat) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-
         if (pdfViewCtrl != null) {
-            PDFDraw draw = null;
             boolean shouldUnlockRead = false;
             try {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-
-                draw = new PDFDraw();
-                draw.setDPI(dpi);
-                Page pg = pdfViewCtrl.getDoc().getPage(pageNumber);
-                String ext = "png";
-                if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
-                    ext = "bmp";
-                } else if (KEY_EXPORT_FORMAT_JPG.equals(exportFormat)) {
-                    ext = "jpg";
-                }
-                File tempFile = File.createTempFile("tmp", "." + ext);
-                draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
-                return tempFile.getAbsolutePath();
+                return ReactUtils.exportAsImageHelper(pdfViewCtrl.getDoc(), pageNumber, dpi, exportFormat);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             } finally {
                 if (shouldUnlockRead) {
                     pdfViewCtrl.docUnlockRead();
-                }
-                if (draw != null) {
-                    try {
-                        draw.destroy();
-                    } catch (Exception ignored) {
-                    }
                 }
             }
         }

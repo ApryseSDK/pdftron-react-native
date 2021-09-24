@@ -19,7 +19,7 @@
 
 - (NSString *)getDocumentPathForDocumentViewTag:(NSNumber *)tag;
 
-- (NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString*) exportAsImageForDocumentViewTag:(NSNumber*)tag pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (int)getPageCountForDocumentViewTag:(NSNumber *)tag;
 
@@ -28,6 +28,7 @@
 - (void)openBookmarkListForDocumentViewTag:(NSNumber *)tag;
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
+
 - (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString;
 
 - (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly;
