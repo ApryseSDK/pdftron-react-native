@@ -13,6 +13,7 @@ interface RNPdftron {
     clearRubberStampCache() : Promise<void>;
     encryptDocument(filePath: string, password: string, currentPassword: string) : Promise<void>;
     pdfFromOfficeTemplate(docxPath: string, json: object) : Promise<string>;
+    exportAsImage(pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, filePath: string) : Promise<string>;
 }
 
 const RNPdftron : RNPdftron = NativeModules.RNPdftron;
