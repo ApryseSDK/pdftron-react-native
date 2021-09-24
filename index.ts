@@ -4,7 +4,7 @@ import { DocumentView } from './src/DocumentView/DocumentView';
 import { Config } from './src/Config/Config';
 import * as AnnotOptions from './src/AnnotOptions/AnnotOptions';
 
-export interface Pdftron {
+interface RNPdftron {
     initialize(licenseKey: string) : void;
     enableJavaScript(enabled: boolean) : void;
     getVersion() : Promise<string>;
@@ -15,7 +15,7 @@ export interface Pdftron {
     pdfFromOfficeTemplate(docxPath: string, json: object) : Promise<string>;
 }
 
-const RNPdftron : Pdftron = NativeModules.RNPdftron;
+const RNPdftron : RNPdftron = NativeModules.RNPdftron;
 
 export {
     RNPdftron,

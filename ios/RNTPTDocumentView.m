@@ -90,6 +90,10 @@ NS_ASSUME_NONNULL_END
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
+
+    _userBookmarksListEditingEnabled = YES;
+    
+    _showQuickNavigationButton = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -193,7 +197,6 @@ NS_ASSUME_NONNULL_END
             
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
-            [self addMissingPencilToolToDocumentController:collaborationViewController];
         } else {
             if ([self isMultiTabEnabled]) {
                 PTTabbedDocumentViewController *tabbedDocumentViewController = [[PTTabbedDocumentViewController alloc] init];
@@ -211,7 +214,6 @@ NS_ASSUME_NONNULL_END
                 
                 self.viewController = documentViewController;
                 self.documentViewController = documentViewController;
-                [self addMissingPencilToolToDocumentController:documentViewController];
             }
         }
         
@@ -222,6 +224,7 @@ NS_ASSUME_NONNULL_END
             [self registerForPDFViewCtrlNotifications:self.documentViewController];
         } else {
             // Using tabbed viewer.
+            [self registerForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
         }
     }
     
@@ -324,6 +327,7 @@ NS_ASSUME_NONNULL_END
     
     if (self.tabbedDocumentViewController) {
         [self.tabbedDocumentViewController.tabManager saveItems];
+        [self deregisterForTabbedDocumentViewControllerNotifications:self.tabbedDocumentViewController];
     }
     
     UINavigationController *navigationController = self.viewController.navigationController;
@@ -452,6 +456,17 @@ NS_ASSUME_NONNULL_END
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
 }
+
+- (void)registerForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController addObserver:self forKeyPath:@"tabManager.selectedIndex" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:TabChangedContext];
+}
+
+- (void)deregisterForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
+{
+    [tabbedDocumentViewController removeObserver:self forKeyPath:@"tabManager.selectedIndex" context:TabChangedContext];
+}
+
 
 #pragma mark - Disabling elements
 
@@ -594,13 +609,33 @@ NS_ASSUME_NONNULL_END
     }
     
     if (annotTypes.count > 0) {
-        //documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
+        documentViewController.navigationListsViewController.annotationViewController.excludedAnnotationTypes = annotTypes;
     }
 }
 
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
 {
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
+}
+
+- (void)setDefaultEraserType:(NSString *)defaultEraserType
+{
+    _defaultEraserType = defaultEraserType;
+    
+    if (self.currentDocumentViewController) {
+        [self applyDefaultEraserType:defaultEraserType documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)applyDefaultEraserType:(NSString *)defaultEraserType documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([defaultEraserType isEqualToString:PTInkEraserModeAllKey]) {
+        toolManager.eraserMode = PTInkEraserModeAll;
+    } else if ([defaultEraserType isEqualToString:PTInkEraserModePointsKey]) {
+        toolManager.eraserMode = PTInkEraserModePoints;
+    }
 }
 
 #pragma mark - Disabled tools
@@ -1885,8 +1920,15 @@ NS_ASSUME_NONNULL_END
     
     // Set User Bookmark List Editing
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
+    
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    
+    // Set Default Eraser Type
+    [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
+    
+    // Show Quick Navigation Button
+    documentViewController.navigationHistoryEnabled = self.showQuickNavigationButton;
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
@@ -2275,66 +2317,6 @@ NS_ASSUME_NONNULL_END
         [pdfViewCtrl
          SetBackgroundColor:[backgroundColor[PTColorRedKey] unsignedCharValue] g:[backgroundColor[PTColorGreenKey] unsignedCharValue] b:[backgroundColor[PTColorBlueKey] unsignedCharValue] a:255];
     }
-}
-
-#pragma mark - Missing PencilKit workaround
-
--(void)addMissingPencilToolToDocumentController:(PTDocumentController*)documentController
-{
-    NSMutableArray<UIBarButtonItem*>* defaultAnnotateGroupTools = [documentController.toolGroupManager.annotateItemGroup.barButtonItems mutableCopy];
-    NSMutableArray<UIBarButtonItem*>* defaultDrawGroupTools = [documentController.toolGroupManager.drawItemGroup.barButtonItems mutableCopy];
-    NSMutableArray<UIBarButtonItem*>* newAnnotateGroupTools = [[NSMutableArray alloc] init];
-    NSMutableArray<UIBarButtonItem*>* newDrawGroupTools = [[NSMutableArray alloc] init];
-
-    for(UIBarButtonItem* defaultToolItem in defaultAnnotateGroupTools)
-    {
-        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
-        {
-            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-            {
-                continue;
-            }
-            else
-            {
-                [newAnnotateGroupTools addObject:defaultToolItem];
-            }
-        }
-        else
-        {
-            [newAnnotateGroupTools addObject:defaultToolItem];
-        }
-    }
-
-    for(UIBarButtonItem* defaultToolItem in defaultDrawGroupTools)
-    {
-        if( [defaultToolItem isKindOfClass:[PTToolBarButtonItem class]] )
-        {
-            PTToolBarButtonItem* toolBarButton = (PTToolBarButtonItem*)defaultToolItem;
-            if( toolBarButton.toolClass == [PTFreeHandCreate class] && documentController.toolManager.freehandUsesPencilKit)
-            {
-                continue;
-            }
-            else
-            {
-                [newDrawGroupTools addObject:defaultToolItem];
-            }
-        }
-        else
-        {
-            [newDrawGroupTools addObject:defaultToolItem];
-        }
-    }
-    if (@available(iOS 13.1, *)) {
-        if (documentController.toolManager.freehandUsesPencilKit) {
-            UIBarButtonItem* pencilItem = [documentController.toolGroupManager createItemForToolClass:[PTPencilDrawingCreate class]];
-            [newAnnotateGroupTools insertObject:pencilItem atIndex:2];
-            [newDrawGroupTools insertObject:pencilItem atIndex:0];
-        }
-    }
-
-    documentController.toolGroupManager.annotateItemGroup.barButtonItems = newAnnotateGroupTools;
-    documentController.toolGroupManager.drawItemGroup.barButtonItems = newDrawGroupTools;
 }
 
 #pragma mark - Custom headers
@@ -2741,7 +2723,6 @@ NS_ASSUME_NONNULL_END
         PTDocumentController *documentController = (PTDocumentController *)documentViewController;
         
         documentController.delegate = self;
-        [self addMissingPencilToolToDocumentController:documentController];
     }
     
     [self applyViewerSettings:documentViewController];
@@ -2765,6 +2746,21 @@ NS_ASSUME_NONNULL_END
 {
     // Always show tab bar when using tabbed viewer.
     return NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == TabChangedContext) {
+        if ([self.delegate respondsToSelector:@selector(tabChanged:currentTab:)]) {
+            PTDocumentTabItem *selectedItem = self.tabbedDocumentViewController.tabManager.selectedItem;
+            if (selectedItem != nil) {
+                NSURL *currentTab = selectedItem.documentURL ?: selectedItem.sourceURL;
+                [self.delegate tabChanged:self currentTab:[currentTab absoluteString]];
+            }
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - <PTDocumentViewControllerDelegate>
@@ -5140,7 +5136,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Navigation List
+#pragma mark - Navigation
+
+-(void)setShowQuickNavigationButton:(BOOL)showQuickNavigationButton
+{
+    _showQuickNavigationButton = showQuickNavigationButton;
+    
+    [self applyViewerSettings];
+}
 
 -(void)openNavigationLists
 {
