@@ -2,7 +2,7 @@ name: Transpile TS
 
 on:
   push:
-    branches: [ts-present-dev] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
+    branches: [test-github-actions-script] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
 
 jobs:
   build:
@@ -41,4 +41,4 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ts-present-master # <-- Change this to the branch where you want builds to be (for example, "master" if you want changes to the primary branch to be applied to `master`).
+          branch: ts-master-script-test # <-- Change this to the branch where you want builds to be (for example, "master" if you want changes to the primary branch to be applied to `master`).
