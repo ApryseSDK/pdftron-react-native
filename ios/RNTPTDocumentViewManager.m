@@ -487,6 +487,13 @@ RCT_CUSTOM_VIEW_PROPERTY(excludedAnnotationListTypes, NSArray, RNTPTDocumentView
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(showQuickNavigationButton, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.showQuickNavigationButton = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showNavigationListAsSidePanelOnLargeDevices, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -529,6 +536,14 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
         view.saveStateEnabled = [RCTConvert BOOL:json];
     }
 }
+
+RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.defaultEraserType = [RCTConvert NSString:json];
+    }
+}
+
 
 - (UIView *)view
 {
@@ -714,6 +729,16 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
             });
         }
         
+    }
+}
+
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onTabChanged": @"onTabChanged",
+            @"currentTab": currentTab,
+        });
     }
 }
 
@@ -1398,6 +1423,28 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
         [documentView openThumbnailsView];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSArray *)getSavedSignaturesForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSArray * signatures = [documentView getSavedSignatures];
+        return signatures;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
+
+- (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        NSString * folder = [documentView getSavedSignatureFolder];
+        return folder;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

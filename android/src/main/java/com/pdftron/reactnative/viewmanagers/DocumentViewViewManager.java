@@ -1255,6 +1255,33 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public ReadableArray getSavedSignatures(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getSavedSignatures();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getSavedSignatures", "Unable to find DocumentView.");
+        }
+    }
+
+    public String getSavedSignatureFolder(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getSavedSignatureFolder();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getSavedSignatureFolder", "Unable to find DocumentView.");
+        }
+    }
+
+    public String getSavedSignatureJpgFolder(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getSavedSignatureJpgFolder();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getSavedSignatureJpgFolder", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

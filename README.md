@@ -5,7 +5,8 @@
 - [Preview](#preview)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Components](#components)
+- [TypeScript](#typescript)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## API
@@ -16,6 +17,7 @@ APIs are available on the [API page](API.md).
 - npm or yarn
 - PDFTron SDK >= 9.0.0
 - react-native >= 0.60.0
+- TypeScript >= 3.4.1 (optional; see [TypeScript](#typescript))
 
 ## Preview
 
@@ -33,7 +35,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 0. If using yarn, do: `yarn global add react-native-cli`
 
-1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup), the following steps will assume your app is created through `react-native init MyApp`.
+1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup). The following steps will assume your app is created through `react-native init MyApp`. This guide also applies if you are using the [TypeScript template](https://reactnative.dev/docs/environment-setup#optional-using-a-specific-version-or-template).
 
 2. In `MyApp` folder, install `react-native-pdftron` by calling:
     ```shell
@@ -49,6 +51,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     npm install @react-native-community/cli --save-dev
     npm install @react-native-community/cli-platform-android --save-dev
     npm install @react-native-community/cli-platform-ios --save-dev
+    npm install
     ```
 
 ### Android
@@ -149,7 +152,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     + public class MainApplication extends MultiDexApplication implements ReactApplication {
     ```
 
-6. Replace `App.js` with what is shown [here](#usage)
+6. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
 7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
@@ -165,13 +168,13 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     ```
 
 2. In the `ios` folder, run `pod install`.
-3. Replace `App.js` with what is shown [here](#usage).
+3. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
 4. Finally in the root project directory, run `react-native run-ios`.
 5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
 ## Usage
 
-Replace `App.js` with the code below.
+Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
 If you set your path variable to point to a local storage file, 
 then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
@@ -201,6 +204,8 @@ import { DocumentView, RNPdftron } from 'react-native-pdftron';
 type Props = {};
 export default class App extends Component<Props> {
 
+  // If you are using TypeScript, use `constructor(props: Props) {`
+  // Otherwise, use:
   constructor(props) {
     super(props);
 
@@ -319,6 +324,31 @@ const styles = StyleSheet.create({
   ```javascript
   document="content://..."
   ```
+
+## TypeScript
+
+PDFTron React Native introduced support for TypeScript in version 3.0.0. This update mainly benefits those who already use TypeScript in their applications. It also provides certain benefits to all customers, including those who use JavaScript without TypeScript.
+
+To get access to TypeScript support, simply update your PDFTron React Native dependency to version 3.0.0 or higher.
+
+### All Users
+
+For non-TypeScript users, updating your PDFTron React Native dependency to version 3.0.0 or higher will not automatically install TypeScript itself, and you can continue to use the library as before (without TypeScript support). If you currently do not use TypeScript itself in your project and would like to, see [Adding TypeScript to an Existing Project](https://reactnative.dev/docs/typescript#adding-typescript-to-an-existing-project).
+
+Regardless of whether you use TypeScript, the following benefits are available:
+- Proper API typings which can be used in tools such as [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense). This offers insight into the data being passed without referring to the [API documentation](API.md).
+- Greater type safety and reliability due to the migration of source files from JavaScript to TypeScript. 
+- Updated Add an API guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/add-an-api/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/add-an-api) to offer step-by-step, TypeScript-supported examples on accessing properties, methods, and events. Contributors should be aware that PRs must now be made to the `dev` branch (see [Contributing](./CONTRIBUTING.md)).
+
+If you have questions, head to the FAQ's Integration section for [Android](https://www.pdftron.com/documentation/android/faq) and [iOS](https://www.pdftron.com/documentation/ios/faq/).
+
+### TypeScript Users
+
+If you are an existing TypeScript user, then the custom typings will be available to you simply by updating your PDFTron React Native dependency to version 3.0.0 or higher.
+
+Note:
+- TypeScript version 3.4.1+ is recommended. Although compilation still works with lower versions, typings may degrade to `any`.
+- Due to the introduction of proper typings to PDFTron's APIs, your compiler may now give warnings or errors about your usage of these APIs. In most cases these will not prevent your app from running but it is advised that you address them to take full advantage of TypeScript. It is particularly important to address them if you use TypeScript to emit files and have enabled `noEmitOnError` in your `tsconfig.json`.
 
 ## Contributing
 See [Contributing](./CONTRIBUTING.md)

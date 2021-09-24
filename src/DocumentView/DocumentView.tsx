@@ -1,121 +1,198 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
   requireNativeComponent,
   ViewPropTypes,
   Platform,
   Alert,
   NativeModules,
-  findNodeHandle
+  findNodeHandle,
 } from 'react-native';
 const { DocumentViewManager } = NativeModules;
+import {Config} from "../Config/Config";
+import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
-export default class DocumentView extends PureComponent {
+/** 
+ * Object containing PropTypes types for {@link DocumentView} class.
+ * Also used to generate prop types for TS users.
+ * 
+ * To represent functions, please use {@link func}.
+ * To represent "one of Config.Buttons values" or "an array of 
+ * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
+ */
+const propTypes = {
+  document: PropTypes.string.isRequired,
+  password: PropTypes.string,
+  initialPageNumber: PropTypes.number,
+  pageNumber: PropTypes.number,
+  customHeaders: PropTypes.object,
+  leadingNavButtonIcon: PropTypes.string,
+  showLeadingNavButton: PropTypes.bool,
+  onLeadingNavButtonPressed: func<() => void>(),
+  onDocumentLoaded: func<(path: string) => void>(),
+  onDocumentError: func<(error: string) => void>(),
+  onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
+  onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
+  onZoomChanged: func<(event: {zoom: number}) => void>(),
+  onZoomFinished: func<(event: {zoom: number}) => void>(),
+  zoom: PropTypes.number,
+  disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
+  disabledTools: arrayOf<Config.Tools>(Config.Tools),
+  longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
+  overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
+  onLongPressMenuPress: func<(event: {longPressMenu: string, longPressText: string}) => void>(),
+  longPressMenuEnabled: PropTypes.bool,
+  annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
+  overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
+  onAnnotationMenuPress: func<(event: {annotationMenu: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
+  overrideBehavior: arrayOf<Config.Actions>(Config.Actions),
+  onBehaviorActivated: func<(event: {action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData}) => void>(),
+  topToolbarEnabled: PropTypes.bool,
+  bottomToolbarEnabled: PropTypes.bool,
+  hideToolbarsOnTap: PropTypes.bool,
+  documentSliderEnabled: PropTypes.bool,
+  pageIndicatorEnabled: PropTypes.bool,
+  keyboardShortcutsEnabled: PropTypes.bool,
+  onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
+  readOnly: PropTypes.bool,
+  thumbnailViewEditingEnabled: PropTypes.bool,
+  fitMode: oneOf<Config.FitMode>(Config.FitMode),
+  layoutMode: oneOf<Config.LayoutMode>(Config.LayoutMode),
+  onLayoutChanged: func<() => void>(),
+  padStatusBar: PropTypes.bool,
+  continuousAnnotationEditing: PropTypes.bool,
+  selectAnnotationAfterCreation: PropTypes.bool,
+  annotationAuthor: PropTypes.string,
+  showSavedSignatures: PropTypes.bool,
+  isBase64String: PropTypes.bool,
+  collabEnabled: PropTypes.bool,
+  currentUser: PropTypes.string,
+  currentUserName: PropTypes.string,
+  onExportAnnotationCommand: func<(event: {action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  autoSaveEnabled: PropTypes.bool,
+  pageChangeOnTap: PropTypes.bool,
+  followSystemDarkMode: PropTypes.bool,
+  useStylusAsPen: PropTypes.bool,
+  multiTabEnabled: PropTypes.bool,
+  tabTitle: PropTypes.string,
+  maxTabCount: PropTypes.number,
+  signSignatureFieldsWithStamps: PropTypes.bool,
+  annotationPermissionCheckEnabled: PropTypes.bool,
+  annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
+    oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+    PropTypes.exact({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
+      items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
+    })
+  ])),
+  hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+  topAppNavBarRightBar: arrayOf<Config.Buttons>(Config.Buttons),
+  bottomToolbar: arrayOf<Config.Buttons>(Config.Buttons),
+  hideAnnotationToolbarSwitcher: PropTypes.bool,
+  hideTopToolbars: PropTypes.bool,
+  hideTopAppNavBar: PropTypes.bool,
+  onBookmarkChanged: func<(event: {bookmarkJson: string}) => void>(),
+  hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
+  onToolChanged: func<(event: {previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool"}) => void>(),
+  horizontalScrollPos: PropTypes.number,
+  verticalScrollPos: PropTypes.number,
+  onTextSearchStart: func<() => void>(),
+  onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
+  hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
+  pageStackEnabled: PropTypes.bool,
+  showQuickNavigationButton: PropTypes.bool,
+  photoPickerEnabled: PropTypes.bool,
+  autoResizeFreeTextEnabled: PropTypes.bool,
+  annotationsListEditingEnabled: PropTypes.bool,
+  showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
+  restrictDownloadUsage: PropTypes.bool,
+  userBookmarksListEditingEnabled: PropTypes.bool,
+  imageInReflowEnabled: PropTypes.bool,
+  reflowOrientation: oneOf<Config.ReflowOrientation>(Config.ReflowOrientation),
+  onUndoRedoStateChanged: func<() => void>(),
+  tabletLayoutEnabled: PropTypes.bool,
+  initialToolbar: PropTypes.string,
+  inkMultiStrokeEnabled: PropTypes.bool,
+  defaultEraserType: oneOf<Config.EraserType>(Config.EraserType),
+  exportPath: PropTypes.string,
+  openUrlPath: PropTypes.string,
+  disableEditingByAnnotationType: arrayOf<Config.Tools>(Config.Tools),
+  hideScrollbars: PropTypes.bool,
+  saveStateEnabled: PropTypes.bool,
+  openSavedCopyInNewTab: PropTypes.bool,
+  excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
+  replyReviewStateEnabled: PropTypes.bool,
+  onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
+  onTabChanged: func<(event: {currentTab: string}) => void>(),
+  ...ViewPropTypes,
+};
 
-  static propTypes = {
-    document: PropTypes.string,
-    password: PropTypes.string,
-    initialPageNumber: PropTypes.number,
-    pageNumber: PropTypes.number,
-    customHeaders: PropTypes.object,
-    leadingNavButtonIcon: PropTypes.string,
-    showLeadingNavButton: PropTypes.bool,
-    onLeadingNavButtonPressed: PropTypes.func,
-    onDocumentLoaded: PropTypes.func,
-    onDocumentError: PropTypes.func,
-    onPageChanged: PropTypes.func,
-    onScrollChanged: PropTypes.func,
-    onZoomChanged: PropTypes.func,
-    onZoomFinished: PropTypes.func,
-    zoom: PropTypes.number,
-    disabledElements: PropTypes.array,
-    disabledTools: PropTypes.array,
-    longPressMenuItems: PropTypes.array,
-    overrideLongPressMenuBehavior: PropTypes.array,
-    onLongPressMenuPress: PropTypes.func,
-    longPressMenuEnabled: PropTypes.bool,
-    annotationMenuItems: PropTypes.array,
-    overrideAnnotationMenuBehavior: PropTypes.array,
-    onAnnotationMenuPress: PropTypes.func,
-    hideAnnotationMenu: PropTypes.array,
-    overrideBehavior: PropTypes.array,
-    onBehaviorActivated: PropTypes.func,
-    topToolbarEnabled: PropTypes.bool,
-    bottomToolbarEnabled: PropTypes.bool,
-    hideToolbarsOnTap: PropTypes.bool,
-    documentSliderEnabled: PropTypes.bool,
-    pageIndicatorEnabled: PropTypes.bool,
-    keyboardShortcutsEnabled: PropTypes.bool,
-    onAnnotationsSelected: PropTypes.func,
-    onAnnotationChanged: PropTypes.func,
-    onFormFieldValueChanged: PropTypes.func,
-    readOnly: PropTypes.bool,
-    thumbnailViewEditingEnabled: PropTypes.bool,
-    fitMode: PropTypes.string,
-    layoutMode: PropTypes.string,
-    onLayoutChanged: PropTypes.func,
-    padStatusBar: PropTypes.bool,
-    continuousAnnotationEditing: PropTypes.bool,
-    selectAnnotationAfterCreation: PropTypes.bool,
-    annotationAuthor: PropTypes.string,
-    showSavedSignatures: PropTypes.bool,
-    isBase64String: PropTypes.bool,
-    collabEnabled: PropTypes.bool,
-    currentUser: PropTypes.string,
-    currentUserName: PropTypes.string,
-    onExportAnnotationCommand: PropTypes.func,
-    autoSaveEnabled: PropTypes.bool,
-    pageChangeOnTap: PropTypes.bool,
-    followSystemDarkMode: PropTypes.bool,
-    useStylusAsPen: PropTypes.bool,
-    multiTabEnabled: PropTypes.bool,
-    tabTitle: PropTypes.string,
-    maxTabCount: PropTypes.number,
-    signSignatureFieldsWithStamps: PropTypes.bool,
-    annotationPermissionCheckEnabled: PropTypes.bool,
-    annotationToolbars: PropTypes.array,
-    hideDefaultAnnotationToolbars: PropTypes.array,
-    topAppNavBarRightBar: PropTypes.array,
-    bottomToolbar: PropTypes.array,
-    hideAnnotationToolbarSwitcher: PropTypes.bool,
-    hideTopToolbars: PropTypes.bool,
-    hideTopAppNavBar: PropTypes.bool,
-    onBookmarkChanged: PropTypes.func,
-    hideThumbnailFilterModes: PropTypes.array,
-    onToolChanged: PropTypes.func,
-    horizontalScrollPos: PropTypes.number,
-    verticalScrollPos: PropTypes.number,
-    onTextSearchStart: PropTypes.func,
-    onTextSearchResult: PropTypes.func,
-    hideViewModeItems: PropTypes.array,
-    pageStackEnabled: PropTypes.bool,
-    showQuickNavigationButton: PropTypes.bool,
-    photoPickerEnabled: PropTypes.bool,
-    autoResizeFreeTextEnabled: PropTypes.bool,
-    annotationsListEditingEnabled: PropTypes.bool,
-    showNavigationListAsSidePanelOnLargeDevices: PropTypes.bool,
-    restrictDownloadUsage: PropTypes.bool,
-    userBookmarksListEditingEnabled: PropTypes.bool,
-    imageInReflowEnabled: PropTypes.bool,
-    reflowOrientation: PropTypes.string,
-    onUndoRedoStateChanged: PropTypes.func,
-    tabletLayoutEnabled: PropTypes.bool,
-    initialToolbar: PropTypes.string,
-    inkMultiStrokeEnabled: PropTypes.bool,
-    defaultEraserType: PropTypes.string,
-    exportPath: PropTypes.string,
-    openUrlPath: PropTypes.string,
-    onPageMoved: PropTypes.func,
-    disableEditingByAnnotationType: PropTypes.array,
-    hideScrollbars: PropTypes.bool,
-    saveStateEnabled: PropTypes.bool,
-    openSavedCopyInNewTab: PropTypes.bool,
-    excludedAnnotationListTypes: PropTypes.array,
-    replyReviewStateEnabled: PropTypes.bool,
-    ...ViewPropTypes,
-  };
+// Generates the prop types for TypeScript users, from PropTypes.
+type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 
-  onChange = (event) => {
+/**
+* Creates a custom PropType for functions.
+*
+* If the resulting PropType is used to generate prop types for TS users, 
+* type checking for function parameters and return values will be provided.
+* @returns {Requireable<T>} A custom PropType constant.
+* @example
+* func<(path: string) => void>()
+*/
+function func<T> () : Requireable<T> {
+  
+  let validator : Validator<T> = function (props: { [key: string]: any }, propName: string, componentName: string, location: string, propFullName: string) : Error | null {
+    if (typeof props[propName] !== "function" && typeof props[propName] !== "undefined") {
+      return new Error (`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`${componentName}\`, expected a function.`);
+    }
+    return null;
+  }
+  
+  const t : Requireable<T> = validator as Requireable<T>;
+  t.isRequired = validator as Validator<NonNullable<T>>;
+  return t;
+}
+
+/** 
+ * Creates a custom PropType representing any value from given object(s).
+ * @param {object} obj An object containing values.
+ * @param {...object} rest Indefinite number of other objects containing values.
+ * @returns {Requireable<T>} A custom PropType constant.
+ * @example
+ * oneOf<Config.Tools>(Config.Tools)
+ * oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
+*/
+function oneOf<T>(obj: object, ...rest: object[]) : Requireable<T> {
+  if (rest.length > 0) {
+    return PropTypes.oneOf(Object.values(Object.assign({}, obj, ...rest)));
+  }
+  return PropTypes.oneOf(Object.values(obj));
+}
+
+/** 
+ * Creates a custom PropType representing any array containing values from given object(s).
+ * @param {object} obj An object containing values.
+ * @param {...object} rest Indefinite number of other objects containing values.
+ * @returns {Requireable<T[]>} A custom PropType constant.
+ * @example
+ * arrayOf<Config.Tools>(Config.Tools)
+ * arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
+*/
+function arrayOf<T>(obj: object, ...rest: object[]) : Requireable<T[]> {
+  return PropTypes.arrayOf(oneOf<T>(obj, ...rest)) as Requireable<T[]>;
+}
+export class DocumentView extends PureComponent<DocumentViewProps, any> {
+
+  _viewerRef: any;
+
+  static propTypes = propTypes;
+
+  onChange = (event: any) => {
     if (event.nativeEvent.onLeadingNavButtonPressed) {
       if (this.props.onLeadingNavButtonPressed) {
         this.props.onLeadingNavButtonPressed();
@@ -251,10 +328,18 @@ export default class DocumentView extends PureComponent {
           'pageNumber': event.nativeEvent.pageNumber,
         });
       }
+    } else if (event.nativeEvent.onTabChanged) {
+      if (this.props.onTabChanged) {
+        this.props.onTabChanged({
+          'currentTab' : event.nativeEvent.currentTab
+        });
+      }
     }
   }
 
-  getDocumentPath = () => {
+  // Methods
+
+  getDocumentPath = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getDocumentPath(tag);
@@ -262,7 +347,8 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
   
-  setToolMode = (toolMode) => {
+
+  setToolMode = (toolMode: Config.Tools): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
     	return DocumentViewManager.setToolMode(tag, toolMode);
@@ -270,7 +356,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  commitTool = () => {
+  commitTool = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.commitTool(tag);
@@ -278,7 +364,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getPageCount = () => {
+  getPageCount = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCount(tag);
@@ -286,15 +372,15 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  importBookmarkJson = (bookmarkJson) => {
+  importBookmarkJson = (bookmarkJson: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importBookmarkJson(tag, bookmarkJson);
     }
     return Promise.resolve();
   }
-
-  openBookmarkList = () => {
+  
+  openBookmarkList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openBookmarkList(tag);
@@ -302,7 +388,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  importAnnotationCommand = (xfdfCommand, initialLoad) => {
+  importAnnotationCommand = (xfdfCommand: string, initialLoad?: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       if (initialLoad === undefined) {
@@ -317,7 +403,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  importAnnotations = (xfdf) => {
+  importAnnotations = (xfdf: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importAnnotations(tag, xfdf);
@@ -325,7 +411,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exportAnnotations = (options) => {
+  exportAnnotations = (options?: {annotList: Array<AnnotOptions.Annotation>}): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.exportAnnotations(tag, options);
@@ -333,7 +419,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  flattenAnnotations = (formsOnly) => {
+  flattenAnnotations = (formsOnly: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.flattenAnnotations(tag, formsOnly);
@@ -341,7 +427,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  deleteAnnotations = (annotations) => {
+  deleteAnnotations = (annotations: Array<AnnotOptions.Annotation>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.deleteAnnotations(tag, annotations);
@@ -349,7 +435,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  saveDocument = () => {
+  saveDocument = (): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.saveDocument(tag);
@@ -357,7 +443,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setFlagForFields = (fields, flag, value) => {
+  setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setFlagForFields(tag, fields, flag, value);
@@ -365,7 +451,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getField = (fieldName) => {
+  getField = (fieldName: string): Promise<void | {fieldName: string, fieldValue?: any, fieldType?: string}> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.getField(tag, fieldName);
@@ -373,7 +459,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openAnnotationList = () => {
+  openAnnotationList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.openAnnotationList(tag);
@@ -385,11 +471,11 @@ export default class DocumentView extends PureComponent {
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
   */
-  setValueForFields = (fieldsMap) => {
+   setValueForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     return this.setValuesForFields(fieldsMap);
   }
 
-  setValuesForFields = (fieldsMap) => {
+  setValuesForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {
       return DocumentViewManager.setValuesForFields(tag, fieldsMap);
@@ -397,7 +483,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  handleBackButton = () => {
+  handleBackButton = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.handleBackButton(tag);
@@ -410,11 +496,11 @@ export default class DocumentView extends PureComponent {
   * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
   * 
   */
-  setFlagForAnnotations = (annotationFlagList) => {
+  setFlagForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     return this.setFlagsForAnnotations(annotationFlagList);  
   }
   
-  setFlagsForAnnotations = (annotationFlagList) => {
+  setFlagsForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setFlagsForAnnotations(tag, annotationFlagList);
@@ -422,7 +508,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  selectAnnotation = (id, pageNumber) => {
+  selectAnnotation = (id: string, pageNumber: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAnnotation(tag, id, pageNumber);
@@ -434,11 +520,11 @@ export default class DocumentView extends PureComponent {
   * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
   * 
   */
-  setPropertyForAnnotation = (id, pageNumber, propertyMap) => {
-    return setPropertiesForAnnotation(id, pageNumber, propertyMap);
+  setPropertyForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
+    return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
   }
 
-  setPropertiesForAnnotation = (id, pageNumber, propertyMap) => {
+  setPropertiesForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setPropertiesForAnnotation(tag, id, pageNumber, propertyMap);
@@ -446,7 +532,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getPropertiesForAnnotation = (id, pageNumber) => {
+  getPropertiesForAnnotation = (id: string, pageNumber: number): Promise<void | AnnotOptions.AnnotationProperties> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPropertiesForAnnotation(tag, id, pageNumber);
@@ -454,7 +540,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setDrawAnnotations = (drawAnnotations) => {
+  setDrawAnnotations = (drawAnnotations: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setDrawAnnotations(tag, drawAnnotations);
@@ -462,7 +548,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setVisibilityForAnnotation = (id, pageNumber, visibility) => {
+  setVisibilityForAnnotation = (id: string, pageNumber: number, visibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setVisibilityForAnnotation(tag, id, pageNumber, visibility);
@@ -470,7 +556,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
   
-  setHighlightFields = (highlightFields) => {
+  setHighlightFields = (highlightFields: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setHighlightFields(tag, highlightFields);
@@ -478,7 +564,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationAtPoint = (x, y, distanceThreshold, minimumLineWeight) => {
+  getAnnotationAtPoint = (x: number, y: number, distanceThreshold: number, minimumLineWeight: number): Promise<void | AnnotOptions.Annotation> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationAt(tag, x, y, distanceThreshold, minimumLineWeight);
@@ -486,7 +572,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationListAt = (x1, y1, x2, y2) => {
+  getAnnotationListAt = (x1: number, y1: number, x2: number, y2: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListAt(tag, x1, y1, x2, y2);
@@ -494,7 +580,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getAnnotationsOnPage = (pageNumber) => {
+  getAnnotationsOnPage = (pageNumber: number): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getAnnotationListOnPage(tag, pageNumber);
@@ -502,7 +588,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getCustomDataForAnnotation = (annotationID, pageNumber, key) => {
+  getCustomDataForAnnotation = (annotationID: string, pageNumber: number, key: string): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
@@ -510,7 +596,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getPageCropBox = (pageNumber) => {
+  getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageCropBox(tag, pageNumber);
@@ -518,7 +604,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setCurrentPage = (pageNumber) => {
+  setCurrentPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setCurrentPage(tag, pageNumber);
@@ -526,7 +612,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getVisiblePages = () => {
+  getVisiblePages = (): Promise<void | Array<number>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getVisiblePages(tag);
@@ -534,7 +620,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  gotoPreviousPage = () => {
+  gotoPreviousPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoPreviousPage(tag);
@@ -542,7 +628,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  gotoNextPage = () => {
+  gotoNextPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoNextPage(tag);
@@ -550,7 +636,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  gotoFirstPage = () => {
+  gotoFirstPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoFirstPage(tag);
@@ -558,7 +644,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  gotoLastPage = () => {
+  gotoLastPage = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.gotoLastPage(tag);
@@ -566,7 +652,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  showGoToPageView = () => {
+  showGoToPageView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.showGoToPageView(tag);
@@ -574,7 +660,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  closeAllTabs = () => {
+  closeAllTabs = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.closeAllTabs(tag);
@@ -582,7 +668,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openTabSwitcher = () => {
+  openTabSwitcher = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openTabSwitcher(tag);
@@ -590,7 +676,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getZoom = () => {
+  getZoom = (): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getZoom(tag);
@@ -598,7 +684,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setZoomLimits = (zoomLimitMode, minimum, maximum) => {
+  setZoomLimits = (zoomLimitMode: Config.ZoomLimitMode, minimum: number, maximum: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setZoomLimits(tag, zoomLimitMode, minimum, maximum);
@@ -606,7 +692,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  zoomWithCenter = (zoom, x, y) => {
+  zoomWithCenter = (zoom: number, x: number, y: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.zoomWithCenter(tag, zoom, x, y);
@@ -614,7 +700,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  zoomToRect = (pageNumber, rect) => {
+  zoomToRect = (pageNumber: number, rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.zoomToRect(tag, pageNumber, rect);
@@ -622,7 +708,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  smartZoom = (x, y, animated) => {
+  smartZoom = (x: number, y: number, animated: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.smartZoom(tag, x, y, animated);
@@ -630,7 +716,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
   
-  getScrollPos = () => {
+  getScrollPos = (): Promise<void | {horizontal: number, vertical: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getScrollPos(tag);
@@ -638,7 +724,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
     
-  getCanvasSize = () => {
+  getCanvasSize = (): Promise<void | {width: number, height: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCanvasSize(tag);
@@ -646,7 +732,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getPageRotation = () => {
+  getPageRotation = (): Promise<void | AnnotOptions.RotationDegree> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageRotation(tag);
@@ -654,7 +740,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  rotateClockwise = () => {
+  rotateClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.rotateClockwise(tag);
@@ -662,7 +748,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  rotateCounterClockwise = () => {
+  rotateCounterClockwise = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.rotateCounterClockwise(tag);
@@ -671,7 +757,7 @@ export default class DocumentView extends PureComponent {
   }
 
 
-  convertScreenPointsToPagePoints = (points) => {
+  convertScreenPointsToPagePoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertScreenPointsToPagePoints(tag, points);
@@ -679,7 +765,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  convertPagePointsToScreenPoints = (points) => {
+  convertPagePointsToScreenPoints = (points: Array<AnnotOptions.Point>): Promise<void | Array<AnnotOptions.Point>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.convertPagePointsToScreenPoints(tag, points);
@@ -687,7 +773,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getPageNumberFromScreenPoint = (x, y) => {
+  getPageNumberFromScreenPoint = (x: number, y: number): Promise<void | number> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getPageNumberFromScreenPoint(tag, x, y);
@@ -695,7 +781,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setProgressiveRendering = (progressiveRendering, initialDelay, interval) => {
+  setProgressiveRendering = (progressiveRendering: boolean, initialDelay: number, interval: number): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setProgressiveRendering(tag, progressiveRendering, initialDelay, interval);
@@ -703,7 +789,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setImageSmoothing = (imageSmoothing) => {
+  setImageSmoothing = (imageSmoothing: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setImageSmoothing(tag, imageSmoothing);
@@ -711,7 +797,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setOverprint = (overprint) => {
+  setOverprint = (overprint: Config.OverprintMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setOverprint(tag, overprint);
@@ -719,7 +805,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setColorPostProcessMode = (colorPostProcessMode) => {
+  setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
@@ -727,7 +813,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setColorPostProcessColors = (whiteColor, blackColor) => {
+  setColorPostProcessColors = (whiteColor: AnnotOptions.Color, blackColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setColorPostProcessColors(tag, whiteColor, blackColor);
@@ -735,7 +821,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  startSearchMode = (searchString, matchCase, matchWholeWord) => {
+  startSearchMode = (searchString: string, matchCase: boolean, matchWholeWord: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.startSearchMode(tag, searchString, matchCase, matchWholeWord);
@@ -743,7 +829,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exitSearchMode = () => {
+  exitSearchMode = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.exitSearchMode(tag);
@@ -751,7 +837,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  findText = (searchString, matchCase, matchWholeWord, searchUp, regExp) => {
+  findText = (searchString: string, matchCase: boolean, matchWholeWord: boolean, searchUp: boolean, regExp: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.findText(tag, searchString, matchCase, matchWholeWord, searchUp, regExp);
@@ -759,7 +845,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  cancelFindText = () => {
+  cancelFindText = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.cancelFindText(tag);
@@ -767,15 +853,15 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openSearch = () => {
+  openSearch = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openSearch(tag);
     }
     return Promise.resolve();
   }
-
-  getSelection = (pageNumber) => {
+  
+  getSelection = (pageNumber: number): Promise<void | AnnotOptions.TextSelectionResult> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getSelection(tag, pageNumber);
@@ -783,7 +869,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  hasSelection = () => {
+  hasSelection = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelection(tag);
@@ -791,7 +877,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  clearSelection = () => {
+  clearSelection = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.clearSelection(tag);
@@ -799,7 +885,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  getSelectionPageRange = () => {
+  getSelectionPageRange = (): Promise<void | {begin: number, end: number}> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getSelectionPageRange(tag);
@@ -807,7 +893,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  hasSelectionOnPage = (pageNumber) => {
+  hasSelectionOnPage = (pageNumber: number): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.hasSelectionOnPage(tag, pageNumber);
@@ -816,7 +902,7 @@ export default class DocumentView extends PureComponent {
   }
 
   
-  selectInRect = (rect) => {
+  selectInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectInRect(tag, rect);
@@ -824,7 +910,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  isThereTextInRect = (rect) => {
+  isThereTextInRect = (rect: AnnotOptions.Rect): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.isThereTextInRect(tag, rect);
@@ -832,7 +918,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  selectAll = () => {
+  selectAll = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.selectAll(tag);
@@ -840,7 +926,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setPageBorderVisibility = (pageBorderVisibility) => {
+  setPageBorderVisibility = (pageBorderVisibility: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setPageBorderVisibility(tag, pageBorderVisibility);
@@ -848,7 +934,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setPageTransparencyGrid = (pageTransparencyGrid) => {
+  setPageTransparencyGrid = (pageTransparencyGrid: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setPageTransparencyGrid(tag, pageTransparencyGrid);
@@ -856,7 +942,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setDefaultPageColor = (defaultPageColor) => {
+  setDefaultPageColor = (defaultPageColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setDefaultPageColor(tag, defaultPageColor);
@@ -864,7 +950,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setBackgroundColor = (backgroundColor) => {
+  setBackgroundColor = (backgroundColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.setBackgroundColor(tag, backgroundColor);
@@ -872,7 +958,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber, dpi, exportFormat) => {
+  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
@@ -880,7 +966,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  undo = () => {
+  undo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.undo(tag);
@@ -888,7 +974,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  redo = () => {
+  redo = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.redo(tag);
@@ -896,7 +982,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  canUndo = () => {
+  canUndo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canUndo(tag);
@@ -904,7 +990,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  canRedo = () => {
+  canRedo = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.canRedo(tag);
@@ -912,7 +998,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  showCrop = () => {
+  showCrop = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showCrop(tag);
@@ -920,7 +1006,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  setCurrentToolbar = (toolbar) => {
+  setCurrentToolbar = (toolbar: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.setCurrentToolbar(tag, toolbar);
@@ -928,7 +1014,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
   
-  showViewSettings = (rect) => {
+  showViewSettings = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.showViewSettings(tag, rect);
@@ -936,15 +1022,15 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  showRotateDialog = () => {
+  showRotateDialog = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.showRotateDialog(tag);
     }
     return Promise.resolve();
   }
-
-  showAddPagesView = (rect) => {
+  
+  showAddPagesView = (rect: AnnotOptions.Rect): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.showAddPagesView(tag, rect);
@@ -952,7 +1038,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  isReflowMode = () => {
+  isReflowMode = (): Promise<void | boolean> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.isReflowMode(tag);
@@ -960,7 +1046,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  toggleReflow = () => {
+  toggleReflow = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.toggleReflow(tag);
@@ -968,7 +1054,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  shareCopy = (rect, flattening) => {
+  shareCopy = (rect: AnnotOptions.Rect, flattening: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
         return DocumentViewManager.shareCopy(tag, rect, flattening);
@@ -976,7 +1062,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
  
-  openThumbnailsView = () => {
+  openThumbnailsView = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
        return DocumentViewManager.openThumbnailsView(tag);
@@ -984,7 +1070,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openOutlineList = () => {
+  openOutlineList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openOutlineList(tag);
@@ -992,7 +1078,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openLayersList = () => {
+  openLayersList = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openLayersList(tag);
@@ -1000,7 +1086,7 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  openNavigationLists = () => {
+  openNavigationLists = (): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.openNavigationLists(tag);
@@ -1008,15 +1094,41 @@ export default class DocumentView extends PureComponent {
     return Promise.resolve();
   }
 
-  _setNativeRef = (ref) => {
+  getSavedSignatures = (): Promise<void | Array<string>> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatures(tag);
+    }
+    return Promise.resolve();
+  }
+
+  getSavedSignatureFolder = (): Promise<void | string> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureFolder(tag);
+    }
+    return Promise.resolve();
+  }
+  
+  getSavedSignatureJpgFolder = (): Promise<void | string> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+       return DocumentViewManager.getSavedSignatureJpgFolder(tag);
+    }
+    return Promise.resolve();
+  }
+
+  _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
 
   render() {
     return (
+      // @ts-ignore
       <RCTDocumentView
         ref={this._setNativeRef}
         style={{ flex:1 }}
+        // @ts-ignore: Intentionally exclude `onChange` from being exposed as a prop.
         onChange={this.onChange}
         {...this.props}
       />
@@ -1026,12 +1138,4 @@ export default class DocumentView extends PureComponent {
 
 const name = Platform.OS === 'ios' ? 'RNTPTDocumentView' : 'RCTDocumentView';
 
-const RCTDocumentView = requireNativeComponent(
-  name,
-  DocumentView,
-  {
-    nativeOnly: {
-      onChange: true
-    }
-  }
-);
+const RCTDocumentView = requireNativeComponent(name);
