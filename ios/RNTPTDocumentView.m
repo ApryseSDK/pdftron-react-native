@@ -20,6 +20,8 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
     return YES;
 }
 
+@class RNTPTCollaborationService;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
@@ -39,9 +41,68 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) NSMutableArray<NSString *> *tempFilePaths;
 
+@property (nonatomic, strong, nullable) RNTPTCollaborationService* collabService;
+
 @end
 
 NS_ASSUME_NONNULL_END
+
+
+@interface RNTPTCollaborationService : NSObject<PTCollaborationServerCommunication>
+
+@property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
+
+@property (nonatomic, weak, nullable) PTBaseCollaborationManager* collaborationManager;
+
+@property (nonatomic, readonly, copy, nullable) NSString *userID;
+
+@property (nonatomic, readonly, copy, nullable) NSString *documentID;
+
+@end
+
+@implementation RNTPTCollaborationService
+
+-(PTBaseCollaborationManager*)collaborationManger
+{
+    return self.viewProxy.collaborationManager;
+}
+
+-(void)setCollaborationManager:(PTCollaborationManager*)collaborationManager
+{
+    self.viewProxy.collaborationManager = collaborationManager;
+}
+
+- (NSString *)documentID
+{
+    return self.viewProxy.document;
+}
+
+- (NSString *)userID
+{
+    return self.viewProxy.currentUser;
+}
+
+- (void)documentLoaded
+{
+    [self.viewProxy documentLoaded];
+}
+
+- (void)localAnnotationAdded:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationAdded:collaborationAnnotation];
+}
+
+- (void)localAnnotationModified:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationModified:collaborationAnnotation];
+}
+
+- (void)localAnnotationRemoved:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationRemoved:collaborationAnnotation];
+}
+
+@end
 
 @implementation RNTPTDocumentView
 
@@ -192,7 +253,11 @@ NS_ASSUME_NONNULL_END
 {
     if (!self.documentViewController && !self.tabbedDocumentViewController) {
         if ([self isCollabEnabled]) {
-            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self];
+            
+            self.collabService = [[RNTPTCollaborationService alloc] init];
+            self.collabService.viewProxy = self;
+            
+            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService];
             collaborationViewController.delegate = self;
             
             self.viewController = collaborationViewController;
