@@ -50,9 +50,9 @@ NS_ASSUME_NONNULL_END
 
 @interface RNTPTCollaborationService<PTCollaborationServerCommunication> : NSObject
 
-@property (nonatomic, weak) RNTPTDocumentView* viewProxy;
+@property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
 
-@property (nonatomic, weak) PTBaseCollaborationManager* collaborationManager;
+@property (nonatomic, weak, nullable) PTBaseCollaborationManager* collaborationManager;
 
 @property (nonatomic, readonly, copy, nullable) NSString *userID;
 
