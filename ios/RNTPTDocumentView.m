@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 
-@interface RNTPTCollaborationService<PTCollaborationServerCommunication> : NSObject
+@interface RNTPTCollaborationService : NSObject<PTCollaborationServerCommunication>
 
 @property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
 
