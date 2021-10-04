@@ -107,6 +107,30 @@ interface RNPdftron
    * });
    */
   pdfFromOfficeTemplate(docxPath: string, json: object) : Promise<string>;
+
+  /**
+   * @method
+   * @desc Export a PDF page to an image format defined in {@link Config.ExportFormat}. 
+   * 
+   * Unlike {@link DocumentView#exportAsImage DocumentView.exportAsImage}, 
+   * this method is static and should only be called *before* a `DocumentView` 
+   * instance has been created or else unexpected behaviour can occur. 
+   * This method also takes a local file path to the desired PDF.
+   * @param {int} pageNumber the page to be converted; 
+   * if the value does not refer to a valid page number, the file path will be undefined
+   * @param {double} dpi the output image resolution
+   * @param {Config.ExportFormat} exportFormat image format to be exported to
+   * @param {string} filePath local file path to pdf
+   * @returns {Promise<string>} resultImagePath - the temp path of the created image, 
+   * user is responsible for clean up the cache
+   * @example
+   * RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then(
+   *  (resultImagePath) => {
+   *   console.log('export', resultImagePath);
+   * });
+   */
+  exportAsImage(pageNumber: number, dpi: number, 
+    exportFormat: Config.ExportFormat, filePath: string) : Promise<string>;
 }
 
 /**

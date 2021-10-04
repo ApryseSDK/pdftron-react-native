@@ -911,8 +911,8 @@ export const DocumentViewPropTypes = {
    * @type {function}
    * @optional
    * @desc This function is called if a change has been made to annotations in the current document.
-   * Unlike {@link DocumentView.event:onAnnotationChanged onAnnotationChanged}, this function has an XFDF 
-   * command string as its parameter. If you are modifying or deleting multiple annotations, 
+   * Unlike {@link DocumentView.event:onAnnotationChanged onAnnotationChanged}, this function has 
+   * an XFDF command string as its parameter. If you are modifying or deleting multiple annotations,
    * then on Android the function is only called once, and on iOS it is called for each annotation.
    * 
    * **Known Issues**
@@ -1586,7 +1586,8 @@ export const DocumentViewPropTypes = {
    * install.
    * Eraser Type | Description
    * --- | ---
-   * `annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+   * `annotationEraser` | Erases everything as an object; if you touch ink, 
+   * the entire object is erased.
    * `hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
    * `inkEraser` | Erases ink by pixel only. Android only.
    * @example
@@ -3651,7 +3652,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   /** 
    * @method
    * @desc Export a PDF page to image format defined in {@link Config.ExportFormat}.
-   * @param {int} pageNumber the page to be converted
+   * 
+   * Unlike {@link RNPdftron#exportAsImage RNPdftron.exportAsImage}, 
+   * this is a viewer method and should only be called *after* the document has been 
+   * loaded or else unexpected behaviour can occur. 
+   * This method uses the PDF that is associated with the viewer, 
+   * and does not take a local file path to the desired PDF.
+   * @param {int} pageNumber the page to be converted; 
+   * if the value does not refer to a valid page number, the file path will be undefined
    * @param {double} dpi the output image resolution
    * @param {Config.ExportFormat} exportFormat image format to be exported to
    * @returns {Promise<void | string>} path - the temp path of the created image, 

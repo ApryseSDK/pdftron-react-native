@@ -1136,7 +1136,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     @ReactMethod
     public void exportAsImage(final int tag, int pageNumber, double dpi, String exportFormat, final Promise promise) {
         try {
-            String result = mDocumentViewInstance.exportToImage(tag, pageNumber, dpi, exportFormat);
+            String result = mDocumentViewInstance.exportAsImage(tag, pageNumber, dpi, exportFormat);
             promise.resolve(result);
         } catch (Exception ex) {
             promise.reject(ex);

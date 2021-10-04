@@ -3,6 +3,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RNPdftron.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const PTToolsButtonKey = @"toolsButton";
@@ -467,7 +469,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSString *)getDocumentPath;
 
-- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
