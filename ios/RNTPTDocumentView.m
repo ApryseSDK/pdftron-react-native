@@ -20,6 +20,8 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
     return YES;
 }
 
+@class RNTPTCollaborationService;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
@@ -39,9 +41,68 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) NSMutableArray<NSString *> *tempFilePaths;
 
+@property (nonatomic, strong, nullable) RNTPTCollaborationService* collabService;
+
 @end
 
 NS_ASSUME_NONNULL_END
+
+
+@interface RNTPTCollaborationService : NSObject<PTCollaborationServerCommunication>
+
+@property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
+
+@property (nonatomic, weak, nullable) PTBaseCollaborationManager* collaborationManager;
+
+@property (nonatomic, readonly, copy, nullable) NSString *userID;
+
+@property (nonatomic, readonly, copy, nullable) NSString *documentID;
+
+@end
+
+@implementation RNTPTCollaborationService
+
+-(PTBaseCollaborationManager*)collaborationManger
+{
+    return self.viewProxy.collaborationManager;
+}
+
+-(void)setCollaborationManager:(PTCollaborationManager*)collaborationManager
+{
+    self.viewProxy.collaborationManager = collaborationManager;
+}
+
+- (NSString *)documentID
+{
+    return self.viewProxy.document;
+}
+
+- (NSString *)userID
+{
+    return self.viewProxy.currentUser;
+}
+
+- (void)documentLoaded
+{
+    [self.viewProxy documentLoaded];
+}
+
+- (void)localAnnotationAdded:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationAdded:collaborationAnnotation];
+}
+
+- (void)localAnnotationModified:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationModified:collaborationAnnotation];
+}
+
+- (void)localAnnotationRemoved:(PTCollaborationAnnotation *)collaborationAnnotation
+{
+    [self.viewProxy localAnnotationRemoved:collaborationAnnotation];
+}
+
+@end
 
 @implementation RNTPTDocumentView
 
@@ -92,6 +153,8 @@ NS_ASSUME_NONNULL_END
     _showSavedSignatures = YES;
 
     _userBookmarksListEditingEnabled = YES;
+    
+    _showQuickNavigationButton = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -200,7 +263,12 @@ NS_ASSUME_NONNULL_END
                 collabMode = e_ptadmin_undo_others;
             }
             
-            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self collaborationMode:collabMode];
+            // RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self collaborationMode:collabMode];
+            
+            self.collabService = [[RNTPTCollaborationService alloc] init];
+            self.collabService.viewProxy = self;
+            
+            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
             
             self.viewController = collaborationViewController;
@@ -624,6 +692,26 @@ NS_ASSUME_NONNULL_END
 - (void)setInkMultiStrokeEnabled:(BOOL)inkMultiStrokeEnabled
 {
     _inkMultiStrokeEnabled = inkMultiStrokeEnabled;
+}
+
+- (void)setDefaultEraserType:(NSString *)defaultEraserType
+{
+    _defaultEraserType = defaultEraserType;
+    
+    if (self.currentDocumentViewController) {
+        [self applyDefaultEraserType:defaultEraserType documentViewController:self.currentDocumentViewController];
+    }
+}
+
+- (void)applyDefaultEraserType:(NSString *)defaultEraserType documentViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    if ([defaultEraserType isEqualToString:PTInkEraserModeAllKey]) {
+        toolManager.eraserMode = PTInkEraserModeAll;
+    } else if ([defaultEraserType isEqualToString:PTInkEraserModePointsKey]) {
+        toolManager.eraserMode = PTInkEraserModePoints;
+    }
 }
 
 #pragma mark - Disabled tools
@@ -1903,7 +1991,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-    documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+//     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Exclude annotation types from annotation list.
     [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
@@ -1920,6 +2008,12 @@ NS_ASSUME_NONNULL_END
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
     
+    // Set Default Eraser Type
+    [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
+    
+    // Show Quick Navigation Button
+    documentViewController.navigationHistoryEnabled = self.showQuickNavigationButton;
+
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
@@ -4186,33 +4280,10 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
 {
-    NSError* error;
-    __block NSString* path;
-
-    [self.currentDocumentViewController.pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-        PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
-        
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* fileName = [NSUUID UUID].UUIDString;
-        
-        path = [tempDir stringByAppendingPathComponent:fileName];
-        
-        path = [path stringByAppendingPathExtension:imageFormat];
-        
-        [draw Export:[[doc GetPageIterator:pageNumber] Current] filename:path format:imageFormat];
-
-    } error:&error];
-    
-    if( error )
-    {
-        NSException* exception = [NSException exceptionWithName:error.localizedDescription reason:error.localizedFailureReason userInfo:nil];
-        @throw exception;
-    }
-    
-    return path;
-    
+    PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
+    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
 }
 
 #pragma mark - Tabs
@@ -5126,7 +5197,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
-#pragma mark - Navigation List
+#pragma mark - Navigation
+
+-(void)setShowQuickNavigationButton:(BOOL)showQuickNavigationButton
+{
+    _showQuickNavigationButton = showQuickNavigationButton;
+    
+    [self applyViewerSettings];
+}
 
 -(void)openNavigationLists
 {

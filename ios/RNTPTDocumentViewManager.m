@@ -487,6 +487,13 @@ RCT_CUSTOM_VIEW_PROPERTY(excludedAnnotationListTypes, NSArray, RNTPTDocumentView
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(showQuickNavigationButton, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.showQuickNavigationButton = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(showNavigationListAsSidePanelOnLargeDevices, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -536,6 +543,14 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationManagerMode, NSString, RNTPTDocumentView)
         view.annotationManagerMode = [RCTConvert NSString:json];
     }
 }
+
+RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.defaultEraserType = [RCTConvert NSString:json];
+    }
+}
+
 
 - (UIView *)view
 {
@@ -822,11 +837,11 @@ RCT_CUSTOM_VIEW_PROPERTY(annotationManagerMode, NSString, RNTPTDocumentView)
     }
 }
  
-- (NSString *)exportAsImageForDocumentViewTag:(NSNumber *)tag pageNumber:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat
+- (NSString *)exportAsImageForDocumentViewTag:(NSNumber *)tag pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return [documentView exportAsImage:pageNumber dpi:dpi imageFormat:imageFormat];
+        return [documentView exportAsImage:pageNumber dpi:dpi exportFormat:exportFormat];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
         return nil;

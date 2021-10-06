@@ -5,7 +5,10 @@
 #import "RCTBridgeModule.h"
 #endif
 
+@class PTPDFDoc;
 @interface RNPdftron : NSObject <RCTBridgeModule>
+
++(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)imageFormat;
 
 @end
   

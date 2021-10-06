@@ -3,6 +3,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RNPdftron.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const PTToolsButtonKey = @"toolsButton";
@@ -257,6 +259,10 @@ static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 static NSString * const PTAnnotationManagerModeOwn = @"own";
 static NSString * const PTAnnotationManangerModeOthers = @"others";
 
+// DefaultEraserType keys
+static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -438,6 +444,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign) BOOL annotationsListEditingEnabled;
 
+@property (nonatomic, assign) BOOL showQuickNavigationButton;
+
 @property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
 
 @property (nonatomic, assign) BOOL restrictDownloadUsage;
@@ -449,6 +457,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
 
 @property (nonatomic, copy, nullable) NSString* annotationManagerMode;
+
+@property (nonatomic, copy, nullable) NSString *defaultEraserType;
 
 #pragma mark - Methods
 
@@ -464,7 +474,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSString *)getDocumentPath;
 
-- (NSString*)exportAsImage:(int)pageNumber dpi:(int)dpi imageFormat:(NSString*)imageFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 

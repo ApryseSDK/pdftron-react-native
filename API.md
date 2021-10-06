@@ -1,5 +1,9 @@
 # PDFTron React Native API
 
+## TypeScript
+
+PDFTron React Native supports TypeScript. Since not all customers use the language, the typings used in this document will be described using normal JavaScript types. For TypeScript users, type information is automatically provided while coding, and exact type aliases and constants used in our custom typings can be found in [AnnotOptions](src/AnnotOptions) and [Config](src/Config) source folders.
+
 ## RNPdftron
 
 RNPdftron contains static methods for global library initialization, configuration, and utility methods.
@@ -144,6 +148,32 @@ RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultP
 });
 ```
 
+#### exportAsImage
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+
+Unlike DocumentView.exportAsImage, this method is static and should only be called *before* a `DocumentView` instance has been created or else unexpected behaviour can occur. This method also takes a local file path to the desired PDF.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
+dpi | double | the output image resolution
+exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.js) constants
+filePath | string | local file path to pdf
+
+Returns a Promise.
+
+Name | Type | Description
+--- | --- | ---
+resultImagePath | string | the temp path of the created image, user is responsible for clean up the cache
+
+```js
+RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
+  console.log('export', resultImagePath);
+});
+```
+
 ## DocumentView - Props
 
 A React component for displaying documents of different types such as PDF, docx, pptx, xlsx and various image formats.
@@ -225,10 +255,15 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-one of [`Config.EraserType`](./src/Config/Config.js) constants, optional
+one of the [`Config.EraserType`](./src/Config/Config.js) constants, optional
 
-Sets the default eraser tool type. Value only applied after a clean install. Android only.
-Example:
+Sets the default eraser tool type. Value only applied after a clean install.
+
+Eraser Type | Description
+--- | ---
+`annotationEraser` | Erases everything as an object; if you touch ink, the entire object is erased.
+`hybrideEraser` | Erases ink by pixel, but erases other annotation types as objects.
+`inkEraser` | Erases ink by pixel only. Android only.
 
 ```js
 <DocumentView
@@ -289,6 +324,12 @@ function, optional
 
 This function is called when the document finishes loading.
 
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
 ```js
 <DocumentView
   onDocumentLoaded = {(path) => { 
@@ -301,6 +342,12 @@ This function is called when the document finishes loading.
 function, optional
 
 This function is called when document opening encounters an error.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+error | string | Error message produced
 
 ```js
 <DocumentView
@@ -1298,7 +1345,10 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
 #### annotationsListEditingEnabled
 bool, optional, Android only, default value is true
 
-If document editing is enabled, then this value determines if the annotation list is editable.
+If document editing is enabled, then this value determines if the annotation list is editable. 
+
+Functionality for iOS will fixed in the next official release, or a fixed version is available by pointing the iOS podfile to https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-06-30/9.0/cocoapods/pdfnet/2021-06-30_stable_rev77837.podspec as described in step one of the [iOS integration instructions](https://github.com/PDFTron/pdftron-react-native#ios).
+
 
 ```js
 <DocumentView
@@ -1539,7 +1589,7 @@ Defines whether the page stack navigation buttons will appear in the viewer.
 ```
 
 #### showQuickNavigationButton
-bool, optional, defaults to true, Android only
+bool, optional, defaults to true
 
 Defines whether the quick navigation buttons will appear in the viewer.
 
@@ -3173,13 +3223,15 @@ this._viewer.getSavedSignatureJpgFolder().then((path) => {
 ### Others
 
 #### exportAsImage
-Export a PDF page to image format defined in [`Config.ExportFormat`](./src/Config/Config.js).
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+
+Unlike RNPdftron.exportAsImage, this is a viewer method and should only be called *after* the document has been loaded or else unexpected behaviour can occur. This method uses the PDF that is associated with the viewer, and does not take a local file path to the desired PDF.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-pageNumber | int | the page to be converted
+pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
 exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.js) constants
 
