@@ -256,8 +256,13 @@ static NSString * const PTTextSelectionQuadPointYKey = @"y";
 static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
 static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
-static NSString * const PTAnnotationManagerModeOwn = @"own";
-static NSString * const PTAnnotationManangerModeOthers = @"others";
+// Annotation Manager Undo Modes
+static NSString * const PTAnnotationManagerUndoModeOwn = @"own";
+static NSString * const PTAnnotationManangerUndoModeAll = @"all";
+
+// Annotation Manager Edit Modes
+static NSString * const PTAnnotationManagerEditModeOwn = @"own";
+static NSString * const PTAnnotationManangerEditModeAll = @"all";
 
 // DefaultEraserType keys
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
@@ -456,7 +461,9 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
 
-@property (nonatomic, copy, nullable) NSString* annotationManagerMode;
+@property (nonatomic, copy, nullable) NSString* annotationManagerUndoMode;
+
+@property (nonatomic, copy, nullable) NSString* annotationManagerEditMode;
 
 @property (nonatomic, copy, nullable) NSString *defaultEraserType;
 

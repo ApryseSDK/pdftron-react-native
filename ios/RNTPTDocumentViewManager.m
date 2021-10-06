@@ -537,10 +537,17 @@ RCT_CUSTOM_VIEW_PROPERTY(saveStateEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotationManagerMode, NSString, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(annotationManagerUndoMode, NSString, RNTPTDocumentView)
 {
     if (json) {
-        view.annotationManagerMode = [RCTConvert NSString:json];
+        view.annotationManagerUndoMode = [RCTConvert NSString:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(annotationManagerEditMode, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.annotationManagerEditMode = [RCTConvert NSString:json];
     }
 }
 

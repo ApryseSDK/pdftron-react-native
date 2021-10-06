@@ -255,13 +255,22 @@ NS_ASSUME_NONNULL_END
         if ([self isCollabEnabled]) {
             PTExternalAnnotManagerMode collabMode = e_ptadmin_undo_own;
             
-            if ([PTAnnotationManagerModeOwn isEqualToString:self.annotationManagerMode]) {
+            if ([PTAnnotationManagerUndoModeOwn isEqualToString:self.annotationManagerUndoMode]) {
                 collabMode = e_ptadmin_undo_own;
             }
             
-            if ([PTAnnotationManangerModeOthers isEqualToString:self.annotationManagerMode]) {
+            if ([PTAnnotationManangerUndoModeAll isEqualToString:self.annotationManagerUndoMode]) {
                 collabMode = e_ptadmin_undo_others;
             }
+            
+            // Code for AnnotationManagerEditMode
+//            if ([PTAnnotationManagerEditModeOwn isEqualToString:self.annotationManagerEditMode]) {
+//                collabMode = e_ptadmin_undo_own;
+//            }
+//
+//            if ([PTAnnotationManangerEditModeAll isEqualToString:self.annotationManagerEditMode]) {
+//                collabMode = e_ptadmin_undo_others;
+//            }
             
             // RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self collaborationMode:collabMode];
             
@@ -1613,9 +1622,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
--(void)setAnnotationManagerMode:(NSString *)annotationManagerMode
+-(void)setAnnotationManagerUndoMode:(NSString *)annotationManagerUndoMode
 {
-    _annotationManagerMode = annotationManagerMode;
+    _annotationManagerUndoMode = annotationManagerUndoMode;
+}
+
+-(void)setAnnotationManagerEditMode:(NSString *)annotationManagerEditMode
+{
+    _annotationManagerEditMode = annotationManagerEditMode;
 }
 
 #pragma mark - Toolbar
