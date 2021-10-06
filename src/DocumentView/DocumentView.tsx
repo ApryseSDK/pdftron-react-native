@@ -126,6 +126,8 @@ const propTypes = {
   saveStateEnabled: PropTypes.bool,
   openSavedCopyInNewTab: PropTypes.bool,
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
+  annotationManagerEditMode: oneOf<Config.AnnotationManagerEditMode>(Config.AnnotationManagerEditMode),
+  annotationManagerUndoMode: oneOf<Config.AnnotationManagerUndoMode>(Config.AnnotationManagerUndoMode),
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
