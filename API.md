@@ -1148,21 +1148,39 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
-#### annotationManagerMode
-one of the [`Config.AnnotationManagerMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerMode.Own`
+#### annotationManagerEditMode
+one of the [`Config.AnnotationManagerEditMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerEditMode.Own`
 
-Sets annotation manager mode.
+Sets annotation manager edit mode.
 
 Mode | Description
 --- | ---
-`Config.AnnotationManagerMode.Own` | In this mode, you can edit and undo only your own changes 
-`Config.AnnotationManagerMode.Others` | In this mode, you can edit and undo everyone's changes 
+`Config.AnnotationManagerEditMode.Own` | In this mode, you can edit only your own changes 
+`Config.AnnotationManagerEditMode.Others` | In this mode, you can edit everyone's changes 
 
 ```js
 <DocumentView
   collabEnabled={true}
   currentUser={'Pdftron'}
-  annotationManagerMode={Config.AnnotationManagerMode.Others}
+  annotationManagerEditMode={Config.AnnotationManagerEditMode.All}
+/>
+```
+
+#### annotationManagerUndoMode
+one of the [`Config.AnnotationManagerUndoMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerUndoMode.Own`
+
+Sets annotation manager undo mode.
+
+Mode | Description
+--- | ---
+`Config.AnnotationManagerUndoMode.Own` | In this mode, you can undo only your own changes 
+`Config.AnnotationManagerUndoMode.Others` | In this mode, you can undo everyone's changes 
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  annotationManagerUndoMode={Config.AnnotationManagerUndoMode.All}
 />
 ```
 

@@ -371,7 +371,11 @@ public final class Constants {
     public static final String KEY_EXPORT_FORMAT_JPEG = "JPEG";
     public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
 
-    // AnnotationManagerMode
-    public static final String KEY_ANNOTATION_MANAGER_MODE_OWN = "own";
-    public static final String KEY_ANNOTATION_MANAGER_MODE_OTHERS = "others";
+    // AnnotationManagerEditMode
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_ALL = "all";
+
+    // AnnotationManagerUndoMode
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL = "all";
 }
