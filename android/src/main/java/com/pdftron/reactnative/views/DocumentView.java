@@ -68,6 +68,7 @@ import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.model.FileInfo;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
+import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
@@ -145,7 +146,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mCollabEnabled;
     private String mCurrentUser;
     private String mCurrentUserName;
-    private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerMode;
+    private AnnotManager.EditPermissionMode mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OWN;
+    private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
 
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
@@ -239,7 +241,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
-                    .usingAnnotationManagerMode(mAnnotationManagerMode)
+                    .usingAnnotationManagerEditMode(mAnnotationManagerEditMode)
+                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode)
                     .build(getContext());
         }
         return super.getViewer();
@@ -500,11 +503,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mCurrentUserName = currentUserName;
     }
 
-    public void setAnnotationManagerMode(String annotationManagerMode) {
-        if (KEY_ANNOTATION_MANAGER_MODE_OTHERS.equals(annotationManagerMode)) {
-            mAnnotationManagerMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OTHERS;
+    public void setAnnotationManagerEditMode(String annotationManagerEditMode) {
+        if (KEY_ANNOTATION_MANAGER_EDIT_MODE_ALL.equals(annotationManagerEditMode)) {
+            mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OTHERS;
         } else {
-            mAnnotationManagerMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
+            mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OWN;
+        }
+    }
+
+    public void setAnnotationManagerUndoMode(String annotationManagerUndoMode) {
+        if (KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL.equals(annotationManagerUndoMode)) {
+            mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OTHERS;
+        } else {
+            mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
         }
     }
 
