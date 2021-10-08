@@ -258,11 +258,11 @@ static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
 // Annotation Manager Undo Modes
 static NSString * const PTAnnotationManagerUndoModeOwn = @"own";
-static NSString * const PTAnnotationManangerUndoModeAll = @"all";
+static NSString * const PTAnnotationManagerUndoModeAll = @"all";
 
 // Annotation Manager Edit Modes
 static NSString * const PTAnnotationManagerEditModeOwn = @"own";
-static NSString * const PTAnnotationManangerEditModeAll = @"all";
+static NSString * const PTAnnotationManagerEditModeAll = @"all";
 
 // DefaultEraserType keys
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
