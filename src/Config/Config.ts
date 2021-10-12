@@ -88,6 +88,7 @@ export const Config = {
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
     annotationCreateLinkText: 'AnnotationCreateLinkText',
     annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
+    annotationCreateSmartPen: 'AnnotationCreateSmartPen',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',

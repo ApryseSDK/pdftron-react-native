@@ -4902,7 +4902,8 @@ NS_ASSUME_NONNULL_END
 
 + (NSString *)keyForToolClass:(Class)toolClass
 {
-    if (toolClass == [PTAnnotEditTool class]) {
+    if (toolClass == [PTAnnotEditTool class] ||
+        toolClass == [PTAnnotSelectTool class]) {
         return PTAnnotationEditToolKey;
     }
     else if (toolClass == [PTStickyNoteCreate class]) {
@@ -4988,6 +4989,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTTextRedactionCreate class]) {
         return PTAnnotationCreateRedactionTextToolKey;
+    }
+    else if (toolClass == [PTSmartPen class]) {
+        return PTAnnotationCreateSmartPenToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
