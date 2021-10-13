@@ -54,6 +54,7 @@ static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
 static NSString * const PTAnnotationCreateFreeHandToolKey = @"AnnotationCreateFreeHand";
 static NSString * const PTTextSelectToolKey = @"TextSelect";
+static NSString * const PTMultiSelectToolKey = @"MultiSelect";
 static NSString * const PTAnnotationCreateTextHighlightToolKey = @"AnnotationCreateTextHighlight";
 static NSString * const PTAnnotationCreateTextUnderlineToolKey = @"AnnotationCreateTextUnderline";
 static NSString * const PTAnnotationCreateTextSquigglyToolKey = @"AnnotationCreateTextSquiggly";

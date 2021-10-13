@@ -1209,6 +1209,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_PAN.equals(item)) {
             mode = ToolManager.ToolMode.PAN;
         } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
+            mode = ToolManager.ToolMode.ANNOT_EDIT;
+        } else if (TOOL_MULTI_SELECT.equals(item)) {
             mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_TEXT_FIELD_CREATE;
@@ -1327,6 +1329,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolModeString = TOOL_PAN;
                 break;
             case ANNOT_EDIT_RECT_GROUP:
+                toolModeString = TOOL_MULTI_SELECT;
+                break;
             case ANNOT_EDIT:
                 toolModeString = TOOL_ANNOTATION_EDIT;
                 break;

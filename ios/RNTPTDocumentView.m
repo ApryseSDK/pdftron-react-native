@@ -4902,8 +4902,7 @@ NS_ASSUME_NONNULL_END
 
 + (NSString *)keyForToolClass:(Class)toolClass
 {
-    if (toolClass == [PTAnnotEditTool class] ||
-        toolClass == [PTAnnotSelectTool class]) {
+    if (toolClass == [PTAnnotEditTool class]) {
         return PTAnnotationEditToolKey;
     }
     else if (toolClass == [PTStickyNoteCreate class]) {
@@ -4914,6 +4913,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTTextSelectTool class]) {
         return PTTextSelectToolKey;
+    }
+    else if (toolClass == [PTAnnotSelectTool class]) {
+        return PTMultiSelectToolKey;
     }
     else if (toolClass == [PTTextHighlightCreate class]) {
         return PTAnnotationCreateTextHighlightToolKey;

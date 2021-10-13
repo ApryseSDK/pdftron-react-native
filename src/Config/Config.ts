@@ -58,6 +58,7 @@ export const Config = {
   Tools: {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
+    multiSelect: 'MultiSelect',
     pan: 'Pan',
     annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
