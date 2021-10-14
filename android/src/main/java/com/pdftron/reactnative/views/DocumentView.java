@@ -1030,6 +1030,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Unknown;
         } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
             annotType = Annot.e_Unknown;
+        } else if (TOOL_MULTI_SELECT.equals(item)) {
+            annotType = Annot.e_Unknown;
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
         } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {

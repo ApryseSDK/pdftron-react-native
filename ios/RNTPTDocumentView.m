@@ -2772,6 +2772,7 @@ NS_ASSUME_NONNULL_END
 //        PTFormCreateComboBoxFieldToolKey : @(),
 //        PTFormCreateListBoxFieldToolKey : @(),
 //        PTAnnotationEditToolKey: @(),
+//        PTMultiSelectToolKey: @(),
     };
     
     PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
