@@ -214,7 +214,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
-        PdfViewCtrlSettingsManager.setShowScrollbarOption(currentActivity, true);
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .setShowRichContentOption(false)
