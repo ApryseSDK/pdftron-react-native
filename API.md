@@ -1151,7 +1151,7 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 #### annotationManagerEditMode
 one of the [`Config.AnnotationManagerEditMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerEditMode.Own`
 
-Sets annotation manager edit mode.
+Sets annotation manager edit mode when [`collabEnabled`](#collabEnabled) is true.
 
 Mode | Description
 --- | ---
@@ -1169,7 +1169,7 @@ Mode | Description
 #### annotationManagerUndoMode
 one of the [`Config.AnnotationManagerUndoMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerUndoMode.Own`
 
-Sets annotation manager undo mode.
+Sets annotation manager undo mode when [`collabEnabled`](#collabEnabled) is true.
 
 Mode | Description
 --- | ---
