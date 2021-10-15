@@ -149,7 +149,7 @@ RNPdftron.pdfFromOfficeTemplate("/sdcard/Download/red.docx", json).then((resultP
 ```
 
 #### exportAsImage
-Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.ts). 
 
 Unlike DocumentView.exportAsImage, this method is static and should only be called *before* a `DocumentView` instance has been created or else unexpected behaviour can occur. This method also takes a local file path to the desired PDF.
 
@@ -159,7 +159,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
-exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.js) constants
+exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.ts) constants
 filePath | string | local file path to pdf
 
 Returns a Promise.
@@ -255,7 +255,7 @@ Defines whether the viewer is read-only. If true, the UI will not allow the user
 />
 ```
 #### defaultEraserType
-one of the [`Config.EraserType`](./src/Config/Config.js) constants, optional
+one of the [`Config.EraserType`](./src/Config/Config.ts) constants, optional
 
 Sets the default eraser tool type. Value only applied after a clean install.
 
@@ -360,7 +360,7 @@ error | string | Error message produced
 ### UI Customization
 
 #### disabledElements
-array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines buttons to be disabled for the viewer.
 
@@ -371,7 +371,7 @@ Defines buttons to be disabled for the viewer.
 ```
 
 #### disabledTools
-array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines tools to be disabled for the viewer.
 
@@ -390,8 +390,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-previousTool | string | the previous tool (one of the [`Config.Tools`](./src/Config/Config.js) constants or "unknown tool"), representing the tool before change
-tool | string | the current tool (one of the [`Config.Tools`](./src/Config/Config.js) constants or "unknown tool"), representing the current tool
+previousTool | string | the previous tool (one of the [`Config.Tools`](./src/Config/Config.ts) constants or "unknown tool"), representing the tool before change
+tool | string | the current tool (one of the [`Config.Tools`](./src/Config/Config.ts) constants or "unknown tool"), representing the current tool
 
 ```js
 <DocumentView
@@ -472,7 +472,7 @@ Defines whether the document slider of the viewer is enabled.
 ```
 
 #### hideViewModeItems
-array of [`Config.ViewModePickerItem`](./src/Config/Config.js) constants, optional, defaults to none.
+array of [`Config.ViewModePickerItem`](./src/Config/Config.ts) constants, optional, defaults to none.
 
 Defines view mode items to be hidden in the view mode dialog.
 
@@ -516,7 +516,7 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```
 
 #### annotationToolbars
-array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants or custom toolbar objects, optional, defaults to none
+array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or custom toolbar objects, optional, defaults to none
 
 Defines custom toolbars. If passed in, the default toolbars will no longer appear.
 It is possible to mix and match with default toolbars. See example below:
@@ -535,7 +535,7 @@ const myToolbar = {
 />
 ```
 #### hideDefaultAnnotationToolbars
-array of [`Config.DefaultToolbars`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines which default annotation toolbars should be hidden. Note that this prop should be used when [`annotationToolbars`](#annotationToolbars) is not defined.
 
@@ -557,7 +557,7 @@ Defines whether to show the toolbar switcher in the top toolbar.
 ```
 
 #### initialToolbar
-one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object, optional, defaults to none
+one of the [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or the `id` of a custom toolbar object, optional, defaults to none
 
 Defines which [`annotationToolbar`](#annotationToolbars) should be selected when the document is opened.
 
@@ -601,7 +601,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```
 
 #### topAppNavBarRightBar
-array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, iOS only
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, iOS only
 
 Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used.
 
@@ -612,7 +612,7 @@ Customizes the right bar section of the top app nav bar. If passed in, the defau
 ```
 
 #### bottomToolbar
-array of [`Config.Buttons`](./src/Config/Config.js) constants, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, only the outline list, thumbnail list, share, view mode, search, and reflow buttons are supported on Android
 
 Defines a custom bottom toolbar. If passed in, the default bottom toolbar will not be used.
 
@@ -636,7 +636,7 @@ Defines whether the viewer will add padding to take account of the system status
 ### Layout
 
 #### fitMode
-one of the [`Config.FitMode`](./src/Config/Config.js) constants, optional, default value is `Config.FitMode.FitWidth`
+one of the [`Config.FitMode`](./src/Config/Config.ts) constants, optional, default value is `Config.FitMode.FitWidth`
 
 Defines the fit mode (default zoom level) of the viewer.
 
@@ -647,7 +647,7 @@ Defines the fit mode (default zoom level) of the viewer.
 ```
 
 #### layoutMode
-one of the [`Config.LayoutMode`](./src/Config/Config.js) constants, optional, default value is `Config.LayoutMode.Continuous`
+one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 
 Defines the layout mode of the viewer.
 
@@ -874,7 +874,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.js) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
 
 Sets the scrolling direction of the reflow control.
 
@@ -887,7 +887,7 @@ Sets the scrolling direction of the reflow control.
 ### Annotation Menu
 
 #### hideAnnotationMenu
-array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines annotation types that will not show in the annotation (long-press) menu.
 
@@ -898,7 +898,7 @@ Defines annotation types that will not show in the annotation (long-press) menu.
 ```
 
 #### annotationMenuItems
-array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, default contains all the items
+array of [`Config.AnnotationMenu`](./src/Config/Config.ts) constants, optional, default contains all the items
 
 Defines the menu items that can show when an annotation is selected.
 
@@ -909,7 +909,7 @@ Defines the menu items that can show when an annotation is selected.
 ```
 
 #### overrideAnnotationMenuBehavior
-array of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.AnnotationMenu`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines the menu items that will skip default behavior when pressed. They will still be displayed in the annotation menu, and the function [`onAnnotationMenuPress`](#onAnnotationMenuPress) will be called where custom behavior can be implemented.
 
@@ -928,8 +928,8 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.js) constants, representing which item has been pressed
-annotations | array | An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.<br><br>`id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`. Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
+annotationMenu | string | One of [`Config.AnnotationMenu`](./src/Config/Config.ts) constants, representing which item has been pressed
+annotations | array | An array of `{id: string, pageNumber: number, type: string, screenRect: object, pageRect: object}` objects.<br><br>`id` is the annotation identifier and `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`. Both rects are represented with `{x1: number, y1: number, x2: number, y2: number, width: number, height: number}` objects.
 
 ```js
 <DocumentView
@@ -960,7 +960,7 @@ Defines whether to show the popup menu of options when the user long presses on 
 ```
 
 #### longPressMenuItems
-array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, default contains all the items
+array of [`Config.LongPressMenu`](./src/Config/Config.ts) constants, optional, default contains all the items
 
 Defines menu items that can show when long press on text or blank space.
 
@@ -971,7 +971,7 @@ Defines menu items that can show when long press on text or blank space.
 ```
 
 #### overrideLongPressMenuBehavior
-array of [`Config.LongPressMenu`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.LongPressMenu`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines the menu items on long press that will skip default behavior when pressed. They will still be displayed in the long press menu, and the function [`onLongPressMenuPress`](#onLongPressMenuPress) will be called where custom behavior can be implemented.
 
@@ -990,7 +990,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-longPressMenu | string | One of [`Config.LongPressMenu`](./src/Config/Config.js) constants, representing which item has been pressed
+longPressMenu | string | One of [`Config.LongPressMenu`](./src/Config/Config.ts) constants, representing which item has been pressed
 longPressText | string | the selected text if pressed on text, empty otherwise
 
 ```js
@@ -1007,7 +1007,7 @@ longPressText | string | the selected text if pressed on text, empty otherwise
 ### Custom Behavior
 
 #### overrideBehavior
-array of [`Config.Actions`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.Actions`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines actions that will skip default behavior, such as external link click. The function [`onBehaviorActivated`](#onBehaviorActivated) will be called where custom behavior can be implemented, whenever the defined actions occur.
 
@@ -1026,15 +1026,15 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | One of [`Config.Actions`](./src/Config/Config.js) constants, representing which action has been activated
+action | string | One of [`Config.Actions`](./src/Config/Config.ts) constants, representing which action has been activated
 data | object | A JSON object that varies depending on the action
 
 Data param table:
 
 Action | Data param
 --- | ---
-[`Config.Actions.linkPress`](./src/Config/Config.js) | `{url: string}`
-[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.js) | `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+[`Config.Actions.linkPress`](./src/Config/Config.ts) | `{url: string}`
+[`Config.Actions.stickyNoteShowPopUp`](./src/Config/Config.ts) | `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. Type is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1230,7 +1230,7 @@ Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
-annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants 
+annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
 
 **Known Issues** <br/> 
 On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
@@ -1262,7 +1262,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`, representing the selected annotations. Type is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`.
 
 ```js
 <DocumentView
@@ -1286,7 +1286,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 action | string | the action that occurred (add, delete, modify)
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants
 
 ```js
 <DocumentView
@@ -1339,7 +1339,7 @@ Functionality for iOS will fixed in the next official release, or a fixed versio
 ```
 
 #### disableEditingByAnnotationType
-array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none.
+array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none.
 
 Defines annotation types that cannot be edited after creation.
 
@@ -1350,7 +1350,7 @@ Defines annotation types that cannot be edited after creation.
 ```
 
 #### excludedAnnotationListTypes
-array of [`Config.Tools`](./src/Config/Config.js) constants, optional, defaults to none
+array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines types to be excluded from the annotation list.
 Example use:
@@ -1433,7 +1433,7 @@ Defines whether to show the option to pick images in the signature dialog.
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
-array of [`Config.ThumbnailFilterMode`](./src/Config/Config.js) constants, optional
+array of [`Config.ThumbnailFilterMode`](./src/Config/Config.ts) constants, optional
 
 Defines filter modes that should be hidden in the thumbnails browser. 
 
@@ -1652,7 +1652,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-colorPostProcessMode | string | color post processing transformation mode, should be a [`Config.ColorPostProcessMode`](./src/Config/Config.js) constant
+colorPostProcessMode | string | color post processing transformation mode, should be a [`Config.ColorPostProcessMode`](./src/Config/Config.ts) constant
 
 ```js
 this._viewer.setColorPostProcessMode(Config.ColorPostProcessMode.NightMode);
@@ -1685,7 +1685,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolMode | string | One of [`Config.Tools`](./src/Config/Config.js) constants, representing to tool mode to set
+toolMode | string | One of [`Config.Tools`](./src/Config/Config.ts) constants, representing to tool mode to set
 
 ```js
 this._viewer.setToolMode(Config.Tools.annotationCreateFreeHand).then(() => {
@@ -2069,7 +2069,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of [`Config.AnnotationFlags`](./src/Config/Config.js) constants, flagValue: bool}
+annotationFlagList | array | A list of annotation flag operations. Each element is in the format {id: string, pageNumber: int, flag: One of [`Config.AnnotationFlags`](./src/Config/Config.ts) constants, flagValue: bool}
 
 Returns a Promise.
 
@@ -2247,7 +2247,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotation | object | the annotation found in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationAtPoint(167, 287, 100, 10).then((annotation) => {
@@ -2275,7 +2275,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotations | array | list of annotations at the target line, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationListAt(0, 0, 200, 200).then((annotations) => {
@@ -2300,7 +2300,7 @@ Promise Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.js) constants. `screenRect` was formerly called `rect`.
+annotations | array | list of annotations on the target page, each in the format of `{id: string, pageNumber: number, type: string, screenRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}, pageRect: {x1: number, y1: number, x2: number, y2: number, width: number, height: number}}`. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `screenRect` was formerly called `rect`.
 
 ```js
 this._viewer.getAnnotationsOnPage(2).then((annotations) => {
@@ -2348,7 +2348,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 fields | array | list of field names for which the flag should be set
-flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/Config/Config.js) constant
+flag | int | flag to be set. Number should be a [`Config.FieldFlags`](./src/Config/Config.ts) constant
 value | bool | value to set for flag
 
 Returns a Promise.
@@ -2439,7 +2439,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.js) constants or the `id` of a custom toolbar object.
+toolbar | string | the toolbar to enable. Should be one of the [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or the `id` of a custom toolbar object.
 
 ```js
 this._viewer.setCurrentToolbar(Config.DefaultToolbars.Insert).then(() => {
@@ -2542,7 +2542,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-zoomLimitMode | String | one of the constants in [`Config.ZoomLimitMode`](./src/Config/Config.js), defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
+zoomLimitMode | String | one of the constants in [`Config.ZoomLimitMode`](./src/Config/Config.ts), defines whether bounds are relative to the standard zoom scale in the current viewer or absolute
 minimum | double | the lower bound of the zoom limit range
 maximum | double | the upper bound of the zoom limit range
 
@@ -2792,7 +2792,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-overprint | string | the mode of overprint, should be a [`Config.OverprintMode`](./src/Config/Config.js) constant
+overprint | string | the mode of overprint, should be a [`Config.OverprintMode`](./src/Config/Config.ts) constant
 
 Returns a Promise.
 
@@ -3203,7 +3203,7 @@ this._viewer.getSavedSignatureJpgFolder().then((path) => {
 ### Others
 
 #### exportAsImage
-Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.js). 
+Export a PDF page to an image format defined in [`Config.ExportFormat`](./src/Config/Config.ts). 
 
 Unlike RNPdftron.exportAsImage, this is a viewer method and should only be called *after* the document has been loaded or else unexpected behaviour can occur. This method uses the PDF that is associated with the viewer, and does not take a local file path to the desired PDF.
 
@@ -3213,7 +3213,7 @@ Name | Type | Description
 --- | --- | ---
 pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
-exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.js) constants
+exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.ts) constants
 
 Returns a Promise.
 
