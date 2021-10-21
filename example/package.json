@@ -15,7 +15,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.2",
-    "react-native-pdftron": "file:../"
+    "react-native-pdftron": "github:PDFTron/pdftron-react-native"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
