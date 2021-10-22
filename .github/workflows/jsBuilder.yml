@@ -2,7 +2,7 @@ name: Transpile TS
 
 on:
   push:
-    branches: [dev] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
+    branches: [test-ader-dev-2] # <-- Change this to the primary branch (for example, "dev" if you want all changes to `dev` to be watched).
 
 jobs:
   build:
@@ -42,4 +42,4 @@ jobs:
         with:
           force: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master # <-- Change this to the branch where you want builds to be (for example, "master" if you want changes to the primary branch to be applied to `master`).
+          branch: test-ader-master-2 # <-- Change this to the branch where you want builds to be (for example, "master" if you want changes to the primary branch to be applied to `master`).
