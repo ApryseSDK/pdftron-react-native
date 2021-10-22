@@ -100,6 +100,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT = "AnnotationCreateAreaMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT = "AnnotationCreateRectAreaMeasurement";
     public static final String TOOL_TEXT_SELECT = "TextSelect";
+    public static final String TOOL_MULTI_SELECT = "MultiSelect";
     public static final String TOOL_ANNOTATION_EDIT = "AnnotationEdit";
     public static final String TOOL_ANNOTATION_CREATE_SOUND = "AnnotationCreateSound";
     public static final String TOOL_PAN = "Pan";
