@@ -4,7 +4,7 @@
  * @hideconstructor
  * @name Config
  * @classdesc Defines configuration constants for the viewer. 
- * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.js) 
+ * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.ts) 
  * for the full list of constants.
  * 
  * Due to the length of the source file, we have included links to the exact lines 
