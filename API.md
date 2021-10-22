@@ -497,6 +497,18 @@ Defines whether the tablet layout should be used on tablets. Otherwise uses the 
 />
 ```
 
+
+#### downloadDialogEnabled
+bool, optional, defaults to 
+
+Defines whether the download dialog should be shown. Android only.
+
+```js
+<DocumentView
+  downloadDialogEnabled={false}
+/>
+```
+
 ### Toolbar Customization
 
 #### topToolbarEnabled

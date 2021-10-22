@@ -129,6 +129,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDocumentSliderEnabled(documentSliderEnabled);
     }
 
+    @ReactProp(name = "downloadDialogEnabled")
+    public void setDownloadDialogEnabled(DocumentView documentView, boolean downloadDialogEnabled) {
+        documentView.setDownloadDialogEnabled(downloadDialogEnabled);
+    }
+
     @ReactProp(name = "pageIndicatorEnabled")
     public void setPageIndicatorEnabled(DocumentView documentView, boolean pageIndicatorEnabled) {
         documentView.setPageIndicatorEnabled(pageIndicatorEnabled);
