@@ -723,8 +723,9 @@ NS_ASSUME_NONNULL_END
             NSString *string = (NSString *)item;
             
             if ([string isEqualToString:PTAnnotationEditToolKey] ||
-                [string isEqualToString:PTEditToolButtonKey]) {
-                // multi-select not implemented
+                [string isEqualToString:PTEditToolButtonKey] ||
+                [string isEqualToString:PTMultiSelectToolKey]) {
+                toolManager.allowsMultipleAnnotationSelection = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateStickyToolKey] ||
                      [string isEqualToString:PTStickyToolButtonKey]) {
@@ -878,6 +879,9 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:PTTextSelectToolKey] )
     {
         toolClass = [PTTextSelectTool class];
+    }
+    else if ( [toolMode isEqualToString:PTMultiSelectToolKey] ) {
+        toolClass = [PTAnnotSelectTool class];
     }
     else if ( [toolMode isEqualToString:PTPanToolKey] )
     {
@@ -2768,6 +2772,7 @@ NS_ASSUME_NONNULL_END
 //        PTFormCreateComboBoxFieldToolKey : @(),
 //        PTFormCreateListBoxFieldToolKey : @(),
 //        PTAnnotationEditToolKey: @(),
+//        PTMultiSelectToolKey: @(),
     };
     
     PTExtendedAnnotType annotType = PTExtendedAnnotTypeUnknown;
@@ -4776,6 +4781,9 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTTextSelectToolKey]) {
         return [PTTextSelectTool class];
     }
+    else if ([key isEqualToString:PTMultiSelectToolKey]) {
+        return [PTAnnotSelectTool class];
+    }
     else if ([key isEqualToString:PTAnnotationCreateTextHighlightToolKey] ||
              [key isEqualToString:PTHighlightToolButtonKey]) {
         return [PTTextHighlightCreate class];
@@ -4914,6 +4922,9 @@ NS_ASSUME_NONNULL_END
     else if (toolClass == [PTTextSelectTool class]) {
         return PTTextSelectToolKey;
     }
+    else if (toolClass == [PTAnnotSelectTool class]) {
+        return PTMultiSelectToolKey;
+    }
     else if (toolClass == [PTTextHighlightCreate class]) {
         return PTAnnotationCreateTextHighlightToolKey;
     }
@@ -4988,6 +4999,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTTextRedactionCreate class]) {
         return PTAnnotationCreateRedactionTextToolKey;
+    }
+    else if (toolClass == [PTSmartPen class]) {
+        return PTAnnotationCreateSmartPenToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
