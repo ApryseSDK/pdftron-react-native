@@ -663,6 +663,16 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationFlattened" : @"onAnnotationFlattened",
+            @"annotations": @[annotation],
+        });
+    }
+}
+
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields
 {
     if (sender.onChange) {

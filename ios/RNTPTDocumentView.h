@@ -309,6 +309,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation;
 
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 

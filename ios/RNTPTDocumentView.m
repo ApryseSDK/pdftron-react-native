@@ -448,6 +448,11 @@ NS_ASSUME_NONNULL_END
                  object:toolManager];
     
     [center addObserver:self
+               selector:@selector(toolManagerDidFlattenAnnotationWithNotification:)
+                   name:PTToolManagerAnnotationFlattenedNotification
+                 object:toolManager];
+    
+    [center addObserver:self
                selector:@selector(toolManagerDidModifyFormFieldDataWithNotification:) name:PTToolManagerFormFieldDataModifiedNotification
                  object:toolManager];
 
@@ -499,6 +504,10 @@ NS_ASSUME_NONNULL_END
     
     [center removeObserver:self
                       name:PTToolManagerAnnotationRemovedNotification
+                    object:toolManager];
+    
+    [center removeObserver:self
+                      name:PTToolManagerAnnotationFlattenedNotification
                     object:toolManager];
 
     [center removeObserver:self
@@ -3581,6 +3590,26 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
         [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+    }
+}
+
+- (void)toolManagerDidFlattenAnnotationWithNotification:(NSNotification *)notification
+{
+    if (notification.object != self.currentDocumentViewController.toolManager) {
+        return;
+    }
+    
+    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    
+    if ([self.delegate respondsToSelector:@selector(annotationFlattened:annotation:)]) {
+        [self.delegate annotationFlattened:self annotation:@{
+            PTAnnotationIdKey: annotId,
+            PTAnnotationPageNumberKey: @(pageNumber),
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+        }];
     }
 }
 
