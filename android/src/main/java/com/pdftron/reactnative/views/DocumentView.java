@@ -356,8 +356,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 	
 	public void setDownloadDialogEnabled(boolean downloadDialogEnabled) {
-        mBuilder = mBuilder.showDownloadDialog(downloadDialogEnabled);
-    }
+		mBuilder = mBuilder.showDownloadDialog(downloadDialogEnabled);
+	}
 
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
         mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
