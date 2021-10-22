@@ -217,7 +217,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         PdfViewCtrlSettingsManager.setFullScreenMode(currentActivity, false);
-        PdfViewCtrlSettingsManager.setShowScrollbarOption(currentActivity, true);
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .setShowRichContentOption(false)
@@ -2739,7 +2738,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             shouldUnlock = true;
 
             BookmarkManager.importPdfBookmarks(pdfViewCtrl, bookmarkJson);
-            pdfViewCtrl.update(true);
+            PdfViewCtrlTabHostFragment2 hostFragment = getViewer();
+            if (hostFragment != null) {
+                hostFragment.reloadUserBookmarks();
+            }
         } catch (JSONException ex) {
             throw new PDFNetException("", 0L, TAG, "importBookmarkJson", "Unable to parse bookmark json.");
         } finally {
