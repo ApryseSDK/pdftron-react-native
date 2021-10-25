@@ -2285,7 +2285,48 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onAnnotationsRemoved(Map<Annot, Integer> map) {
+            ToolManager toolManager = getToolManager();
+            if (toolManager != null) {
+                ToolManager.AnnotAction lastAction = toolManager.getLastAnnotAction();
+                if (lastAction == ToolManager.AnnotAction.FLATTEN) {
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATION_FLATTENED, ON_ANNOTATION_FLATTENED);
+                    WritableArray annotList = Arguments.createArray();
+                    for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                        Annot key = entry.getKey();
 
+                        String uid = null;
+                        try {
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (uid == null) {
+                            uid = UUID.randomUUID().toString();
+                            try {
+                                key.setUniqueID(uid);
+                            } catch (PDFNetException e) {
+                                e.printStackTrace();
+                                uid = null;
+                            }
+                        }
+
+                        WritableMap annotData = Arguments.createMap();
+                        annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
+                        annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
+                        try {
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
+                        }
+                        annotList.pushMap(annotData);
+                    }
+
+                    params.putArray(KEY_ANNOTATIONS, annotList);
+                    onReceiveNativeEvent(params);
+                }
+            }
         }
 
         @Override
