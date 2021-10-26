@@ -1886,6 +1886,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     public void onNavButtonPressed() {
+        if (getToolManager() != null) {
+            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+        }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
