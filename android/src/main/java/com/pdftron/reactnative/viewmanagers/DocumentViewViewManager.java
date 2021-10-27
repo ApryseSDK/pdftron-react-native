@@ -438,6 +438,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
     }
 
+    @ReactProp(name = "showErrorDialog")
+    public void setShowErrorDialog(DocumentView documentView, boolean showErrorDialog) {
+        documentView.setShowErrorDialog(showErrorDialog);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

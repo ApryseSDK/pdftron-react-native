@@ -494,6 +494,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showAnnotationReplyReviewState(replyReviewStateEnabled);
     }
 
+    public void setShowErrorDialog(boolean showErrorDialog) {
+        Utils.sShowAlertDialog = showErrorDialog;
+    }
+
     public void setAnnotationMenuItems(ReadableArray items) {
         mAnnotMenuItems = items != null ? items.toArrayList() : null;
     }

@@ -128,6 +128,7 @@ const propTypes = {
   openSavedCopyInNewTab: PropTypes.bool,
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
   replyReviewStateEnabled: PropTypes.bool,
+  showErrorDialog: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   ...ViewPropTypes,
