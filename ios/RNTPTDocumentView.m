@@ -2257,9 +2257,9 @@ NS_ASSUME_NONNULL_END
         PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
         PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
         //PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
-        //PTAnnotationToolbarPrepareForm: [NSNull null], // not implemented
+        PTAnnotationToolbarPrepareForm: toolGroupManager.prepareFormItemGroup, // not implemented
         PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
-        //PTAnnotationToolbarRedaction: [NSNull null], // not implemented
+        PTAnnotationToolbarRedaction: toolGroupManager.redactItemGroup, // not implemented
         PTAnnotationToolbarPens: toolGroupManager.pensItemGroup,
         PTAnnotationToolbarFavorite: toolGroupManager.favoritesItemGroup,
     };
