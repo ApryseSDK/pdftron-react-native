@@ -349,6 +349,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.showDocumentSlider(documentSliderEnabled);
     }
 
+    public void setDownloadDialogEnabled(boolean downloadDialogEnabled) {
+        mBuilder = mBuilder.showDownloadDialog(downloadDialogEnabled);
+    }
+
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
         mBuilder = mBuilder.showPageNumberIndicator(pageIndicatorEnabled);
     }
@@ -1903,6 +1907,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     public void onNavButtonPressed() {
+        if (getToolManager() != null) {
+            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+        }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 

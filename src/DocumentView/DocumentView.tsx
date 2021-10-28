@@ -52,6 +52,7 @@ const propTypes = {
   bottomToolbarEnabled: PropTypes.bool,
   hideToolbarsOnTap: PropTypes.bool,
   documentSliderEnabled: PropTypes.bool,
+  downloadDialogEnabled: PropTypes.bool,
   pageIndicatorEnabled: PropTypes.bool,
   keyboardShortcutsEnabled: PropTypes.bool,
   onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
