@@ -58,6 +58,7 @@ export const Config = {
   Tools: {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
+    multiSelect: 'MultiSelect',
     pan: 'Pan',
     annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
@@ -88,6 +89,7 @@ export const Config = {
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
     annotationCreateLinkText: 'AnnotationCreateLinkText',
     annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
+    annotationCreateSmartPen: 'AnnotationCreateSmartPen',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',
