@@ -2304,18 +2304,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             e.printStackTrace();
                         }
 
-                        if (uid == null) {
-                            uid = UUID.randomUUID().toString();
-                            try {
-                                key.setUniqueID(uid);
-                            } catch (PDFNetException e) {
-                                e.printStackTrace();
-                                uid = null;
-                            }
-                        }
-
                         WritableMap annotData = Arguments.createMap();
-                        annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
+                        annotData.putString(KEY_ANNOTATION_ID, uid);
                         annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                         try {
                             annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));

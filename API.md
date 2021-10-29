@@ -1323,7 +1323,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `id`s returned via the event listener can be null.
 
 ```js
 <DocumentView
