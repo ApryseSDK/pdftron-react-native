@@ -3607,11 +3607,11 @@ NS_ASSUME_NONNULL_END
     PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
     int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
     
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : nil;
+    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
     
     if ([self.delegate respondsToSelector:@selector(annotationFlattened:annotation:)]) {
         [self.delegate annotationFlattened:self annotation:@{
-            PTAnnotationIdKey: annotId,
+            PTAnnotationIdKey: [annotId isEqualToString:@""] ? [NSNull null] : annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
             PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
         }];

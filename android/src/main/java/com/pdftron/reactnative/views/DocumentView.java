@@ -2299,13 +2299,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                         String uid = null;
                         try {
-                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : null;
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : "";
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
                         WritableMap annotData = Arguments.createMap();
-                        annotData.putString(KEY_ANNOTATION_ID, uid);
+                        annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
                         annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                         try {
                             annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
