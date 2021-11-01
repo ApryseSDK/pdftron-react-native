@@ -1159,6 +1159,42 @@ Defines the current user name. Will set the user name only if [`collabEnabled`](
 />
 ```
 
+#### annotationManagerEditMode
+one of the [`Config.AnnotationManagerEditMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerEditMode.Own`
+
+Sets annotation manager edit mode when [`collabEnabled`](#collabEnabled) is true.
+
+Mode | Description
+--- | ---
+`Config.AnnotationManagerEditMode.Own` | In this mode, you can edit only your own changes 
+`Config.AnnotationManagerEditMode.Others` | In this mode, you can edit everyone's changes 
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  annotationManagerEditMode={Config.AnnotationManagerEditMode.All}
+/>
+```
+
+#### annotationManagerUndoMode
+one of the [`Config.AnnotationManagerUndoMode`](./src/Config/Config.js) constants, optional, default value is `Config.AnnotationManagerUndoMode.Own`
+
+Sets annotation manager undo mode when [`collabEnabled`](#collabEnabled) is true.
+
+Mode | Description
+--- | ---
+`Config.AnnotationManagerUndoMode.Own` | In this mode, you can undo only your own changes 
+`Config.AnnotationManagerUndoMode.Others` | In this mode, you can undo everyone's changes 
+
+```js
+<DocumentView
+  collabEnabled={true}
+  currentUser={'Pdftron'}
+  annotationManagerUndoMode={Config.AnnotationManagerUndoMode.All}
+/>
+```
+
 #### replyReviewStateEnabled
 boolean, optional, Android only, defaults to true
 
@@ -1943,7 +1979,7 @@ this._viewer.showRotateDialog();
 ### Import/Export Annotations
 
 #### importAnnotationCommand
-Imports remote annotation command to local document.
+Imports remote annotation command to local document. Can be used in both local and collaboration mode.
 
 Parameters:
 
@@ -1962,6 +1998,8 @@ this._viewer.importAnnotationCommand(xfdfCommand);
 
 #### importAnnotations
 Imports XFDF annotation string to the current document.
+
+`importAnnotations` should only be used in local mode. To import annotations in collaboration mode, use [`importAnnotationCommand`](#importAnnotationCommand).
 
 Parameters:
 
