@@ -402,7 +402,7 @@ tool | string | the current tool (one of the [`Config.Tools`](./src/Config/Confi
 ```
 
 #### rememberLastUsedTool
-boolean, optional, defaults to true
+boolean, optional, defaults to true, Android only
 
 Defines whether the last tool used in the current viewer session will be the tool selected upon starting a new viewer session.
 
