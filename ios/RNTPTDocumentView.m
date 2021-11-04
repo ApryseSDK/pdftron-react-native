@@ -835,7 +835,7 @@ NS_ASSUME_NONNULL_END
                 toolManager.linkAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
-                // TODO
+                toolManager.redactAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
                 // TODO
@@ -981,7 +981,7 @@ NS_ASSUME_NONNULL_END
         toolClass = [PTRectangleRedactionCreate class];
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey]) {
-        // TODO
+        toolClass = [PTLinkCreate class];
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         toolClass = [PTTextRedactionCreate class];
@@ -990,22 +990,22 @@ NS_ASSUME_NONNULL_END
         // TODO
     }
     else if ( [toolMode isEqualToString:PTFormCreateTextFieldToolKey]) {
-        // TODO
+        toolClass = [PTTextFieldCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
-        // TODO
+        toolClass = [PTCheckBoxCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateSignatureFieldToolKey]) {
-        // TODO
+        toolClass = [PTSignatureFieldCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateRadioFieldToolKey]) {
         // TODO
     }
     else if ( [toolMode isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
-        // TODO
+        toolClass = [PTComboBoxCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
-        // TODO
+        toolClass = [PTListBoxCreate class];
     }
     
     if (toolClass) {
@@ -4907,7 +4907,7 @@ NS_ASSUME_NONNULL_END
         return [PTRectangleRedactionCreate class];
     }
     else if ([key isEqualToString:PTAnnotationCreateLinkToolKey]) {
-        // TODO
+        return [PTLinkCreate class];
     }
     else if ([key isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         return [PTTextRedactionCreate class];
@@ -4916,22 +4916,22 @@ NS_ASSUME_NONNULL_END
         // TODO
     }
     else if ([key isEqualToString:PTFormCreateTextFieldToolKey]) {
-        // TODO
+        return [PTTextFieldCreate class];
     }
     else if ([key isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
-        // TODO
+        return [PTCheckBoxCreate class];
     }
     else if ([key isEqualToString:PTFormCreateSignatureFieldToolKey]) {
-        // TODO
+        return [PTSignatureFieldCreate class];
     }
     else if ([key isEqualToString:PTFormCreateRadioFieldToolKey]) {
         // TODO
     }
     else if ([key isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
-        // TODO
+        return [PTComboBoxCreate class];
     }
     else if ([key isEqualToString:PTFormCreateListBoxFieldToolKey]) {
-        // TODO
+        return [PTListBoxCreate class];
     }
     
     if (@available(iOS 13.1, *)) {
@@ -5037,6 +5037,24 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTSmartPen class]) {
         return PTAnnotationCreateSmartPenToolKey;
+    }
+    else if (toolClass == [PTLinkCreate class]) {
+        return PTAnnotationCreateLinkToolKey;
+    }
+    else if (toolClass == [PTTextFieldCreate class]) {
+        return PTFormCreateTextFieldToolKey;
+    }
+    else if (toolClass == [PTCheckBoxCreate class]) {
+        return PTFormCreateCheckboxFieldToolKey;
+    }
+    else if (toolClass == [PTSignatureFieldCreate class]) {
+        return PTFormCreateSignatureFieldToolKey;
+    }
+    else if (toolClass == [PTComboBoxCreate class]) {
+        return PTFormCreateComboBoxFieldToolKey;
+    }
+    else if (toolClass == [PTListBoxCreate class]) {
+        return PTFormCreateListBoxFieldToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
