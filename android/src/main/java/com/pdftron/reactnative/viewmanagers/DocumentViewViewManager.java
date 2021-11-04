@@ -84,6 +84,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDisabledTools(array);
     }
 
+    @ReactProp(name = "rememberLastUsedTool")
+    public void setRememberLastUsedTool(DocumentView documentView, boolean rememberLastUsedTool) {
+        documentView.setRememberLastUsedTool(rememberLastUsedTool);
+    }
+
     @ReactProp(name = "customHeaders")
     public void setCustomHeaders(DocumentView documentView, @Nullable ReadableMap map) {
         documentView.setCustomHeaders(map);
