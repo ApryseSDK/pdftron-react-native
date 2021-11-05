@@ -3488,11 +3488,23 @@ NS_ASSUME_NONNULL_END
     
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
-
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    NSError *error;
     
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
+    
     if (annotId.length == 0) {
         PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
         BOOL shouldUnlock = NO;
@@ -3540,11 +3552,22 @@ NS_ASSUME_NONNULL_END
     
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    NSError *error;
     
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
-    
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
     
     if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
         [self.delegate annotationChanged:self annotation:@{
@@ -3573,11 +3596,22 @@ NS_ASSUME_NONNULL_END
     
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    NSError *error;
     
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
-    
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
     
     if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
         [self.delegate annotationChanged:self annotation:@{
@@ -3604,10 +3638,23 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
-    
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    NSError *error;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
     
     if ([self.delegate respondsToSelector:@selector(annotationFlattened:annotation:)]) {
         [self.delegate annotationFlattened:self annotation:@{
