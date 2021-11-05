@@ -287,6 +287,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         disableTools(array);
     }
 
+    public void setRememberLastUsedTool(boolean rememberLastUsedTool) {
+        mBuilder = mBuilder.rememberLastUsedTool(rememberLastUsedTool);
+    }
+
     public void setCustomHeaders(ReadableMap map) {
         if (null == map) {
             return;
