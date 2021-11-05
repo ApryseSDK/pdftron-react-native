@@ -253,11 +253,20 @@ NS_ASSUME_NONNULL_END
 {
     if (!self.documentViewController && !self.tabbedDocumentViewController) {
         if ([self isCollabEnabled]) {
+            PTExternalAnnotManagerMode collabMode = e_ptadmin_undo_own;
+
+            if ([PTAnnotationManagerUndoModeOwn isEqualToString:self.annotationManagerUndoMode]) {
+                collabMode = e_ptadmin_undo_own;
+            }
+
+            if ([PTAnnotationManagerUndoModeAll isEqualToString:self.annotationManagerUndoMode]) {
+                collabMode = e_ptadmin_undo_others;
+            }
             
             self.collabService = [[RNTPTCollaborationService alloc] init];
             self.collabService.viewProxy = self;
             
-            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService];
+            RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
             
             self.viewController = collaborationViewController;
@@ -1580,6 +1589,8 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
+#pragma mark - Annotation
+
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
 {
     _annotationPermissionCheckEnabled = annotationPermissionCheckEnabled;
@@ -1587,7 +1598,6 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-#pragma mark - Collaboration
 
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad
 {
@@ -1613,6 +1623,22 @@ NS_ASSUME_NONNULL_END
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
 }
+
+-(void)setAnnotationManagerUndoMode:(NSString *)annotationManagerUndoMode
+{
+    _annotationManagerUndoMode = [annotationManagerUndoMode copy];
+    
+    [self applyViewerSettings];
+}
+
+-(void)setAnnotationManagerEditMode:(NSString *)annotationManagerEditMode
+{
+    _annotationManagerEditMode = [annotationManagerEditMode copy];
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Toolbar
 
 - (void)setAnnotationToolbars:(NSArray<id> *)annotationToolbars
 {
@@ -2007,6 +2033,15 @@ NS_ASSUME_NONNULL_END
     
     // Show Quick Navigation Button
     documentViewController.navigationHistoryEnabled = self.showQuickNavigationButton;
+    
+    // Annotation Manager Edit Mode
+    if ([PTAnnotationManagerEditModeOwn isEqualToString:self.annotationManagerEditMode]) {
+        documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditOwn;
+        documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
+    } else if ([PTAnnotationManagerEditModeAll isEqualToString:self.annotationManagerEditMode]) {
+        documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
+        documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
+    }
 
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled

@@ -84,6 +84,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDisabledTools(array);
     }
 
+    @ReactProp(name = "rememberLastUsedTool")
+    public void setRememberLastUsedTool(DocumentView documentView, boolean rememberLastUsedTool) {
+        documentView.setRememberLastUsedTool(rememberLastUsedTool);
+    }
+
     @ReactProp(name = "customHeaders")
     public void setCustomHeaders(DocumentView documentView, @Nullable ReadableMap map) {
         documentView.setCustomHeaders(map);
@@ -207,6 +212,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "currentUserName")
     public void setCurrentUserName(DocumentView documentView, String currentUserName) {
         documentView.setCurrentUserName(currentUserName);
+    }
+
+    @ReactProp(name = "annotationManagerEditMode")
+    public void annotationManagerEditMode(DocumentView documentView, String annotationManagerEditMode) {
+        documentView.setAnnotationManagerEditMode(annotationManagerEditMode);
+    }
+
+    @ReactProp(name = "annotationManagerUndoMode")
+    public void annotationManagerUndoMode(DocumentView documentView, String annotationManagerUndoMode) {
+        documentView.setAnnotationManagerUndoMode(annotationManagerUndoMode);
     }
 
     @ReactProp(name = "annotationMenuItems")
