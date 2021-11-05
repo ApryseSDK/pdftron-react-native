@@ -831,14 +831,12 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
                 toolManager.redactAnnotationOptions.canCreate = value;
             }
-            else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+            else if ([string isEqualToString:PTAnnotationCreateLinkToolKey] ||
+                     [string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
                 toolManager.linkAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
                 toolManager.redactAnnotationOptions.canCreate = value;
-            }
-            else if ([string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-                // TODO
             }
             else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
                 // TODO
@@ -980,14 +978,12 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionToolKey]) {
         toolClass = [PTRectangleRedactionCreate class];
     }
-    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey]) {
+    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey] ||
+             [toolMode isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
         toolClass = [PTLinkCreate class];
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         toolClass = [PTTextRedactionCreate class];
-    }
-    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-        // TODO
     }
     else if ( [toolMode isEqualToString:PTFormCreateTextFieldToolKey]) {
         toolClass = [PTTextFieldCreate class];
@@ -999,7 +995,7 @@ NS_ASSUME_NONNULL_END
         toolClass = [PTSignatureFieldCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateRadioFieldToolKey]) {
-        // TODO
+        toolClass = [PTRadioButtonCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
         toolClass = [PTComboBoxCreate class];
@@ -2798,14 +2794,14 @@ NS_ASSUME_NONNULL_END
         PTAnnotationCreateRubberStampToolKey: @(PTExtendedAnnotTypeStamp),
         PTAnnotationCreateRedactionToolKey : @(PTExtendedAnnotTypeRedact),
         PTAnnotationCreateLinkToolKey : @(PTExtendedAnnotTypeLink),
-//        PTAnnotationCreateRedactionTextToolKey : @(),
-//        PTAnnotationCreateLinkTextToolKey : @(),
-//        PTFormCreateTextFieldToolKey : @(),
-//        PTFormCreateCheckboxFieldToolKey : @(),
-//        PTFormCreateSignatureFieldToolKey : @(),
-//        PTFormCreateRadioFieldToolKey : @(),
-//        PTFormCreateComboBoxFieldToolKey : @(),
-//        PTFormCreateListBoxFieldToolKey : @(),
+        PTAnnotationCreateLinkTextToolKey: @(PTExtendedAnnotTypeLink),
+        PTFormCreateRadioFieldToolKey: @(PTExtendedAnnotTypeRadioButton),
+        PTFormCreateListBoxFieldToolKey : @(PTExtendedAnnotTypeListBox),
+        PTFormCreateSignatureFieldToolKey: @(PTExtendedAnnotTypeSignatureField),
+        PTFormCreateTextFieldToolKey : @(PTExtendedAnnotTypeTextField),
+        PTFormCreateCheckboxFieldToolKey : @(PTExtendedAnnotTypeCheckBox),
+        PTFormCreateComboBoxFieldToolKey : @(PTExtendedAnnotTypeComboBox),
+        PTAnnotationCreateRedactionTextToolKey : @(PTExtendedAnnotTypeTextRedact),
 //        PTAnnotationEditToolKey: @(),
 //        PTMultiSelectToolKey: @(),
     };
@@ -4906,14 +4902,12 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateRedactionToolKey]) {
         return [PTRectangleRedactionCreate class];
     }
-    else if ([key isEqualToString:PTAnnotationCreateLinkToolKey]) {
+    else if ([key isEqualToString:PTAnnotationCreateLinkToolKey] ||
+             [key isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
         return [PTLinkCreate class];
     }
     else if ([key isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         return [PTTextRedactionCreate class];
-    }
-    else if ([key isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-        // TODO
     }
     else if ([key isEqualToString:PTFormCreateTextFieldToolKey]) {
         return [PTTextFieldCreate class];
@@ -4925,7 +4919,7 @@ NS_ASSUME_NONNULL_END
         return [PTSignatureFieldCreate class];
     }
     else if ([key isEqualToString:PTFormCreateRadioFieldToolKey]) {
-        // TODO
+        return [PTRadioButtonCreate class];
     }
     else if ([key isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
         return [PTComboBoxCreate class];
@@ -5039,7 +5033,7 @@ NS_ASSUME_NONNULL_END
         return PTAnnotationCreateSmartPenToolKey;
     }
     else if (toolClass == [PTLinkCreate class]) {
-        return PTAnnotationCreateLinkToolKey;
+       return PTAnnotationCreateLinkToolKey;
     }
     else if (toolClass == [PTTextFieldCreate class]) {
         return PTFormCreateTextFieldToolKey;
@@ -5055,6 +5049,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTListBoxCreate class]) {
         return PTFormCreateListBoxFieldToolKey;
+    }
+    else if (toolClass == [PTRadioButtonCreate class]) {
+        return PTFormCreateRadioFieldToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
@@ -5133,7 +5130,8 @@ NS_ASSUME_NONNULL_END
 + (PTAnnotType)annotTypeForString:(NSString *)string {
     if ([string isEqualToString:PTAnnotationCreateStickyToolKey]) {
         return e_ptText;
-    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey] ||
+               [string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
         return e_ptLink;
     } else if ([string isEqualToString:PTAnnotationCreateFreeTextToolKey]) {
         return e_ptFreeText;
