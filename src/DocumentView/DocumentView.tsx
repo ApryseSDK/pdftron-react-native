@@ -57,6 +57,7 @@ const propTypes = {
   keyboardShortcutsEnabled: PropTypes.bool,
   onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
+  onAnnotationFlattened: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
@@ -132,6 +133,7 @@ const propTypes = {
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
+  rememberLastUsedTool: PropTypes.bool,
   ...ViewPropTypes,
 };
 
@@ -238,6 +240,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onAnnotationChanged) {
         this.props.onAnnotationChanged({
           'action': event.nativeEvent.action,
+          'annotations': event.nativeEvent.annotations,
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationFlattened) {
+      if (this.props.onAnnotationFlattened) {
+        this.props.onAnnotationFlattened({
           'annotations': event.nativeEvent.annotations,
         });
       }

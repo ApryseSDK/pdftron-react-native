@@ -287,6 +287,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         disableTools(array);
     }
 
+    public void setRememberLastUsedTool(boolean rememberLastUsedTool) {
+        mBuilder = mBuilder.rememberLastUsedTool(rememberLastUsedTool);
+    }
+
     public void setCustomHeaders(ReadableMap map) {
         if (null == map) {
             return;
@@ -2308,7 +2312,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onAnnotationsRemoved(Map<Annot, Integer> map) {
+            ToolManager toolManager = getToolManager();
+            if (toolManager != null) {
+                ToolManager.AnnotAction lastAction = toolManager.getLastAnnotAction();
+                if (lastAction == ToolManager.AnnotAction.FLATTEN) {
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATION_FLATTENED, ON_ANNOTATION_FLATTENED);
+                    WritableArray annotList = Arguments.createArray();
+                    for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                        Annot key = entry.getKey();
 
+                        String uid = null;
+                        try {
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : "";
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        WritableMap annotData = Arguments.createMap();
+                        annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
+                        annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
+                        try {
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
+                        }
+                        annotList.pushMap(annotData);
+                    }
+
+                    params.putArray(KEY_ANNOTATIONS, annotList);
+                    onReceiveNativeEvent(params);
+                }
+            }
         }
 
         @Override

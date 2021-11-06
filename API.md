@@ -401,6 +401,19 @@ tool | string | the current tool (one of the [`Config.Tools`](./src/Config/Confi
 />
 ```
 
+#### rememberLastUsedTool
+boolean, optional, defaults to true, Android only
+
+Defines whether the last tool used in the current viewer session will be the tool selected upon starting a new viewer session.
+
+Example:
+
+```js
+<DocumentView
+  rememberLastUsedTool={false}
+/>
+```
+
 #### leadingNavButtonIcon
 string, optional
 
@@ -1328,6 +1341,8 @@ function, optional
 
 This function is called if a change has been made to an annotation(s) in the current document.
 
+Note: When an annotation is flattened, it also gets deleted, so both [`onAnnotationChanged`](#onAnnotationChanged) and [`onAnnotationFlattened`](#onAnnotationFlattened) are called.
+
 Parameters:
 
 Name | Type | Description
@@ -1339,6 +1354,29 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 <DocumentView
   onAnnotationChanged = {({action, annotations}) => {
     console.log('Annotation edit action is', action);
+    annotations.forEach(annotation => {
+      console.log('The id of changed annotation is', annotation.id);
+      console.log('It is in page', annotation.pageNumber);
+      console.log('Its type is', annotation.type);
+    });
+  }}
+/>
+```
+
+#### onAnnotationFlattened
+function, optional
+
+This function is called if an annotation(s) has been flattened in the current document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+annotations | array | array of annotation data in the format `{id: string, pageNumber: number, type: string}`, representing the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants. `id`s returned via the event listener can be null.
+
+```js
+<DocumentView
+  onAnnotationFlattened={({annotations}) => {
     annotations.forEach(annotation => {
       console.log('The id of changed annotation is', annotation.id);
       console.log('It is in page', annotation.pageNumber);
