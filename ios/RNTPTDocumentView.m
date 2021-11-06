@@ -3702,16 +3702,25 @@ NS_ASSUME_NONNULL_END
         return;
     }
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
-
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    NSError *error;
     
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
     
     if ([annot GetType] == e_ptWidget) {
-        PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
-        NSError* error;
-
         __block PTWidget *widget;
         __block PTField *field;
         __block NSString *fieldName;
@@ -3723,6 +3732,7 @@ NS_ASSUME_NONNULL_END
             fieldName = [field IsValid] ? [field GetName] : @"";
             fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
         } error:&error];
+        
         if (error) {
             NSLog(@"An error occurred: %@", error);
             return;
