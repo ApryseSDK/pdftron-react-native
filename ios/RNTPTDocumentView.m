@@ -837,15 +837,13 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
                 toolManager.stampAnnotationOptions.canCreate = value;
             }
-            else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+            else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey] ||
+                     [string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
                 toolManager.redactAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTAnnotationCreateLinkToolKey] ||
                      [string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
                 toolManager.linkAnnotationOptions.canCreate = value;
-            }
-            else if ([string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
-                toolManager.redactAnnotationOptions.canCreate = value;
             }
             else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
                 // TODO
