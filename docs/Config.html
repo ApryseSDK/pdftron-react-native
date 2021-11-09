@@ -42,7 +42,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
+					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onAnnotationFlattened">onAnnotationFlattened</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
 				</ul>
 			</li>
 			
@@ -86,7 +86,7 @@
         </h1>
         
             <div class="class-description"><p>Defines configuration constants for the viewer.
-See <a href="https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.js"><code>Config.ts</code></a>
+See <a href="https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.ts"><code>Config.ts</code></a>
 for the full list of constants.</p>
 <p>Due to the length of the source file, we have included links to the exact lines
 of the source code where these APIs have been implemented.</p></div>
@@ -528,6 +528,10 @@ of the source code where these APIs have been implemented.</p></div>
                 </li>
             
                 <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>multiSelect</code>
+                </li>
+            
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
                 <code>pan</code>
                 </li>
             
@@ -648,6 +652,10 @@ of the source code where these APIs have been implemented.</p></div>
                 </li>
             
                 <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>annotationCreateSmartPen</code>
+                </li>
+            
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
                 <code>formCreateTextField</code>
                 </li>
             
@@ -736,7 +744,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L120">line 120</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L122">line 122</a>
 						</h5>
 							
 
@@ -833,7 +841,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L130">line 130</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L132">line 132</a>
 						</h5>
 							
 
@@ -938,7 +946,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L142">line 142</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L144">line 144</a>
 						</h5>
 							
 
@@ -1027,7 +1035,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L150">line 150</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L152">line 152</a>
 						</h5>
 							
 
@@ -1172,7 +1180,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L172">line 172</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L174">line 174</a>
 						</h5>
 							
 
@@ -1265,7 +1273,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L181">line 181</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L183">line 183</a>
 						</h5>
 							
 
@@ -1366,7 +1374,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L192">line 192</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L194">line 194</a>
 						</h5>
 							
 
@@ -1455,7 +1463,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L200">line 200</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L202">line 202</a>
 						</h5>
 							
 
@@ -1576,7 +1584,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L216">line 216</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L218">line 218</a>
 						</h5>
 							
 
@@ -1697,7 +1705,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L232">line 232</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L234">line 234</a>
 						</h5>
 							
 
@@ -1818,7 +1826,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L248">line 248</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L250">line 250</a>
 						</h5>
 							
 
@@ -1915,7 +1923,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L258">line 258</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L260">line 260</a>
 						</h5>
 							
 
@@ -2004,7 +2012,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L266">line 266</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L268">line 268</a>
 						</h5>
 							
 
@@ -2097,7 +2105,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L275">line 275</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L277">line 277</a>
 						</h5>
 							
 
@@ -2190,7 +2198,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L284">line 284</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L286">line 286</a>
 						</h5>
 							
 
@@ -2283,7 +2291,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L293">line 293</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L295">line 295</a>
 						</h5>
 							
 
@@ -2376,7 +2384,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L302">line 302</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L304">line 304</a>
 						</h5>
 							
 
@@ -2473,7 +2481,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L312">line 312</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L314">line 314</a>
 						</h5>
 							
 
@@ -2562,7 +2570,7 @@ alternatively, the default zoom level</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L320">line 320</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L322">line 322</a>
 						</h5>
 							
 
@@ -2593,6 +2601,184 @@ alternatively, the default zoom level</p>
             
                 <li style="flex: 1 0 33.33%; word-wrap: break-word">
                 <code>PNG</code>
+                </li>
+            </ul>
+    
+
+    
+</dd>
+
+        
+            
+    <hr>
+
+
+<dt class="name" id=".AnnotationManagerEditMode">
+    <h4 id=".AnnotationManagerEditMode">AnnotationManagerEditMode</h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>AnnotationManagerEditMode determines whose changes can be edited.</p>
+    </div>
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+						<h5>
+						<span style="font-weight: bold">Source: </span>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
+						
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L331">line 331</a>
+						</h5>
+							
+
+					
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+            <h5>Constants:</h5>
+            <ul style="columns: 2 auto; column-gap: 40px;">
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>Own</code>
+                </li>
+            
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>All</code>
+                </li>
+            </ul>
+    
+
+    
+</dd>
+
+        
+            
+    <hr>
+
+
+<dt class="name" id=".AnnotationManagerUndoMode">
+    <h4 id=".AnnotationManagerUndoMode">AnnotationManagerUndoMode</h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>AnnotationManagerUndoMode determines whose changes can be undone.</p>
+    </div>
+    
+
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+						<h5>
+						<span style="font-weight: bold">Source: </span>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js">Config.js</a>
+						
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/Config/Config.js##L339">line 339</a>
+						</h5>
+							
+
+					
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+            <h5>Constants:</h5>
+            <ul style="columns: 2 auto; column-gap: 40px;">
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>Own</code>
+                </li>
+            
+                <li style="flex: 1 0 33.33%; word-wrap: break-word">
+                <code>All</code>
                 </li>
             </ul>
     
@@ -2652,7 +2838,7 @@ alternatively, the default zoom level</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2021-10-04T11:23:33-07:00
+		on 2021-11-09T15:16:38-08:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

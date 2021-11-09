@@ -42,7 +42,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
+					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onAnnotationFlattened">onAnnotationFlattened</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
 				</ul>
 			</li>
 			
@@ -629,6 +629,21 @@ export const DocumentViewPropTypes = {
     pageIndicatorEnabled: PropTypes.bool,
     /**
      * @memberof DocumentView
+     * @category UI Customization
+     * @type {boolean}
+     * @optional
+     * @default true
+     * @desc Android only.
+     *
+     * Defines whether the download dialog should be shown.
+     * @example
+     * &lt;DocumentView
+     *    downloadDialogEnabled={true}
+     * />
+     */
+    downloadDialogEnabled: PropTypes.bool,
+    /**
+     * @memberof DocumentView
      * @category Page
      * @type {boolean}
      * @optional
@@ -678,6 +693,11 @@ export const DocumentViewPropTypes = {
      * @optional
      * @desc This function is called if a change has been made to an annotation(s)
      * in the current document.
+     *
+     * Note: When an annotation is flattened, it also gets deleted, so both
+     * {@link DocumentView.event:onAnnotationChanged onAnnotationChanged} and
+     * {@link DocumentView.event:onAnnotationFlattened onAnnotationFlattened} are called.
+     *
      * @param {string} action the action that occurred (add, delete, modify)
      * @param {object[]} annotations array of annotation data in the format
      * `{id: string, pageNumber: number, type: string}`,
@@ -719,6 +739,33 @@ export const DocumentViewPropTypes = {
      * />
      */
     onFormFieldValueChanged: func(),
+    /**
+     * @memberof DocumentView
+     * @category Annotations
+     * @event
+     * @type {function}
+     * @optional
+     * @desc This function is called if an annotation(s) has been flattened in the
+     * current document.
+     * @param {object[]} annotations array of annotation data in the format
+     * `{id: string, pageNumber: number, type: string}`,
+     * representing the annotations that have been changed.
+     *
+     * `type` is one of the {@link Config.Tools} constants
+     *
+     * `id` returned via the event listener can be null.
+     * @example
+     * &lt;DocumentView
+     *   onAnnotationFlattened={({annotations}) => {
+          annotations.forEach(annotation => {
+            console.log('The id of changed annotation is', annotation.id);
+            console.log('It is in page', annotation.pageNumber);
+            console.log('Its type is', annotation.type);
+          });
+        }}
+     * />
+     */
+    onAnnotationFlattened: func(),
     /**
      * @memberof DocumentView
      * @category Open a Document
@@ -1699,6 +1746,48 @@ export const DocumentViewPropTypes = {
     replyReviewStateEnabled: PropTypes.bool,
     /**
      * @memberof DocumentView
+     * @category Collaboration
+     * @type {Config.AnnotationManagerEditMode}
+     * @optional
+     * @default Config.AnnotationManagerEditMode.Own
+     * @desc Sets annotation manager edit mode when {@link DocumentView.collabEnabled collabEnabled}
+     * is true.
+     *
+     * Mode | Description
+     * --- | ---
+     * `Config.AnnotationManagerEditMode.Own` | In this mode, you can edit only your own changes
+     * `Config.AnnotationManagerEditMode.All` | In this mode, you can edit everyone's changes
+     * @example
+     * &lt;DocumentView
+     *   collabEnabled={true}
+     *   currentUser={'Pdftron'}
+     *   annotationManagerEditMode={Config.AnnotationManagerEditMode.Own}
+     * />
+     */
+    annotationManagerEditMode: oneOf(Config.AnnotationManagerEditMode),
+    /**
+     * @memberof DocumentView
+     * @category Collaboration
+     * @type {Config.AnnotationManagerUndoMode}
+     * @optional
+     * @default Config.AnnotationManagerUndoMode.Own
+     * @desc Sets annotation manager undo mode when {@link DocumentView.collabEnabled collabEnabled}
+     * is true.
+     *
+     * Mode | Description
+     * --- | ---
+     * `Config.AnnotationManagerUndoMode.Own` | In this mode, you can undo only your own changes
+     * `Config.AnnotationManagerUndoMode.All` | In this mode, you can undo everyone's changes
+     * @example
+     * &lt;DocumentView
+     *   collabEnabled={true}
+     *   currentUser={'Pdftron'}
+     *   annotationManagerUndoMode={Config.AnnotationManagerUndoMode.Own}
+     * />
+     */
+    annotationManagerUndoMode: oneOf(Config.AnnotationManagerUndoMode),
+    /**
+     * @memberof DocumentView
      * @category Page
      * @event
      * @type {function}
@@ -1734,7 +1823,24 @@ export const DocumentViewPropTypes = {
      *   }}
      * />
      */
-    onTabChanged: func()
+    onTabChanged: func(),
+    /**
+     * @memberof DocumentView
+     * @category UI Customization
+     * @type {boolean}
+     * @optional
+     * @default true
+     * @desc Android only.
+     *
+     * Defines whether the last tool used in the current viewer session will
+     * be the tool selected upon starting a new viewer session.
+     * @example
+     * &lt;DocumentView
+     *   rememberLastUsedTool={true}
+     * />
+     */
+    rememberLastUsedTool: PropTypes.bool,
+    ...ViewPropTypes
 };
 /**
 * Creates a custom PropType for functions.
@@ -1849,6 +1955,13 @@ export class DocumentView extends PureComponent {
             if (this.props.onAnnotationChanged) {
                 this.props.onAnnotationChanged({
                     'action': event.nativeEvent.action,
+                    'annotations': event.nativeEvent.annotations
+                });
+            }
+        }
+        else if (event.nativeEvent.onAnnotationFlattened) {
+            if (this.props.onAnnotationFlattened) {
+                this.props.onAnnotationFlattened({
                     'annotations': event.nativeEvent.annotations
                 });
             }
@@ -3950,7 +4063,7 @@ const RCTDocumentView = requireNativeComponent(name);
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2021-10-04T11:23:32-07:00
+		on 2021-11-09T15:16:38-08:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

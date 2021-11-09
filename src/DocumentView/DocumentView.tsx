@@ -588,6 +588,22 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category UI Customization
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @desc Android only.
+   * 
+   * Defines whether the download dialog should be shown. 
+   * @example 
+   * <DocumentView
+   *    downloadDialogEnabled={true}
+   * />
+   */
+  downloadDialogEnabled: PropTypes.bool,
+
+  /**
+   * @memberof DocumentView
    * @category Page
    * @type {boolean}
    * @optional
@@ -639,6 +655,11 @@ export const DocumentViewPropTypes = {
    * @optional
    * @desc This function is called if a change has been made to an annotation(s) 
    * in the current document.
+   * 
+   * Note: When an annotation is flattened, it also gets deleted, so both 
+   * {@link DocumentView.event:onAnnotationChanged onAnnotationChanged} and
+   * {@link DocumentView.event:onAnnotationFlattened onAnnotationFlattened} are called.
+   * 
    * @param {string} action the action that occurred (add, delete, modify)
    * @param {object[]} annotations array of annotation data in the format 
    * `{id: string, pageNumber: number, type: string}`, 
@@ -682,6 +703,35 @@ export const DocumentViewPropTypes = {
    * />
    */  
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
+
+  /**
+   * @memberof DocumentView
+   * @category Annotations
+   * @event
+   * @type {function}
+   * @optional
+   * @desc This function is called if an annotation(s) has been flattened in the 
+   * current document.
+   * @param {object[]} annotations array of annotation data in the format 
+   * `{id: string, pageNumber: number, type: string}`, 
+   * representing the annotations that have been changed. 
+   * 
+   * `type` is one of the {@link Config.Tools} constants 
+   * 
+   * `id` returned via the event listener can be null.
+   * @example
+   * <DocumentView
+   *   onAnnotationFlattened={({annotations}) => {
+        annotations.forEach(annotation => {
+          console.log('The id of changed annotation is', annotation.id);
+          console.log('It is in page', annotation.pageNumber);
+          console.log('Its type is', annotation.type);
+        });
+      }}
+   * />
+   */
+  onAnnotationFlattened: func<(event: {annotations: 
+    Array<AnnotOptions.Annotation>}) => void>(),
 
   /**
    * @memberof DocumentView
@@ -1724,6 +1774,52 @@ export const DocumentViewPropTypes = {
    * />
    */
   replyReviewStateEnabled: PropTypes.bool,
+
+  /**
+   * @memberof DocumentView
+   * @category Collaboration
+   * @type {Config.AnnotationManagerEditMode}
+   * @optional
+   * @default Config.AnnotationManagerEditMode.Own
+   * @desc Sets annotation manager edit mode when {@link DocumentView.collabEnabled collabEnabled}
+   * is true.
+   * 
+   * Mode | Description
+   * --- | ---
+   * `Config.AnnotationManagerEditMode.Own` | In this mode, you can edit only your own changes 
+   * `Config.AnnotationManagerEditMode.All` | In this mode, you can edit everyone's changes   
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   *   annotationManagerEditMode={Config.AnnotationManagerEditMode.Own}
+   * />
+   */
+  annotationManagerEditMode: 
+    oneOf<Config.AnnotationManagerEditMode>(Config.AnnotationManagerEditMode),
+
+  /**
+   * @memberof DocumentView
+   * @category Collaboration
+   * @type {Config.AnnotationManagerUndoMode}
+   * @optional
+   * @default Config.AnnotationManagerUndoMode.Own
+   * @desc Sets annotation manager undo mode when {@link DocumentView.collabEnabled collabEnabled} 
+   * is true.
+   * 
+   * Mode | Description
+   * --- | ---
+   * `Config.AnnotationManagerUndoMode.Own` | In this mode, you can undo only your own changes 
+   * `Config.AnnotationManagerUndoMode.All` | In this mode, you can undo everyone's changes   
+   * @example
+   * <DocumentView
+   *   collabEnabled={true}
+   *   currentUser={'Pdftron'}
+   *   annotationManagerUndoMode={Config.AnnotationManagerUndoMode.Own}
+   * />
+   */
+  annotationManagerUndoMode: 
+    oneOf<Config.AnnotationManagerUndoMode>(Config.AnnotationManagerUndoMode),
   
   /**
    * @memberof DocumentView
@@ -1763,7 +1859,25 @@ export const DocumentViewPropTypes = {
    *   }}
    * />
    */
-  onTabChanged: func<(event: {currentTab: string}) => void>()
+  onTabChanged: func<(event: {currentTab: string}) => void>(),
+
+  /**
+   * @memberof DocumentView
+   * @category UI Customization
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @desc Android only.
+   * 
+   * Defines whether the last tool used in the current viewer session will 
+   * be the tool selected upon starting a new viewer session.
+   * @example
+   * <DocumentView 
+   *   rememberLastUsedTool={true}
+   * />
+   */
+  rememberLastUsedTool: PropTypes.bool,
+  ...ViewPropTypes
 };
 
 // Generates the prop types for TypeScript users, from PropTypes.
@@ -1882,6 +1996,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onAnnotationChanged) {
         this.props.onAnnotationChanged({
           'action': event.nativeEvent.action,
+          'annotations': event.nativeEvent.annotations
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationFlattened) {
+      if (this.props.onAnnotationFlattened) {
+        this.props.onAnnotationFlattened({
           'annotations': event.nativeEvent.annotations
         });
       }

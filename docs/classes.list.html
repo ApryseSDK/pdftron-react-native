@@ -42,7 +42,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
+					<li><a href="DocumentView.html#.event:onAnnotationMenuPress">onAnnotationMenuPress</a></li><li><a href="DocumentView.html#.event:onAnnotationsSelected">onAnnotationsSelected</a></li><li><a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a></li><li><a href="DocumentView.html#.event:onFormFieldValueChanged">onFormFieldValueChanged</a></li><li><a href="DocumentView.html#.event:onAnnotationFlattened">onAnnotationFlattened</a></li><li><a href="DocumentView.html#.event:onBookmarkChanged">onBookmarkChanged</a></li><li><a href="DocumentView.html#.event:onBehaviorActivated">onBehaviorActivated</a></li><li><a href="DocumentView.html#.event:onExportAnnotationCommand">onExportAnnotationCommand</a></li><li><a href="DocumentView.html#.event:onLayoutChanged">onLayoutChanged</a></li><li><a href="DocumentView.html#.event:onLongPressMenuPress">onLongPressMenuPress</a></li><li><a href="DocumentView.html#.event:onTabChanged">onTabChanged</a></li><li><a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a></li><li><a href="DocumentView.html#.event:onDocumentError">onDocumentError</a></li><li><a href="DocumentView.html#.event:onPageChanged">onPageChanged</a></li><li><a href="DocumentView.html#.event:onPageMoved">onPageMoved</a></li><li><a href="DocumentView.html#.event:onScrollChanged">onScrollChanged</a></li><li><a href="DocumentView.html#.event:onTextSearchStart">onTextSearchStart</a></li><li><a href="DocumentView.html#.event:onTextSearchResult">onTextSearchResult</a></li><li><a href="DocumentView.html#.event:onLeadingNavButtonPressed">onLeadingNavButtonPressed</a></li><li><a href="DocumentView.html#.event:onToolChanged">onToolChanged</a></li><li><a href="DocumentView.html#.event:onUndoRedoStateChanged">onUndoRedoStateChanged</a></li><li><a href="DocumentView.html#.event:onZoomChanged">onZoomChanged</a></li><li><a href="DocumentView.html#.event:onZoomFinished">onZoomFinished</a></li>
 				</ul>
 			</li>
 			
@@ -463,7 +463,7 @@
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L589">line 589</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L604">line 604</a>
 						</h5>
 							
 
@@ -586,6 +586,9 @@ representing the selected annotations.</p>
     <div class="description">
         <p>This function is called if a change has been made to an annotation(s)
 in the current document.</p>
+<p>Note: When an annotation is flattened, it also gets deleted, so both
+<a href="DocumentView.html#.event:onAnnotationChanged">onAnnotationChanged</a> and
+<a href="DocumentView.html#.event:onAnnotationFlattened">onAnnotationFlattened</a> are called.</p>
     </div>
     
 
@@ -644,7 +647,7 @@ in the current document.</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L616">line 616</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L636">line 636</a>
 						</h5>
 							
 
@@ -849,7 +852,7 @@ representing the annotations that have been changed.</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L638">line 638</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L658">line 658</a>
 						</h5>
 							
 
@@ -954,6 +957,187 @@ representing the fields that have been changed</p></td>
     
 </dd>
 
+        
+            
+    <hr>
+
+
+<dt>
+    <h4 class="name" id=".event:onAnnotationFlattened">onAnnotationFlattened</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>This function is called if an annotation(s) has been flattened in the
+current document.</p>
+    </div>
+    
+
+    
+
+    
+        
+            <h5>
+                <span style="font-weight: bold">Type: </span>
+                <span style="font-weight: normal">
+<code class="param-type">function</code>
+
+
+</span>
+            </h5>
+            
+        
+
+    
+<dl class="details">
+    
+
+	
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+
+		
+		<h5>
+		<span style="font-weight: bold">Optional.</span>
+		</h5>
+		
+
+		
+
+		
+						<h5>
+						<span style="font-weight: bold">Source: </span>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
+						
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L685">line 685</a>
+						</h5>
+							
+
+					
+		
+
+		
+
+		
+
+		
+	
+
+	
+</dl>
+
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        
+        <th class="last">Description</th>
+        
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>annotations</code></td>
+            
+
+            <td class="type">
+            
+                
+<code class="param-type">Array&lt;object></code>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            
+                <td class="description last"><p>array of annotation data in the format
+<code>{id: string, pageNumber: number, type: string}</code>,
+representing the annotations that have been changed.</p>
+<p><code>type</code> is one of the <a href="Config.html#.Tools">Config.Tools</a> constants</p>
+<p><code>id</code> returned via the event listener can be null.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+      
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">&lt;DocumentView
+  onAnnotationFlattened={({annotations}) =&gt; {
+          annotations.forEach(annotation =&gt; {
+            console.log(&#x27;The id of changed annotation is&#x27;, annotation.id);
+            console.log(&#x27;It is in page&#x27;, annotation.pageNumber);
+            console.log(&#x27;Its type is&#x27;, annotation.type);
+          });
+        }}
+/&gt;</pre>
+
+
+    
+</dd>
+
         <br>
                     <h3 class="subsection-title">Bookmark</h3><hr class="category-line">
                 
@@ -1027,7 +1211,7 @@ representing the fields that have been changed</p></td>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1147">line 1147</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1194">line 1194</a>
 						</h5>
 							
 
@@ -1413,7 +1597,7 @@ modifying annotations while collaboration mode is enabled.</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L886">line 886</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L933">line 933</a>
 						</h5>
 							
 
@@ -1649,7 +1833,7 @@ In both cases, the data represents the annotations that have been changed.</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L707">line 707</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L754">line 754</a>
 						</h5>
 							
 
@@ -1972,7 +2156,7 @@ the <a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a> eve
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1654">line 1654</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1743">line 1743</a>
 						</h5>
 							
 
@@ -2680,7 +2864,7 @@ the <a href="DocumentView.html#.event:onDocumentLoaded">onDocumentLoaded</a> eve
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1633">line 1633</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1722">line 1722</a>
 						</h5>
 							
 
@@ -3076,7 +3260,7 @@ either through user actions, or function calls such as <a href="DocumentView.htm
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1219">line 1219</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1266">line 1266</a>
 						</h5>
 							
 
@@ -3195,7 +3379,7 @@ either through user actions, or function calls such as <a href="DocumentView.htm
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1257">line 1257</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1304">line 1304</a>
 						</h5>
 							
 
@@ -3529,7 +3713,7 @@ lower-left relatively to the box.</p></td>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1179">line 1179</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1226">line 1226</a>
 						</h5>
 							
 
@@ -3736,7 +3920,7 @@ undo/redo stack has been changed.</p>
 						<span style="font-weight: bold">Source: </span>
 						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js">DocumentView.js</a>
 						
-						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1430">line 1430</a>
+						<a href="https://github.com/PDFTron/pdftron-react-native/blob/ts-typedocs-master/lib/src/DocumentView/DocumentView.js##L1477">line 1477</a>
 						</h5>
 							
 
@@ -4173,7 +4357,7 @@ For example, if zoom via gesture, this is called on gesture release.</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a>
 	
-		on 2021-10-04T11:23:33-07:00
+		on 2021-11-09T15:16:38-08:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

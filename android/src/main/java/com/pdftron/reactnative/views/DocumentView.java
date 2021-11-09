@@ -1,5 +1,7 @@
 package com.pdftron.reactnative.views;
 
+import static com.pdftron.reactnative.utils.Constants.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,16 +10,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -42,7 +41,6 @@ import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.ColorPt;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
-import com.pdftron.pdf.PDFDraw;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
@@ -52,22 +50,17 @@ import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
 import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.AnnotationDialogFragment;
-import com.pdftron.pdf.controls.BookmarksTabLayout;
-import com.pdftron.pdf.controls.OutlineDialogFragment;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
 import com.pdftron.pdf.controls.ReflowControl;
-import com.pdftron.pdf.dialog.RotateDialogFragment;
-import com.pdftron.pdf.controls.UserBookmarkDialogFragment;
-import com.pdftron.pdf.dialog.BookmarksDialogFragment;
 import com.pdftron.pdf.controls.ThumbnailsViewFragment;
+import com.pdftron.pdf.dialog.RotateDialogFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
-import com.pdftron.pdf.model.FileInfo;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
+import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.QuickMenu;
@@ -79,12 +72,11 @@ import com.pdftron.pdf.utils.ActionUtils;
 import com.pdftron.pdf.utils.AnnotUtils;
 import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.CommonToast;
-import com.pdftron.pdf.utils.DialogFragmentTab;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
-import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
@@ -103,8 +95,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import static com.pdftron.reactnative.utils.Constants.*;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
@@ -145,6 +135,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mCollabEnabled;
     private String mCurrentUser;
     private String mCurrentUserName;
+    private AnnotManager.EditPermissionMode mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OWN;
+    private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
 
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
@@ -237,6 +229,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
+                    .usingAnnotationManagerEditMode(mAnnotationManagerEditMode)
+                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode)
                     .build(getContext());
         }
         return super.getViewer();
@@ -291,6 +285,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setDisabledTools(ReadableArray array) {
         disableTools(array);
+    }
+
+    public void setRememberLastUsedTool(boolean rememberLastUsedTool) {
+        mBuilder = mBuilder.rememberLastUsedTool(rememberLastUsedTool);
     }
 
     public void setCustomHeaders(ReadableMap map) {
@@ -353,6 +351,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setDocumentSliderEnabled(boolean documentSliderEnabled) {
         mBuilder = mBuilder.showDocumentSlider(documentSliderEnabled);
+    }
+
+    public void setDownloadDialogEnabled(boolean downloadDialogEnabled) {
+        mBuilder = mBuilder.showDownloadDialog(downloadDialogEnabled);
     }
 
     public void setPageIndicatorEnabled(boolean pageIndicatorEnabled) {
@@ -495,6 +497,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setCurrentUserName(String currentUserName) {
         mCurrentUserName = currentUserName;
+    }
+
+    public void setAnnotationManagerEditMode(String annotationManagerEditMode) {
+        if (KEY_ANNOTATION_MANAGER_EDIT_MODE_ALL.equals(annotationManagerEditMode)) {
+            mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OTHERS;
+        } else {
+            mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OWN;
+        }
+    }
+
+    public void setAnnotationManagerUndoMode(String annotationManagerUndoMode) {
+        if (KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL.equals(annotationManagerUndoMode)) {
+            mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OTHERS;
+        } else {
+            mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
+        }
     }
 
     public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
@@ -1040,6 +1058,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Unknown;
         } else if (TOOL_ANNOTATION_EDIT.equals(item)) {
             annotType = Annot.e_Unknown;
+        } else if (TOOL_MULTI_SELECT.equals(item)) {
+            annotType = Annot.e_Unknown;
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             annotType = Annot.e_Widget;
         } else if (TOOL_FORM_CREATE_CHECKBOX_FIELD.equals(item)) {
@@ -1208,6 +1228,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else if (TOOL_PAN.equals(item)) {
             mode = ToolManager.ToolMode.PAN;
         } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
+            mode = ToolManager.ToolMode.ANNOT_EDIT;
+        } else if (TOOL_MULTI_SELECT.equals(item)) {
             mode = ToolManager.ToolMode.ANNOT_EDIT_RECT_GROUP;
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             mode = ToolManager.ToolMode.FORM_TEXT_FIELD_CREATE;
@@ -1326,6 +1348,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 toolModeString = TOOL_PAN;
                 break;
             case ANNOT_EDIT_RECT_GROUP:
+                toolModeString = TOOL_MULTI_SELECT;
+                break;
             case ANNOT_EDIT:
                 toolModeString = TOOL_ANNOTATION_EDIT;
                 break;
@@ -1424,7 +1448,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             // TODO
         } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             // TODO
-        } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
+        } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item) || TOOL_MULTI_SELECT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.MULTI_SELECT.value();
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.TEXT_FIELD.value();
@@ -1509,7 +1533,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.TEXT_REDACTION;
         } else if (TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             // TODO
-        } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item)) {
+        } else if (TOOL_BUTTON_EDIT.equals(item) || TOOL_ANNOTATION_EDIT.equals(item) || TOOL_MULTI_SELECT.equals(item)) {
             buttonType = ToolbarButtonType.MULTI_SELECT;
         } else if (TOOL_FORM_CREATE_TEXT_FIELD.equals(item)) {
             buttonType = ToolbarButtonType.TEXT_FIELD;
@@ -1887,6 +1911,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     public void onNavButtonPressed() {
+        if (getToolManager() != null) {
+            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+        }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
 
@@ -2285,7 +2312,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onAnnotationsRemoved(Map<Annot, Integer> map) {
+            ToolManager toolManager = getToolManager();
+            if (toolManager != null) {
+                ToolManager.AnnotAction lastAction = toolManager.getLastAnnotAction();
+                if (lastAction == ToolManager.AnnotAction.FLATTEN) {
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATION_FLATTENED, ON_ANNOTATION_FLATTENED);
+                    WritableArray annotList = Arguments.createArray();
+                    for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                        Annot key = entry.getKey();
 
+                        String uid = null;
+                        try {
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : "";
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        WritableMap annotData = Arguments.createMap();
+                        annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
+                        annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
+                        try {
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
+                        }
+                        annotList.pushMap(annotData);
+                    }
+
+                    params.putArray(KEY_ANNOTATIONS, annotList);
+                    onReceiveNativeEvent(params);
+                }
+            }
         }
 
         @Override

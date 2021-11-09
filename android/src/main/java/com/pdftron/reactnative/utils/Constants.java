@@ -24,6 +24,7 @@ public final class Constants {
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
     public static final String ON_TAB_CHANGED = "onTabChanged";
+    public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -100,6 +101,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT = "AnnotationCreateAreaMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT = "AnnotationCreateRectAreaMeasurement";
     public static final String TOOL_TEXT_SELECT = "TextSelect";
+    public static final String TOOL_MULTI_SELECT = "MultiSelect";
     public static final String TOOL_ANNOTATION_EDIT = "AnnotationEdit";
     public static final String TOOL_ANNOTATION_CREATE_SOUND = "AnnotationCreateSound";
     public static final String TOOL_PAN = "Pan";
@@ -370,4 +372,12 @@ public final class Constants {
     public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
     public static final String KEY_EXPORT_FORMAT_JPEG = "JPEG";
     public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
+
+    // AnnotationManagerEditMode
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_ALL = "all";
+
+    // AnnotationManagerUndoMode
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL = "all";
 }

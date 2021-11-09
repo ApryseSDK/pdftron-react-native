@@ -54,6 +54,7 @@ static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
 static NSString * const PTAnnotationCreateFreeHandToolKey = @"AnnotationCreateFreeHand";
 static NSString * const PTTextSelectToolKey = @"TextSelect";
+static NSString * const PTMultiSelectToolKey = @"MultiSelect";
 static NSString * const PTAnnotationCreateTextHighlightToolKey = @"AnnotationCreateTextHighlight";
 static NSString * const PTAnnotationCreateTextUnderlineToolKey = @"AnnotationCreateTextUnderline";
 static NSString * const PTAnnotationCreateTextSquigglyToolKey = @"AnnotationCreateTextSquiggly";
@@ -83,6 +84,7 @@ static NSString * const PTAnnotationCreateRedactionToolKey = @"AnnotationCreateR
 static NSString * const PTAnnotationCreateLinkToolKey = @"AnnotationCreateLink";
 static NSString * const PTAnnotationCreateRedactionTextToolKey = @"AnnotationCreateRedactionText";
 static NSString * const PTAnnotationCreateLinkTextToolKey = @"AnnotationCreateLinkText";
+static NSString * const PTAnnotationCreateSmartPenToolKey = @"AnnotationCreateSmartPen";
 static NSString * const PTFormCreateTextFieldToolKey = @"FormCreateTextField";
 static NSString * const PTFormCreateCheckboxFieldToolKey = @"FormCreateCheckboxField";
 static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatureField";
@@ -256,6 +258,14 @@ static NSString * const PTTextSelectionQuadPointYKey = @"y";
 static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
 static NSString * const PTTextSelectionPageRangeEndKey = @"end";
 
+// Annotation Manager Undo Modes
+static NSString * const PTAnnotationManagerUndoModeOwn = @"own";
+static NSString * const PTAnnotationManagerUndoModeAll = @"all";
+
+// Annotation Manager Edit Modes
+static NSString * const PTAnnotationManagerEditModeOwn = @"own";
+static NSString * const PTAnnotationManagerEditModeAll = @"all";
+
 // DefaultEraserType keys
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
 static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
@@ -309,6 +319,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation;
 
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
@@ -452,6 +463,10 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
+@property (nonatomic, copy, nullable) NSString* annotationManagerUndoMode;
+
+@property (nonatomic, copy, nullable) NSString* annotationManagerEditMode;
 
 @property (nonatomic, copy, nullable) NSString *defaultEraserType;
 

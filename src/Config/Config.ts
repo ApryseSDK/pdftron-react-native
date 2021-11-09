@@ -76,6 +76,7 @@ export const Config = {
   Tools: {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
+    multiSelect: 'MultiSelect',
     pan: 'Pan',
     annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
@@ -106,6 +107,7 @@ export const Config = {
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
     annotationCreateLinkText: 'AnnotationCreateLinkText',
     annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
+    annotationCreateSmartPen: 'AnnotationCreateSmartPen',
     formCreateTextField: 'FormCreateTextField',
     formCreateCheckboxField: 'FormCreateCheckboxField',
     formCreateSignatureField: 'FormCreateSignatureField',
@@ -344,6 +346,24 @@ export const Config = {
     BMP: "BMP",
     JPEG: "JPEG",
     PNG: "PNG"
+  },
+
+  /**
+   * @member
+   * @desc AnnotationManagerEditMode determines whose changes can be edited.
+   */
+  AnnotationManagerEditMode: {
+    Own: "own",
+    All: "all"
+  },
+
+  /**
+   * @member
+   * @desc AnnotationManagerUndoMode determines whose changes can be undone.
+   */
+  AnnotationManagerUndoMode: {
+    Own: "own",
+    All: "all"
   }
 } as const;
 
@@ -399,6 +419,8 @@ export module Config {
   export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
   export type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
   export type ExportFormat = ValueOf<typeof Config.ExportFormat>;
+  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode> 
+  export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>
   export type CustomToolbarKey = {
     id : string;
     name: string;
