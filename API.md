@@ -1180,7 +1180,7 @@ Sets annotation manager edit mode when [`collabEnabled`](#collabEnabled) is true
 Mode | Description
 --- | ---
 `Config.AnnotationManagerEditMode.Own` | In this mode, you can edit only your own changes 
-`Config.AnnotationManagerEditMode.Others` | In this mode, you can edit everyone's changes 
+`Config.AnnotationManagerEditMode.All` | In this mode, you can edit everyone's changes 
 
 ```js
 <DocumentView
@@ -1198,7 +1198,7 @@ Sets annotation manager undo mode when [`collabEnabled`](#collabEnabled) is true
 Mode | Description
 --- | ---
 `Config.AnnotationManagerUndoMode.Own` | In this mode, you can undo only your own changes 
-`Config.AnnotationManagerUndoMode.Others` | In this mode, you can undo everyone's changes 
+`Config.AnnotationManagerUndoMode.All` | In this mode, you can undo everyone's changes 
 
 ```js
 <DocumentView
