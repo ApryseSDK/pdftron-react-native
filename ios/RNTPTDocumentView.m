@@ -2106,6 +2106,8 @@ NS_ASSUME_NONNULL_END
         documentController.toolGroupToolbarHidden = YES;
     }
     
+    documentController.toolGroupToolbar.itemsAlignment = PTToolGroupToolbarAlignmentTrailing;
+    
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
         
