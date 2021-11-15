@@ -63,6 +63,7 @@ export const Config = {
     annotationEraserTool: 'AnnotationEraserTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
     annotationCreateFreeHand: 'AnnotationCreateFreeHand',
+    annotationCreateFreeHandHighlight: 'AnnotationCreateFreeHandHighlight',
     annotationCreateTextHighlight: 'AnnotationCreateTextHighlight',
     annotationCreateTextUnderline: 'AnnotationCreateTextUnderline',
     annotationCreateTextSquiggly: 'AnnotationCreateTextSquiggly',
