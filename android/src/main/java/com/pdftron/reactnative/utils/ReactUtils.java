@@ -5,11 +5,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.pdftron.pdf.PDFDraw;
+import com.pdftron.pdf.Page;
 import com.pdftron.pdf.utils.Utils;
+import com.pdftron.pdf.PDFDoc;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -19,19 +23,22 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLEncoder;
+
+import static com.pdftron.reactnative.utils.Constants.*;
 
 public class ReactUtils {
 
     private static final String TAG = ReactUtils.class.getName();
 
-    public static Uri getUri(Context context, String path, boolean isBase64) {
+    public static Uri getUri(Context context, String path, boolean isBase64, String base64Extension) {
         if (context == null || path == null) {
             return null;
         }
         try {
             if (isBase64) {
                 byte[] data = Base64.decode(path, Base64.DEFAULT);
-                File tempFile = File.createTempFile("tmp", ".pdf");
+                File tempFile = File.createTempFile("tmp", base64Extension);
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(tempFile);
@@ -57,6 +64,17 @@ public class ReactUtils {
             } else if (ContentResolver.SCHEME_FILE.equals(fileUri.getScheme())) {
                 File file = new File(fileUri.getPath());
                 fileUri = Uri.fromFile(file);
+            } else if (URLUtil.isHttpUrl(path) || URLUtil.isHttpsUrl(path)) {
+                // this is a link uri, let's encode the file name
+                if (path.contains(" ")) {
+                    String filename = FilenameUtils.getName(path);
+                    if (filename.contains("?")) {
+                        filename = filename.substring(0, filename.indexOf("?")); // remove query params
+                    }
+                    String encodedName = URLEncoder.encode(filename, "UTF-8").replace("+", "%20");
+                    String newUrl = path.replace(filename, encodedName);
+                    return Uri.parse(newUrl);
+                }
             }
             return fileUri;
         } catch (Exception ex) {
@@ -119,5 +137,35 @@ public class ReactUtils {
             }
         }
         return array;
+    }
+
+    public static String exportAsImageHelper(PDFDoc doc, int pageNumber, double dpi, String exportFormat) {
+        PDFDraw draw = null;
+        try {
+            draw = new PDFDraw();
+            draw.setDPI(dpi);
+            if (pageNumber <= doc.getPageCount() && pageNumber >= 1) {
+                Page pg = doc.getPage(pageNumber);
+                String ext = "png";
+                if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
+                    ext = "bmp";
+                } else if (KEY_EXPORT_FORMAT_JPEG.equals(exportFormat)) {
+                    ext = "jpeg";
+                }
+                File tempFile = File.createTempFile("tmp", "." + ext);
+                draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
+                return tempFile.getAbsolutePath();
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            if (draw != null) {
+                try {
+                    draw.destroy();
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 }

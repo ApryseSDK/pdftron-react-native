@@ -6,12 +6,21 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+import com.pdftron.pdf.Convert;
+import com.pdftron.pdf.OfficeToPDFOptions;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
+import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
+import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
+
+import static com.pdftron.reactnative.utils.Constants.*;
+
+import java.io.File;
 
 public class RNPdftronModule extends ReactContextBaseJavaModule {
 
@@ -42,6 +51,42 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @ReactMethod
+    public void getSystemFontList(final Promise promise) {
+        String fontList = null;
+        Exception exception = null;
+        try {
+            fontList = PDFNet.getSystemFontList();
+        } catch (Exception e) {
+            exception = e;
+        }
+
+        String finalFontList = fontList;
+        Exception finalException = exception;
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (finalFontList != null) {
+                    promise.resolve(finalFontList);
+                } else {
+                    promise.reject(finalException);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void clearRubberStampCache(final Promise promise) {
+        StandardStampOption.clearCache(getReactApplicationContext());
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                promise.resolve(null);
+            }
+        });
     }
 
     @ReactMethod
@@ -92,5 +137,33 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
                 }
             }
         });
+    }
+
+    @ReactMethod
+    public void pdfFromOfficeTemplate(final String docxPath, final ReadableMap json, final Promise promise) {
+        try {
+            PDFDoc doc = new PDFDoc();
+            OfficeToPDFOptions options = new OfficeToPDFOptions();
+            options.setTemplateParamsJson(ReactUtils.convertMapToJson(json).toString());
+            Convert.officeToPdf(doc, docxPath, options);
+            File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
+            doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.NO_FLAGS, null);
+            promise.resolve(resultPdf.getAbsolutePath());
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void exportAsImage(int pageNumber, double dpi, String exportFormat, final String filePath, final Promise promise) {
+        try {
+            PDFDoc doc = new PDFDoc(filePath);
+            doc.lockRead();
+            String imagePath = ReactUtils.exportAsImageHelper(doc, pageNumber, dpi, exportFormat);
+            doc.unlockRead();
+            promise.resolve(imagePath);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
     }
 }

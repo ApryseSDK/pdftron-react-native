@@ -3,6 +3,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "RNPdftron.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const PTToolsButtonKey = @"toolsButton";
@@ -16,11 +18,14 @@ static NSString * const PTThumbnailSliderButtonKey = @"thumbnailSlider";
 static NSString * const PTOutlineListButtonKey = @"outlineListButton";
 static NSString * const PTAnnotationListButtonKey = @"annotationListButton";
 static NSString * const PTUserBookmarkListButtonKey = @"userBookmarkListButton";
+static NSString * const PTLayerListButtonKey = @"viewLayersButton";
 static NSString * const PTReflowButtonKey = @"reflowButton";
 static NSString * const PTEditPagesButtonKey = @"editPagesButton";
 static NSString * const PTPrintButtonKey = @"printButton";
 static NSString * const PTCloseButtonKey = @"closeButton";
 static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
+static NSString * const PTSaveIdenticalCopyButtonKey = @"saveIdenticalCopyButton";
+static NSString * const PTSaveFlattenedCopyButtonKey = @"saveFlattenedCopyButton";
 static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
@@ -43,13 +48,14 @@ static NSString * const PTRectangleToolButtonKey = @"rectangleToolButton";
 static NSString * const PTEllipseToolButtonKey = @"ellipseToolButton";
 static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
-
+static NSString * const PTEditToolButtonKey = @"editToolButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
 static NSString * const PTAnnotationCreateFreeHandToolKey = @"AnnotationCreateFreeHand";
 static NSString * const PTAnnotationCreateFreeHandHighlightToolKey = @"AnnotationCreateFreeHandHighlight";
 static NSString * const PTTextSelectToolKey = @"TextSelect";
+static NSString * const PTMultiSelectToolKey = @"MultiSelect";
 static NSString * const PTAnnotationCreateTextHighlightToolKey = @"AnnotationCreateTextHighlight";
 static NSString * const PTAnnotationCreateTextUnderlineToolKey = @"AnnotationCreateTextUnderline";
 static NSString * const PTAnnotationCreateTextSquigglyToolKey = @"AnnotationCreateTextSquiggly";
@@ -79,6 +85,7 @@ static NSString * const PTAnnotationCreateRedactionToolKey = @"AnnotationCreateR
 static NSString * const PTAnnotationCreateLinkToolKey = @"AnnotationCreateLink";
 static NSString * const PTAnnotationCreateRedactionTextToolKey = @"AnnotationCreateRedactionText";
 static NSString * const PTAnnotationCreateLinkTextToolKey = @"AnnotationCreateLinkText";
+static NSString * const PTAnnotationCreateSmartPenToolKey = @"AnnotationCreateSmartPen";
 static NSString * const PTFormCreateTextFieldToolKey = @"FormCreateTextField";
 static NSString * const PTFormCreateCheckboxFieldToolKey = @"FormCreateCheckboxField";
 static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatureField";
@@ -109,6 +116,10 @@ static NSString * const PTFacingContinuousLayoutModeKey = @"FacingContinuous";
 static NSString * const PTFacingCoverLayoutModeKey = @"FacingCover";
 static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverContinuous";
 
+static NSString * const PTViewModeCropKey = @"viewModeCrop";
+static NSString * const PTViewModeRotationKey = @"viewModeRotation";
+static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
+
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
 static NSString * const PTDeleteAnnotationActionKey = @"delete";
@@ -119,6 +130,8 @@ static NSString * const PTAnnotationIdKey = @"id";
 static NSString * const PTAnnotationPageNumberKey = @"pageNumber";
 static NSString * const PTAnnotationFlagKey = @"flag";
 static NSString * const PTAnnotationFlagValueKey = @"flagValue";
+static NSString * const PTAnnotationTypeKey = @"type";
+static NSString * const PTAnnotationCustomDataKey = @"customData";
 
 static NSString * const PTContentRectAnnotationPropertyKey = @"contentRect";
 static NSString * const PTContentsAnnotationPropertyKey = @"contents";
@@ -128,12 +141,18 @@ static NSString * const PTTitleAnnotationPropertyKey = @"title";
 static NSString * const PTLinkPressLinkAnnotationKey = @"linkPress";
 static NSString * const PTURILinkAnnotationKey = @"URI";
 static NSString * const PTURLLinkAnnotationKey = @"url";
-static NSString * const PTDataLinkAnnotationKey = @"data";
-static NSString * const PTActionLinkAnnotationKey = @"action";
+
+static NSString * const PTStickyNoteShowPopUpKey = @"stickyNoteShowPopUp";
+
+static NSString * const PTDataBehaviorKey = @"data";
+static NSString * const PTActionBehaviorKey = @"action";
 
 static NSString * const PTStyleMenuItemTitleKey = @"Style";
 static NSString * const PTNoteMenuItemTitleKey = @"Note";
+static NSString * const PTCommentsMenuItemTitleKey = @"Comments";
 static NSString * const PTCopyMenuItemTitleKey = @"Copy";
+static NSString * const PTPasteMenuItemTitleKey = @"Paste";
+static NSString * const PTDuplicateMenuItemTitleKey = @"Duplicate";
 static NSString * const PTDeleteMenuItemTitleKey = @"Delete";
 static NSString * const PTTypeMenuItemTitleKey = @"Type";
 static NSString * const PTSearchMenuItemTitleKey = @"Search";
@@ -147,6 +166,8 @@ static NSString * const PTCalibrateMenuItemTitleKey = @"Calibrate";
 static NSString * const PTStyleMenuItemIdentifierKey = @"style";
 static NSString * const PTNoteMenuItemIdentifierKey = @"note";
 static NSString * const PTCopyMenuItemIdentifierKey = @"copy";
+static NSString * const PTPasteMenuItemIdentifierKey = @"paste";
+static NSString * const PTDuplicateMenuItemIdentifierKey = @"duplicate";
 static NSString * const PTDeleteMenuItemIdentifierKey = @"delete";
 static NSString * const PTTypeMenuItemIdentifierKey = @"markupType";
 static NSString * const PTSearchMenuItemIdentifierKey = @"search";
@@ -166,7 +187,12 @@ static NSString * const PTSquigglyWhiteListKey = @"Squiggly";
 static NSString * const PTAnnotatedFilterModeKey = @"annotated";
 static NSString * const PTBookmarkedFilterModeKey = @"bookmarked";
 
+static NSString * const PTAbsoluteZoomLimitModeKey = @"absolute";
+static NSString * const PTRelativeZoomLimitModeKey = @"relative";
+
 static NSString * const PTRectKey = @"rect";
+static NSString * const PTScreenRectKey = @"screenRect";
+static NSString * const PTPageRectKey = @"pageRect";
 static NSString * const PTRectX1Key = @"x1";
 static NSString * const PTRectY1Key = @"y1";
 static NSString * const PTRectX2Key = @"x2";
@@ -174,8 +200,76 @@ static NSString * const PTRectY2Key = @"y2";
 static NSString * const PTRectWidthKey = @"width";
 static NSString * const PTRectHeightKey = @"height";
 
+static NSString * const PTStrokeColorKey = @"strokeColor";
+
+static NSString * const PTScrollHorizontalKey = @"horizontal";
+static NSString * const PTScrollVerticalKey = @"vertical";
+
+static NSString * const PTConversionScreenKey = @"screen";
+static NSString * const PTConversionCanvasKey = @"canvas";
+static NSString * const PTConversionPageKey = @"page";
+
+static NSString * const PTCoordinatePointX = @"x";
+static NSString * const PTCoordinatePointY = @"y";
+static NSString * const PTCoordinatePointPageNumber = @"pageNumber";
+
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
+static NSString * const PTFormFieldTypeKey = @"fieldType";
+
+static NSString * const PTFieldTypeUnknownKey = @"unknown";
+static NSString * const PTFieldTypeButtonKey = @"button";
+static NSString * const PTFieldTypeCheckboxKey = @"checkbox";
+static NSString * const PTFieldTypeRadioKey = @"radio";
+static NSString * const PTFieldTypeTextKey = @"text";
+static NSString * const PTFieldTypeChoiceKey = @"choice";
+static NSString * const PTFieldTypeSignatureKey = @"signature";
+
+static NSString * const PTZoomScaleKey = @"scale";
+static NSString * const PTZoomCenterKey = @"center";
+static NSString * const PTZoomCenterXKey = @"x";
+static NSString * const PTZoomCenterYKey = @"y";
+
+static NSString * const PTZoomLimitRelativeKey = @"relative";
+static NSString * const PTZoomLimitAbsoluteKey = @"absolute";
+static NSString * const PTZoomLimitNoneKey = @"none";
+
+static NSString * const PTOverprintModeOnKey = @"on";
+static NSString * const PTOverprintModeOffKey = @"off";
+static NSString * const PTOverprintModePdfxKey = @"pdfx";
+
+static NSString * const PTColorRedKey = @"red";
+static NSString * const PTColorGreenKey = @"green";
+static NSString * const PTColorBlueKey = @"blue";
+static NSString * const PTColorAlphaKey = @"alpha";
+
+static NSString * const PTColorPostProcessModeNoneKey = @"none";
+static NSString * const PTColorPostProcessModeInvertKey = @"invert";
+static NSString * const PTColorPostProcessModeGradientMapKey = @"gradientMap";
+static NSString * const PTColorPostProcessModeNightModeKey = @"nightMode";
+
+static NSString * const PTTextSelectionPageNumberKey = @"pageNumber";
+static NSString * const PTTextSelectionUnicodekey = @"unicode";
+static NSString * const PTTextSelectionHtmlKey = @"html";
+static NSString * const PTTextSelectionQuadsKey = @"quads";
+
+static NSString * const PTTextSelectionQuadPointXKey = @"x";
+static NSString * const PTTextSelectionQuadPointYKey = @"y";
+
+static NSString * const PTTextSelectionPageRangeBeginKey = @"begin";
+static NSString * const PTTextSelectionPageRangeEndKey = @"end";
+
+// Annotation Manager Undo Modes
+static NSString * const PTAnnotationManagerUndoModeOwn = @"own";
+static NSString * const PTAnnotationManagerUndoModeAll = @"all";
+
+// Annotation Manager Edit Modes
+static NSString * const PTAnnotationManagerEditModeOwn = @"own";
+static NSString * const PTAnnotationManagerEditModeAll = @"all";
+
+// DefaultEraserType keys
+static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
+static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
@@ -187,6 +281,7 @@ static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFillAndSign = @"PD
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPrepareForm = @"PDFTron_Prepare_Form";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarMeasure = @"PDFTron_Measure";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarPens = @"PDFTron_Pens";
+static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarRedaction = @"PDFTron_Redact";
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarFavorite = @"PDFTron_Favorite";
 
 // Custom annotation toolbar keys.
@@ -195,6 +290,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyId = @"id";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
+
+// Contexts.
+static void *TabChangedContext = &TabChangedContext;
+
+// To access the saved signatures folder
+static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesManager_signatureDirectory";
 
 @class RNTPTDocumentView;
 
@@ -207,15 +308,23 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 - (void)documentLoaded:(RNTPTDocumentView *)sender;
 - (void)documentError:(RNTPTDocumentView *)sender error:(nullable NSString *)error;
 - (void)pageChanged:(RNTPTDocumentView *)sender previousPageNumber:(int)previousPageNumber;
+- (void)scrollChanged:(RNTPTDocumentView *)sender horizontal:(double)horizontal vertical:(double)vertical;
 - (void)zoomChanged:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)zoomFinished:(RNTPTDocumentView *)sender zoom:(double)zoom;
+- (void)layoutChanged:(RNTPTDocumentView *)sender;
+- (void)textSearchStart:(RNTPTDocumentView *)sender;
+- (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
+- (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+- (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation;
 
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
-- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand;
+- (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand annotation:(NSDictionary*)annotation;
 
 - (void)annotationMenuPressed:(RNTPTDocumentView *)sender annotationMenu:(NSString *)annotationMenu annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
@@ -225,12 +334,17 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)toolChanged:(RNTPTDocumentView *)sender previousTool:(NSString *)previousTool tool:(NSString *)tool;
 
+- (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
+
+- (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
 @end
 
 @interface RNTPTDocumentView : UIView
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledElements;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *disabledTools;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *uneditableAnnotationTypes;
 
 
 // annotation selection menu customization
@@ -248,7 +362,9 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, assign) BOOL topToolbarEnabled DEPRECATED_MSG_ATTRIBUTE("Use hideTopAppNavBar instead");
 @property (nonatomic, assign) BOOL bottomToolbarEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorEnabled;
+@property (nonatomic, assign) BOOL keyboardShortcutsEnabled;
 @property (nonatomic, assign) BOOL hideToolbarsOnTap;
+@property (nonatomic, assign) BOOL documentSliderEnabled;
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
@@ -256,6 +372,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;
 @property (nonatomic, getter=isBase64String) BOOL base64String;
+@property (nonatomic, copy, nullable) NSString *base64Extension;
 @property (nonatomic) int initialPageNumber;
 @property (nonatomic) int pageNumber;
 @property (nonatomic, assign) BOOL showNavButton;
@@ -272,9 +389,13 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isThumbnailViewEditingEnabled) BOOL thumbnailViewEditingEnabled;
 
+@property (nonatomic, assign) BOOL imageInReflowEnabled;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
+
+@property (nonatomic) BOOL inkMultiStrokeEnabled;
 
 @property (nonatomic) BOOL useStylusAsPen;
 
@@ -287,6 +408,7 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 @property (nonatomic, copy, nullable) NSString *currentUserName;
 
 @property (nonatomic, assign) BOOL selectAnnotationAfterCreation;
+@property (nonatomic, assign) BOOL autoResizeFreeTextEnabled;
 
 @property (nonatomic, strong, nullable) PTCollaborationManager *collaborationManager;
 
@@ -296,20 +418,58 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 @property (nonatomic, assign, getter=isLongPressMenuEnabled) BOOL longPressMenuEnabled;
 
+@property (nonatomic, assign) BOOL followSystemDarkMode;
+
 @property (nonatomic, assign) BOOL signSignatureFieldsWithStamps;
 
 @property (nonatomic, assign) BOOL annotationPermissionCheckEnabled;
 
 @property (nonatomic, assign, getter=isMultiTabEnabled) BOOL multiTabEnabled;
 @property (nonatomic, copy, nullable) NSString *tabTitle;
+@property (nonatomic, assign) int maxTabCount;
 
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
+@property (nonatomic, copy, nullable) NSString *initialToolbar;
+
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
+
+@property (nonatomic) double zoom;
+
+@property (nonatomic) double horizontalScrollPos;
+@property (nonatomic) double verticalScrollPos;
+
+@property (nonatomic, assign) BOOL hideScrollbars;
+
+@property (nonatomic) double canvasWidth;
+@property (nonatomic) double canvasHeight;
+
+@property (nonatomic, assign) BOOL annotationsListEditingEnabled;
+
+@property (nonatomic, assign) BOOL showQuickNavigationButton;
+
+@property (nonatomic, assign) BOOL showNavigationListAsSidePanelOnLargeDevices;
+
+@property (nonatomic, assign) BOOL restrictDownloadUsage;
+
+@property (nonatomic, assign) BOOL userBookmarksListEditingEnabled;
+
+@property (nonatomic, assign) BOOL saveStateEnabled;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
+
+@property (nonatomic, copy, nullable) NSString* annotationManagerUndoMode;
+
+@property (nonatomic, copy, nullable) NSString* annotationManagerEditMode;
+
+@property (nonatomic, copy, nullable) NSString *defaultEraserType;
 
 #pragma mark - Methods
 
@@ -329,7 +489,11 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)importBookmarkJson:(NSString *)bookmarkJson;
 
+- (void)openBookmarkList;
+
 - (NSString *)getDocumentPath;
+
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
@@ -347,19 +511,156 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
 - (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;
 
+- (NSDictionary *)getField:(NSString *)fieldName;
+
 - (void)setFlagsForAnnotations:(NSArray *)annotationFlagList;
 
 - (void)selectAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
 
 - (void)setPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber propertyMap:(NSDictionary *)propertyMap;
 
+- (NSDictionary *)getPropertiesForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber;
+
+- (void)setDrawAnnotations:(BOOL)drawAnnotations;
+
+- (void)setVisibilityForAnnotation:(NSString *)annotationId pageNumber:(NSInteger)pageNumber visibility:(BOOL)visibility;
+
+- (void)setHighlightFields:(BOOL)highlightFields;
+
+- (NSDictionary *)getAnnotationAt:(NSInteger)x y:(NSInteger)y distanceThreshold:(double)distanceThreshold minimumLineWeight:(double)minimumLineWeight;
+
+- (NSArray *)getAnnotationListAt:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
+
+- (NSArray *)getAnnotationListOnPage:(NSInteger)pageNumber;
+
+- (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
+    pageNumber:(NSInteger)pageNumber key:(NSString *)key;
+
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;
 
+- (NSArray *)getVisiblePages;
+
+- (bool)gotoPreviousPage;
+
+- (bool)gotoNextPage;
+
+- (bool)gotoFirstPage;
+
+- (bool)gotoLastPage;
+
+- (void)showGoToPageView;
+
 - (void)closeAllTabs;
 
+- (void)openTabSwitcher;
+
+- (int)getPageRotation;
+
+- (void)rotateClockwise;
+
+- (void)rotateCounterClockwise;
+
+- (void)undo;
+
+- (void)redo;
+
+- (bool)canUndo;
+
+- (bool)canRedo;
+
+- (double)getZoom;
+
+- (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum;
+
+- (void)zoomWithCenter:(double)zoom x:(int)x y:(int)y;
+
+- (void)zoomToRect:(int)pageNumber rect:(NSDictionary *)rect;
+
+- (void)smartZoom:(int)x y:(int)y animated:(BOOL)animated;
+
+- (NSDictionary<NSString *, NSNumber *> *)getScrollPos;
+
+- (NSDictionary<NSString *, NSNumber *> *)getCanvasSize;
+
+- (NSArray *)convertScreenPointsToPagePoints:(NSArray *)points;
+
+- (NSArray *)convertPagePointsToScreenPoints:(NSArray *)points;
+
+- (int)getPageNumberFromScreenPoint:(double)x y:(double)y;
+
+- (void)setProgressiveRendering:(BOOL)progressiveRendering initialDelay:(NSInteger)initialDelay interval:(NSInteger)interval;
+
+- (void)setImageSmoothing:(BOOL)imageSmoothing;
+
+- (void)setOverprint:(NSString *)overprint;
+
+- (void)setPageBorderVisibility:(BOOL)pageBorderVisibility;
+
+- (void)setPageTransparencyGrid:(BOOL)pageTransparencyGrid;
+
+- (void)setDefaultPageColor:(NSDictionary *)defaultPageColor;
+
+- (void)setBackgroundColor:(NSDictionary *)backgroundColor;
+
+- (void)setColorPostProcessMode:(NSString *)colorPostProcessMode;
+
+- (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor;
+
+- (void)findText:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord searchUp:(BOOL)searchUp regExp:(BOOL)regExp;
+
+- (void)cancelFindText;
+
+- (void)openSearch;
+
+- (void)startSearchMode:(NSString *)searchString matchCase:(BOOL)matchCase matchWholeWord:(BOOL)matchWholeWord;
+
+- (void)exitSearchMode;
+
+- (NSDictionary *)getSelection:(NSInteger)pageNumber;
+
+- (BOOL)hasSelection;
+
+- (void)clearSelection;
+
+- (NSDictionary *)getSelectionPageRange;
+
+- (bool)hasSelectionOnPage:(NSInteger)pageNumber;
+
+- (BOOL)selectInRect:(NSDictionary *)rect;
+
+- (BOOL)isThereTextInRect:(NSDictionary *)rect;
+
+- (void)selectAll;
+
 - (void)importAnnotationCommand:(NSString *)xfdfCommand initialLoad:(BOOL)initialLoad;
+
+- (void)setCurrentToolbar:(NSString *)toolbarTitle;
+
+- (void)openOutlineList;
+
+- (void)openLayersList;
+
+- (void)openNavigationLists;
+
+- (void)openAnnotationList;
+
+- (BOOL)isReflowMode;
+
+- (void)toggleReflow;
+
+- (void)showViewSettingsFromRect:(NSDictionary *)rect;
+
+- (void)showAddPagesViewFromRect:(NSDictionary *)rect;
+
+- (void)shareCopyfromRect:(NSDictionary *)rect withFlattening:(BOOL)flattening;
+
+- (void)openThumbnailsView;
+
+-(NSArray *)getSavedSignatures;
+
+-(NSString *)getSavedSignatureFolder;
 
 @end
 

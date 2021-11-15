@@ -64,17 +64,9 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
-- (BOOL)controlsHidden
+- (BOOL)shouldExportCachedDocumentAtURL:(nonnull NSURL *)cachedDocumentURL
 {
-    if (self.navigationController) {
-        if ([self isTopToolbarEnabled]) {
-            return [self.navigationController isNavigationBarHidden];
-        }
-        if ([self isBottomToolbarEnabled]) {
-            return [self isThumbnailSliderHidden];
-        }
-    }
-    return [super controlsHidden];
+    return NO;
 }
 
 #pragma mark - <PTToolManagerDelegate>
@@ -158,6 +150,14 @@ NS_ASSUME_NONNULL_END
     return YES;
 }
 
+- (void)toolManager:(nonnull PTToolManager *)toolManager pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+{
+    [super toolManager:toolManager pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageDidMove:pageMovedFromPageNumber:toPageNumber:)]) {
+        [self.delegate rnt_documentViewControllerPageDidMove:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    }
+}
+
 #pragma mark - <PTAnnotationToolbarDelegate>
 
 - (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
@@ -208,10 +208,47 @@ NS_ASSUME_NONNULL_END
     [super pdfViewCtrl:pdfViewCtrl downloadEventType:type pageNumber:pageNum message:message];
 }
 
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidScroll:)]) {
+        [self.delegate rnt_documentViewControllerDidScroll:self];
+    }
+}
+
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidZoom:(UIScrollView *)scrollView
 {
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidZoom:)]) {
         [self.delegate rnt_documentViewControllerDidZoom:self];
+    }
+}
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl pdfScrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidFinishZoom:)]) {
+        [self.delegate rnt_documentViewControllerDidFinishZoom:self];
+    }
+}
+
+- (void)pdfViewCtrlOnLayoutChanged:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerLayoutDidChange:)]) {
+        [self.delegate rnt_documentViewControllerLayoutDidChange:self];
+    }
+}
+
+- (void)pdfViewCtrlTextSearchStart:(PTPDFViewCtrl *)pdfViewCtrl
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerTextSearchDidStart:)]) {
+        [self.delegate rnt_documentViewControllerTextSearchDidStart:self];
+    }
+}
+
+- (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl textSearchResult:(PTSelection *)selection
+{
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerTextSearchDidFindResult:
+                                                    selection:)]) {
+        [self.delegate rnt_documentViewControllerTextSearchDidFindResult:self
+                                                          selection:selection];
     }
 }
 
@@ -230,5 +267,19 @@ NS_ASSUME_NONNULL_END
     [bookmarkViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (NSArray<UIKeyCommand *> *)keyCommands
+{
+    BOOL keyboardShortcutsEnabled = YES;
+
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerAreKeyboardShortcutsEnabled:)]) {
+        keyboardShortcutsEnabled = [self.delegate rnt_documentViewControllerAreKeyboardShortcutsEnabled:self];
+    }
+
+    if (keyboardShortcutsEnabled) {
+        return [super keyCommands];
+    }
+
+    return nil;
+}
 
 @end
