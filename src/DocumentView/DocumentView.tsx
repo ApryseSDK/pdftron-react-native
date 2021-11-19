@@ -132,6 +132,7 @@ const propTypes = {
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
+  testProp: PropTypes.bool,
   ...ViewPropTypes,
 };
 
