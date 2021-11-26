@@ -104,6 +104,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mTabTitle;
     private boolean mIsBase64;
     private String mBase64Extension = ".pdf";
+    private String mDocumentExtension;
 
     private ArrayList<File> mTempFiles = new ArrayList<>();
 
@@ -244,6 +245,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
             }
+            if (!mDocumentExtension.isEmpty()) {
+                mViewerBuilder.usingFileExtension(mDocumentExtension);
+            }
             mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
     }
@@ -300,6 +304,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDocumentExtension(String documentExtension) {
+        mDocumentExtension = documentExtension;
     }
 
     public void setInitialPageNumber(int pageNum) {
