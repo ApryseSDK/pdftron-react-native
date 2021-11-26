@@ -478,7 +478,7 @@ String, optional, Android only
 
 The file name of the icon to be used as the overflow menu button. The button will use the specified icon if it is valid, and the default icon otherwise.
 
-**Note**: to add the image file to your application, follow the steps under the Android section of [`leadingNavButtonIcon`](#leadinNavButtonIcon).
+**Note**: to add the image file to your application, follow the steps under the Android section of [`leadingNavButtonIcon`](#leadingNavButtonIcon).
 
 Example:
 
