@@ -377,6 +377,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL showNavButton;
 @property (nonatomic, copy, nullable) NSString *navButtonPath;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nonatomic, copy, nullable) NSString *documentExtension;
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) NSString *fitMode;

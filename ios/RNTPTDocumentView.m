@@ -2450,6 +2450,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)setDocumentExtension:(NSString *)documentExtension
+{
+    _documentExtension = [documentExtension copy];
+    
+    [self applyViewerSettings];
+}
+
 - (void)applyCustomHeaders:(PTDocumentBaseViewController *)documentViewController
 {
     documentViewController.additionalHTTPHeaders = self.customHeaders;
