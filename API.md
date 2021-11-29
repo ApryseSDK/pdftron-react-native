@@ -474,17 +474,17 @@ This function is called when the leading navigation button is pressed.
 ```
 
 #### overflowMenuButtonIcon
-String, optional, Android only
+String, optional
 
 The file name of the icon to be used as the overflow menu button. The button will use the specified icon if it is valid, and the default icon otherwise.
 
-**Note**: to add the image file to your application, follow the steps under the Android section of [`leadingNavButtonIcon`](#leadingNavButtonIcon).
+**Note**: to add the image file to your application, follow the steps under the Note section of [`leadingNavButtonIcon`](#leadingNavButtonIcon).
 
 Example:
 
 ```js
 <DocumentView
-  overflowMenuIcon={'ic_arrow_back_white_24dp'}
+  overflowMenuButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
 />
 ```
 

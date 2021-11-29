@@ -1714,6 +1714,15 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+# pragma mark - Overflow Menu Button
+
+- (void)setOverflowMenuButtonPath:(NSString *)overflowMenuButtonPath
+{
+    _overflowMenuButtonPath = overflowMenuButtonPath;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Top/bottom toolbar
 
 - (BOOL)isTopToolbarEnabled
@@ -1988,6 +1997,9 @@ NS_ASSUME_NONNULL_END
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     
+    // Overflow Menu Button Icon
+    [self applyOverflowMenuButton];
+    
     // Thumbnail Filter Mode
     
     NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
@@ -2097,6 +2109,16 @@ NS_ASSUME_NONNULL_END
             if (navImage) {
                 [navButton setImage:navImage];
             }
+        }
+    }
+}
+
+- (void) applyOverflowMenuButton
+{
+    if (self.overflowMenuButtonPath != nil) {
+        UIImage *overflowImage = [UIImage imageNamed:self.overflowMenuButtonPath];
+        if (overflowImage != nil) {
+            self.currentDocumentViewController.moreItemsButtonItem.image = overflowImage;
         }
     }
 }
