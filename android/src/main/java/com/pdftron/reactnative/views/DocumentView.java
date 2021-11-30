@@ -245,7 +245,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            if (!mDocumentExtension.isEmpty()) {
+            if (mDocumentExtension != null) {
                 mViewerBuilder.usingFileExtension(mDocumentExtension);
             }
             mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
