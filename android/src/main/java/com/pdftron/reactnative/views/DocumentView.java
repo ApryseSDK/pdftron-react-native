@@ -889,7 +889,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
-        mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
+        mBuilder = mBuilder.pageStackEnabled(showQuickNavigationButton);
     }
 
     public void setPhotoPickerEnabled(boolean photoPickerEnabled) {
