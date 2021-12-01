@@ -1808,11 +1808,18 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
+- (void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
 {
    _imageInReflowEnabled = imageInReflowEnabled;
 
    [self applyViewerSettings];
+}
+
+- (void)reflowOrientation:(NSString*)reflowOrientation
+{
+    _reflowOrientation = [reflowOrientation copy];
+    
+    [self applyViewerSettings];
 }
 
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
@@ -2039,6 +2046,13 @@ NS_ASSUME_NONNULL_END
     
     // Image in reflow mode enabled.
     documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    
+    // Reflow Orientation
+    if ([PTReflowOrientationHorizontalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
+    } else if ([PTReflowOrientationVerticalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
+    }
     
     // Set Default Eraser Type
     [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];

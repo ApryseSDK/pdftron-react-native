@@ -913,7 +913,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, defaults to the viewer's scroll direction.
 
 Sets the scrolling direction of the reflow control.
 
