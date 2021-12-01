@@ -1662,6 +1662,8 @@ Defines whether to restrict data usage when viewing online PDFs.
 #### pageStackEnabled
 bool, optional, defaults to true, Android only
 
+Deprecated. Use the [`showQuickNavigationButton`](#showQuickNavigationButton) prop instead.
+
 Defines whether the page stack navigation buttons will appear in the viewer.
 
 ```js
