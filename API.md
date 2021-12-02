@@ -902,7 +902,7 @@ Determines whether scrollbars will be hidden on the viewer.
 ### Reflow
 
 #### imageInReflowEnabled
-bool, optional, defaults to true
+bool, optional, defaults to true, will be available on iOS in version 9.1.2 and greater
 
 Whether to show images in reflow mode. 
 
@@ -913,7 +913,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, defaults to the viewer's scroll direction.
 
 Sets the scrolling direction of the reflow control.
 
