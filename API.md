@@ -234,7 +234,7 @@ The file extension for the base64 string in [`document`](#document), if [`isBase
 ```
 
 #### documentExtension
-string, Android only, required if the URL/path does not contain the file extension or if you're loading a Blob/File. Defaults to the extension in the [`document`](#document) prop. 
+string, optional, defaults to the extension in the [`document`](#document) prop. 
 
 Used for specifying the extension of the document to be loaded. 
 
