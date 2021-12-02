@@ -228,21 +228,33 @@ NS_ASSUME_NONNULL_END
 
         [self.tempFilePaths addObject:path];
     }
+
+// Uncomment the following to use documentExtension:
+//    PTDocumentOptions *options = [PTDocumentOptions options];
+//    if (self.documentExtension != nil) {
+//        options.sourcePathExtension = self.documentExtension;
+//    }
+//    options.password = self.password;
+//
+//    if (self.documentViewController) {
+//        [self.documentViewController openDocumentWithURL:fileURL
+//                                                 options:options];
+//
+//        [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
+//    } else {
+//        [self.tabbedDocumentViewController openDocumentWithURL:fileURL
+//                                                       options:options];
+//    }
     
-    PTDocumentOptions *options = [PTDocumentOptions options];
-    if (self.documentExtension != nil) {
-        options.sourcePathExtension = self.documentExtension;
-    }
-    options.password = self.password;
-    
+    // Comment out the following to use documentExtension:
     if (self.documentViewController) {
         [self.documentViewController openDocumentWithURL:fileURL
-                                                 options:options];
-        
+                                                password:self.password];
+
         [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
     } else {
         [self.tabbedDocumentViewController openDocumentWithURL:fileURL
-                                                       options:options];
+                                                      password:self.password];
     }
 }
 
