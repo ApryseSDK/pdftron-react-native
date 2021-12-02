@@ -229,14 +229,20 @@ NS_ASSUME_NONNULL_END
         [self.tempFilePaths addObject:path];
     }
     
+    PTDocumentOptions *options = [PTDocumentOptions options];
+    if (self.documentExtension != nil) {
+        options.sourcePathExtension = self.documentExtension;
+    }
+    options.password = self.password;
+    
     if (self.documentViewController) {
         [self.documentViewController openDocumentWithURL:fileURL
-                                                password:self.password];
+                                                 options:options];
         
         [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
     } else {
         [self.tabbedDocumentViewController openDocumentWithURL:fileURL
-                                                      password:self.password];
+                                                       options:options];
     }
 }
 
