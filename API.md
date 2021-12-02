@@ -234,9 +234,12 @@ The file extension for the base64 string in [`document`](#document), if [`isBase
 ```
 
 #### documentExtension
-string, required if the URL/path does not contain the file extension or if you're loading a Blob/File. Defaults to the extension in the [`document`](#document) prop.
+string, Android only, required if the URL/path does not contain the file extension or if you're loading a Blob/File. Defaults to the extension in the [`document`](#document) prop. 
 
 Used for specifying the extension of the document to be loaded. 
+
+For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
+
 
 ```js
 <DocumentView
