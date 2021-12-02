@@ -135,6 +135,7 @@ const propTypes = {
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
+  overflowMenuButtonIcon: PropTypes.string,
   ...ViewPropTypes,
 };
 

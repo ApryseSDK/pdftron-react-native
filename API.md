@@ -517,6 +517,21 @@ This function is called when the leading navigation button is pressed.
 />
 ```
 
+#### overflowMenuButtonIcon
+String, optional
+
+The file name of the icon to be used as the overflow menu button. The button will use the specified icon if it is valid, and the default icon otherwise.
+
+**Note**: to add the image file to your application, follow the steps under the Note section of [`leadingNavButtonIcon`](#leadingNavButtonIcon).
+
+Example:
+
+```js
+<DocumentView
+  overflowMenuButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
+/>
+```
+
 #### documentSliderEnabled
 bool, optional, defaults to true
 
@@ -1690,6 +1705,8 @@ Defines whether to restrict data usage when viewing online PDFs.
 
 #### pageStackEnabled
 bool, optional, defaults to true, Android only
+
+Deprecated. Use the [`showQuickNavigationButton`](#showQuickNavigationButton) prop instead.
 
 Defines whether the page stack navigation buttons will appear in the viewer.
 
