@@ -245,7 +245,7 @@ Used for specifying the extension of the document to be loaded.
 />
 ```
 
-For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec, and go to `ios/NTPTDocumentView.m` and comment/uncomment the appropriate code:
+For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec, and go to `ios/RNTPTDocumentView.m` and comment/uncomment the appropriate code:
 ```
 // Uncomment the following to use documentExtension:
 //    PTDocumentOptions *options = [PTDocumentOptions options];
