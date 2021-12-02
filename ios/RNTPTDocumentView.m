@@ -2045,7 +2045,8 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     
     // Image in reflow mode enabled.
-    documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    // TODO: When supported use below
+    // Instead use documentViewController.reflowViewController.reflowManager.includeImages = self.ImageInReflowEnabled;
     
     // Reflow Orientation
     if ([PTReflowOrientationHorizontalKey isEqualToString:self.reflowOrientation]) {

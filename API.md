@@ -902,7 +902,7 @@ Determines whether scrollbars will be hidden on the viewer.
 ### Reflow
 
 #### imageInReflowEnabled
-bool, optional, defaults to true
+bool, optional, defaults to true, will be available on iOS in version 9.1.2 and greater
 
 Whether to show images in reflow mode. 
 
