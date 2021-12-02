@@ -238,15 +238,44 @@ string, Android only, required if the URL/path does not contain the file extensi
 
 Used for specifying the extension of the document to be loaded. 
 
-For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
-
-
 ```js
 <DocumentView
   document={'pdfInDisguise.png'}
   documentExtension={"pdf"}
 />
 ```
+
+For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec, and go to `ios/NTPTDocumentView.m` and comment/uncomment the appropriate code:
+```
+// Uncomment the following to use documentExtension:
+//    PTDocumentOptions *options = [PTDocumentOptions options];
+//    if (self.documentExtension != nil) {
+//        options.sourcePathExtension = self.documentExtension;
+//    }
+//    options.password = self.password;
+//
+//    if (self.documentViewController) {
+//        [self.documentViewController openDocumentWithURL:fileURL
+//                                                 options:options];
+//
+//        [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
+//    } else {
+//        [self.tabbedDocumentViewController openDocumentWithURL:fileURL
+//                                                       options:options];
+//    }
+    
+    // Comment out the following to use documentExtension:
+    if (self.documentViewController) {
+        [self.documentViewController openDocumentWithURL:fileURL
+                                                password:self.password];
+
+        [self applyLayoutMode:self.documentViewController.pdfViewCtrl];
+    } else {
+        [self.tabbedDocumentViewController openDocumentWithURL:fileURL
+                                                      password:self.password];
+    }
+```
+
 
 #### customHeaders
 object, optional
