@@ -152,6 +152,7 @@ NS_ASSUME_NONNULL_END
     
     _showSavedSignatures = YES;
 
+    _annotationsListEditingEnabled = YES;
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
@@ -2030,7 +2031,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-//     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Exclude annotation types from annotation list.
     [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];

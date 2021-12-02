@@ -1425,11 +1425,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
 ```
 
 #### annotationsListEditingEnabled
-bool, optional, Android only, default value is true
+bool, optional, default value is true
 
 If document editing is enabled, then this value determines if the annotation list is editable. 
-
-Functionality for iOS will fixed in the next official release, or a fixed version is available by pointing the iOS podfile to https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-06-30/9.0/cocoapods/pdfnet/2021-06-30_stable_rev77837.podspec as described in step one of the [iOS integration instructions](https://github.com/PDFTron/pdftron-react-native#ios).
 
 
 ```js
