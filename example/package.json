@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "preandroid": "cd node_modules/react-native-pdftron && npm run build-js-and-docs && cd ../../",
+    "preandroid": "cd node_modules/react-native-pdftron && npm start && cd ../../",
     "android": "react-native run-android",
-    "preios": "cd node_modules/react-native-pdftron && npm run build-js-and-docs && cd ../../",
+    "preios": "cd node_modules/react-native-pdftron && npm start && cd ../../",
     "ios": "react-native run-ios",
-    "prestart": "cd node_modules/react-native-pdftron && npm run build-js-and-docs && cd ../../",
+    "prestart": "cd node_modules/react-native-pdftron && npm start && cd ../../",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."

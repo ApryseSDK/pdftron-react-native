@@ -16,7 +16,6 @@ The typings used in these API docs will be described using normal JavaScript typ
 
 - {@link Config} - Defines configuration constants for the viewer.
 - {@link DocumentView} - An all-in-one React component for displaying and editing documents of different types.
-- {@link PDFViewCtrl} - A React component for displaying documents when a higher level of customization is required.
 - {@link RNPdftron} - Contains static methods for global library initialization, configuration, and utility methods.
 
 ## Links

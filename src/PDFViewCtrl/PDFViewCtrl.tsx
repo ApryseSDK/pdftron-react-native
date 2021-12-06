@@ -37,6 +37,7 @@ type PDFViewCtrlProps = InferProps<typeof PDFViewCtrlPropTypes>;
   * For easy all-in-one document viewing and editing, use {@link DocumentView}.
   * @hideconstructor
   * @hidesource
+  * @ignore
   */
 export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
 
