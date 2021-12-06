@@ -240,7 +240,7 @@ Used for specifying the extension of the document to be loaded.
 
 ```js
 <DocumentView
-  document={'pdfInDisguise.png'}
+  document={"https://pdftron.s3.amazonaws.com/pdfInDisguise.png"}
   documentExtension={"pdf"}
 />
 ```
