@@ -6,8 +6,6 @@
   "main": "./lib/index.js",
   "typings": "index.ts",
   "scripts": {
-    "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
-    "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
     "start": "rm -rf docs && tsc && ./node_modules/.bin/jsdoc -c conf.json",
     "upload-docs": "cd scripts && python3 -m pip install pwinput && python3 buildDocs.py $BRANCH && cd .."
   },
