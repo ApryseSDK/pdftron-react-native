@@ -90,6 +90,13 @@ RCT_CUSTOM_VIEW_PROPERTY(leadingNavButtonIcon, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overflowMenuButtonIcon, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.overflowMenuButtonPath = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
 {
     if (json) {
@@ -323,6 +330,13 @@ RCT_CUSTOM_VIEW_PROPERTY(imageInReflowEnabled, BOOL, RNTPTDocumentView)
    if (json) {
        view.imageInReflowEnabled = [RCTConvert BOOL:json];
    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(reflowOrientation, NSString*, RNTPTDocumentView)
+{
+    if (json) {
+        view.reflowOrientation = [RCTConvert NSString:json];
+    }
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)

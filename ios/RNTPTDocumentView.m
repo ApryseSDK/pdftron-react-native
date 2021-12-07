@@ -152,6 +152,7 @@ NS_ASSUME_NONNULL_END
     
     _showSavedSignatures = YES;
 
+    _annotationsListEditingEnabled = YES;
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
@@ -1714,6 +1715,15 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+# pragma mark - Overflow Menu Button
+
+- (void)setOverflowMenuButtonPath:(NSString *)overflowMenuButtonPath
+{
+    _overflowMenuButtonPath = overflowMenuButtonPath;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Top/bottom toolbar
 
 - (BOOL)isTopToolbarEnabled
@@ -1799,11 +1809,18 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
+- (void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
 {
    _imageInReflowEnabled = imageInReflowEnabled;
 
    [self applyViewerSettings];
+}
+
+- (void)reflowOrientation:(NSString*)reflowOrientation
+{
+    _reflowOrientation = [reflowOrientation copy];
+    
+    [self applyViewerSettings];
 }
 
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
@@ -1988,6 +2005,9 @@ NS_ASSUME_NONNULL_END
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     
+    // Overflow Menu Button Icon
+    [self applyOverflowMenuButton];
+    
     // Thumbnail Filter Mode
     
     NSMutableArray <PTFilterMode>* filterModeArray = [[NSMutableArray alloc] init];
@@ -2011,7 +2031,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-//     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Exclude annotation types from annotation list.
     [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
@@ -2026,7 +2046,15 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     
     // Image in reflow mode enabled.
-    documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    // TODO: When supported use below
+    // Instead use documentViewController.reflowViewController.reflowManager.includeImages = self.ImageInReflowEnabled;
+    
+    // Reflow Orientation
+    if ([PTReflowOrientationHorizontalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
+    } else if ([PTReflowOrientationVerticalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
+    }
     
     // Set Default Eraser Type
     [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];
@@ -2097,6 +2125,16 @@ NS_ASSUME_NONNULL_END
             if (navImage) {
                 [navButton setImage:navImage];
             }
+        }
+    }
+}
+
+- (void) applyOverflowMenuButton
+{
+    if (self.overflowMenuButtonPath != nil) {
+        UIImage *overflowImage = [UIImage imageNamed:self.overflowMenuButtonPath];
+        if (overflowImage != nil) {
+            self.currentDocumentViewController.moreItemsButtonItem.image = overflowImage;
         }
     }
 }
@@ -2226,7 +2264,8 @@ NS_ASSUME_NONNULL_END
         NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
         
         for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
-            UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString];
+            UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
+                                               inViewController:documentController];
             if (rightBarItem) {
                 [righBarItems addObject:rightBarItem];
             }
@@ -2237,17 +2276,21 @@ NS_ASSUME_NONNULL_END
     
     // Handle bottomToolbar.
     if (self.bottomToolbar && self.bottomToolbar.count >= 0) {
-        
-        // the spacing item between elements
-        UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        
-        
-        NSMutableArray *bottomToolbarItems = [[NSMutableArray alloc] init];
+        NSMutableArray<UIBarButtonItem *> *bottomToolbarItems = [[NSMutableArray alloc] init];
         
         for (NSString *bottomToolbarString in self.bottomToolbar) {
-            UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarString];
+            UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarString
+                                                    inViewController:documentController];
             if (bottomToolbarItem) {
+                [self ensureUniqueBottomBarButtonItem:bottomToolbarItem
+                                     inViewController:documentController];
+                
                 [bottomToolbarItems addObject:bottomToolbarItem];
+                
+                // the spacing item between elements
+                UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                       target:nil
+                                                                                       action:nil];
                 [bottomToolbarItems addObject:space];
             }
         }
@@ -4858,23 +4901,103 @@ NS_ASSUME_NONNULL_END
 }
 
 - (UIBarButtonItem *)itemForButton:(NSString *)buttonString
+                  inViewController:(PTDocumentBaseViewController *)documentViewController
 {
     if ([buttonString isEqualToString:PTSearchButtonKey]) {
-        return self.documentViewController.searchButtonItem;
+        return documentViewController.searchButtonItem;
     } else if ([buttonString isEqualToString:PTMoreItemsButtonKey]) {
-        return self.documentViewController.moreItemsButtonItem;
+        return documentViewController.moreItemsButtonItem;
     } else if ([buttonString isEqualToString:PTThumbNailsButtonKey]) {
-        return self.documentViewController.thumbnailsButtonItem;
+        return documentViewController.thumbnailsButtonItem;
     } else if ([buttonString isEqualToString:PTListsButtonKey]) {
-        return self.documentViewController.navigationListsButtonItem;
+        return documentViewController.navigationListsButtonItem;
     } else if ([buttonString isEqualToString:PTReflowButtonKey]) {
-        return self.documentViewController.readerModeButtonItem;
+        return documentViewController.readerModeButtonItem;
     } else if ([buttonString isEqualToString:PTShareButtonKey]) {
-        return self.documentViewController.shareButtonItem;
+        return documentViewController.shareButtonItem;
     } else if ([buttonString isEqualToString:PTViewControlsButtonKey]) {
-        return self.documentViewController.settingsButtonItem;
+        return documentViewController.settingsButtonItem;
     }
     return nil;
+}
+
+- (void)ensureUniqueBottomBarButtonItem:(UIBarButtonItem *)item
+                       inViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    if (!item) {
+        return;
+    }
+    
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
+        PTDocumentNavigationItem * const navigationItem = documentController.navigationItem;
+        
+        NSArray<UIBarButtonItem *> * const compactLeftBarButtonItems = [navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+        if ([compactLeftBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableLeftBarButtonItems = [compactLeftBarButtonItems mutableCopy];
+            
+            [mutableLeftBarButtonItems removeObject:item];
+            
+            [navigationItem setLeftBarButtonItems:[mutableLeftBarButtonItems copy]
+                                     forSizeClass:UIUserInterfaceSizeClassCompact
+                                         animated:NO];
+        }
+        
+        NSArray<UIBarButtonItem *> * const regularLeftBarButtonItems = [navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+        if ([regularLeftBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableLeftBarButtonItems = [regularLeftBarButtonItems mutableCopy];
+            
+            [mutableLeftBarButtonItems removeObject:item];
+            
+            [navigationItem setLeftBarButtonItems:[mutableLeftBarButtonItems copy]
+                                     forSizeClass:UIUserInterfaceSizeClassRegular
+                                         animated:NO];
+        }
+        
+        NSArray<UIBarButtonItem *> * const compactRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+        if ([compactRightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [compactRightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                      forSizeClass:UIUserInterfaceSizeClassCompact
+                                          animated:NO];
+        }
+        
+        NSArray<UIBarButtonItem *> * const regularRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+        if ([regularRightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [regularRightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                      forSizeClass:UIUserInterfaceSizeClassRegular
+                                          animated:NO];
+        }
+    } else {
+        UINavigationItem * const navigationItem = documentViewController.navigationItem;
+        
+        NSArray<UIBarButtonItem *> * const leftBarButtonItems = navigationItem.leftBarButtonItems;
+        if ([leftBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableLeftBarButtonItems = [leftBarButtonItems mutableCopy];
+            
+            [mutableLeftBarButtonItems removeObject:item];
+            
+            [navigationItem setLeftBarButtonItems:[mutableLeftBarButtonItems copy]
+                                         animated:NO];
+        }
+
+        NSArray<UIBarButtonItem *> * const rightBarButtonItems = navigationItem.rightBarButtonItems;
+        if ([rightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [rightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                          animated:NO];
+        }
+    }
 }
 
 + (Class)toolClassForKey:(NSString *)key

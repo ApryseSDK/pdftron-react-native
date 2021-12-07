@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -156,6 +157,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mShowAddPageToolbarButton = true;
 
+    // overflow menu icon
+    private String mOverflowResName = null;
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
     public DocumentView(Context context) {
@@ -277,6 +281,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mPdfViewCtrlTabHostFragment.getToolbar().setNavigationIcon(res);
             }
         }
+    }
+
+    public void setOverflowResName(String resName) {
+        mOverflowResName = resName;
     }
 
     public void setDisabledElements(ReadableArray array) {
@@ -881,7 +889,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
-        mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
+        mBuilder = mBuilder.pageStackEnabled(showQuickNavigationButton);
     }
 
     public void setPhotoPickerEnabled(boolean photoPickerEnabled) {
@@ -2621,6 +2629,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (mReadOnly) {
             getToolManager().setReadOnly(true);
+        }
+
+        if (mOverflowResName != null && mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getToolbar() != null) {
+            int res = Utils.getResourceDrawable(this.getContext(), mOverflowResName);
+            if (res != 0) {
+                Drawable icon = Utils.getDrawable(this.getContext(), res);
+                mPdfViewCtrlTabHostFragment.getToolbar().setOverflowIcon(icon);
+            }
         }
 
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);

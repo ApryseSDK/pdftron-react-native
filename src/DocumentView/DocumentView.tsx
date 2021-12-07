@@ -1416,6 +1416,8 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
+   * @deprecated Use the {@link DocumentView.showQuickNavigationButton showQuickNavigationButton} 
+   * prop instead.
    * @desc Android only.
    * 
    * Defines whether the page stack navigation buttons will appear in the viewer.
@@ -1476,9 +1478,8 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
-   * @desc Android only
-   * 
-   * If document editing is enabled, then this value determines if the annotation list is editable.
+   * @desc If document editing is enabled, then this value determines 
+   * if the annotation list is editable.
    * @example
    * <DocumentView
    *   annotationsListEditingEnabled={true}
@@ -1536,7 +1537,9 @@ export const DocumentViewPropTypes = {
    * @type {boolean}
    * @optional
    * @default true
-   * @desc Whether to show images in reflow mode. 
+   * @desc Will be available on iOS in version 9.1.2 and greater
+   * 
+   * Whether to show images in reflow mode. 
    * @example
    * <DocumentView
    *   imageInReflowEnabled={false}
@@ -1549,7 +1552,7 @@ export const DocumentViewPropTypes = {
    * @category Reflow
    * @type {Config.ReflowOrientation}
    * @optional
-   * @default Config.ReflowOrientation.Horizontal 
+   * @default Defaults to the viewer's scroll direction
    * @desc Android only.
    * 
    * Sets the scrolling direction of the reflow control.
@@ -1877,7 +1880,26 @@ export const DocumentViewPropTypes = {
    * />
    */
   rememberLastUsedTool: PropTypes.bool,
-  ...ViewPropTypes
+
+  /**
+   * @memberof DocumentView
+   * @category UI Customization
+   * @type {string}
+   * @optional
+   * @desc The file name of the icon to be used as the overflow menu button. 
+   * The button will use the specified icon if it is valid, and the default icon otherwise.
+   * 
+   * **Note**: to add the image file to your application, follow the steps under the Note 
+   * section of {@link DocumentView.leadingNavButtonIcon leadingNavButtonIcon}.
+   * @example
+   * let iosButton = 'ic_close_black_24px.png';
+   * let androidButton = 'ic_arrow_back_white_24dp';
+   * <DocumentView
+   *  overflowMenuButtonIcon={Platform.OS === 'ios' ? iosButton : androidButton}
+   * />
+   */
+  overflowMenuButtonIcon: PropTypes.string,
+  ...ViewPropTypes,
 };
 
 // Generates the prop types for TypeScript users, from PropTypes.
