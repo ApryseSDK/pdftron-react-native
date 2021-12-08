@@ -230,13 +230,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected PdfViewCtrlTabHostFragment2 getViewer() {
         if (mCollabEnabled) {
             // Create the Fragment using CollabViewerBuilder
-            return CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
+            CollabViewerBuilder2 builder2 = CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
                     .usingAnnotationManagerEditMode(mAnnotationManagerEditMode)
-                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode)
-                    .build(getContext());
+                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode);
+            if (!Utils.isNullOrEmpty(mTabTitle)) {
+                builder2.usingTabTitle(mTabTitle);
+            }
+            if (!Utils.isNullOrEmpty(mDocumentExtension)) {
+                builder2.usingFileExtension(mDocumentExtension);
+            }
+            return builder2.usingTheme(R.style.RNAppTheme).build(getContext());
         }
         return super.getViewer();
     }
@@ -245,14 +251,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void buildViewer() {
         super.buildViewer();
         if (mViewerBuilder != null) {
-            mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
             if (!Utils.isNullOrEmpty(mTabTitle)) {
-                mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+                mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            if (mDocumentExtension != null) {
+            if (!Utils.isNullOrEmpty(mDocumentExtension)) {
                 mViewerBuilder.usingFileExtension(mDocumentExtension);
             }
-            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
+            mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
     }
 
@@ -907,7 +913,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
     }
-    
+
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
@@ -992,7 +998,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 saveCopyOptions.add(R.id.menu_export_password_copy);
             }
         }
-        
+
         if (!saveCopyOptions.isEmpty()) {
             int[] modes = new int[saveCopyOptions.size()];
             for (int j = 0; j < modes.length; j++) {
@@ -2664,7 +2670,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
-
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
@@ -3126,7 +3131,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (isOutlineListVisible) {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
-                } 
+                }
             } else {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
@@ -4200,7 +4205,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
         }
     }
-    
+
     public boolean isReflowMode() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().isReflowMode();
@@ -4261,7 +4266,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         WritableArray signatures = Arguments.createArray();
         Context context = getContext();
         if (context != null) {
-            File[] files = StampManager.getInstance().getSavedSignatures(context);    
+            File[] files = StampManager.getInstance().getSavedSignatures(context);
             for (int i = 0; i < files.length; i++) {
                 signatures.pushString(files[i].getAbsolutePath());
             }
@@ -4286,7 +4291,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return "";
     }
-    
+
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
     }
