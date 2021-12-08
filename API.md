@@ -120,7 +120,7 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 ```
 
 ### pdfFromOffice
-Generates a PDF from an Office document. For more
+Generates a PDF from an Office document.
 
 Parameters:
 
