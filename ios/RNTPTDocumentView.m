@@ -152,6 +152,7 @@ NS_ASSUME_NONNULL_END
     
     _showSavedSignatures = YES;
 
+    _annotationsListEditingEnabled = YES;
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
@@ -1814,11 +1815,18 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
+- (void)setImageInReflowEnabled:(BOOL)imageInReflowEnabled
 {
    _imageInReflowEnabled = imageInReflowEnabled;
 
    [self applyViewerSettings];
+}
+
+- (void)reflowOrientation:(NSString*)reflowOrientation
+{
+    _reflowOrientation = [reflowOrientation copy];
+    
+    [self applyViewerSettings];
 }
 
 - (void)setSelectAnnotationAfterCreation:(BOOL)selectAnnotationAfterCreation
@@ -2029,7 +2037,7 @@ NS_ASSUME_NONNULL_END
     [self applyCustomHeaders:documentViewController];
 
     // Set Annotation List Editing 
-//     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
+     documentViewController.navigationListsViewController.annotationViewController.readonly = !self.annotationsListEditingEnabled;
     
     // Exclude annotation types from annotation list.
     [self excludeAnnotationListTypes:self.excludedAnnotationListTypes documentViewController:documentViewController];
@@ -2044,7 +2052,15 @@ NS_ASSUME_NONNULL_END
     documentViewController.navigationListsViewController.bookmarkViewController.readonly = !self.userBookmarksListEditingEnabled;
     
     // Image in reflow mode enabled.
-    documentViewController.reflowViewController.reflowMode = self.imageInReflowEnabled;
+    // TODO: When supported use below
+    // Instead use documentViewController.reflowViewController.reflowManager.includeImages = self.ImageInReflowEnabled;
+    
+    // Reflow Orientation
+    if ([PTReflowOrientationHorizontalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionHorizontal;
+    } else if ([PTReflowOrientationVerticalKey isEqualToString:self.reflowOrientation]) {
+        documentViewController.reflowViewController.scrollingDirection = PTReflowViewControllerScrollingDirectionVertical;
+    }
     
     // Set Default Eraser Type
     [self applyDefaultEraserType:self.defaultEraserType documentViewController:documentViewController];

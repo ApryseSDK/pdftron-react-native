@@ -270,6 +270,10 @@ static NSString * const PTAnnotationManagerEditModeAll = @"all";
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
 static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 
+// ReflowOrientation keys
+static NSString * const PTReflowOrientationHorizontalKey = @"horizontal";
+static NSString * const PTReflowOrientationVerticalKey = @"veritcal";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -391,6 +395,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign, getter=isThumbnailViewEditingEnabled) BOOL thumbnailViewEditingEnabled;
 
 @property (nonatomic, assign) BOOL imageInReflowEnabled;
+
+@property (nonatomic, copy, nullable) NSString *reflowOrientation;
 
 @property (nonatomic, copy) NSString *annotationAuthor;
 
