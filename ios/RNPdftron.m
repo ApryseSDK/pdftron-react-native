@@ -109,6 +109,44 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
+RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath applyPageBreaksToSheet:(BOOL)applyPageBreaks displayChangeTracking:(BOOL)displayChangeTracking excelDefaultCellBorderWidth:(NSNumber *)width excelMaxAllowedCellCount:(int)count locale:(NSString *)locale resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        PTPDFDoc* pdfDoc = [[PTPDFDoc alloc] init];
+        PTOfficeToPDFOptions* options = [[PTOfficeToPDFOptions alloc] init];
+        [options SetApplyPageBreaksToSheet:applyPageBreaks];
+        [options SetDisplayChangeTracking:displayChangeTracking];
+        [options SetExcelDefaultCellBorderWidth:[width doubleValue]];
+        [options SetExcelMaxAllowedCellCount:count];
+        [options SetLocale:locale];
+
+        [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:options];
+        
+        NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"pdf"];
+        NSString* resultPdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+        
+        BOOL shouldUnlock = NO;
+        @try {
+            [pdfDoc Lock];
+            shouldUnlock = YES;
+            
+            [pdfDoc SaveToFile:resultPdfPath flags:0];
+        } @catch (NSException* exception) {
+            NSLog(@"Exception: %@: %@", exception.name, exception.reason);
+        } @finally {
+            if (shouldUnlock) {
+                [pdfDoc Unlock];
+            }
+        }
+
+        resolve(resultPdfPath);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate document from template", [self errorFromException:exception]);
+    }    
+}
+
 RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary *)json resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {

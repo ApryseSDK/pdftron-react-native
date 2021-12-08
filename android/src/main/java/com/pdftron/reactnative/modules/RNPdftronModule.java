@@ -140,6 +140,27 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void pdfFromOffice(final String docxPath, final boolean applyPageBreaksToSheet, final boolean displayChangeTracking,
+                              final double excelDefaultCellBorderWidth, final int excelMaxAllowedCellCount,
+                              final String locale, final Promise promise) {
+        try {
+            PDFDoc doc = new PDFDoc();
+            OfficeToPDFOptions options = new OfficeToPDFOptions();
+            options.setApplyPageBreaksToSheet(applyPageBreaksToSheet);
+            options.setDisplayChangeTracking(displayChangeTracking);
+            options.setExcelDefaultCellBorderWidth(excelDefaultCellBorderWidth);
+            options.setExcelMaxAllowedCellCount(excelMaxAllowedCellCount);
+            options.setLocale(locale);
+            Convert.officeToPdf(doc, docxPath, options);
+            File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
+            doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.NO_FLAGS, null);
+            promise.resolve(resultPdf.getAbsolutePath());
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
     public void pdfFromOfficeTemplate(final String docxPath, final ReadableMap json, final Promise promise) {
         try {
             PDFDoc doc = new PDFDoc();
