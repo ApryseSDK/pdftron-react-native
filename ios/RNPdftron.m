@@ -109,14 +109,14 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
-RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath applyPageBreaksToSheet:(BOOL)applyPageBreaks displayChangeTracking:(BOOL)displayChangeTracking excelDefaultCellBorderWidth:(NSNumber *)width excelMaxAllowedCellCount:(int)count locale:(NSString *)locale resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath applyPageBreaksToSheet:(BOOL)applyPageBreaks displayChangeTracking:(BOOL)displayChangeTracking excelDefaultCellBorderWidth:(double)width excelMaxAllowedCellCount:(int)count locale:(NSString *)locale resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         PTPDFDoc* pdfDoc = [[PTPDFDoc alloc] init];
         PTOfficeToPDFOptions* options = [[PTOfficeToPDFOptions alloc] init];
         [options SetApplyPageBreaksToSheet:applyPageBreaks];
         [options SetDisplayChangeTracking:displayChangeTracking];
-        [options SetExcelDefaultCellBorderWidth:[width doubleValue]];
+        [options SetExcelDefaultCellBorderWidth:width];
         [options SetExcelMaxAllowedCellCount:count];
         [options SetLocale:locale];
 
