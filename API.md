@@ -146,7 +146,7 @@ The user is responsible for cleaning up the temporary file that is generated.
 Example:
 
 ```js
-RNPdftron.pdfFromOffice("/sdcard/Download/red.docx", false, false, 1, 1, 'en-US').then((resultPdfPath) => {
+RNPdftron.pdfFromOffice("/sdcard/Download/red.docx", true, true, 1, 250000, 'en-US').then((resultPdfPath) => {
   console.log(resultPdfPath);
 });
 ```
