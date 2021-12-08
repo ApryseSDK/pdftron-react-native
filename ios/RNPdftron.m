@@ -109,18 +109,36 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
-RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath applyPageBreaksToSheet:(BOOL)applyPageBreaks displayChangeTracking:(BOOL)displayChangeTracking excelDefaultCellBorderWidth:(double)width excelMaxAllowedCellCount:(int)count locale:(NSString *)locale resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath options:(NSDictionary*)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         PTPDFDoc* pdfDoc = [[PTPDFDoc alloc] init];
-        PTOfficeToPDFOptions* options = [[PTOfficeToPDFOptions alloc] init];
-        [options SetApplyPageBreaksToSheet:applyPageBreaks];
-        [options SetDisplayChangeTracking:displayChangeTracking];
-        [options SetExcelDefaultCellBorderWidth:width];
-        [options SetExcelMaxAllowedCellCount:count];
-        [options SetLocale:locale];
+        PTOfficeToPDFOptions* conversionOptions = [[PTOfficeToPDFOptions alloc] init];
+        
+        if (options != Nil) {
+            if (options[@"applyPageBreaksToSheet"]) {
+                [conversionOptions SetApplyPageBreaksToSheet:[[options objectForKey:@"applyPageBreaksToSheet"] boolValue]];
+            }
+            
+            if (options[@"displayChangeTracking"]) {
+                [conversionOptions SetDisplayChangeTracking:[[options objectForKey:@"displayChangeTracking"] boolValue]];
+            }
+            
+            if (options[@"excelDefaultCellBorderWidth"]) {
+                [conversionOptions SetExcelDefaultCellBorderWidth:[[options objectForKey:@"excelDefaultCellBorderWidth"] doubleValue]];
+            }
+            
+            if (options[@"excelMaxAllowedCellCount"]) {
+                [conversionOptions SetExcelMaxAllowedCellCount:[[options objectForKey:@"excelMaxAllowedCellCount"] doubleValue]];
+            }
+            
+            if (options[@"locale"]) {
+                [conversionOptions SetLocale:[[options objectForKey:@"locale"] stringValue]];
+            }
 
-        [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:options];
+        }
+        
+        [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:conversionOptions];
         
         NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"pdf"];
         NSString* resultPdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];

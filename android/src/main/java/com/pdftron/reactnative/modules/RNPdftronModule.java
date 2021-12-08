@@ -1,6 +1,7 @@
 package com.pdftron.reactnative.modules;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -140,18 +141,44 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void pdfFromOffice(final String docxPath, final boolean applyPageBreaksToSheet, final boolean displayChangeTracking,
-                              final double excelDefaultCellBorderWidth, final int excelMaxAllowedCellCount,
-                              final String locale, final Promise promise) {
+    public void pdfFromOffice(final String docxPath, final @Nullable ReadableMap options, final Promise promise) {
         try {
             PDFDoc doc = new PDFDoc();
-            OfficeToPDFOptions options = new OfficeToPDFOptions();
-            options.setApplyPageBreaksToSheet(applyPageBreaksToSheet);
-            options.setDisplayChangeTracking(displayChangeTracking);
-            options.setExcelDefaultCellBorderWidth(excelDefaultCellBorderWidth);
-            options.setExcelMaxAllowedCellCount(excelMaxAllowedCellCount);
-            options.setLocale(locale);
-            Convert.officeToPdf(doc, docxPath, options);
+            OfficeToPDFOptions conversionOptions = new OfficeToPDFOptions();
+
+            if (options != null) {
+                if (options.hasKey("applyPageBreaksToSheet")) {
+                    if (!options.isNull("applyPageBreaksToSheet")) {
+                        conversionOptions.setApplyPageBreaksToSheet(options.getBoolean("applyPageBreaksToSheet"));
+                    }
+                }
+
+                if (options.hasKey("displayChangeTracking")) {
+                    if (!options.isNull("displayChangeTracking")) {
+                        conversionOptions.setDisplayChangeTracking(options.getBoolean("displayChangeTracking"));
+                    }
+                }
+
+                if (options.hasKey("excelDefaultCellBorderWidth")) {
+                    if (!options.isNull("excelDefaultCellBorderWidth")) {
+                        conversionOptions.setExcelDefaultCellBorderWidth(options.getDouble("excelDefaultCellBorderWidth"));
+                    }
+                }
+
+                if (options.hasKey("excelMaxAllowedCellCount")) {
+                    if (!options.isNull("excelMaxAllowedCellCount")) {
+                        conversionOptions.setExcelMaxAllowedCellCount(options.getInt("excelMaxAllowedCellCount"));
+                    }
+                }
+
+                if (options.hasKey("locale")) {
+                    if (!options.isNull("locale")) {
+                        conversionOptions.setLocale(options.getString("locale"));
+                    }
+                }
+            }
+
+            Convert.officeToPdf(doc, docxPath, conversionOptions);
             File resultPdf = File.createTempFile("tmp", ".pdf", getReactApplicationContext().getFilesDir());
             doc.save(resultPdf.getAbsolutePath(), SDFDoc.SaveMode.NO_FLAGS, null);
             promise.resolve(resultPdf.getAbsolutePath());
