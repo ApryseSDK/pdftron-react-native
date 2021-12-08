@@ -143,7 +143,7 @@ RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath applyPageBreaksToSheet:(BOO
     }
     @catch (NSException *exception) {
         NSLog(@"Exception: %@, %@", exception.name, exception.reason);
-        reject(@"generation_failed", @"Failed to generate document from template", [self errorFromException:exception]);
+        reject(@"generation_failed", @"Failed to generate document from Office doc", [self errorFromException:exception]);
     }    
 }
 
