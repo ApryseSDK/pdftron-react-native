@@ -119,6 +119,57 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
+### pdfFromOffice
+Generates a PDF from an Office document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+docxPath | string | the local file path to the Office file
+
+Optional Parameters: 
+
+Name | Type | Description
+--- | --- | ---
+applyPageBreaksToSheet | boolean | Whether we should split Excel workheets into pages so that the output resembles print output.
+displayChangeTracking | boolean | If this option is true, will display office change tracking markup present in the document (i.e, red strikethrough of deleted content and underlining of new content).
+excelDefaultCellBorderWidth | double | Cell border width for table cells that would normally be drawn with no border.
+excelMaxAllowedCellCount | int | Conversion will throw an exception if the number of cells in a Microsoft Excel document is above the set MaxAllowedCellCount. 
+locale | string | ISO 639-1 code of the current system locale. For example: 'en-US', 'ar-SA', 'de-DE', etc.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+resultPdfPath | string | the local file path to the generated PDF 
+
+The user is responsible for cleaning up the temporary file that is generated.
+
+Example:
+
+```js
+// With options
+RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", 
+  {
+    applyPageBreaksToSheet: true, 
+    displayChangeTracking: true, 
+    excelDefaultCellBorderWidth: 1, 
+    excelMaxAllowedCellCount: 250000, 
+    locale: 'en-US'
+  })
+.then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+
+// Without options
+RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", null).then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+```
+
 ### pdfFromOfficeTemplate
 Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
 For more information please see our [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
