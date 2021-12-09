@@ -2065,9 +2065,11 @@ NS_ASSUME_NONNULL_END
     // Annotation Manager Edit Mode
     if ([PTAnnotationManagerEditModeOwn isEqualToString:self.annotationManagerEditMode]) {
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditOwn;
+        documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
     } else if ([PTAnnotationManagerEditModeAll isEqualToString:self.annotationManagerEditMode]) {
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
+        documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
     }
 
