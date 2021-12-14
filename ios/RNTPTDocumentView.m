@@ -2209,7 +2209,6 @@ NS_ASSUME_NONNULL_END
         if (toolGroups.count > 0) {
             if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
                 toolGroupManager.groups = toolGroups;
-                toolGroupManager.selectedGroup = toolGroups.firstObject;
             }
             
             if (toolGroups.count == 1) {
