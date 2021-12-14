@@ -1568,6 +1568,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 />
 ```
 
+#### storeNewSignature
+bool, optional, defaults to true. iOS only.
+
+Defines whether to store new signatures when using the signing tool.
+
+```js
+<DocumentView
+  storeNewSignature={true}
+/>
+```
+
 #### photoPickerEnabled
 bool, optional, defaults to true. Android only.
 
