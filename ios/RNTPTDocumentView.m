@@ -151,6 +151,7 @@ NS_ASSUME_NONNULL_END
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
+    _storeNewSignature = YES;
 
     _annotationsListEditingEnabled = YES;
     _userBookmarksListEditingEnabled = YES;
@@ -1950,6 +1951,8 @@ NS_ASSUME_NONNULL_END
     // Shows saved signatures.
     toolManager.showDefaultSignature = self.showSavedSignatures;
     
+    toolManager.signatureAnnotationOptions.storeNewSignature = self.storeNewSignature;
+    
     toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
 
     // Annotation permission check
@@ -2071,9 +2074,11 @@ NS_ASSUME_NONNULL_END
     // Annotation Manager Edit Mode
     if ([PTAnnotationManagerEditModeOwn isEqualToString:self.annotationManagerEditMode]) {
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditOwn;
+        documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
     } else if ([PTAnnotationManagerEditModeAll isEqualToString:self.annotationManagerEditMode]) {
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
+        documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
     }
 
@@ -2210,7 +2215,6 @@ NS_ASSUME_NONNULL_END
         if (toolGroups.count > 0) {
             if (![toolGroupManager.groups isEqualToArray:toolGroups]) {
                 toolGroupManager.groups = toolGroups;
-                toolGroupManager.selectedGroup = toolGroups.firstObject;
             }
             
             if (toolGroups.count == 1) {
@@ -2599,6 +2603,13 @@ NS_ASSUME_NONNULL_END
 - (void)setShowSavedSignatures:(BOOL)showSavedSignatures
 {
     _showSavedSignatures = showSavedSignatures;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setStoreNewSignature:(BOOL)storeNewSignature
+{
+    _storeNewSignature = storeNewSignature;
     
     [self applyViewerSettings];
 }

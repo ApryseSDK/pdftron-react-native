@@ -408,6 +408,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic) BOOL showSavedSignatures;
 
+@property (nonatomic) BOOL storeNewSignature;
+
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
 @property (nonatomic, copy, nullable) NSString *currentUser;

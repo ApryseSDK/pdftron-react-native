@@ -109,6 +109,62 @@ RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
+RCT_EXPORT_METHOD(pdfFromOffice:(NSString *)docxPath options:(NSDictionary*)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        PTPDFDoc* pdfDoc = [[PTPDFDoc alloc] init];
+        PTOfficeToPDFOptions* conversionOptions = [[PTOfficeToPDFOptions alloc] init];
+        
+        if (options != Nil) {
+            if (options[@"applyPageBreaksToSheet"]) {
+                [conversionOptions SetApplyPageBreaksToSheet:[[options objectForKey:@"applyPageBreaksToSheet"] boolValue]];
+            }
+            
+            if (options[@"displayChangeTracking"]) {
+                [conversionOptions SetDisplayChangeTracking:[[options objectForKey:@"displayChangeTracking"] boolValue]];
+            }
+            
+            if (options[@"excelDefaultCellBorderWidth"]) {
+                [conversionOptions SetExcelDefaultCellBorderWidth:[[options objectForKey:@"excelDefaultCellBorderWidth"] doubleValue]];
+            }
+            
+            if (options[@"excelMaxAllowedCellCount"]) {
+                [conversionOptions SetExcelMaxAllowedCellCount:[[options objectForKey:@"excelMaxAllowedCellCount"] doubleValue]];
+            }
+            
+            if (options[@"locale"]) {
+                [conversionOptions SetLocale:[[options objectForKey:@"locale"] stringValue]];
+            }
+
+        }
+        
+        [PTConvert OfficeToPDF:pdfDoc in_filename:docxPath options:conversionOptions];
+        
+        NSString* fileName = [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"pdf"];
+        NSString* resultPdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+        
+        BOOL shouldUnlock = NO;
+        @try {
+            [pdfDoc Lock];
+            shouldUnlock = YES;
+            
+            [pdfDoc SaveToFile:resultPdfPath flags:0];
+        } @catch (NSException* exception) {
+            NSLog(@"Exception: %@: %@", exception.name, exception.reason);
+        } @finally {
+            if (shouldUnlock) {
+                [pdfDoc Unlock];
+            }
+        }
+
+        resolve(resultPdfPath);
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate document from Office doc", [self errorFromException:exception]);
+    }    
+}
+
 RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary *)json resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
