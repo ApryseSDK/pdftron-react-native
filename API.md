@@ -284,6 +284,21 @@ The file extension for the base64 string in [`document`](#document), if [`isBase
 />
 ```
 
+#### documentExtension
+string, optional, defaults to the extension in the [`document`](#document) prop. 
+
+Used for specifying the extension of the document to be loaded. 
+
+```js
+<DocumentView
+  document={"https://pdftron.s3.amazonaws.com/pdfInDisguise.png"}
+  documentExtension={"pdf"}
+/>
+```
+
+For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
+
+
 #### customHeaders
 object, optional
 
