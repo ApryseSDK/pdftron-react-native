@@ -824,6 +824,14 @@ NS_ASSUME_NONNULL_END
                      [string isEqualToString:PTCloudToolButtonKey]) {
                 toolManager.cloudyAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:PTInsertPageToolKey] ||
+                     [string isEqualToString:PTInsertPageButton]) {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
+            }
             else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
                 toolManager.fileAttachmentAnnotationOptions.canCreate = value;
             }
