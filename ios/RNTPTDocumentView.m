@@ -626,6 +626,14 @@ NS_ASSUME_NONNULL_END
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
+            if( [documentViewController isKindOfClass:[PTDocumentController class]] )
+            {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
+            }
         },
         PTEditMenuButtonKey: ^{
             if( [documentViewController isKindOfClass:[PTDocumentController class]] )
@@ -823,6 +831,14 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreatePolygonCloudToolKey] ||
                      [string isEqualToString:PTCloudToolButtonKey]) {
                 toolManager.cloudyAnnotationOptions.canCreate = value;
+            }
+            else if ([string isEqualToString:PTInsertPageToolKey] ||
+                     [string isEqualToString:PTInsertPageButton]) {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
             }
             else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
                 toolManager.fileAttachmentAnnotationOptions.canCreate = value;

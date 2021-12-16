@@ -49,6 +49,7 @@ static NSString * const PTEllipseToolButtonKey = @"ellipseToolButton";
 static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
 static NSString * const PTEditToolButtonKey = @"editToolButton";
+static NSString * const PTInsertPageButton = @"insertPageButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -91,6 +92,7 @@ static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatur
 static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
+static NSString * const PTInsertPageToolKey = @"InsertPage";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";

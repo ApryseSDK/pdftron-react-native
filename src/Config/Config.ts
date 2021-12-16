@@ -47,6 +47,7 @@ export const Config = {
     undo: 'undo',
     redo: 'redo',
     addPageButton: 'addPageButton',
+    insertPageButton: 'insertPageButton',
 
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
@@ -96,6 +97,7 @@ export const Config = {
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+    insertPage: 'InsertPage',
 
     // iOS only.
     pencilKitDrawing: 'PencilKitDrawing',
