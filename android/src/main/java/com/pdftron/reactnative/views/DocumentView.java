@@ -1013,7 +1013,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void disableTools(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
-            if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
+            if (TOOL_BUTTON_ADD_PAGE.equals(item) ||
+                    TOOL_BUTTON_INSERT_PAGE.equals(item) ||
+                    TOOL_INSERT_PAGE.equals(item)) {
                 mShowAddPageToolbarButton = false;
             }
             ToolManager.ToolMode mode = convStringToToolMode(item);

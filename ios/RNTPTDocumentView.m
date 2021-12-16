@@ -626,6 +626,14 @@ NS_ASSUME_NONNULL_END
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
+            if( [documentViewController isKindOfClass:[PTDocumentController class]] )
+            {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
+            }
         },
         PTEditMenuButtonKey: ^{
             if( [documentViewController isKindOfClass:[PTDocumentController class]] )
