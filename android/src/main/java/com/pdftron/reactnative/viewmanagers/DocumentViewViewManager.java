@@ -99,6 +99,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setCustomHeaders(map);
     }
 
+    @ReactProp(name = "documentExtension")
+    public void setDocumentExtension(DocumentView documentView, String documentExtension) {
+        documentView.setDocumentExtension(documentExtension);
+    }
+
     @ReactProp(name = "initialPageNumber")
     public void setInitialPageNumber(DocumentView documentView, int pageNum) {
         documentView.setInitialPageNumber(pageNum);

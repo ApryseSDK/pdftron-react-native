@@ -185,6 +185,13 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(documentExtension, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.documentExtension = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(readOnly, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -224,6 +231,13 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.showSavedSignatures = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(storeNewSignature, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.storeNewSignature = [RCTConvert BOOL:json];
     }
 }
 

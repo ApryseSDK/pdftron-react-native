@@ -95,6 +95,21 @@ export const DocumentViewPropTypes = {
 
   /**
    * @memberof DocumentView
+   * @category Open a Document
+   * @type {string}
+   * @optional
+   * @default The extension in the {@link DocumentView.document document} prop
+   * @desc Used for specifying the extension of the document to be loaded.
+   * @example
+   * <DocumentView
+   *  document={"https://pdftron.s3.amazonaws.com/pdfInDisguise.png"}
+   *  documentExtension={"pdf"}
+   * />
+   */
+  documentExtension: PropTypes.string,
+
+  /**
+   * @memberof DocumentView
    * @category UI Customization
    * @type {string}
    * @optional
@@ -880,6 +895,22 @@ export const DocumentViewPropTypes = {
    * />
    */
   showSavedSignatures: PropTypes.bool,
+
+  /**
+   * @memberof DocumentView
+   * @category Signature
+   * @type {boolean}
+   * @optional
+   * @default true
+   * @desc iOS only
+   * 
+   * Defines whether to store new signatures when using the signing tool.
+   * @example
+   * <DocumentView
+   *    storeNewSignature={false}
+   * />
+   */
+  storeNewSignature: PropTypes.bool,
 
   /**
    * @memberof DocumentView

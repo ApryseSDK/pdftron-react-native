@@ -92,6 +92,46 @@ interface RNPdftron
 
   /**
    * @method
+   * @desc Generates a PDF from an Office document
+   * @param {string} docxPath the local file path to the Office file.
+   * @param {boolean} [options.applyPageBreaksToSheet] Whether we should split Excel workheets into 
+   * pages so that the output resembles print output.
+   * @param {boolean} [options.displayChangeTracking] If this option is true, will display office 
+   * change tracking markup present in the document (i.e, red strikethrough of deleted 
+   * content and underlining of new content).
+   * @param {double} [options.excelDefaultCellBorderWidth] Cell border width for table cells that 
+   * would normally be drawn with no border.
+   * @param {int} [options.excelMaxAllowedCellCount] Conversion will throw an exception if the 
+   * number of cells in a Microsoft Excel document is above the set MaxAllowedCellCount.
+   * @param {string} [options.locale] ISO 639-1 code of the current system locale. 
+   * For example: 'en-US', 'ar-SA', 'de-DE', etc.
+   * @returns {Promise<string>} resultPdfPath - the local file path to the generated PDF. 
+   * The user is responsible for cleaning up the temporary file that is generated.
+   * @example
+   * // With options
+   * RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", 
+   * {
+   *  applyPageBreaksToSheet: true, 
+   *  displayChangeTracking: true, 
+   *  excelDefaultCellBorderWidth: 1, 
+   *  excelMaxAllowedCellCount: 250000, 
+   *  locale: 'en-US'
+   * })
+   * .then((resultPdfPath) => {
+   *    console.log(resultPdfPath);
+   * });
+   *
+   * // Without options
+   * RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", null).then((resultPdfPath) => {
+   *  console.log(resultPdfPath);
+   * });
+   */
+  pdfFromOffice(docxPath: string, options?: {applyPageBreaksToSheet?: boolean, 
+    displayChangeTracking?: boolean, excelDefaultCellBorderWidth?: number, 
+    excelMaxAllowedCellCount?: number, locale?: string}) : Promise<string>
+
+  /**
+   * @method
    * @desc Generates a PDF using a template in the form of an Office document 
    * and replacement data in the form of a JSON object.
    * For more information please see our 
