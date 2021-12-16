@@ -119,6 +119,57 @@ RNPdftron.encryptDocument("/sdcard/Download/new.pdf", "1111", "").then(() => {
 });
 ```
 
+### pdfFromOffice
+Generates a PDF from an Office document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+docxPath | string | the local file path to the Office file
+
+Optional Parameters: 
+
+Name | Type | Description
+--- | --- | ---
+applyPageBreaksToSheet | boolean | Whether we should split Excel workheets into pages so that the output resembles print output.
+displayChangeTracking | boolean | If this option is true, will display office change tracking markup present in the document (i.e, red strikethrough of deleted content and underlining of new content).
+excelDefaultCellBorderWidth | double | Cell border width for table cells that would normally be drawn with no border.
+excelMaxAllowedCellCount | int | Conversion will throw an exception if the number of cells in a Microsoft Excel document is above the set MaxAllowedCellCount. 
+locale | string | ISO 639-1 code of the current system locale. For example: 'en-US', 'ar-SA', 'de-DE', etc.
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+resultPdfPath | string | the local file path to the generated PDF 
+
+The user is responsible for cleaning up the temporary file that is generated.
+
+Example:
+
+```js
+// With options
+RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", 
+  {
+    applyPageBreaksToSheet: true, 
+    displayChangeTracking: true, 
+    excelDefaultCellBorderWidth: 1, 
+    excelMaxAllowedCellCount: 250000, 
+    locale: 'en-US'
+  })
+.then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+
+// Without options
+RNPdftron.pdfFromOffice("/sdcard/Download/red.xlsx", null).then((resultPdfPath) => {
+  console.log(resultPdfPath);
+});
+```
+
 ### pdfFromOfficeTemplate
 Generates a PDF using a template in the form of an Office document and replacement data in the form of a JSON object.
 For more information please see our [template guide](https://www.pdftron.com/documentation/core/guides/generate-via-template/).
@@ -232,6 +283,21 @@ The file extension for the base64 string in [`document`](#document), if [`isBase
   base64FileExtension={'.jpeg'}
 />
 ```
+
+#### documentExtension
+string, optional, defaults to the extension in the [`document`](#document) prop. 
+
+Used for specifying the extension of the document to be loaded. 
+
+```js
+<DocumentView
+  document={"https://pdftron.s3.amazonaws.com/pdfInDisguise.png"}
+  documentExtension={"pdf"}
+/>
+```
+
+For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
+
 
 #### customHeaders
 object, optional
@@ -470,6 +536,21 @@ This function is called when the leading navigation button is pressed.
   onLeadingNavButtonPressed = {() => {
     console.log('The leading nav has been pressed');
   }}
+/>
+```
+
+#### overflowMenuButtonIcon
+String, optional
+
+The file name of the icon to be used as the overflow menu button. The button will use the specified icon if it is valid, and the default icon otherwise.
+
+**Note**: to add the image file to your application, follow the steps under the Note section of [`leadingNavButtonIcon`](#leadingNavButtonIcon).
+
+Example:
+
+```js
+<DocumentView
+  overflowMenuButtonIcon={Platform.OS === 'ios' ? 'ic_close_black_24px.png' : 'ic_arrow_back_white_24dp'}
 />
 ```
 
@@ -887,7 +968,7 @@ Determines whether scrollbars will be hidden on the viewer.
 ### Reflow
 
 #### imageInReflowEnabled
-bool, optional, defaults to true
+bool, optional, defaults to true, will be available on iOS in version 9.1.2 and greater
 
 Whether to show images in reflow mode. 
 
@@ -898,7 +979,7 @@ Whether to show images in reflow mode.
 ```
 
 #### reflowOrientation
-one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, default value is `Config.ReflowOrientation.Horizontal`. Android only.
+one of the [`Config.ReflowOrientation`](./src/Config/Config.ts) constants, optional, defaults to the viewer's scroll direction.
 
 Sets the scrolling direction of the reflow control.
 
@@ -1410,11 +1491,9 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
 ```
 
 #### annotationsListEditingEnabled
-bool, optional, Android only, default value is true
+bool, optional, default value is true
 
 If document editing is enabled, then this value determines if the annotation list is editable. 
-
-Functionality for iOS will fixed in the next official release, or a fixed version is available by pointing the iOS podfile to https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-06-30/9.0/cocoapods/pdfnet/2021-06-30_stable_rev77837.podspec as described in step one of the [iOS integration instructions](https://github.com/PDFTron/pdftron-react-native#ios).
 
 
 ```js
@@ -1501,6 +1580,17 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 ```js
 <DocumentView
   showSavedSignatures={true}
+/>
+```
+
+#### storeNewSignature
+bool, optional, defaults to true. iOS only.
+
+Defines whether to store new signatures when using the signing tool.
+
+```js
+<DocumentView
+  storeNewSignature={true}
 />
 ```
 
@@ -1646,6 +1736,8 @@ Defines whether to restrict data usage when viewing online PDFs.
 
 #### pageStackEnabled
 bool, optional, defaults to true, Android only
+
+Deprecated. Use the [`showQuickNavigationButton`](#showQuickNavigationButton) prop instead.
 
 Defines whether the page stack navigation buttons will appear in the viewer.
 

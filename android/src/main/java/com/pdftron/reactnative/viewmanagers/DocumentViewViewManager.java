@@ -74,6 +74,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowNavIcon(show);
     }
 
+    @ReactProp(name = "overflowMenuButtonIcon")
+    public void setOverflowMenuButtonIcon(DocumentView documentView, @NonNull String resName) {
+        documentView.setOverflowResName(resName);
+    }
+
     @ReactProp(name = "disabledElements")
     public void setDisabledElements(DocumentView documentView, @NonNull ReadableArray array) {
         documentView.setDisabledElements(array);
@@ -92,6 +97,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "customHeaders")
     public void setCustomHeaders(DocumentView documentView, @Nullable ReadableMap map) {
         documentView.setCustomHeaders(map);
+    }
+
+    @ReactProp(name = "documentExtension")
+    public void setDocumentExtension(DocumentView documentView, String documentExtension) {
+        documentView.setDocumentExtension(documentExtension);
     }
 
     @ReactProp(name = "initialPageNumber")

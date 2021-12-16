@@ -77,6 +77,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
     public static final String TOOL_BUTTON_EDIT = "editToolButton";
     public static final String TOOL_BUTTON_ADD_PAGE = "addPageButton";
+    public static final String TOOL_BUTTON_INSERT_PAGE = "insertPageButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -123,6 +124,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_SMART_PEN = "AnnotationCreateSmartPen";
     public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
     public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
+    public static final String TOOL_INSERT_PAGE = "InsertPage";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";

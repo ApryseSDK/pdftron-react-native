@@ -26,6 +26,7 @@ const propTypes = {
   initialPageNumber: PropTypes.number,
   pageNumber: PropTypes.number,
   customHeaders: PropTypes.object,
+  documentExtension: PropTypes.string,
   leadingNavButtonIcon: PropTypes.string,
   showLeadingNavButton: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
@@ -69,6 +70,7 @@ const propTypes = {
   selectAnnotationAfterCreation: PropTypes.bool,
   annotationAuthor: PropTypes.string,
   showSavedSignatures: PropTypes.bool,
+  storeNewSignature: PropTypes.bool,
   isBase64String: PropTypes.bool,
   collabEnabled: PropTypes.bool,
   currentUser: PropTypes.string,
@@ -134,6 +136,7 @@ const propTypes = {
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
+  overflowMenuButtonIcon: PropTypes.string,
   ...ViewPropTypes,
 };
 
