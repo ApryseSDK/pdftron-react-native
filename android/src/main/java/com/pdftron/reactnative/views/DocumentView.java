@@ -2942,6 +2942,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public String saveDocument() {
         if (getPdfViewCtrlTabFragment() != null) {
+            commitTool();
             getPdfViewCtrlTabFragment().setSavingEnabled(true);
             getPdfViewCtrlTabFragment().save(false, true, true);
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
