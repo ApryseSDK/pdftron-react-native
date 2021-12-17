@@ -88,7 +88,6 @@ export const Config = {
     annotationCreateRedaction: 'AnnotationCreateRedaction',
     annotationCreateLink: 'AnnotationCreateLink',
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
-    annotationCreateLinkText: 'AnnotationCreateLinkText',
     annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
     annotationCreateSmartPen: 'AnnotationCreateSmartPen',
     formCreateTextField: 'FormCreateTextField',
@@ -101,6 +100,9 @@ export const Config = {
 
     // iOS only.
     pencilKitDrawing: 'PencilKitDrawing',
+
+    // Android only.
+    annotationCreateLinkText: 'AnnotationCreateLinkText',
   },
 
   // FitMode define how a page should fit relative to the viewer, alternatively, the default zoom level
@@ -338,12 +340,12 @@ export module Config {
   export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
   export type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
   export type ExportFormat = ValueOf<typeof Config.ExportFormat>;
-  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode> 
-  export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>
+  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode>; 
+  export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>;
   export type CustomToolbarKey = {
-    id : string;
+    id: string;
     name: string;
     icon: ToolbarIcons;
     items: (Tools | Buttons)[];
-  }
+  };
 }
