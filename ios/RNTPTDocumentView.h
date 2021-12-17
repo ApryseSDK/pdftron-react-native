@@ -49,6 +49,7 @@ static NSString * const PTEllipseToolButtonKey = @"ellipseToolButton";
 static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
 static NSString * const PTEditToolButtonKey = @"editToolButton";
+static NSString * const PTInsertPageButton = @"insertPageButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -91,6 +92,7 @@ static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatur
 static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
+static NSString * const PTInsertPageToolKey = @"InsertPage";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";
@@ -270,6 +272,10 @@ static NSString * const PTAnnotationManagerEditModeAll = @"all";
 static NSString * const PTInkEraserModeAllKey = @"annotationEraser";
 static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 
+// ReflowOrientation keys
+static NSString * const PTReflowOrientationHorizontalKey = @"horizontal";
+static NSString * const PTReflowOrientationVerticalKey = @"veritcal";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -319,6 +325,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
 
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation;
 
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
@@ -375,7 +382,9 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic) int pageNumber;
 @property (nonatomic, assign) BOOL showNavButton;
 @property (nonatomic, copy, nullable) NSString *navButtonPath;
+@property (nonatomic, copy, nullable) NSString *overflowMenuButtonPath;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nonatomic, copy, nullable) NSString *documentExtension;
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) NSString *fitMode;
@@ -389,6 +398,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign) BOOL imageInReflowEnabled;
 
+@property (nonatomic, copy, nullable) NSString *reflowOrientation;
+
 @property (nonatomic, copy) NSString *annotationAuthor;
 
 @property (nonatomic) BOOL continuousAnnotationEditing;
@@ -398,6 +409,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic) BOOL useStylusAsPen;
 
 @property (nonatomic) BOOL showSavedSignatures;
+
+@property (nonatomic) BOOL storeNewSignature;
 
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 

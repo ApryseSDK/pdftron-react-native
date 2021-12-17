@@ -90,6 +90,13 @@ RCT_CUSTOM_VIEW_PROPERTY(leadingNavButtonIcon, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overflowMenuButtonIcon, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.overflowMenuButtonPath = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
 {
     if (json) {
@@ -178,6 +185,13 @@ RCT_CUSTOM_VIEW_PROPERTY(customHeaders, NSDictionary, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(documentExtension, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.documentExtension = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(readOnly, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -217,6 +231,13 @@ RCT_CUSTOM_VIEW_PROPERTY(showSavedSignatures, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.showSavedSignatures = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(storeNewSignature, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.storeNewSignature = [RCTConvert BOOL:json];
     }
 }
 
@@ -323,6 +344,13 @@ RCT_CUSTOM_VIEW_PROPERTY(imageInReflowEnabled, BOOL, RNTPTDocumentView)
    if (json) {
        view.imageInReflowEnabled = [RCTConvert BOOL:json];
    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(reflowOrientation, NSString*, RNTPTDocumentView)
+{
+    if (json) {
+        view.reflowOrientation = [RCTConvert NSString:json];
+    }
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(selectAnnotationAfterCreation, BOOL, RNTPTDocumentView)
@@ -672,6 +700,16 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         sender.onChange(@{
             @"onAnnotationChanged" : @"onAnnotationChanged",
             @"action": action,
+            @"annotations": @[annotation],
+        });
+    }
+}
+
+- (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onAnnotationFlattened" : @"onAnnotationFlattened",
             @"annotations": @[annotation],
         });
     }

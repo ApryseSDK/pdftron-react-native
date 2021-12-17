@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -104,6 +105,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mTabTitle;
     private boolean mIsBase64;
     private String mBase64Extension = ".pdf";
+    private String mDocumentExtension;
 
     private ArrayList<File> mTempFiles = new ArrayList<>();
 
@@ -155,6 +157,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mSaveStateEnabled = true;
 
     private boolean mShowAddPageToolbarButton = true;
+
+    // overflow menu icon
+    private String mOverflowResName = null;
 
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
@@ -225,13 +230,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected PdfViewCtrlTabHostFragment2 getViewer() {
         if (mCollabEnabled) {
             // Create the Fragment using CollabViewerBuilder
-            return CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
+            CollabViewerBuilder2 builder2 = CollabViewerBuilder2.withUri(mDocumentUri, mPassword)
                     .usingConfig(mViewerConfig)
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
                     .usingAnnotationManagerEditMode(mAnnotationManagerEditMode)
-                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode)
-                    .build(getContext());
+                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode);
+            if (!Utils.isNullOrEmpty(mTabTitle)) {
+                builder2.usingTabTitle(mTabTitle);
+            }
+            if (!Utils.isNullOrEmpty(mDocumentExtension)) {
+                builder2.usingFileExtension(mDocumentExtension);
+            }
+            return builder2.usingTheme(R.style.RNAppTheme).build(getContext());
         }
         return super.getViewer();
     }
@@ -240,11 +251,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void buildViewer() {
         super.buildViewer();
         if (mViewerBuilder != null) {
-            mViewerBuilder = mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
             if (!Utils.isNullOrEmpty(mTabTitle)) {
-                mViewerBuilder = mViewerBuilder.usingTabTitle(mTabTitle);
+                mViewerBuilder.usingTabTitle(mTabTitle);
             }
-            mViewerBuilder = mViewerBuilder.usingTheme(R.style.RNAppTheme);
+            if (!Utils.isNullOrEmpty(mDocumentExtension)) {
+                mViewerBuilder.usingFileExtension(mDocumentExtension);
+            }
+            mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
     }
 
@@ -279,12 +293,20 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setOverflowResName(String resName) {
+        mOverflowResName = resName;
+    }
+
     public void setDisabledElements(ReadableArray array) {
         disableElements(array);
     }
 
     public void setDisabledTools(ReadableArray array) {
         disableTools(array);
+    }
+
+    public void setRememberLastUsedTool(boolean rememberLastUsedTool) {
+        mBuilder = mBuilder.rememberLastUsedTool(rememberLastUsedTool);
     }
 
     public void setCustomHeaders(ReadableMap map) {
@@ -296,6 +318,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDocumentExtension(String documentExtension) {
+        mDocumentExtension = documentExtension;
     }
 
     public void setInitialPageNumber(int pageNum) {
@@ -877,7 +903,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
-        mBuilder = mBuilder.showQuickNavigationButton(showQuickNavigationButton);
+        mBuilder = mBuilder.pageStackEnabled(showQuickNavigationButton);
     }
 
     public void setPhotoPickerEnabled(boolean photoPickerEnabled) {
@@ -887,7 +913,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
     }
-    
+
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
         mBuilder = mBuilder.navigationListAsSheetOnLargeDevice(showNavigationListAsSidePanelOnLargeDevices);
     }
@@ -972,7 +998,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 saveCopyOptions.add(R.id.menu_export_password_copy);
             }
         }
-        
+
         if (!saveCopyOptions.isEmpty()) {
             int[] modes = new int[saveCopyOptions.size()];
             for (int j = 0; j < modes.length; j++) {
@@ -987,7 +1013,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private void disableTools(ReadableArray args) {
         for (int i = 0; i < args.size(); i++) {
             String item = args.getString(i);
-            if (TOOL_BUTTON_ADD_PAGE.equals(item)) {
+            if (TOOL_BUTTON_ADD_PAGE.equals(item) ||
+                    TOOL_BUTTON_INSERT_PAGE.equals(item) ||
+                    TOOL_INSERT_PAGE.equals(item)) {
                 mShowAddPageToolbarButton = false;
             }
             ToolManager.ToolMode mode = convStringToToolMode(item);
@@ -2308,7 +2336,38 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onAnnotationsRemoved(Map<Annot, Integer> map) {
+            ToolManager toolManager = getToolManager();
+            if (toolManager != null) {
+                ToolManager.AnnotAction lastAction = toolManager.getLastAnnotAction();
+                if (lastAction == ToolManager.AnnotAction.FLATTEN) {
+                    WritableMap params = Arguments.createMap();
+                    params.putString(ON_ANNOTATION_FLATTENED, ON_ANNOTATION_FLATTENED);
+                    WritableArray annotList = Arguments.createArray();
+                    for (Map.Entry<Annot, Integer> entry : map.entrySet()) {
+                        Annot key = entry.getKey();
 
+                        String uid = null;
+                        try {
+                            uid = key.getUniqueID() != null ? key.getUniqueID().getAsPDFText() : "";
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        WritableMap annotData = Arguments.createMap();
+                        annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
+                        annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
+                        try {
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                        } catch (PDFNetException e) {
+                            e.printStackTrace();
+                        }
+                        annotList.pushMap(annotData);
+                    }
+
+                    params.putArray(KEY_ANNOTATIONS, annotList);
+                    onReceiveNativeEvent(params);
+                }
+            }
         }
 
         @Override
@@ -2588,6 +2647,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().setReadOnly(true);
         }
 
+        if (mOverflowResName != null && mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getToolbar() != null) {
+            int res = Utils.getResourceDrawable(this.getContext(), mOverflowResName);
+            if (res != 0) {
+                Drawable icon = Utils.getDrawable(this.getContext(), res);
+                mPdfViewCtrlTabHostFragment.getToolbar().setOverflowIcon(icon);
+            }
+        }
+
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
         getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
@@ -2604,7 +2671,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
-
 
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
@@ -2876,6 +2942,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public String saveDocument() {
         if (getPdfViewCtrlTabFragment() != null) {
+            commitTool();
             getPdfViewCtrlTabFragment().setSavingEnabled(true);
             getPdfViewCtrlTabFragment().save(false, true, true);
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
@@ -3067,7 +3134,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (isOutlineListVisible) {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(1);
-                } 
+                }
             } else {
                 if (isAnnotationListVisible && mPdfViewCtrlTabHostFragment != null) {
                     mPdfViewCtrlTabHostFragment.onOutlineOptionSelected(0);
@@ -4141,7 +4208,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.onOutlineOptionSelected();
         }
     }
-    
+
     public boolean isReflowMode() {
         if (getPdfViewCtrlTabFragment() != null) {
             return getPdfViewCtrlTabFragment().isReflowMode();
@@ -4202,7 +4269,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         WritableArray signatures = Arguments.createArray();
         Context context = getContext();
         if (context != null) {
-            File[] files = StampManager.getInstance().getSavedSignatures(context);    
+            File[] files = StampManager.getInstance().getSavedSignatures(context);
             for (int i = 0; i < files.length; i++) {
                 signatures.pushString(files[i].getAbsolutePath());
             }
@@ -4227,7 +4294,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return "";
     }
-    
+
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
     }
