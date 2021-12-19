@@ -1,7 +1,5 @@
 package com.pdftron.reactnative.views;
 
-import static com.pdftron.reactnative.utils.Constants.*;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,6 +94,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.pdftron.reactnative.utils.Constants.*;
+
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private static final String TAG = DocumentView.class.getSimpleName();
@@ -139,6 +138,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mCurrentUserName;
     private AnnotManager.EditPermissionMode mAnnotationManagerEditMode = AnnotManager.EditPermissionMode.EDIT_OWN;
     private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
+    private File mCollabTempFile;
 
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
@@ -2943,6 +2943,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public String saveDocument() {
         if (getPdfViewCtrlTabFragment() != null) {
             commitTool();
+            if (mCollabEnabled) {
+                try {
+                    if (mCollabTempFile == null || !mCollabTempFile.exists()) {
+                        mCollabTempFile = File.createTempFile("tmp", ".pdf");
+                    }
+                    FileUtils.copyFile(getPdfViewCtrlTabFragment().getFile(), mCollabTempFile);
+                    if (getToolManager() != null && getToolManager().getAnnotManager() != null) {
+                        getToolManager().getAnnotManager().exportToFile(mCollabTempFile);
+                    }
+                    return mCollabTempFile.getAbsolutePath();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }
             getPdfViewCtrlTabFragment().setSavingEnabled(true);
             getPdfViewCtrlTabFragment().save(false, true, true);
             getPdfViewCtrlTabFragment().setSavingEnabled(mAutoSaveEnabled);
