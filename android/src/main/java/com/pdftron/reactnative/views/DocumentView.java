@@ -83,6 +83,7 @@ import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
+import com.pdftron.sdf.SDFDoc;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -2940,6 +2941,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    // TODO: remove when native fix is merged
+    public void exportToFile(File targetFile) {
+        boolean shouldUnlockRead = false;
+        PDFDoc exportedDoc = null;
+        try {
+            getPdfViewCtrl().docLockRead();
+            shouldUnlockRead = true;
+
+            PDFDoc mainDoc = getPdfViewCtrl().getDoc();
+            exportedDoc = new PDFDoc(targetFile.getAbsolutePath());
+            FDFDoc mainFDFDoc = mainDoc.fdfExtract(PDFDoc.e_both);
+            String xfdf = mainFDFDoc.saveAsXFDF();
+            FDFDoc newFDFDoc = FDFDoc.createFromXFDF(xfdf);
+            exportedDoc.fdfUpdate(newFDFDoc);
+
+            exportedDoc.save(targetFile.getAbsolutePath(), SDFDoc.SaveMode.LINEARIZED, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (shouldUnlockRead) {
+                getPdfViewCtrl().docUnlockRead();
+            }
+            if (exportedDoc != null) {
+                Utils.closeQuietly(exportedDoc);
+                exportedDoc = null;
+            }
+        }
+    }
+
     public String saveDocument() {
         if (getPdfViewCtrlTabFragment() != null) {
             commitTool();
@@ -2950,9 +2980,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                     FileUtils.copyFile(getPdfViewCtrlTabFragment().getFile(), mCollabTempFile);
                     if (getToolManager() != null && getToolManager().getAnnotManager() != null) {
-                        getToolManager().getAnnotManager().exportToFile(mCollabTempFile);
+                        // TODO change back to native annot manager version when native change is merged
+                        exportToFile(mCollabTempFile);
+                        return mCollabTempFile.getAbsolutePath();
                     }
-                    return mCollabTempFile.getAbsolutePath();
+                    return "";
                 } catch (Exception e) {
                     e.printStackTrace();
                     return "";
