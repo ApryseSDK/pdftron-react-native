@@ -147,6 +147,8 @@ export const Config = {
     playSound: 'playSound',
     openAttachment: 'openAttachment',
     calibrate: 'calibrate',
+    group: 'group',
+    ungroup: 'ungroup',
   },
 
   // EraserType defines the type of eraser that will be used when eraser is selected
