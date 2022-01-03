@@ -375,32 +375,36 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  setToolThickness = (thickness: Number, toolType: string) => {
+  setToolThickness = (thickness: Number, toolType: string): Promise<void>  => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setToolThickness(tag, thickness, toolType);
     }
+    return Promise.resolve();
   };
 
-  setToolColor = (toolColor: string, toolType: string) => {
+  setToolColor = (toolColor: string, toolType: string): Promise<void>  => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.setToolColor(tag, toolColor, toolType);
     }
+    return Promise.resolve();
   };
 
-  openThumbnails = () => {
+  openThumbnails = (): Promise<void>  => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.openThumbnails(tag);
     }
+    return Promise.resolve();
   };
 
-  openTextSearch = () => {
+  openTextSearch = (): Promise<void>  => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       DocumentViewManager.openTextSearch(tag);
     }
+    return Promise.resolve();
   };
 
   getPageCount = (): Promise<void | number> => {
