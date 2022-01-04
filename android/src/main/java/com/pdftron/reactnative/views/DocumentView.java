@@ -2941,35 +2941,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    // TODO: remove when native fix is merged
-    public void exportToFile(File targetFile) {
-        boolean shouldUnlockRead = false;
-        PDFDoc exportedDoc = null;
-        try {
-            getPdfViewCtrl().docLockRead();
-            shouldUnlockRead = true;
-
-            PDFDoc mainDoc = getPdfViewCtrl().getDoc();
-            exportedDoc = new PDFDoc(targetFile.getAbsolutePath());
-            FDFDoc mainFDFDoc = mainDoc.fdfExtract(PDFDoc.e_both);
-            String xfdf = mainFDFDoc.saveAsXFDF();
-            FDFDoc newFDFDoc = FDFDoc.createFromXFDF(xfdf);
-            exportedDoc.fdfUpdate(newFDFDoc);
-
-            exportedDoc.save(targetFile.getAbsolutePath(), SDFDoc.SaveMode.LINEARIZED, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (shouldUnlockRead) {
-                getPdfViewCtrl().docUnlockRead();
-            }
-            if (exportedDoc != null) {
-                Utils.closeQuietly(exportedDoc);
-                exportedDoc = null;
-            }
-        }
-    }
-
     public String saveDocument() {
         if (getPdfViewCtrlTabFragment() != null) {
             commitTool();
@@ -2980,8 +2951,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                     FileUtils.copyFile(getPdfViewCtrlTabFragment().getFile(), mCollabTempFile);
                     if (getToolManager() != null && getToolManager().getAnnotManager() != null) {
-                        // TODO change back to native annot manager version when native change is merged
-                        exportToFile(mCollabTempFile);
+                        getToolManager().getAnnotManager().exportToFile(mCollabTempFile);
                         return mCollabTempFile.getAbsolutePath();
                     }
                     return "";
