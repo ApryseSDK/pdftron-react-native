@@ -244,7 +244,6 @@ public final class Constants {
     public static final String MENU_ID_STRING_SIGN_AND_SAVE = "signAndSave";
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
-    public static final String MENU_ID_STRING_TYPE = "type";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
 
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
