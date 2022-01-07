@@ -85,7 +85,6 @@ import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
-import com.pdftron.sdf.SDFDoc;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -254,7 +253,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void buildViewer() {
         super.buildViewer();
         if (mViewerBuilder != null) {
-            mViewerBuilder.usingTabHostClass(RNPdfViewCtrlTabHostFragment.class).usingTabClass(RNPdfViewCtrlTabFragment.class);
+            mViewerBuilder
+                    .usingTabHostClass(RNPdfViewCtrlTabHostFragment.class)
+                    .usingTabClass(RNPdfViewCtrlTabFragment.class);
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder.usingTabTitle(mTabTitle);
             }
