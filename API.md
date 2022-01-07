@@ -706,7 +706,7 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```
 
 #### topAppNavBarRightBar
-array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, iOS only
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, only the tabs, search, view mode, thumbnails, outline, undo, share, reflow, edit pages, save copy, print, file attachment, layers, digital signatures and close buttons are supported on Android
 
 Customizes the right bar section of the top app nav bar. If passed in, the default right bar section will not be used.
 
