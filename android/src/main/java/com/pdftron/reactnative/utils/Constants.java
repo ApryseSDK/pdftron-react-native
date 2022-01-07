@@ -56,6 +56,8 @@ public final class Constants {
     public static final String BUTTON_SAVE_REDUCED_COPY = "saveReducedCopyButton";
     public static final String BUTTON_SAVE_CROPPED_COPY = "saveCroppedCopyButton";
     public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
+    public static final String BUTTON_TABS = "tabsButton";
+    public static final String BUTTON_FILE_ATTACHMENT = "fileAttachmentButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
