@@ -53,6 +53,8 @@ export const Config = {
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
     savePasswordCopyButton: 'savePasswordCopyButton',
+    tabsButton: 'tabsButton',
+    fileAttachmentButton: 'fileAttachmentButton',
   },
 
   // Tools define the various kinds of tools for the viewer

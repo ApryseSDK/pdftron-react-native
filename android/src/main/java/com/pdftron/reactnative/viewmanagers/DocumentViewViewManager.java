@@ -463,6 +463,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
     }
 
+    @ReactProp(name = "topAppNavBarRightBar")
+    public void setTopAppNavBarRightBar(DocumentView documentView, ReadableArray menus) {
+        documentView.setTopAppNavBarRightBar(menus);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

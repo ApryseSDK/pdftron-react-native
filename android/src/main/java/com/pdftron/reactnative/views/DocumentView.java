@@ -78,6 +78,7 @@ import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
+import com.pdftron.pdf.widget.toolbar.TopToolbarMenuId;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
@@ -85,7 +86,6 @@ import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
-import com.pdftron.sdf.SDFDoc;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -542,6 +542,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
         mBuilder = mBuilder.showAnnotationReplyReviewState(replyReviewStateEnabled);
+    }
+
+    public void setTopAppNavBarRightBar(ReadableArray menus) {
+        ArrayList<TopToolbarMenuId> menuIdArrayList = new ArrayList<>();
+        for (int i = 0; i < menus.size(); i++) {
+            String button = menus.getString(i);
+            TopToolbarMenuId id = convButtonIdToMenuId(button);
+            if (id != null) {
+                menuIdArrayList.add(id);
+            }
+        }
+        mBuilder = mBuilder.topToolbarMenuIds(menuIdArrayList.toArray(new TopToolbarMenuId[0]));
     }
 
     public void setAnnotationMenuItems(ReadableArray items) {
@@ -1501,6 +1513,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         }
         return buttonId;
+    }
+
+    @Nullable
+    private TopToolbarMenuId convButtonIdToMenuId(String item) {
+        if (BUTTON_TABS.equals(item)) {
+            return TopToolbarMenuId.TABS;
+        } else if (BUTTON_SEARCH.equals(item)) {
+            return TopToolbarMenuId.SEARCH;
+        } else if (BUTTON_VIEW_CONTROLS.equals(item)) {
+            return TopToolbarMenuId.VIEW_MODE;
+        } else if (BUTTON_THUMBNAILS.equals(item)) {
+            return TopToolbarMenuId.THUMBNAILS;
+        } else if (BUTTON_OUTLINE_LIST.equals(item)) {
+            return TopToolbarMenuId.OUTLINE;
+        } else if (BUTTON_UNDO.equals(item)) {
+            return TopToolbarMenuId.UNDO;
+        } else if (BUTTON_SHARE.equals(item)) {
+            return TopToolbarMenuId.SHARE;
+        } else if (BUTTON_REFLOW.equals(item)) {
+            return TopToolbarMenuId.REFLOW_MODE;
+        } else if (BUTTON_EDIT_PAGES.equals(item)) {
+            return TopToolbarMenuId.EDIT_PAGES;
+        } else if (BUTTON_SAVE_COPY.equals(item)) {
+            return TopToolbarMenuId.EXPORT;
+        } else if (BUTTON_PRINT.equals(item)) {
+            return TopToolbarMenuId.PRINT;
+        } else if (BUTTON_FILE_ATTACHMENT.equals(item)) {
+            return TopToolbarMenuId.FILE_ATTACHMENT;
+        } else if (BUTTON_VIEW_LAYERS.equals(item)) {
+            return TopToolbarMenuId.OCG_LAYERS;
+        } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
+            return TopToolbarMenuId.DIGITAL_SIGNATURES;
+        } else if (BUTTON_CLOSE.equals(item)) {
+            return TopToolbarMenuId.CLOSE_TAB;
+        }
+        return null;
     }
 
     @Nullable
