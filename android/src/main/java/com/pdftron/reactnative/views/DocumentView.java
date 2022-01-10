@@ -62,8 +62,10 @@ import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
+import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
 import com.pdftron.pdf.tools.UndoRedoManager;
@@ -77,6 +79,7 @@ import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.pdf.widget.bottombar.builder.BottomBarBuilder;
+import com.pdftron.pdf.widget.toolbar.TopToolbarMenuId;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
@@ -543,6 +546,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setReplyReviewStateEnabled(boolean replyReviewStateEnabled) {
         mBuilder = mBuilder.showAnnotationReplyReviewState(replyReviewStateEnabled);
+    }
+
+    public void setTopAppNavBarRightBar(ReadableArray menus) {
+        ArrayList<TopToolbarMenuId> menuIdArrayList = new ArrayList<>();
+        for (int i = 0; i < menus.size(); i++) {
+            String button = menus.getString(i);
+            TopToolbarMenuId id = convButtonIdToMenuId(button);
+            if (id != null) {
+                menuIdArrayList.add(id);
+            }
+        }
+        mBuilder = mBuilder.topToolbarMenuIds(menuIdArrayList.toArray(new TopToolbarMenuId[0]));
     }
 
     public void setAnnotationMenuItems(ReadableArray items) {
@@ -1505,6 +1520,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Nullable
+    private TopToolbarMenuId convButtonIdToMenuId(String item) {
+        if (BUTTON_TABS.equals(item)) {
+            return TopToolbarMenuId.TABS;
+        } else if (BUTTON_SEARCH.equals(item)) {
+            return TopToolbarMenuId.SEARCH;
+        } else if (BUTTON_VIEW_CONTROLS.equals(item)) {
+            return TopToolbarMenuId.VIEW_MODE;
+        } else if (BUTTON_THUMBNAILS.equals(item)) {
+            return TopToolbarMenuId.THUMBNAILS;
+        } else if (BUTTON_OUTLINE_LIST.equals(item)) {
+            return TopToolbarMenuId.OUTLINE;
+        } else if (BUTTON_UNDO.equals(item)) {
+            return TopToolbarMenuId.UNDO;
+        } else if (BUTTON_SHARE.equals(item)) {
+            return TopToolbarMenuId.SHARE;
+        } else if (BUTTON_REFLOW.equals(item)) {
+            return TopToolbarMenuId.REFLOW_MODE;
+        } else if (BUTTON_EDIT_PAGES.equals(item)) {
+            return TopToolbarMenuId.EDIT_PAGES;
+        } else if (BUTTON_SAVE_COPY.equals(item)) {
+            return TopToolbarMenuId.EXPORT;
+        } else if (BUTTON_PRINT.equals(item)) {
+            return TopToolbarMenuId.PRINT;
+        } else if (BUTTON_FILE_ATTACHMENT.equals(item)) {
+            return TopToolbarMenuId.FILE_ATTACHMENT;
+        } else if (BUTTON_VIEW_LAYERS.equals(item)) {
+            return TopToolbarMenuId.OCG_LAYERS;
+        } else if (BUTTON_DIGITAL_SIGNATURE.equals(item)) {
+            return TopToolbarMenuId.DIGITAL_SIGNATURES;
+        } else if (BUTTON_CLOSE.equals(item)) {
+            return TopToolbarMenuId.CLOSE_TAB;
+        }
+        return null;
+    }
+
+    @Nullable
     private ToolbarButtonType convStringToToolbarType(String item) {
         ToolbarButtonType buttonType = null;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
@@ -1773,8 +1824,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             menuStr = MENU_ID_STRING_THICKNESS;
         } else if (id == R.id.qm_translate) {
             menuStr = MENU_ID_STRING_TRANSLATE;
-        } else if (id == R.id.qm_type) {
-            menuStr = MENU_ID_STRING_TYPE;
         } else if (id == R.id.qm_ungroup) {
             menuStr = MENU_ID_STRING_UNGROUP;
         }
@@ -2151,7 +2200,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
 
             // remove unwanted items
-            if (mAnnotMenuItems != null && annot != null) {
+            ToolManager.Tool currentTool = getToolManager() != null ? getToolManager().getTool() : null;
+            if (mAnnotMenuItems != null && !(currentTool instanceof Pan) && !(currentTool instanceof TextSelect)) {
                 List<QuickMenuItem> removeList = new ArrayList<>();
                 checkQuickMenu(quickMenu.getFirstRowMenuItems(), mAnnotMenuItems, removeList);
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), mAnnotMenuItems, removeList);
@@ -2162,7 +2212,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     quickMenu.setDividerVisibility(View.GONE);
                 }
             }
-            if (mLongPressMenuItems != null && null == annot) {
+            if (mLongPressMenuItems != null && (currentTool instanceof Pan || currentTool instanceof TextSelect)) {
                 List<QuickMenuItem> removeList = new ArrayList<>();
                 checkQuickMenu(quickMenu.getFirstRowMenuItems(), mLongPressMenuItems, removeList);
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), mLongPressMenuItems, removeList);

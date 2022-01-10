@@ -56,6 +56,8 @@ public final class Constants {
     public static final String BUTTON_SAVE_REDUCED_COPY = "saveReducedCopyButton";
     public static final String BUTTON_SAVE_CROPPED_COPY = "saveCroppedCopyButton";
     public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
+    public static final String BUTTON_TABS = "tabsButton";
+    public static final String BUTTON_FILE_ATTACHMENT = "fileAttachmentButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
@@ -244,7 +246,6 @@ public final class Constants {
     public static final String MENU_ID_STRING_SIGN_AND_SAVE = "signAndSave";
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
-    public static final String MENU_ID_STRING_TYPE = "type";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
 
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";

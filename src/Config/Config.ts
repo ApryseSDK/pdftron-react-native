@@ -53,6 +53,8 @@ export const Config = {
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
     savePasswordCopyButton: 'savePasswordCopyButton',
+    tabsButton: 'tabsButton',
+    fileAttachmentButton: 'fileAttachmentButton',
   },
 
   // Tools define the various kinds of tools for the viewer
@@ -147,6 +149,8 @@ export const Config = {
     playSound: 'playSound',
     openAttachment: 'openAttachment',
     calibrate: 'calibrate',
+    group: 'group',
+    ungroup: 'ungroup',
   },
 
   // EraserType defines the type of eraser that will be used when eraser is selected
