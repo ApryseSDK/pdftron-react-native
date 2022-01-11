@@ -15,6 +15,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
@@ -84,6 +85,7 @@ import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
+import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
@@ -254,7 +256,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void buildViewer() {
         super.buildViewer();
         if (mViewerBuilder != null) {
-            mViewerBuilder.usingTabClass(RNPdfViewCtrlTabFragment.class);
+            mViewerBuilder
+                    .usingTabHostClass(RNPdfViewCtrlTabHostFragment.class)
+                    .usingTabClass(RNPdfViewCtrlTabFragment.class);
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 mViewerBuilder.usingTabTitle(mTabTitle);
             }
@@ -1894,9 +1898,36 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Override
+    protected void prepView() {
+        super.prepView();
+
+        if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getView() == null) {
+            if (mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
+                ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
+                    @Override
+                    public void onHostFragmentViewCreated() {
+                        View fragmentView = mPdfViewCtrlTabHostFragment.getView();
+                        if (fragmentView != null) {
+                            fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
+                            addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
     protected void onAttachedToWindow() {
         if (null == mFragmentManager) {
             setSupportFragmentManager(mFragmentManagerSave);
+        }
+        try {
+            // check if the view is attached to a parent fragment
+            Fragment fragment = FragmentManager.findFragment(this);
+            mFragmentManagerSave = fragment.getChildFragmentManager();
+            setSupportFragmentManager(mFragmentManagerSave);
+        } catch (Exception ignored) {
         }
 
         // TODO, update base64 when ViewerBuilder supports byte array
