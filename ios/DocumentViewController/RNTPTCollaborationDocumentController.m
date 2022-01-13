@@ -21,7 +21,7 @@
         self.needsDocumentLoaded = NO;
         self.needsRemoteDocumentLoaded = NO;
         self.documentLoaded = YES;
-        
+        self.collaborationReplyViewController.annotationStateEnabled = NO;
         if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDocumentLoaded:)]) {
             [self.delegate rnt_documentViewControllerDocumentLoaded:self];
         }

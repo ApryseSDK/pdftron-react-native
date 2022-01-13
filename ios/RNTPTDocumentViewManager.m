@@ -297,6 +297,13 @@ RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(replyReviewStateEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.replyReviewStateEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(currentUser, NSString, RNTPTDocumentView)
 {
     if (json) {

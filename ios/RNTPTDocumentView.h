@@ -414,6 +414,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
+
 @property (nonatomic, copy, nullable) NSString *currentUser;
 
 @property (nonatomic, copy, nullable) NSString *currentUserName;
@@ -667,6 +669,16 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 
 @interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
+
+@interface RNTPTAnnotationManager : PTAnnotationManager
+
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
+
+@end
+
+@interface RNTPTAnnotationReplyViewController : PTAnnotationReplyViewController
 
 @end
 NS_ASSUME_NONNULL_END

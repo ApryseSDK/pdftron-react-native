@@ -147,7 +147,13 @@ NS_ASSUME_NONNULL_END
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
-    
+
+    [PTOverrides overrideClass:[PTAnnotationManager class]
+                     withClass:[RNTPTAnnotationManager class]];
+
+    [PTOverrides overrideClass:[PTAnnotationReplyViewController class]
+                     withClass:[RNTPTAnnotationReplyViewController class]];
+
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
@@ -157,6 +163,8 @@ NS_ASSUME_NONNULL_END
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
+
+    _replyReviewStateEnabled = YES;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -276,6 +284,7 @@ NS_ASSUME_NONNULL_END
             
             RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
+            collaborationViewController.collaborationReplyViewController.annotationStateEnabled = self.replyReviewStateEnabled;
             
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
@@ -1857,6 +1866,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setReplyReviewStateEnabled:(BOOL)replyReviewStateEnabled
+{
+    _replyReviewStateEnabled = replyReviewStateEnabled;
+
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -2093,6 +2109,11 @@ NS_ASSUME_NONNULL_END
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
         documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
+    }
+
+    if ([documentViewController.toolManager.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)documentViewController.toolManager.annotationManager;
+        annotationManager.replyReviewStateEnabled = self.replyReviewStateEnabled;
     }
 
     // Enable/disable restoring state (last read page).
@@ -5531,3 +5552,27 @@ NS_ASSUME_NONNULL_END
     self.navigationController.toolbarHidden = !self.editingEnabled;
 }
 @end
+
+#pragma mark - RNTPTAnnotationManager
+
+@implementation RNTPTAnnotationManager
+
+@end
+
+#pragma mark - RNTPTAnnotationReplyViewController
+
+@implementation RNTPTAnnotationReplyViewController
+
+- (BOOL)isAnnotationStateEnabled
+{
+    BOOL annotationStateEnabled = [super isAnnotationStateEnabled];
+    BOOL replyReviewStateEnabled = YES;
+    if ([self.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)self.annotationManager;
+        replyReviewStateEnabled = annotationManager.replyReviewStateEnabled;
+    }
+    return annotationStateEnabled && replyReviewStateEnabled;
+}
+
+@end
+
