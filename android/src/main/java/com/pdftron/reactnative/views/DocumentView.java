@@ -728,7 +728,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             toolbarItems = map.getArray(toolbarKey);
                         }
                     }
-                    if (!Utils.isNullOrEmpty(tag) && !Utils.isNullOrEmpty(toolbarName) &&
+                    if (!Utils.isNullOrEmpty(tag) && toolbarName != null &&
                             toolbarItems != null && toolbarItems.size() > 0) {
                         AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
                                 .setToolbarName(toolbarName)
