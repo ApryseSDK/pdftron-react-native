@@ -55,7 +55,7 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"
 
-    implementation 'androidx.fragment:fragment:1.4.0'
+    implementation 'androidx.fragment:fragment:1.2.1'
 
     implementation "com.pdftron:pdftron:9.1.3-beta12"
     implementation "com.pdftron:tools:9.1.3-beta12"
