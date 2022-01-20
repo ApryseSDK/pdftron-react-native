@@ -476,6 +476,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setStoreNewSignature(boolean storeNewSignature) {
+        mToolManagerBuilder.setDefaultStoreNewSignature(storeNewSignature).setPersistStoreSignatureSetting(false);
+    }
+
     public void setDisableEditingByAnnotationType(ReadableArray annotationTypes) {
         int[] annotTypes = new int[annotationTypes.size()];
         for (int i = 0; i < annotationTypes.size(); i++) {

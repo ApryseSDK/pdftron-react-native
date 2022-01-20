@@ -822,7 +822,7 @@ Defines whether to show the page indicator for the viewer.
 ```
 
 #### keyboardShortcutsEnabled
-bool, optional, defaults to true, iOS only
+bool, optional, defaults to true
 
 Defines whether the keyboard shortcuts of the viewer are enabled.
 
@@ -1584,7 +1584,7 @@ Defines whether to show saved signatures for re-use when using the signing tool.
 ```
 
 #### storeNewSignature
-bool, optional, defaults to true. iOS only.
+bool, optional, defaults to true.
 
 Defines whether to store new signatures when using the signing tool.
 
