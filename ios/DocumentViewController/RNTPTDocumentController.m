@@ -187,6 +187,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)toolManager:(PTToolManager *)toolManager pageAddedForPageNumber:(int)pageNumber
+{
+    [super toolManager:toolManager pageAddedForPageNumber:pageNumber];
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageAdded:pageNumber:)]) {
+        [self.delegate rnt_documentViewControllerPageAdded:self pageNumber:pageNumber];
+    }
+}
+
 #pragma mark - <PTPDFViewCtrlDelegate>
 
 - (void)pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl onSetDoc:(PTPDFDoc *)doc
