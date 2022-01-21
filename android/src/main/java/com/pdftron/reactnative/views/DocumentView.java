@@ -2743,7 +2743,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getPdfViewCtrl().addPageChangeListener(mPageChangeListener);
         getPdfViewCtrl().addOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
         getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
-        getPdfViewCtrl().setTextSearchListener(mTextSearchListener);
+        getPdfViewCtrl().addTextSearchListener(mTextSearchListener);
 
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
