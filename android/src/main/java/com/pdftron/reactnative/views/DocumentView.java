@@ -1976,9 +1976,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     protected void onDetachedFromWindow() {
         if (getPdfViewCtrl() != null) {
             getPdfViewCtrl().removePageChangeListener(mPageChangeListener);
+            getPdfViewCtrl().removeTextSearchListener(mTextSearchListener);
             getPdfViewCtrl().removeOnCanvasSizeChangeListener(mOnCanvasSizeChangeListener);
             getPdfViewCtrl().removeOnLayoutChangeListener(mLayoutChangedListener);
-            getPdfViewCtrl().setTextSearchListener(null);
         }
         if (getToolManager() != null) {
             getToolManager().removeAnnotationModificationListener(mAnnotationModificationListener);
