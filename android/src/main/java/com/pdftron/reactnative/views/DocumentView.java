@@ -2492,7 +2492,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onPagesAdded(List<Integer> list) {
+            WritableMap params = Arguments.createMap();
+            WritableArray pageNumbers = Arguments.fromList(list);
+            params.putString(ON_PAGE_ADDED, ON_PAGE_ADDED);
+            params.putArray(KEY_PAGE_NUMBERS, pageNumbers);
 
+            onReceiveNativeEvent(params);
         }
 
         @Override
