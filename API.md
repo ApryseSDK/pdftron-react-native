@@ -872,7 +872,7 @@ pageNumber | int | the current page number
 />
 ```
 
-#### onPageAdded
+#### onPagesAdded
 function, optional
 
 This function is called when pages are added to the document.
@@ -885,7 +885,7 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 
 ```js
 <DocumentView
-  onPageAdded = {({pageNumbers}) => {
+  onPagesAdded = {({pageNumbers}) => {
     console.log('Pages added:', pageNumbers);
   }}
 />

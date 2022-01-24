@@ -134,7 +134,7 @@ const propTypes = {
   annotationManagerUndoMode: oneOf<Config.AnnotationManagerUndoMode>(Config.AnnotationManagerUndoMode),
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
-  onPageAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
+  onPagesAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
@@ -343,9 +343,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
           'pageNumber': event.nativeEvent.pageNumber,
         });
       }
-    } else if (event.nativeEvent.onPageAdded) {
-      if (this.props.onPageAdded) {
-        this.props.onPageAdded({
+    } else if (event.nativeEvent.onPagesAdded) {
+      if (this.props.onPagesAdded) {
+        this.props.onPagesAdded({
           'pageNumbers': event.nativeEvent.pageNumbers,
         });
       }
