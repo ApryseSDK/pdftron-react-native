@@ -687,7 +687,7 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
 {
     if (sender.onChange) {
         sender.onChange(@{
-            @"onPageAdded" : @"onPageAdded",
+            @"onPagesAdded" : @"onPagesAdded",
             @"pageNumbers" : @[@(pageNumber)],
         });
     }
