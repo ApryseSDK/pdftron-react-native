@@ -3056,11 +3056,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController
-{
-    if (self.initialPageNumber > 0) {
-        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
-    }
-        
+{       
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -3573,6 +3569,10 @@ NS_ASSUME_NONNULL_END
 
     if (documentViewController != self.currentDocumentViewController) {
         return;
+    }
+
+    if (self.initialPageNumber > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
