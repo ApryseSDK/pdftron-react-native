@@ -22,6 +22,7 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  */
 const propTypes = {
   document: PropTypes.string.isRequired,
+  source: PropTypes.string,
   password: PropTypes.string,
   initialPageNumber: PropTypes.number,
   pageNumber: PropTypes.number,

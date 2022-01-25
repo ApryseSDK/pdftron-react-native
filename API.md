@@ -244,6 +244,18 @@ Example:
 />
 ```
 
+#### source
+string 
+
+This prop is not implemented please use 'document' prop instead
+Example:
+
+```js
+<DocumentView
+  source={''}
+/>
+```
+
 #### password
 string, optional
 
