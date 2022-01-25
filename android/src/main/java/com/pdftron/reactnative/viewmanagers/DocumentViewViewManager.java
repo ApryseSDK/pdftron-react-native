@@ -110,6 +110,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInitialPageNumber(pageNum);
     }
 
+    @ReactProp(name = "page")
+    public void setPage(DocumentView documentView, int pageNum) {
+        documentView.setInitialPageNumber(pageNum);
+    }
+
     @ReactProp(name = "pageNumber")
     public void setPageNumber(DocumentView documentView, int pageNum) {
         documentView.setPageNumber(pageNum);
