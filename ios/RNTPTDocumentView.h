@@ -379,6 +379,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, getter=isBase64String) BOOL base64String;
 @property (nonatomic, copy, nullable) NSString *base64Extension;
 @property (nonatomic) int initialPageNumber;
+@property (nonatomic) int page;
 @property (nonatomic) int pageNumber;
 @property (nonatomic, assign) BOOL showNavButton;
 @property (nonatomic, copy, nullable) NSString *navButtonPath;

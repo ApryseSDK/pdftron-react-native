@@ -3575,6 +3575,10 @@ NS_ASSUME_NONNULL_END
         return;
     }
     
+    if (self.page > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.page];
+    }
+
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }

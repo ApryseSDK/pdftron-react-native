@@ -62,6 +62,13 @@ RCT_CUSTOM_VIEW_PROPERTY(initialPageNumber, int, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(page, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.page = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(initialToolbar, NSString, RNTPTDocumentView)
 {
     if (json) {
