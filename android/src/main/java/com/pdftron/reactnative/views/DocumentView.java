@@ -433,6 +433,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setFitPolicy(int fitPolicy){
+        if (mPDFViewCtrlConfig != null) {
+            PDFViewCtrl.PageViewMode mode = null;
+            switch(fitPolicy){
+                case 1: mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
+                    break;
+                case 2: mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
+                case 0: 
+                default: mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
+            }
+            if (mode != null) {
+                if (getPdfViewCtrl() != null) {
+                    getPdfViewCtrl().setPageViewMode(mode);
+                } else {
+                    mPDFViewCtrlConfig.setPageViewMode(mode);
+                }
+            }
+        }    
+    }
+
     public void setLayoutMode(String layoutMode) {
         String mode = null;
         PDFViewCtrl.PagePresentationMode presentationMode = null;

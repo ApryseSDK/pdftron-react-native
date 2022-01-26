@@ -751,6 +751,17 @@ Defines the fit mode (default zoom level) of the viewer.
 />
 ```
 
+#### fitPolicy
+
+Defines the fit mode (default zoom level) of the viewer.
+0:fit both(default), 1:fit width 2:fit height
+
+```js
+<DocumentView
+  fitPolicy={2}
+/>
+```
+
 #### layoutMode
 one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 

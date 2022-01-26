@@ -1935,15 +1935,15 @@ NS_ASSUME_NONNULL_END
     documentViewController.changesPageOnTap = self.pageChangeOnTap;
     
     // Fit mode.
-    if ([self.fitMode isEqualToString:PTFitPageFitModeKey]) {
+    if ([self.fitMode isEqualToString:PTFitPageFitModeKey] || (self.fitPolicy == 2)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_page];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
     }
-    else if ([self.fitMode isEqualToString:PTFitWidthFitModeKey]) {
+    else if ([self.fitMode isEqualToString:PTFitWidthFitModeKey] || (self.fitPolicy == 0)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_width];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
     }
-    else if ([self.fitMode isEqualToString:PTFitHeightFitModeKey]) {
+    else if ([self.fitMode isEqualToString:PTFitHeightFitModeKey] || (self.fitPolicy == 1)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_height];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
     }
@@ -2580,6 +2580,15 @@ NS_ASSUME_NONNULL_END
 - (void)setFitMode:(NSString *)fitMode
 {
     _fitMode = [fitMode copy];
+    
+    [self applyViewerSettings];
+}
+
+#pragma mark - Fit Policy
+
+- (void)setFitPolicy:(int)fitPolicy
+{
+    _fitPolicy = fitPolicy;
     
     [self applyViewerSettings];
 }
