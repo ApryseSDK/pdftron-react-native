@@ -92,7 +92,14 @@ const propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
+      items: PropTypes.arrayOf(PropTypes.oneOfType([
+        oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired,
+        PropTypes.exact({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          icon: PropTypes.string.isRequired,
+        })
+      ]))
     })
   ])),
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
