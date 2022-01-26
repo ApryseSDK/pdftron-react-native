@@ -2729,6 +2729,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Scale
+
+- (void)setScale:(double)scale
+{
+    _scale = scale;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SetZoom:scale];
+    }
+}
+
 - (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
