@@ -627,18 +627,44 @@ Defines custom toolbars. If passed in, the default toolbars will no longer appea
 It is possible to mix and match with default toolbars. See example below:
 
 ```js
+const myToolItem = {
+  [Config.CustomToolItemKey.Id]: 'add_page',
+  [Config.CustomToolItemKey.Name]: 'Add page',
+  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white',
+};
+
 const myToolbar = {
   [Config.CustomToolbarKey.Id]: 'myToolbar',
   [Config.CustomToolbarKey.Name]: 'myToolbar',
   [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
-  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, myToolItem, Config.Buttons.undo]
 };
 
-...
 <DocumentView
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
+
+#### onAnnotationToolbarItemPress
+function, optional
+
+This function is called when a custom toolbar tool item is clicked
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | the `Config.CustomToolItemKey.Id` defined in the tool
+
+```js
+<DocumentView
+  onAnnotationToolbarItemPress =({id}) => {
+    console.log('toolbar item press: ' + id);
+  };
+/>
+
+```
+
 #### hideDefaultAnnotationToolbars
 array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants, optional, defaults to none
 
