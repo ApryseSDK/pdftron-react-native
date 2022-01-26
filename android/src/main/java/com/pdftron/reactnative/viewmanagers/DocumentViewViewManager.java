@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
@@ -442,6 +443,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "inkMultiStrokeEnabled")
     public void setInkMultiStrokeEnabled(DocumentView documentView, boolean inkMultiStrokeEnabled) {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
+    }
+
+    @ReactProp(name = "keyboardShortcutsEnabled")
+    public void setKeyboardShortcutsEnabled(DocumentView documentView, boolean keyboardShortcutsEnabled) {
+        ShortcutHelper.enable(keyboardShortcutsEnabled);
+    }
+
+    @ReactProp(name = "storeNewSignature")
+    public void setStoreNewSignature(DocumentView documentView, boolean storeNewSignature) {
+        documentView.setStoreNewSignature(storeNewSignature);
     }
 
     @ReactProp(name = "disableEditingByAnnotationType")
