@@ -3125,6 +3125,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber
+{
+    if ([self.delegate respondsToSelector:@selector(pageAdded:pageNumber:)]) {
+        [self.delegate pageAdded:self pageNumber:pageNumber];
+    }
+}
+
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
 {
     return !self.continuousAnnotationEditing;
