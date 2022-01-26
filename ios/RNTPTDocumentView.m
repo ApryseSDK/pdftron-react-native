@@ -2284,17 +2284,17 @@ NS_ASSUME_NONNULL_END
     // Handle topAppNavBarRightBar.
     if (self.topAppNavBarRightBar && self.topAppNavBarRightBar.count >= 0) {
         
-        NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
+        NSMutableArray *rightBarItems = [[NSMutableArray alloc] init];
         
         for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
             UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
                                                inViewController:documentController];
             if (rightBarItem) {
-                [righBarItems addObject:rightBarItem];
+                [rightBarItems addObject:rightBarItem];
             }
         }
-        
-        documentController.navigationItem.rightBarButtonItems = [righBarItems copy];
+        NSArray * reversedArray = [[rightBarItems reverseObjectEnumerator] allObjects];
+        documentController.navigationItem.rightBarButtonItems = reversedArray;
     }
     
     // Handle bottomToolbar.
