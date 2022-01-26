@@ -70,6 +70,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setNavResName(resName);
     }
 
+    @ReactProp(name = "enableAntialiasing")
+    public void setAntiAliasing(DocumentView documentView, boolean enableAntialiasing) {
+        documentView.setAntiAliasing(enableAntialiasing);
+    }
+
     @ReactProp(name = "showLeadingNavButton")
     public void setShowNavButton(DocumentView documentView, boolean show) {
         documentView.setShowNavIcon(show);

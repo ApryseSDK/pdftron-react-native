@@ -848,6 +848,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setAntiAliasing(boolean enableAntialiasing){
+        getPdfViewCtrl().setAntiAliasing(enableAntialiasing);
+    }
+
     public void setZoomLimits(String zoomLimitMode, double minimum, double maximum) {
         if (getPdfViewCtrl() != null) {
 
