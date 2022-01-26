@@ -893,6 +893,29 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 
 ### Zoom
 
+### zoom
+double, optional
+
+This prop lets define the zoom of the document
+
+```js
+<DocumentView
+  zoom={2.0}
+/>
+```
+
+### scale
+double, optional
+
+This prop lets define the zoom of the document.
+Same as zoom.
+
+```js
+<DocumentView
+  scale={2.0}
+/>
+```
+
 #### onZoomChanged
 function, optional
 
