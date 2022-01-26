@@ -350,7 +350,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
           'pageNumbers': event.nativeEvent.pageNumbers,
         });
       }
-    }else if (event.nativeEvent.onPagesRotated) {
+    } else if (event.nativeEvent.onPagesRotated) {
       if (this.props.onPagesRotated) {
         this.props.onPagesRotated({
           'pageNumbers': event.nativeEvent.pageNumbers,
