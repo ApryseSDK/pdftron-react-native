@@ -412,45 +412,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setFitMode(String fitMode) {
-        if (mPDFViewCtrlConfig != null) {
-            PDFViewCtrl.PageViewMode mode = null;
-            if (FIT_MODE_FIT_PAGE.equals(fitMode)) {
-                mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
-            } else if (FIT_MODE_FIT_WIDTH.equals(fitMode)) {
-                mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
-            } else if (FIT_MODE_FIT_HEIGHT.equals(fitMode)) {
-                mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
-            } else if (FIT_MODE_ZOOM.equals(fitMode)) {
-                mode = PDFViewCtrl.PageViewMode.ZOOM;
-            }
-            if (mode != null) {
-                if (getPdfViewCtrl() != null) {
-                    getPdfViewCtrl().setPageViewMode(mode);
-                } else {
-                    mPDFViewCtrlConfig.setPageViewMode(mode);
-                }
+        PDFViewCtrl.PageViewMode mode = null;
+        if (FIT_MODE_FIT_PAGE.equals(fitMode)) {
+            mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
+        } else if (FIT_MODE_FIT_WIDTH.equals(fitMode)) {
+            mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
+        } else if (FIT_MODE_FIT_HEIGHT.equals(fitMode)) {
+            mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
+        } else if (FIT_MODE_ZOOM.equals(fitMode)) {
+            mode = PDFViewCtrl.PageViewMode.ZOOM;
+        }
+        if (mode != null) {
+            if (getPdfViewCtrl() != null) {
+                getPdfViewCtrl().setPageViewMode(mode);
+            } else if (mPDFViewCtrlConfig != null) {
+                mPDFViewCtrlConfig.setPageViewMode(mode);
             }
         }
     }
 
     public void setFitPolicy(int fitPolicy){
-        if (mPDFViewCtrlConfig != null) {
-            PDFViewCtrl.PageViewMode mode = null;
-            switch(fitPolicy){
-                case 1: mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
-                    break;
-                case 2: mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
-                case 0: 
-                default: mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
+        PDFViewCtrl.PageViewMode mode = null;
+        switch(fitPolicy){
+            case 1: mode = PDFViewCtrl.PageViewMode.FIT_WIDTH;
+                break;
+            case 2: mode = PDFViewCtrl.PageViewMode.FIT_HEIGHT;
+            case 0: 
+            default: mode = PDFViewCtrl.PageViewMode.FIT_PAGE;
+        }
+        if (mode != null) {
+            if (getPdfViewCtrl() != null) {
+                getPdfViewCtrl().setPageViewMode(mode);
+            } else if (mPDFViewCtrlConfig != null) {
+                mPDFViewCtrlConfig.setPageViewMode(mode);
             }
-            if (mode != null) {
-                if (getPdfViewCtrl() != null) {
-                    getPdfViewCtrl().setPageViewMode(mode);
-                } else {
-                    mPDFViewCtrlConfig.setPageViewMode(mode);
-                }
-            }
-        }    
+        }  
     }
 
     public void setLayoutMode(String layoutMode) {
