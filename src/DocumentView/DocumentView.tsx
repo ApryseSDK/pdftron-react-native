@@ -32,6 +32,7 @@ const propTypes = {
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
+  onError: func<(error: string) => void>(),
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
   onZoomChanged: func<(event: {zoom: number}) => void>(),
@@ -268,7 +269,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError) {
         this.props.onDocumentError(event.nativeEvent.onDocumentError);
-      } else {
+      } else if (this.props.onError) {
+        this.props.onError(event.nativeEvent.onDocumentError);
+      }else {
         const msg = event.nativeEvent.onDocumentError ? event.nativeEvent.onDocumentError : 'Unknown error';
         Alert.alert(
           'Alert',
