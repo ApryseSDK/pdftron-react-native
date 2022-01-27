@@ -29,7 +29,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-*.xcworkspace
 project.xcworkspace
       
 
