@@ -71,7 +71,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "enableAntialiasing")
-    public void setAntiAliasing(DocumentView documentView, boolean enableAntialiasing) {
+    public void setAntiAliasing(DocumentView documentView, boolean enableAntialiasing) throws PDFNetException {
         documentView.setAntiAliasing(enableAntialiasing);
     }
 
