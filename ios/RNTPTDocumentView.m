@@ -1818,11 +1818,11 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Enable Anti Aliasing 
 - (void)setEnableAntialiasing:(BOOL)enableAntialiasing
 {
-    _enableAntialiasing = enableAntialiasing
+    _enableAntialiasing = enableAntialiasing;
     PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (pdfViewCtrl) {
         @try{
-            [pdfViewCtrl setAntiAliasing:enableAntialiasing];
+            [pdfViewCtrl SetAntiAliasing:enableAntialiasing];
         } @catch (NSException *exception) {
             NSLog(@"Exception: %@, %@", exception.name, exception.reason);
         }
