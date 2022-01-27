@@ -31,6 +31,7 @@ const propTypes = {
   showLeadingNavButton: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
+  onLoadComplete: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
@@ -209,6 +210,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onDocumentLoaded) {
       if (this.props.onDocumentLoaded) {
         this.props.onDocumentLoaded(event.nativeEvent.onDocumentLoaded);
+      }
+      if (this.props.onLoadComplete) {
+        this.props.onLoadComplete(event.nativeEvent.onDocumentLoaded);
       }
     } else if (event.nativeEvent.onPageChanged) {
       if (this.props.onPageChanged) {
