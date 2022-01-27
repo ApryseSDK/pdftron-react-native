@@ -1815,6 +1815,21 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Enable Anti Aliasing 
+- (void)setEnableAntialiasing:(BOOL)enableAntialiasing
+{
+    _enableAntialiasing = enableAntialiasing
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        @try{
+            [pdfViewCtrl setAntiAliasing:enableAntialiasing];
+        } @catch (NSException *exception) {
+            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        }
+    }
+
+}
+
 - (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
 {
     _pageChangeOnTap = pageChangeOnTap;

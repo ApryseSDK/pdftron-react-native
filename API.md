@@ -1696,6 +1696,16 @@ quads indicate the quad boundary boxes for the selection, which could have a siz
 
 ### Others
 
+#### enableAntialiasing
+bool, optional
+
+Define whether antialiasing should be applied
+
+```js
+<DocumentView
+  enableAntialiasing={true}
+/>
+```
 #### useStylusAsPen
 bool, optional, defaults to true
 
