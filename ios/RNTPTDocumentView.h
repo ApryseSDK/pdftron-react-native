@@ -320,6 +320,9 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 - (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+
+- (void)pageAdded:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
+
 - (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;

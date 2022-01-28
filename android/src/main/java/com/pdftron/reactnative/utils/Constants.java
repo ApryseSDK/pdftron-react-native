@@ -23,6 +23,7 @@ public final class Constants {
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
+    public static final String ON_PAGES_ADDED = "onPagesAdded";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
     public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
@@ -337,6 +338,8 @@ public final class Constants {
     public static final String KEY_ANNOTATION_FLAG_TOGGLE_NO_VIEW = "toggleNoView";
 
     public static final String KEY_BOOKMARK_JSON = "bookmarkJson";
+
+    public static final String KEY_PAGE_NUMBERS = "pageNumbers";
 
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";
