@@ -156,13 +156,18 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
+#### Note — January 2022
+**There is a new podspec file to use when integrating the PDFTron React Native Wrapper for iOS:**
+**https://pdftron.s3.amazonaws.com/downloads/ios/react-native/latest.podspec**
+
+**Please update your `Podfile` accordingly.**
 
 1. Open `Podfile` in the `ios` folder, add the following line to the `target 'MyApp' do ... end` block:
 
     ```
     target 'MyApp' do
         # ...
-        pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/pdfnet/latest.podspec'
+        pod 'PDFNet', podspec: 'https://pdftron.s3.amazonaws.com/downloads/ios/react-native/latest.podspec'
         # ...
     end
     ```
