@@ -8,7 +8,9 @@
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "tsc"
+    "start": "tsc",
+    "postinstall": "python3 scripts/newPodspecMessage.py",
+    "prestart" : "python3 scripts/newPodspecMessage.py"
   },
   "repository": {
     "type": "git",
