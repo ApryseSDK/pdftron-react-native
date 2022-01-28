@@ -60,6 +60,7 @@ const propTypes = {
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onAnnotationFlattened: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
+  onAnnotationToolbarItemPress: func<(event: {id: string}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
@@ -91,7 +92,14 @@ const propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
+      items: PropTypes.arrayOf(PropTypes.oneOfType([
+        oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired,
+        PropTypes.exact({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          icon: PropTypes.string.isRequired,
+        })
+      ]))
     })
   ])),
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
@@ -263,6 +271,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onFormFieldValueChanged) {
         this.props.onFormFieldValueChanged({
           'fields': event.nativeEvent.fields,
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationToolbarItemPress) {
+      if (this.props.onAnnotationToolbarItemPress) {
+        this.props.onAnnotationToolbarItemPress({
+          'id': event.nativeEvent.id,
         });
       }
     } else if (event.nativeEvent.onDocumentError) {

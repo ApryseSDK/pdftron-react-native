@@ -225,6 +225,13 @@ export const Config = {
     Items: "items"
   },
 
+  // CustomToolItemKey defines the necessary keys for a custom tool inside a custom toolbar
+  CustomToolItemKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon"
+  },
+
   // ThumbnailFilterMode defines filter modes in the thumbnails browser
   ThumbnailFilterMode: {
     Annotated: "annotated",
