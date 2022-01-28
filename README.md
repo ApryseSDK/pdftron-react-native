@@ -158,7 +158,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 ### iOS
 #### Note — January 2022
 **There is a new podspec file to use when integrating the PDFTron React Native Wrapper for iOS:**
-**https://pdftron.s3.amazonaws.com/downloads/ios/react-native/latest.podspec**
+**https://pdftron.com/downloads/ios/react-native/latest.podspec**
 
 **Please update your `Podfile` accordingly.**
 
@@ -167,7 +167,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     ```
     target 'MyApp' do
         # ...
-        pod 'PDFNet', podspec: 'https://pdftron.s3.amazonaws.com/downloads/ios/react-native/latest.podspec'
+        pod 'PDFNet', podspec: 'https://pdftron.com/downloads/ios/react-native/latest.podspec'
         # ...
     end
     ```
