@@ -3132,6 +3132,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerDidRotatePages:(PTDocumentBaseViewController *)documentViewController forPageNumbers:(NSIndexSet *)pageNumbers
+{
+    if ([self.delegate respondsToSelector:@selector(pagesRotated:pageNumbers:)]) {
+        [self.delegate pagesRotated:self pageNumbers:pageNumbers];
+    }
+}
+
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
 {
     return !self.continuousAnnotationEditing;
