@@ -35,6 +35,7 @@ const propTypes = {
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
   onZoomChanged: func<(event: {zoom: number}) => void>(),
+  onScaleChanged: func<(event: {scale: number}) => void>(),
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
@@ -228,6 +229,11 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
+        });
+      }
+      if (this.props.onScaleChanged) {
+        this.props.onScaleChanged({
+        	'scale': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onZoomFinished) {
