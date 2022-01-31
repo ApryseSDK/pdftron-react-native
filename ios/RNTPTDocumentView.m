@@ -25,6 +25,10 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+{
+    NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
+    NSUInteger _annotationToolbarItemCounter;
+}
 
 @property (nonatomic, strong, nullable) UIViewController *viewController;
 
@@ -141,7 +145,7 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
-    _maxTabCount = NSUIntegerMax;
+    _maxTabCount = INT_MAX;
     
     _saveStateEnabled = YES;
     
@@ -157,6 +161,9 @@ NS_ASSUME_NONNULL_END
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
+    
+    _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
+    _annotationToolbarItemCounter = 0;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -2349,7 +2356,7 @@ NS_ASSUME_NONNULL_END
     NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
     NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
     NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
-    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    NSArray<id> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
     
     UIImage *toolbarImage = nil;
     if (toolbarIcon) {
@@ -2360,18 +2367,62 @@ NS_ASSUME_NONNULL_END
     
     NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
     
-    for (NSString *toolbarItem in toolbarItems) {
-        if (![toolbarItem isKindOfClass:[NSString class]]) {
-            continue;
+    for (id toolbarItemValue in toolbarItems) {
+        if ([toolbarItemValue isKindOfClass:[NSString class]]) {
+            NSString * const toolbarItemKey = (NSString *)toolbarItemValue;
+            
+            Class toolClass = [[self class] toolClassForKey:toolbarItemKey];
+            if (!toolClass) {
+                continue;
+            }
+            
+            UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+            if (item) {
+                [barButtonItems addObject:item];
+            }
         }
-        
-        Class toolClass = [[self class] toolClassForKey:toolbarItem];
-        if (!toolClass) {
-            continue;
-        }
-        
-        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
-        if (item) {
+        else if ([toolbarItemValue isKindOfClass:[NSDictionary class]]) {
+            NSDictionary<NSString *, id> * const toolbarItem = (NSDictionary *)toolbarItemValue;
+            
+            NSString * const toolbarItemId = toolbarItem[PTAnnotationToolbarItemKeyId];
+            NSString * const toolbarItemName = toolbarItem[PTAnnotationToolbarItemKeyName];
+            NSString * const toolbarItemIconName = toolbarItem[PTAnnotationToolbarItemKeyIcon];
+            
+            // An item id, name, and icon are required.
+            if (toolbarItemId.length == 0 ||
+                !toolbarItemName ||
+                toolbarItemIconName.length == 0) {
+                continue;
+            }
+            
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithTitle:toolbarItemName
+                                                                                                style:UIBarButtonItemStylePlain
+                                                                                               target:self
+                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            UIImage * const toolbarItemIcon = [UIImage imageNamed:toolbarItemIconName];
+            if (toolbarItemIcon != nil) {
+                item.image = toolbarImage;
+            }
+            
+            NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
+            
+            NSInteger itemTag = 0;
+            
+            // Check if this id has already been mapped before.
+            NSNumber * const idNumberValue = _annotationToolbarItemKeyMap[toolbarItemId];
+            if (idNumberValue) {
+                // Use existing mapped integer tag.
+                itemTag = idNumberValue.integerValue;
+            } else {
+                // We need to map this item id key to an integer.
+                _annotationToolbarItemCounter++;
+                
+                itemTag = _annotationToolbarItemCounter;
+                _annotationToolbarItemKeyMap[toolbarItemId] = @(itemTag);
+            }
+            
+            item.tag = itemTag;
+            
             [barButtonItems addObject:item];
         }
     }
@@ -2382,6 +2433,27 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)customToolGroupToolbarItemPressed:(PTSelectableBarButtonItem *)toolbarItem
+{
+    const NSInteger itemTag = toolbarItem.tag;
+    
+    // Find the corresponding item key string value for this item tag number.
+    __block NSString *itemKey = nil;
+    [_annotationToolbarItemKeyMap enumerateKeysAndObjectsUsingBlock:^(NSString * const currentItemKey,
+                                                                      NSNumber * const currentItemTagNumber,
+                                                                      BOOL * const stop) {
+        const NSInteger currentItemTag = currentItemTagNumber.integerValue;
+        if (itemTag == currentItemTag) {
+            itemKey = currentItemKey;
+            *stop = YES;
+        }
+    }];
+    
+    if (itemKey) {
+        [self.delegate annotationToolbarItemPressed:self withKey:itemKey];
+    }
 }
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle

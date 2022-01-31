@@ -26,6 +26,7 @@ public final class Constants {
     public static final String ON_PAGES_ADDED = "onPagesAdded";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
+    public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -155,6 +156,11 @@ public final class Constants {
     public static final String TOOLBAR_KEY_NAME = "name";
     public static final String TOOLBAR_KEY_ICON = "icon";
     public static final String TOOLBAR_KEY_ITEMS = "items";
+
+    // Custom button
+    public static final String TOOLBAR_ITEM_KEY_ID = "id";
+    public static final String TOOLBAR_ITEM_KEY_NAME = "name";
+    public static final String TOOLBAR_ITEM_KEY_ICON = "icon";
 
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
