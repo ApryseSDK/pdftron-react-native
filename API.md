@@ -755,11 +755,10 @@ Defines the fit mode (default zoom level) of the viewer.
 
 Defines the fit mode (default zoom level) of the viewer.
 Parameters:
-0:fit both(default), 1:fit width 2:fit height
 
 Mode | Value | Description
 --- | --- | ---
-fit both or fitPge | 0 | fits the whole page
+fit both or fitPage (default) | 0 | fits the whole page
 fit width | 1 | fits page using width
 fit hieght | 2 | fits page using height
 
