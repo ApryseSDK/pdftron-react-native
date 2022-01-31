@@ -2403,7 +2403,6 @@ NS_ASSUME_NONNULL_END
             if (toolbarItemIcon != nil) {
                 item.image = toolbarImage;
             }
-            item.image = UIImage.actionsImage;
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
             
