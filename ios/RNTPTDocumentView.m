@@ -250,7 +250,17 @@ NS_ASSUME_NONNULL_END
 
 - (void)setDocument:(NSString *)document
 {
-    _document = [document copy];
+    if([document length] != 0){
+        _document = [document copy];
+    }
+    
+    [self openDocument];
+}
+
+
+- (void)setSource:(NSString *)source
+{
+    _document = [source copy];
     
     [self openDocument];
 }
