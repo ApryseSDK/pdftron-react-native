@@ -658,9 +658,9 @@ id | string | the `Config.CustomToolItemKey.Id` defined in the tool
 
 ```js
 <DocumentView
-  onAnnotationToolbarItemPress =({id}) => {
+  onAnnotationToolbarItemPress = {({id}) => {
     console.log('toolbar item press: ' + id);
-  };
+  }}
 />
 
 ```
