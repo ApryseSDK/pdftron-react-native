@@ -25,6 +25,8 @@ const propTypes = {
   password: PropTypes.string,
   initialPageNumber: PropTypes.number,
   pageNumber: PropTypes.number,
+  minScale: PropTypes.number,
+  maxScale: PropTypes.number,
   customHeaders: PropTypes.object,
   documentExtension: PropTypes.string,
   leadingNavButtonIcon: PropTypes.string,

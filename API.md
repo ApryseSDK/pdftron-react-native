@@ -893,6 +893,14 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 
 ### Zoom
 
+#### minScale
+number, optional
+
+Not implemented please use [setZoomLimits](#setZoomLimits) instead
+#### maxScale
+number, optional
+
+Not implemented please use [setZoomLimits](#setZoomLimits) instead
 #### onZoomChanged
 function, optional
 
