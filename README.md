@@ -8,6 +8,7 @@
 - [TypeScript](#typescript)
 - [Contributing](#contributing)
 - [License](#license)
+- [Wonday](#wonday)
 
 ## API
 APIs are available on the [API page](API.md).
@@ -356,3 +357,13 @@ See [Contributing](./CONTRIBUTING.md)
 ## License
 See [License](./LICENSE)
 ![](https://onepixel.pdftron.com/pdftron-react-native)
+
+## Wonday
+
+If you are switching from wonday to pdftron sdk don't be worried! Our team has created API's to match most of Wonday's props and callback to make the integration
+process easy for you!
+Steps to integrate:
+- First follow these guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/). These guides cover the steps to install the pdftron package as well iOS and Android specific changes for the pdftron SDK.
+- Change the 'View' prop to 'DocumentView'
+- Most of the API match the Wonday functionality but some of them are not implemented. Please refer to the [API page](API.md) to find out more.
+- You are good to go! 
