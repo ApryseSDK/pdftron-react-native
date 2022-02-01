@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rnt_documentViewControllerPageDidMove:(PTDocumentBaseViewController *)documentViewController pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
 
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber;
+
 @end
 
 @class RNTPTDocumentViewController;

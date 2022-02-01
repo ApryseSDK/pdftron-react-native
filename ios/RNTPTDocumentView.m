@@ -25,6 +25,10 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+{
+    NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
+    NSUInteger _annotationToolbarItemCounter;
+}
 
 @property (nonatomic, strong, nullable) UIViewController *viewController;
 
@@ -141,7 +145,7 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
-    _maxTabCount = NSUIntegerMax;
+    _maxTabCount = INT_MAX;
     
     _saveStateEnabled = YES;
     
@@ -157,6 +161,9 @@ NS_ASSUME_NONNULL_END
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
+    
+    _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
+    _annotationToolbarItemCounter = 0;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -626,6 +633,14 @@ NS_ASSUME_NONNULL_END
         },
         PTEditPagesButtonKey: ^{
             documentViewController.addPagesButtonHidden = YES;
+            if( [documentViewController isKindOfClass:[PTDocumentController class]] )
+            {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
+            }
         },
         PTEditMenuButtonKey: ^{
             if( [documentViewController isKindOfClass:[PTDocumentController class]] )
@@ -824,6 +839,14 @@ NS_ASSUME_NONNULL_END
                      [string isEqualToString:PTCloudToolButtonKey]) {
                 toolManager.cloudyAnnotationOptions.canCreate = value;
             }
+            else if ([string isEqualToString:PTInsertPageToolKey] ||
+                     [string isEqualToString:PTInsertPageButton]) {
+                PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+                PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+                NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+                [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+                insertItemGroup.barButtonItems = [barButtonItems copy];
+            }
             else if ([string isEqualToString:PTAnnotationCreateFileAttachmentToolKey]) {
                 toolManager.fileAttachmentAnnotationOptions.canCreate = value;
             }
@@ -845,17 +868,13 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateRubberStampToolKey]) {
                 toolManager.stampAnnotationOptions.canCreate = value;
             }
-            else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey]) {
+            else if ([string isEqualToString:PTAnnotationCreateRedactionToolKey] ||
+                     [string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
                 toolManager.redactAnnotationOptions.canCreate = value;
             }
-            else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+            else if ([string isEqualToString:PTAnnotationCreateLinkToolKey] ||
+                     [string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
                 toolManager.linkAnnotationOptions.canCreate = value;
-            }
-            else if ([string isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
-                // TODO
-            }
-            else if ([string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-                // TODO
             }
             else if ([string isEqualToString:PTFormCreateTextFieldToolKey]) {
                 // TODO
@@ -1000,32 +1019,30 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionToolKey]) {
         toolClass = [PTRectangleRedactionCreate class];
     }
-    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey]) {
-        // TODO
+    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkToolKey] ||
+             [toolMode isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
+        toolClass = [PTLinkCreate class];
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         toolClass = [PTTextRedactionCreate class];
     }
-    else if ( [toolMode isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-        // TODO
-    }
     else if ( [toolMode isEqualToString:PTFormCreateTextFieldToolKey]) {
-        // TODO
+        toolClass = [PTTextFieldCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
-        // TODO
+        toolClass = [PTCheckBoxCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateSignatureFieldToolKey]) {
-        // TODO
+        toolClass = [PTSignatureFieldCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateRadioFieldToolKey]) {
-        // TODO
+        toolClass = [PTRadioButtonCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
-        // TODO
+        toolClass = [PTComboBoxCreate class];
     }
     else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
-        // TODO
+        toolClass = [PTListBoxCreate class];
     }
     
     if (toolClass) {
@@ -2274,17 +2291,17 @@ NS_ASSUME_NONNULL_END
     // Handle topAppNavBarRightBar.
     if (self.topAppNavBarRightBar && self.topAppNavBarRightBar.count >= 0) {
         
-        NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
+        NSMutableArray *rightBarItems = [[NSMutableArray alloc] init];
         
         for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
             UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
                                                inViewController:documentController];
             if (rightBarItem) {
-                [righBarItems addObject:rightBarItem];
+                [rightBarItems addObject:rightBarItem];
             }
         }
-        
-        documentController.navigationItem.rightBarButtonItems = [righBarItems copy];
+        NSArray * reversedArray = [[rightBarItems reverseObjectEnumerator] allObjects];
+        documentController.navigationItem.rightBarButtonItems = reversedArray;
     }
     
     // Handle bottomToolbar.
@@ -2339,7 +2356,7 @@ NS_ASSUME_NONNULL_END
     NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
     NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
     NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
-    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    NSArray<id> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
     
     UIImage *toolbarImage = nil;
     if (toolbarIcon) {
@@ -2350,18 +2367,62 @@ NS_ASSUME_NONNULL_END
     
     NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
     
-    for (NSString *toolbarItem in toolbarItems) {
-        if (![toolbarItem isKindOfClass:[NSString class]]) {
-            continue;
+    for (id toolbarItemValue in toolbarItems) {
+        if ([toolbarItemValue isKindOfClass:[NSString class]]) {
+            NSString * const toolbarItemKey = (NSString *)toolbarItemValue;
+            
+            Class toolClass = [[self class] toolClassForKey:toolbarItemKey];
+            if (!toolClass) {
+                continue;
+            }
+            
+            UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+            if (item) {
+                [barButtonItems addObject:item];
+            }
         }
-        
-        Class toolClass = [[self class] toolClassForKey:toolbarItem];
-        if (!toolClass) {
-            continue;
-        }
-        
-        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
-        if (item) {
+        else if ([toolbarItemValue isKindOfClass:[NSDictionary class]]) {
+            NSDictionary<NSString *, id> * const toolbarItem = (NSDictionary *)toolbarItemValue;
+            
+            NSString * const toolbarItemId = toolbarItem[PTAnnotationToolbarItemKeyId];
+            NSString * const toolbarItemName = toolbarItem[PTAnnotationToolbarItemKeyName];
+            NSString * const toolbarItemIconName = toolbarItem[PTAnnotationToolbarItemKeyIcon];
+            
+            // An item id, name, and icon are required.
+            if (toolbarItemId.length == 0 ||
+                !toolbarItemName ||
+                toolbarItemIconName.length == 0) {
+                continue;
+            }
+            
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithTitle:toolbarItemName
+                                                                                                style:UIBarButtonItemStylePlain
+                                                                                               target:self
+                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            UIImage * const toolbarItemIcon = [UIImage imageNamed:toolbarItemIconName];
+            if (toolbarItemIcon != nil) {
+                item.image = toolbarImage;
+            }
+            
+            NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
+            
+            NSInteger itemTag = 0;
+            
+            // Check if this id has already been mapped before.
+            NSNumber * const idNumberValue = _annotationToolbarItemKeyMap[toolbarItemId];
+            if (idNumberValue) {
+                // Use existing mapped integer tag.
+                itemTag = idNumberValue.integerValue;
+            } else {
+                // We need to map this item id key to an integer.
+                _annotationToolbarItemCounter++;
+                
+                itemTag = _annotationToolbarItemCounter;
+                _annotationToolbarItemKeyMap[toolbarItemId] = @(itemTag);
+            }
+            
+            item.tag = itemTag;
+            
             [barButtonItems addObject:item];
         }
     }
@@ -2372,6 +2433,27 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)customToolGroupToolbarItemPressed:(PTSelectableBarButtonItem *)toolbarItem
+{
+    const NSInteger itemTag = toolbarItem.tag;
+    
+    // Find the corresponding item key string value for this item tag number.
+    __block NSString *itemKey = nil;
+    [_annotationToolbarItemKeyMap enumerateKeysAndObjectsUsingBlock:^(NSString * const currentItemKey,
+                                                                      NSNumber * const currentItemTagNumber,
+                                                                      BOOL * const stop) {
+        const NSInteger currentItemTag = currentItemTagNumber.integerValue;
+        if (itemTag == currentItemTag) {
+            itemKey = currentItemKey;
+            *stop = YES;
+        }
+    }];
+    
+    if (itemKey) {
+        [self.delegate annotationToolbarItemPressed:self withKey:itemKey];
+    }
 }
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle
@@ -2879,14 +2961,14 @@ NS_ASSUME_NONNULL_END
         PTAnnotationCreateRubberStampToolKey: @(PTExtendedAnnotTypeStamp),
         PTAnnotationCreateRedactionToolKey : @(PTExtendedAnnotTypeRedact),
         PTAnnotationCreateLinkToolKey : @(PTExtendedAnnotTypeLink),
-//        PTAnnotationCreateRedactionTextToolKey : @(),
-//        PTAnnotationCreateLinkTextToolKey : @(),
-//        PTFormCreateTextFieldToolKey : @(),
-//        PTFormCreateCheckboxFieldToolKey : @(),
-//        PTFormCreateSignatureFieldToolKey : @(),
-//        PTFormCreateRadioFieldToolKey : @(),
-//        PTFormCreateComboBoxFieldToolKey : @(),
-//        PTFormCreateListBoxFieldToolKey : @(),
+        PTAnnotationCreateLinkTextToolKey: @(PTExtendedAnnotTypeLink),
+        PTFormCreateRadioFieldToolKey: @(PTExtendedAnnotTypeRadioButton),
+        PTFormCreateListBoxFieldToolKey : @(PTExtendedAnnotTypeListBox),
+        PTFormCreateSignatureFieldToolKey: @(PTExtendedAnnotTypeSignatureField),
+        PTFormCreateTextFieldToolKey : @(PTExtendedAnnotTypeTextField),
+        PTFormCreateCheckboxFieldToolKey : @(PTExtendedAnnotTypeCheckBox),
+        PTFormCreateComboBoxFieldToolKey : @(PTExtendedAnnotTypeComboBox),
+        PTAnnotationCreateRedactionTextToolKey : @(PTExtendedAnnotTypeTextRedact),
 //        PTAnnotationEditToolKey: @(),
 //        PTMultiSelectToolKey: @(),
     };
@@ -3112,6 +3194,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(pageMoved:pageMovedFromPageNumber:toPageNumber:)]) {
         [self.delegate pageMoved:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    }
+}
+
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber
+{
+    if ([self.delegate respondsToSelector:@selector(pageAdded:pageNumber:)]) {
+        [self.delegate pageAdded:self pageNumber:pageNumber];
     }
 }
 
@@ -3778,16 +3867,25 @@ NS_ASSUME_NONNULL_END
         return;
     }
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
-
-    PTAnnot *annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
-    int pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    NSError *error;
     
-    NSString *annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    __block PTAnnot *annot;
+    __block int pageNumber;
+    __block NSString *annotId;
+
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * doc) {
+        annot = notification.userInfo[PTToolManagerAnnotationUserInfoKey];
+        pageNumber = ((NSNumber *)notification.userInfo[PTToolManagerPageNumberUserInfoKey]).intValue;
+        annotId = [[annot GetUniqueID] IsValid] ? [[annot GetUniqueID] GetAsPDFText] : @"";
+    } error:&error];
+
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return;
+    }
     
     if ([annot GetType] == e_ptWidget) {
-        PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
-        NSError* error;
-
         __block PTWidget *widget;
         __block PTField *field;
         __block NSString *fieldName;
@@ -3799,6 +3897,7 @@ NS_ASSUME_NONNULL_END
             fieldName = [field IsValid] ? [field GetName] : @"";
             fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
         } error:&error];
+        
         if (error) {
             NSLog(@"An error occurred: %@", error);
             return;
@@ -5134,32 +5233,30 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateRedactionToolKey]) {
         return [PTRectangleRedactionCreate class];
     }
-    else if ([key isEqualToString:PTAnnotationCreateLinkToolKey]) {
-        // TODO
+    else if ([key isEqualToString:PTAnnotationCreateLinkToolKey] ||
+             [key isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
+        return [PTLinkCreate class];
     }
     else if ([key isEqualToString:PTAnnotationCreateRedactionTextToolKey]) {
         return [PTTextRedactionCreate class];
     }
-    else if ([key isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
-        // TODO
-    }
     else if ([key isEqualToString:PTFormCreateTextFieldToolKey]) {
-        // TODO
+        return [PTTextFieldCreate class];
     }
     else if ([key isEqualToString:PTFormCreateCheckboxFieldToolKey]) {
-        // TODO
+        return [PTCheckBoxCreate class];
     }
     else if ([key isEqualToString:PTFormCreateSignatureFieldToolKey]) {
-        // TODO
+        return [PTSignatureFieldCreate class];
     }
     else if ([key isEqualToString:PTFormCreateRadioFieldToolKey]) {
-        // TODO
+        return [PTRadioButtonCreate class];
     }
     else if ([key isEqualToString:PTFormCreateComboBoxFieldToolKey]) {
-        // TODO
+        return [PTComboBoxCreate class];
     }
     else if ([key isEqualToString:PTFormCreateListBoxFieldToolKey]) {
-        // TODO
+        return [PTListBoxCreate class];
     }
     
     if (@available(iOS 13.1, *)) {
@@ -5266,6 +5363,27 @@ NS_ASSUME_NONNULL_END
     else if (toolClass == [PTSmartPen class]) {
         return PTAnnotationCreateSmartPenToolKey;
     }
+    else if (toolClass == [PTLinkCreate class]) {
+       return PTAnnotationCreateLinkToolKey;
+    }
+    else if (toolClass == [PTTextFieldCreate class]) {
+        return PTFormCreateTextFieldToolKey;
+    }
+    else if (toolClass == [PTCheckBoxCreate class]) {
+        return PTFormCreateCheckboxFieldToolKey;
+    }
+    else if (toolClass == [PTSignatureFieldCreate class]) {
+        return PTFormCreateSignatureFieldToolKey;
+    }
+    else if (toolClass == [PTComboBoxCreate class]) {
+        return PTFormCreateComboBoxFieldToolKey;
+    }
+    else if (toolClass == [PTListBoxCreate class]) {
+        return PTFormCreateListBoxFieldToolKey;
+    }
+    else if (toolClass == [PTRadioButtonCreate class]) {
+        return PTFormCreateRadioFieldToolKey;
+    }
     
     if (@available(iOS 13.1, *)) {
         if (toolClass == [PTPencilDrawingCreate class]) {
@@ -5343,7 +5461,8 @@ NS_ASSUME_NONNULL_END
 + (PTAnnotType)annotTypeForString:(NSString *)string {
     if ([string isEqualToString:PTAnnotationCreateStickyToolKey]) {
         return e_ptText;
-    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey]) {
+    } else if ([string isEqualToString:PTAnnotationCreateLinkToolKey] ||
+               [string isEqualToString:PTAnnotationCreateLinkTextToolKey]) {
         return e_ptLink;
     } else if ([string isEqualToString:PTAnnotationCreateFreeTextToolKey]) {
         return e_ptFreeText;

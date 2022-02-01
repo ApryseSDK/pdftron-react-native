@@ -49,6 +49,7 @@ static NSString * const PTEllipseToolButtonKey = @"ellipseToolButton";
 static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
 static NSString * const PTEditToolButtonKey = @"editToolButton";
+static NSString * const PTInsertPageButton = @"insertPageButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -91,6 +92,7 @@ static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatur
 static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
+static NSString * const PTInsertPageToolKey = @"InsertPage";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";
@@ -294,6 +296,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// Custom annotation toolbar item keys.
+typedef NSString * PTAnnotationToolbarItemKey NS_TYPED_EXTENSIBLE_ENUM;
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyId = @"id";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyName = @"name";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyIcon = @"icon";
+
 // Contexts.
 static void *TabChangedContext = &TabChangedContext;
 
@@ -318,6 +326,9 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)textSearchStart:(RNTPTDocumentView *)sender;
 - (void)textSearchResult:(RNTPTDocumentView *)sender found:(BOOL)found textSelection:(nullable NSDictionary *)textSelection;
 - (void)pageMoved:(RNTPTDocumentView *)sender pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+
+- (void)pageAdded:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
+
 - (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
@@ -340,6 +351,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
 - (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
+- (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
 @end
 

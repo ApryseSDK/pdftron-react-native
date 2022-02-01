@@ -3,16 +3,16 @@
  * @class (Assigned to class for documentation purposes.)
  * @hideconstructor
  * @name Config
- * @classdesc Defines configuration constants for the viewer. 
- * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.ts) 
+ * @classdesc Defines configuration constants for the viewer.
+ * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.ts)
  * for the full list of constants.
- * 
- * Due to the length of the source file, we have included links to the exact lines 
+ *
+ * Due to the length of the source file, we have included links to the exact lines
  * of the source code where these APIs have been implemented.
  */
 export const Config = {
 
-  /** 
+  /**
    * @member
    * @desc Buttons define the various kinds of buttons for the viewer
    */
@@ -62,14 +62,17 @@ export const Config = {
     undo: 'undo',
     redo: 'redo',
     addPageButton: 'addPageButton',
+    insertPageButton: 'insertPageButton',
 
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
-    savePasswordCopyButton: 'savePasswordCopyButton'
+    savePasswordCopyButton: 'savePasswordCopyButton',
+    tabsButton: 'tabsButton',
+    fileAttachmentButton: 'fileAttachmentButton',
   },
 
-  /** 
+  /**
    * @member
    * @desc Tools define the various kinds of tools for the viewer
    */
@@ -105,7 +108,6 @@ export const Config = {
     annotationCreateRedaction: 'AnnotationCreateRedaction',
     annotationCreateLink: 'AnnotationCreateLink',
     annotationCreateRedactionText: 'AnnotationCreateRedactionText',
-    annotationCreateLinkText: 'AnnotationCreateLinkText',
     annotationCreateFreeHighlighter: 'AnnotationCreateFreeHighlighter',
     annotationCreateSmartPen: 'AnnotationCreateSmartPen',
     formCreateTextField: 'FormCreateTextField',
@@ -114,24 +116,28 @@ export const Config = {
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+    insertPage: 'InsertPage',
 
     // iOS only.
-    pencilKitDrawing: 'PencilKitDrawing'
+    pencilKitDrawing: 'PencilKitDrawing',
+
+    // Android only.
+    annotationCreateLinkText: 'AnnotationCreateLinkText',
   },
 
-  /** 
+  /**
    * @member
-   * @desc FitMode define how a page should fit relative to the viewer, 
+   * @desc FitMode define how a page should fit relative to the viewer,
    * alternatively, the default zoom level
    */
   FitMode: {
     FitPage: 'FitPage',
     FitWidth: 'FitWidth',
     FitHeight: 'FitHeight',
-    Zoom: 'Zoom'
+    Zoom: 'Zoom',
   },
 
-  /** 
+  /**
    * @member
    * @desc LayoutMode defines the layout mode of the viewer
    */
@@ -141,19 +147,19 @@ export const Config = {
     Facing: 'Facing',
     FacingContinuous: 'FacingContinuous',
     FacingCover: 'FacingCover',
-    FacingCoverContinuous: 'FacingCoverContinuous'
+    FacingCoverContinuous: 'FacingCoverContinuous',
   },
 
-  /** 
+  /**
    * @member
    * @desc FieldFlags define the property flags for a form field
    */
   FieldFlags: {
     ReadOnly: 0,
-    Required: 1
+    Required: 1,
   },
 
-  /** 
+  /**
    * @member
    * @desc AnnotationMenu defines the menu items when an annotation is selected
    */
@@ -173,10 +179,12 @@ export const Config = {
     screenCapture: 'screenCapture',
     playSound: 'playSound',
     openAttachment: 'openAttachment',
-    calibrate: 'calibrate'
+    calibrate: 'calibrate',
+    group: 'group',
+    ungroup: 'ungroup',
   },
 
-  /** 
+  /**
    * @member
    * @desc EraserType defines the type of eraser that will be used when eraser is selected
    */
@@ -186,7 +194,7 @@ export const Config = {
     inkEraser: 'inkEraser'
   },
 
-  /** 
+  /**
    * @member
    * @desc LongPressMenu defines the menu items when a long press on empty space or text occurs
    */
@@ -195,19 +203,19 @@ export const Config = {
     paste: 'paste',
     search: 'search',
     share: 'share',
-    read: 'read'
+    read: 'read',
   },
   
-  /** 
+  /**
    * @member
    * @desc Actions define potentially overridable action to the viewer
    */
   Actions: {
     linkPress: 'linkPress',
-    stickyNoteShowPopUp: 'stickyNoteShowPopUp'
+    stickyNoteShowPopUp: 'stickyNoteShowPopUp',
   },
 
-  /** 
+  /**
    * @member
    * @desc AnnotationFlags define the flags for any annotation in the document
    */
@@ -224,7 +232,7 @@ export const Config = {
     toggleNoView: "toggleNoView"
   },
 
-  /** 
+  /**
    * @member
    * @desc DefaultToolbars define a set of pre-designed toolbars for easier customization
    */
@@ -241,7 +249,7 @@ export const Config = {
     Favorite: "PDFTron_Favorite"
   },
 
-  /** 
+  /**
    * @member
    * @desc ToolbarIcons define default toolbar icons for use for potential custom toolbars
    */
@@ -258,7 +266,7 @@ export const Config = {
     Favorite: "PDFTron_Favorite"
   },
 
-  /** 
+  /**
    * @member
    * @desc CustomToolbarKey defines the necessary keys for a custom toolbar
    */
@@ -269,56 +277,66 @@ export const Config = {
     Items: "items"
   },
 
-  /** 
+  /**
+   * @member
+   * @desc CustomToolItemKey defines the necessary keys for a custom tool inside a custom toolbar
+   */
+  CustomToolItemKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon"
+  },
+
+  /**
    * @member
    * @desc ThumbnailFilterMode defines filter modes in the thumbnails browser
    */
   ThumbnailFilterMode: {
     Annotated: "annotated",
-    Bookmarked: "bookmarked"
+    Bookmarked: "bookmarked",
   },
 
-  /** 
+  /**
    * @member
    * @desc Conversion defines conversion sources and destinations
    */
   Conversion: {
     Screen: "screen",
     Canvas: "canvas",
-    Page: "page"
+    Page: "page",
   },
   
-  /** 
+  /**
    * @member
    * @desc ViewModePickerItem defines view mode items in the view mode dialog
    */
   ViewModePickerItem: {
     Crop: "viewModeCrop",
     Rotation: "viewModeRotation",
-    ColorMode: "viewModeColorMode"
+    ColorMode: "viewModeColorMode",
   },
 
-  /** 
+  /**
    * @member
    * @desc ZoomLimitMode defines the limit mode for zoom in the current document viewer
    */
   ZoomLimitMode: {
     None: "none",
     Absolute: "absolute",
-    Relative: "relative"
+    Relative: "relative",
   },
 
-  /** 
+  /**
    * @member
    * @desc OverprintMode defines when overprint would be applied in the viewer
    */
   OverprintMode: {
     On: "on",
     Off: "off",
-    OnlyPDFX: "pdfx" // only apply to PDF/X files
+    OnlyPDFX: "pdfx", // only apply to PDF/X files
   },
 
-  /** 
+  /**
    * @member
    * @desc ColorPostProcessMode defines color modifications after rendering in the viewer
    */
@@ -329,23 +347,23 @@ export const Config = {
     NightMode: "nightMode"
   },
 
-  /** 
+  /**
    * @member
    * @desc ReflowOrientation defines the scrolling direction when in reflow viewing mode
    */
   ReflowOrientation: {
     Horizontal: 'horizontal',
-    Vertical: 'vertical'
+    Vertical: 'vertical',
   },
 
-  /** 
+  /**
    * @member
    * @desc Export to format
    */
   ExportFormat: {
     BMP: "BMP",
     JPEG: "JPEG",
-    PNG: "PNG"
+    PNG: "PNG",
   },
 
   /**
@@ -354,7 +372,7 @@ export const Config = {
    */
   AnnotationManagerEditMode: {
     Own: "own",
-    All: "all"
+    All: "all",
   },
 
   /**
@@ -363,8 +381,8 @@ export const Config = {
    */
   AnnotationManagerUndoMode: {
     Own: "own",
-    All: "all"
-  }
+    All: "all",
+  },
 } as const;
 
 /**
@@ -419,12 +437,12 @@ export module Config {
   export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
   export type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
   export type ExportFormat = ValueOf<typeof Config.ExportFormat>;
-  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode> 
-  export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>
+  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode>;
+  export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>;
   export type CustomToolbarKey = {
-    id : string;
+    id: string;
     name: string;
     icon: ToolbarIcons;
     items: (Tools | Buttons)[];
-  }
+  };
 }

@@ -23,8 +23,10 @@ public final class Constants {
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
+    public static final String ON_PAGES_ADDED = "onPagesAdded";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
+    public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -56,6 +58,8 @@ public final class Constants {
     public static final String BUTTON_SAVE_REDUCED_COPY = "saveReducedCopyButton";
     public static final String BUTTON_SAVE_CROPPED_COPY = "saveCroppedCopyButton";
     public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
+    public static final String BUTTON_TABS = "tabsButton";
+    public static final String BUTTON_FILE_ATTACHMENT = "fileAttachmentButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
@@ -77,6 +81,7 @@ public final class Constants {
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
     public static final String TOOL_BUTTON_EDIT = "editToolButton";
     public static final String TOOL_BUTTON_ADD_PAGE = "addPageButton";
+    public static final String TOOL_BUTTON_INSERT_PAGE = "insertPageButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -123,6 +128,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_SMART_PEN = "AnnotationCreateSmartPen";
     public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
     public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
+    public static final String TOOL_INSERT_PAGE = "InsertPage";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";
@@ -150,6 +156,11 @@ public final class Constants {
     public static final String TOOLBAR_KEY_NAME = "name";
     public static final String TOOLBAR_KEY_ICON = "icon";
     public static final String TOOLBAR_KEY_ITEMS = "items";
+
+    // Custom button
+    public static final String TOOLBAR_ITEM_KEY_ID = "id";
+    public static final String TOOLBAR_ITEM_KEY_NAME = "name";
+    public static final String TOOLBAR_ITEM_KEY_ICON = "icon";
 
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
@@ -242,7 +253,6 @@ public final class Constants {
     public static final String MENU_ID_STRING_SIGN_AND_SAVE = "signAndSave";
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
-    public static final String MENU_ID_STRING_TYPE = "type";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
 
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
@@ -328,6 +338,8 @@ public final class Constants {
     public static final String KEY_ANNOTATION_FLAG_TOGGLE_NO_VIEW = "toggleNoView";
 
     public static final String KEY_BOOKMARK_JSON = "bookmarkJson";
+
+    public static final String KEY_PAGE_NUMBERS = "pageNumbers";
 
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";

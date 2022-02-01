@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
@@ -444,6 +445,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "keyboardShortcutsEnabled")
+    public void setKeyboardShortcutsEnabled(DocumentView documentView, boolean keyboardShortcutsEnabled) {
+        ShortcutHelper.enable(keyboardShortcutsEnabled);
+    }
+
+    @ReactProp(name = "storeNewSignature")
+    public void setStoreNewSignature(DocumentView documentView, boolean storeNewSignature) {
+        documentView.setStoreNewSignature(storeNewSignature);
+    }
+
     @ReactProp(name = "disableEditingByAnnotationType")
     public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
         documentView.setDisableEditingByAnnotationType(annotationTypes);
@@ -461,6 +472,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "replyReviewStateEnabled")
     public void setReplyReviewStateEnabled(DocumentView documentView, boolean replyReviewStateEnabled) {
         documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
+    }
+
+    @ReactProp(name = "topAppNavBarRightBar")
+    public void setTopAppNavBarRightBar(DocumentView documentView, ReadableArray menus) {
+        documentView.setTopAppNavBarRightBar(menus);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
