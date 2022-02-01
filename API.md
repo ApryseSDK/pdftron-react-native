@@ -1699,7 +1699,8 @@ quads indicate the quad boundary boxes for the selection, which could have a siz
 #### enableAntialiasing
 bool, optional
 
-Define whether antialiasing should be applied
+Define whether antialiasing should be applied.
+It is enabled by default
 
 ```js
 <DocumentView
