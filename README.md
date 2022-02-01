@@ -364,6 +364,6 @@ If you are switching from wonday to pdftron sdk don't be worried! Our team has c
 process easy for you!
 Steps to integrate:
 - First follow these guides for [Android](https://www.pdftron.com/documentation/android/get-started/react-native/) and [iOS](https://www.pdftron.com/documentation/ios/get-started/react-native/). These guides cover the steps to install the pdftron package as well iOS and Android specific changes for the pdftron SDK.
-- Change the 'View' prop to 'DocumentView'
+- Change instances of the 'View' component name to 'DocumentView'
 - Most of the API match the Wonday functionality but some of them are not implemented. Please refer to the [API page](API.md) to find out more.
 - You are good to go! 
