@@ -398,7 +398,7 @@ path | string | File path that the document has been saved to
 
 ```js
 <DocumentView
-  onLoadComplete = {(path) => { 
+  onDocumentLoaded = {(path) => { 
     console.log('The document has finished loading:', path); 
   }}
 />
@@ -417,7 +417,7 @@ path | string | File path that the document has been saved to
 
 ```js
 <DocumentView
-  onDocumentLoaded = {(path) => { 
+  onLoadComplete = {(path) => { 
     console.log('The document has finished loading:', path); 
   }}
 />
