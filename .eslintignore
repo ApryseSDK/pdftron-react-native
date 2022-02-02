@@ -1,0 +1,8 @@
+# Build
+lib
+
+# Auto-gen Docs
+docs
+
+# Example folder
+example

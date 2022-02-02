@@ -1,6 +1,21 @@
+/**
+ * @constant
+ * @class (Assigned to class for documentation purposes.)
+ * @hideconstructor
+ * @name Config
+ * @classdesc Defines configuration constants for the viewer.
+ * See [`Config.ts`](https://github.com/PDFTron/pdftron-react-native/blob/master/src/Config/Config.ts)
+ * for the full list of constants.
+ *
+ * Due to the length of the source file, we have included links to the exact lines
+ * of the source code where these APIs have been implemented.
+ */
 export const Config = {
 
-  // Buttons define the various kinds of buttons for the viewer
+  /**
+   * @member
+   * @desc Buttons define the various kinds of buttons for the viewer
+   */
   Buttons: {
     editToolButton: 'editToolButton',
     viewControlsButton: 'viewControlsButton',
@@ -57,7 +72,10 @@ export const Config = {
     fileAttachmentButton: 'fileAttachmentButton',
   },
 
-  // Tools define the various kinds of tools for the viewer
+  /**
+   * @member
+   * @desc Tools define the various kinds of tools for the viewer
+   */
   Tools: {
     annotationEdit: 'AnnotationEdit',
     textSelect: 'TextSelect',
@@ -107,7 +125,11 @@ export const Config = {
     annotationCreateLinkText: 'AnnotationCreateLinkText',
   },
 
-  // FitMode define how a page should fit relative to the viewer, alternatively, the default zoom level
+  /**
+   * @member
+   * @desc FitMode define how a page should fit relative to the viewer,
+   * alternatively, the default zoom level
+   */
   FitMode: {
     FitPage: 'FitPage',
     FitWidth: 'FitWidth',
@@ -115,7 +137,10 @@ export const Config = {
     Zoom: 'Zoom',
   },
 
-  // LayoutMode defines the layout mode of the viewer
+  /**
+   * @member
+   * @desc LayoutMode defines the layout mode of the viewer
+   */
   LayoutMode: {
     Single: 'Single',
     Continuous: 'Continuous',
@@ -125,13 +150,19 @@ export const Config = {
     FacingCoverContinuous: 'FacingCoverContinuous',
   },
 
-  // FieldFlags define the property flags for a form field
+  /**
+   * @member
+   * @desc FieldFlags define the property flags for a form field
+   */
   FieldFlags: {
     ReadOnly: 0,
     Required: 1,
   },
 
-  // AnnotationMenu defines the menu items when an annotation is selected
+  /**
+   * @member
+   * @desc AnnotationMenu defines the menu items when an annotation is selected
+   */
   AnnotationMenu: {
     style: 'style',
     note: 'note',
@@ -153,14 +184,20 @@ export const Config = {
     ungroup: 'ungroup',
   },
 
-  // EraserType defines the type of eraser that will be used when eraser is selected
+  /**
+   * @member
+   * @desc EraserType defines the type of eraser that will be used when eraser is selected
+   */
   EraserType: {
     annotationEraser: 'annotationEraser',
     hybrideEraser: 'hybrideEraser',
     inkEraser: 'inkEraser'
   },
 
-  // LongPressMenu defines the menu items when a long press on empty space or text occurs
+  /**
+   * @member
+   * @desc LongPressMenu defines the menu items when a long press on empty space or text occurs
+   */
   LongPressMenu: {
     copy: 'copy',
     paste: 'paste',
@@ -169,13 +206,19 @@ export const Config = {
     read: 'read',
   },
   
-  // Actions define potentially overridable action to the viewer
+  /**
+   * @member
+   * @desc Actions define potentially overridable action to the viewer
+   */
   Actions: {
     linkPress: 'linkPress',
     stickyNoteShowPopUp: 'stickyNoteShowPopUp',
   },
 
-  // AnnotationFlags define the flags for any annotation in the document
+  /**
+   * @member
+   * @desc AnnotationFlags define the flags for any annotation in the document
+   */
   AnnotationFlags: {
     hidden: "hidden",
     invisible: "invisible",
@@ -189,7 +232,10 @@ export const Config = {
     toggleNoView: "toggleNoView"
   },
 
-  // DefaultToolbars define a set of pre-designed toolbars for easier customization
+  /**
+   * @member
+   * @desc DefaultToolbars define a set of pre-designed toolbars for easier customization
+   */
   DefaultToolbars: {
     View: "PDFTron_View",
     Annotate: "PDFTron_Annotate",
@@ -203,7 +249,10 @@ export const Config = {
     Favorite: "PDFTron_Favorite"
   },
 
-  // ToolbarIcons define default toolbar icons for use for potential custom toolbars
+  /**
+   * @member
+   * @desc ToolbarIcons define default toolbar icons for use for potential custom toolbars
+   */
   ToolbarIcons: {
     View: "PDFTron_View",
     Annotate: "PDFTron_Annotate",
@@ -217,7 +266,10 @@ export const Config = {
     Favorite: "PDFTron_Favorite"
   },
 
-  // CustomToolbarKey defines the necessary keys for a custom toolbar
+  /**
+   * @member
+   * @desc CustomToolbarKey defines the necessary keys for a custom toolbar
+   */
   CustomToolbarKey: {
     Id: "id",
     Name: "name",
@@ -225,48 +277,69 @@ export const Config = {
     Items: "items"
   },
 
-  // CustomToolItemKey defines the necessary keys for a custom tool inside a custom toolbar
+  /**
+   * @member
+   * @desc CustomToolItemKey defines the necessary keys for a custom tool inside a custom toolbar
+   */
   CustomToolItemKey: {
     Id: "id",
     Name: "name",
     Icon: "icon"
   },
 
-  // ThumbnailFilterMode defines filter modes in the thumbnails browser
+  /**
+   * @member
+   * @desc ThumbnailFilterMode defines filter modes in the thumbnails browser
+   */
   ThumbnailFilterMode: {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
   },
 
-  // Conversion defines conversion sources and destinations
+  /**
+   * @member
+   * @desc Conversion defines conversion sources and destinations
+   */
   Conversion: {
     Screen: "screen",
     Canvas: "canvas",
     Page: "page",
   },
   
-  // ViewModePickerItem defines view mode items in the view mode dialog
+  /**
+   * @member
+   * @desc ViewModePickerItem defines view mode items in the view mode dialog
+   */
   ViewModePickerItem: {
     Crop: "viewModeCrop",
     Rotation: "viewModeRotation",
     ColorMode: "viewModeColorMode",
   },
 
-  // ZoomLimitMode defines the limit mode for zoom in the current document viewer
+  /**
+   * @member
+   * @desc ZoomLimitMode defines the limit mode for zoom in the current document viewer
+   */
   ZoomLimitMode: {
     None: "none",
     Absolute: "absolute",
     Relative: "relative",
   },
 
-  // OverprintMode defines when overprint would be applied in the viewer
+  /**
+   * @member
+   * @desc OverprintMode defines when overprint would be applied in the viewer
+   */
   OverprintMode: {
     On: "on",
     Off: "off",
     OnlyPDFX: "pdfx", // only apply to PDF/X files
   },
 
-  // ColorPostProcessMode defines color modifications after rendering in the viewer
+  /**
+   * @member
+   * @desc ColorPostProcessMode defines color modifications after rendering in the viewer
+   */
   ColorPostProcessMode: {
     None: "none",
     Invert: "invert",
@@ -274,26 +347,38 @@ export const Config = {
     NightMode: "nightMode"
   },
 
-  // ReflowOrientation defines the scrolling direction when in reflow viewing mode
+  /**
+   * @member
+   * @desc ReflowOrientation defines the scrolling direction when in reflow viewing mode
+   */
   ReflowOrientation: {
     Horizontal: 'horizontal',
     Vertical: 'vertical',
   },
 
-  // Export to format
+  /**
+   * @member
+   * @desc Export to format
+   */
   ExportFormat: {
     BMP: "BMP",
     JPEG: "JPEG",
     PNG: "PNG",
   },
 
-  // AnnotationManagerEditMode determines whose changes can be edited.
+  /**
+   * @member
+   * @desc AnnotationManagerEditMode determines whose changes can be edited.
+   */
   AnnotationManagerEditMode: {
     Own: "own",
     All: "all",
   },
 
-  // AnnotationManagerUndoMode determines whose changes can be undone.
+  /**
+   * @member
+   * @desc AnnotationManagerUndoMode determines whose changes can be undone.
+   */
   AnnotationManagerUndoMode: {
     Own: "own",
     All: "all",
@@ -330,6 +415,7 @@ type ValueOf<T> = T[keyof T];
  * 
  * These types are used for props such as `disabledElements` and methods such as `exportAsImage`
  */
+// eslint-disable-next-line no-redeclare
 export module Config {
   export type Buttons = ValueOf<typeof Config.Buttons>;
   export type Tools = ValueOf<typeof Config.Tools>;
@@ -351,7 +437,7 @@ export module Config {
   export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
   export type ReflowOrientation = ValueOf<typeof Config.ReflowOrientation>;
   export type ExportFormat = ValueOf<typeof Config.ExportFormat>;
-  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode>; 
+  export type AnnotationManagerEditMode = ValueOf<typeof Config.AnnotationManagerEditMode>;
   export type AnnotationManagerUndoMode = ValueOf<typeof Config.AnnotationManagerUndoMode>;
   export type CustomToolbarKey = {
     id: string;
