@@ -404,6 +404,24 @@ path | string | File path that the document has been saved to
 />
 ```
 
+#### onLoadComplete
+function, optional
+
+This function is called when the document finishes loading.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
+```js
+<DocumentView
+  onLoadComplete = {(path) => { 
+    console.log('The document has finished loading:', path); 
+  }}
+/>
+```
 #### onDocumentError
 function, optional
 
