@@ -955,6 +955,24 @@ zoom | double | the current zoom ratio of the document
   }}
 />
 ```
+#### onScaleChanged
+function, optional
+
+This function is called when the zoom scale has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onScaleChanged = {(scale) => {
+    console.log('Current scale ratio is', scale);
+  }}
+/>
+```
 
 #### onZoomFinished
 function, optional
