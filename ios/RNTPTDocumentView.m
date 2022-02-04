@@ -2395,22 +2395,14 @@ NS_ASSUME_NONNULL_END
                 continue;
             }
             
-            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithTitle:toolbarItemName
+            UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
+            
+            // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
                                                                                                 style:UIBarButtonItemStylePlain
                                                                                                target:self
                                                                                                action:@selector(customToolGroupToolbarItemPressed:)];
-            UIImage * const toolbarItemIcon = [UIImage imageNamed:toolbarItemIconName];
-            if (toolbarItemIcon != nil) {
-                item.image = toolbarItemIcon;
-            }else{
-                // fallback to System Image
-                if (@available(iOS 13.0, *)) {
-                    UIImage *systemIcon = [UIImage systemImageNamed:toolbarItemIconName];
-                    if (systemIcon != nil) {
-                        item.image = systemIcon;
-                    }
-                }
-            }
+            item.title = toolbarItemName;
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
             
@@ -5540,6 +5532,24 @@ NS_ASSUME_NONNULL_END
     }
     
     return fileURL;
+}
+
+- (nullable UIImage *)imageForImageName:(NSString *)imageName
+{
+    UIImage * const image = [UIImage imageNamed:imageName];
+    if (image != nil) {
+        return image;
+    }else{
+        // fallback to System Image
+        if (@available(iOS 13.0, *)) {
+            UIImage *systemIcon = [UIImage systemImageNamed:imageName];
+            if (systemIcon != nil) {
+                return systemIcon;
+            }
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark - Display Responsiveness
