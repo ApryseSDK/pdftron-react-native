@@ -2401,7 +2401,15 @@ NS_ASSUME_NONNULL_END
                                                                                                action:@selector(customToolGroupToolbarItemPressed:)];
             UIImage * const toolbarItemIcon = [UIImage imageNamed:toolbarItemIconName];
             if (toolbarItemIcon != nil) {
-                item.image = toolbarImage;
+                item.image = toolbarItemIcon;
+            }else{
+                // fallback to System Image
+                if (@available(iOS 13.0, *)) {
+                    UIImage *systemIcon = [UIImage systemImageNamed:toolbarItemIconName];
+                    if (systemIcon != nil) {
+                        item.image = systemIcon;
+                    }
+                }
             }
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
