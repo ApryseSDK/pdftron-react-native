@@ -39,37 +39,51 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup). The following steps will assume your app is created through `react-native init MyApp`. This guide also applies if you are using the [TypeScript template](https://reactnative.dev/docs/environment-setup#optional-using-a-specific-version-or-template).
 
-2. In `MyApp` folder, install `react-native-pdftron` by calling:
+2. There are two ways to integrate the SDK:
 
-   ```shell
-   yarn add github:PDFTron/pdftron-react-native
-   yarn add @react-native-community/cli --dev
-   yarn add @react-native-community/cli-platform-android --dev
-   yarn add @react-native-community/cli-platform-ios --dev
-   yarn install
-   ```
+   - #### Through pdftron's github repo:
 
-   or
+     In `MyApp` folder, install `react-native-pdftron` by calling:
 
-   ```shell
-   npm install github:PDFTron/pdftron-react-native --save
-   npm install @react-native-community/cli --save-dev
-   npm install @react-native-community/cli-platform-android --save-dev
-   npm install @react-native-community/cli-platform-ios --save-dev
-   npm install
-   ```
+     ```shell
+     yarn add github:PDFTron/pdftron-react-native
+     yarn add @react-native-community/cli --dev
+     yarn add @react-native-community/cli-platform-android --dev
+     yarn add @react-native-community/cli-platform-ios --dev
+     yarn install
+     ```
 
-   If you want to use our npm package please use
+     or
 
-   ```shell
-     react-native-pdftron
-   ```
+     ```shell
+     npm install github:PDFTron/pdftron-react-native --save
+     npm install @react-native-community/cli --save-dev
+     npm install @react-native-community/cli-platform-android --save-dev
+     npm install @react-native-community/cli-platform-ios --save-dev
+     npm install
+     ```
 
-   instead of
+   - #### Through pdftron's npm package:
 
-   ```shell
-      github:PDFTron/pdftron-react-native
-   ```
+     In `MyApp` folder, install run the following commands:
+
+     ```shell
+     yarn add react-native-pdftron
+     yarn add @react-native-community/cli --dev
+     yarn add @react-native-community/cli-platform-android --dev
+     yarn add @react-native-community/cli-platform-ios --dev
+     yarn install
+     ```
+
+     or
+
+     ```shell
+     npm install react-native-pdftron
+     npm install @react-native-community/cli --save-dev
+     npm install @react-native-community/cli-platform-android --save-dev
+     npm install @react-native-community/cli-platform-ios --save-dev
+     npm install
+     ```
 
 ### Android
 
