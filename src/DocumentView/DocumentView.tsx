@@ -31,10 +31,12 @@ const propTypes = {
   showLeadingNavButton: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
+  onLoadComplete: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
   onZoomChanged: func<(event: {zoom: number}) => void>(),
+  onScaleChanged: func<(event: {scale: number}) => void>(),
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
@@ -60,6 +62,7 @@ const propTypes = {
   onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onAnnotationFlattened: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
+  onAnnotationToolbarItemPress: func<(event: {id: string}) => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
@@ -91,7 +94,14 @@ const propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: arrayOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired
+      items: PropTypes.arrayOf(PropTypes.oneOfType([
+        oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired,
+        PropTypes.exact({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          icon: PropTypes.string.isRequired,
+        })
+      ]))
     })
   ])),
   hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
@@ -210,6 +220,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onDocumentLoaded) {
         this.props.onDocumentLoaded(event.nativeEvent.onDocumentLoaded);
       }
+      if (this.props.onLoadComplete) {
+        this.props.onLoadComplete(event.nativeEvent.onDocumentLoaded);
+      }
     } else if (event.nativeEvent.onPageChanged) {
       if (this.props.onPageChanged) {
         this.props.onPageChanged({
@@ -228,6 +241,11 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
+        });
+      }
+      if (this.props.onScaleChanged) {
+        this.props.onScaleChanged({
+        	'scale': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onZoomFinished) {
@@ -263,6 +281,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onFormFieldValueChanged) {
         this.props.onFormFieldValueChanged({
           'fields': event.nativeEvent.fields,
+        });
+      }
+    } else if (event.nativeEvent.onAnnotationToolbarItemPress) {
+      if (this.props.onAnnotationToolbarItemPress) {
+        this.props.onAnnotationToolbarItemPress({
+          'id': event.nativeEvent.id,
         });
       }
     } else if (event.nativeEvent.onDocumentError) {
