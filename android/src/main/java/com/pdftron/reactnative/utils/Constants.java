@@ -24,6 +24,7 @@ public final class Constants {
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
     public static final String ON_PAGES_ADDED = "onPagesAdded";
+    public static final String ON_PAGES_ROTATED = "onPagesRotated";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
     public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
