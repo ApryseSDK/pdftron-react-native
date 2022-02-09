@@ -700,6 +700,21 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)pagesRotated:(RNTPTDocumentView *)sender pageNumbers:(NSIndexSet *)pageNumbers;
+{
+    NSMutableArray *pageNumbersArray=[NSMutableArray array];
+    [pageNumbers enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [pageNumbersArray addObject:[NSNumber numberWithInteger:idx]];
+    }];
+
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPagesRotated" : @"onPagesRotated",
+            @"pageNumbers" : [pageNumbersArray copy],
+        });
+    }
+}
+
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
 {
     if (sender.onChange) {

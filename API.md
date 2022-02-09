@@ -932,6 +932,26 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 />
 ```
 
+#### onPagesRotated
+function, optional
+
+This function is called when pages are rotated.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumbers | array | An array of the page numbers that were rotated
+
+```js
+<DocumentView
+  onPagesRotated = {({pageNumbers}) => {
+    console.log('Pages rotated:', pageNumbers);
+  }}
+/>
+```
+
+
 ### Zoom
 
 #### onZoomChanged
