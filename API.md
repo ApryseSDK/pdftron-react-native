@@ -1388,7 +1388,7 @@ Mode | Description
 ```
 
 #### replyReviewStateEnabled
-boolean, optional, Android only, defaults to true
+boolean, optional, defaults to true
 
 Defines whether to show an annotation's reply review state.
 
