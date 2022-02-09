@@ -25,6 +25,10 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+{
+    NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
+    NSUInteger _annotationToolbarItemCounter;
+}
 
 @property (nonatomic, strong, nullable) UIViewController *viewController;
 
@@ -141,7 +145,7 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
-    _maxTabCount = NSUIntegerMax;
+    _maxTabCount = INT_MAX;
     
     _saveStateEnabled = YES;
     
@@ -165,6 +169,9 @@ NS_ASSUME_NONNULL_END
     _showQuickNavigationButton = YES;
 
     _replyReviewStateEnabled = YES;
+
+    _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
+    _annotationToolbarItemCounter = 0;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -2305,17 +2312,17 @@ NS_ASSUME_NONNULL_END
     // Handle topAppNavBarRightBar.
     if (self.topAppNavBarRightBar && self.topAppNavBarRightBar.count >= 0) {
         
-        NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
+        NSMutableArray *rightBarItems = [[NSMutableArray alloc] init];
         
         for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
             UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
                                                inViewController:documentController];
             if (rightBarItem) {
-                [righBarItems addObject:rightBarItem];
+                [rightBarItems addObject:rightBarItem];
             }
         }
-        
-        documentController.navigationItem.rightBarButtonItems = [righBarItems copy];
+        NSArray * reversedArray = [[rightBarItems reverseObjectEnumerator] allObjects];
+        documentController.navigationItem.rightBarButtonItems = reversedArray;
     }
     
     // Handle bottomToolbar.
@@ -2370,7 +2377,7 @@ NS_ASSUME_NONNULL_END
     NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
     NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
     NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
-    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    NSArray<id> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
     
     UIImage *toolbarImage = nil;
     if (toolbarIcon) {
@@ -2381,18 +2388,62 @@ NS_ASSUME_NONNULL_END
     
     NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
     
-    for (NSString *toolbarItem in toolbarItems) {
-        if (![toolbarItem isKindOfClass:[NSString class]]) {
-            continue;
+    for (id toolbarItemValue in toolbarItems) {
+        if ([toolbarItemValue isKindOfClass:[NSString class]]) {
+            NSString * const toolbarItemKey = (NSString *)toolbarItemValue;
+            
+            Class toolClass = [[self class] toolClassForKey:toolbarItemKey];
+            if (!toolClass) {
+                continue;
+            }
+            
+            UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+            if (item) {
+                [barButtonItems addObject:item];
+            }
         }
-        
-        Class toolClass = [[self class] toolClassForKey:toolbarItem];
-        if (!toolClass) {
-            continue;
-        }
-        
-        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
-        if (item) {
+        else if ([toolbarItemValue isKindOfClass:[NSDictionary class]]) {
+            NSDictionary<NSString *, id> * const toolbarItem = (NSDictionary *)toolbarItemValue;
+            
+            NSString * const toolbarItemId = toolbarItem[PTAnnotationToolbarItemKeyId];
+            NSString * const toolbarItemName = toolbarItem[PTAnnotationToolbarItemKeyName];
+            NSString * const toolbarItemIconName = toolbarItem[PTAnnotationToolbarItemKeyIcon];
+            
+            // An item id, name, and icon are required.
+            if (toolbarItemId.length == 0 ||
+                !toolbarItemName ||
+                toolbarItemIconName.length == 0) {
+                continue;
+            }
+            
+            UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
+            
+            // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
+                                                                                                style:UIBarButtonItemStylePlain
+                                                                                               target:self
+                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            item.title = toolbarItemName;
+            
+            NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
+            
+            NSInteger itemTag = 0;
+            
+            // Check if this id has already been mapped before.
+            NSNumber * const idNumberValue = _annotationToolbarItemKeyMap[toolbarItemId];
+            if (idNumberValue) {
+                // Use existing mapped integer tag.
+                itemTag = idNumberValue.integerValue;
+            } else {
+                // We need to map this item id key to an integer.
+                _annotationToolbarItemCounter++;
+                
+                itemTag = _annotationToolbarItemCounter;
+                _annotationToolbarItemKeyMap[toolbarItemId] = @(itemTag);
+            }
+            
+            item.tag = itemTag;
+            
             [barButtonItems addObject:item];
         }
     }
@@ -2403,6 +2454,27 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)customToolGroupToolbarItemPressed:(PTSelectableBarButtonItem *)toolbarItem
+{
+    const NSInteger itemTag = toolbarItem.tag;
+    
+    // Find the corresponding item key string value for this item tag number.
+    __block NSString *itemKey = nil;
+    [_annotationToolbarItemKeyMap enumerateKeysAndObjectsUsingBlock:^(NSString * const currentItemKey,
+                                                                      NSNumber * const currentItemTagNumber,
+                                                                      BOOL * const stop) {
+        const NSInteger currentItemTag = currentItemTagNumber.integerValue;
+        if (itemTag == currentItemTag) {
+            itemKey = currentItemKey;
+            *stop = YES;
+        }
+    }];
+    
+    if (itemKey) {
+        [self.delegate annotationToolbarItemPressed:self withKey:itemKey];
+    }
 }
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle
@@ -3143,6 +3215,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(pageMoved:pageMovedFromPageNumber:toPageNumber:)]) {
         [self.delegate pageMoved:self pageMovedFromPageNumber:oldPageNumber toPageNumber:newPageNumber];
+    }
+}
+
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber
+{
+    if ([self.delegate respondsToSelector:@selector(pageAdded:pageNumber:)]) {
+        [self.delegate pageAdded:self pageNumber:pageNumber];
     }
 }
 
@@ -5474,6 +5553,24 @@ NS_ASSUME_NONNULL_END
     }
     
     return fileURL;
+}
+
+- (nullable UIImage *)imageForImageName:(NSString *)imageName
+{
+    UIImage * const image = [UIImage imageNamed:imageName];
+    if (image != nil) {
+        return image;
+    }else{
+        // fallback to System Image
+        if (@available(iOS 13.0, *)) {
+            UIImage *systemIcon = [UIImage systemImageNamed:imageName];
+            if (systemIcon != nil) {
+                return systemIcon;
+            }
+        }
+    }
+    
+    return nil;
 }
 
 #pragma mark - Display Responsiveness

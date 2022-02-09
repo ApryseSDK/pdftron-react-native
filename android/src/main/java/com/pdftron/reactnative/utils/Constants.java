@@ -23,8 +23,10 @@ public final class Constants {
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
+    public static final String ON_PAGES_ADDED = "onPagesAdded";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
+    public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -154,6 +156,11 @@ public final class Constants {
     public static final String TOOLBAR_KEY_NAME = "name";
     public static final String TOOLBAR_KEY_ICON = "icon";
     public static final String TOOLBAR_KEY_ITEMS = "items";
+
+    // Custom button
+    public static final String TOOLBAR_ITEM_KEY_ID = "id";
+    public static final String TOOLBAR_ITEM_KEY_NAME = "name";
+    public static final String TOOLBAR_ITEM_KEY_ICON = "icon";
 
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
@@ -331,6 +338,8 @@ public final class Constants {
     public static final String KEY_ANNOTATION_FLAG_TOGGLE_NO_VIEW = "toggleNoView";
 
     public static final String KEY_BOOKMARK_JSON = "bookmarkJson";
+
+    public static final String KEY_PAGE_NUMBERS = "pageNumbers";
 
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";

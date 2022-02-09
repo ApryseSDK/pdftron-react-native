@@ -690,6 +690,15 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         });
     }
 }
+- (void)pageAdded:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPagesAdded" : @"onPagesAdded",
+            @"pageNumbers" : @[@(pageNumber)],
+        });
+    }
+}
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *,id> *> *)annotations
 {
@@ -851,6 +860,18 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         // set potential nil value through this way
         result[@"textSelection"] = textSelection;
         
+        sender.onChange(result);
+    }
+}
+
+- (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey
+{
+    if (sender.onChange) {
+        NSMutableDictionary *result = [[NSMutableDictionary alloc] initWithDictionary: @{
+            @"onAnnotationToolbarItemPress": @"onAnnotationToolbarItemPress",
+            PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
+        }];
+                
         sender.onChange(result);
     }
 }
