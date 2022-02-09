@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.util.SparseArray;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -98,6 +100,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.pdftron.reactnative.utils.Constants.*;
 
@@ -165,6 +168,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     // overflow menu icon
     private String mOverflowResName = null;
+
+    // custom tools
+    private final SparseArray<String> mToolIdMap = new SparseArray<>();
+    private final AtomicInteger mToolIdGenerator = new AtomicInteger(1000);
 
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
 
@@ -716,29 +723,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             } else if (type == ReadableType.Map) {
                 // custom toolbars
                 ReadableMap map = toolbars.getMap(i);
-                if (map != null) {
-                    ReadableMapKeySetIterator iterator = map.keySetIterator();
-                    String tag = null, toolbarName = null, toolbarIcon = null;
-                    ReadableArray toolbarItems = null;
-                    while (iterator.hasNextKey()) {
-                        String toolbarKey = iterator.nextKey();
-                        if (TOOLBAR_KEY_ID.equals(toolbarKey)) {
-                            tag = map.getString(toolbarKey);
-                        } else if (TOOLBAR_KEY_NAME.equals(toolbarKey)) {
-                            toolbarName = map.getString(toolbarKey);
-                        } else if (TOOLBAR_KEY_ICON.equals(toolbarKey)) {
-                            toolbarIcon = map.getString(toolbarKey);
-                        } else if (TOOLBAR_KEY_ITEMS.equals(toolbarKey)) {
-                            toolbarItems = map.getArray(toolbarKey);
-                        }
+                ReadableMapKeySetIterator iterator = map.keySetIterator();
+                String tag = null, toolbarName = null, toolbarIcon = null;
+                ReadableArray toolbarItems = null;
+                while (iterator.hasNextKey()) {
+                    String toolbarKey = iterator.nextKey();
+                    if (TOOLBAR_KEY_ID.equals(toolbarKey)) {
+                        tag = map.getString(toolbarKey);
+                    } else if (TOOLBAR_KEY_NAME.equals(toolbarKey)) {
+                        toolbarName = map.getString(toolbarKey);
+                    } else if (TOOLBAR_KEY_ICON.equals(toolbarKey)) {
+                        toolbarIcon = map.getString(toolbarKey);
+                    } else if (TOOLBAR_KEY_ITEMS.equals(toolbarKey)) {
+                        toolbarItems = map.getArray(toolbarKey);
                     }
-                    if (!Utils.isNullOrEmpty(tag) && toolbarName != null &&
-                            toolbarItems != null && toolbarItems.size() > 0) {
-                        AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
-                                .setToolbarName(toolbarName)
-                                .setIcon(convStringToToolbarDefaultIconRes(toolbarIcon));
-                        boolean saveItemOrder = false;
-                        for (int j = 0; j < toolbarItems.size(); j++) {
+                }
+                if (!Utils.isNullOrEmpty(tag) && toolbarName != null &&
+                        toolbarItems != null && toolbarItems.size() > 0) {
+                    AnnotationToolbarBuilder toolbarBuilder = AnnotationToolbarBuilder.withTag(tag)
+                            .setToolbarName(toolbarName)
+                            .setIcon(convStringToToolbarDefaultIconRes(toolbarIcon));
+                    boolean saveItemOrder = false;
+                    for (int j = 0; j < toolbarItems.size(); j++) {
+                        ReadableType itemType = toolbarItems.getType(j);
+                        if (itemType == ReadableType.String) {
                             String toolStr = toolbarItems.getString(j);
                             ToolbarButtonType buttonType = convStringToToolbarType(toolStr);
                             int buttonId = convStringToButtonId(toolStr);
@@ -754,12 +762,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                                     toolbarBuilder.addToolButton(buttonType, buttonId);
                                 }
                             }
+                        } else if (itemType == ReadableType.Map) {
+                            // custom buttons
+                            ReadableMap itemMap = toolbarItems.getMap(j);
+                            ReadableMapKeySetIterator itemIterator = itemMap.keySetIterator();
+                            String itemId = null, itemName = null, itemIcon = null;
+                            while (itemIterator.hasNextKey()) {
+                                String toolbarKey = itemIterator.nextKey();
+                                if (TOOLBAR_ITEM_KEY_ID.equals(toolbarKey)) {
+                                    itemId = itemMap.getString(toolbarKey);
+                                } else if (TOOLBAR_ITEM_KEY_NAME.equals(toolbarKey)) {
+                                    itemName = itemMap.getString(toolbarKey);
+                                } else if (TOOLBAR_ITEM_KEY_ICON.equals(toolbarKey)) {
+                                    itemIcon = itemMap.getString(toolbarKey);
+                                }
+                            }
+                            if (!Utils.isNullOrEmpty(itemId) && itemName != null && !Utils.isNullOrEmpty(itemIcon)) {
+                                int res = Utils.getResourceDrawable(this.getContext(), itemIcon);
+                                if (res != 0) {
+                                    int id = mToolIdGenerator.getAndIncrement();
+                                    mToolIdMap.put(id, itemId);
+                                    toolbarBuilder.addCustomButton(itemName, res, id);
+                                }
+                            }
                         }
-                        // SDK Support Issue 22893
-                        // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
-                        mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(saveItemOrder);
-                        annotationToolbarBuilders.add(toolbarBuilder);
                     }
+                    // SDK Support Issue 22893
+                    // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(saveItemOrder);
+                    annotationToolbarBuilders.add(toolbarBuilder);
                 }
             }
         }
@@ -2023,6 +2054,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
         }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
+    }
+
+    @Override
+    public boolean onToolbarOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        String itemKey = mToolIdMap.get(itemId);
+        if (itemKey != null) {
+            // this is a custom button
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_ANNOTATION_TOOLBAR_ITEM_PRESS, ON_ANNOTATION_TOOLBAR_ITEM_PRESS);
+            params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);
+            onReceiveNativeEvent(params);
+            return true;
+        }
+
+        return super.onToolbarOptionsItemSelected(item);
     }
 
     @Override

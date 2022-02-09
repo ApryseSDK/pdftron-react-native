@@ -296,6 +296,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// Custom annotation toolbar item keys.
+typedef NSString * PTAnnotationToolbarItemKey NS_TYPED_EXTENSIBLE_ENUM;
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyId = @"id";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyName = @"name";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyIcon = @"icon";
+
 // Contexts.
 static void *TabChangedContext = &TabChangedContext;
 
@@ -347,6 +353,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
 - (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
+- (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
 @end
 
