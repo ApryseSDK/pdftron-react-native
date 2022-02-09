@@ -296,9 +296,6 @@ Used for specifying the extension of the document to be loaded.
 />
 ```
 
-For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
-
-
 #### customHeaders
 object, optional
 

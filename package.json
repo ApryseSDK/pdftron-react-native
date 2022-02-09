@@ -1,14 +1,16 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "3.0.2-beta.50",
+  "version": "3.0.2-beta.51",
   "description": "React Native Pdftron",
   "main": "./lib/index.js",
   "typings": "index.ts",
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "tsc"
+    "start": "tsc",
+    "postinstall": "python3 scripts/newPodspecMessage.py",
+    "prestart" : "python3 scripts/newPodspecMessage.py"
   },
   "repository": {
     "type": "git",
