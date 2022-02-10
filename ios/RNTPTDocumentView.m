@@ -292,7 +292,6 @@ NS_ASSUME_NONNULL_END
             RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
             collaborationViewController.collaborationReplyViewController.annotationStateEnabled = self.replyReviewStateEnabled;
-
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
         } else {
@@ -2417,7 +2416,6 @@ NS_ASSUME_NONNULL_END
             }
             
             UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
-
             // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
             PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
                                                                                                 style:UIBarButtonItemStylePlain
@@ -5583,7 +5581,6 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
-
     return nil;
 }
 
