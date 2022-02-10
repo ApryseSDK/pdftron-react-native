@@ -146,7 +146,7 @@ const propTypes = {
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onPagesAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
   onPagesRemoved: func<(event: {pageNumbers: Array<number>}) => void>(),
-    onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
+  onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
