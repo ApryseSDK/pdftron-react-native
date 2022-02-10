@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber;
 
+- (void)rnt_documentViewControllerPageRemoved:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber;
+
 @end
 
 @class RNTPTDocumentViewController;
@@ -50,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentViewController : PTDocumentViewController
 
-@property (nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
+@property(nonatomic, weak, nullable) id<RNTPTDocumentViewControllerDelegate> delegate;
 
 @end
 

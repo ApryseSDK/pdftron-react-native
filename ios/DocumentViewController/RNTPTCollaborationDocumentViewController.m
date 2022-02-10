@@ -166,6 +166,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)toolManager:(PTToolManager *)toolManager pageRemovedForPageNumber:(int)pageNumber
+ {
+     [super toolManager:toolManager pageRemovedForPageNumber:pageNumber];
+     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageRemoved:pageNumber:)]) {
+         [self.delegate rnt_documentViewControllerPageRemoved:self pageNumber:pageNumber];
+     }
+ }
+
 #pragma mark - <PTAnnotationToolbarDelegate>
 
 - (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar
