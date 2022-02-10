@@ -8,13 +8,16 @@
   "scripts": {
     "copy-to-repo": "cd scripts && python3 fileCopy.py toRepo && cd ..",
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
-    "start": "tsc"
+    "start": "tsc",
+    "postinstall": "python3 scripts/newPodspecMessage.py",
+    "prestart" : "python3 scripts/newPodspecMessage.py"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PDFTron/pdftron-react-native.git",
     "baseUrl": "https://github.com/PDFTron/pdftron-react-native"
   },
+  "homepage": "https://www.pdftron.com/documentation/mobile/#frameworks",
   "keywords": [
     "react-native",
     "PDFTron",

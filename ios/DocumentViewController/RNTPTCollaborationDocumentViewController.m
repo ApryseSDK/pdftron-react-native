@@ -174,6 +174,14 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)toolManager:(PTToolManager *)toolManager didRotatePagesForPageNumbers:(NSIndexSet *)pageNumbers
+{
+    [super toolManager:toolManager didRotatePagesForPageNumbers:pageNumbers];
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidRotatePages:forPageNumbers:)]) {
+        [self.delegate rnt_documentViewControllerDidRotatePages:self forPageNumbers:pageNumbers];
+    }
+}
+
 #pragma mark - <PTAnnotationToolbarDelegate>
 
 - (BOOL)toolShouldGoBackToPan:(PTAnnotationToolbar *)annotationToolbar

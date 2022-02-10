@@ -21,7 +21,7 @@
         self.needsDocumentLoaded = NO;
         self.needsRemoteDocumentLoaded = NO;
         self.documentLoaded = YES;
-        
+        self.collaborationReplyViewController.annotationStateEnabled = NO;
         if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDocumentLoaded:)]) {
             [self.delegate rnt_documentViewControllerDocumentLoaded:self];
         }
@@ -194,6 +194,14 @@
     [super toolManager:toolManager pageRemovedForPageNumber:pageNumber];
     if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerPageRemoved:pageNumber:)]) {
         [self.delegate rnt_documentViewControllerPageRemoved:self pageNumber:pageNumber];
+    }
+}
+
+- (void)toolManager:(PTToolManager *)toolManager didRotatePagesForPageNumbers:(NSIndexSet *)pageNumbers
+{
+    [super toolManager:toolManager didRotatePagesForPageNumbers:pageNumbers];
+    if ([self.delegate respondsToSelector:@selector(rnt_documentViewControllerDidRotatePages:forPageNumbers:)]) {
+        [self.delegate rnt_documentViewControllerDidRotatePages:self forPageNumbers:pageNumbers];
     }
 }
 

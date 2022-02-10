@@ -331,6 +331,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)pageRemoved:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
 
+- (void)pagesRotated:(RNTPTDocumentView *)sender pageNumbers:(NSIndexSet *)pageNumbers;
+
 - (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
@@ -426,6 +428,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic) BOOL storeNewSignature;
 
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
+
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
 
 @property (nonatomic, copy, nullable) NSString *currentUser;
 
@@ -680,6 +684,16 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 
 @interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
+
+@interface RNTPTAnnotationManager : PTAnnotationManager
+
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
+
+@end
+
+@interface RNTPTAnnotationReplyViewController : PTAnnotationReplyViewController
 
 @end
 NS_ASSUME_NONNULL_END

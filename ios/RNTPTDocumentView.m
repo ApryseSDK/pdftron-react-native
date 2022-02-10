@@ -151,7 +151,13 @@ NS_ASSUME_NONNULL_END
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
-    
+
+    [PTOverrides overrideClass:[PTAnnotationManager class]
+                     withClass:[RNTPTAnnotationManager class]];
+
+    [PTOverrides overrideClass:[PTAnnotationReplyViewController class]
+                     withClass:[RNTPTAnnotationReplyViewController class]];
+
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
@@ -161,7 +167,9 @@ NS_ASSUME_NONNULL_END
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
-    
+
+    _replyReviewStateEnabled = YES;
+
     _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
     _annotationToolbarItemCounter = 0;
 }
@@ -283,7 +291,8 @@ NS_ASSUME_NONNULL_END
             
             RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
-            
+            collaborationViewController.collaborationReplyViewController.annotationStateEnabled = self.replyReviewStateEnabled;
+
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
         } else {
@@ -1864,6 +1873,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setReplyReviewStateEnabled:(BOOL)replyReviewStateEnabled
+{
+    _replyReviewStateEnabled = replyReviewStateEnabled;
+
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -2100,6 +2116,11 @@ NS_ASSUME_NONNULL_END
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
         documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
+    }
+
+    if ([documentViewController.toolManager.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)documentViewController.toolManager.annotationManager;
+        annotationManager.replyReviewStateEnabled = self.replyReviewStateEnabled;
     }
 
     // Enable/disable restoring state (last read page).
@@ -2395,14 +2416,14 @@ NS_ASSUME_NONNULL_END
                 continue;
             }
             
-            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithTitle:toolbarItemName
+            UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
+
+            // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
                                                                                                 style:UIBarButtonItemStylePlain
                                                                                                target:self
                                                                                                action:@selector(customToolGroupToolbarItemPressed:)];
-            UIImage * const toolbarItemIcon = [UIImage imageNamed:toolbarItemIconName];
-            if (toolbarItemIcon != nil) {
-                item.image = toolbarImage;
-            }
+            item.title = toolbarItemName;
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
             
@@ -3208,6 +3229,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(pageRemoved:pageNumber:)]) {
         [self.delegate pageRemoved:self pageNumber:pageNumber];
+    }
+}
+
+- (void)rnt_documentViewControllerDidRotatePages:(PTDocumentBaseViewController *)documentViewController forPageNumbers:(NSIndexSet *)pageNumbers
+{
+    if ([self.delegate respondsToSelector:@selector(pagesRotated:pageNumbers:)]) {
+        [self.delegate pagesRotated:self pageNumbers:pageNumbers];
     }
 }
 
@@ -5541,6 +5569,24 @@ NS_ASSUME_NONNULL_END
     return fileURL;
 }
 
+- (nullable UIImage *)imageForImageName:(NSString *)imageName
+{
+    UIImage * const image = [UIImage imageNamed:imageName];
+    if (image != nil) {
+        return image;
+    }else{
+        // fallback to System Image
+        if (@available(iOS 13.0, *)) {
+            UIImage *systemIcon = [UIImage systemImageNamed:imageName];
+            if (systemIcon != nil) {
+                return systemIcon;
+            }
+        }
+    }
+
+    return nil;
+}
+
 #pragma mark - Display Responsiveness
 
 -(void)setShowNavigationListAsSidePanelOnLargeDevices:(BOOL)showNavigationListAsSidePanelOnLargeDevices
@@ -5617,3 +5663,27 @@ NS_ASSUME_NONNULL_END
     self.navigationController.toolbarHidden = !self.editingEnabled;
 }
 @end
+
+#pragma mark - RNTPTAnnotationManager
+
+@implementation RNTPTAnnotationManager
+
+@end
+
+#pragma mark - RNTPTAnnotationReplyViewController
+
+@implementation RNTPTAnnotationReplyViewController
+
+- (BOOL)isAnnotationStateEnabled
+{
+    BOOL annotationStateEnabled = [super isAnnotationStateEnabled];
+    BOOL replyReviewStateEnabled = YES;
+    if ([self.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)self.annotationManager;
+        replyReviewStateEnabled = annotationManager.replyReviewStateEnabled;
+    }
+    return annotationStateEnabled && replyReviewStateEnabled;
+}
+
+@end
+

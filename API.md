@@ -296,9 +296,6 @@ Used for specifying the extension of the document to be loaded.
 />
 ```
 
-For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
-
-
 #### customHeaders
 object, optional
 
@@ -404,6 +401,24 @@ path | string | File path that the document has been saved to
 />
 ```
 
+#### onLoadComplete
+function, optional
+
+This function is called when the document finishes loading.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
+```js
+<DocumentView
+  onLoadComplete = {(path) => { 
+    console.log('The document has finished loading:', path); 
+  }}
+/>
+```
 #### onDocumentError
 function, optional
 
@@ -917,6 +932,25 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 />
 ```
 
+#### onPagesRotated
+function, optional
+
+This function is called when pages are rotated.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumbers | array | An array of the page numbers that were rotated
+
+```js
+<DocumentView
+  onPagesRotated = {({pageNumbers}) => {
+    console.log('Pages rotated:', pageNumbers);
+  }}
+/>
+```
+
 #### onPagesRemoved
 function, optional
 
@@ -953,6 +987,24 @@ zoom | double | the current zoom ratio of the document
 <DocumentView
   onZoomChanged = {(zoom) => {
     console.log('Current zoom ratio is', zoom);
+  }}
+/>
+```
+#### onScaleChanged
+function, optional
+
+This function is called when the zoom scale has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onScaleChanged = {(scale) => {
+    console.log('Current scale ratio is', scale);
   }}
 />
 ```
@@ -1354,7 +1406,7 @@ Mode | Description
 ```
 
 #### replyReviewStateEnabled
-boolean, optional, Android only, defaults to true
+boolean, optional, defaults to true
 
 Defines whether to show an annotation's reply review state.
 
