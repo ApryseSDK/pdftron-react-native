@@ -951,6 +951,24 @@ pageNumbers | array | An array of the page numbers that were rotated
 />
 ```
 
+#### onPagesRemoved
+function, optional
+
+This function is called when pages are removed from the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumbers | array | An array of the page numbers that were removed from the document
+
+```js
+<DocumentView
+  onPagesRemoved = {({pageNumbers}) => {
+    console.log('Pages removed:', pageNumbers);
+  }}
+/>
+```
 
 ### Zoom
 

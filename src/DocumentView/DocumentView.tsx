@@ -145,6 +145,7 @@ const propTypes = {
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onPagesAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
+  onPagesRemoved: func<(event: {pageNumbers: Array<number>}) => void>(),
   onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
@@ -371,6 +372,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onPagesAdded) {
       if (this.props.onPagesAdded) {
         this.props.onPagesAdded({
+          'pageNumbers': event.nativeEvent.pageNumbers,
+        });
+      }
+    } else if (event.nativeEvent.onPagesRemoved) {
+      if (this.props.onPagesRemoved) {
+        this.props.onPagesRemoved({
           'pageNumbers': event.nativeEvent.pageNumbers,
         });
       }
