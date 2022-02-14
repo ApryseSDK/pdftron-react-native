@@ -19,6 +19,7 @@ jobs:
         run: | 
           npm i
       
+      - run: pwd
       - run: ls -la 
 
       - name: Node setup
