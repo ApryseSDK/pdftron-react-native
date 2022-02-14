@@ -11,7 +11,7 @@
     "start": "tsc",
     "postinstall": "python3 scripts/newPodspecMessage.py",
     "prestart" : "python3 scripts/newPodspecMessage.py",
-    "prepare": "bash scripts/prepare.sh",
+    "prepublishOnly": "bash scripts/prepare.sh",
     "postpublish": "bash scripts/postpublish.sh"
   },
   "repository": {
