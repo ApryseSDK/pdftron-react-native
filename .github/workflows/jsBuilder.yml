@@ -19,6 +19,7 @@ jobs:
         run: | 
           npm i
       
+      - run: bash scripts/postpublish.sh
       - run: pwd
       - run: ls -la 
 
