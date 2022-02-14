@@ -19,6 +19,8 @@ jobs:
         run: | 
           npm i
       
+      - run: ls -la 
+
       - name: Node setup
         uses: actions/setup-node@v2
         with:
