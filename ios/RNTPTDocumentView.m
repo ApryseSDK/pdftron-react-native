@@ -908,6 +908,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateSmartPenToolKey]) {
                 toolManager.smartPenEnabled = value;
             }
+            else if ([string isEqualToString:PTFormFillToolKey]) {
+                toolManager.widgetAnnotationOptions.canEdit = value;
+            }
         }
     }
 }

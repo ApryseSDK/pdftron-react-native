@@ -1327,6 +1327,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FREE_HIGHLIGHTER;
         } else if (TOOL_ANNOTATION_CREATE_SMART_PEN.equals(item)) {
             mode = ToolManager.ToolMode.SMART_PEN_INK;
+        } else if (TOOL_FORM_FILL.equals(item)) {
+            mode = ToolManager.ToolMode.FORM_FILL;
         }
         return mode;
     }
