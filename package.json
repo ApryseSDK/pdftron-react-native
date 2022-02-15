@@ -1,7 +1,7 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "3.0.2-beta.57",
+  "version": "3.0.2-beta.58",
   "description": "React Native Pdftron",
   "main": "./lib/index.js",
   "typings": "index.ts",
@@ -19,7 +19,7 @@
     "url": "git+https://github.com/PDFTron/pdftron-react-native.git",
     "baseUrl": "https://github.com/PDFTron/pdftron-react-native"
   },
-  "license" : "SEE LICENSE IN <filename>",
+  "license" : "SEE LICENSE IN LICENSE",
   "homepage": "https://www.pdftron.com/documentation/mobile/#frameworks",
   "keywords": [
     "react-native",
