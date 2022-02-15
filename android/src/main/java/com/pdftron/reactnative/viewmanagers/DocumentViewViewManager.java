@@ -538,7 +538,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             return documentView.currentFilePath();
         } else {
-            throw new PDFNetException("", 0L, getName(), "saveDocument", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "currentFilePath", "Unable to find DocumentView.");
         }
     }
 

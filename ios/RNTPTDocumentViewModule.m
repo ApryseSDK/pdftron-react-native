@@ -241,12 +241,12 @@ RCT_REMAP_METHOD(currentFilePath,
             if (filePath) {
                 resolve(filePath);
             } else {
-                reject(@"save_failed", @"Failed to get file path", nil);
+                reject(@"current_file_path_failed", @"Failed to get file path", nil);
             }
         }];
     }
     @catch (NSException *exception) {
-        reject(@"save_failed", @"Failed to get file path", [self errorFromException:exception]);
+        reject(@"current_file_path_failed", @"Failed to get file path", [self errorFromException:exception]);
     }
 }
 
