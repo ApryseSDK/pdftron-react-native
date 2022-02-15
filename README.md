@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   document = "content://...";
   ```
   
-  ## Usage-NPM
+## Usage-NPM
 
 Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
