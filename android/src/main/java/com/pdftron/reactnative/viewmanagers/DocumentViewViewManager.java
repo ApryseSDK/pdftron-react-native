@@ -533,6 +533,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public String currentFilePath(int tag) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.currentFilePath();
+        } else {
+            throw new PDFNetException("", 0L, getName(), "saveDocument", "Unable to find DocumentView.");
+        }
+    }
+
     public void flattenAnnotations(int tag, boolean formsOnly) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

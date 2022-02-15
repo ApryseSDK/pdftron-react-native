@@ -37,6 +37,8 @@
 
 - (void)saveDocumentForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
+- (void)currentFilePathForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString *_Nullable filePath))completionHandler;
+
 - (void)setFlagForFieldsForDocumentViewTag:(NSNumber *)tag forFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
 - (void)setValuesForFieldsForDocumentViewTag:(NSNumber *)tag map:(NSDictionary<NSString *, id> *)map;

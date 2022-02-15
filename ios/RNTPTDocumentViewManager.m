@@ -1044,6 +1044,22 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)currentFilePathForDocumentViewTag:(NSNumber *)tag completionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView currentFilePathWithCompletionHandler:^(NSString * _Nullable filePath){
+            if (completionHandler) {
+                completionHandler(filePath);
+            }
+        }];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:@"Unable to find DocumentView for tag"
+                                     userInfo:nil];
+    }
+}
+
 - (void)setFlagForFieldsForDocumentViewTag:(NSNumber *)tag forFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];

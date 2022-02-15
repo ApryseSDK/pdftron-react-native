@@ -526,6 +526,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler;
 
+- (void)currentFilePathWithCompletionHandler:(void (^)(NSString *_Nullable filePath))completionHandler;
+
 - (void)setFlagForFields:(NSArray<NSString *> *)fields setFlag:(PTFieldFlag)flag toValue:(BOOL)value;
 
 - (void)setValuesForFields:(NSDictionary<NSString *, id> *)map;

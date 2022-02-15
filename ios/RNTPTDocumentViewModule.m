@@ -231,6 +231,25 @@ RCT_REMAP_METHOD(saveDocument,
     }
 }
 
+RCT_REMAP_METHOD(currentFilePath,
+                 currentFilePathForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] currentFilePathForDocumentViewTag:tag completionHandler:^(NSString * _Nullable filePath) {
+            if (filePath) {
+                resolve(filePath);
+            } else {
+                reject(@"save_failed", @"Failed to get file path", nil);
+            }
+        }];
+    }
+    @catch (NSException *exception) {
+        reject(@"save_failed", @"Failed to get file path", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setFlagForFields,
                  setFlagForFieldsForDocumentViewTag:(nonnull NSNumber *)tag
                  fields:(NSArray<NSString *> *)fields

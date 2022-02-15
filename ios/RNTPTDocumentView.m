@@ -1398,6 +1398,18 @@ NS_ASSUME_NONNULL_END
     }];
 }
 
+#pragma mark - Get Current File Path
+
+- (void)currentFilePathWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
+{
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+
+    NSString *filePath = documentViewController.coordinatedDocument.fileURL.path;
+
+    completionHandler(filePath);
+}
+
 #pragma mark - Annotation Flag
 
 - (void)setFlagsForAnnotations:(NSArray *)annotationFlagList

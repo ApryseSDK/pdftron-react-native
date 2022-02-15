@@ -502,6 +502,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  currentFilePath = (): Promise<void | string> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.currentFilePath(tag);
+    }
+    return Promise.resolve();
+  }
+
   setFlagForFields = (fields: Array<string>, flag: Config.FieldFlags, value: boolean): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if(tag != null) {

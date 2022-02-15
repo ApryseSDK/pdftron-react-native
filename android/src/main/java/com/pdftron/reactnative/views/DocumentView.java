@@ -3132,6 +3132,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
+    public String currentFilePath() {
+        if (getPdfViewCtrlTabFragment() != null) {
+            commitTool();
+            if (mCollabEnabled) {
+                try {
+                    if (mCollabTempFile == null || !mCollabTempFile.exists()) {
+                        mCollabTempFile = File.createTempFile("tmp", ".pdf");
+                    }
+                    if (getToolManager() != null && getToolManager().getAnnotManager() != null) {
+                        return mCollabTempFile.getAbsolutePath();
+                    }
+                    return "";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return "";
+                }
+            }
+            if (getPdfViewCtrlTabFragment() != null && getPdfViewCtrlTabFragment().getFile() != null) {
+                File file = getPdfViewCtrlTabFragment().getFile();
+                if (mIsBase64) {
+                    try {
+                        byte[] data = FileUtils.readFileToByteArray(file);
+                        return Base64.encodeToString(data, Base64.DEFAULT);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return "";
+                    }
+                } else {
+                    if (getPdfViewCtrlTabFragment() != null) {
+                        return getPdfViewCtrlTabFragment().getFilePath();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public void flattenAnnotations(boolean formsOnly) throws PDFNetException {
         // go back to pan tool first so it will commit currently typing text boxes
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
