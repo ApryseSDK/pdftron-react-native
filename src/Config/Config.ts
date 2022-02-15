@@ -98,6 +98,7 @@ export const Config = {
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+    formFill: 'FormFill',
     insertPage: 'InsertPage',
 
     // iOS only.
