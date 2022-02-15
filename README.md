@@ -4,7 +4,8 @@
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Usage Github](#usage-github)
+- [Usage NPM](#usage-npm)
 - [TypeScript](#typescript)
 - [Contributing](#contributing)
 - [License](#license)
@@ -209,7 +210,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 4. Finally in the root project directory, run `react-native run-ios`.
 5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
-## Usage
+## Usage-Github
 
 Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
@@ -338,6 +339,43 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+- (iOS) For app bundle file path:
+
+  ```javascript
+  document = "sample";
+  ```
+
+- (Android) For local storage file path:
+
+  ```javascript
+  document = "file:///storage/emulated/0/Download/sample.pdf";
+  ```
+
+- (Android) For raw resource path (include file extension):
+
+  ```javascript
+  document = "android.resource://mypackagename/raw/sample.pdf";
+  ```
+
+- (Android) For content Uri:
+
+  ```javascript
+  document = "content://...";
+  ```
+  
+  ## Usage-NPM
+
+Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
+
+If you set your path variable to point to a local storage file,
+then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
+
+Within this example there are several sections of commented out code that work together to
+handle storage permissions.
+
+Below the example are the types of file paths that are native to iOS or Android and accepted
+by the `DocumentView` component.
 
 if you are using the npm package use this instead
 
@@ -481,7 +519,6 @@ const styles = StyleSheet.create({
   ```javascript
   document = "content://...";
   ```
-
 ## TypeScript
 
 PDFTron React Native introduced support for TypeScript in version 3.0.0. This update mainly benefits those who already use TypeScript in their applications. It also provides certain benefits to all customers, including those who use JavaScript without TypeScript.
