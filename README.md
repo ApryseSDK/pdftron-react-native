@@ -212,7 +212,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ## Usage-Github
 
-Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
+If you installed through GitHub, replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
 If you set your path variable to point to a local storage file,
 then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   
 ## Usage-NPM
 
-Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
+If you installed through NPM package, Replace `App.js` (or `App.tsx` if you are [using TypeScript](#typescript)) with the code below.
 
 If you set your path variable to point to a local storage file,
 then the `PermissionsAndroid` component is required to ensure that storage permission is properly granted.
