@@ -297,6 +297,13 @@ RCT_CUSTOM_VIEW_PROPERTY(collabEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(replyReviewStateEnabled, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.replyReviewStateEnabled = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(currentUser, NSString, RNTPTDocumentView)
 {
     if (json) {
@@ -696,6 +703,30 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         sender.onChange(@{
             @"onPagesAdded" : @"onPagesAdded",
             @"pageNumbers" : @[@(pageNumber)],
+        });
+    }
+}
+- (void)pageRemoved:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPagesRemoved" : @"onPagesRemoved",
+            @"pageNumbers" : @[@(pageNumber)],
+        });
+    }
+}
+
+- (void)pagesRotated:(RNTPTDocumentView *)sender pageNumbers:(NSIndexSet *)pageNumbers;
+{
+    NSMutableArray *pageNumbersArray=[NSMutableArray array];
+    [pageNumbers enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [pageNumbersArray addObject:[NSNumber numberWithInteger:idx]];
+    }];
+
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onPagesRotated" : @"onPagesRotated",
+            @"pageNumbers" : [pageNumbersArray copy],
         });
     }
 }

@@ -24,6 +24,8 @@ public final class Constants {
     public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
     public static final String ON_PAGE_MOVED = "onPageMoved";
     public static final String ON_PAGES_ADDED = "onPagesAdded";
+    public static final String ON_PAGES_REMOVED = "onPagesRemoved";
+    public static final String ON_PAGES_ROTATED = "onPagesRotated";
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
     public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
@@ -129,6 +131,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
     public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
     public static final String TOOL_INSERT_PAGE = "InsertPage";
+    public static final String TOOL_FORM_FILL = "FormFill";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";

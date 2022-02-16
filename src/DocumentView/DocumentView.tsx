@@ -31,10 +31,12 @@ const propTypes = {
   showLeadingNavButton: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
+  onLoadComplete: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
   onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
   onZoomChanged: func<(event: {zoom: number}) => void>(),
+  onScaleChanged: func<(event: {scale: number}) => void>(),
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
@@ -144,6 +146,8 @@ const propTypes = {
   replyReviewStateEnabled: PropTypes.bool,
   onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
   onPagesAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
+  onPagesRemoved: func<(event: {pageNumbers: Array<number>}) => void>(),
+  onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
@@ -219,6 +223,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onDocumentLoaded) {
         this.props.onDocumentLoaded(event.nativeEvent.onDocumentLoaded);
       }
+      if (this.props.onLoadComplete) {
+        this.props.onLoadComplete(event.nativeEvent.onDocumentLoaded);
+      }
     } else if (event.nativeEvent.onPageChanged) {
       if (this.props.onPageChanged) {
         this.props.onPageChanged({
@@ -237,6 +244,11 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onZoomChanged) {
         this.props.onZoomChanged({
         	'zoom': event.nativeEvent.zoom,
+        });
+      }
+      if (this.props.onScaleChanged) {
+        this.props.onScaleChanged({
+        	'scale': event.nativeEvent.zoom,
         });
       }
     } else if (event.nativeEvent.onZoomFinished) {
@@ -361,6 +373,18 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onPagesAdded) {
       if (this.props.onPagesAdded) {
         this.props.onPagesAdded({
+          'pageNumbers': event.nativeEvent.pageNumbers,
+        });
+      }
+    } else if (event.nativeEvent.onPagesRemoved) {
+      if (this.props.onPagesRemoved) {
+        this.props.onPagesRemoved({
+          'pageNumbers': event.nativeEvent.pageNumbers,
+        });
+      }
+    } else if (event.nativeEvent.onPagesRotated) {
+      if (this.props.onPagesRotated) {
+        this.props.onPagesRotated({
           'pageNumbers': event.nativeEvent.pageNumbers,
         });
       }

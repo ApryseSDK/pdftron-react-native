@@ -1345,6 +1345,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FREE_HIGHLIGHTER;
         } else if (TOOL_ANNOTATION_CREATE_SMART_PEN.equals(item)) {
             mode = ToolManager.ToolMode.SMART_PEN_INK;
+        } else if (TOOL_FORM_FILL.equals(item)) {
+            mode = ToolManager.ToolMode.FORM_FILL;
         }
         return mode;
     }
@@ -2576,12 +2578,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         @Override
         public void onPagesDeleted(List<Integer> list) {
+            WritableMap params = Arguments.createMap();
+            WritableArray pageNumbers = Arguments.fromList(list);
+            params.putString(ON_PAGES_REMOVED, ON_PAGES_REMOVED);
+            params.putArray(KEY_PAGE_NUMBERS, pageNumbers);
 
+            onReceiveNativeEvent(params);
         }
 
         @Override
         public void onPagesRotated(List<Integer> list) {
+            WritableMap params = Arguments.createMap();
+            WritableArray pageNumbers = Arguments.fromList(list);
+            params.putString(ON_PAGES_ROTATED, ON_PAGES_ROTATED);
+            params.putArray(KEY_PAGE_NUMBERS, pageNumbers);
 
+            onReceiveNativeEvent(params);
         }
 
         @Override
