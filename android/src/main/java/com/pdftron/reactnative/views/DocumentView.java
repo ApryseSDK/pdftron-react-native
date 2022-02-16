@@ -86,6 +86,7 @@ import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
 import com.pdftron.reactnative.R;
+import com.pdftron.reactnative.nativeviews.RNCollabViewerTabHostFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
@@ -247,7 +248,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     .usingNavIcon(mShowNavIcon ? mNavIconRes : 0)
                     .usingCustomHeaders(mCustomHeaders)
                     .usingAnnotationManagerEditMode(mAnnotationManagerEditMode)
-                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode);
+                    .usingAnnotationManagerUndoMode(mAnnotationManagerUndoMode)
+                    .usingTabHostClass(RNCollabViewerTabHostFragment.class);
             if (!Utils.isNullOrEmpty(mTabTitle)) {
                 builder2.usingTabTitle(mTabTitle);
             }
@@ -1949,6 +1951,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                 });
             }
+        } else if (mPdfViewCtrlTabHostFragment instanceof RNCollabViewerTabHostFragment) {
+            ((RNCollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
+                @Override
+                public void onHostFragmentViewCreated() {
+                    View fragmentView = mPdfViewCtrlTabHostFragment.getView();
+                    if (fragmentView != null) {
+                        fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
+                        addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    }
+                }
+            });
         }
     }
 
