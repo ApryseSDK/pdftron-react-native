@@ -3016,7 +3016,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void importAnnotations(String xfdf) throws PDFNetException {
+    public void importAnnotations(String xfdf, boolean replace) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -3042,7 +3042,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             shouldUnlock = true;
 
             FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
-            pdfDoc.fdfUpdate(fdfDoc);
+            if (replace) {
+                pdfDoc.fdfUpdate(fdfDoc);
+            } else {
+                pdfDoc.fdfMerge(fdfDoc);
+            }
             pdfViewCtrl.update(true);
         } finally {
             if (shouldUnlock) {
