@@ -83,8 +83,8 @@ RCT_REMAP_METHOD(getAllFields,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSString *path = [[self documentViewManager] getAllFieldsForDocumentViewTag:tag pageNumber:pageNumber];
-        resolve(path);
+        NSMutableArray<NSDictionary *> *fields= [[self documentViewManager] getAllFieldsForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(fields);
     }
     @catch (NSException *exception) {
         reject(@"export_failed", @"Failed to get all fields for the page", [self errorFromException:exception]);

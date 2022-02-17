@@ -4584,66 +4584,51 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Get All Fields
 
-- (NSDictionary *)getAllFieldsForDocumentViewTag:(int)pageNumber
+- (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
-    PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-    if(doc){
-        PTPage page = [doc getPage];
-        int num_annots = [page getNumAnnots];
-        for (int i = 0; i < num_annots; i ++){
-            PTAnnot annot = [page getAnnot:i];
-            if(annot != null && isValid) {
-                 if ([annot GetType] == e_ptWidget) {
-        __block PTWidget *widget;
-        __block PTField *field;
-        __block NSString *fieldName;
-        __block NSDictionary *fieldMap;
-
-        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            widget = [[PTWidget alloc] initWithAnn:annot];
-            field = [widget GetField];
-            fieldName = [field IsValid] ? [field GetName] : @"";
-            fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
-        } error:&error];
-        
-        if (error) {
-            NSLog(@"An error occurred: %@", error);
-            return;
-        }
-
-            }
-        }
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
     }
-            WritableArray fieldsArray = Arguments.createArray();
-            try {
-                Page page = getPdfDoc().getPage(pageNumber);
-                int num_annots = page.getNumAnnots();
-                for (int i = 0; i < num_annots; ++i) {
-                    Annot annot = page.getAnnot(i);
-                    if (annot != null && annot.isValid()) {
-                        if (annot.getType() == Annot.e_Widget) {
-                            Widget widget = new Widget(annot);
-                            Field field = widget.getField();
-                            String name = field.getName();
-                            WritableMap resultMap = getField(name);
-                            resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, false);
-                            if (resultMap.getString(KEY_FIELD_TYPE).equals("signature")) {
-                                SignatureWidget signatureWidget = new SignatureWidget(annot);
-                                DigitalSignatureField digitalSignatureField = signatureWidget
-                                        .getDigitalSignatureField();
-                                boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
-                                resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
-                            }
-                            fieldsArray.pushMap(resultMap);
-                        }
+    PTPDFDoc * doc = [pdfViewCtrl GetDoc];
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    if(doc){
+        PTPage *page = [doc GetPage:pageNumber];
+        int num_annots = [page GetNumAnnots];
+        for (int i = 0; i < num_annots; i ++){
+            PTAnnot *annot = [page GetAnnot:i];
+            if(annot != nil) {
+                 if ([annot GetType] == e_ptWidget) {
+                    __block PTWidget *widget;
+                    __block PTField *field;
+                    __block NSString *fieldName;
+                     __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+                    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+                        widget = [[PTWidget alloc] initWithAnn:annot];
+                        field = [widget GetField];
+                        fieldName = [field IsValid] ? [field GetName] : @"";
+                        fieldMap = [[field IsValid] ? [self getField:fieldName] : @{} mutableCopy];
+                    } error:&error];
+                    
+                    if (error) {
+                        NSLog(@"An error occurred: %@", error);
+                        return nil;
                     }
+                    if([PTFieldTypeSignatureKey isEqualToString:fieldMap[PTFormFieldTypeKey]]){
+                        PTSignatureWidget *signatureWidget = [[PTSignatureWidget alloc] initWithAnnot:annot];
+                        PTDigitalSignatureField *digitalSignatureField= [signatureWidget GetDigitalSignatureField];
+                        Boolean hasExistingSignature = [digitalSignatureField HasVisibleAppearance];
+                        [fieldMap setValue:[[NSNumber alloc] initWithBool:hasExistingSignature] forKey:PTFormFieldHasAppearanceKey];
+                    }
+                    [resultMap addObject:fieldMap];
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
-            return fieldsArray;
         }
-        return null;
+        return resultMap;   
+    }
+        return nil;
 }
 
 #pragma mark - Export as image
