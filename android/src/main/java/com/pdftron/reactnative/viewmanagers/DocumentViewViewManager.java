@@ -551,6 +551,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public WritableArray getAllFields(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAllFields(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAllFields", "Unable to find DocumentView.");
+        }
+    }
+
     public void setToolMode(int tag, String item) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

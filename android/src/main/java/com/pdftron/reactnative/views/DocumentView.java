@@ -40,12 +40,14 @@ import com.pdftron.pdf.Action;
 import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.ColorPt;
+import com.pdftron.pdf.DigitalSignatureField;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.annots.Markup;
+import com.pdftron.pdf.annots.SignatureWidget;
 import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
@@ -3489,6 +3491,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public String getDocumentPath() {
         return getPdfViewCtrlTabFragment().getFilePath();
+    }
+
+    public WritableArray getAllFields(int pageNumber) {
+        if (getPdfDoc() != null) {
+            WritableArray fieldsArray = Arguments.createArray();
+            try {
+                Page page = getPdfDoc().getPage(pageNumber);
+                int num_annots = page.getNumAnnots();
+                for (int i = 0; i < num_annots; ++i) {
+                    Annot annot = page.getAnnot(i);
+                    if (annot != null && annot.isValid()) {
+                        if (annot.getType() == Annot.e_Widget) {
+                            Widget widget = new Widget(annot);
+                            Field field = widget.getField();
+                            String name = field.getName();
+                            WritableMap resultMap = getField(name);
+                            resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, false);
+                            if (resultMap.getString(KEY_FIELD_TYPE).equals("signature")) {
+                                SignatureWidget signatureWidget = new SignatureWidget(annot);
+                                DigitalSignatureField digitalSignatureField = signatureWidget
+                                        .getDigitalSignatureField();
+                                boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
+                                resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
+                            }
+                            fieldsArray.pushMap(resultMap);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return fieldsArray;
+        }
+        return null;
     }
 
     public void setToolMode(String item) {
