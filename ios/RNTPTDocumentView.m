@@ -4582,6 +4582,70 @@ NS_ASSUME_NONNULL_END
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
 }
 
+#pragma mark - Get All Fields
+
+- (NSDictionary *)getAllFieldsForDocumentViewTag:(int)pageNumber
+{
+    PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
+    if(doc){
+        PTPage page = [doc getPage];
+        int num_annots = [page getNumAnnots];
+        for (int i = 0; i < num_annots; i ++){
+            PTAnnot annot = [page getAnnot:i];
+            if(annot != null && isValid) {
+                 if ([annot GetType] == e_ptWidget) {
+        __block PTWidget *widget;
+        __block PTField *field;
+        __block NSString *fieldName;
+        __block NSDictionary *fieldMap;
+
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            widget = [[PTWidget alloc] initWithAnn:annot];
+            field = [widget GetField];
+            fieldName = [field IsValid] ? [field GetName] : @"";
+            fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
+        } error:&error];
+        
+        if (error) {
+            NSLog(@"An error occurred: %@", error);
+            return;
+        }
+
+            }
+        }
+    }
+            WritableArray fieldsArray = Arguments.createArray();
+            try {
+                Page page = getPdfDoc().getPage(pageNumber);
+                int num_annots = page.getNumAnnots();
+                for (int i = 0; i < num_annots; ++i) {
+                    Annot annot = page.getAnnot(i);
+                    if (annot != null && annot.isValid()) {
+                        if (annot.getType() == Annot.e_Widget) {
+                            Widget widget = new Widget(annot);
+                            Field field = widget.getField();
+                            String name = field.getName();
+                            WritableMap resultMap = getField(name);
+                            resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, false);
+                            if (resultMap.getString(KEY_FIELD_TYPE).equals("signature")) {
+                                SignatureWidget signatureWidget = new SignatureWidget(annot);
+                                DigitalSignatureField digitalSignatureField = signatureWidget
+                                        .getDigitalSignatureField();
+                                boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
+                                resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
+                            }
+                            fieldsArray.pushMap(resultMap);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return fieldsArray;
+        }
+        return null;
+}
+
 #pragma mark - Export as image
 
 - (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat

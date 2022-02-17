@@ -514,6 +514,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSString *)getDocumentPath;
 
+- (NSDictionary *)getAllFieldsForDocumentViewTag:(int)pageNumber;
+
 - (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
