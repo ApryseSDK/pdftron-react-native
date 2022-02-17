@@ -2047,6 +2047,37 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
+#### getAllFields 
+function, optional
+
+This method gets all the fields for a particular page.Additionally if a field of type signature is present it
+will have a hasAppearance which is a boolean to represent whether a signature field was signed. The hasAppearance field
+will be undefined for all other fields except signature.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number to be set as the current page; 1-indexed
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any,fieldHasAppearance: boolean}`, representing the fields that have been changed
+
+```js
+  this._viewer.getAllFields(1).then((fields) => {
+      fields.forEach(field => {
+        console.log('The name of the  field is', field.fieldName);
+        console.log('The type of the  field is', field.fieldType);
+        console.log('The value of the field is', field.fieldValue);
+        console.log('The hasAppearance of the field is', field.fieldHasAppearance);
+      });
+    });
+```
 #### gotoPreviousPage
 Go to the previous page of the document. If on first page, it would stay on first page.
 

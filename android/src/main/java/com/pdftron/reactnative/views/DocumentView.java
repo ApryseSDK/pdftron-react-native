@@ -3507,7 +3507,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             Field field = widget.getField();
                             String name = field.getName();
                             WritableMap resultMap = getField(name);
-                            resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, false);
                             if (resultMap.getString(KEY_FIELD_TYPE).equals("signature")) {
                                 SignatureWidget signatureWidget = new SignatureWidget(annot);
                                 DigitalSignatureField digitalSignatureField = signatureWidget

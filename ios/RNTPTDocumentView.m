@@ -4603,7 +4603,7 @@ NS_ASSUME_NONNULL_END
                     __block PTWidget *widget;
                     __block PTField *field;
                     __block NSString *fieldName;
-                     __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
 
                     [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
                         widget = [[PTWidget alloc] initWithAnn:annot];
@@ -4628,7 +4628,7 @@ NS_ASSUME_NONNULL_END
         }
         return resultMap;   
     }
-        return nil;
+    return nil;
 }
 
 #pragma mark - Export as image
