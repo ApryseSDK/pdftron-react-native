@@ -1904,9 +1904,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mBuilder = mBuilder.hideViewModeItems(mViewModePickerItems.toArray(new ViewModePickerDialogFragment.ViewModePickerItems[0]));
         }
         if (mThumbnailViewItems.size() > 0) {
-            ThumbnailsViewFragment.ThumbnailsViewEditOptions[] t = mThumbnailViewItems
-                    .toArray(new ThumbnailsViewFragment.ThumbnailsViewEditOptions[mThumbnailViewItems.size()]);
-            mBuilder = mBuilder.hideThumbnailEditOptions(t);
+            mBuilder = mBuilder.hideThumbnailEditOptions(mThumbnailViewItems
+                    .toArray(new ThumbnailsViewFragment.ThumbnailsViewEditOptions[0]));
         }
         return mBuilder
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)
