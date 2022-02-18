@@ -2445,12 +2445,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 try {
                     if (annot != null && annot.isValid()) {
                         if (annot.getType() == Annot.e_Widget) {
-                            Widget widget = new Widget(annot);
-                            Field field = widget.getField();
-                            String name = field.getName();
-
-                            WritableMap resultMap = getField(name, annot);
-                            fieldsArray.pushMap(resultMap);
+                            WritableMap resultMap = getField(annot);
+                            if (resultMap != null) {
+                                fieldsArray.pushMap(resultMap);
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -2906,7 +2904,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         String error = "Unknown error";
         if (getPdfViewCtrlTabFragment() != null) {
-            int messageId = com.pdftron.pdf.tools.R.string.error_opening_doc_message;
+            int messageId = R.string.error_opening_doc_message;
             int errorCode = getPdfViewCtrlTabFragment().getTabErrorCode();
             switch (errorCode) {
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_ZERO_PAGE:
@@ -3018,7 +3016,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void importAnnotations(String xfdf) throws PDFNetException {
+    public void importAnnotations(String xfdf, boolean replace) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -3044,7 +3042,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             shouldUnlock = true;
 
             FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
-            pdfDoc.fdfUpdate(fdfDoc);
+            if (replace) {
+                pdfDoc.fdfUpdate(fdfDoc);
+            } else {
+                pdfDoc.fdfMerge(fdfDoc);
+            }
             pdfViewCtrl.update(true);
         } finally {
             if (shouldUnlock) {
@@ -3433,21 +3435,21 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public WritableMap getField(String fieldName) throws PDFNetException {
+    @Nullable
+    public WritableMap getField(Field field) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
-        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
 
-        WritableMap fieldMap = null;
-        boolean shouldUnlock = false;
+        if (pdfViewCtrl == null) {
+            return null;
+        }
 
+        boolean shouldUnlockRead = false;
         try {
             pdfViewCtrl.docLockRead();
-            shouldUnlock = true;
-
-            Field field = pdfDoc.getField(fieldName);
+            shouldUnlockRead = true;
 
             if (field != null && field.isValid()) {
-                fieldMap = Arguments.createMap();
+                WritableMap fieldMap = Arguments.createMap();
                 int fieldType = field.getType();
                 String typeString;
                 switch (fieldType) {
@@ -3478,27 +3480,64 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         break;
                 }
 
-                fieldMap.putString(KEY_FIELD_NAME, fieldName);
+                fieldMap.putString(KEY_FIELD_NAME, field.getName());
                 fieldMap.putString(KEY_FIELD_TYPE, typeString);
+                return fieldMap;
             }
         } finally {
-            if (shouldUnlock) {
+            if (shouldUnlockRead) {
                 pdfViewCtrl.docUnlockRead();
             }
         }
-        return fieldMap;
+        return null;
     }
 
-    public WritableMap getField(String fieldName, Annot annot) throws PDFNetException {
-        WritableMap fieldMap = getField(fieldName);
-        if (fieldMap.getString(KEY_FIELD_TYPE).equals(FIELD_TYPE_SIGNATURE)) {
-            SignatureWidget signatureWidget = new SignatureWidget(annot);
-            DigitalSignatureField digitalSignatureField = signatureWidget
-                    .getDigitalSignatureField();
-            boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
-            fieldMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
+    @Nullable
+    public WritableMap getField(String fieldName) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+
+        Field field = null;
+        boolean shouldUnlockRead = false;
+        try {
+            pdfViewCtrl.docLockRead();
+            shouldUnlockRead = true;
+
+            field = pdfDoc.getField(fieldName);
+        } finally {
+            if (shouldUnlockRead) {
+                pdfViewCtrl.docUnlockRead();
+            }
         }
-        return fieldMap;
+        if (field != null) {
+            return getField(field);
+        }
+        return null;
+    }
+
+    /**
+     * This method does not lock, a read lock is expected around this method
+     */
+    @Nullable
+    public WritableMap getField(Annot annot) throws PDFNetException {
+        WritableMap resultMap = null;
+        if (annot != null && annot.isValid()) {
+            if (annot.getType() == Annot.e_Widget) {
+                Widget widget = new Widget(annot);
+                Field field = widget.getField();
+                resultMap = getField(field);
+                if (resultMap != null) {
+                    int fieldType = field.getType();
+                    if (fieldType == Field.e_signature) {
+                        SignatureWidget signatureWidget = new SignatureWidget(annot);
+                        DigitalSignatureField digitalSignatureField = signatureWidget.getDigitalSignatureField();
+                        boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
+                        resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
+                    }
+                }
+            }
+        }
+        return resultMap;
     }
 
     public String getDocumentPath() {
@@ -3508,30 +3547,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public WritableArray getAllFields(int pageNumber) {
         if (getPdfDoc() != null) {
             WritableArray fieldsArray = Arguments.createArray();
-            boolean shouldUnlock = false;
+            boolean shouldUnlockRead = false;
             PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
             try {
-                pdfViewCtrl.docLock(true);
-                shouldUnlock = true;
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
                 Page page = getPdfDoc().getPage(pageNumber);
                 int num_annots = page.getNumAnnots();
                 for (int i = 0; i < num_annots; ++i) {
                     Annot annot = page.getAnnot(i);
                     if (annot != null && annot.isValid()) {
                         if (annot.getType() == Annot.e_Widget) {
-                            Widget widget = new Widget(annot);
-                            Field field = widget.getField();
-                            String name = field.getName();
-                            WritableMap resultMap = getField(name, annot);
-                            fieldsArray.pushMap(resultMap);
+                            WritableMap resultMap = getField(annot);
+                            if (resultMap != null) {
+                                fieldsArray.pushMap(resultMap);
+                            }
                         }
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
-                if (shouldUnlock) {
-                    pdfViewCtrl.docUnlock();
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
                 }
             }
             return fieldsArray;
