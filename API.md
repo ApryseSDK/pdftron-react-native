@@ -691,6 +691,16 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 />
 ```
 
+#### hideThumbnailsViewItems
+array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, optional, defaults to none
+
+Defines which default thumbnail view items should be hidden.
+
+```js
+<DocumentView
+  hideThumbnailsViewItems={[Config.ThumbnailsViewItem.InsertPages, Config.ThumbnailsViewItem.ExportPages]}
+/>
+```
 #### hideAnnotationToolbarSwitcher
 bool, optional, defaults to false
 
@@ -2252,6 +2262,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 xfdf | string | annotation string in XFDF format for import
+replace | boolean | whether to replace existing form and annotation data with those imported from the XFDF string (Android only) 
 
 Returns a Promise.
 

@@ -479,6 +479,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTopAppNavBarRightBar(menus);
     }
 
+    @ReactProp(name = "hideThumbnailsViewItems")
+    public void setHideThumbnailsViewItems(DocumentView documentView, ReadableArray thumbnailViewItems) {
+        documentView.setHideThumbnailsViewItems(thumbnailViewItems);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -506,10 +511,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void importAnnotations(int tag, String xfdf) throws PDFNetException {
+    public void importAnnotations(int tag, String xfdf, boolean replace) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.importAnnotations(xfdf);
+            documentView.importAnnotations(xfdf, replace);
         } else {
             throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
         }

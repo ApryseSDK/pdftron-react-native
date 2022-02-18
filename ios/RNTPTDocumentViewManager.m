@@ -444,6 +444,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideViewModeItems, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hideThumbnailsViewItems, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.hideThumbnailsViewItems = [RCTConvert NSArray:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(topAppNavBarRightBar, NSArray, RNTPTDocumentView)
 {
     if (json) {
@@ -998,7 +1005,7 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
-- (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString
+- (void)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString replace:(BOOL)replace
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {

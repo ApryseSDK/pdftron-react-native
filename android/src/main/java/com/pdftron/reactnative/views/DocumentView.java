@@ -187,6 +187,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                 }
             };
+    private ArrayList<ThumbnailsViewFragment.ThumbnailsViewEditOptions> mThumbnailViewItems = new ArrayList<>();
 
     public DocumentView(Context context) {
         super(context);
@@ -882,6 +883,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_ROTATION);
             } else if (VIEW_MODE_COLORMODE.equals(mode)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_COLORMODE);
+            }
+        }
+    }
+
+    public void setHideThumbnailsViewItems(ReadableArray thumbnailViewItems) {
+        for (int i = 0; i < thumbnailViewItems.size(); i++) {
+            String viewItem = thumbnailViewItems.getString(i);
+            if (THUMBNAIL_DELETE_PAGES.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_DELETE_PAGES);
+            } else if (THUMBNAIL_DUPLICATE_PAGES.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_DUPLICATE_PAGES);
+            } else if (THUMBNAIL_EXPORT_PAGES.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_EXPORT_PAGES);
+            } else if (THUMBNAIL_INSERT_PAGES.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_PAGES);
+            } else if (THUMBNAIL_ROTATE_PAGES.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_ROTATE_PAGES);
             }
         }
     }
@@ -1898,6 +1916,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         if (mViewModePickerItems.size() > 0) {
             mBuilder = mBuilder.hideViewModeItems(mViewModePickerItems.toArray(new ViewModePickerDialogFragment.ViewModePickerItems[0]));
+        }
+        if (mThumbnailViewItems.size() > 0) {
+            mBuilder = mBuilder.hideThumbnailEditOptions(mThumbnailViewItems
+                    .toArray(new ThumbnailsViewFragment.ThumbnailsViewEditOptions[0]));
         }
         return mBuilder
                 .pdfViewCtrlConfig(mPDFViewCtrlConfig)
@@ -3023,7 +3045,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void importAnnotations(String xfdf) throws PDFNetException {
+    public void importAnnotations(String xfdf, boolean replace) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();
@@ -3049,7 +3071,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             shouldUnlock = true;
 
             FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
-            pdfDoc.fdfUpdate(fdfDoc);
+            if (replace) {
+                pdfDoc.fdfUpdate(fdfDoc);
+            } else {
+                pdfDoc.fdfMerge(fdfDoc);
+            }
             pdfViewCtrl.update(true);
         } finally {
             if (shouldUnlock) {
