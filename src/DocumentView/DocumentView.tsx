@@ -118,6 +118,7 @@ const propTypes = {
   onTextSearchStart: func<() => void>(),
   onTextSearchResult: func<(event: {found: boolean, textSelection: AnnotOptions.TextSelectionResult | null}) => void>(),
   hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
+  hideThumbnailsViewItems: arrayOf<Config.ThumbnailsViewItem>(Config.ThumbnailsViewItem),
   pageStackEnabled: PropTypes.bool,
   showQuickNavigationButton: PropTypes.bool,
   photoPickerEnabled: PropTypes.bool,
