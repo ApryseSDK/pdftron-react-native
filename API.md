@@ -1602,7 +1602,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
       console.log('The name of the changed field is', field.fieldName);
       console.log('The type of the changed field is', field.fieldType);
       console.log('The value of the changed field is', field.fieldValue);
-      console.log('The hasAppearance of the field is', field.fieldHasAppearance);
+      console.log('The hasAppearance of the changed field is', field.fieldHasAppearance);
     });
   }}
 />
@@ -2052,9 +2052,9 @@ this._viewer.setCurrentPage(4).then((success) => {
 #### getAllFields 
 function, optional
 
-This method gets all the fields for a particular page.Additionally if a field of type signature is present it
-will have a hasAppearance which is a boolean to represent whether a signature field was signed. The hasAppearance field
-will be undefined for all other fields except signature.
+This method gets all the fields for a particular page.
+Additionally if a field of type signature is present it will have a hasAppearance which is a boolean to represent whether a signature field was signed. 
+The hasAppearance field will be undefined for all other fields except signature.
 
 Parameters:
 
