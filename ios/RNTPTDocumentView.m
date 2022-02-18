@@ -1721,6 +1721,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHideThumbnailsViewItems:(NSArray<NSString *> *)hideThumbnailsViewItems
+{
+    _hideThumbnailsViewItems = [hideThumbnailsViewItems copy];
+
+    [self applyViewerSettings];
+}
+
 - (void)setTopAppNavBarRightBar:(NSArray<NSString *> *)topAppNavBarRightBar
 {
     _topAppNavBarRightBar = [topAppNavBarRightBar copy];
@@ -2067,6 +2074,21 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.pageRotationHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
             documentViewController.settingsViewController.cropPagesHidden = YES;
+        }
+    }
+
+    // Thumbnails view items
+    for (NSString * thumbnailsItemString in self.hideThumbnailsViewItems) {
+        if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertPagesKey]) {
+            documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewExportPagesKey]) {
+            documentViewController.thumbnailsViewController.exportPagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDuplicatePagesKey]) {
+            documentViewController.thumbnailsViewController.duplicatePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewRotatePagesKey]) {
+            documentViewController.thumbnailsViewController.rotatePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDeletePagesKey]) {
+            documentViewController.thumbnailsViewController.deletePagesEnabled = NO;
         }
     }
 

@@ -691,6 +691,16 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 />
 ```
 
+#### hideThumbnailsViewItems
+array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, optional, defaults to none
+
+Defines which default thumbnail view items should be hidden.
+
+```js
+<DocumentView
+  hideThumbnailsViewItems={[Config.ThumbnailsViewItem.InsertPages, Config.ThumbnailsViewItem.ExportPages]}
+/>
+```
 #### hideAnnotationToolbarSwitcher
 bool, optional, defaults to false
 
