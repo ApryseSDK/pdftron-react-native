@@ -218,7 +218,7 @@ static NSString * const PTCoordinatePointPageNumber = @"pageNumber";
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 static NSString * const PTFormFieldTypeKey = @"fieldType";
-static NSString *const PTFormFieldHasAppearanceKey = @"fieldHasAppearance";
+static NSString * const PTFormFieldHasAppearanceKey = @"fieldHasAppearance";
 
 static NSString * const PTFieldTypeUnknownKey = @"unknown";
 static NSString * const PTFieldTypeButtonKey = @"button";

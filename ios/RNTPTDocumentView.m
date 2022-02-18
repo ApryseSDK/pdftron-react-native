@@ -1628,17 +1628,25 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
-- (NSDictionary *)getFieldWithHasAppearance:(NSString *)fieldName annot:(PTAnnot *)annot
+- (NSMutableDictionary *)getFieldWithHasAppearance:(PTAnnot *)annot
 {
-    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    __block PTWidget *widget;
+    __block PTField *field;
+    __block NSString *fieldName;
+    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    
+    widget = [[PTWidget alloc] initWithAnn:annot];
+    field = [widget GetField];
+    fieldName = [field IsValid] ? [field GetName] : @"";
     fieldMap = [self getField:fieldName];
-    if([PTFieldTypeSignatureKey isEqualToString:fieldMap[PTFormFieldTypeKey]]){
+    NSString *fieldType = fieldMap[PTFormFieldTypeKey];
+    if([fieldType isEqualToString:PTFieldTypeSignatureKey]){
         PTSignatureWidget *signatureWidget = [[PTSignatureWidget alloc] initWithAnnot:annot];
         PTDigitalSignatureField *digitalSignatureField= [signatureWidget GetDigitalSignatureField];
         Boolean hasExistingSignature = [digitalSignatureField HasVisibleAppearance];
         [fieldMap setValue:[[NSNumber alloc] initWithBool:hasExistingSignature] forKey:PTFormFieldHasAppearanceKey];
     }   
-    return fieldMap;
+    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
 #pragma mark - Annotation
@@ -3935,16 +3943,10 @@ NS_ASSUME_NONNULL_END
     }
     
     if ([annot GetType] == e_ptWidget) {
-        __block PTWidget *widget;
-        __block PTField *field;
-        __block NSString *fieldName;
         __block NSDictionary *fieldMap;
 
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            widget = [[PTWidget alloc] initWithAnn:annot];
-            field = [widget GetField];
-            fieldName = [field IsValid] ? [field GetName] : @"";
-            fieldMap = [field IsValid] ? [self getFieldWithHasAppearance:fieldName annot:annot] : @{};
+            fieldMap = [self getFieldWithHasAppearance:annot];
         } error:&error];
         
         if (error) {
@@ -4607,34 +4609,29 @@ NS_ASSUME_NONNULL_END
     NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
     NSError *error;
     if(doc){
-        PTPage *page = [doc GetPage:pageNumber];
-        int num_annots = [page GetNumAnnots];
-        for (int i = 0; i < num_annots; i ++){
-            PTAnnot *annot = [page GetAnnot:i];
-            if(annot != nil) {
-                 if ([annot GetType] == e_ptWidget) {
-                    __block PTWidget *widget;
-                    __block PTField *field;
-                    __block NSString *fieldName;
-                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            PTPage *page = [doc GetPage:pageNumber];
+            int num_annots = [page GetNumAnnots];
+            for (int i = 0; i < num_annots; i ++){
+                PTAnnot *annot = [page GetAnnot:i];
+                if(annot != nil) {
+                    if ([annot GetType] == e_ptWidget) {
+                        __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
 
-                    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-                        widget = [[PTWidget alloc] initWithAnn:annot];
-                        field = [widget GetField];
-                        fieldName = [field IsValid] ? [field GetName] : @"";
-                        fieldMap = [[field IsValid] ? [self getFieldWithHasAppearance:fieldName annot:annot] : @{} mutableCopy];
-                    } error:&error];
-                    
-                    if (error) {
-                        NSLog(@"An error occurred: %@", error);
-                        return nil;
+                        fieldMap = [self getFieldWithHasAppearance:annot];
+
+                        [resultMap addObject:fieldMap];
                     }
-
-                    [resultMap addObject:fieldMap];
                 }
             }
+        } error:&error];
+        
+        if (error) {
+            NSLog(@"An error occurred: %@", error);
+            return nil;
         }
-        return resultMap;   
+        
+        return resultMap; 
     }
     return nil;
 }
