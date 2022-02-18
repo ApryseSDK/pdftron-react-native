@@ -463,10 +463,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  importAnnotations = (xfdf: string): Promise<void> => {
+  importAnnotations = (xfdf: string, replace: boolean = false): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.importAnnotations(tag, xfdf);
+      return DocumentViewManager.importAnnotations(tag, xfdf, replace);
     }
     return Promise.resolve();
   }
