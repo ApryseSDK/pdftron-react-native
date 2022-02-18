@@ -2449,7 +2449,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             Field field = widget.getField();
                             String name = field.getName();
 
-                            WritableMap resultMap = getField(name);
+                            WritableMap resultMap = getField(name, annot);
                             fieldsArray.pushMap(resultMap);
                         }
                     }
@@ -3489,6 +3489,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return fieldMap;
     }
 
+    public WritableMap getField(String fieldName, Annot annot) throws PDFNetException {
+        WritableMap fieldMap = getField(fieldName);
+        if (fieldMap.getString(KEY_FIELD_TYPE).equals(FIELD_TYPE_SIGNATURE)) {
+            SignatureWidget signatureWidget = new SignatureWidget(annot);
+            DigitalSignatureField digitalSignatureField = signatureWidget
+                    .getDigitalSignatureField();
+            boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
+            fieldMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
+        }
+        return fieldMap;
+    }
+
     public String getDocumentPath() {
         return getPdfViewCtrlTabFragment().getFilePath();
     }
@@ -3496,7 +3508,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public WritableArray getAllFields(int pageNumber) {
         if (getPdfDoc() != null) {
             WritableArray fieldsArray = Arguments.createArray();
+            boolean shouldUnlock = false;
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
             try {
+                pdfViewCtrl.docLock(true);
+                shouldUnlock = true;
                 Page page = getPdfDoc().getPage(pageNumber);
                 int num_annots = page.getNumAnnots();
                 for (int i = 0; i < num_annots; ++i) {
@@ -3506,20 +3522,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                             Widget widget = new Widget(annot);
                             Field field = widget.getField();
                             String name = field.getName();
-                            WritableMap resultMap = getField(name);
-                            if (resultMap.getString(KEY_FIELD_TYPE).equals("signature")) {
-                                SignatureWidget signatureWidget = new SignatureWidget(annot);
-                                DigitalSignatureField digitalSignatureField = signatureWidget
-                                        .getDigitalSignatureField();
-                                boolean hasExistingSignature = digitalSignatureField.hasVisibleAppearance();
-                                resultMap.putBoolean(KEY_FIELD_HAS_APPEARANCE, hasExistingSignature);
-                            }
+                            WritableMap resultMap = getField(name, annot);
                             fieldsArray.pushMap(resultMap);
                         }
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+            } finally {
+                if (shouldUnlock) {
+                    pdfViewCtrl.docUnlock();
+                }
             }
             return fieldsArray;
         }

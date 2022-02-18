@@ -1586,13 +1586,14 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 #### onFormFieldValueChanged
 function, optional
 
-This function is called if a change has been made to form field values.
+This function is called if a change has been made to form field values. Additionally signatures type fields will have the fieldHasAppearance value defined.
+The hasAppearance indicates whether the signature field was signed or not
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any, fieldHasAppearance: boolean}`, representing the fields that have been changed
 
 ```js
 <DocumentView
@@ -1601,6 +1602,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
       console.log('The name of the changed field is', field.fieldName);
       console.log('The type of the changed field is', field.fieldType);
       console.log('The value of the changed field is', field.fieldValue);
+      console.log('The hasAppearance of the field is', field.fieldHasAppearance);
     });
   }}
 />
