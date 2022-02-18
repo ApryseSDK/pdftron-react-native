@@ -131,6 +131,7 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
     public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
     public static final String TOOL_INSERT_PAGE = "InsertPage";
+    public static final String TOOL_FORM_FILL = "FormFill";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";
