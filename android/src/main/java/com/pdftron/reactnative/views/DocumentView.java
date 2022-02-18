@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -175,6 +176,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private final AtomicInteger mToolIdGenerator = new AtomicInteger(1000);
 
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
+    private final RNPdfViewCtrlTabHostFragment.RNHostFragmentListener mRNHostFragmentListener =
+            new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
+                @Override
+                public void onHostFragmentViewCreated() {
+                    View fragmentView = mPdfViewCtrlTabHostFragment.getView();
+                    if (fragmentView != null) {
+                        fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
+                        addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                    }
+                }
+            };
 
     public DocumentView(Context context) {
         super(context);
@@ -1940,28 +1952,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getView() == null) {
             if (mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
-                ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
-                    @Override
-                    public void onHostFragmentViewCreated() {
-                        View fragmentView = mPdfViewCtrlTabHostFragment.getView();
-                        if (fragmentView != null) {
-                            fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
-                            addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                        }
-                    }
-                });
+                ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(mRNHostFragmentListener);
+            } else if (mPdfViewCtrlTabHostFragment instanceof RNCollabViewerTabHostFragment) {
+                ((RNCollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(mRNHostFragmentListener);
             }
-        } else if (mPdfViewCtrlTabHostFragment instanceof RNCollabViewerTabHostFragment) {
-            ((RNCollabViewerTabHostFragment) mPdfViewCtrlTabHostFragment).setRNHostFragmentListener(new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
-                @Override
-                public void onHostFragmentViewCreated() {
-                    View fragmentView = mPdfViewCtrlTabHostFragment.getView();
-                    if (fragmentView != null) {
-                        fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
-                        addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                    }
-                }
-            });
         }
     }
 
