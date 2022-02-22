@@ -1628,7 +1628,7 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
-- (NSMutableDictionary *)getFieldWithHasAppearance:(PTAnnot *)annot
+- (NSDictionary *)getFieldWithHasAppearance:(PTAnnot *)annot
 {
     __block PTWidget *widget;
     __block PTField *field;
@@ -4621,7 +4621,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Get All Fields
 
-- (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
+- (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
