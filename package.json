@@ -1,7 +1,7 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "3.0.2-beta.63",
+  "version": "3.0.2-beta.64",
   "description": "React Native Pdftron",
   "main": "./lib/index.js",
   "typings": "index.ts",
@@ -10,7 +10,7 @@
     "copy-to-node-modules": "cd scripts && python3 fileCopy.py toModule && cd ..",
     "start": "tsc",
     "postinstall": "python3 scripts/newPodspecMessage.py",
-    "prestart" : "python3 scripts/newPodspecMessage.py",
+    "prestart": "python3 scripts/newPodspecMessage.py",
     "prepublishOnly": "bash scripts/prepare.sh",
     "postpublish": "bash scripts/postpublish.sh"
   },
@@ -19,7 +19,7 @@
     "url": "git+https://github.com/PDFTron/pdftron-react-native.git",
     "baseUrl": "https://github.com/PDFTron/pdftron-react-native"
   },
-  "license" : "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://www.pdftron.com/documentation/mobile/#frameworks",
   "keywords": [
     "react-native",
