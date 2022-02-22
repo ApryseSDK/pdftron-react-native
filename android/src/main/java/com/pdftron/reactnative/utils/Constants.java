@@ -258,8 +258,14 @@ public final class Constants {
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
 
+    // Thumbnails
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
     public static final String THUMBNAIL_FILTER_MODE_BOOKMARKED = "bookmarked";
+    public static final String THUMBNAIL_INSERT_PAGES = "thumbnailsInsertPages";
+    public static final String THUMBNAIL_EXPORT_PAGES = "thumbnailsExportPages";
+    public static final String THUMBNAIL_DUPLICATE_PAGES = "thumbnailsDuplicatePages";
+    public static final String THUMBNAIL_ROTATE_PAGES = "thumbnailsRotatePages";
+    public static final String THUMBNAIL_DELETE_PAGES = "thumbnailsDeletePages";
 
     public static final String VIEW_MODE_CROP = "viewModeCrop";
     public static final String VIEW_MODE_ROTATION = "viewModeRotation";

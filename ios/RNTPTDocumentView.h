@@ -122,6 +122,13 @@ static NSString * const PTViewModeCropKey = @"viewModeCrop";
 static NSString * const PTViewModeRotationKey = @"viewModeRotation";
 static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
 
+
+static NSString * const PTThumbnailsViewInsertPagesKey = @"thumbnailsInsertPages";
+static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages";
+static NSString * const PTThumbnailsViewDuplicatePagesKey = @"thumbnailsDuplicatePages";
+static NSString * const PTThumbnailsViewRotatePagesKey = @"thumbnailsRotatePages";
+static NSString * const PTThumbnailsViewDeletePagesKey = @"thumbnailsDeletePages";
+
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
 static NSString * const PTDeleteAnnotationActionKey = @"delete";
@@ -461,6 +468,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailsViewItems;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
 @property (nonatomic, copy, nullable) NSString *initialToolbar;

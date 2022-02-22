@@ -479,6 +479,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTopAppNavBarRightBar(menus);
     }
 
+    @ReactProp(name = "hideThumbnailsViewItems")
+    public void setHideThumbnailsViewItems(DocumentView documentView, ReadableArray thumbnailViewItems) {
+        documentView.setHideThumbnailsViewItems(thumbnailViewItems);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
