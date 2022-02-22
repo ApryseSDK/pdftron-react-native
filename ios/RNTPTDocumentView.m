@@ -1646,7 +1646,7 @@ NS_ASSUME_NONNULL_END
         Boolean hasExistingSignature = [digitalSignatureField HasVisibleAppearance];
         [fieldMap setValue:[[NSNumber alloc] initWithBool:hasExistingSignature] forKey:PTFormFieldHasAppearanceKey];
     }   
-    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
+    return [[fieldMap allKeys] count] == 0 ? nil : [fieldMap copy];
 }
 
 #pragma mark - Annotation
@@ -4605,35 +4605,31 @@ NS_ASSUME_NONNULL_END
     if (!pdfViewCtrl) {
         return nil;
     }
-    PTPDFDoc * doc = [pdfViewCtrl GetDoc];
     NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
     NSError *error;
-    if(doc){
-        [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            PTPage *page = [doc GetPage:pageNumber];
-            int num_annots = [page GetNumAnnots];
-            for (int i = 0; i < num_annots; i ++){
-                PTAnnot *annot = [page GetAnnot:i];
-                if(annot != nil) {
-                    if ([annot GetType] == e_ptWidget) {
-                        __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        PTPage *page = [doc GetPage:pageNumber];
+        int num_annots = [page GetNumAnnots];
+        for (int i = 0; i < num_annots; i ++){
+            PTAnnot *annot = [page GetAnnot:i];
+            if(annot != nil) {
+                if ([annot GetType] == e_ptWidget) {
+                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
 
-                        fieldMap = [self getFieldWithHasAppearance:annot];
+                    fieldMap = [self getFieldWithHasAppearance:annot];
 
-                        [resultMap addObject:fieldMap];
-                    }
+                    [resultMap addObject:fieldMap];
                 }
             }
-        } error:&error];
-        
-        if (error) {
-            NSLog(@"An error occurred: %@", error);
-            return nil;
         }
+    } error:&error];
         
-        return resultMap; 
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
     }
-    return nil;
+    
+    return [resultMap copy];
 }
 
 #pragma mark - Export as image
