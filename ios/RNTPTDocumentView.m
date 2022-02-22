@@ -1628,6 +1628,27 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
+- (NSDictionary *)getFieldWithHasAppearance:(PTAnnot *)annot
+{
+    __block PTWidget *widget;
+    __block PTField *field;
+    __block NSString *fieldName;
+    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    
+    widget = [[PTWidget alloc] initWithAnn:annot];
+    field = [widget GetField];
+    fieldName = [field IsValid] ? [field GetName] : @"";
+    fieldMap = [self getField:fieldName];
+    NSString *fieldType = fieldMap[PTFormFieldTypeKey];
+    if([fieldType isEqualToString:PTFieldTypeSignatureKey]){
+        PTSignatureWidget *signatureWidget = [[PTSignatureWidget alloc] initWithAnnot:annot];
+        PTDigitalSignatureField *digitalSignatureField= [signatureWidget GetDigitalSignatureField];
+        Boolean hasExistingSignature = [digitalSignatureField HasVisibleAppearance];
+        [fieldMap setValue:[[NSNumber alloc] initWithBool:hasExistingSignature] forKey:PTFormFieldHasAppearanceKey];
+    }   
+    return [[fieldMap allKeys] count] == 0 ? nil : [fieldMap copy];
+}
+
 #pragma mark - Annotation
 
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
@@ -3944,16 +3965,10 @@ NS_ASSUME_NONNULL_END
     }
     
     if ([annot GetType] == e_ptWidget) {
-        __block PTWidget *widget;
-        __block PTField *field;
-        __block NSString *fieldName;
         __block NSDictionary *fieldMap;
 
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            widget = [[PTWidget alloc] initWithAnn:annot];
-            field = [widget GetField];
-            fieldName = [field IsValid] ? [field GetName] : @"";
-            fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
+            fieldMap = [self getFieldWithHasAppearance:annot];
         } error:&error];
         
         if (error) {
@@ -4602,6 +4617,41 @@ NS_ASSUME_NONNULL_END
 
 - (NSString *) getDocumentPath {
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
+}
+
+#pragma mark - Get All Fields
+
+- (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        PTPage *page = [doc GetPage:pageNumber];
+        int num_annots = [page GetNumAnnots];
+        for (int i = 0; i < num_annots; i ++){
+            PTAnnot *annot = [page GetAnnot:i];
+            if(annot != nil) {
+                if ([annot GetType] == e_ptWidget) {
+                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+                    fieldMap = [self getFieldWithHasAppearance:annot];
+
+                    [resultMap addObject:fieldMap];
+                }
+            }
+        }
+    } error:&error];
+        
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
+    }
+    
+    return [resultMap copy];
 }
 
 #pragma mark - Export as image

@@ -317,6 +317,7 @@ public final class Constants {
     public static final String KEY_FIELD_NAME = "fieldName";
     public static final String KEY_FIELD_VALUE = "fieldValue";
     public static final String KEY_FIELD_TYPE = "fieldType";
+    public static final String KEY_FIELD_HAS_APPEARANCE = "fieldHasAppearance";
     public static final String KEY_ERROR = "error";
 
     public static final String KEY_ANNOTATION_MENU = "annotationMenu";

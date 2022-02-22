@@ -67,6 +67,8 @@
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
+- (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
+
 - (BOOL)setCurrentPageForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (NSArray *)getVisiblePagesForDocumentViewTag:(NSNumber *)tag;

@@ -940,6 +940,17 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         return nil;
     }
 }
+
+- (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView getAllFieldsForDocumentViewTag:pageNumber];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+        return nil;
+    }
+}
  
 - (NSString *)exportAsImageForDocumentViewTag:(NSNumber *)tag pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
 {
