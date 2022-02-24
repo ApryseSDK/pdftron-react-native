@@ -4623,6 +4623,9 @@ NS_ASSUME_NONNULL_END
 
 - (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
+    if(pageNumber == 0){
+        return [self getAllFields];
+    }
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
         return nil;
@@ -4641,6 +4644,43 @@ NS_ASSUME_NONNULL_END
                     fieldMap = [self getFieldWithHasAppearance:annot];
 
                     [resultMap addObject:fieldMap];
+                }
+            }
+        }
+    } error:&error];
+        
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
+    }
+    
+    return [resultMap copy];
+}
+
+- (NSArray<NSDictionary *> *)getAllFields
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        int pageCount = [doc GetPageCount];
+        for (int i = 1; i <= pageCount; i ++){
+            PTPage *page = [doc GetPage:i];
+            int num_annots = [page GetNumAnnots];
+            for (int i = 0; i < num_annots; i ++){
+                PTAnnot *annot = [page GetAnnot:i];
+                if(annot != nil) {
+                    if ([annot GetType] == e_ptWidget) {
+                        __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+                        fieldMap = [self getFieldWithHasAppearance:annot];
+
+                        [resultMap addObject:fieldMap];
+                    }
                 }
             }
         }

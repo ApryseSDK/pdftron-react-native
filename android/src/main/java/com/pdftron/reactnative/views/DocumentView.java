@@ -3574,6 +3574,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public WritableArray getAllFields(int pageNumber) {
+        if (pageNumber == 0) {
+            return getAllFields();
+        }
         if (getPdfDoc() != null) {
             WritableArray fieldsArray = Arguments.createArray();
             boolean shouldUnlockRead = false;
@@ -3594,6 +3597,42 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         }
                     }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+            return fieldsArray;
+        }
+        return null;
+    }
+
+    public WritableArray getAllFields() {
+        if (getPdfDoc() != null) {
+            WritableArray fieldsArray = Arguments.createArray();
+            boolean shouldUnlockRead = false;
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+                for (int i = 1; i <= getPdfDoc().getPageCount(); i++) {
+                    Page page = getPdfDoc().getPage(i);
+                    int num_annots = page.getNumAnnots();
+                    for (int j = 0; j < num_annots; ++j) {
+                        Annot annot = page.getAnnot(j);
+                        if (annot != null && annot.isValid()) {
+                            if (annot.getType() == Annot.e_Widget) {
+                                WritableMap resultMap = getField(annot);
+                                if (resultMap != null) {
+                                    fieldsArray.pushMap(resultMap);
+                                }
+                            }
+                        }
+                    }
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
