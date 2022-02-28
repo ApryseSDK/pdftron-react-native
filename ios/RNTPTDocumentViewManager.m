@@ -1573,6 +1573,8 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+#pragma mark - Hygen Generated Methods
+
 #pragma mark - Coordination
 
 - (NSArray *)convertScreenPointsToPagePointsForDocumentViewTag:(nonnull NSNumber *)tag points:(NSArray *)points
