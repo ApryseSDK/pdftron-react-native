@@ -1391,4 +1391,6 @@ RCT_REMAP_METHOD(importAnnotationCommand,
     }
 }
 
+#pragma mark - Hygen Generated Methods
+
 @end

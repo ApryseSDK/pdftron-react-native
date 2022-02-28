@@ -4577,6 +4577,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return "";
     }
 
+    // Hygen Generated Methods
+
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
     }
