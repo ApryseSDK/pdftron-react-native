@@ -1,7 +1,7 @@
 ---
 inject: true
 to: src/DocumentView/DocumentView.tsx
-at_line: 409
+after: // Hygen Generated Methods
 ---
 
 <%= name %> = (: ): Promise<void | {}> => {
@@ -10,5 +10,4 @@ at_line: 409
       return DocumentViewManager.<%= name %>(tag);
     }
     return Promise.resolve();
-    <%= params %>
 }
