@@ -535,6 +535,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  // Hygen Generated Methods
+
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
   * 
