@@ -10,4 +10,5 @@ at_line: 409
       return DocumentViewManager.<%= name %>(tag);
     }
     return Promise.resolve();
+    <%= params %>
 }

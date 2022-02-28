@@ -600,6 +600,7 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+// Hygen Generated Props
 
 - (UIView *)view
 {

@@ -1,9 +1,9 @@
 ---
 inject: true
 to: android/src/main/java/com/pdftron/reactnative/views/DocumentView.java
-at_line: 623
+after: // Hygen Generated Props
 ---
-
     public void set<%= h.changeCase.pascalCase(name) %>(<%= type %> ) {
 
     }
+    

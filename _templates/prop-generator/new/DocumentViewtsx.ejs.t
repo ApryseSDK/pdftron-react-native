@@ -1,6 +1,6 @@
 ---
 inject: true
 to: src/DocumentView/DocumentView.tsx
-at_line: 25
+after: // Hygen Generated Props
 ---
     <%= name %>: PropsTypes.<%= type%>,

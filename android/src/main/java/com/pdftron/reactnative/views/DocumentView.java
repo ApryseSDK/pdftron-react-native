@@ -712,6 +712,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    // Hygen Generated Props
+
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
             if (mPdfViewCtrlTabHostFragment != null) {
