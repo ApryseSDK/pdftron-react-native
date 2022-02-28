@@ -1344,6 +1344,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    // Hygen Generated Methods
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
