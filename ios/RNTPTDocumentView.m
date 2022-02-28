@@ -4634,17 +4634,7 @@ NS_ASSUME_NONNULL_END
     NSError *error;
     [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         PTPage *page = [doc GetPage:pageNumber];
-        int num_annots = [page GetNumAnnots];
-        for (int i = 0; i < num_annots; i ++){
-            PTAnnot *annot = [page GetAnnot:i];
-            if(annot != nil) {
-                if ([annot GetType] == e_ptWidget) {
-                    __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
-
-                    [resultMap addObject:fieldMap];
-                }
-            }
-        }
+        [self getFieldsForPage:page resultMap:resultMap];
     } error:&error];
         
     if (error) {
@@ -4668,17 +4658,7 @@ NS_ASSUME_NONNULL_END
         int pageCount = [doc GetPageCount];
         for (int i = 1; i <= pageCount; i ++){
             PTPage *page = [doc GetPage:i];
-            int num_annots = [page GetNumAnnots];
-            for (int i = 0; i < num_annots; i ++){
-                PTAnnot *annot = [page GetAnnot:i];
-                if(annot != nil) {
-                    if ([annot GetType] == e_ptWidget) {
-                        __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
-
-                        [resultMap addObject:fieldMap];
-                    }
-                }
-            }
+            [self getFieldsForPage:page resultMap:resultMap];
         }
     } error:&error];
         
@@ -4688,6 +4668,21 @@ NS_ASSUME_NONNULL_END
     }
     
     return [resultMap copy];
+}
+
+- (void)getFieldsForPage:(PTPage*)page resultMap:(NSMutableArray<NSDictionary *>*)resultMap
+{
+    int num_annots = [page GetNumAnnots];
+    for (int i = 0; i < num_annots; i ++){
+        PTAnnot *annot = [page GetAnnot:i];
+        if(annot != nil) {
+            if ([annot GetType] == e_ptWidget) {
+                __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
+
+                [resultMap addObject:fieldMap];
+            }
+        }
+    }
 }
 
 #pragma mark - Export as image
