@@ -1,7 +1,7 @@
 ---
 inject: true
 to: ios/RNTPTDocumentViewManager.m
-after:// Hygen Generated Props
+after: // Hygen Generated Props
 ---
 
 RCT_CUSTOM_VIEW_PROPERTY(<%= name %>, <%= type %>, RNTPTDocumentView)
