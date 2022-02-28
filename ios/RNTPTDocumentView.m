@@ -4623,7 +4623,7 @@ NS_ASSUME_NONNULL_END
 
 - (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
-    if(pageNumber == 0){
+    if(pageNumber == -1){
         return [self getAllFields];
     }
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
@@ -4639,9 +4639,7 @@ NS_ASSUME_NONNULL_END
             PTAnnot *annot = [page GetAnnot:i];
             if(annot != nil) {
                 if ([annot GetType] == e_ptWidget) {
-                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
-
-                    fieldMap = [self getFieldWithHasAppearance:annot];
+                    __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
 
                     [resultMap addObject:fieldMap];
                 }
@@ -4675,9 +4673,7 @@ NS_ASSUME_NONNULL_END
                 PTAnnot *annot = [page GetAnnot:i];
                 if(annot != nil) {
                     if ([annot GetType] == e_ptWidget) {
-                        __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
-
-                        fieldMap = [self getFieldWithHasAppearance:annot];
+                        __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
 
                         [resultMap addObject:fieldMap];
                     }

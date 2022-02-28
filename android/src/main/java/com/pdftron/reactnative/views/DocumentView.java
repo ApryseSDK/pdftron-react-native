@@ -3584,7 +3584,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             try {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-                fieldsArray = getFieldsForPage(pageNumber, fieldsArray);
+                getFieldsForPage(pageNumber, fieldsArray);
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
@@ -3606,7 +3606,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
                 for (int i = 1; i <= getPdfDoc().getPageCount(); i++) {
-                    fieldsArray = getFieldsForPage(i, fieldsArray);
+                    getFieldsForPage(i, fieldsArray);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -3620,7 +3620,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
-    public WritableArray getFieldsForPage(int pageNumber, WritableArray fieldsArray){
+    public void getFieldsForPage(int pageNumber, WritableArray fieldsArray) {
         try {
             Page page = getPdfDoc().getPage(pageNumber);
             int num_annots = page.getNumAnnots();
@@ -3635,11 +3635,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                 }
             }
-            return fieldsArray;
         } catch (Exception ex){
             ex.printStackTrace();
         }
-        return null;
     }
 
     public void setToolMode(String item) {
