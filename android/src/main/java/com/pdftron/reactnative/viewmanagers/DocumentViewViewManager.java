@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
 
 public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
@@ -444,6 +445,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInkMultiStrokeEnabled(inkMultiStrokeEnabled);
     }
 
+    @ReactProp(name = "keyboardShortcutsEnabled")
+    public void setKeyboardShortcutsEnabled(DocumentView documentView, boolean keyboardShortcutsEnabled) {
+        ShortcutHelper.enable(keyboardShortcutsEnabled);
+    }
+
+    @ReactProp(name = "storeNewSignature")
+    public void setStoreNewSignature(DocumentView documentView, boolean storeNewSignature) {
+        documentView.setStoreNewSignature(storeNewSignature);
+    }
+
     @ReactProp(name = "disableEditingByAnnotationType")
     public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
         documentView.setDisableEditingByAnnotationType(annotationTypes);
@@ -461,6 +472,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "replyReviewStateEnabled")
     public void setReplyReviewStateEnabled(DocumentView documentView, boolean replyReviewStateEnabled) {
         documentView.setReplyReviewStateEnabled(replyReviewStateEnabled);
+    }
+
+    @ReactProp(name = "topAppNavBarRightBar")
+    public void setTopAppNavBarRightBar(DocumentView documentView, ReadableArray menus) {
+        documentView.setTopAppNavBarRightBar(menus);
+    }
+
+    @ReactProp(name = "hideThumbnailsViewItems")
+    public void setHideThumbnailsViewItems(DocumentView documentView, ReadableArray thumbnailViewItems) {
+        documentView.setHideThumbnailsViewItems(thumbnailViewItems);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -490,10 +511,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void importAnnotations(int tag, String xfdf) throws PDFNetException {
+    public void importAnnotations(int tag, String xfdf, boolean replace) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.importAnnotations(xfdf);
+            documentView.importAnnotations(xfdf, replace);
         } else {
             throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
         }
@@ -532,6 +553,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getDocumentPath();
         } else {
             throw new PDFNetException("", 0L, getName(), "setToolMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray getAllFields(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAllFields(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAllFields", "Unable to find DocumentView.");
         }
     }
 

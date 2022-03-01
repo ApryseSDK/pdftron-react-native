@@ -25,6 +25,10 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+{
+    NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
+    NSUInteger _annotationToolbarItemCounter;
+}
 
 @property (nonatomic, strong, nullable) UIViewController *viewController;
 
@@ -141,13 +145,19 @@ NS_ASSUME_NONNULL_END
     _useStylusAsPen = YES;
     _longPressMenuEnabled = YES;
     
-    _maxTabCount = NSUIntegerMax;
+    _maxTabCount = INT_MAX;
     
     _saveStateEnabled = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
-    
+
+    [PTOverrides overrideClass:[PTAnnotationManager class]
+                     withClass:[RNTPTAnnotationManager class]];
+
+    [PTOverrides overrideClass:[PTAnnotationReplyViewController class]
+                     withClass:[RNTPTAnnotationReplyViewController class]];
+
     _tempFilePaths = [[NSMutableArray alloc] init];
     
     _showSavedSignatures = YES;
@@ -157,6 +167,11 @@ NS_ASSUME_NONNULL_END
     _userBookmarksListEditingEnabled = YES;
     
     _showQuickNavigationButton = YES;
+
+    _replyReviewStateEnabled = YES;
+
+    _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
+    _annotationToolbarItemCounter = 0;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -276,7 +291,7 @@ NS_ASSUME_NONNULL_END
             
             RNTPTCollaborationDocumentController *collaborationViewController = [[RNTPTCollaborationDocumentController alloc] initWithCollaborationService:self.collabService collaborationMode:collabMode];
             collaborationViewController.delegate = self;
-            
+            collaborationViewController.collaborationReplyViewController.annotationStateEnabled = self.replyReviewStateEnabled;
             self.viewController = collaborationViewController;
             self.documentViewController = collaborationViewController;
         } else {
@@ -892,6 +907,9 @@ NS_ASSUME_NONNULL_END
             }
             else if ([string isEqualToString:PTAnnotationCreateSmartPenToolKey]) {
                 toolManager.smartPenEnabled = value;
+            }
+            else if ([string isEqualToString:PTFormFillToolKey]) {
+                toolManager.widgetAnnotationOptions.canEdit = value;
             }
         }
     }
@@ -1610,6 +1628,27 @@ NS_ASSUME_NONNULL_END
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
+- (NSDictionary *)getFieldWithHasAppearance:(PTAnnot *)annot
+{
+    __block PTWidget *widget;
+    __block PTField *field;
+    __block NSString *fieldName;
+    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    
+    widget = [[PTWidget alloc] initWithAnn:annot];
+    field = [widget GetField];
+    fieldName = [field IsValid] ? [field GetName] : @"";
+    fieldMap = [self getField:fieldName];
+    NSString *fieldType = fieldMap[PTFormFieldTypeKey];
+    if([fieldType isEqualToString:PTFieldTypeSignatureKey]){
+        PTSignatureWidget *signatureWidget = [[PTSignatureWidget alloc] initWithAnnot:annot];
+        PTDigitalSignatureField *digitalSignatureField= [signatureWidget GetDigitalSignatureField];
+        Boolean hasExistingSignature = [digitalSignatureField HasVisibleAppearance];
+        [fieldMap setValue:[[NSNumber alloc] initWithBool:hasExistingSignature] forKey:PTFormFieldHasAppearanceKey];
+    }   
+    return [[fieldMap allKeys] count] == 0 ? nil : [fieldMap copy];
+}
+
 #pragma mark - Annotation
 
 -(void)setAnnotationPermissionCheckEnabled:(BOOL)annotationPermissionCheckEnabled
@@ -1678,6 +1717,13 @@ NS_ASSUME_NONNULL_END
 - (void)setHideViewModeItems:(NSArray<NSString *> *)hideViewModeItems
 {
     _hideViewModeItems = [hideViewModeItems copy];
+
+    [self applyViewerSettings];
+}
+
+- (void)setHideThumbnailsViewItems:(NSArray<NSString *> *)hideThumbnailsViewItems
+{
+    _hideThumbnailsViewItems = [hideThumbnailsViewItems copy];
 
     [self applyViewerSettings];
 }
@@ -1857,6 +1903,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setReplyReviewStateEnabled:(BOOL)replyReviewStateEnabled
+{
+    _replyReviewStateEnabled = replyReviewStateEnabled;
+
+    [self applyViewerSettings];
+}
+
 -(void)setHideAnnotMenuTools:(NSArray<NSString *> *)hideAnnotMenuTools
 {
     _hideAnnotMenuTools = hideAnnotMenuTools;
@@ -2024,6 +2077,21 @@ NS_ASSUME_NONNULL_END
         }
     }
 
+    // Thumbnails view items
+    for (NSString * thumbnailsItemString in self.hideThumbnailsViewItems) {
+        if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertPagesKey]) {
+            documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewExportPagesKey]) {
+            documentViewController.thumbnailsViewController.exportPagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDuplicatePagesKey]) {
+            documentViewController.thumbnailsViewController.duplicatePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewRotatePagesKey]) {
+            documentViewController.thumbnailsViewController.rotatePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDeletePagesKey]) {
+            documentViewController.thumbnailsViewController.deletePagesEnabled = NO;
+        }
+    }
+
     // Leading Nav Icon.
     [self applyLeadingNavButton];
     
@@ -2093,6 +2161,11 @@ NS_ASSUME_NONNULL_END
         documentViewController.toolManager.annotationManager.annotationEditMode = PTAnnotationModeEditAll;
         documentViewController.toolManager.annotationAuthorCheckEnabled = YES;
         documentViewController.toolManager.annotationPermissionCheckEnabled = YES;
+    }
+
+    if ([documentViewController.toolManager.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)documentViewController.toolManager.annotationManager;
+        annotationManager.replyReviewStateEnabled = self.replyReviewStateEnabled;
     }
 
     // Enable/disable restoring state (last read page).
@@ -2284,17 +2357,17 @@ NS_ASSUME_NONNULL_END
     // Handle topAppNavBarRightBar.
     if (self.topAppNavBarRightBar && self.topAppNavBarRightBar.count >= 0) {
         
-        NSMutableArray *righBarItems = [[NSMutableArray alloc] init];
+        NSMutableArray *rightBarItems = [[NSMutableArray alloc] init];
         
         for (NSString *rightBarItemString in self.topAppNavBarRightBar) {
             UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
                                                inViewController:documentController];
             if (rightBarItem) {
-                [righBarItems addObject:rightBarItem];
+                [rightBarItems addObject:rightBarItem];
             }
         }
-        
-        documentController.navigationItem.rightBarButtonItems = [righBarItems copy];
+        NSArray * reversedArray = [[rightBarItems reverseObjectEnumerator] allObjects];
+        documentController.navigationItem.rightBarButtonItems = reversedArray;
     }
     
     // Handle bottomToolbar.
@@ -2349,7 +2422,7 @@ NS_ASSUME_NONNULL_END
     NSString *toolbarId = dictionary[PTAnnotationToolbarKeyId];
     NSString *toolbarName = dictionary[PTAnnotationToolbarKeyName];
     NSString *toolbarIcon = dictionary[PTAnnotationToolbarKeyIcon];
-    NSArray<NSString *> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
+    NSArray<id> *toolbarItems = dictionary[PTAnnotationToolbarKeyItems];
     
     UIImage *toolbarImage = nil;
     if (toolbarIcon) {
@@ -2360,18 +2433,61 @@ NS_ASSUME_NONNULL_END
     
     NSMutableArray<UIBarButtonItem *> *barButtonItems = [NSMutableArray array];
     
-    for (NSString *toolbarItem in toolbarItems) {
-        if (![toolbarItem isKindOfClass:[NSString class]]) {
-            continue;
+    for (id toolbarItemValue in toolbarItems) {
+        if ([toolbarItemValue isKindOfClass:[NSString class]]) {
+            NSString * const toolbarItemKey = (NSString *)toolbarItemValue;
+            
+            Class toolClass = [[self class] toolClassForKey:toolbarItemKey];
+            if (!toolClass) {
+                continue;
+            }
+            
+            UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
+            if (item) {
+                [barButtonItems addObject:item];
+            }
         }
-        
-        Class toolClass = [[self class] toolClassForKey:toolbarItem];
-        if (!toolClass) {
-            continue;
-        }
-        
-        UIBarButtonItem *item = [toolGroupManager createItemForToolClass:toolClass];
-        if (item) {
+        else if ([toolbarItemValue isKindOfClass:[NSDictionary class]]) {
+            NSDictionary<NSString *, id> * const toolbarItem = (NSDictionary *)toolbarItemValue;
+            
+            NSString * const toolbarItemId = toolbarItem[PTAnnotationToolbarItemKeyId];
+            NSString * const toolbarItemName = toolbarItem[PTAnnotationToolbarItemKeyName];
+            NSString * const toolbarItemIconName = toolbarItem[PTAnnotationToolbarItemKeyIcon];
+            
+            // An item id, name, and icon are required.
+            if (toolbarItemId.length == 0 ||
+                !toolbarItemName ||
+                toolbarItemIconName.length == 0) {
+                continue;
+            }
+            
+            UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
+            // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
+                                                                                                style:UIBarButtonItemStylePlain
+                                                                                               target:self
+                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            item.title = toolbarItemName;
+            
+            NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
+            
+            NSInteger itemTag = 0;
+            
+            // Check if this id has already been mapped before.
+            NSNumber * const idNumberValue = _annotationToolbarItemKeyMap[toolbarItemId];
+            if (idNumberValue) {
+                // Use existing mapped integer tag.
+                itemTag = idNumberValue.integerValue;
+            } else {
+                // We need to map this item id key to an integer.
+                _annotationToolbarItemCounter++;
+                
+                itemTag = _annotationToolbarItemCounter;
+                _annotationToolbarItemKeyMap[toolbarItemId] = @(itemTag);
+            }
+            
+            item.tag = itemTag;
+            
             [barButtonItems addObject:item];
         }
     }
@@ -2382,6 +2498,27 @@ NS_ASSUME_NONNULL_END
     toolGroup.identifier = toolbarId;
 
     return toolGroup;
+}
+
+- (void)customToolGroupToolbarItemPressed:(PTSelectableBarButtonItem *)toolbarItem
+{
+    const NSInteger itemTag = toolbarItem.tag;
+    
+    // Find the corresponding item key string value for this item tag number.
+    __block NSString *itemKey = nil;
+    [_annotationToolbarItemKeyMap enumerateKeysAndObjectsUsingBlock:^(NSString * const currentItemKey,
+                                                                      NSNumber * const currentItemTagNumber,
+                                                                      BOOL * const stop) {
+        const NSInteger currentItemTag = currentItemTagNumber.integerValue;
+        if (itemTag == currentItemTag) {
+            itemKey = currentItemKey;
+            *stop = YES;
+        }
+    }];
+    
+    if (itemKey) {
+        [self.delegate annotationToolbarItemPressed:self withKey:itemKey];
+    }
 }
 
 - (void)setCurrentToolbar:(NSString *)toolbarTitle
@@ -3125,6 +3262,27 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber
+{
+    if ([self.delegate respondsToSelector:@selector(pageAdded:pageNumber:)]) {
+        [self.delegate pageAdded:self pageNumber:pageNumber];
+    }
+}
+
+- (void)rnt_documentViewControllerPageRemoved:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber
+{
+    if ([self.delegate respondsToSelector:@selector(pageRemoved:pageNumber:)]) {
+        [self.delegate pageRemoved:self pageNumber:pageNumber];
+    }
+}
+
+- (void)rnt_documentViewControllerDidRotatePages:(PTDocumentBaseViewController *)documentViewController forPageNumbers:(NSIndexSet *)pageNumbers
+{
+    if ([self.delegate respondsToSelector:@selector(pagesRotated:pageNumbers:)]) {
+        [self.delegate pagesRotated:self pageNumbers:pageNumbers];
+    }
+}
+
 - (BOOL)rnt_documentViewControllerShouldGoBackToPan:(PTDocumentViewController *)documentViewController
 {
     return !self.continuousAnnotationEditing;
@@ -3807,16 +3965,10 @@ NS_ASSUME_NONNULL_END
     }
     
     if ([annot GetType] == e_ptWidget) {
-        __block PTWidget *widget;
-        __block PTField *field;
-        __block NSString *fieldName;
         __block NSDictionary *fieldMap;
 
         [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-            widget = [[PTWidget alloc] initWithAnn:annot];
-            field = [widget GetField];
-            fieldName = [field IsValid] ? [field GetName] : @"";
-            fieldMap = [field IsValid] ? [self getField:fieldName] : @{};
+            fieldMap = [self getFieldWithHasAppearance:annot];
         } error:&error];
         
         if (error) {
@@ -4465,6 +4617,41 @@ NS_ASSUME_NONNULL_END
 
 - (NSString *) getDocumentPath {
     return self.currentDocumentViewController.coordinatedDocument.fileURL.path;
+}
+
+#pragma mark - Get All Fields
+
+- (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        PTPage *page = [doc GetPage:pageNumber];
+        int num_annots = [page GetNumAnnots];
+        for (int i = 0; i < num_annots; i ++){
+            PTAnnot *annot = [page GetAnnot:i];
+            if(annot != nil) {
+                if ([annot GetType] == e_ptWidget) {
+                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+                    fieldMap = [self getFieldWithHasAppearance:annot];
+
+                    [resultMap addObject:fieldMap];
+                }
+            }
+        }
+    } error:&error];
+        
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
+    }
+    
+    return [resultMap copy];
 }
 
 #pragma mark - Export as image
@@ -5455,6 +5642,23 @@ NS_ASSUME_NONNULL_END
     return fileURL;
 }
 
+- (nullable UIImage *)imageForImageName:(NSString *)imageName
+{
+    UIImage * const image = [UIImage imageNamed:imageName];
+    if (image != nil) {
+        return image;
+    }else{
+        // fallback to System Image
+        if (@available(iOS 13.0, *)) {
+            UIImage *systemIcon = [UIImage systemImageNamed:imageName];
+            if (systemIcon != nil) {
+                return systemIcon;
+            }
+        }
+    }
+    return nil;
+}
+
 #pragma mark - Display Responsiveness
 
 -(void)setShowNavigationListAsSidePanelOnLargeDevices:(BOOL)showNavigationListAsSidePanelOnLargeDevices
@@ -5531,3 +5735,27 @@ NS_ASSUME_NONNULL_END
     self.navigationController.toolbarHidden = !self.editingEnabled;
 }
 @end
+
+#pragma mark - RNTPTAnnotationManager
+
+@implementation RNTPTAnnotationManager
+
+@end
+
+#pragma mark - RNTPTAnnotationReplyViewController
+
+@implementation RNTPTAnnotationReplyViewController
+
+- (BOOL)isAnnotationStateEnabled
+{
+    BOOL annotationStateEnabled = [super isAnnotationStateEnabled];
+    BOOL replyReviewStateEnabled = YES;
+    if ([self.annotationManager isKindOfClass:RNTPTAnnotationManager.class]) {
+        RNTPTAnnotationManager *annotationManager = (RNTPTAnnotationManager*)self.annotationManager;
+        replyReviewStateEnabled = annotationManager.replyReviewStateEnabled;
+    }
+    return annotationStateEnabled && replyReviewStateEnabled;
+}
+
+@end
+
