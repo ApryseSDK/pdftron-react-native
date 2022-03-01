@@ -382,17 +382,6 @@ Example:
 />
 ```
 
-#### highlighterSmoothingEnabled
-bool, optional, default to true, Android only.
-
-Sets whether the pdf should have highlighter smoothing.
-Example
-
-```js
-<DocumentView
-  highlighterSmoothingEnabled={false}
-/>
-```
 #### onDocumentLoaded
 function, optional
 
@@ -1649,6 +1638,18 @@ Defines annotation types that cannot be edited after creation.
 ```js
 <DocumentView
   disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+/>
+```
+
+#### highlighterSmoothingEnabled
+bool, optional, default to true, Android only.
+
+Sets whether the pdf should have highlighter smoothing.
+Example
+
+```js
+<DocumentView
+  highlighterSmoothingEnabled={false}
 />
 ```
 
