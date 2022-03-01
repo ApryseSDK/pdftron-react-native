@@ -2063,6 +2063,7 @@ this._viewer.setCurrentPage(4).then((success) => {
 function, optional
 
 This method gets all the fields for a particular page.
+If no page number is passed the method gets the Fields for all the pages.
 Additionally if a field of type signature is present it will have a hasAppearance which is a boolean to represent whether a signature field was signed. 
 The hasAppearance field will be undefined for all other fields except signature.
 
