@@ -185,7 +185,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
    + public class MainApplication extends MultiDexApplication implements ReactApplication {
    ```
 
-6. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
+3. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
 7. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
@@ -206,7 +206,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
     ```
 
 2. In the `ios` folder, run `pod install`.
-3. Replace `App.js` (or `App.tsx`) with what is shown [here](#usage).
+3. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
 4. Finally in the root project directory, run `react-native run-ios`.
 5. (Optional) If you need a close button icon, you will need to add the PNG resources to `MyApp` as well, i.e. `ic_close_black_24px`.
 
