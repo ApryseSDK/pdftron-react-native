@@ -484,6 +484,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailsViewItems(thumbnailViewItems);
     }
 
+    @ReactProp(name = "disableHighlighterSmoothing")
+    public void setDisableHighlighterSmoothing(DocumentView documentView, boolean disableHighlighterSmoothing) {
+        documentView.setDisableHighlighterSmoothing(disableHighlighterSmoothing);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

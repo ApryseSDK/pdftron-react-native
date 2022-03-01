@@ -382,6 +382,17 @@ Example:
 />
 ```
 
+#### disableHighlighterSmoothing
+bool, optional, default to false, Android only.
+
+Sets whether the pdf should have highlighter smoothing.
+Example
+
+```js
+<DocumentView
+  disableHighlighterSmoothing={true}
+/>
+```
 #### onDocumentLoaded
 function, optional
 
