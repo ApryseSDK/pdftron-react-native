@@ -382,15 +382,15 @@ Example:
 />
 ```
 
-#### disableHighlighterSmoothing
-bool, optional, default to false, Android only.
+#### highlighterSmoothingEnabled
+bool, optional, default to true, Android only.
 
 Sets whether the pdf should have highlighter smoothing.
 Example
 
 ```js
 <DocumentView
-  disableHighlighterSmoothing={true}
+  highlighterSmoothingEnabled={false}
 />
 ```
 #### onDocumentLoaded

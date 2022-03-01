@@ -84,7 +84,7 @@ const propTypes = {
   followSystemDarkMode: PropTypes.bool,
   useStylusAsPen: PropTypes.bool,
   multiTabEnabled: PropTypes.bool,
-  disableHighlighterSmoothing: PropTypes.bool,
+  highlighterSmoothingEnabled: PropTypes.bool,
   tabTitle: PropTypes.string,
   maxTabCount: PropTypes.number,
   signSignatureFieldsWithStamps: PropTypes.bool,

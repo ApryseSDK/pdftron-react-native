@@ -4579,8 +4579,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mSaveStateEnabled = saveStateEnabled;
     }
 
-    public void setDisableHighlighterSmoothing(boolean disableHighlighterSmoothing) {
-        if (disableHighlighterSmoothing) {
+    public void setHighlighterSmoothingEnabled(boolean highlighterSmoothingEnabled) {
+        if (!highlighterSmoothingEnabled) {
             mToolManagerBuilder = mToolManagerBuilder.setFreeHighlighterAutoSmoothingRange(0f);
         }
     }
