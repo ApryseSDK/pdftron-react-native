@@ -1763,6 +1763,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             menuStr = MENU_ID_STRING_DELETE;
         } else if (id == R.id.qm_flatten) {
             menuStr = MENU_ID_STRING_FLATTEN;
+        } else if (id == R.id.qm_duplicate) {
+            menuStr = MENU_ID_STRING_DUPLICATE;
         } else if (id == R.id.qm_text) {
             menuStr = MENU_ID_STRING_TEXT;
         } else if (id == R.id.qm_edit) {
