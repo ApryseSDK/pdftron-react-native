@@ -257,6 +257,7 @@ public final class Constants {
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
+    public static final String MENU_ID_STRING_DUPLICATE = "duplicate";
 
     // Thumbnails
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
