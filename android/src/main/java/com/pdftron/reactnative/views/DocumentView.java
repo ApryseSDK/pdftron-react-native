@@ -4579,6 +4579,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mSaveStateEnabled = saveStateEnabled;
     }
 
+    public void setHighlighterSmoothingEnabled(boolean highlighterSmoothingEnabled) {
+        if (!highlighterSmoothingEnabled) {
+            mToolManagerBuilder = mToolManagerBuilder.setFreeHighlighterAutoSmoothingRange(0f);
+        }
+    }
+
     public void setOpenSavedCopyInNewTab(boolean openSavedCopyInNewTab) {
         mBuilder = mBuilder.openSavedCopyInNewTab(openSavedCopyInNewTab);
     }
