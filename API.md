@@ -1641,6 +1641,18 @@ Defines annotation types that cannot be edited after creation.
 />
 ```
 
+#### highlighterSmoothingEnabled
+bool, optional, default to true, Android only.
+
+Sets whether the pdf should have highlighter smoothing.
+Example
+
+```js
+<DocumentView
+  highlighterSmoothingEnabled={false}
+/>
+```
+
 #### excludedAnnotationListTypes
 array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none
 
