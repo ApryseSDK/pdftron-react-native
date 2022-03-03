@@ -1499,9 +1499,6 @@ action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
 annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
 
-**Known Issues** <br/> 
-On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
-
 ```js
 <DocumentView
   onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
