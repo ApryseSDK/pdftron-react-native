@@ -3576,6 +3576,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public WritableArray getAllFields(int pageNumber) {
+        if (pageNumber == -1) {
+            return getAllFields();
+        }
         if (getPdfDoc() != null) {
             WritableArray fieldsArray = Arguments.createArray();
             boolean shouldUnlockRead = false;
@@ -3583,18 +3586,29 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             try {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-                Page page = getPdfDoc().getPage(pageNumber);
-                int num_annots = page.getNumAnnots();
-                for (int i = 0; i < num_annots; ++i) {
-                    Annot annot = page.getAnnot(i);
-                    if (annot != null && annot.isValid()) {
-                        if (annot.getType() == Annot.e_Widget) {
-                            WritableMap resultMap = getField(annot);
-                            if (resultMap != null) {
-                                fieldsArray.pushMap(resultMap);
-                            }
-                        }
-                    }
+                getFieldsForPage(pageNumber, fieldsArray);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
+            }
+            return fieldsArray;
+        }
+        return null;
+    }
+
+    public WritableArray getAllFields() {
+        if (getPdfDoc() != null) {
+            WritableArray fieldsArray = Arguments.createArray();
+            boolean shouldUnlockRead = false;
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
+                for (int i = 1; i <= getPdfDoc().getPageCount(); i++) {
+                    getFieldsForPage(i, fieldsArray);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -3606,6 +3620,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             return fieldsArray;
         }
         return null;
+    }
+
+    public void getFieldsForPage(int pageNumber, WritableArray fieldsArray) {
+        try {
+            Page page = getPdfDoc().getPage(pageNumber);
+            int num_annots = page.getNumAnnots();
+            for (int i = 0; i < num_annots; ++i) {
+                Annot annot = page.getAnnot(i);
+                if (annot != null && annot.isValid()) {
+                    if (annot.getType() == Annot.e_Widget) {
+                        WritableMap resultMap = getField(annot);
+                        if (resultMap != null) {
+                            fieldsArray.pushMap(resultMap);
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public void setToolMode(String item) {

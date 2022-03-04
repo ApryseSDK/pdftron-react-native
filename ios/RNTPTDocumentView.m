@@ -4623,6 +4623,9 @@ NS_ASSUME_NONNULL_END
 
 - (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
+    if(pageNumber == -1){
+        return [self getAllFields];
+    }
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
         return nil;
@@ -4631,18 +4634,31 @@ NS_ASSUME_NONNULL_END
     NSError *error;
     [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         PTPage *page = [doc GetPage:pageNumber];
-        int num_annots = [page GetNumAnnots];
-        for (int i = 0; i < num_annots; i ++){
-            PTAnnot *annot = [page GetAnnot:i];
-            if(annot != nil) {
-                if ([annot GetType] == e_ptWidget) {
-                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+        [resultMap addObjectsFromArray:[self getFieldsForPage:page]];
+    } error:&error];
+        
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
+    }
+    
+    return [resultMap copy];
+}
 
-                    fieldMap = [self getFieldWithHasAppearance:annot];
+- (NSArray<NSDictionary *> *)getAllFields
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
 
-                    [resultMap addObject:fieldMap];
-                }
-            }
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        int pageCount = [doc GetPageCount];
+        for (int i = 1; i <= pageCount; i ++){
+            PTPage *page = [doc GetPage:i];
+            [resultMap addObjectsFromArray:[self getFieldsForPage:page]];
         }
     } error:&error];
         
@@ -4651,6 +4667,22 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
+    return [resultMap copy];
+}
+
+- (NSArray<NSDictionary *>*)getFieldsForPage:(PTPage*)page
+{
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    int num_annots = [page GetNumAnnots];
+    for (int i = 0; i < num_annots; i ++){
+        PTAnnot *annot = [page GetAnnot:i];
+        if(annot != nil) {
+            if ([annot GetType] == e_ptWidget) {
+                __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
+                [resultMap addObject:fieldMap];
+            }
+        }
+    }
     return [resultMap copy];
 }
 

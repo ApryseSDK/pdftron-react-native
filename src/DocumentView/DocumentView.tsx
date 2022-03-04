@@ -408,9 +408,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  getAllFields = (pageNumber: number): Promise<void |  Array<AnnotOptions.Field>> => {
+  getAllFields = (pageNumber?: number): Promise<void |  Array<AnnotOptions.Field>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
+      if (pageNumber === undefined) {
+        pageNumber = -1;
+      }
       return DocumentViewManager.getAllFields(tag, pageNumber);
     }
     return Promise.resolve();
