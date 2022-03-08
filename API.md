@@ -2296,9 +2296,7 @@ this._viewer.importAnnotationCommand(xfdfCommand);
 ```
 
 #### importAnnotations
-Imports XFDF annotation string to the current document.
-
-`importAnnotations` should only be used in local mode. To import annotations in collaboration mode, use [`importAnnotationCommand`](#importAnnotationCommand).
+Imports XFDF annotation string to the current document. Can be used in both local and collaboration mode.
 
 Parameters:
 
