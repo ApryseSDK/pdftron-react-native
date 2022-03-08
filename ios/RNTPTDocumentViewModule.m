@@ -76,6 +76,21 @@ RCT_REMAP_METHOD(getDocumentPath,
     }
 }
 
+RCT_REMAP_METHOD(getAllFields,
+                 getAllFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSMutableArray<NSDictionary *> *fields= [[self documentViewManager] getAllFieldsForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(fields);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get all fields for the page", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(exportAsImage,
                  exportAsImageForDocumentViewTag:(nonnull NSNumber *)tag
                  pageNumber:(int)pageNumber
@@ -170,11 +185,12 @@ RCT_REMAP_METHOD(exportAnnotations,
 RCT_REMAP_METHOD(importAnnotations,
                  importAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  xfdf:(NSString *)xfdf
+                 replace:(BOOL)replace
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf];
+        [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf replace:replace];
         resolve(nil);
     }
     @catch (NSException *exception) {

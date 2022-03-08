@@ -82,12 +82,12 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void importAnnotations(final int tag, final String xfdf, final Promise promise) {
+    public void importAnnotations(final int tag, final String xfdf, final boolean replace, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.importAnnotations(tag, xfdf);
+                    mDocumentViewInstance.importAnnotations(tag, xfdf, replace);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);
@@ -149,6 +149,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
                 try {
                     String path = mDocumentViewInstance.getDocumentPath(tag);
                     promise.resolve(path);
+                } catch (Exception e) {
+                    promise.reject(e);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAllFields(final int tag, final int pageNumber, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WritableArray fields = mDocumentViewInstance.getAllFields(tag, pageNumber);
+                    promise.resolve(fields);
                 } catch (Exception e) {
                     promise.reject(e);
                 }
