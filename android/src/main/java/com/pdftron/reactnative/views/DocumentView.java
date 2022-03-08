@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -3048,40 +3047,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void importAnnotations(String xfdf, boolean replace) throws PDFNetException {
-        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        if (mCollabManager != null) {
+            mCollabManager.importAnnotations(xfdf, false);
+        } else {
+            PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
-        PDFDoc pdfDoc = pdfViewCtrl.getDoc();
+            PDFDoc pdfDoc = pdfViewCtrl.getDoc();
 
-        boolean shouldUnlockRead = false;
-        try {
-            pdfViewCtrl.docLockRead();
-            shouldUnlockRead = true;
+            boolean shouldUnlockRead = false;
+            try {
+                pdfViewCtrl.docLockRead();
+                shouldUnlockRead = true;
 
-            if (pdfDoc.hasDownloader()) {
-                // still downloading file, let's wait for next call
-                return;
+                if (pdfDoc.hasDownloader()) {
+                    // still downloading file, let's wait for next call
+                    return;
+                }
+            } finally {
+                if (shouldUnlockRead) {
+                    pdfViewCtrl.docUnlockRead();
+                }
             }
-        } finally {
-            if (shouldUnlockRead) {
-                pdfViewCtrl.docUnlockRead();
-            }
-        }
 
-        boolean shouldUnlock = false;
-        try {
-            pdfViewCtrl.docLock(true);
-            shouldUnlock = true;
+            boolean shouldUnlock = false;
+            try {
+                pdfViewCtrl.docLock(true);
+                shouldUnlock = true;
 
-            FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
-            if (replace) {
-                pdfDoc.fdfUpdate(fdfDoc);
-            } else {
-                pdfDoc.fdfMerge(fdfDoc);
-            }
-            pdfViewCtrl.update(true);
-        } finally {
-            if (shouldUnlock) {
-                pdfViewCtrl.docUnlock();
+                FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
+                if (replace) {
+                    pdfDoc.fdfUpdate(fdfDoc);
+                } else {
+                    pdfDoc.fdfMerge(fdfDoc);
+                }
+                pdfViewCtrl.update(true);
+            } finally {
+                if (shouldUnlock) {
+                    pdfViewCtrl.docUnlock();
+                }
             }
         }
     }
@@ -3637,7 +3640,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     }
                 }
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
