@@ -93,6 +93,7 @@ static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
 static NSString * const PTInsertPageToolKey = @"InsertPage";
+static NSString *const PTFormFillToolKey = @"FormFill";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";
@@ -120,6 +121,13 @@ static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverCont
 static NSString * const PTViewModeCropKey = @"viewModeCrop";
 static NSString * const PTViewModeRotationKey = @"viewModeRotation";
 static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
+
+
+static NSString * const PTThumbnailsViewInsertPagesKey = @"thumbnailsInsertPages";
+static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages";
+static NSString * const PTThumbnailsViewDuplicatePagesKey = @"thumbnailsDuplicatePages";
+static NSString * const PTThumbnailsViewRotatePagesKey = @"thumbnailsRotatePages";
+static NSString * const PTThumbnailsViewDeletePagesKey = @"thumbnailsDeletePages";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
@@ -217,6 +225,7 @@ static NSString * const PTCoordinatePointPageNumber = @"pageNumber";
 static NSString * const PTFormFieldNameKey = @"fieldName";
 static NSString * const PTFormFieldValueKey = @"fieldValue";
 static NSString * const PTFormFieldTypeKey = @"fieldType";
+static NSString * const PTFormFieldHasAppearanceKey = @"fieldHasAppearance";
 
 static NSString * const PTFieldTypeUnknownKey = @"unknown";
 static NSString * const PTFieldTypeButtonKey = @"button";
@@ -296,6 +305,12 @@ static const PTAnnotationToolbarKey PTAnnotationToolbarKeyName = @"name";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyIcon = @"icon";
 static const PTAnnotationToolbarKey PTAnnotationToolbarKeyItems = @"items";
 
+// Custom annotation toolbar item keys.
+typedef NSString * PTAnnotationToolbarItemKey NS_TYPED_EXTENSIBLE_ENUM;
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyId = @"id";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyName = @"name";
+static const PTAnnotationToolbarItemKey PTAnnotationToolbarItemKeyIcon = @"icon";
+
 // Contexts.
 static void *TabChangedContext = &TabChangedContext;
 
@@ -323,6 +338,10 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)pageAdded:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
 
+- (void)pageRemoved:(RNTPTDocumentView *)sender pageNumber:(int)pageNumber;
+
+- (void)pagesRotated:(RNTPTDocumentView *)sender pageNumbers:(NSIndexSet *)pageNumbers;
+
 - (void)tabChanged:(RNTPTDocumentView *)sender currentTab:(NSString *)currentTab;
 
 - (void)annotationsSelected:(RNTPTDocumentView *)sender annotations:(NSArray<NSDictionary<NSString *, id> *> *)annotations;
@@ -345,6 +364,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)behaviorActivated:(RNTPTDocumentView *)sender action:(NSString *)action data:(NSDictionary *)data;
 
 - (void)undoRedoStateChanged:(RNTPTDocumentView *)sender;
+
+- (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
 @end
 
@@ -417,6 +438,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
+
 @property (nonatomic, copy, nullable) NSString *currentUser;
 
 @property (nonatomic, copy, nullable) NSString *currentUserName;
@@ -445,6 +468,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<id> *annotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideDefaultAnnotationToolbars;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideViewModeItems;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailsViewItems;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *topAppNavBarRightBar;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *bottomToolbar;
 @property (nonatomic, copy, nullable) NSString *initialToolbar;
@@ -499,6 +523,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)openBookmarkList;
 
 - (NSString *)getDocumentPath;
+
+- (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber;
 
 - (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
 
@@ -671,6 +697,16 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 
 @interface RNTPTThumbnailsViewController : PTThumbnailsViewController
+
+@end
+
+@interface RNTPTAnnotationManager : PTAnnotationManager
+
+@property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
+
+@end
+
+@interface RNTPTAnnotationReplyViewController : PTAnnotationReplyViewController
 
 @end
 NS_ASSUME_NONNULL_END

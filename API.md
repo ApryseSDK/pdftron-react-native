@@ -296,9 +296,6 @@ Used for specifying the extension of the document to be loaded.
 />
 ```
 
-For iOS, please use the following podspec in your `Podfile`: https://nightly-pdftron.s3-us-west-2.amazonaws.com/stable/2021-12-01/9.1/cocoapods/xcframeworks/pdfnet/2021-12-01_stable_rev78714.podspec
-
-
 #### customHeaders
 object, optional
 
@@ -404,6 +401,24 @@ path | string | File path that the document has been saved to
 />
 ```
 
+#### onLoadComplete
+function, optional
+
+This function is called when the document finishes loading.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+path | string | File path that the document has been saved to
+
+```js
+<DocumentView
+  onLoadComplete = {(path) => { 
+    console.log('The document has finished loading:', path); 
+  }}
+/>
+```
 #### onDocumentError
 function, optional
 
@@ -627,18 +642,44 @@ Defines custom toolbars. If passed in, the default toolbars will no longer appea
 It is possible to mix and match with default toolbars. See example below:
 
 ```js
+const myToolItem = {
+  [Config.CustomToolItemKey.Id]: 'add_page',
+  [Config.CustomToolItemKey.Name]: 'Add page',
+  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white',
+};
+
 const myToolbar = {
   [Config.CustomToolbarKey.Id]: 'myToolbar',
   [Config.CustomToolbarKey.Name]: 'myToolbar',
   [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
-  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, Config.Buttons.undo]
+  [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, myToolItem, Config.Buttons.undo]
 };
 
-...
 <DocumentView
   annotationToolbars={[Config.DefaultToolbars.Annotate, myToolbar]}
 />
 ```
+
+#### onAnnotationToolbarItemPress
+function, optional
+
+This function is called when a custom toolbar tool item is clicked
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | the `Config.CustomToolItemKey.Id` defined in the tool
+
+```js
+<DocumentView
+  onAnnotationToolbarItemPress = {({id}) => {
+    console.log('toolbar item press: ' + id);
+  }}
+/>
+
+```
+
 #### hideDefaultAnnotationToolbars
 array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants, optional, defaults to none
 
@@ -650,6 +691,16 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 />
 ```
 
+#### hideThumbnailsViewItems
+array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, optional, defaults to none
+
+Defines which default thumbnail view items should be hidden.
+
+```js
+<DocumentView
+  hideThumbnailsViewItems={[Config.ThumbnailsViewItem.InsertPages, Config.ThumbnailsViewItem.ExportPages]}
+/>
+```
 #### hideAnnotationToolbarSwitcher
 bool, optional, defaults to false
 
@@ -891,6 +942,44 @@ pageNumbers | array | An array of the page numbers that were added to the docume
 />
 ```
 
+#### onPagesRotated
+function, optional
+
+This function is called when pages are rotated.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumbers | array | An array of the page numbers that were rotated
+
+```js
+<DocumentView
+  onPagesRotated = {({pageNumbers}) => {
+    console.log('Pages rotated:', pageNumbers);
+  }}
+/>
+```
+
+#### onPagesRemoved
+function, optional
+
+This function is called when pages are removed from the document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumbers | array | An array of the page numbers that were removed from the document
+
+```js
+<DocumentView
+  onPagesRemoved = {({pageNumbers}) => {
+    console.log('Pages removed:', pageNumbers);
+  }}
+/>
+```
+
 ### Zoom
 
 ### zoom
@@ -931,6 +1020,24 @@ zoom | double | the current zoom ratio of the document
 <DocumentView
   onZoomChanged = {(zoom) => {
     console.log('Current zoom ratio is', zoom);
+  }}
+/>
+```
+#### onScaleChanged
+function, optional
+
+This function is called when the zoom scale has been changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+zoom | double | the current zoom ratio of the document
+
+```js
+<DocumentView
+  onScaleChanged = {(scale) => {
+    console.log('Current scale ratio is', scale);
   }}
 />
 ```
@@ -1332,7 +1439,7 @@ Mode | Description
 ```
 
 #### replyReviewStateEnabled
-boolean, optional, Android only, defaults to true
+boolean, optional, defaults to true
 
 Defines whether to show an annotation's reply review state.
 
@@ -1414,9 +1521,6 @@ Name | Type | Description
 action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
 annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
-
-**Known Issues** <br/> 
-On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
 
 ```js
 <DocumentView
@@ -1512,13 +1616,14 @@ annotations | array | array of annotation data in the format `{id: string, pageN
 #### onFormFieldValueChanged
 function, optional
 
-This function is called if a change has been made to form field values.
+This function is called if a change has been made to form field values. Additionally signatures type fields will have the fieldHasAppearance value defined.
+The hasAppearance indicates whether the signature field was signed or not
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
-fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any}`, representing the fields that have been changed
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any, fieldHasAppearance: boolean}`, representing the fields that have been changed
 
 ```js
 <DocumentView
@@ -1527,6 +1632,7 @@ fields | array | array of field data in the format `{fieldName: string, fieldTyp
       console.log('The name of the changed field is', field.fieldName);
       console.log('The type of the changed field is', field.fieldType);
       console.log('The value of the changed field is', field.fieldValue);
+      console.log('The hasAppearance of the changed field is', field.fieldHasAppearance);
     });
   }}
 />
@@ -1552,6 +1658,18 @@ Defines annotation types that cannot be edited after creation.
 ```js
 <DocumentView
   disableEditingByAnnotationType={[Config.Tools.annotationCreateTextSquiggly, Config.Tools.annotationCreateEllipse]}
+/>
+```
+
+#### highlighterSmoothingEnabled
+bool, optional, default to true, Android only.
+
+Sets whether the pdf should have highlighter smoothing.
+Example
+
+```js
+<DocumentView
+  highlighterSmoothingEnabled={false}
 />
 ```
 
@@ -1973,6 +2091,38 @@ this._viewer.setCurrentPage(4).then((success) => {
 });
 ```
 
+#### getAllFields 
+function, optional
+
+This method gets all the fields for a particular page.
+If no page number is passed the method gets the Fields for all the pages.
+Additionally if a field of type signature is present it will have a hasAppearance which is a boolean to represent whether a signature field was signed. 
+The hasAppearance field will be undefined for all other fields except signature.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+pageNumber | integer | the page number to be set as the current page; 1-indexed
+
+Returns a Promise.
+
+Promise Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fields | array | array of field data in the format `{fieldName: string, fieldType: string, fieldValue: any,fieldHasAppearance: boolean}`, representing the fields that have been changed
+
+```js
+  this._viewer.getAllFields(1).then((fields) => {
+      fields.forEach(field => {
+        console.log('The name of the  field is', field.fieldName);
+        console.log('The type of the  field is', field.fieldType);
+        console.log('The value of the field is', field.fieldValue);
+        console.log('The hasAppearance of the field is', field.fieldHasAppearance);
+      });
+    });
+```
 #### gotoPreviousPage
 Go to the previous page of the document. If on first page, it would stay on first page.
 
@@ -2169,15 +2319,14 @@ this._viewer.importAnnotationCommand(xfdfCommand);
 ```
 
 #### importAnnotations
-Imports XFDF annotation string to the current document.
-
-`importAnnotations` should only be used in local mode. To import annotations in collaboration mode, use [`importAnnotationCommand`](#importAnnotationCommand).
+Imports XFDF annotation string to the current document. Can be used in both local and collaboration mode.
 
 Parameters:
 
 Name | Type | Description
 --- | --- | ---
 xfdf | string | annotation string in XFDF format for import
+replace | boolean | whether to replace existing form and annotation data with those imported from the XFDF string (Android only) 
 
 Returns a Promise.
 
