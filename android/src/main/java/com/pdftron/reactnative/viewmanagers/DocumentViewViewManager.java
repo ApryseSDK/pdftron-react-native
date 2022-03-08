@@ -115,11 +115,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageNumber(pageNum);
     }
 
-    @ReactProp(name = "scale")
-    public void setScale(DocumentView documentView, double scale) {
-        documentView.setZoom(scale);
-    }
-
     @ReactProp(name = "topToolbarEnabled")
     public void setTopToolbarEnabled(DocumentView documentView, boolean topToolbarEnabled) {
         documentView.setTopToolbarEnabled(topToolbarEnabled);
@@ -378,6 +373,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "zoom")
     public void setZoom(DocumentView documentView, double zoom) {
         documentView.setZoom(zoom);
+    }
+
+    @ReactProp(name = "scale")
+    public void setScale(DocumentView documentView, double scale) {
+        documentView.setZoom(scale);
     }
 
     @ReactProp(name = "horizontalScrollPos")
