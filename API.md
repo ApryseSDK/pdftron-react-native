@@ -758,7 +758,7 @@ Parameters:
 
 Mode | Value | Description
 --- | --- | ---
-fit both or fitPage (default) | 0 | fits the whole page
+fitPage (default) | 0 | fits the whole page
 fit width | 1 | fits page using width
 fit hieght | 2 | fits page using height
 
