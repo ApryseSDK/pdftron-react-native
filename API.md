@@ -996,8 +996,8 @@ This prop lets define the zoom of the document
 ### scale
 double, optional
 
-Wonday compatibility API. This prop lets define the zoom of the document.
-Same as zoom.
+This prop lets define the zoom of the document.
+Same as zoom. Wonday compatibility API
 
 ```js
 <DocumentView
