@@ -243,6 +243,9 @@ export const Config = {
   ThumbnailsViewItem: {
     InsertPages: "thumbnailsInsertPages",
     ExportPages: "thumbnailsExportPages",
+    InsertFromImage: "thumbnailsInsertFromImage",
+    InsertFromDocument: "thumbnailsInsertFromDocument",
+    InsertFromPhoto: "thumbnailsInsertFromPhoto",
     DuplicatePages: "thumbnailsDuplicatePages",
     RotatePages: "thumbnailsRotatePages",
     DeletePages: "thumbnailsDeletePages",

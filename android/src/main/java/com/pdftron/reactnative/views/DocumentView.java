@@ -62,6 +62,7 @@ import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
+import com.pdftron.pdf.model.UserBookmarkItem;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
@@ -901,6 +902,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_PAGES);
             } else if (THUMBNAIL_ROTATE_PAGES.equals(viewItem)) {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_ROTATE_PAGES);
+            } else if (THUMBNAIL_INSERT_FROM_IMAGE.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_IMAGE);
+            } else if (THUMBNAIL_INSERT_FROM_DOCUMENT.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_DOCUMENT);
             }
         }
     }
@@ -2548,6 +2553,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ToolManager.PdfDocModificationListener mPdfDocModificationListener = new ToolManager.PdfDocModificationListener() {
         @Override
         public void onBookmarkModified() {
+
+        }
+
+        @Override
+        public void onBookmarkModified(@NonNull List<UserBookmarkItem> bookmarkItems) {
             if (getPdfDoc() != null) {
                 WritableMap params = Arguments.createMap();
                 params.putString(ON_BOOKMARK_CHANGED, ON_BOOKMARK_CHANGED);
