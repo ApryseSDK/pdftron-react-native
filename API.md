@@ -696,6 +696,7 @@ array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, option
 
 Defines which default thumbnail view items should be hidden.
 Note: InsertFromPhoto item is for iOS only
+On Android, photo and camera are both included in InsertFromImage
 
 ```js
 <DocumentView
