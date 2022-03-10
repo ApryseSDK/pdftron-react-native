@@ -128,6 +128,9 @@ static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages
 static NSString * const PTThumbnailsViewDuplicatePagesKey = @"thumbnailsDuplicatePages";
 static NSString * const PTThumbnailsViewRotatePagesKey = @"thumbnailsRotatePages";
 static NSString * const PTThumbnailsViewDeletePagesKey = @"thumbnailsDeletePages";
+static NSString *const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertFromImage";
+static NSString *const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
+static NSString *const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";

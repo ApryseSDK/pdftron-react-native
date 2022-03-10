@@ -695,6 +695,7 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines which default thumbnail view items should be hidden.
+Note: InsertFromPhoto item is for iOS only
 
 ```js
 <DocumentView
