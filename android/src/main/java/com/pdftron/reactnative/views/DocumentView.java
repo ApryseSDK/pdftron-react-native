@@ -62,6 +62,7 @@ import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
+import com.pdftron.pdf.model.UserBookmarkItem;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
 import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
@@ -2548,6 +2549,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ToolManager.PdfDocModificationListener mPdfDocModificationListener = new ToolManager.PdfDocModificationListener() {
         @Override
         public void onBookmarkModified() {
+
+        }
+
+        @Override
+        public void onBookmarkModified(@NonNull List<UserBookmarkItem> bookmarkItems) {
             if (getPdfDoc() != null) {
                 WritableMap params = Arguments.createMap();
                 params.putString(ON_BOOKMARK_CHANGED, ON_BOOKMARK_CHANGED);
