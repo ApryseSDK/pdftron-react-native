@@ -241,8 +241,11 @@ export const Config = {
 
   // ThumbnailsViewItem defines actionss in the thumbnails browser
   ThumbnailsViewItem: {
-    InsertPages: "thumbnailsInsertPages",
+    InsertBlankPage: "thumbnailsInsertPages",
     ExportPages: "thumbnailsExportPages",
+    InsertFromImage: "thumbnailsInsertFromImage",
+    InsertFromDocument: "thumbnailsInsertFromDocument",
+    InsertFromPhoto: "thumbnailsInsertFromPhoto",
     DuplicatePages: "thumbnailsDuplicatePages",
     RotatePages: "thumbnailsRotatePages",
     DeletePages: "thumbnailsDeletePages",

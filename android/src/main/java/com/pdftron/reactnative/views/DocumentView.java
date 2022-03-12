@@ -902,6 +902,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_PAGES);
             } else if (THUMBNAIL_ROTATE_PAGES.equals(viewItem)) {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_ROTATE_PAGES);
+            } else if (THUMBNAIL_INSERT_FROM_IMAGE.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_IMAGE);
+            } else if (THUMBNAIL_INSERT_FROM_DOCUMENT.equals(viewItem)) {
+                mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_DOCUMENT);
             }
         }
     }

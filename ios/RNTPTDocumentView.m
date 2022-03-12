@@ -2077,10 +2077,11 @@ NS_ASSUME_NONNULL_END
         }
     }
 
+    NSMutableArray *addPagesItems = [documentViewController.thumbnailsViewController.addPagesViewController.items mutableCopy];
     // Thumbnails view items
     for (NSString * thumbnailsItemString in self.hideThumbnailsViewItems) {
         if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertPagesKey]) {
-            documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addBlankPagesButtonItem];
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewExportPagesKey]) {
             documentViewController.thumbnailsViewController.exportPagesEnabled = NO;
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDuplicatePagesKey]) {
@@ -2089,8 +2090,18 @@ NS_ASSUME_NONNULL_END
             documentViewController.thumbnailsViewController.rotatePagesEnabled = NO;
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDeletePagesKey]) {
             documentViewController.thumbnailsViewController.deletePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromImageKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addImagePageButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromPhotoKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addCameraImagePageButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromDocumentKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addDocumentPagesButtonItem];
         }
     }
+    if([addPagesItems count] == 0){
+        documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+    }
+    documentViewController.thumbnailsViewController.addPagesViewController.items = [addPagesItems copy];
 
     // Leading Nav Icon.
     [self applyLeadingNavButton];
