@@ -416,6 +416,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) NSString *fitMode;
+@property (nonatomic) int fitPolicy;
 @property (nonatomic, copy) NSString *layoutMode;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *annotationMenuItems;

@@ -213,6 +213,13 @@ RCT_CUSTOM_VIEW_PROPERTY(fitMode, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(fitPolicy, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.fitPolicy = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(layoutMode, NSString, RNTPTDocumentView)
 {
     if (json) {

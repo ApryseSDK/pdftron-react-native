@@ -68,6 +68,7 @@ const propTypes = {
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
+  fitPolicy: PropTypes.number,
   layoutMode: oneOf<Config.LayoutMode>(Config.LayoutMode),
   onLayoutChanged: func<() => void>(),
   padStatusBar: PropTypes.bool,

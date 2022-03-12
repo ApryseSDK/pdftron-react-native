@@ -170,6 +170,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setFitMode(fitMode);
     }
 
+    @ReactProp(name = "fitPolicy")
+    public void setFitPolicy(DocumentView documentView, int fitPolicy) {
+        documentView.setFitPolicy(fitPolicy);
+    }
+
     @ReactProp(name = "layoutMode")
     public void setLayoutMode(DocumentView documentView, String layoutMode) {
         documentView.setLayoutMode(layoutMode);
