@@ -438,6 +438,24 @@ error | string | Error message produced
 />
 ```
 
+#### onError
+function, optional
+
+This function is called when document opening encounters an error.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+error | string | Error message produced
+
+```js
+<DocumentView
+  onError = {(error) => { 
+    console.log('Error occured during document opening:', error); 
+  }}
+/>
+```
 ### UI Customization
 
 #### disabledElements
