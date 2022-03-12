@@ -24,6 +24,7 @@ const propTypes = {
   document: PropTypes.string.isRequired,
   password: PropTypes.string,
   initialPageNumber: PropTypes.number,
+  page: PropTypes.number,
   pageNumber: PropTypes.number,
   customHeaders: PropTypes.object,
   documentExtension: PropTypes.string,

@@ -859,6 +859,17 @@ Defines the initial page number that viewer displays when the document is opened
 />
 ```
 
+#### page
+number, optional
+
+Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed.
+
+```js
+<DocumentView
+  page={5}
+/>
+```
+
 #### pageNumber
 number, optional
 
