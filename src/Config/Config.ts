@@ -49,6 +49,12 @@ export const Config = {
     addPageButton: 'addPageButton',
     insertPageButton: 'insertPageButton',
 
+    // iOS only
+    InsertBlankPage: "insertBlankPageButton",
+    InsertFromImage: "insertFromImageButton",
+    InsertFromDocument: "insertFromDocumentButton",
+    InsertFromPhoto: "insertFromPhotoButton",
+
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',

@@ -50,6 +50,10 @@ static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
 static NSString * const PTEditToolButtonKey = @"editToolButton";
 static NSString * const PTInsertPageButton = @"insertPageButton";
+static NSString * const PTInsertBlankPageButton = @"insertBlankPageButton";
+static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
+static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
+static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
