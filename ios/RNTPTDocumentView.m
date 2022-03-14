@@ -766,6 +766,7 @@ NS_ASSUME_NONNULL_END
 - (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value documentViewController:(PTDocumentBaseViewController *)documentViewController
 {
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSMutableArray *addPagesItems = [documentViewController.addPagesViewController.items mutableCopy];
     
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
@@ -911,8 +912,29 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTFormFillToolKey]) {
                 toolManager.widgetAnnotationOptions.canEdit = value;
             }
+            else if([string isEqualToString:PTInsertBlankPageButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addBlankPagesButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromImageButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addImagePageButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromPhotoButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addCameraImagePageButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromDocumentButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
+            }
         }
     }
+    if([addPagesItems count] == 0){
+        documentViewController.addPagesButtonHidden = true;
+        PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+        PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+        NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+        [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+        insertItemGroup.barButtonItems = [barButtonItems copy];
+    }
+    documentViewController.addPagesViewController.items = [addPagesItems copy];
 }
 
 - (void)setToolMode:(NSString *)toolMode
