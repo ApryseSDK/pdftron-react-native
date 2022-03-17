@@ -921,6 +921,9 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromPhotoButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addCameraImagePageButtonItem];
             }
+            else if([string isEqualToString:PTInsertFromScannerButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addScannedPageButtonItem];
+            }
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
@@ -2118,6 +2121,8 @@ NS_ASSUME_NONNULL_END
             [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addCameraImagePageButtonItem];
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromDocumentKey]) {
             [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addDocumentPagesButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromScannerKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addScannedPageButtonItem];
         }
     }
     if([addPagesItems count] == 0){
