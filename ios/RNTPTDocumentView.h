@@ -54,6 +54,7 @@ static NSString * const PTInsertBlankPageButton = @"insertBlankPageButton";
 static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
 static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
 static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
+static NSString * const PTInsertFromScannerButton = @"insertFromScannerButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -132,9 +133,10 @@ static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages
 static NSString * const PTThumbnailsViewDuplicatePagesKey = @"thumbnailsDuplicatePages";
 static NSString * const PTThumbnailsViewRotatePagesKey = @"thumbnailsRotatePages";
 static NSString * const PTThumbnailsViewDeletePagesKey = @"thumbnailsDeletePages";
-static NSString *const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertFromImage";
-static NSString *const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
-static NSString *const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
+static NSString * const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertFromImage";
+static NSString * const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
+static NSString * const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
+static NSString * const PTThumbnailsViewInsertFromScannerKey = @"thumbnailsInsertFromScanner";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
