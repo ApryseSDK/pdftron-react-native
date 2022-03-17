@@ -31,6 +31,7 @@ export interface Field {
     fieldName: string;
     fieldType: string;
     fieldValue?: string | boolean | number | undefined;
+    fieldHasAppearance?: boolean | undefined;
 }
 
 export interface Point {

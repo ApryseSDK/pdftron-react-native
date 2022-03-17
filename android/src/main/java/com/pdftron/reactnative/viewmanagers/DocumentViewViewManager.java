@@ -115,6 +115,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInitialPageNumber(pageNum);
     }
 
+    @ReactProp(name = "page")
+    public void setPage(DocumentView documentView, int pageNum) {
+        documentView.setInitialPageNumber(pageNum);
+    }
+
     @ReactProp(name = "pageNumber")
     public void setPageNumber(DocumentView documentView, int pageNum) {
         documentView.setPageNumber(pageNum);
@@ -168,6 +173,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "fitMode")
     public void setFitMode(DocumentView documentView, String fitMode) {
         documentView.setFitMode(fitMode);
+    }
+
+    @ReactProp(name = "fitPolicy")
+    public void setFitPolicy(DocumentView documentView, int fitPolicy) {
+        documentView.setFitPolicy(fitPolicy);
     }
 
     @ReactProp(name = "layoutMode")
@@ -486,6 +496,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTopAppNavBarRightBar(menus);
     }
 
+    @ReactProp(name = "hideThumbnailsViewItems")
+    public void setHideThumbnailsViewItems(DocumentView documentView, ReadableArray thumbnailViewItems) {
+        documentView.setHideThumbnailsViewItems(thumbnailViewItems);
+    }
+
+    @ReactProp(name = "highlighterSmoothingEnabled")
+    public void setHighlighterSmoothingEnabled(DocumentView documentView, boolean highlighterSmoothingEnabled) {
+        documentView.setHighlighterSmoothingEnabled(highlighterSmoothingEnabled);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -514,10 +534,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void importAnnotations(int tag, String xfdf) throws PDFNetException {
+    public void importAnnotations(int tag, String xfdf, boolean replace) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.importAnnotations(xfdf);
+            documentView.importAnnotations(xfdf, replace);
         } else {
             throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
         }
@@ -556,6 +576,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getDocumentPath();
         } else {
             throw new PDFNetException("", 0L, getName(), "setToolMode", "Unable to find DocumentView.");
+        }
+    }
+
+    public WritableArray getAllFields(int tag, int pageNumber) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            return documentView.getAllFields(pageNumber);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "getAllFields", "Unable to find DocumentView.");
         }
     }
 
