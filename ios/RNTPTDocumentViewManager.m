@@ -339,6 +339,13 @@ RCT_CUSTOM_VIEW_PROPERTY(autoSaveEnabled, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(enableAntialiasing, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.enableAntialiasing = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(annotationMenuItems, NSArray, RNTPTDocumentView)
 {
     if (json) {

@@ -204,7 +204,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setup(ThemedReactContext reactContext) {
-        // Must be called in order to properly pass onActivityResult intent to DigitalSignatureDialogFragment
+        // Must be called in order to properly pass onActivityResult intent to
+        // DigitalSignatureDialogFragment
         DigitalSignatureDialogFragment.HANDLE_INTENT_IN_ACTIVITY = true;
 
         // intercept toast
@@ -227,7 +228,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         Activity currentActivity = reactContext.getCurrentActivity();
         if (currentActivity instanceof AppCompatActivity) {
-            FragmentManager fragmentManager = ((AppCompatActivity) reactContext.getCurrentActivity()).getSupportFragmentManager();
+            FragmentManager fragmentManager = ((AppCompatActivity) reactContext.getCurrentActivity())
+                    .getSupportFragmentManager();
             setSupportFragmentManager(fragmentManager);
             mFragmentManagerSave = fragmentManager;
             String cacheDir = currentActivity.getCacheDir().getAbsolutePath();
@@ -750,9 +752,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             if (type == ReadableType.String) {
                 String tag = toolbars.getString(i);
                 if (isValidToolbarTag(tag)) {
-                    AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars.getDefaultAnnotationToolbarBuilderByTag(tag);
+                    AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars
+                            .getDefaultAnnotationToolbarBuilderByTag(tag);
                     // SDK Support Issue 22893
-                    // To ensure if the client changes the order of the annotation tools that the UI will reflect the changed state
+                    // To ensure if the client changes the order of the annotation tools that the UI
+                    // will reflect the changed state
                     mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
                     annotationToolbarBuilders.add(toolbarBuilder);
                 }
@@ -933,6 +937,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() != null &&
                 getPdfViewCtrlTabFragment().isDocumentReady()) {
             getPdfViewCtrl().setZoom(zoom);
+        }
+    }
+
+    public void setAntiAliasing(boolean enableAntialiasing) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setAntiAliasing(enableAntialiasing);
+            } catch (PDFNetException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -1183,7 +1197,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_FileAttachment;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
             annotType = Annot.e_Sound;
-        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item) || TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_REDACTION.equals(item)
+                || TOOL_ANNOTATION_CREATE_REDACTION_TEXT.equals(item)) {
             annotType = Annot.e_Redact;
         } else if (TOOL_ANNOTATION_CREATE_LINK.equals(item) || TOOL_ANNOTATION_CREATE_LINK_TEXT.equals(item)) {
             annotType = Annot.e_Link;

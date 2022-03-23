@@ -29,6 +29,7 @@ const propTypes = {
   customHeaders: PropTypes.object,
   documentExtension: PropTypes.string,
   leadingNavButtonIcon: PropTypes.string,
+  enableAntialiasing: PropTypes.bool,
   showLeadingNavButton: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
