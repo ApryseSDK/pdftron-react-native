@@ -247,7 +247,8 @@ Example:
 #### source
 string 
 
-This prop is not implemented please use 'document' prop instead
+The path or url to the document.
+
 Example:
 
 ```js
