@@ -247,7 +247,7 @@ Example:
 #### source
 string 
 
-The path or url to the document.
+The path or url to the document. Wonday compatibility API.
 
 Example:
 
