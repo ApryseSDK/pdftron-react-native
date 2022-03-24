@@ -49,6 +49,13 @@ export const Config = {
     addPageButton: 'addPageButton',
     insertPageButton: 'insertPageButton',
 
+    // iOS only
+    InsertBlankPage: "insertBlankPageButton",
+    InsertFromImage: "insertFromImageButton",
+    InsertFromDocument: "insertFromDocumentButton",
+    InsertFromPhoto: "insertFromPhotoButton",
+    InsertFromScanner: "insertFromScannerButton",
+
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
@@ -98,6 +105,7 @@ export const Config = {
     formCreateRadioField: 'FormCreateRadioField',
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
+    formFill: 'FormFill',
     insertPage: 'InsertPage',
 
     // iOS only.
@@ -225,10 +233,30 @@ export const Config = {
     Items: "items"
   },
 
+  // CustomToolItemKey defines the necessary keys for a custom tool inside a custom toolbar
+  CustomToolItemKey: {
+    Id: "id",
+    Name: "name",
+    Icon: "icon"
+  },
+
   // ThumbnailFilterMode defines filter modes in the thumbnails browser
   ThumbnailFilterMode: {
     Annotated: "annotated",
     Bookmarked: "bookmarked",
+  },
+
+  // ThumbnailsViewItem defines actionss in the thumbnails browser
+  ThumbnailsViewItem: {
+    InsertBlankPage: "thumbnailsInsertPages",
+    ExportPages: "thumbnailsExportPages",
+    InsertFromImage: "thumbnailsInsertFromImage",
+    InsertFromDocument: "thumbnailsInsertFromDocument",
+    InsertFromPhoto: "thumbnailsInsertFromPhoto",
+    DuplicatePages: "thumbnailsDuplicatePages",
+    RotatePages: "thumbnailsRotatePages",
+    DeletePages: "thumbnailsDeletePages",
+    InsertFromScanner: "thumbnailsInsertFromScanner"
   },
 
   // Conversion defines conversion sources and destinations
@@ -339,6 +367,7 @@ export module Config {
   export type ThumbnailFilterMode = ValueOf<typeof Config.ThumbnailFilterMode>;
   export type Conversion = ValueOf<typeof Config.Conversion>;
   export type ViewModePickerItem = ValueOf<typeof Config.ViewModePickerItem>;
+  export type ThumbnailsViewItem = ValueOf<typeof Config.ThumbnailsViewItem>;
   export type ZoomLimitMode = ValueOf<typeof Config.ZoomLimitMode>;
   export type OverprintMode = ValueOf<typeof Config.OverprintMode>;
   export type ColorPostProcessMode = ValueOf<typeof Config.ColorPostProcessMode>;
