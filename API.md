@@ -253,7 +253,7 @@ Example:
 
 ```js
 <DocumentView
-  source={''}
+  source={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
 />
 ```
 
