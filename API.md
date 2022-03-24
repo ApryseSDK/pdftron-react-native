@@ -1030,6 +1030,29 @@ pageNumbers | array | An array of the page numbers that were removed from the do
 
 ### Zoom
 
+#### zoom
+double, optional
+
+This prop defines the zoom of the document
+
+```js
+<DocumentView
+  zoom={2.0}
+/>
+```
+
+#### scale
+double, optional
+
+This prop defines the zoom of the document.
+Same as zoom. Wonday compatibility API.
+
+```js
+<DocumentView
+  scale={2.0}
+/>
+```
+
 #### onZoomChanged
 function, optional
 

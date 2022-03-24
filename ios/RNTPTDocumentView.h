@@ -492,6 +492,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
 @property (nonatomic) double zoom;
+@property (nonatomic) double scale;
 
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;

@@ -390,6 +390,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setZoom(zoom);
     }
 
+    @ReactProp(name = "scale")
+    public void setScale(DocumentView documentView, double scale) {
+        documentView.setZoom(scale);
+    }
+
     @ReactProp(name = "horizontalScrollPos")
     public void setHorizontalScrollPos(DocumentView documentView, double horizontalScrollPos) {
         documentView.setHorizontalScrollPos(horizontalScrollPos);

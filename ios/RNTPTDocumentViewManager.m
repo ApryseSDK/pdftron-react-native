@@ -521,6 +521,14 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(scale, double, RNTPTDocumentView)
+{
+    if (json) {
+        view.scale = [RCTConvert double:json];
+    }
+}
+
+
 RCT_CUSTOM_VIEW_PROPERTY(horizontalScrollPos, double, RNTPTDocumentView)
 {
     if (json) {

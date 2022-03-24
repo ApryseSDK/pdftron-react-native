@@ -42,6 +42,7 @@ const propTypes = {
   onScaleChanged: func<(event: {scale: number}) => void>(),
   onZoomFinished: func<(event: {zoom: number}) => void>(),
   zoom: PropTypes.number,
+  scale: PropTypes.number,
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
   disabledTools: arrayOf<Config.Tools>(Config.Tools),
   longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
