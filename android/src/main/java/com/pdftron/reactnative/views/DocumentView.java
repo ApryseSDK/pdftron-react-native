@@ -80,6 +80,7 @@ import com.pdftron.pdf.utils.BookmarkManager;
 import com.pdftron.pdf.utils.CommonToast;
 import com.pdftron.pdf.utils.PdfDocManager;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.RequestCode;
 import com.pdftron.pdf.utils.StampManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
@@ -207,6 +208,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // Must be called in order to properly pass onActivityResult intent to
         // DigitalSignatureDialogFragment
         DigitalSignatureDialogFragment.HANDLE_INTENT_IN_ACTIVITY = true;
+        ThumbnailsViewFragment.HANDLE_INTENT_IN_ACTIVITY = true;
 
         // intercept toast
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {
@@ -2118,6 +2120,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         if (getPdfViewCtrlTabFragment() != null) {
             getPdfViewCtrlTabFragment().onActivityResult(requestCode, resultCode, data);
+        }
+        // Consume for ThumbnailsViewFragment
+        if (requestCode == RequestCode.PICK_PDF_FILE || requestCode == RequestCode.PICK_PHOTO_CAM) {
+            if (mFragmentManager != null) {
+                Fragment fragment = mFragmentManager.findFragmentByTag("thumbnails_fragment");
+                if (fragment instanceof ThumbnailsViewFragment) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+            }
         }
     }
 
