@@ -244,6 +244,19 @@ Example:
 />
 ```
 
+#### source
+string 
+
+The path or url to the document. Wonday compatibility API.
+
+Example:
+
+```js
+<DocumentView
+  source={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
+/>
+```
+
 #### password
 string, optional
 

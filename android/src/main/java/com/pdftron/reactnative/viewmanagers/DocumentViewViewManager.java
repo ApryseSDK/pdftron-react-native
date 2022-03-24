@@ -60,6 +60,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDocument(filepath);
     }
 
+    @ReactProp(name = "source")
+    public void setSource(DocumentView documentView, @NonNull String filepath) {
+        documentView.setDocument(filepath);
+    }
+
     @ReactProp(name = "password")
     public void setPassword(DocumentView documentView, @Nullable String password) {
         documentView.setPassword(password);

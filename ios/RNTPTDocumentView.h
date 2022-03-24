@@ -410,6 +410,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;
+@property (nonatomic, copy, nullable) NSString *source;
 @property (nonatomic, getter=isBase64String) BOOL base64String;
 @property (nonatomic, copy, nullable) NSString *base64Extension;
 @property (nonatomic) int initialPageNumber;
