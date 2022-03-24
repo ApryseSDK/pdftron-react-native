@@ -2,8 +2,8 @@ package com.pdftron.reactnative.modules;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Promise;
@@ -14,8 +14,9 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.pdftron.pdf.controls.ThumbnailsViewFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
-import com.pdftron.reactnative.R;
+import com.pdftron.pdf.utils.RequestCode;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
 public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -619,7 +620,6 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             }
         });
     }
-
 
     @ReactMethod
     public void getPageRotation(final int tag, final Promise promise) {
@@ -1452,6 +1452,14 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         if (activity instanceof AppCompatActivity) {
             if (DigitalSignatureDialogFragment.isDigitalSignatureIntent(requestCode)) {
                 DigitalSignatureDialogFragment.getViewModel((AppCompatActivity) activity).setActivityResultIntent(requestCode, resultCode, data);
+            }
+
+            // Consume for ThumbnailsViewFragment
+            if (requestCode == RequestCode.PICK_PDF_FILE || requestCode == RequestCode.PICK_PHOTO_CAM) {
+                Fragment fragment = ((AppCompatActivity) activity).getSupportFragmentManager().findFragmentByTag("thumbnails_fragment");
+                if (fragment instanceof ThumbnailsViewFragment) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
             }
         }
     }
