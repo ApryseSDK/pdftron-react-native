@@ -26,19 +26,13 @@ const propTypes = {
   initialPageNumber: PropTypes.number,
   page: PropTypes.number,
   pageNumber: PropTypes.number,
-  minScale: PropTypes.number,
-  maxScale: PropTypes.number,
   customHeaders: PropTypes.object,
   documentExtension: PropTypes.string,
   leadingNavButtonIcon: PropTypes.string,
   enableAntialiasing: PropTypes.bool,
   showLeadingNavButton: PropTypes.bool,
-  trustAllCerts: PropTypes.bool,
-  singlePage: PropTypes.bool,
   onLeadingNavButtonPressed: func<() => void>(),
   onDocumentLoaded: func<(path: string) => void>(),
-  onLoadProgress: func<(path: string) => void>(),
-  onPressLink: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
   onPageChanged: func<(event: { previousPageNumber: number, pageNumber: number }) => void>(),
   onScrollChanged: func<(event: { horizontal: number, vertical: number }) => void>(),
@@ -164,6 +158,15 @@ const propTypes = {
   onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
+
+  // Wonday Props and Callbacks Not Implemented
+  minScale: PropTypes.number,
+  maxScale: PropTypes.number,
+  trustAllCerts: PropTypes.bool,
+  singlePage: PropTypes.bool,
+  onLoadProgress: func<(path: string) => void>(),
+  onPressLink: func<(path: string) => void>(),
+  
   ...ViewPropTypes,
 };
 

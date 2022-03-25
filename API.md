@@ -1030,14 +1030,6 @@ pageNumbers | array | An array of the page numbers that were removed from the do
 
 ### Zoom
 
-#### minScale
-number, optional
-
-Not implemented please use [setZoomLimits](#setZoomLimits) instead
-#### maxScale
-number, optional
-
-Not implemented please use [setZoomLimits](#setZoomLimits) instead
 #### zoom
 double, optional
 
@@ -2022,6 +2014,15 @@ callback not implemented
 ### onPressLink
 
 callBack not implemented
+
+#### minScale
+number, optional
+
+Not implemented please use [setZoomLimits](#setZoomLimits) instead
+#### maxScale
+number, optional
+
+Not implemented please use [setZoomLimits](#setZoomLimits) instead
 
 ## DocumentView - Methods
 
