@@ -2001,17 +2001,18 @@ This function is called when the state of the current document's undo/redo stack
 />
 ```
 
-## Props and Callbacks Not Implemented
+## Wonday Compatibility API 
+### Props and Callbacks Not Implemented
 
-### trustAllCerts
+#### trustAllCerts
 
-### singlePage
+#### singlePage
 
-### onLoadProgress
+#### onLoadProgress
 
 callback not implemented
 
-### onPressLink
+#### onPressLink
 
 callBack not implemented
 
