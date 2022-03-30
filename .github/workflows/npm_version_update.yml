@@ -24,7 +24,7 @@ jobs:
         run:  npm install json   
 
       - run: git fetch 
-      - run: git checkout -m orgin/master package.json 
+      - run: git checkout -m origin/master package.json 
       - run: git add package.json
       - run: git commit  
 
