@@ -34,7 +34,7 @@ jobs:
           npm install json        
 
       - name: Update package.json
-        run: bash ./scripts/update_version.sh
+        run: bash scripts/update_version.sh
 
       - name: Add package.json 
         run: git add package.json  
