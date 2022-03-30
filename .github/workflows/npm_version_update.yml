@@ -14,16 +14,6 @@ jobs:
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo.
           ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master` 
 
-      - name: Install dependencies
-        run: | 
-          npm i json  
-      
-      - name: Node setup
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          cache: 'npm'
-
       - name: Get Latest package.json
         run: | 
           git fetch 
@@ -32,6 +22,16 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "Updating package.json" -a || echo "No commit needed. Package.json is already up-to-date"
+      
+      - name: Node setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'  
+
+      - name: Install dependencies
+        run: | 
+          npm install json        
 
       - name: Update package.json
         run: bash ./scripts/update_version.sh
