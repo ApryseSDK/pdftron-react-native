@@ -27,7 +27,25 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
+
       - run: npm install json    
-      - run: npm publish --access public
+
+      - name: Publish Package
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+
+      - name: add json file changes
+        run: git add  package.json  # <-- Change this to your build path.
+
+      - name: Commit files
+        run: | # Change last line to your preferred commit message (I like `chore: build js files`).
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Updating package version"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
