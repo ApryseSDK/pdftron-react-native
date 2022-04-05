@@ -34,6 +34,8 @@ import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
+import com.pdftron.collab.utils.Keys;
+import com.pdftron.collab.utils.XfdfUtils;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
@@ -3132,12 +3134,39 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     pdfDoc.fdfMerge(fdfDoc);
                 }
                 pdfViewCtrl.update(true);
+                Obj fdf = fdfDoc.getFDF();
+                if (fdf != null) {
+                    Obj annots = fdf.findObj(Keys.FDF_ANNOTS);
+                    if (annots != null && annots.isArray()) {
+                        long size = annots.size();
+                        for (int i = 0; i < size; i++) {
+                            Obj annotObj = annots.getAt(i);
+
+                            if (annotObj != null) {
+                                Annot annot = new Annot(annotObj);
+                                String annotId = annot.getUniqueID().getAsPDFText();
+                                Integer page = safeGetObjAsInteger(annotObj, Keys.FDF_PAGE);
+                            }
+                        }
+                    }
+                }
             } finally {
                 if (shouldUnlock) {
                     pdfViewCtrl.docUnlock();
                 }
             }
         }
+    }
+
+    private static Integer safeGetObjAsInteger(Obj obj, String key) throws PDFNetException {
+        if (obj != null) {
+            Obj result = obj.findObj(key);
+            if (result != null && result.isNumber()) {
+                double number = result.getNumber();
+                return (int) number;
+            }
+        }
+        return null;
     }
 
     public String exportAnnotations(ReadableMap options) throws Exception {
