@@ -486,7 +486,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  importAnnotations = (xfdf: string, replace: boolean = false): Promise<void | Array<AnnotOptions.ImportAnnotations>> => {
+  importAnnotations = (xfdf: string, replace: boolean = false): Promise<void | Array<AnnotOptions.Annotation>> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.importAnnotations(tag, xfdf, replace);

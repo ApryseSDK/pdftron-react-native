@@ -8,11 +8,6 @@ export interface Annotation {
     screenRect?: Rect;
 }
 
-export interface ImportAnnotations {
-    id: string;
-    pageNumber: number;
-}
-
 export interface Rect {
     height?: number;
     width?: number;
