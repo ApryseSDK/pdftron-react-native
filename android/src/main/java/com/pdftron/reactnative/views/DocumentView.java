@@ -61,7 +61,6 @@ import com.pdftron.pdf.dialog.RotateDialogFragment;
 import com.pdftron.pdf.dialog.ViewModePickerDialogFragment;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
 import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
-import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.model.UserBookmarkItem;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
@@ -4678,10 +4677,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setOpenSavedCopyInNewTab(boolean openSavedCopyInNewTab) {
         mBuilder = mBuilder.openSavedCopyInNewTab(openSavedCopyInNewTab);
-    }
-
-    public void setMaxSignatureCount(int maxSignatureCount){
-        SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
     }
 
     public ToolManager getToolManager() {

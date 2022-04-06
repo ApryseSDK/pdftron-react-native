@@ -1815,7 +1815,7 @@ Defines whether to store new signatures when using the signing tool.
 />
 ```
 
-#### maxSignatureCounte
+#### maxSignatureCount
 number, optional
 
 Defines the maximum number of signatures you can create for a document.
