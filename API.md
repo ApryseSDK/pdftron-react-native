@@ -2400,11 +2400,19 @@ Name | Type | Description
 xfdf | string | annotation string in XFDF format for import
 replace | boolean | whether to replace existing form and annotation data with those imported from the XFDF string (Android only) 
 
-Returns a Promise.
+Promise Parameters:
+Name | Type | Description
+--- | --- | ---
+importedAnnotations | Array<ImportAnnotations> | A list of ImportAnnotation object that contain id and pageNumber as members
 
 ```js
 const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">\n\t<annots>\n\t\t<circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20190729202215Z" flags="print" date="D:20190729202215Z" page="0" rect="138.824,653.226,236.28,725.159" title="" /></annots>\n\t<pages>\n\t\t<defmtx matrix="1.333333,0.000000,0.000000,-1.333333,0.000000,1056.000000" />\n\t</pages>\n\t<pdf-info version="2" xmlns="http://www.pdftron.com/pdfinfo" />\n</xfdf>';
-this._viewer.importAnnotations(xfdf);
+this._viewer.importAnnotations(xfdf).then((importedAnnotations)=>{
+        importedAnnotations.forEach((annotation) => {
+          console.log("id: " + annotation.id);
+          console.log("pageNumber: " + annotation.pageNumber);
+        }) 
+      });;
 ```
 
 #### exportAnnotations
