@@ -517,8 +517,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHighlighterSmoothingEnabled(highlighterSmoothingEnabled);
     }
 
-    @ReactProp(name="maxSignatureCount")
-    public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount){
+    @ReactProp(name = "maxSignatureCount")
+    public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount) {
         SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
     }
 
