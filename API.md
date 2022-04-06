@@ -2404,7 +2404,7 @@ Returns a Promise.
 Promise Parameters:
 Name | Type | Description
 --- | --- | ---
-importedAnnotations | Array<ImportAnnotations> | A list of ImportAnnotation object that contain id and pageNumber as members
+importedAnnotations | Array<Annotation> | A list of Annotation object that contain id and pageNumber as members
 
 ```js
 const xfdf = '<?xml version="1.0" encoding="UTF-8"?>\n<xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve">\n\t<add>\n\t\t<circle style="solid" width="5" color="#E44234" opacity="1" creationdate="D:20220406184336Z" flags="print" date="D:20220406184336Z" name="ca1165b2-5cd3-43f7-adcd-ff1ad13bceeb" page="1" rect="277.088,681.657,334.525,737.238" title="" />\n\t</add>\n\t<modify />\n\t<delete />\n\t<pdf-info import-version="4" version="2" xmlns="http://www.pdftron.com/pdfinfo" />\n</xfdf>';
