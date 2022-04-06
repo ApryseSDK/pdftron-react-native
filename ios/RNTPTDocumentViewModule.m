@@ -190,8 +190,8 @@ RCT_REMAP_METHOD(importAnnotations,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf replace:replace];
-        resolve(nil);
+        NSArray<NSDictionary *>* importedAnnotations = [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf replace:replace];
+        resolve(importedAnnotations);
     }
     @catch (NSException *exception) {
         reject(@"import_failed", @"Failed to import annotations", [self errorFromException:exception]);

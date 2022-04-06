@@ -1294,7 +1294,7 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (void)importAnnotations:(NSString *)xfdfString
+- (NSMutableArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
@@ -1307,7 +1307,7 @@ NS_ASSUME_NONNULL_END
     } error:&error];
     
     if (hasDownloader || error) {
-        return;
+        return nil;
     }
     
     PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
@@ -1317,6 +1317,36 @@ NS_ASSUME_NONNULL_END
     if (!updateSuccess || error) {
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
+    
+    return [self getAnnotationFromXFDF:xfdfString];
+
+}
+
+-(NSMutableArray<NSDictionary *> *)getAnnotationFromXFDF:(NSString *)xfdfString
+{
+    NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
+    PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+    PTObj *fdf = [fdfDoc GetFDF];
+    if (fdf != nil) {
+        PTObj *annots = [fdf FindObj:@"Annots"];
+        if (annots != nil && [annots IsArray]) {
+            long size = [annots Size];
+            for (int i = 0; i < size; i++) {
+                PTObj *annotObj = [annots GetAt:i];
+
+                if (annotObj != nil) {
+                    NSMutableDictionary *annotPair = [[NSMutableDictionary alloc] init];
+                    PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
+                    NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
+                    int page = [[annot GetPage] GetIndex] + 1;
+                    [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                    [annotPair setValue:[NSNumber numberWithInt:page] forKey:PTAnnotationPageNumberKey];
+                    [annotations addObject:annotPair];
+                }
+            }
+        }
+    }
+    return annotations;
 }
 
 #pragma mark - Flatten annotations
