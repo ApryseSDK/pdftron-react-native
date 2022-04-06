@@ -35,7 +35,6 @@ import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
 import com.pdftron.collab.utils.Keys;
-import com.pdftron.collab.utils.XfdfUtils;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
@@ -3102,6 +3101,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public WritableArray importAnnotations(String xfdf, boolean replace) throws PDFNetException {
         if (mCollabManager != null) {
             mCollabManager.importAnnotations(xfdf, false);
+            return getAnnotationsFromXFDF(xfdf);
         } else {
             PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -3134,19 +3134,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     pdfDoc.fdfMerge(fdfDoc);
                 }
                 pdfViewCtrl.update(true);
-
+                return getAnnotationsFromXFDF(xfdf);
             } finally {
                 if (shouldUnlock) {
                     pdfViewCtrl.docUnlock();
                 }
             }
         }
-        try {
-            return getAnnotationsFromXFDF(xfdf);
-        } catch (PDFNetException ex) {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
     private static Integer safeGetObjAsInteger(Obj obj, String key) throws PDFNetException {
@@ -3160,7 +3154,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return null;
     }
 
-    private static WritableArray getAnnotationsFromXFDF(String xfdf) throws PDFNetException{
+    private static WritableArray getAnnotationsFromXFDF(String xfdf) throws PDFNetException {
         WritableArray annotations = Arguments.createArray();
         FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
         Obj fdf = fdfDoc.getFDF();
@@ -3177,7 +3171,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         String annotId = annot.getUniqueID().getAsPDFText();
                         Integer page = safeGetObjAsInteger(annotObj, Keys.FDF_PAGE) + 1;
                         annotPair.putString(KEY_ANNOTATION_ID, annotId);
-                        annotPair.putInt(KEY_ANNOTATION_PAGE,page);
+                        annotPair.putInt(KEY_ANNOTATION_PAGE, page);
                         annotations.pushMap(annotPair);
                     }
                 }
