@@ -516,6 +516,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHighlighterSmoothingEnabled(highlighterSmoothingEnabled);
     }
 
+    @ReactProp(name="maxSignatureCount")
+    public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount){
+        documentView.setMaxSignatureCount(maxSignatureCount);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
