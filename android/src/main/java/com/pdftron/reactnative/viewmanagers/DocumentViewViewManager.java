@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
@@ -514,6 +515,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "highlighterSmoothingEnabled")
     public void setHighlighterSmoothingEnabled(DocumentView documentView, boolean highlighterSmoothingEnabled) {
         documentView.setHighlighterSmoothingEnabled(highlighterSmoothingEnabled);
+    }
+
+    @ReactProp(name = "maxSignatureCount")
+    public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount) {
+        SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
