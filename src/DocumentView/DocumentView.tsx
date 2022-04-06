@@ -158,6 +158,7 @@ const propTypes = {
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
+  maxSignatureCount: PropTypes.number,
   ...ViewPropTypes,
 };
 
