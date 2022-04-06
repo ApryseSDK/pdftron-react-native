@@ -34,6 +34,14 @@ RCT_CUSTOM_VIEW_PROPERTY(document, NSString, RNTPTDocumentView)
     }
 }
 
+
+RCT_CUSTOM_VIEW_PROPERTY(source, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.document = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(isBase64String, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -520,6 +528,14 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
         view.zoom = [RCTConvert double:json];
     }
 }
+
+RCT_CUSTOM_VIEW_PROPERTY(scale, double, RNTPTDocumentView)
+{
+    if (json) {
+        view.scale = [RCTConvert double:json];
+    }
+}
+
 
 RCT_CUSTOM_VIEW_PROPERTY(horizontalScrollPos, double, RNTPTDocumentView)
 {

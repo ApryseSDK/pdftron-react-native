@@ -265,7 +265,17 @@ NS_ASSUME_NONNULL_END
 
 - (void)setDocument:(NSString *)document
 {
-    _document = [document copy];
+    if([document length] != 0){
+        _document = [document copy];
+    }
+    
+    [self openDocument];
+}
+
+
+- (void)setSource:(NSString *)source
+{
+    _document = [source copy];
     
     [self openDocument];
 }
@@ -2928,6 +2938,17 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+#pragma mark - Scale
+
+- (void)setScale:(double)scale
+{
+    _scale = scale;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SetZoom:scale];
+    }
+}
+
 - (void)setZoomLimits:(NSString *)zoomLimitMode minimum:(double)minimum maximum:(double)maximum
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
@@ -3255,11 +3276,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController
-{
-    if (self.initialPageNumber > 0) {
-        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
-    }
-        
+{       
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -3793,6 +3810,10 @@ NS_ASSUME_NONNULL_END
 
     if (documentViewController != self.currentDocumentViewController) {
         return;
+    }
+
+    if (self.initialPageNumber > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
     }
     
     if (self.page > 0) {

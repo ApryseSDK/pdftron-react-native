@@ -244,6 +244,19 @@ Example:
 />
 ```
 
+#### source
+string 
+
+The path or url to the document. Wonday compatibility API.
+
+Example:
+
+```js
+<DocumentView
+  source={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
+/>
+```
+
 #### password
 string, optional
 
@@ -1030,6 +1043,29 @@ pageNumbers | array | An array of the page numbers that were removed from the do
 
 ### Zoom
 
+#### zoom
+double, optional
+
+This prop defines the zoom of the document
+
+```js
+<DocumentView
+  zoom={2.0}
+/>
+```
+
+#### scale
+double, optional
+
+This prop defines the zoom of the document.
+Same as zoom. Wonday compatibility API.
+
+```js
+<DocumentView
+  scale={2.0}
+/>
+```
+
 #### onZoomChanged
 function, optional
 
@@ -1778,6 +1814,18 @@ Defines whether to store new signatures when using the signing tool.
   storeNewSignature={true}
 />
 ```
+
+#### maxSignatureCount
+number, optional
+
+Defines the maximum number of signatures you can create for a document.
+
+Android only.
+
+```js 
+<DocumentView
+  maxSignatureCount={3}
+/>
 
 #### photoPickerEnabled
 bool, optional, defaults to true. Android only.
