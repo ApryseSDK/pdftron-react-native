@@ -27,11 +27,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org/  
-
-      - name: Install dependencies
-        run: | 
-          npm install json        
+          registry-url: https://registry.npmjs.org/         
 
       - name: Update package.json
         run: node scripts/update_version.js
