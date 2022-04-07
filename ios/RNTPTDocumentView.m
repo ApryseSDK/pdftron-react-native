@@ -1334,7 +1334,7 @@ NS_ASSUME_NONNULL_END
             for (int i = 0; i < size; i++) {
                 PTObj *annotObj = [annots GetAt:i];
 
-                if (annotObj != nil) {
+                if ([annotObj IsValid]) {
                     NSMutableDictionary *annotPair = [[NSMutableDictionary alloc] init];
                     PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
                     NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
