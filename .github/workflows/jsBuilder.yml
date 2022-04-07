@@ -45,7 +45,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.event.pull_request.head.ref }} # pushes the commit to the branch being merged into `master`
 
-  package.json-update:
+  package-json-update:
     needs: transpile-ts    
     runs-on: ubuntu-latest
 
