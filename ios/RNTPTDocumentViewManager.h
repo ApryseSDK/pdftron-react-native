@@ -29,7 +29,7 @@
 
 - (NSString *)exportAnnotationsForDocumentViewTag:(NSNumber *)tag options:(NSDictionary *)options;
 
-- (NSMutableArray<NSDictionary *> *)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString replace:(BOOL)replace;
+- (nullable NSArray<NSDictionary *> *)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString replace:(BOOL)replace;
 
 - (void)flattenAnnotationsForDocumentViewTag:(NSNumber *)tag formsOnly:(BOOL)formsOnly;
 
