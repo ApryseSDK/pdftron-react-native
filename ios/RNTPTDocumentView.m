@@ -1322,7 +1322,7 @@ NS_ASSUME_NONNULL_END
 
 }
 
--(NSMutableArray<NSDictionary *> *)getAnnotationFromXFDF:(NSString *)xfdfString
+-(NSArray<NSDictionary *> *)getAnnotationFromXFDF:(NSString *)xfdfString
 {
     NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
     PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
@@ -1346,7 +1346,7 @@ NS_ASSUME_NONNULL_END
             }
         }
     }
-    return annotations;
+    return [annotations copy];
 }
 
 #pragma mark - Flatten annotations
