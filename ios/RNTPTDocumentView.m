@@ -1325,7 +1325,8 @@ NS_ASSUME_NONNULL_END
 -(NSArray<NSDictionary *> *)getAnnotationFromXFDF:(NSString *)xfdfString
 {
     NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
-    PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+    @try {
+        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
     PTObj *fdf = [fdfDoc GetFDF];
     if ([fdf IsValid]) {
         PTObj *annots = [fdf FindObj:@"Annots"];
