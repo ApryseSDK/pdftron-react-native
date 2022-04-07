@@ -1329,7 +1329,7 @@ NS_ASSUME_NONNULL_END
     PTObj *fdf = [fdfDoc GetFDF];
     if ([fdf IsValid]) {
         PTObj *annots = [fdf FindObj:@"Annots"];
-        if (annots != nil && [annots IsArray]) {
+        if ([annots IsValid] && [annots IsArray]) {
             long size = [annots Size];
             for (int i = 0; i < size; i++) {
                 PTObj *annotObj = [annots GetAt:i];
