@@ -2,7 +2,7 @@ name: Update Package Version
 
 on:
   workflow_run:
-    workflows: ["Transpile TS"]
+    workflows: [Transpile TS]
     types:
       - completed
 
