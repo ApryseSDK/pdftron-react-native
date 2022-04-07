@@ -690,6 +690,13 @@ NS_ASSUME_NONNULL_END
                 documentViewController.exportItems = [exportItems copy];
             }
         },
+        PTSaveCroppedCopyButtonKey: ^{
+            if (![documentViewController isExportButtonHidden]) {
+                NSMutableArray * exportItems = [documentViewController.exportItems mutableCopy];
+                [exportItems removeObject:documentViewController.exportCroppedCopyButtonItem];
+                documentViewController.exportItems = [exportItems copy];
+            }
+        },
 //        PTFormToolsButtonKey: ^{
 //
 //        },

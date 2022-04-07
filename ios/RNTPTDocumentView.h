@@ -26,6 +26,7 @@ static NSString * const PTCloseButtonKey = @"closeButton";
 static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
 static NSString * const PTSaveIdenticalCopyButtonKey = @"saveIdenticalCopyButton";
 static NSString * const PTSaveFlattenedCopyButtonKey = @"saveFlattenedCopyButton";
+static NSString * const PTSaveCroppedCopyButtonKey = @"saveCroppedCopyButton";
 static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
