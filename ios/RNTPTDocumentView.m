@@ -1339,7 +1339,9 @@ NS_ASSUME_NONNULL_END
                     PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
                     NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
                     int page = [[annot GetPage] GetIndex] + 1;
-                    [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                    if (annotId) {
+                        [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                    }
                     [annotPair setValue:[NSNumber numberWithInt:page] forKey:PTAnnotationPageNumberKey];
                     [annotations addObject:annotPair];
                 }
