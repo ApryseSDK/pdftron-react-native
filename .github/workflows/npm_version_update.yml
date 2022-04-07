@@ -1,8 +1,10 @@
 name: Update Package Version
 
 on:
-  pull_request:
-    branches: [master]
+  workflow_run:
+    workflows: ["Transpile TS"]
+    types:
+      - completed
 
 jobs:
   build:
