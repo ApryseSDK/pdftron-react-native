@@ -1053,7 +1053,7 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
-- (NSMutableArray<NSDictionary *> *)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString replace:(BOOL)replace
+- (nullable NSArray<NSDictionary *> *)importAnnotationsForDocumentViewTag:(NSNumber *)tag xfdf:(NSString *)xfdfString replace:(BOOL)replace
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
