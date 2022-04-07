@@ -85,8 +85,8 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.importAnnotations(tag, xfdf, replace);
-                    promise.resolve(null);
+                    WritableArray importedAnnotations = mDocumentViewInstance.importAnnotations(tag, xfdf, replace);
+                    promise.resolve(importedAnnotations);
                 } catch (Exception ex) {
                     promise.reject(ex);
                 }

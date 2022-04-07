@@ -1294,7 +1294,7 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (void)importAnnotations:(NSString *)xfdfString
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
@@ -1307,7 +1307,7 @@ NS_ASSUME_NONNULL_END
     } error:&error];
     
     if (hasDownloader || error) {
-        return;
+        return nil;
     }
     
     PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
@@ -1317,6 +1317,44 @@ NS_ASSUME_NONNULL_END
     if (!updateSuccess || error) {
         @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
     }
+    
+    return [self getAnnotationFromXFDF:xfdfString];
+
+}
+
+-(NSArray<NSDictionary *> *)getAnnotationFromXFDF:(NSString *)xfdfString
+{
+    NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
+    @try {
+        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+        PTObj *fdf = [fdfDoc GetFDF];
+        if ([fdf IsValid]) {
+            PTObj *annots = [fdf FindObj:@"Annots"];
+            if ([annots IsValid] && [annots IsArray]) {
+                long size = [annots Size];
+                for (int i = 0; i < size; i++) {
+                    PTObj *annotObj = [annots GetAt:i];
+
+                    if ([annotObj IsValid]) {
+                        NSMutableDictionary *annotPair = [[NSMutableDictionary alloc] init];
+                        PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
+                        NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
+                        int page = [[annot GetPage] GetIndex] + 1;
+                        if (annotId) {
+                            [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                        }
+                        [annotPair setValue:[NSNumber numberWithInt:page] forKey:PTAnnotationPageNumberKey];
+                        [annotations addObject:annotPair];
+                    }
+                }
+            }
+        }
+    }   
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+    }
+
+    return [annotations copy];
 }
 
 #pragma mark - Flatten annotations
