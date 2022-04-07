@@ -96,6 +96,7 @@ const propTypes = {
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
   // Hygen Generated Props
+    maxSignatureCount: PropTypes.number,
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
     oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({

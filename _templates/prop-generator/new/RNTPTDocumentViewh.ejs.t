@@ -4,4 +4,4 @@ to: ios/RNTPTDocumentView.h
 after: // Hygen Generated Props
 ---
 
-@property (nonatomic, assign) BOOL <%= name %>;
+@property (nonatomic, assign) <%= iOSParam %> <%= name %>;

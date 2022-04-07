@@ -4,9 +4,10 @@ to: ios/RNTPTDocumentViewManager.m
 after: // Hygen Generated Props
 ---
 
-RCT_CUSTOM_VIEW_PROPERTY(<%= name %>, <%= type %>, RNTPTDocumentView)
+
+RCT_CUSTOM_VIEW_PROPERTY(<%= name %>, <%= iOSParam %>, RNTPTDocumentView)
 {
     if (json) {
-        view.<%= name %> = [RCTConvert <%= type %>:json];
+        view.<%= paramName %> = [RCTConvert <%= iOSParam %>:json];
     }
 }
