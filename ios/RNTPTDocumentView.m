@@ -1327,7 +1327,7 @@ NS_ASSUME_NONNULL_END
     NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
     PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
     PTObj *fdf = [fdfDoc GetFDF];
-    if (fdf != nil) {
+    if ([fdf IsValid]) {
         PTObj *annots = [fdf FindObj:@"Annots"];
         if (annots != nil && [annots IsArray]) {
             long size = [annots Size];
