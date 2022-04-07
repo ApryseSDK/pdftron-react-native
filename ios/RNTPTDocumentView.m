@@ -1327,28 +1327,33 @@ NS_ASSUME_NONNULL_END
     NSMutableArray<NSDictionary *> *annotations = [[NSMutableArray alloc] init];
     @try {
         PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
-    PTObj *fdf = [fdfDoc GetFDF];
-    if ([fdf IsValid]) {
-        PTObj *annots = [fdf FindObj:@"Annots"];
-        if ([annots IsValid] && [annots IsArray]) {
-            long size = [annots Size];
-            for (int i = 0; i < size; i++) {
-                PTObj *annotObj = [annots GetAt:i];
+        PTObj *fdf = [fdfDoc GetFDF];
+        if ([fdf IsValid]) {
+            PTObj *annots = [fdf FindObj:@"Annots"];
+            if ([annots IsValid] && [annots IsArray]) {
+                long size = [annots Size];
+                for (int i = 0; i < size; i++) {
+                    PTObj *annotObj = [annots GetAt:i];
 
-                if ([annotObj IsValid]) {
-                    NSMutableDictionary *annotPair = [[NSMutableDictionary alloc] init];
-                    PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
-                    NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
-                    int page = [[annot GetPage] GetIndex] + 1;
-                    if (annotId) {
-                        [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                    if ([annotObj IsValid]) {
+                        NSMutableDictionary *annotPair = [[NSMutableDictionary alloc] init];
+                        PTAnnot *annot = [[PTAnnot alloc] initWithD:annotObj];
+                        NSString *annotId = [[annot GetUniqueID] GetAsPDFText];
+                        int page = [[annot GetPage] GetIndex] + 1;
+                        if (annotId) {
+                            [annotPair setValue:annotId forKey:PTAnnotationIdKey];
+                        }
+                        [annotPair setValue:[NSNumber numberWithInt:page] forKey:PTAnnotationPageNumberKey];
+                        [annotations addObject:annotPair];
                     }
-                    [annotPair setValue:[NSNumber numberWithInt:page] forKey:PTAnnotationPageNumberKey];
-                    [annotations addObject:annotPair];
                 }
             }
         }
+    }   
+    @catch (NSException *exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
     }
+
     return [annotations copy];
 }
 

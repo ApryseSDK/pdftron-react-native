@@ -2425,7 +2425,7 @@ this._viewer.importAnnotations(xfdf).then((importedAnnotations)=>{
           console.log("id: " + annotation.id);
           console.log("pageNumber: " + annotation.pageNumber);
         }) 
-      });;
+      });
 ```
 
 #### exportAnnotations
