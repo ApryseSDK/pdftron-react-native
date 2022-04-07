@@ -1294,7 +1294,7 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (NSMutableArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
