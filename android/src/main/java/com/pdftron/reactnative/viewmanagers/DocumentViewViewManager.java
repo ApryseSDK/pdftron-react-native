@@ -550,10 +550,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void importAnnotations(int tag, String xfdf, boolean replace) throws PDFNetException {
+    public WritableArray importAnnotations(int tag, String xfdf, boolean replace) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.importAnnotations(xfdf, replace);
+            return documentView.importAnnotations(xfdf, replace);
         } else {
             throw new PDFNetException("", 0L, getName(), "importAnnotations", "Unable to find DocumentView.");
         }

@@ -34,6 +34,7 @@ import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
 import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
+import com.pdftron.collab.utils.Keys;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.Action;
@@ -3097,9 +3098,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public void importAnnotations(String xfdf, boolean replace) throws PDFNetException {
+    public WritableArray importAnnotations(String xfdf, boolean replace) throws PDFNetException {
         if (mCollabManager != null) {
             mCollabManager.importAnnotations(xfdf, false);
+            return getAnnotationsFromXFDF(xfdf);
         } else {
             PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -3112,7 +3114,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
                 if (pdfDoc.hasDownloader()) {
                     // still downloading file, let's wait for next call
-                    return;
+                    return null;
                 }
             } finally {
                 if (shouldUnlockRead) {
@@ -3132,12 +3134,50 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     pdfDoc.fdfMerge(fdfDoc);
                 }
                 pdfViewCtrl.update(true);
+                return getAnnotationsFromXFDF(xfdf);
             } finally {
                 if (shouldUnlock) {
                     pdfViewCtrl.docUnlock();
                 }
             }
         }
+    }
+
+    private static Integer safeGetObjAsInteger(Obj obj, String key) throws PDFNetException {
+        if (obj != null) {
+            Obj result = obj.findObj(key);
+            if (result != null && result.isNumber()) {
+                double number = result.getNumber();
+                return (int) number;
+            }
+        }
+        return null;
+    }
+
+    private static WritableArray getAnnotationsFromXFDF(String xfdf) throws PDFNetException {
+        WritableArray annotations = Arguments.createArray();
+        FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
+        Obj fdf = fdfDoc.getFDF();
+        if (fdf != null) {
+            Obj annots = fdf.findObj(Keys.FDF_ANNOTS);
+            if (annots != null && annots.isArray()) {
+                long size = annots.size();
+                for (int i = 0; i < size; i++) {
+                    Obj annotObj = annots.getAt(i);
+
+                    if (annotObj != null) {
+                        WritableMap annotPair = Arguments.createMap();
+                        Annot annot = new Annot(annotObj);
+                        String annotId = annot.getUniqueID().getAsPDFText();
+                        Integer page = safeGetObjAsInteger(annotObj, Keys.FDF_PAGE) + 1;
+                        annotPair.putString(KEY_ANNOTATION_ID, annotId);
+                        annotPair.putInt(KEY_ANNOTATION_PAGE, page);
+                        annotations.pushMap(annotPair);
+                    }
+                }
+            }
+        }
+        return annotations;
     }
 
     public String exportAnnotations(ReadableMap options) throws Exception {
