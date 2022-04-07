@@ -49,6 +49,13 @@ export const Config = {
     addPageButton: 'addPageButton',
     insertPageButton: 'insertPageButton',
 
+    // iOS only
+    InsertBlankPage: "insertBlankPageButton",
+    InsertFromImage: "insertFromImageButton",
+    InsertFromDocument: "insertFromDocumentButton",
+    InsertFromPhoto: "insertFromPhotoButton",
+    InsertFromScanner: "insertFromScannerButton",
+
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
@@ -241,11 +248,15 @@ export const Config = {
 
   // ThumbnailsViewItem defines actionss in the thumbnails browser
   ThumbnailsViewItem: {
-    InsertPages: "thumbnailsInsertPages",
+    InsertBlankPage: "thumbnailsInsertPages",
     ExportPages: "thumbnailsExportPages",
+    InsertFromImage: "thumbnailsInsertFromImage",
+    InsertFromDocument: "thumbnailsInsertFromDocument",
+    InsertFromPhoto: "thumbnailsInsertFromPhoto",
     DuplicatePages: "thumbnailsDuplicatePages",
     RotatePages: "thumbnailsRotatePages",
     DeletePages: "thumbnailsDeletePages",
+    InsertFromScanner: "thumbnailsInsertFromScanner"
   },
 
   // Conversion defines conversion sources and destinations

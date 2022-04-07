@@ -265,7 +265,17 @@ NS_ASSUME_NONNULL_END
 
 - (void)setDocument:(NSString *)document
 {
-    _document = [document copy];
+    if([document length] != 0){
+        _document = [document copy];
+    }
+    
+    [self openDocument];
+}
+
+
+- (void)setSource:(NSString *)source
+{
+    _document = [source copy];
     
     [self openDocument];
 }
@@ -766,6 +776,7 @@ NS_ASSUME_NONNULL_END
 - (void)setToolsPermission:(NSArray<NSString *> *)stringsArray toValue:(BOOL)value documentViewController:(PTDocumentBaseViewController *)documentViewController
 {
     PTToolManager *toolManager = documentViewController.toolManager;
+    NSMutableArray *addPagesItems = [documentViewController.addPagesViewController.items mutableCopy];
     
     for (NSObject *item in stringsArray) {
         if ([item isKindOfClass:[NSString class]]) {
@@ -911,8 +922,32 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTFormFillToolKey]) {
                 toolManager.widgetAnnotationOptions.canEdit = value;
             }
+            else if([string isEqualToString:PTInsertBlankPageButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addBlankPagesButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromImageButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addImagePageButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromPhotoButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addCameraImagePageButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromScannerButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addScannedPageButtonItem];
+            }
+            else if([string isEqualToString:PTInsertFromDocumentButton]){
+                [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
+            }
         }
     }
+    if([addPagesItems count] == 0){
+        documentViewController.addPagesButtonHidden = true;
+        PTToolGroupManager *toolGroupManager = ((PTDocumentController*)documentViewController).toolGroupManager;
+        PTToolGroup *insertItemGroup = toolGroupManager.insertItemGroup;
+        NSMutableArray<UIBarButtonItem *> *barButtonItems = [insertItemGroup.barButtonItems mutableCopy];
+        [barButtonItems removeObject:toolGroupManager.addPagesButtonItem];
+        insertItemGroup.barButtonItems = [barButtonItems copy];
+    }
+    documentViewController.addPagesViewController.items = [addPagesItems copy];
 }
 
 - (void)setToolMode:(NSString *)toolMode
@@ -1861,6 +1896,21 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Enable Anti Aliasing 
+- (void)setEnableAntialiasing:(BOOL)enableAntialiasing
+{
+    _enableAntialiasing = enableAntialiasing;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        @try{
+            [pdfViewCtrl SetAntiAliasing:enableAntialiasing];
+        } @catch (NSException *exception) {
+            NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        }
+    }
+
+}
+
 - (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
 {
     _pageChangeOnTap = pageChangeOnTap;
@@ -1988,15 +2038,15 @@ NS_ASSUME_NONNULL_END
     documentViewController.changesPageOnTap = self.pageChangeOnTap;
     
     // Fit mode.
-    if ([self.fitMode isEqualToString:PTFitPageFitModeKey]) {
+    if ([self.fitMode isEqualToString:PTFitPageFitModeKey] || (self.fitPolicy == 2)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_page];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_page];
     }
-    else if ([self.fitMode isEqualToString:PTFitWidthFitModeKey]) {
+    else if ([self.fitMode isEqualToString:PTFitWidthFitModeKey] || (self.fitPolicy == 0)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_width];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_width];
     }
-    else if ([self.fitMode isEqualToString:PTFitHeightFitModeKey]) {
+    else if ([self.fitMode isEqualToString:PTFitHeightFitModeKey] || (self.fitPolicy == 1)) {
         [pdfViewCtrl SetPageViewMode:e_trn_fit_height];
         [pdfViewCtrl SetPageRefViewMode:e_trn_fit_height];
     }
@@ -2077,10 +2127,11 @@ NS_ASSUME_NONNULL_END
         }
     }
 
+    NSMutableArray *addPagesItems = [documentViewController.thumbnailsViewController.addPagesViewController.items mutableCopy];
     // Thumbnails view items
     for (NSString * thumbnailsItemString in self.hideThumbnailsViewItems) {
         if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertPagesKey]) {
-            documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addBlankPagesButtonItem];
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewExportPagesKey]) {
             documentViewController.thumbnailsViewController.exportPagesEnabled = NO;
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDuplicatePagesKey]) {
@@ -2089,8 +2140,20 @@ NS_ASSUME_NONNULL_END
             documentViewController.thumbnailsViewController.rotatePagesEnabled = NO;
         } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewDeletePagesKey]) {
             documentViewController.thumbnailsViewController.deletePagesEnabled = NO;
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromImageKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addImagePageButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromPhotoKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addCameraImagePageButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromDocumentKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addDocumentPagesButtonItem];
+        } else if ([thumbnailsItemString isEqualToString:PTThumbnailsViewInsertFromScannerKey]) {
+            [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addScannedPageButtonItem];
         }
     }
+    if([addPagesItems count] == 0){
+        documentViewController.thumbnailsViewController.addPagesEnabled = NO;
+    }
+    documentViewController.thumbnailsViewController.addPagesViewController.items = [addPagesItems copy];
 
     // Leading Nav Icon.
     [self applyLeadingNavButton];
@@ -2406,7 +2469,7 @@ NS_ASSUME_NONNULL_END
         PTAnnotationToolbarAnnotate: toolGroupManager.annotateItemGroup,
         PTAnnotationToolbarDraw: toolGroupManager.drawItemGroup,
         PTAnnotationToolbarInsert: toolGroupManager.insertItemGroup,
-        //PTAnnotationToolbarFillAndSign: [NSNull null], // not implemented
+        PTAnnotationToolbarFillAndSign: toolGroupManager.fillAndSignItemGroup,
         PTAnnotationToolbarPrepareForm: toolGroupManager.prepareFormItemGroup,
         PTAnnotationToolbarMeasure: toolGroupManager.measureItemGroup,
         PTAnnotationToolbarRedaction: toolGroupManager.redactItemGroup, 
@@ -2721,6 +2784,15 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+#pragma mark - Fit Policy
+
+- (void)setFitPolicy:(int)fitPolicy
+{
+    _fitPolicy = fitPolicy;
+    
+    [self applyViewerSettings];
+}
+
 #pragma mark - Layout mode
 
 - (void)setLayoutMode:(NSString *)layoutMode
@@ -2863,6 +2935,17 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (pdfViewCtrl) {
         [pdfViewCtrl SetZoom:zoom];
+    }
+}
+
+#pragma mark - Scale
+
+- (void)setScale:(double)scale
+{
+    _scale = scale;
+    PTPDFViewCtrl* pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        [pdfViewCtrl SetZoom:scale];
     }
 }
 
@@ -3193,11 +3276,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - <RNTPTDocumentViewControllerDelegate>
 
 - (void)rnt_documentViewControllerDocumentLoaded:(PTDocumentBaseViewController *)documentViewController
-{
-    if (self.initialPageNumber > 0) {
-        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
-    }
-        
+{       
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -3732,7 +3811,15 @@ NS_ASSUME_NONNULL_END
     if (documentViewController != self.currentDocumentViewController) {
         return;
     }
+
+    if (self.initialPageNumber > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.initialPageNumber];
+    }
     
+    if (self.page > 0) {
+        [documentViewController.pdfViewCtrl SetCurrentPage:self.page];
+    }
+
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
@@ -4623,6 +4710,9 @@ NS_ASSUME_NONNULL_END
 
 - (NSArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber
 {
+    if(pageNumber == -1){
+        return [self getAllFields];
+    }
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
         return nil;
@@ -4631,18 +4721,31 @@ NS_ASSUME_NONNULL_END
     NSError *error;
     [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
         PTPage *page = [doc GetPage:pageNumber];
-        int num_annots = [page GetNumAnnots];
-        for (int i = 0; i < num_annots; i ++){
-            PTAnnot *annot = [page GetAnnot:i];
-            if(annot != nil) {
-                if ([annot GetType] == e_ptWidget) {
-                    __block NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+        [resultMap addObjectsFromArray:[self getFieldsForPage:page]];
+    } error:&error];
+        
+    if (error) {
+        NSLog(@"An error occurred: %@", error);
+        return nil;
+    }
+    
+    return [resultMap copy];
+}
 
-                    fieldMap = [self getFieldWithHasAppearance:annot];
+- (NSArray<NSDictionary *> *)getAllFields
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
 
-                    [resultMap addObject:fieldMap];
-                }
-            }
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+        int pageCount = [doc GetPageCount];
+        for (int i = 1; i <= pageCount; i ++){
+            PTPage *page = [doc GetPage:i];
+            [resultMap addObjectsFromArray:[self getFieldsForPage:page]];
         }
     } error:&error];
         
@@ -4651,6 +4754,22 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
+    return [resultMap copy];
+}
+
+- (NSArray<NSDictionary *>*)getFieldsForPage:(PTPage*)page
+{
+    NSMutableArray<NSDictionary *> *resultMap = [[NSMutableArray alloc] init];
+    int num_annots = [page GetNumAnnots];
+    for (int i = 0; i < num_annots; i ++){
+        PTAnnot *annot = [page GetAnnot:i];
+        if(annot != nil) {
+            if ([annot GetType] == e_ptWidget) {
+                __block NSDictionary* fieldMap = [self getFieldWithHasAppearance:annot];
+                [resultMap addObject:fieldMap];
+            }
+        }
+    }
     return [resultMap copy];
 }
 

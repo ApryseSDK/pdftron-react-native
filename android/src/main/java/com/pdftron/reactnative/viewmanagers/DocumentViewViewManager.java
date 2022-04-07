@@ -16,6 +16,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
+import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
@@ -60,6 +61,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setDocument(filepath);
     }
 
+    @ReactProp(name = "source")
+    public void setSource(DocumentView documentView, @NonNull String filepath) {
+        documentView.setDocument(filepath);
+    }
+
     @ReactProp(name = "password")
     public void setPassword(DocumentView documentView, @Nullable String password) {
         documentView.setPassword(password);
@@ -68,6 +74,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "leadingNavButtonIcon")
     public void setNavButtonIcon(DocumentView documentView, @NonNull String resName) {
         documentView.setNavResName(resName);
+    }
+
+    @ReactProp(name = "enableAntialiasing")
+    public void setAntiAliasing(DocumentView documentView, boolean enableAntialiasing) throws PDFNetException {
+        documentView.setAntiAliasing(enableAntialiasing);
     }
 
     @ReactProp(name = "showLeadingNavButton")
@@ -110,6 +121,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setInitialPageNumber(pageNum);
     }
 
+    @ReactProp(name = "page")
+    public void setPage(DocumentView documentView, int pageNum) {
+        documentView.setInitialPageNumber(pageNum);
+    }
+
     @ReactProp(name = "pageNumber")
     public void setPageNumber(DocumentView documentView, int pageNum) {
         documentView.setPageNumber(pageNum);
@@ -144,7 +160,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setDocumentSliderEnabled(DocumentView documentView, boolean documentSliderEnabled) {
         documentView.setDocumentSliderEnabled(documentSliderEnabled);
     }
-	
+
     @ReactProp(name = "downloadDialogEnabled")
     public void setDownloadDialogEnabled(DocumentView documentView, boolean downloadDialogEnabled) {
         documentView.setDownloadDialogEnabled(downloadDialogEnabled);
@@ -163,6 +179,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "fitMode")
     public void setFitMode(DocumentView documentView, String fitMode) {
         documentView.setFitMode(fitMode);
+    }
+
+    @ReactProp(name = "fitPolicy")
+    public void setFitPolicy(DocumentView documentView, int fitPolicy) {
+        documentView.setFitPolicy(fitPolicy);
     }
 
     @ReactProp(name = "layoutMode")
@@ -375,6 +396,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setZoom(zoom);
     }
 
+    @ReactProp(name = "scale")
+    public void setScale(DocumentView documentView, double scale) {
+        documentView.setZoom(scale);
+    }
+
     @ReactProp(name = "horizontalScrollPos")
     public void setHorizontalScrollPos(DocumentView documentView, double horizontalScrollPos) {
         documentView.setHorizontalScrollPos(horizontalScrollPos);
@@ -395,7 +421,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
     }
 
-    @ReactProp(name = "photoPickerEnabled") 
+    @ReactProp(name = "photoPickerEnabled")
     public void setPhotoPickerEnabled(DocumentView documentView, boolean photoPickerEnabled) {
         documentView.setPhotoPickerEnabled(photoPickerEnabled);
     }
@@ -403,8 +429,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "autoResizeFreeTextEnabled")
     public void setAutoResizeFreeTextEnabled(DocumentView documentView, boolean autoResizeFreeTextEnabled) {
         documentView.setAutoResizeFreeTextEnabled(autoResizeFreeTextEnabled);
-    } 
-    
+    }
+
     @ReactProp(name = "annotationsListEditingEnabled")
     public void setAnnotationsListEditingEnabled(DocumentView documentView, boolean annotationsListEditingEnabled) {
         documentView.setAnnotationsListEditingEnabled(annotationsListEditingEnabled);
@@ -421,7 +447,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     @ReactProp(name = "showNavigationListAsSidePanelOnLargeDevices")
-    public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView, boolean showNavigationListAsSidePanelOnLargeDevices) {
+    public void setShowNavigationListAsSidePanelOnLargeDevices(DocumentView documentView,
+            boolean showNavigationListAsSidePanelOnLargeDevices) {
         documentView.setShowNavigationListAsSidePanelOnLargeDevices(showNavigationListAsSidePanelOnLargeDevices);
     }
 
@@ -459,6 +486,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setDisableEditingByAnnotationType(DocumentView documentView, ReadableArray annotationTypes) {
         documentView.setDisableEditingByAnnotationType(annotationTypes);
     }
+
     @ReactProp(name = "saveStateEnabled")
     public void setSaveStateEnabled(DocumentView documentView, boolean saveState) {
         documentView.setSaveStateEnabled(saveState);
@@ -484,6 +512,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setHideThumbnailsViewItems(thumbnailViewItems);
     }
 
+    @ReactProp(name = "highlighterSmoothingEnabled")
+    public void setHighlighterSmoothingEnabled(DocumentView documentView, boolean highlighterSmoothingEnabled) {
+        documentView.setHighlighterSmoothingEnabled(highlighterSmoothingEnabled);
+    }
+
+    @ReactProp(name = "maxSignatureCount")
+    public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount) {
+        SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
+   }
+
     // Hygen Generated Props
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -495,7 +533,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void openBookmarkList(int tag) throws PDFNetException{
+    public void openBookmarkList(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.openBookmarkList();
@@ -509,7 +547,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             documentView.importAnnotationCommand(xfdfCommand, initialLoad);
         } else {
-            throw new PDFNetException("", 0L, getName(), "importAnnotationCommand", "set collabEnabled to true is required.");
+            throw new PDFNetException("", 0L, getName(), "importAnnotationCommand",
+                    "set collabEnabled to true is required.");
         }
     }
 
@@ -639,7 +678,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public ReadableMap getAnnotationAt(int tag, int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
+    public ReadableMap getAnnotationAt(int tag, int x, int y, double distanceThreshold, double minimumLineWeight)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             return documentView.getAnnotationAt(x, y, distanceThreshold, minimumLineWeight);
@@ -666,8 +706,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void openAnnotationList(int tag) throws PDFNetException
-    {
+    public void openAnnotationList(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.openAnnotationList();
@@ -675,7 +714,9 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "openAnnotationList", "Unable to find DocumentView.");
         }
     }
-    public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key) throws PDFNetException {
+
+    public String getCustomDataForAnnotation(int tag, String annotationID, int pageNumber, String key)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             return documentView.getCustomDataForAnnotation(annotationID, pageNumber, key);
@@ -711,7 +752,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setPropertiesForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap) throws PDFNetException {
+    public void setPropertiesForAnnotation(int tag, String annotId, int pageNumber, ReadableMap propertyMap)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.setPropertiesForAnnotation(annotId, pageNumber, propertyMap);
@@ -738,7 +780,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setVisibilityForAnnotation(int tag, String annotId, int pageNumber, boolean visibility) throws PDFNetException {
+    public void setVisibilityForAnnotation(int tag, String annotId, int pageNumber, boolean visibility)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.setVisibilityForAnnotation(annotId, pageNumber, visibility);
@@ -938,7 +981,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             return documentView.convertScreenPointsToPagePoints(points);
         } else {
-            throw new PDFNetException("", 0L, getName(), "convertScreenPointsToPagePoints", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "convertScreenPointsToPagePoints",
+                    "Unable to find DocumentView.");
         }
     }
 
@@ -947,7 +991,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             return documentView.convertPagePointsToScreenPoints(points);
         } else {
-            throw new PDFNetException("", 0L, getName(), "convertPagePointsToScreenPoints", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "convertPagePointsToScreenPoints",
+                    "Unable to find DocumentView.");
         }
     }
 
@@ -956,11 +1001,13 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         if (documentView != null) {
             return documentView.getPageNumberFromScreenPoint(x, y);
         } else {
-            throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint", "Unable to find DocumentView.");
+            throw new PDFNetException("", 0L, getName(), "getPageNumberFromScreenPoint",
+                    "Unable to find DocumentView.");
         }
     }
 
-    public void setProgressiveRendering(int tag, boolean progressiveRendering, int initialDelay, int interval) throws PDFNetException {
+    public void setProgressiveRendering(int tag, boolean progressiveRendering, int initialDelay, int interval)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.setProgressiveRendering(progressiveRendering, initialDelay, interval);
@@ -1032,7 +1079,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setColorPostProcessColors(int tag, ReadableMap whiteColor, ReadableMap blackColor) throws PDFNetException {
+    public void setColorPostProcessColors(int tag, ReadableMap whiteColor, ReadableMap blackColor)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.setColorPostProcessColors(whiteColor, blackColor);
@@ -1041,7 +1089,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void startSearchMode(int tag, String searchString, boolean matchCase, boolean matchWholeWord) throws PDFNetException {
+    public void startSearchMode(int tag, String searchString, boolean matchCase, boolean matchWholeWord)
+            throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.startSearchMode(searchString, matchCase, matchWholeWord);
@@ -1059,7 +1108,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void findText(int tag, String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp, boolean regExp) throws PDFNetException {
+    public void findText(int tag, String searchString, boolean matchCase, boolean matchWholeWord, boolean searchUp,
+            boolean regExp) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.findText(searchString, matchCase, matchWholeWord, searchUp, regExp);
@@ -1208,7 +1258,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "canRedo", "Unable to find DocumentView.");
         }
     }
-    
+
     public void showViewSettings(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1254,7 +1304,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void openOutlineList(int tag) throws PDFNetException{
+    public void openOutlineList(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.openOutlineList();
@@ -1272,7 +1322,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void openNavigationLists(int tag)  throws PDFNetException {
+    public void openNavigationLists(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.openNavigationLists();
@@ -1280,7 +1330,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "openNavigationLists", "Unable to find DocumentView");
         }
     }
-    
+
     public boolean isReflowMode(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -1307,7 +1357,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "openThumbnailsView", "Unable to find DocumentView.");
         }
     }
-    
+
     public void showGoToPageView(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

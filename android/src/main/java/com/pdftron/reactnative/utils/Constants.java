@@ -257,6 +257,7 @@ public final class Constants {
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
+    public static final String MENU_ID_STRING_DUPLICATE = "duplicate";
 
     // Thumbnails
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
@@ -266,6 +267,8 @@ public final class Constants {
     public static final String THUMBNAIL_DUPLICATE_PAGES = "thumbnailsDuplicatePages";
     public static final String THUMBNAIL_ROTATE_PAGES = "thumbnailsRotatePages";
     public static final String THUMBNAIL_DELETE_PAGES = "thumbnailsDeletePages";
+    public static final String THUMBNAIL_INSERT_FROM_IMAGE = "thumbnailsInsertFromImage";
+    public static final String THUMBNAIL_INSERT_FROM_DOCUMENT = "thumbnailsInsertFromDocument";
 
     public static final String VIEW_MODE_CROP = "viewModeCrop";
     public static final String VIEW_MODE_ROTATION = "viewModeRotation";

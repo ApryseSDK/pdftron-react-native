@@ -34,6 +34,14 @@ RCT_CUSTOM_VIEW_PROPERTY(document, NSString, RNTPTDocumentView)
     }
 }
 
+
+RCT_CUSTOM_VIEW_PROPERTY(source, NSString, RNTPTDocumentView)
+{
+    if (json && [RCTConvert NSString:json]) {
+        view.document = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(isBase64String, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -59,6 +67,13 @@ RCT_CUSTOM_VIEW_PROPERTY(initialPageNumber, int, RNTPTDocumentView)
 {
     if (json) {
         view.initialPageNumber = [RCTConvert int:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(page, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.page = [RCTConvert int:json];
     }
 }
 
@@ -206,6 +221,13 @@ RCT_CUSTOM_VIEW_PROPERTY(fitMode, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(fitPolicy, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.fitPolicy = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(layoutMode, NSString, RNTPTDocumentView)
 {
     if (json) {
@@ -322,6 +344,13 @@ RCT_CUSTOM_VIEW_PROPERTY(autoSaveEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.autoSaveEnabled = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(enableAntialiasing, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.enableAntialiasing = [RCTConvert BOOL:json];
     }
 }
 
@@ -499,6 +528,14 @@ RCT_CUSTOM_VIEW_PROPERTY(zoom, double, RNTPTDocumentView)
         view.zoom = [RCTConvert double:json];
     }
 }
+
+RCT_CUSTOM_VIEW_PROPERTY(scale, double, RNTPTDocumentView)
+{
+    if (json) {
+        view.scale = [RCTConvert double:json];
+    }
+}
+
 
 RCT_CUSTOM_VIEW_PROPERTY(horizontalScrollPos, double, RNTPTDocumentView)
 {

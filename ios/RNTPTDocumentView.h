@@ -50,6 +50,11 @@ static NSString * const PTPolygonToolButtonKey = @"polygonToolButton";
 static NSString * const PTCloudToolButtonKey = @"cloudToolButton";
 static NSString * const PTEditToolButtonKey = @"editToolButton";
 static NSString * const PTInsertPageButton = @"insertPageButton";
+static NSString * const PTInsertBlankPageButton = @"insertBlankPageButton";
+static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
+static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
+static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
+static NSString * const PTInsertFromScannerButton = @"insertFromScannerButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -128,6 +133,10 @@ static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages
 static NSString * const PTThumbnailsViewDuplicatePagesKey = @"thumbnailsDuplicatePages";
 static NSString * const PTThumbnailsViewRotatePagesKey = @"thumbnailsRotatePages";
 static NSString * const PTThumbnailsViewDeletePagesKey = @"thumbnailsDeletePages";
+static NSString * const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertFromImage";
+static NSString * const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
+static NSString * const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
+static NSString * const PTThumbnailsViewInsertFromScannerKey = @"thumbnailsInsertFromScanner";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
@@ -397,14 +406,17 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL pageIndicatorShowsOnPageChange;
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
+@property (nonatomic, assign) BOOL enableAntialiasing;
 
 // Hygen Generated Props
 
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;
+@property (nonatomic, copy, nullable) NSString *source;
 @property (nonatomic, getter=isBase64String) BOOL base64String;
 @property (nonatomic, copy, nullable) NSString *base64Extension;
 @property (nonatomic) int initialPageNumber;
+@property (nonatomic) int page;
 @property (nonatomic) int pageNumber;
 @property (nonatomic, assign) BOOL showNavButton;
 @property (nonatomic, copy, nullable) NSString *navButtonPath;
@@ -414,6 +426,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign, getter=isReadOnly) BOOL readOnly;
 
 @property (nonatomic, copy) NSString *fitMode;
+@property (nonatomic) int fitPolicy;
 @property (nonatomic, copy) NSString *layoutMode;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *annotationMenuItems;
@@ -482,6 +495,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
 @property (nonatomic) double zoom;
+@property (nonatomic) double scale;
 
 @property (nonatomic) double horizontalScrollPos;
 @property (nonatomic) double verticalScrollPos;

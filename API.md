@@ -244,6 +244,19 @@ Example:
 />
 ```
 
+#### source
+string 
+
+The path or url to the document. Wonday compatibility API.
+
+Example:
+
+```js
+<DocumentView
+  source={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
+/>
+```
+
 #### password
 string, optional
 
@@ -438,6 +451,24 @@ error | string | Error message produced
 />
 ```
 
+#### onError
+function, optional
+
+This function is called when document opening encounters an error.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+error | string | Error message produced
+
+```js
+<DocumentView
+  onError = {(error) => { 
+    console.log('Error occured during document opening:', error); 
+  }}
+/>
+```
 ### UI Customization
 
 #### disabledElements
@@ -695,6 +726,8 @@ Defines which default annotation toolbars should be hidden. Note that this prop 
 array of [`Config.ThumbnailsViewItem`](./src/Config/Config.ts) constants, optional, defaults to none
 
 Defines which default thumbnail view items should be hidden.
+Note: InsertFromPhoto item is for iOS only
+On Android, photo and camera are both included in InsertFromImage
 
 ```js
 <DocumentView
@@ -802,6 +835,23 @@ Defines the fit mode (default zoom level) of the viewer.
 />
 ```
 
+#### fitPolicy
+
+Defines the fit mode (default zoom level) of the viewer.
+Parameters:
+
+Mode | Value | Description
+--- | --- | ---
+fitPage (default) | 0 | fits the whole page
+fit width | 1 | fits page using width
+fit hieght | 2 | fits page using height
+
+```js
+<DocumentView
+  fitPolicy={2}
+/>
+```
+
 #### layoutMode
 one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 
@@ -836,6 +886,17 @@ Defines the initial page number that viewer displays when the document is opened
 ```js
 <DocumentView
   initialPageNumber={5}
+/>
+```
+
+#### page
+number, optional
+
+Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed.
+
+```js
+<DocumentView
+  page={5}
 />
 ```
 
@@ -981,6 +1042,29 @@ pageNumbers | array | An array of the page numbers that were removed from the do
 ```
 
 ### Zoom
+
+#### zoom
+double, optional
+
+This prop defines the zoom of the document
+
+```js
+<DocumentView
+  zoom={2.0}
+/>
+```
+
+#### scale
+double, optional
+
+This prop defines the zoom of the document.
+Same as zoom. Wonday compatibility API.
+
+```js
+<DocumentView
+  scale={2.0}
+/>
+```
 
 #### onZoomChanged
 function, optional
@@ -1499,9 +1583,6 @@ action | string | the action that occurred (add, delete, modify)
 xfdfCommand | string | an xfdf string containing info about the edit
 annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
 
-**Known Issues** <br/> 
-On iOS, there is currently a bug that prevents the last XFDF from being retrieved when modifying annotations while collaboration mode is enabled.
-
 ```js
 <DocumentView
   onExportAnnotationCommand = {({action, xfdfCommand, annotations}) => {
@@ -1641,6 +1722,18 @@ Defines annotation types that cannot be edited after creation.
 />
 ```
 
+#### highlighterSmoothingEnabled
+bool, optional, default to true, Android only.
+
+Sets whether the pdf should have highlighter smoothing.
+Example
+
+```js
+<DocumentView
+  highlighterSmoothingEnabled={false}
+/>
+```
+
 #### excludedAnnotationListTypes
 array of [`Config.Tools`](./src/Config/Config.ts) constants, optional, defaults to none
 
@@ -1721,6 +1814,18 @@ Defines whether to store new signatures when using the signing tool.
   storeNewSignature={true}
 />
 ```
+
+#### maxSignatureCount
+number, optional
+
+Defines the maximum number of signatures you can create for a document.
+
+Android only.
+
+```js 
+<DocumentView
+  maxSignatureCount={3}
+/>
 
 #### photoPickerEnabled
 bool, optional, defaults to true. Android only.
@@ -1805,6 +1910,17 @@ quads indicate the quad boundary boxes for the selection, which could have a siz
 
 ### Others
 
+#### enableAntialiasing
+bool, optional
+
+Define whether antialiasing should be applied.
+It is enabled by default
+
+```js
+<DocumentView
+  enableAntialiasing={true}
+/>
+```
 #### useStylusAsPen
 bool, optional, defaults to true
 
@@ -2063,6 +2179,7 @@ this._viewer.setCurrentPage(4).then((success) => {
 function, optional
 
 This method gets all the fields for a particular page.
+If no page number is passed the method gets the Fields for all the pages.
 Additionally if a field of type signature is present it will have a hasAppearance which is a boolean to represent whether a signature field was signed. 
 The hasAppearance field will be undefined for all other fields except signature.
 
@@ -2286,9 +2403,7 @@ this._viewer.importAnnotationCommand(xfdfCommand);
 ```
 
 #### importAnnotations
-Imports XFDF annotation string to the current document.
-
-`importAnnotations` should only be used in local mode. To import annotations in collaboration mode, use [`importAnnotationCommand`](#importAnnotationCommand).
+Imports XFDF annotation string to the current document. Can be used in both local and collaboration mode.
 
 Parameters:
 
