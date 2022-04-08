@@ -375,6 +375,9 @@ Example:
 bool, optional, default to true
 
 Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+
+For iOS it only remember the last visited page for local docs and it does not remember the zoom for the document.
+
 Example:
 
 ```js
