@@ -376,7 +376,9 @@ bool, optional, default to true
 
 Sets whether to remember the last visited page and zoom for a document if it gets opened again.
 
-For iOS it only remember the last visited page for local docs and it does not remember the zoom for the document.
+On iOS this prop only applies to local documents and saves the last visited page. The zoom is not saved.
+
+On Android the zoom and last visited page are saved for both local and remote documents.
 
 Example:
 
