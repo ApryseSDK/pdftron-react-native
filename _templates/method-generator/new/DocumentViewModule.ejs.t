@@ -3,20 +3,15 @@ inject: true
 to: android/src/main/java/com/pdftron/reactnative/modules/DocumentViewModule.java
 after: // Hygen Generated Methods
 ---
-<% parameter = "" -%>
-<% arguments = "" -%>
-<%  params.split(',').forEach((param)=> {  -%>
-<% parameter +=  'final ' +param.replace(':',' ')+ ', ' -%>
-<% arguments +=  param.split(':')[1]+ ', ' -%>
-<% }) -%>
-<% arguments = arguments.substr(0,arguments.length-2) -%>
+
+
     @ReactMethod
-    public void <%= name %>(<%= parameter %>final Promise promise) {
+    public void <%= name %>(<%= h.finalize(params) %>final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    WritableMap field = mDocumentViewInstance.<%= name %>(tag, <%= arguments %>);
+                    WritableMap field = mDocumentViewInstance.<%= name %>(tag, <%= h.argumenterize(params) %>);
                     promise.resolve(field);
                 } catch (Exception ex) {
                     promise.reject(ex);

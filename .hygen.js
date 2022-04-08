@@ -12,6 +12,13 @@ module.exports = {
             arguments +=  param.split(':')[1]+ ', ' 
             arguments = arguments.substr(0,arguments.length-2)
             return arguments 
+        },
+        finalize: (params) => {
+            arguments = "" 
+            params.split(',').forEach((param)=> {  
+            arguments += 'final ' + param.replace(':',' ') + ', ' 
+            })
+            return arguments
         }  
     }
 }
