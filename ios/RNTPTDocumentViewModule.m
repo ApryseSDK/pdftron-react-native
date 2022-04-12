@@ -25,7 +25,7 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
             @{
               NSLocalizedDescriptionKey: exception.name,
-              NSLocalizedFailureReasonErrorKey: exception.reason,
+              NSLocalizedFailureReasonErrorKey: exception.reason ?: @"",
               }];
 }
 
