@@ -25,7 +25,7 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
             @{
               NSLocalizedDescriptionKey: exception.name,
-              NSLocalizedFailureReasonErrorKey: exception.reason,
+              NSLocalizedFailureReasonErrorKey: exception.reason ?: @"",
               }];
 }
 
@@ -33,9 +33,17 @@ RCT_EXPORT_MODULE(DocumentViewManager) // JS-name
 
 RCT_REMAP_METHOD(setToolMode,
                  setToolModeForDocumentViewTag:(nonnull NSNumber *)tag
-                 toolMode:(NSString *)toolMode)
+                 toolMode:(NSString *)toolMode
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
-    [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+    @try {
+        [[self documentViewManager] setToolModeForDocumentViewTag:tag toolMode:toolMode];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_tool_mode_failed", @"Failed to set tool mode", [self errorFromException:exception]);
+    }
 }
 
 RCT_REMAP_METHOD(commitTool,
@@ -68,6 +76,53 @@ RCT_REMAP_METHOD(getDocumentPath,
     }
 }
 
+RCT_REMAP_METHOD(getAllFields,
+                 getAllFieldsForDocumentViewTag:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSMutableArray<NSDictionary *> *fields= [[self documentViewManager] getAllFieldsForDocumentViewTag:tag pageNumber:pageNumber];
+        resolve(fields);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get all fields for the page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(exportAsImage,
+                 exportAsImageForDocumentViewTag:(nonnull NSNumber *)tag
+                 pageNumber:(int)pageNumber
+                 dpi:(int)dpi
+                 exportFormat:(NSString*)exportFormat
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *path = [[self documentViewManager] exportAsImageForDocumentViewTag:tag pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
+        resolve(path);
+    }
+    @catch (NSException *exception) {
+        reject(@"export_failed", @"Failed to get document path", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(setCurrentToolbar,
+                 setCurrentToolbarForDocumentViewTag:(nonnull NSNumber *)tag
+                 toolbarTitle:(NSString*)toolbarTitle
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setCurrentToolbarForDocumentViewTag:tag toolbarTitle:toolbarTitle];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_current_toolbar_failed", @"Failed to set current toolbar", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCount,
                  getPageCountForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -97,6 +152,20 @@ RCT_REMAP_METHOD(importBookmarkJson,
     }
 }
 
+RCT_REMAP_METHOD(openBookmarkList,
+                 openBookmarkListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openBookmarkListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_bookmark_list_failed", @"Failed to open bookmark list", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(exportAnnotations,
                  exportAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  options:(NSDictionary *)options
@@ -116,12 +185,13 @@ RCT_REMAP_METHOD(exportAnnotations,
 RCT_REMAP_METHOD(importAnnotations,
                  importAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
                  xfdf:(NSString *)xfdf
+                 replace:(BOOL)replace
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf];
-        resolve(nil);
+        NSArray<NSDictionary *>* importedAnnotations = [[self documentViewManager] importAnnotationsForDocumentViewTag:tag xfdf:xfdf replace:replace];
+        resolve(importedAnnotations);
     }
     @catch (NSException *exception) {
         reject(@"import_failed", @"Failed to import annotations", [self errorFromException:exception]);
@@ -220,7 +290,21 @@ RCT_REMAP_METHOD(getField,
         resolve(field);
     }
     @catch (NSException *exception) {
-        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+        reject(@"get_field", @"Failed to get field", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openAnnotationList,
+                 openAnnotationListForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openAnnotationListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_annotation_list", @"Failed to open annotation list", [self errorFromException:exception]);
     }
 }
 
@@ -269,6 +353,22 @@ RCT_REMAP_METHOD(setPropertiesForAnnotation,
     }
     @catch (NSException *exception) {
         reject(@"set_property_for_annotation", @"Failed to set property for annotation", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getPropertiesForAnnotation,
+                 getPropertiesForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *propertyMap = [[self documentViewManager] getPropertiesForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber];
+        resolve(propertyMap);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_properties_for_annotation", @"Failed to get properties for annotation", [self errorFromException:exception]);
     }
 }
 
@@ -367,6 +467,24 @@ RCT_REMAP_METHOD(getAnnotationListOnPage,
     }
     @catch (NSException *exception) {
         reject(@"get_annotation_list_on_page", @"Failed to get annotation list on page", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getCustomDataForAnnotation,
+                  getCustomDataForAnnotationForDocumentViewTag: (nonnull NSNumber *)tag
+                  annotationId:(NSString *)annotationId
+                  pageNumber:(NSInteger)pageNumber
+                  key:(NSString *)key
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *customData = [[self documentViewManager]
+            getCustomDataForAnnotationForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber key:key];
+        resolve(customData);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_custom_data_for_annotation", @"Failed to get custom data for annotation", [self errorFromException:exception]);
     }
 }
 
@@ -470,6 +588,20 @@ RCT_REMAP_METHOD(gotoLastPage,
     }
 }
 
+RCT_REMAP_METHOD(showGoToPageView,
+                showGoToPageViewForDocumentViewTag: (nonnull NSNumber *) tag
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showGoToPageViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_go_to_page_view", @"Failed to open goto page view", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(closeAllTabs,
                  closeAllTabsForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
@@ -480,7 +612,21 @@ RCT_REMAP_METHOD(closeAllTabs,
         resolve(nil);
     }
     @catch (NSException *exception) {
-        reject(@"export_failed", @"Failed to close all tabs", [self errorFromException:exception]);
+        reject(@"close_all_tabs", @"Failed to close all tabs", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openTabSwitcher,
+                 openTabSwitcherForDocumentViewTag:(nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openTabSwitcherForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_tab_switcher", @"Failed to open tab switcher", [self errorFromException:exception]);
     }
 }
 
@@ -521,6 +667,60 @@ RCT_REMAP_METHOD(rotateCounterClockwise,
     }
     @catch (NSException *exception) {
         reject(@"rotate_counter_clockwise", @"Failed to rotate counter-clockwise", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(undo,
+                 undoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] undoForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"undo", @"Failed to undo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(redo,
+                 redoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] redoForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"redo", @"Failed to redo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canUndo,
+                 canUndoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canUndo = [[self documentViewManager] canUndoForDocumentViewTag:tag];
+        resolve(@(canUndo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canUndo", @"Failed to get canUndo", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(canRedo,
+                 canRedoForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL canRedo = [[self documentViewManager] canRedoForDocumentViewTag:tag];
+        resolve(@(canRedo));
+    }
+    @catch (NSException *exception) {
+        reject(@"canRedo", @"Failed to canRedo", [self errorFromException:exception]);
     }
 }
 
@@ -665,6 +865,96 @@ RCT_REMAP_METHOD(getCanvasSize,
     }
 }
 
+RCT_REMAP_METHOD(isReflowMode,
+                 isReflowModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        BOOL inReflow = [[self documentViewManager] isReflowModeForDocumentViewTag:tag];
+        resolve(@(inReflow));
+    }
+    @catch (NSException *exception) {
+        reject(@"is_reflow_mode", @"Failed to get is reflow mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(toggleReflow,
+                 toggleReflowForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] toggleReflow:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"toggle_reflow", @"Failed to toggle reflow", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(showViewSettings,
+                 showViewSettingsForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showViewSettingsForDocumentViewTag:tag rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_view_settings", @"Failed to show view settings", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(showAddPagesView,
+                 showAddPagesViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] showAddPagesViewForDocumentViewTag:tag rect:rect];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"show_add_pages", @"Failed to show add pages view", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(shareCopy,
+                 shareCopyForDocumentViewTag: (nonnull NSNumber *)tag
+                 rect:(NSDictionary *)rect
+                 withFlattening:(BOOL)flattening
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] shareCopyForDocumentViewTag:tag rect:rect withFlattening:flattening];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"share_copy", @"Failed to share a copy", [self errorFromException:exception]);
+    }
+}
+
+
+
+RCT_REMAP_METHOD(openThumbnailsView,
+                 openThumbnailsViewForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openThumbnailsViewForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_thumbnails_view", @"Failed to open thumbnails view", [self errorFromException:exception]);
+    }
+}
+
 #pragma mark - Coordinate
 
 RCT_REMAP_METHOD(convertScreenPointsToPagePoints,
@@ -725,21 +1015,6 @@ RCT_REMAP_METHOD(setOverprint,
     }
     @catch (NSException *exception) {
         reject(@"set_overprint", @"Failed to set overprint", [self errorFromException:exception]);
-    }
-}
-
-RCT_REMAP_METHOD(setUrlExtraction,
-                 setUrlExtractionForDocumentViewTag: (nonnull NSNumber *) tag
-                 urlExtraction:(BOOL)urlExtraction
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejector:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        [[self documentViewManager] setUrlExtractionForDocumentViewTag:tag urlExtraction:urlExtraction];
-        resolve(nil);
-    }
-    @catch (NSException *exception) {
-        reject(@"set_url_extraction", @"Failed to set url extraction", [self errorFromException:exception]);
     }
 }
 
@@ -866,6 +1141,50 @@ RCT_REMAP_METHOD(cancelFindText,
     }
 }
 
+RCT_REMAP_METHOD(openSearch,
+                 openSearchForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openSearchForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_search", @"Failed to open search", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(startSearchMode,
+                 startSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 searchString:(NSString *)searchString
+                 matchCase:(BOOL)matchCase
+                 matchWholeWord:(BOOL)matchWholeWord
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] startSearchModeForDocumentViewTag:tag searchString:searchString matchCase:matchCase matchWholeWord:matchWholeWord];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"start_search_mode", @"Failed to start search mode", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(exitSearchMode,
+                 exitSearchModeForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] exitSearchModeForDocumentViewTag:tag];
+    }
+    @catch (NSException *exception) {
+        reject(@"exit_search_mode", @"Failed to exit text search mode", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getSelection,
                  getSelectionForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber
@@ -981,6 +1300,78 @@ RCT_REMAP_METHOD(selectAll,
         reject(@"select_all", @"Failed to select all", [self errorFromException:exception]);
     }
 }
+
+RCT_REMAP_METHOD(openOutlineList,
+                 openOutlineListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openOutlineListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_outline_list_failed", @"Failed to open outline list", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openLayersList,
+                 openLayersListForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openLayersListForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_layers_list_failed", @"Failed to open layers list", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(openNavigationLists,
+                 openNavigationListsForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] openNavigationListsForDocumentViewTag:tag];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"open_navigation_lists_failed", @"Failed to open navigation lists", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSavedSignatures,
+                 getSavedSignaturesForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSArray *signatures = [[self documentViewManager] getSavedSignaturesForDocumentViewTag:tag];
+        resolve(signatures);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signatures_failed", @"Failed to get saved signatures", [self errorFromException:exception]);
+    }
+}
+
+RCT_REMAP_METHOD(getSavedSignatureFolder,
+                 getSavedSignatureFolderForDocumentViewTag: (nonnull NSNumber *)tag
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *folder = [[self documentViewManager] getSavedSignatureFolderForDocumentViewTag:tag];
+        resolve(folder);
+    }
+    @catch (NSException *exception) {
+        reject(@"get_saved_signature_folder_failed", @"Failed to get saved signatures folder", [self errorFromException:exception]);
+    }
+}
+
+
 
 #pragma mark - Collaboration
 

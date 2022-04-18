@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "Node",
+        "target": "ESNext",
+        "jsx": "react-native",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "declaration": false,
+        "outDir": "./lib",
+        "strict": true,
+        "noEmitOnError": true,
+    },
+    "include": ["index.ts", "src/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+}

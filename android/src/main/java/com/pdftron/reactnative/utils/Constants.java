@@ -21,6 +21,14 @@ public final class Constants {
     public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
     public static final String ON_TEXT_SEARCH_START = "onTextSearchStart";
     public static final String ON_TEXT_SEARCH_RESULT = "onTextSearchResult";
+    public static final String ON_UNDO_REDO_STATE_CHANGED = "onUndoRedoStateChanged";
+    public static final String ON_PAGE_MOVED = "onPageMoved";
+    public static final String ON_PAGES_ADDED = "onPagesAdded";
+    public static final String ON_PAGES_REMOVED = "onPagesRemoved";
+    public static final String ON_PAGES_ROTATED = "onPagesRotated";
+    public static final String ON_TAB_CHANGED = "onTabChanged";
+    public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
+    public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
@@ -32,6 +40,8 @@ public final class Constants {
     public static final String BUTTON_THUMBNAIL_SLIDER = "thumbnailSlider";
     public static final String BUTTON_SAVE_COPY = "saveCopyButton";
     public static final String BUTTON_EDIT_PAGES = "editPagesButton";
+    public static final String BUTTON_DIGITAL_SIGNATURE = "digitalSignatureButton";
+    public static final String BUTTON_VIEW_LAYERS = "viewLayersButton";
     public static final String BUTTON_PRINT = "printButton";
     public static final String BUTTON_CLOSE = "closeButton";
     public static final String BUTTON_FORM_TOOLS = "formToolsButton";
@@ -45,6 +55,13 @@ public final class Constants {
     public static final String BUTTON_CROP_PAGE = "cropPageButton";
     public static final String BUTTON_UNDO = "undo";
     public static final String BUTTON_REDO = "redo";
+    public static final String BUTTON_SAVE_IDENTICAL_COPY = "saveIdenticalCopyButton";
+    public static final String BUTTON_SAVE_FLATTENED_COPY = "saveFlattenedCopyButton";
+    public static final String BUTTON_SAVE_REDUCED_COPY = "saveReducedCopyButton";
+    public static final String BUTTON_SAVE_CROPPED_COPY = "saveCroppedCopyButton";
+    public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
+    public static final String BUTTON_TABS = "tabsButton";
+    public static final String BUTTON_FILE_ATTACHMENT = "fileAttachmentButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
@@ -65,6 +82,8 @@ public final class Constants {
     public static final String TOOL_BUTTON_CALLOUT = "calloutToolButton";
     public static final String TOOL_BUTTON_STAMP = "stampToolButton";
     public static final String TOOL_BUTTON_EDIT = "editToolButton";
+    public static final String TOOL_BUTTON_ADD_PAGE = "addPageButton";
+    public static final String TOOL_BUTTON_INSERT_PAGE = "insertPageButton";
 
     // TOOLS
     public static final String TOOL_ANNOTATION_CREATE_FREE_HAND = "AnnotationCreateFreeHand";
@@ -87,7 +106,9 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT = "AnnotationCreateDistanceMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_PERIMETER_MEASUREMENT = "AnnotationCreatePerimeterMeasurement";
     public static final String TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT = "AnnotationCreateAreaMeasurement";
+    public static final String TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT = "AnnotationCreateRectAreaMeasurement";
     public static final String TOOL_TEXT_SELECT = "TextSelect";
+    public static final String TOOL_MULTI_SELECT = "MultiSelect";
     public static final String TOOL_ANNOTATION_EDIT = "AnnotationEdit";
     public static final String TOOL_ANNOTATION_CREATE_SOUND = "AnnotationCreateSound";
     public static final String TOOL_PAN = "Pan";
@@ -106,6 +127,11 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_RUBBER_STAMP = "AnnotationCreateRubberStamp";
     public static final String TOOL_ANNOTATION_ERASER_TOOL = "AnnotationEraserTool";
     public static final String TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER = "AnnotationCreateFreeHighlighter";
+    public static final String TOOL_ANNOTATION_CREATE_SMART_PEN = "AnnotationCreateSmartPen";
+    public static final String TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE = "AnnotationCreateFreeTextDate";
+    public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
+    public static final String TOOL_INSERT_PAGE = "InsertPage";
+    public static final String TOOL_FORM_FILL = "FormFill";
 
     // Field types
     public static final String FIELD_TYPE_UNKNOWN = "unknown";
@@ -134,6 +160,11 @@ public final class Constants {
     public static final String TOOLBAR_KEY_ICON = "icon";
     public static final String TOOLBAR_KEY_ITEMS = "items";
 
+    // Custom button
+    public static final String TOOLBAR_ITEM_KEY_ID = "id";
+    public static final String TOOLBAR_ITEM_KEY_NAME = "name";
+    public static final String TOOLBAR_ITEM_KEY_ICON = "icon";
+
     // FIT MODES
     public static final String FIT_MODE_FIT_PAGE = "FitPage";
     public static final String FIT_MODE_FIT_WIDTH = "FitWidth";
@@ -147,6 +178,11 @@ public final class Constants {
     public static final String LAYOUT_MODE_FACING_CONTINUOUS = "FacingContinuous";
     public static final String LAYOUT_MODE_FACING_COVER = "FacingCover";
     public static final String LAYOUT_MODE_FACING_COVER_CONTINUOUS = "FacingCoverContinuous";
+
+    // ERASER TYPES
+    public static final String ANNOTATION_ERASER = "annotationEraser";
+    public static final String HYBRID_ERASER = "hybrideEraser";
+    public static final String INK_ERASER = "inkEraser";
 
     // MENU ID STRINGS
     public static final String MENU_ID_STRING_STYLE = "style";
@@ -220,14 +256,23 @@ public final class Constants {
     public static final String MENU_ID_STRING_SIGN_AND_SAVE = "signAndSave";
     public static final String MENU_ID_STRING_THICKNESS = "thickness";
     public static final String MENU_ID_STRING_TRANSLATE = "translate";
-    public static final String MENU_ID_STRING_TYPE = "type";
     public static final String MENU_ID_STRING_UNGROUP = "ungroup";
+    public static final String MENU_ID_STRING_DUPLICATE = "duplicate";
 
+    // Thumbnails
     public static final String THUMBNAIL_FILTER_MODE_ANNOTATED = "annotated";
     public static final String THUMBNAIL_FILTER_MODE_BOOKMARKED = "bookmarked";
+    public static final String THUMBNAIL_INSERT_PAGES = "thumbnailsInsertPages";
+    public static final String THUMBNAIL_EXPORT_PAGES = "thumbnailsExportPages";
+    public static final String THUMBNAIL_DUPLICATE_PAGES = "thumbnailsDuplicatePages";
+    public static final String THUMBNAIL_ROTATE_PAGES = "thumbnailsRotatePages";
+    public static final String THUMBNAIL_DELETE_PAGES = "thumbnailsDeletePages";
+    public static final String THUMBNAIL_INSERT_FROM_IMAGE = "thumbnailsInsertFromImage";
+    public static final String THUMBNAIL_INSERT_FROM_DOCUMENT = "thumbnailsInsertFromDocument";
 
     public static final String VIEW_MODE_CROP = "viewModeCrop";
     public static final String VIEW_MODE_ROTATION = "viewModeRotation";
+    public static final String VIEW_MODE_COLORMODE = "viewModeColorMode";
 
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
@@ -263,6 +308,7 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CONTENT_RECT = "contentRect";
     public static final String KEY_ANNOTATION_TYPE = "type";
     public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
+    public static final String KEY_ANNOTATION_STROKE_COLOR = "strokeColor";
 
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
@@ -274,6 +320,7 @@ public final class Constants {
     public static final String KEY_FIELD_NAME = "fieldName";
     public static final String KEY_FIELD_VALUE = "fieldValue";
     public static final String KEY_FIELD_TYPE = "fieldType";
+    public static final String KEY_FIELD_HAS_APPEARANCE = "fieldHasAppearance";
     public static final String KEY_ERROR = "error";
 
     public static final String KEY_ANNOTATION_MENU = "annotationMenu";
@@ -305,8 +352,12 @@ public final class Constants {
 
     public static final String KEY_BOOKMARK_JSON = "bookmarkJson";
 
+    public static final String KEY_PAGE_NUMBERS = "pageNumbers";
+
     public static final String KEY_PREVIOUS_TOOL = "previousTool";
     public static final String KEY_TOOL = "tool";
+
+    public static final String KEY_CURRENT_TAB = "currentTab";
 
     // Color RGBA
     public static final String COLOR_RED = "red";
@@ -337,4 +388,21 @@ public final class Constants {
     public static final String KEY_COLOR_POST_PROCESS_MODE_INVERT = "invert";
     public static final String KEY_COLOR_POST_PROCESS_MODE_GRADIENT_MAP = "gradientMap";
     public static final String KEY_COLOR_POST_PROCESS_MODE_NIGHT_MODE = "nightMode";
+
+    // ReflowOrientation
+    public static final String KEY_REFLOW_ORIENTATION_HORIZONTAL = "horizontal";
+    public static final String KEY_REFLOW_ORIENTATION_VERTICAL = "vertical";
+
+    // Export format
+    public static final String KEY_EXPORT_FORMAT_BMP = "BMP";
+    public static final String KEY_EXPORT_FORMAT_JPEG = "JPEG";
+    public static final String KEY_EXPORT_FORMAT_PNG = "PNG";
+
+    // AnnotationManagerEditMode
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_EDIT_MODE_ALL = "all";
+
+    // AnnotationManagerUndoMode
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_OWN = "own";
+    public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL = "all";
 }

@@ -10,7 +10,10 @@ import android.webkit.URLUtil;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.pdftron.pdf.PDFDraw;
+import com.pdftron.pdf.Page;
 import com.pdftron.pdf.utils.Utils;
+import com.pdftron.pdf.PDFDoc;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +24,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
+
+import static com.pdftron.reactnative.utils.Constants.*;
 
 public class ReactUtils {
 
@@ -132,5 +137,35 @@ public class ReactUtils {
             }
         }
         return array;
+    }
+
+    public static String exportAsImageHelper(PDFDoc doc, int pageNumber, double dpi, String exportFormat) {
+        PDFDraw draw = null;
+        try {
+            draw = new PDFDraw();
+            draw.setDPI(dpi);
+            if (pageNumber <= doc.getPageCount() && pageNumber >= 1) {
+                Page pg = doc.getPage(pageNumber);
+                String ext = "png";
+                if (KEY_EXPORT_FORMAT_BMP.equals(exportFormat)) {
+                    ext = "bmp";
+                } else if (KEY_EXPORT_FORMAT_JPEG.equals(exportFormat)) {
+                    ext = "jpeg";
+                }
+                File tempFile = File.createTempFile("tmp", "." + ext);
+                draw.export(pg, tempFile.getAbsolutePath(), exportFormat);
+                return tempFile.getAbsolutePath();
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            if (draw != null) {
+                try {
+                    draw.destroy();
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 }

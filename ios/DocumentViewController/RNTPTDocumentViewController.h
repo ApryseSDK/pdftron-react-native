@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)rnt_documentViewControllerIsNavigationBarEnabled:(PTDocumentBaseViewController *)documentViewController;
 
+- (BOOL)rnt_documentViewControllerAreKeyboardShortcutsEnabled:(PTDocumentBaseViewController *)documentViewController;
+
 - (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForAnnotationSelectionMenu:(UIMenuController *)menuController forAnnotation:(PTAnnot *)annot;
 
 - (BOOL)rnt_documentViewController:(PTDocumentBaseViewController *)documentViewController filterMenuItemsForLongPressMenu:(UIMenuController *)menuController;
@@ -30,6 +32,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)rnt_documentViewControllerTextSearchDidStart:(PTDocumentBaseViewController *)documentViewController;
 
 - (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection;
+
+- (void)rnt_documentViewControllerPageDidMove:(PTDocumentBaseViewController *)documentViewController pageMovedFromPageNumber:(int)oldPageNumber toPageNumber:(int)newPageNumber;
+
+- (void)rnt_documentViewControllerPageAdded:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber;
+
+- (void)rnt_documentViewControllerPageRemoved:(PTDocumentBaseViewController *)documentViewController pageNumber:(int)pageNumber;
+
+- (void)rnt_documentViewControllerDidRotatePages:(PTDocumentBaseViewController *)documentViewController forPageNumbers:(NSIndexSet *)pageNumbers;
 
 @end
 
