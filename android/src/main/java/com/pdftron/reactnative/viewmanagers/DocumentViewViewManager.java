@@ -416,6 +416,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageStackEnabled(pageStackEnabled);
     }
 
+    @ReactProp(name = "hideToolbarsOnAppear")
+    public void setHideToolbarsOnAppear(DocumentView documentView, boolean hideToolbarsOnAppear) {
+        documentView.setHideToolbarsOnAppear(hideToolbarsOnAppear);
+    }
+    
     @ReactProp(name = "showQuickNavigationButton")
     public void setShowQuickNavigationButton(DocumentView documentView, boolean showQuickNavigationButton) {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);

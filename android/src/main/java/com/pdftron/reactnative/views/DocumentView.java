@@ -164,6 +164,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    // RN specific behaviour
+    private boolean mHideToolbarsOnAppear;
+
     private boolean mReadOnly;
 
     private boolean mFragmentTransactionFinished;
@@ -1030,6 +1033,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         mBuilder = mBuilder.pageStackEnabled(pageStackEnabled);
     }
 
+    public void setHideToolbarsOnAppear(boolean hideToolbarsOnAppear) {
+        mHideToolbarsOnAppear = hideToolbarsOnAppear;
+    }
+    
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
         mBuilder = mBuilder.pageStackEnabled(showQuickNavigationButton);
     }
@@ -2953,6 +2960,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     });
                 }
             }
+        }
+
+        if (mHideToolbarsOnAppear) {
+            mPdfViewCtrlTabHostFragment.setToolbarsVisible(false, false);
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);

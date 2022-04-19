@@ -794,6 +794,19 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 />
 ```
 
+#### hideToolbarsOnAppear
+bool, optional, defaults to false, android only
+
+Defines whether the toolbars will be gone at startup.
+
+Android 
+
+```js
+<DocumentView
+  hideToolbarsOnAppear={true}
+/>
+```
+
 #### topAppNavBarRightBar
 array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, only the tabs, search, view mode, thumbnails, outline, undo, share, reflow, edit pages, save copy, print, file attachment, layers, digital signatures and close buttons are supported on Android
 
