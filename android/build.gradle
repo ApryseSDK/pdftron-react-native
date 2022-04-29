@@ -23,12 +23,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "29.0.2"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -57,7 +57,7 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.1'
 
-    implementation "com.pdftron:pdftron:9.2.2-beta12"
-    implementation "com.pdftron:tools:9.2.2-beta12"
-    implementation "com.pdftron:collab:9.2.2-beta12"
+    implementation "com.pdftron:pdftron:9.2.2"
+    implementation "com.pdftron:tools:9.2.2"
+    implementation "com.pdftron:collab:9.2.2"
 }
