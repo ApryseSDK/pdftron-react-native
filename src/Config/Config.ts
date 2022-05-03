@@ -48,6 +48,7 @@ export const Config = {
     redo: 'redo',
     addPageButton: 'addPageButton',
     insertPageButton: 'insertPageButton',
+    saveCroppedCopyButton: 'saveCroppedCopyButton',
 
     // iOS only
     InsertBlankPage: "insertBlankPageButton",
@@ -58,7 +59,6 @@ export const Config = {
 
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
-    saveCroppedCopyButton: 'saveCroppedCopyButton',
     savePasswordCopyButton: 'savePasswordCopyButton',
     tabsButton: 'tabsButton',
     fileAttachmentButton: 'fileAttachmentButton',
