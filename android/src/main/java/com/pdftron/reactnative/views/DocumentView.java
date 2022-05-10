@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -2106,6 +2107,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
         }
 
+        mPdfViewCtrlTabHostFragment.removeOnToolbarChangedListener(mOnToolbarChangedListener);
+
         ActionUtils.getInstance().setActionInterceptCallback(null);
 
         super.onDetachedFromWindow();
@@ -2447,6 +2450,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 return true;
             }
             return false;
+        }
+    };
+
+    private final PdfViewCtrlTabHostFragment2.OnToolbarChangedListener mOnToolbarChangedListener = new PdfViewCtrlTabHostFragment2.OnToolbarChangedListener() {
+        @Override
+        public void onToolbarChanged(String newToolbar) {
+            Log.d("pdftron", "toolbar changed: " + newToolbar);
         }
     };
 
@@ -2911,6 +2921,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
+
+        mPdfViewCtrlTabHostFragment.addOnToolbarChangedListener(mOnToolbarChangedListener);
 
         // collab
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment2) {
