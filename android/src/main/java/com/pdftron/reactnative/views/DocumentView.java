@@ -1036,7 +1036,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setHideToolbarsOnAppear(boolean hideToolbarsOnAppear) {
         mHideToolbarsOnAppear = hideToolbarsOnAppear;
     }
-    
+
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
         mBuilder = mBuilder.pageStackEnabled(showQuickNavigationButton);
     }
@@ -2736,7 +2736,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
-    private StampManager.SignatureListener mSignatureListener = new StampManager.SignatureListener() {
+    private final StampManager.SignatureListener mSignatureListener = new StampManager.SignatureListener() {
         @Override
         public void onSavedSignatureDeleted() {
             WritableMap params = Arguments.createMap();
