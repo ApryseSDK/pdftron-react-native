@@ -29,6 +29,7 @@ public final class Constants {
     public static final String ON_TAB_CHANGED = "onTabChanged";
     public static final String ON_ANNOTATION_FLATTENED = "onAnnotationFlattened";
     public static final String ON_ANNOTATION_TOOLBAR_ITEM_PRESS = "onAnnotationToolbarItemPress";
+    public static final String ON_SAVED_SIGNATURES_CHANGED = "onSavedSignaturesChanged";
 
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
