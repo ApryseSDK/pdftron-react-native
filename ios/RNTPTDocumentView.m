@@ -4820,10 +4820,10 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat transparent:(BOOL)transparent
 {
     PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
+    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat transparent:transparent];
 }
 
 #pragma mark - Tabs

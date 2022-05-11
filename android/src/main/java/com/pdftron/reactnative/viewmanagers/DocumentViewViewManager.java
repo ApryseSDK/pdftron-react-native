@@ -1217,10 +1217,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public String exportAsImage(final int tag, int pageNumber, double dpi, String exportFormat) throws PDFNetException {
+    public String exportAsImage(final int tag, int pageNumber, double dpi, String exportFormat, boolean transparent) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.exportAsImage(pageNumber, dpi, exportFormat);
+            return documentView.exportAsImage(pageNumber, dpi, exportFormat, transparent);
         } else {
             throw new PDFNetException("", 0L, getName(), "exportAsImage", "Unable to find DocumentView.");
         }

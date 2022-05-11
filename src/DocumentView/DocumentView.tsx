@@ -12,12 +12,12 @@ const { DocumentViewManager } = NativeModules;
 import { Config } from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
 
-/** 
+/**
  * Object containing PropTypes types for {@link DocumentView} class.
  * Also used to generate prop types for TS users.
- * 
+ *
  * To represent functions, please use {@link func}.
- * To represent "one of Config.Buttons values" or "an array of 
+ * To represent "one of Config.Buttons values" or "an array of
  * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
  */
 const propTypes = {
@@ -168,7 +168,7 @@ type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
 /**
 * Creates a custom PropType for functions.
 *
-* If the resulting PropType is used to generate prop types for TS users, 
+* If the resulting PropType is used to generate prop types for TS users,
 * type checking for function parameters and return values will be provided.
 * @returns {Requireable<T>} A custom PropType constant.
 * @example
@@ -188,7 +188,7 @@ function func<T>(): Requireable<T> {
   return t;
 }
 
-/** 
+/**
  * Creates a custom PropType representing any value from given object(s).
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
@@ -204,7 +204,7 @@ function oneOf<T>(obj: object, ...rest: object[]): Requireable<T> {
   return PropTypes.oneOf(Object.values(obj));
 }
 
-/** 
+/**
  * Creates a custom PropType representing any array containing values from given object(s).
  * @param {object} obj An object containing values.
  * @param {...object} rest Indefinite number of other objects containing values.
@@ -430,7 +430,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     }
     return Promise.resolve();
   }
-  
+
 
   setToolMode = (toolMode: Config.Tools): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
@@ -553,7 +553,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.
-  * 
+  *
   */
   setValueForFields = (fieldsMap: Record<string, string | boolean | number>): Promise<void> => {
     return this.setValuesForFields(fieldsMap);
@@ -578,7 +578,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
   * note: this function exists for supporting the old version. It simply calls setFlagsForAnnotations.
-  * 
+  *
   */
   setFlagForAnnotations = (annotationFlagList: Array<AnnotOptions.AnnotationFlag>): Promise<void> => {
     return this.setFlagsForAnnotations(annotationFlagList);
@@ -602,7 +602,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   /**
   * note: this function exists for supporting the old version. It simply calls setPropertiesForAnnotation.
-  * 
+  *
   */
   setPropertyForAnnotation = (id: string, pageNumber: number, propertyMap: AnnotOptions.AnnotationProperties): Promise<void> => {
     return this._viewerRef.setPropertiesForAnnotation(id, pageNumber, propertyMap);
@@ -1042,10 +1042,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
+  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, transparent: boolean): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
+      return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat, transparent);
     }
     return Promise.resolve();
   }
