@@ -799,6 +799,15 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)savedSignaturesChanged:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onSavedSignaturesChanged" : @"onSavedSignaturesChanged",
+        });
+    }
+}
+
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields
 {
     if (sender.onChange) {
