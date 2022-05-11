@@ -212,7 +212,7 @@ pageNumber | int | the page to be converted; if the value does not refer to a va
 dpi | double | the output image resolution
 exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.ts) constants
 filePath | string | local file path to pdf
-transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or opaque white
+transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or the color of the PDF page (typically white)
 
 Returns a Promise.
 
