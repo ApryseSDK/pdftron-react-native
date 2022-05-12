@@ -1207,6 +1207,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  clearSavedViewerState = (): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.clearSavedViewerState(tag);
+    }
+    return Promise.resolve();
+  }
+
   _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };
