@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,7 +17,6 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
-import com.pdftron.pdf.utils.PdfViewCtrlTabsManager;
 import com.pdftron.pdf.utils.ShortcutHelper;
 import com.pdftron.reactnative.views.DocumentView;
 
@@ -1395,16 +1393,6 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getSavedSignatureJpgFolder();
         } else {
             throw new PDFNetException("", 0L, getName(), "getSavedSignatureJpgFolder", "Unable to find DocumentView.");
-        }
-    }
-
-    public void clearSavedViewerState(int tag) throws PDFNetException {
-        DocumentView documentView = mDocumentViews.get(tag);
-        if (documentView != null) {
-            PdfViewCtrlTabsManager.getInstance().cleanup();
-            PdfViewCtrlTabsManager.getInstance().clearAllPdfViewCtrlTabInfo(documentView.getContext());
-        } else {
-            throw new PDFNetException("", 0L, getName(), "clearSavedViewerState", "Unable to find DocumentView.");
         }
     }
 
