@@ -1868,6 +1868,18 @@ Defines whether to show the option to pick images in the signature dialog.
 />
 ```
 
+#### onSavedSignaturesChanged
+function, optional
+
+This function is called when the number of saved signatures has been changed (added or deleted).
+```js
+<DocumentView
+  onSavedSignaturesChanged={() => {
+    console.log('Number of saved signatures changed');
+  }}
+/>
+```
+
 ### Thumbnail Browser
 
 #### hideThumbnailFilterModes
