@@ -14,12 +14,12 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
+import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.PdfViewCtrlTabsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
-
-import static com.pdftron.reactnative.utils.Constants.*;
 
 import java.io.File;
 
@@ -210,6 +210,18 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             String imagePath = ReactUtils.exportAsImageHelper(doc, pageNumber, dpi, exportFormat);
             doc.unlockRead();
             promise.resolve(imagePath);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void clearSavedViewerState(final Promise promise) {
+        try {
+            PdfViewCtrlTabsManager.getInstance().cleanup();
+            PdfViewCtrlTabsManager.getInstance().clearAllPdfViewCtrlTabInfo(getReactApplicationContext());
+            PdfViewCtrlSettingsManager.setOpenUrlAsyncCache(getReactApplicationContext(), "");
+            promise.resolve(null);
         } catch (Exception e) {
             promise.reject(e);
         }

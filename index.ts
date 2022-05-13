@@ -16,6 +16,7 @@ interface RNPdftron {
             excelMaxAllowedCellCount?: number, locale?: string}) : Promise<string>;
     pdfFromOfficeTemplate(docxPath: string, json: object) : Promise<string>;
     exportAsImage(pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, filePath: string) : Promise<string>;
+    clearSavedViewerState() : Promise<void>;
 }
 
 const RNPdftron : RNPdftron = NativeModules.RNPdftron;
