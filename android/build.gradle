@@ -57,7 +57,7 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.1'
 
-    implementation "com.pdftron:pdftron:9.2.3-beta01"
-    implementation "com.pdftron:tools:9.2.3-beta01"
-    implementation "com.pdftron:collab:9.2.3-beta01"
+    implementation "com.pdftron:pdftron:9.2.3-beta04"
+    implementation "com.pdftron:tools:9.2.3-beta04"
+    implementation "com.pdftron:collab:9.2.3-beta04"
 }
