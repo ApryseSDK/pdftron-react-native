@@ -92,12 +92,9 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
    ```diff
    android {
+       ndkVersion rootProject.ext.ndkVersion
+   
        compileSdkVersion rootProject.ext.compileSdkVersion
-
-       compileOptions {
-           sourceCompatibility JavaVersion.VERSION_1_8
-           targetCompatibility JavaVersion.VERSION_1_8
-       }
 
        defaultConfig {
            applicationId "com.reactnativesample"
@@ -105,48 +102,38 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
            targetSdkVersion rootProject.ext.targetSdkVersion
            versionCode 1
            versionName "1.0"
+           buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
    +       multiDexEnabled true
    +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
        }
        ...
    }
+   ...
 
    dependencies {
    +   implementation "androidx.multidex:multidex:2.0.1"
        ...
    }
    ```
-
-2. Add the following to your `android/build.gradle` file:
-   ```diff
-   buildscript {
-       ext {
-   	buildToolsVersion = "28.0.3"
-   +	minSdkVersion = 21
-   	compileSdkVersion = 28
-   	targetSdkVersion = 28
-       }
-       // ...
-   }
-   ```
-3. In your `android/gradle.properties` file, add the following line:
+   
+2. In your `android/gradle.properties` file, add the following line:
    ```diff
    # Add the PDFTRON_LICENSE_KEY variable here.
    # For trial purposes leave it blank.
    # For production add a valid commercial license key.
    PDFTRON_LICENSE_KEY=
    ```
-4. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
+3. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
    ```diff
    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-       package="com.myapp">
+     package="com.myapp">
 
-   	<uses-permission android:name="android.permission.INTERNET" />
-   	<!-- Required to read and write documents from device storage -->
-   +	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-   	<!-- Required if you want to record audio annotations -->
-   +	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+     <uses-permission android:name="android.permission.INTERNET" />
+     <!-- Required to read and write documents from device storage -->
+   + <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <!-- Required if you want to record audio annotations -->
+   + <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
      <application
        ...
@@ -159,12 +146,10 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
    +       android:value="${pdftronLicenseKey}"/>
 
        <activity
-         android:name=".MainActivity"
-         android:label="@string/app_name"
-         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+         ...
    -     android:windowSoftInputMode="adjustResize"
    +     android:windowSoftInputMode="adjustPan"
-   +     android:theme="@style/PDFTronAppTheme">
+   +     android:exported="true">
          <intent-filter>
              <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.LAUNCHER" />
@@ -175,7 +160,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
    </manifest>
    ```
 
-5. In your `android/app/src/main/java/com/myapp/MainApplication.java` file, change `Application` to `MultiDexApplication`:
+4. In your `android/app/src/main/java/com/myapp/MainApplication.java` file, change `Application` to `MultiDexApplication`:
 
    ```diff
    - import android.app.Application;
@@ -185,8 +170,8 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
    + public class MainApplication extends MultiDexApplication implements ReactApplication {
    ```
 
-3. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
-7. Finally in the root project directory, run `react-native run-android`.
+5. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
+6. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 #### Note — January 2022
