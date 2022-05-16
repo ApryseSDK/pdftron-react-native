@@ -727,6 +727,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setAnnotationToolbarItemEnabled(int tag, int itemId, boolean enable) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setAnnotationToolbarItemEnabled(itemId, enable);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setAnnotationToolbarItemEnabled", "Unable to find DocumentView.");
+        }
+    }
+
     public boolean handleBackButton(int tag) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
