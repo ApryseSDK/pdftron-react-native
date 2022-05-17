@@ -1047,10 +1047,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
-  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat): Promise<void | string> => {
+  exportAsImage = (pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, transparent: boolean = false): Promise<void | string> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat);
+      return DocumentViewManager.exportAsImage(tag, pageNumber, dpi, exportFormat, transparent);
     }
     return Promise.resolve();
   }

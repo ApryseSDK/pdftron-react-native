@@ -224,6 +224,7 @@ pageNumber | int | the page to be converted; if the value does not refer to a va
 dpi | double | the output image resolution
 exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.ts) constants
 filePath | string | local file path to pdf
+transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or the color of the PDF page (typically white)
 
 Returns a Promise.
 
@@ -232,7 +233,7 @@ Name | Type | Description
 resultImagePath | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
+RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf", false).then((resultImagePath) => {
   console.log('export', resultImagePath);
 });
 ```
@@ -3719,6 +3720,7 @@ Name | Type | Description
 pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
 exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.ts) constants
+transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or opaque white
 
 Returns a Promise.
 
@@ -3727,7 +3729,7 @@ Name | Type | Description
 path | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+this._viewer.exportAsImage(1, 92, Config.ExportFormat.BMP, false).then((path) => {
   console.log('export', path);
 });
 ```
