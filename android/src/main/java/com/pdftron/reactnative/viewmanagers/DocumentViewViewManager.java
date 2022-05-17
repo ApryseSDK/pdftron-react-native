@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 

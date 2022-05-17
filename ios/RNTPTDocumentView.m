@@ -157,6 +157,9 @@ NS_ASSUME_NONNULL_END
 
     [PTOverrides overrideClass:[PTAnnotationReplyViewController class]
                      withClass:[RNTPTAnnotationReplyViewController class]];
+    
+    [PTOverrides overrideClass:[PTDigitalSignatureTool class]
+                     withClass:[RNTPTDigitalSignatureTool class]];
 
     _tempFilePaths = [[NSMutableArray alloc] init];
     
@@ -3450,6 +3453,13 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (void)rnt_documentViewControllerSavedSignaturesChanged:(PTDocumentBaseViewController *)documentViewController
+{
+    if ([self.delegate respondsToSelector:@selector(savedSignaturesChanged:)]) {
+        [self.delegate savedSignaturesChanged:self];
+    }
+}
+
 - (NSDictionary<NSString *, id> *)getAnnotationData:(PTAnnot *)annot pageNumber:(int)pageNumber pdfViewCtrl:(PTPDFViewCtrl *)pdfViewCtrl {
     if (![annot IsValid]) {
         return nil;
@@ -5923,3 +5933,33 @@ NS_ASSUME_NONNULL_END
 
 @end
 
+#pragma mark - RNTPTDigitalSignatureTool
+
+@implementation RNTPTDigitalSignatureTool
+
+- (void)signaturesManagerNumberOfSignaturesDidChange:(PTSignaturesManager *)signaturesManager numberOfSignatures:(int)numberOfSignatures
+{
+    [super signaturesManagerNumberOfSignaturesDidChange:signaturesManager numberOfSignatures:numberOfSignatures];
+    
+    if ([self.toolManager.viewController isKindOfClass:[RNTPTDocumentViewController class]]) {
+        RNTPTDocumentViewController *viewController = (RNTPTDocumentViewController *) self.toolManager.viewController;
+        
+        if ([viewController.delegate respondsToSelector:@selector(rnt_documentViewControllerSavedSignaturesChanged:)]) {
+            [viewController.delegate rnt_documentViewControllerSavedSignaturesChanged:viewController];
+        }
+    } else if ([self.toolManager.viewController isKindOfClass:[RNTPTDocumentController class]]) {
+        RNTPTDocumentController *viewController = (RNTPTDocumentController *) self.toolManager.viewController;
+        
+        if ([viewController.delegate respondsToSelector:@selector(rnt_documentViewControllerSavedSignaturesChanged:)]) {
+            [viewController.delegate rnt_documentViewControllerSavedSignaturesChanged:viewController];
+        }
+    } else if ([self.toolManager.viewController isKindOfClass:[RNTPTCollaborationDocumentController class]]) {
+        RNTPTCollaborationDocumentController *viewController = (RNTPTCollaborationDocumentController *) self.toolManager.viewController;
+        
+        if ([viewController.delegate respondsToSelector:@selector(rnt_documentViewControllerSavedSignaturesChanged:)]) {
+            [viewController.delegate rnt_documentViewControllerSavedSignaturesChanged:viewController];
+        }
+    }
+}
+
+@end

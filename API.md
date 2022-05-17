@@ -98,6 +98,18 @@ RNPdftron.clearRubberStampCache().then(() => {
 });
 ```
 
+### clearSavedViewerState
+Clear the saved view state such as page number, zoom location etc. (Android only).
+This is typically useful when `DocumentView` is in a sub-navigation component and state-saving is not desired across sessions.
+
+Returns a promise.
+
+```js
+RNPdftron.clearSavedViewerState().then(() => {
+  console.log("Viewer state cleared");
+});
+```
+
 ### encryptDocument
 Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
@@ -1854,6 +1866,18 @@ Defines whether to show the option to pick images in the signature dialog.
 ```js
 <DocumentView
   photoPickerEnabled={true}
+/>
+```
+
+#### onSavedSignaturesChanged
+function, optional
+
+This function is called when the number of saved signatures has been changed (added or deleted).
+```js
+<DocumentView
+  onSavedSignaturesChanged={() => {
+    console.log('Number of saved signatures changed');
+  }}
 />
 ```
 

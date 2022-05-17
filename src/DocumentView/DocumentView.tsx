@@ -68,6 +68,7 @@ const propTypes = {
   onAnnotationFlattened: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
   onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
   onAnnotationToolbarItemPress: func<(event: {id: string}) => void>(),
+  onSavedSignaturesChanged: func<() => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
   fitMode: oneOf<Config.FitMode>(Config.FitMode),
@@ -299,6 +300,10 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
         this.props.onAnnotationToolbarItemPress({
           'id': event.nativeEvent.id,
         });
+      }
+    } else if (event.nativeEvent.onSavedSignaturesChanged) {
+      if (this.props.onSavedSignaturesChanged) {
+        this.props.onSavedSignaturesChanged();
       }
     } else if (event.nativeEvent.onDocumentError) {
       if (this.props.onDocumentError || this.props.onError) {
