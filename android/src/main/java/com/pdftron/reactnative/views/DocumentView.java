@@ -840,25 +840,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 }
             }
         }
-        mBuilder.addToolbarBuilder(demoCodeOnly()); // !!
         if (mPdfViewCtrlTabHostFragment != null) {
             mPdfViewCtrlTabHostFragment.setAnnotationToolbars(annotationToolbarBuilders);
         }
-    }
-
-    // !!
-    private AnnotationToolbarBuilder demoCodeOnly() {
-        int id = mToolIdGenerator.getAndIncrement();
-        mToolIdMap.put(id, "demo-button");
-        return AnnotationToolbarBuilder.withTag("Demo-Toolbar") // Identifier for toolbar
-                .setToolbarName("Demo Toolbar") // Name used when displaying toolbar
-                .addToolButton(ToolbarButtonType.INK, 1)
-                .addToolButton(ToolbarButtonType.STICKY_NOTE, 2)
-                .addToolButton(ToolbarButtonType.TEXT_HIGHLIGHT, 3)
-                .addToolStickyButton(ToolbarButtonType.UNDO, DefaultToolbars.ButtonId.UNDO.value())
-                .addToolStickyButton(ToolbarButtonType.REDO, DefaultToolbars.ButtonId.REDO.value())
-                .addCustomStickyButton("info", R.drawable.ic_bx_download, id)
-                ;
     }
 
     private boolean isValidToolbarTag(String tag) {
@@ -2170,8 +2154,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean onToolbarOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         String itemKey = mToolIdMap.get(itemId);
-        // !!
-        setAnnotationToolbarItemEnabled(TOOL_ANNOTATION_CREATE_SIGNATURE, false);
         if (itemKey != null) {
             // this is a custom button
             WritableMap params = Arguments.createMap();
