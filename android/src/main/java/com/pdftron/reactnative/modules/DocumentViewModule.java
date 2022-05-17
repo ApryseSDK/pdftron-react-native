@@ -364,7 +364,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void setAnnotationToolbarItemEnabled(final int tag, final int itemId, final boolean enable, final Promise promise) {
+    public void setAnnotationToolbarItemEnabled(final int tag, final String itemId, final boolean enable, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {

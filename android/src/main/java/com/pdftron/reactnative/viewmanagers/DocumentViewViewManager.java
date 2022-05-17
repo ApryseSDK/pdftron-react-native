@@ -727,7 +727,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public void setAnnotationToolbarItemEnabled(int tag, int itemId, boolean enable) throws PDFNetException {
+    public void setAnnotationToolbarItemEnabled(int tag, String itemId, boolean enable) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
             documentView.setAnnotationToolbarItemEnabled(itemId, enable);

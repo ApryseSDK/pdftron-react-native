@@ -2170,6 +2170,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public boolean onToolbarOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         String itemKey = mToolIdMap.get(itemId);
+        // !!
+        setAnnotationToolbarItemEnabled(TOOL_ANNOTATION_CREATE_SIGNATURE, false);
         if (itemKey != null) {
             // this is a custom button
             WritableMap params = Arguments.createMap();
@@ -3512,10 +3514,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return customData;
     }
 
-    public void setAnnotationToolbarItemEnabled(int itemId, boolean enable) {
+    public void setAnnotationToolbarItemEnabled(String itemId, boolean enable) {
         if (mPdfViewCtrlTabHostFragment != null &&
             mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
-            ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setItemEnabled(itemId, enable);
+            int buttonId = convStringToButtonId(itemId);
+            if (buttonId == 0) {
+                int index = mToolIdMap.indexOfValue(itemId);
+                buttonId = mToolIdMap.keyAt(index);
+            }
+            ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setItemEnabled(buttonId, enable);
         }
     }
 
