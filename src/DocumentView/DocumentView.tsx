@@ -688,7 +688,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   setAnnotationToolbarItemEnabled = (itemId: string, enable: boolean) : Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.setAnnotationToolbarItemEnabled(itemId, enable);
+      return DocumentViewManager.setAnnotationToolbarItemEnabled(tag, itemId, enable);
     }
     return Promise.resolve();
   }

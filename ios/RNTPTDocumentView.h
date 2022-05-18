@@ -583,6 +583,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
     pageNumber:(NSInteger)pageNumber key:(NSString *)key;
 
+- (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable;
+
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 
 - (bool)setCurrentPage:(NSInteger)pageNumber;

@@ -65,6 +65,8 @@
 
 - (NSString *)getCustomDataForAnnotationForDocumentViewTag:(NSNumber *) tag annotationId:(NSString *)annotationId  pageNumber:(NSInteger)pageNumber key:(NSString *)key;
 
+- (void)setAnnotationToolbarItemEnabled:(NSNumber *)tag itemId:(NSString *)itemId enable:(BOOL)enable;
+
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
 
 - (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber;
