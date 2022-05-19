@@ -257,19 +257,6 @@ Example:
 />
 ```
 
-#### source
-string 
-
-The path or url to the document. Wonday compatibility API.
-
-Example:
-
-```js
-<DocumentView
-  source={'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf'}
-/>
-```
-
 #### password
 string, optional
 
@@ -469,24 +456,6 @@ error | string | Error message produced
 />
 ```
 
-#### onError
-function, optional
-
-This function is called when document opening encounters an error.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-error | string | Error message produced
-
-```js
-<DocumentView
-  onError = {(error) => { 
-    console.log('Error occured during document opening:', error); 
-  }}
-/>
-```
 ### UI Customization
 
 #### disabledElements
@@ -1082,18 +1051,6 @@ This prop defines the zoom of the document
 ```js
 <DocumentView
   zoom={2.0}
-/>
-```
-
-#### scale
-double, optional
-
-This prop defines the zoom of the document.
-Same as zoom. Wonday compatibility API.
-
-```js
-<DocumentView
-  scale={2.0}
 />
 ```
 
