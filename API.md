@@ -852,29 +852,6 @@ Defines whether the viewer will add padding to take account of the system status
 />
 ```
 
-#### setAnnotationToolbarItemEnabled
-Sets the annotation toolbar item corresponding to the given string key enabled/disabled.
-
-Returns a Promise.
-
-Parameters:
-
-Name | Type    | Description
---- |---------| ---
-itemId | string  | one of the constants defined in `Config.Tools` or the `Config.CustomToolItemKey.Id` defined in a custom tool item object
-enable | boolean | whether to enable or disable the item
-
-```js
-this._viewer
-  .setAnnotationToolbarItemEnabled(
-    'add_page',
-    false,
-  )
-  .then(() => {
-    console.log('disabled');
-  });
-```
-
 ### Layout
 
 #### fitMode
@@ -2194,6 +2171,29 @@ committed | bool | true if either ink or poly-shape tool is committed, false oth
 this._viewer.commitTool().then((committed) => {
   // committed: true if either ink or poly-shape tool is committed, false otherwise
 });
+```
+
+#### setAnnotationToolbarItemEnabled
+Sets the annotation toolbar item corresponding to the given string key enabled/disabled.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type    | Description
+--- |---------| ---
+itemId | string  | one of the constants defined in `Config.Tools` or the `Config.CustomToolItemKey.Id` defined in a custom tool item object
+enable | boolean | whether to enable or disable the item
+
+```js
+this._viewer
+  .setAnnotationToolbarItemEnabled(
+    Config.Tools.annotationCreateSignature,
+    false,
+  )
+  .then(() => {
+    console.log('disabled');
+  });
 ```
 
 ### Page
