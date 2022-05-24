@@ -4,10 +4,10 @@ to: src/DocumentView/DocumentView.tsx
 after: // Hygen Generated Methods
 ---
 
-<%= name %> = (: ): Promise<void | <%= reactType %> > => {
+  <%= name %> = (<%= params %>): Promise<void | <%= returnType %>> => {
     const tag = findNodeHandle(this._viewerRef);
-    if(tag != null) {
+    if (tag != null) {
       return DocumentViewManager.<%= name %>(tag);
     }
     return Promise.resolve();
-}
+  }

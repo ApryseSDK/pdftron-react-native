@@ -4,7 +4,6 @@ to: android/src/main/java/com/pdftron/reactnative/modules/DocumentViewModule.jav
 after: // Hygen Generated Methods
 ---
 
-
     @ReactMethod
     public void <%= name %>(<%= h.finalize(params) %>final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
