@@ -7,20 +7,15 @@ module.exports = {
           name: 'name',
           message: 'Name of method?',
         },
-        // {
-        //   type: 'input',
-        //   name: 'numberOfParams',
-        //   message: 'Number of params? (ex: 1)',
-        // },
         {
           type: 'input',
           name: 'params',
-          message: 'Parameter list for the React Native function? Use either int or double for number (ex: flag: boolean, page: int, ...)\n',
+          message: 'Parameter list for the React Native function (comma separated)? Use either int or double for number\n  (ex: flag: boolean, page: int, options: { annotList: Array<AnnotOptions.Annotation> }, ...)\n',
         },
         {
           type: 'input',
           name: 'returnType',
-          message: 'Return type for the React Native function? Use either int or double for number (ex: boolean, int, ...)\n',
+          message: 'Return type for the React Native function? Use either int or double for number\n  (ex: void, boolean, int, { fieldName: string, fieldValue?: any }, ...)\n',
         }
       ]
 

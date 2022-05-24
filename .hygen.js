@@ -1,31 +1,68 @@
 module.exports = {
     helpers: {
-        parameterize: params => {
-            let arguments = ""
+        androidParameters: (params, setFinal) => {
+            let arguments = ''
+            let finalWord = setFinal ? 'final ' : ''
+
+            let delim = ''
+            let skip = false
             params.split(',').forEach(param => {
-                let splitParam = param.split(':')
-                arguments +=  splitParam[1].trim() + ' ' + splitParam[0].trim() + ', '
+                if (skip) {
+                    if (param.trim().endsWith(delim))
+                        skip = false
+                    return
+                }
+
+                let name = param.substring(0, param.indexOf(':')).trim()
+                let type = param.substring(param.indexOf(':') + 1).trim()
+
+                if (type.startsWith('{') || type.startsWith('Record<')) {
+                    type = 'ReadableMap'
+                    delim = type.startsWith('{') ? '}' : '>'
+                    skip = true
+                } else if (type.startsWith('AnnotOptions.')) {
+                    type = 'ReadableMap'
+                } else if (type.startsWith('Config.') || type === 'string') {
+                    type = 'String'
+                } else if (type.startsWith('Array<') && type.endsWith('>')) {
+                    type = 'ReadableArray'
+                }
+
+                arguments += finalWord + type + ' ' + name + ', '
             })
-            arguments = arguments.substr(0, arguments.length - 2)
+
+            arguments = arguments.substring(0, arguments.length - 2)
             return arguments
         },
+        // 'flag: boolean, page: int' => 'flag, page'
         argumenterize: params => {
-            let arguments = ""
+            let arguments = ''
+
+            let delim = ''
+            let skip = false
             params.split(',').forEach(param => {
-                arguments +=  param.split(':')[0].trim() + ', '
+                if (skip) {
+                    if (param.trim().endsWith(delim))
+                        skip = false
+                    return
+                }
+
+                let name = param.substring(0, param.indexOf(':')).trim()
+                let type = param.substring(param.indexOf(':') + 1).trim()
+
+                if (type.startsWith('{') || type.startsWith('Record<')) {
+                    delim = type.startsWith('{') ? '}' : '>'
+                    skip = true
+                    return
+                }
+
+                arguments += name + ', '
             })
-            arguments = arguments.substr(0, arguments.length - 2)
+
+            arguments = arguments.substring(0, arguments.length - 2)
             return arguments
         },
-        finalize: params => {
-            arguments = ""
-            params.split(',').forEach(param => {
-                let splitParam = param.split(':')
-                arguments += 'final ' + splitParam[1].trim() + ' ' + splitParam[0].trim() + ', '
-            })
-            return arguments
-        },
-        getAndroidPropType: type => {
+        androidPropType: type => {
             if (type === 'bool') {
                 return 'boolean'
             } else if (type === 'string' || type === 'oneOf') {
@@ -34,6 +71,17 @@ module.exports = {
                 return '@NonNull ReadableArray'
             } else {
                 return type
+            }
+        },
+        androidReturnType: type => {
+            if (type.startsWith('Config.') || type === 'string') {
+                return 'String'
+            } else if ((type.startsWith('{') && type.endsWith('}')) ||
+                       (type.startsWith('Record<') && type.endsWith('>')) ||
+                        type.startsWith('AnnotOptions.')) {
+                return 'WritableMap'
+            } else if (type.startsWith('Array<') && type.endsWith('>')) {
+                return 'WritableArray'
             }
         }
     }

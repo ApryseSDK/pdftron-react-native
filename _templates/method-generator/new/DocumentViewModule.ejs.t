@@ -5,7 +5,7 @@ after: // Hygen Generated Methods
 ---
 
     @ReactMethod
-    public void <%= name %>(<%= h.finalize(params) %>final Promise promise) {
+    public void <%= name %>(<%- h.androidParameters(params, true) %>, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {

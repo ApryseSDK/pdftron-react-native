@@ -5,6 +5,6 @@ after: // Hygen Generated Props
 ---
 
     @ReactProp(name = "<%= name %>")
-    public void set<%= h.changeCase.pascalCase(name) %>(DocumentView documentView, <%= h.getAndroidPropType(propType) %> <%= paramName %>) {
+    public void set<%= h.changeCase.pascalCase(name) %>(DocumentView documentView, <%= h.androidPropType(propType) %> <%= paramName %>) {
         documentView.set<%= h.changeCase.pascalCase(name) %>(<%= paramName %>);
     }
