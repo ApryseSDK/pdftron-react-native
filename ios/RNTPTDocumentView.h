@@ -708,6 +708,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 -(NSString *)getSavedSignatureFolder;
 
+// Hygen Generated Methods
 @end
 
 
