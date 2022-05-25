@@ -3,21 +3,13 @@ inject: true
 to: ios/RNTPTDocumentViewManager.m
 after: Hygen Generated Methods
 ---
-<% parameter = "" -%>
-<% arguments = "" -%>
-<%  params.split(',').forEach((param)=> {  -%>
-<% paramName = param.split(':')[1] %>
-<% parameter +=  paramName + ':' + '('+param.split(':')[0] + '*)' + paramName + ' '-%>
-<% arguments +=  paramName+ ':' + paramName + ' '-%>
-<% }) -%>
-<% parameter = parameter.substr(0,parameter.length-5) -%>
-- ( *)<%= name %>ForDocumentViewTag:(NSNumber *)tag <%=parameter%>
+<% args = h.iOSArgs(params) -%>
+- (<%= h.iOSReturnType(returnType) %>)<%= name %>ForDocumentViewTag:(NSNumber *)tag <%= h.iOSParams(params) %>
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return [documentView getField:<%= arguments%>];
+        <%= returnType === 'void' ? '' : 'return ' %>[documentView <%= name %>:<%= args.substring(args.indexOf(':') + 1) %>];
     } else {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
-        return nil;
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];<%= returnType === 'void' ? '' : '\n        return nil;' %>
     }
 }

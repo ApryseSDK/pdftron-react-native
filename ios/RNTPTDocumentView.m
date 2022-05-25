@@ -5880,6 +5880,8 @@ NS_ASSUME_NONNULL_END
     [self.currentDocumentViewController showThumbnailsController];
 }
 
+#pragma mark - Hygen Generated Props/Methods
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController

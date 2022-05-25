@@ -3,25 +3,26 @@ inject: true
 to: ios/RNTPTDocumentViewModule.m
 after: Hygen Generated Methods
 ---
-<% parameter = "" -%>
-<% arguments = "" -%>
-<%  params.split(',').forEach((param)=> {  -%>
-<% paramName = param.split(':')[1] %>
-<% parameter +=  paramName + ':' + '('+param.split(':')[0] + '*)' + paramName + '\n\t\t\t\t'-%>
-<% arguments +=  paramName+ ':' + paramName + ' '-%>
-<% }) -%>
-<% parameter = parameter.substr(0,parameter.length-5) -%>
+<% returnVar = h.iOSReturnType(returnType)
+   if (returnVar === 'void') {
+     returnVar = ''
+   } else if (!returnVar.endsWith('*')) {
+     returnVar = returnVar + ' result = '
+   } else {
+     returnVar = returnVar + 'result = '
+   }
+-%>
 RCT_REMAP_METHOD(<%= name %>,
                  <%= name %>ForDocumentViewTag:(nonnull NSNumber *)tag
-                 <%= parameter %>
+                 <%= h.iOSParams(params, true) %>
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSDictionary *result = [[self documentViewManager]  <%= name %>ForDocumentViewTag:tag <%= arguments %>];
-        resolve(result);
+        <%= returnVar %>[[self documentViewManager] <%= name %>ForDocumentViewTag:tag <%= h.iOSArgs(params) %>];
+        resolve(<%= returnType === 'void' ? 'nil' : 'result' %>);
     }
     @catch (NSException *exception) {
-        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+        reject(@"<%= h.changeCase.snakeCase(name) %>", @"Failed to <%= h.changeCase.noCase(name) %>", [self errorFromException:exception]);
     }
 }
