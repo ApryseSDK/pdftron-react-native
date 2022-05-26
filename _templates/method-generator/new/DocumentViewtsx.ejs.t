@@ -15,7 +15,7 @@ after: // Hygen Generated Methods
   <%= name %> = (<%- parameters %>): <%- promiseType %> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      return DocumentViewManager.<%= name %>(tag, <%= h.androidArgs(params) %>);
+      return DocumentViewManager.<%= name %>(tag<%= params === '' ? '' : ', ' + h.androidArgs(params) %>);
     }
     return Promise.resolve();
   }

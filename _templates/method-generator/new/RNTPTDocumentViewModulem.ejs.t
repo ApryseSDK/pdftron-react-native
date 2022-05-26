@@ -13,13 +13,12 @@ after: Hygen Generated Methods
    }
 -%>
 RCT_REMAP_METHOD(<%= name %>,
-                 <%= name %>ForDocumentViewTag:(nonnull NSNumber *)tag
-                 <%= h.iOSParams(params, true) %>
+                 <%= name %>ForDocumentViewTag:(nonnull NSNumber *)tag<%= params === '' ? '' : '\n' + h.iOSParams(params, true) %>
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        <%= returnVar %>[[self documentViewManager] <%= name %>ForDocumentViewTag:tag <%= h.iOSArgs(params) %>];
+        <%= returnVar %>[[self documentViewManager] <%= name %>ForDocumentViewTag:tag<%= params === '' ? '' : ' ' + h.iOSArgs(params) %>];
         resolve(<%= returnType === 'void' ? 'nil' : 'result' %>);
     }
     @catch (NSException *exception) {

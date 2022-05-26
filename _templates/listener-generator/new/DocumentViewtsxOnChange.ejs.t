@@ -5,15 +5,15 @@ after: // Hygen Generated Event Listeners
 ---
 <% args = ''
    if (params !== '') {
-     args += '{\n          '
+     args += '{'
      params.split(',').forEach(param => {
        argName = param.split(':')[0].trim()
-       args += '\'' + argName + '\': event.nativeEvent.' + argName + '\n'
+       args += '\n          \'' + argName + '\': event.nativeEvent.' + argName + ','
      })
-     args += '        }'
+     args += '\n        }'
    }
 -%>
     } else if (event.nativeEvent.<%= name %>) {
       if (this.props.<%= name %>) {
-        this.props.<%= name %>(<%= args %>);
+        this.props.<%= name %>(<%- args %>);
       }<% -%>
