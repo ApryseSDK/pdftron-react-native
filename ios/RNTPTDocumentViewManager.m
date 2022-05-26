@@ -270,6 +270,13 @@ RCT_CUSTOM_VIEW_PROPERTY(signSignatureFieldsWithStamps, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(maxSignatureCount, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.maxSignatureCount = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(followSystemDarkMode, BOOL, RNTPTDocumentView)
 {
     if (json) {

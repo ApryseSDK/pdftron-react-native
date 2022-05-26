@@ -2118,6 +2118,8 @@ NS_ASSUME_NONNULL_END
     toolManager.signatureAnnotationOptions.storeNewSignature = self.storeNewSignature;
     
     toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
+    
+    toolManager.signatureAnnotationOptions.maxSignatureCount = self.maxSignatureCount;
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
@@ -2887,6 +2889,13 @@ NS_ASSUME_NONNULL_END
 -(void)setSignSignatureFieldsWithStamps:(BOOL)signSignatureFieldsWithStamps
 {
     _signSignatureFieldsWithStamps = signSignatureFieldsWithStamps;
+    
+    [self applyViewerSettings];
+}
+
+- (void)setMaxSignatureCount:(int)maxSignatureCount
+{
+    _maxSignatureCount = maxSignatureCount;
     
     [self applyViewerSettings];
 }
