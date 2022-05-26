@@ -1851,12 +1851,11 @@ number, optional
 
 Defines the maximum number of signatures you can create for a document.
 
-Android only.
-
 ```js 
 <DocumentView
   maxSignatureCount={3}
 />
+```
 
 #### photoPickerEnabled
 bool, optional, defaults to true. Android only.
