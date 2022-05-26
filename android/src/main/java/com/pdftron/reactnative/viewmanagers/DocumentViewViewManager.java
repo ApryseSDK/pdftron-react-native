@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -416,6 +415,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setPageStackEnabled(pageStackEnabled);
     }
 
+    @ReactProp(name = "hideToolbarsOnAppear")
+    public void setHideToolbarsOnAppear(DocumentView documentView, boolean hideToolbarsOnAppear) {
+        documentView.setHideToolbarsOnAppear(hideToolbarsOnAppear);
+    }
+    
     @ReactProp(name = "showQuickNavigationButton")
     public void setShowQuickNavigationButton(DocumentView documentView, boolean showQuickNavigationButton) {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
@@ -1214,10 +1218,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
-    public String exportAsImage(final int tag, int pageNumber, double dpi, String exportFormat) throws PDFNetException {
+    public String exportAsImage(final int tag, int pageNumber, double dpi, String exportFormat, boolean transparent) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            return documentView.exportAsImage(pageNumber, dpi, exportFormat);
+            return documentView.exportAsImage(pageNumber, dpi, exportFormat, transparent);
         } else {
             throw new PDFNetException("", 0L, getName(), "exportAsImage", "Unable to find DocumentView.");
         }

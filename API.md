@@ -98,6 +98,18 @@ RNPdftron.clearRubberStampCache().then(() => {
 });
 ```
 
+### clearSavedViewerState
+Clear the saved view state such as page number, zoom location etc. (Android only).
+This is typically useful when `DocumentView` is in a sub-navigation component and state-saving is not desired across sessions.
+
+Returns a promise.
+
+```js
+RNPdftron.clearSavedViewerState().then(() => {
+  console.log("Viewer state cleared");
+});
+```
+
 ### encryptDocument
 Encrypts (password-protect) a document (must be a PDF). **Note**: This function does not lock the document it cannot be used it while the document is opened in the viewer.
 
@@ -212,6 +224,7 @@ pageNumber | int | the page to be converted; if the value does not refer to a va
 dpi | double | the output image resolution
 exportFormat | string | one of [`Config.ExportFormat`](./src/Config/Config.ts) constants
 filePath | string | local file path to pdf
+transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or the color of the PDF page (typically white)
 
 Returns a Promise.
 
@@ -220,7 +233,7 @@ Name | Type | Description
 resultImagePath | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf").then((resultImagePath) => {
+RNPdftron.exportAsImage(1, 92, Config.ExportFormat.BMP, "/sdcard/Download/red.pdf", false).then((resultImagePath) => {
   console.log('export', resultImagePath);
 });
 ```
@@ -375,6 +388,11 @@ Example:
 bool, optional, default to true
 
 Sets whether to remember the last visited page and zoom for a document if it gets opened again.
+
+On iOS this prop only applies to local documents and saves the last visited page. The zoom is not saved.
+
+On Android the zoom and last visited page are saved for both local and remote documents.
+
 Example:
 
 ```js
@@ -786,6 +804,19 @@ Defines whether an unhandled tap in the viewer should toggle the visibility of t
 ```js
 <DocumentView
   hideToolbarsOnTap={false}
+/>
+```
+
+#### hideToolbarsOnAppear
+bool, optional, defaults to false, android only
+
+Defines whether the toolbars will be gone at startup.
+
+Android 
+
+```js
+<DocumentView
+  hideToolbarsOnAppear={true}
 />
 ```
 
@@ -1835,6 +1866,18 @@ Defines whether to show the option to pick images in the signature dialog.
 ```js
 <DocumentView
   photoPickerEnabled={true}
+/>
+```
+
+#### onSavedSignaturesChanged
+function, optional
+
+This function is called when the number of saved signatures has been changed (added or deleted).
+```js
+<DocumentView
+  onSavedSignaturesChanged={() => {
+    console.log('Number of saved signatures changed');
+  }}
 />
 ```
 
@@ -3677,6 +3720,7 @@ Name | Type | Description
 pageNumber | int | the page to be converted; if the value does not refer to a valid page number, the file path will be undefined
 dpi | double | the output image resolution
 exportFormat | string | one of the [`Config.ExportFormat`](./src/Config/Config.ts) constants
+transparent | boolean | (only relevant when exported as PNG) whether the background of the image is transparent or opaque white
 
 Returns a Promise.
 
@@ -3685,7 +3729,7 @@ Name | Type | Description
 path | string | the temp path of the created image, user is responsible for clean up the cache
 
 ```js
-this._viewer.exportToImage(1, 92, Config.ExportFormat.BMP).then((path) => {
+this._viewer.exportAsImage(1, 92, Config.ExportFormat.BMP, false).then((path) => {
   console.log('export', path);
 });
 ```

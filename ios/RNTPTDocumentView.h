@@ -26,6 +26,7 @@ static NSString * const PTCloseButtonKey = @"closeButton";
 static NSString * const PTSaveCopyButtonKey = @"saveCopyButton";
 static NSString * const PTSaveIdenticalCopyButtonKey = @"saveIdenticalCopyButton";
 static NSString * const PTSaveFlattenedCopyButtonKey = @"saveFlattenedCopyButton";
+static NSString * const PTSaveCroppedCopyButtonKey = @"saveCroppedCopyButton";
 static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
@@ -358,6 +359,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)annotationChanged:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation action:(NSString *)action;
 - (void)annotationFlattened:(RNTPTDocumentView *)sender annotation:(NSDictionary *)annotation;
 
+- (void)savedSignaturesChanged:(RNTPTDocumentView *)sender;
+
 - (void)formFieldValueChanged:(RNTPTDocumentView *)sender fields:(NSDictionary *)fields;
 
 - (void)exportAnnotationCommand:(RNTPTDocumentView *)sender action:(NSString *)action xfdfCommand:(NSString *)xfdfCommand annotation:(NSDictionary*)annotation;
@@ -541,7 +544,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber;
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat transparent:(BOOL)transparent;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
@@ -725,4 +728,9 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @interface RNTPTAnnotationReplyViewController : PTAnnotationReplyViewController
 
 @end
+
+@interface RNTPTDigitalSignatureTool : PTDigitalSignatureTool
+
+@end
+
 NS_ASSUME_NONNULL_END

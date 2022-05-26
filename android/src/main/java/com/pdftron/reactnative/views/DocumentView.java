@@ -164,6 +164,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     // custom behaviour
     private ReadableArray mActionOverrideItems;
 
+    // RN specific behaviour
+    private boolean mHideToolbarsOnAppear;
+
     private boolean mReadOnly;
 
     private boolean mFragmentTransactionFinished;
@@ -1030,6 +1033,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setPageStackEnabled(boolean pageStackEnabled) {
         mBuilder = mBuilder.pageStackEnabled(pageStackEnabled);
+    }
+
+    public void setHideToolbarsOnAppear(boolean hideToolbarsOnAppear) {
+        mHideToolbarsOnAppear = hideToolbarsOnAppear;
     }
 
     public void setShowQuickNavigationButton(boolean showQuickNavigationButton) {
@@ -2101,6 +2108,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrlTabFragment().removeQuickMenuListener(mQuickMenuListener);
         }
 
+        StampManager.getInstance().setSignatureListener(null);
+
         ActionUtils.getInstance().setActionInterceptCallback(null);
 
         super.onDetachedFromWindow();
@@ -2729,6 +2738,24 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private final StampManager.SignatureListener mSignatureListener = new StampManager.SignatureListener() {
+        @Override
+        public void onSavedSignatureDeleted() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_SAVED_SIGNATURES_CHANGED, ON_SAVED_SIGNATURES_CHANGED);
+
+            onReceiveNativeEvent(params);
+        }
+
+        @Override
+        public void onSavedSignatureCreated() {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_SAVED_SIGNATURES_CHANGED, ON_SAVED_SIGNATURES_CHANGED);
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -2905,6 +2932,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
+        StampManager.getInstance().setSignatureListener(mSignatureListener);
+
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
         // collab
@@ -2955,6 +2984,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     });
                 }
             }
+        }
+
+        if (mHideToolbarsOnAppear) {
+            mPdfViewCtrlTabHostFragment.setToolbarsVisible(false, false);
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
@@ -4514,14 +4547,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public String exportAsImage(int pageNumber, double dpi, String exportFormat) {
+    public String exportAsImage(int pageNumber, double dpi, String exportFormat, boolean transparent) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null) {
             boolean shouldUnlockRead = false;
             try {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-                return ReactUtils.exportAsImageHelper(pdfViewCtrl.getDoc(), pageNumber, dpi, exportFormat);
+                return ReactUtils.exportAsImageHelper(pdfViewCtrl.getDoc(), pageNumber, dpi, exportFormat, transparent);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             } finally {

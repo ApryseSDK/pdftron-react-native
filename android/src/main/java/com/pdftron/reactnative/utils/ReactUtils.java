@@ -139,11 +139,12 @@ public class ReactUtils {
         return array;
     }
 
-    public static String exportAsImageHelper(PDFDoc doc, int pageNumber, double dpi, String exportFormat) {
+    public static String exportAsImageHelper(PDFDoc doc, int pageNumber, double dpi, String exportFormat, boolean transparent) {
         PDFDraw draw = null;
         try {
             draw = new PDFDraw();
             draw.setDPI(dpi);
+            draw.setPageTransparent(transparent);
             if (pageNumber <= doc.getPageCount() && pageNumber >= 1) {
                 Page pg = doc.getPage(pageNumber);
                 String ext = "png";

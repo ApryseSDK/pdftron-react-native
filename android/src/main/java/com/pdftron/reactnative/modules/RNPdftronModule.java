@@ -14,12 +14,12 @@ import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
+import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
+import com.pdftron.pdf.utils.PdfViewCtrlTabsManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.SDFDoc;
-
-import static com.pdftron.reactnative.utils.Constants.*;
 
 import java.io.File;
 
@@ -203,13 +203,25 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void exportAsImage(int pageNumber, double dpi, String exportFormat, final String filePath, final Promise promise) {
+    public void exportAsImage(int pageNumber, double dpi, String exportFormat, final String filePath, boolean transparent, final Promise promise) {
         try {
             PDFDoc doc = new PDFDoc(filePath);
             doc.lockRead();
-            String imagePath = ReactUtils.exportAsImageHelper(doc, pageNumber, dpi, exportFormat);
+            String imagePath = ReactUtils.exportAsImageHelper(doc, pageNumber, dpi, exportFormat, transparent);
             doc.unlockRead();
             promise.resolve(imagePath);
+        } catch (Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    @ReactMethod
+    public void clearSavedViewerState(final Promise promise) {
+        try {
+            PdfViewCtrlTabsManager.getInstance().cleanup();
+            PdfViewCtrlTabsManager.getInstance().clearAllPdfViewCtrlTabInfo(getReactApplicationContext());
+            PdfViewCtrlSettingsManager.setOpenUrlAsyncCache(getReactApplicationContext(), "");
+            promise.resolve(null);
         } catch (Exception e) {
             promise.reject(e);
         }

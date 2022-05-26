@@ -12,10 +12,11 @@ interface RNPdftron {
     getSystemFontList() : Promise<string>;
     clearRubberStampCache() : Promise<void>;
     encryptDocument(filePath: string, password: string, currentPassword: string) : Promise<void>;
-    pdfFromOffice(docxPath: string, options?: {applyPageBreaksToSheet?: boolean, displayChangeTracking?: boolean, excelDefaultCellBorderWidth?: number, 
+    pdfFromOffice(docxPath: string, options: {applyPageBreaksToSheet?: boolean, displayChangeTracking?: boolean, excelDefaultCellBorderWidth?: number,
             excelMaxAllowedCellCount?: number, locale?: string}) : Promise<string>;
     pdfFromOfficeTemplate(docxPath: string, json: object) : Promise<string>;
-    exportAsImage(pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, filePath: string) : Promise<string>;
+    exportAsImage(pageNumber: number, dpi: number, exportFormat: Config.ExportFormat, filePath: string, transparent: boolean) : Promise<string>;
+    clearSavedViewerState() : Promise<void>;
 }
 
 const RNPdftron : RNPdftron = NativeModules.RNPdftron;
