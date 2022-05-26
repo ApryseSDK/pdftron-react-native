@@ -9,8 +9,8 @@ after: // Hygen Generated Methods
    } else {
      promiseType = 'Promise<void | ' + promiseType + '>'
    }
-   promiseType = promiseType.replace(/int|double/g, 'number');
-   parameters = params.replace(/int|double/g, 'number');
+   promiseType = promiseType.replace(/\bint\b|\bdouble\b/g, 'number');
+   parameters = params.replace(/\bint\b|\bdouble\b/g, 'number');
 -%>
   <%= name %> = (<%- parameters %>): <%- promiseType %> => {
     const tag = findNodeHandle(this._viewerRef);

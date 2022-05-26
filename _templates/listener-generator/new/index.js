@@ -6,6 +6,11 @@ module.exports = {
         type: 'input',
         name: 'name',
         message: 'Name of event listener? (ex: onLayoutChanged)',
+      },
+      {
+        type: 'input',
+        name: 'params',
+        message: 'Parameter list for the TS listener (comma separated)? Use either int or double for number\n  (ex: previousPageNumber: int, pageNumber: int, ...)\n',
       }
     ]
 

@@ -97,7 +97,7 @@ const propTypes = {
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
   // Hygen Generated Props
-    maxSignatureCount: PropTypes.number,
+  maxSignatureCount: PropTypes.number,
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
     oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({
@@ -413,6 +413,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
           'currentTab': event.nativeEvent.currentTab
         });
       }
+    // Hygen Generated Event Listeners
     }
   }
 
