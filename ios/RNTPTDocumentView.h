@@ -452,6 +452,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic) BOOL storeNewSignature;
 
+@property (nonatomic, assign) int maxSignatureCount;
+
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
 @property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
