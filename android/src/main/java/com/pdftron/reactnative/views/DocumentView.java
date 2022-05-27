@@ -3046,6 +3046,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return true;
     }
 
+    // Hygen Generated Event Listeners
+
     public void importBookmarkJson(String bookmarkJson) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
