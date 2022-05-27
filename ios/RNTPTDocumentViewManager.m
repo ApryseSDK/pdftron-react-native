@@ -954,6 +954,8 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+// Hygen Generated Event Listeners
+
 #pragma mark - Methods
 
 - (void)setToolModeForDocumentViewTag:(NSNumber *)tag toolMode:(NSString *)toolMode
