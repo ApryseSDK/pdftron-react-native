@@ -9,7 +9,7 @@ after: // Hygen Generated Event Listeners
        argName = param.substring(0, param.indexOf(':')).trim()
        argType = param.substring(param.indexOf(':') + 1).trim()
 
-       if (argType.match(/int|double|boolean/) {
+       if (argType === 'int' || argType === 'double' || argType === 'boolean' ) {
          args += '\n            @"' + argName + '": @(' + argName + '),'
        } else {
          args += '\n            @"' + argName + '": ' + argName + ','
