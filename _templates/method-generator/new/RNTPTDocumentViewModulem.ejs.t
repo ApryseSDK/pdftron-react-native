@@ -13,7 +13,7 @@ after: Hygen Generated Methods
    }
 -%>
 RCT_REMAP_METHOD(<%= name %>,
-                 <%= name %>ForDocumentViewTag:(nonnull NSNumber *)tag<%= params === '' ? '' : '\n' + h.iOSParams(params, true) %>
+                 <%= name %>ForDocumentViewTag:(nonnull NSNumber *)tag<%= params === '' ? '' : '\n                 ' + h.iOSParams(params, true) %>
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
