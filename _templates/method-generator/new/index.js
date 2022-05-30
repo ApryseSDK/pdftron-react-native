@@ -10,12 +10,12 @@ module.exports = {
       {
         type: 'input',
         name: 'params',
-        message: 'Parameter list for the TS function (comma separated)? Use either int or double for number\n  (ex: flag: boolean, page: int, options: { annotList: Array<AnnotOptions.Annotation> }, ...)\n',
+        message: 'Parameter list of React Native method (comma separated)? Use either int or double for number\n  (ex: flag: boolean, page: int, options: { annotList: Array<AnnotOptions.Annotation> }, ...)\n',
       },
       {
         type: 'input',
         name: 'returnType',
-        message: 'Return type for the TS function? Use either int or double for number\n  (ex: void, boolean, int, { fieldName: string, fieldValue?: any }, ...)\n',
+        message: 'Return type of React Native method? Use either int or double for number\n  (ex: void, boolean, int, { fieldName: string, fieldValue?: any }, ...)\n',
       }
     ]
 

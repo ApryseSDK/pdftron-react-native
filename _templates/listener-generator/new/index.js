@@ -10,7 +10,7 @@ module.exports = {
       {
         type: 'input',
         name: 'params',
-        message: 'Parameter list for the TS listener (comma separated)? Use either int or double for number\n  (ex: previousPageNumber: int, pageNumber: int, ...)\n',
+        message: 'Parameter list of React Native listener (comma separated)? Use either int or double for number\n  (ex: previousPageNumber: int, pageNumber: int, ...)\n',
       }
     ]
 
