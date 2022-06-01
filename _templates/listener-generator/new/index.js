@@ -14,6 +14,7 @@ module.exports = {
       }
     ]
 
+    // returning the answers to the prompt
     return inquirer
       .prompt(questions)
   },

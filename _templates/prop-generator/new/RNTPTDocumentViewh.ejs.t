@@ -3,7 +3,7 @@ inject: true
 to: ios/RNTPTDocumentView.h
 after: // Hygen Generated Props
 ---
-
+<%# converting the React Native prop type into the corresponding iOS type, along with appropriate keywords -%>
 <% type = propType
    if (type === 'bool') {
      type = '(nonatomic, assign) BOOL '

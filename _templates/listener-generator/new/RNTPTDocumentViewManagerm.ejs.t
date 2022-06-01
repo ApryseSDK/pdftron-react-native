@@ -3,6 +3,7 @@ inject: true
 to: ios/RNTPTDocumentViewManager.m
 after: // Hygen Generated Event Listeners
 ---
+<%# injecting lines for each parameter, e.g. @"pageNumber": @(pageNumber), -%>
 <% args = ''
    if (params !== '') {
      params.split(',').forEach(param => {

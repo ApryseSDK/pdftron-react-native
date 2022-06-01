@@ -13,4 +13,4 @@ after: // Hygen Generated Props
      type = 'PropTypes.' + type
    }
 -%>
-  <%= name %>: <%- type %>, <% -%>
+  <%= name %>: <%- type %>,<% -%>

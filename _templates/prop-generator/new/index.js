@@ -17,6 +17,7 @@ module.exports = {
     return inquirer
       .prompt(questions)
       .then(answers => {
+        // using the answers from the previous prompt to determine which questions to ask next
         const propType = answers.propType.trim()
         const questions = [
           {
@@ -35,6 +36,7 @@ module.exports = {
           })
         }
 
+        // return the merged set of answers from the previous prompt and this prompt
         return inquirer.prompt(questions).then(nextAnswers => Object.assign({}, answers, nextAnswers))
       })
   },

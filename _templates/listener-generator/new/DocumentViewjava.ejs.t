@@ -3,6 +3,7 @@ inject: true
 to: android/src/main/java/com/pdftron/reactnative/views/DocumentView.java
 after: // Hygen Generated Event Listeners
 ---
+<%# injecting lines to put the parameters into the WritableMap, e.g. params.putInt(KEY_PAGE_NUMBER, ); -%>
 <% putArgs = ''
    if (params !== '') {
      params.split(',').forEach(param => {

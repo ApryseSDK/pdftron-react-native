@@ -1,11 +1,18 @@
 module.exports = {
     helpers: {
-        // 'flag: boolean, page: int' => 'boolean flag, int page' or 'final boolean flag, final int page'
+        /**
+         * Converts the parameter list of a React Native function into a parameter list of an Android function.
+         * e.g. 'flag: boolean, page: int' => 'boolean flag, int page' or 'final boolean flag, final int page'
+         * @param params React Native parameter list string
+         * @param setFinal Whether to add the 'final' keyword in front of each parameter
+         * @returns {string} Android parameter list string
+         */
         androidParams: (params, setFinal) => {
             let arguments = ''
             let finalWord = setFinal ? 'final ' : ''
 
-            // assuming no nested maps, remove the params inside maps
+            // assuming no nested maps, remove the params inside maps (in between {} or Record<>)
+            // so that the top level parameters can be properly split by commas
             params = params.replace(/((?<=\{)(.*?)(?=}))|((?<=Record<)(.*?)(?=>))/g, '')
 
             params.split(',').forEach(param => {
@@ -28,12 +35,17 @@ module.exports = {
             arguments = arguments.substring(0, arguments.length - 2)
             return arguments
         },
-        // 'flag: boolean, page: int' => 'flag:(BOOL)flag page:(NSInteger)page'
+        /**
+         * Converts the parameter list of a React Native function into a parameter list of an iOS function.
+         * e.g. 'flag: boolean, page: int' => 'flag:(BOOL)flag page:(NSInteger)page'
+         * @param params React Native parameter list string
+         * @param format Whether to separate each parameter by newlines
+         * @returns {string} iOS parameter list string
+         */
         iOSParams: (params, format) => {
             let arguments = ''
             let formatStr = format ? '\n                 ' : ' '
 
-            // assumes no nested maps
             params = params.replace(/((?<=\{)(.*?)(?=}))|((?<=Record<)(.*?)(?=>))/g, '')
 
             params.split(',').forEach(param => {
@@ -60,11 +72,15 @@ module.exports = {
             arguments = arguments.substring(0, arguments.length - formatStr.length)
             return arguments
         },
-        // 'flag: boolean, page: int' => 'flag, page'
+        /**
+         * Converts the parameter list of a React Native function into arguments when calling an Android function.
+         * e.g. 'flag: boolean, page: int' => 'flag, page'
+         * @param params React Native parameter list string
+         * @returns {string} Android arguments string
+         */
         androidArgs: params => {
             let arguments = ''
 
-            // assumes no nested maps
             params = params.replace(/((?<=\{)(.*?)(?=}))|((?<=Record<)(.*?)(?=>))/g, '')
 
             params.split(',').forEach(param => {
@@ -74,11 +90,15 @@ module.exports = {
             arguments = arguments.substring(0, arguments.length - 2)
             return arguments
         },
-        // 'flag: boolean, page: int' => 'flag:flag page:page'
+        /**
+         * Converts the parameter list of a React Native function into arguments when calling an iOS function.
+         * e.g. 'flag: boolean, page: int' => 'flag:flag page:page'
+         * @param params React Native parameter list string
+         * @returns {string} iOS arguments string
+         */
         iOSArgs: params => {
             let arguments = ''
 
-            // assumes no nested maps
             params = params.replace(/((?<=\{)(.*?)(?=}))|((?<=Record<)(.*?)(?=>))/g, '')
 
             params.split(',').forEach(param => {
@@ -89,6 +109,11 @@ module.exports = {
             arguments = arguments.substring(0, arguments.length - 1)
             return arguments
         },
+        /**
+         * Converts the React Native prop type into a corresponding Android type.
+         * @param type React Native prop type
+         * @returns {string|*} Android prop type; returns given param if no match is found
+         */
         androidPropType: type => {
             if (type === 'bool') {
                 return 'boolean'
@@ -100,6 +125,11 @@ module.exports = {
                 return type
             }
         },
+        /**
+         * Converts the React Native function return type into a corresponding Android type.
+         * @param type React Native function return type
+         * @returns {string|*} Android return type; returns given param if no match is found
+         */
         androidReturnType: type => {
             if (type.startsWith('Config.') || type === 'string') {
                 return 'String'
@@ -113,6 +143,11 @@ module.exports = {
                 return type
             }
         },
+        /**
+         * Converts the React Native function return type into a corresponding iOS type.
+         * @param type React Native function return type
+         * @returns {string|*} iOS return type; returns given param if no match is found
+         */
         iOSReturnType: type => {
             if (type === 'boolean') {
                 return 'BOOL'
