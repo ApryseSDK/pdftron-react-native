@@ -419,24 +419,6 @@ path | string | File path that the document has been saved to
 />
 ```
 
-#### onLoadComplete
-function, optional
-
-This function is called when the document finishes loading.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-path | string | File path that the document has been saved to
-
-```js
-<DocumentView
-  onLoadComplete = {(path) => { 
-    console.log('The document has finished loading:', path); 
-  }}
-/>
-```
 #### onDocumentError
 function, optional
 
@@ -835,23 +817,6 @@ Defines the fit mode (default zoom level) of the viewer.
 />
 ```
 
-#### fitPolicy
-
-Defines the fit mode (default zoom level) of the viewer.
-Parameters:
-
-Mode | Value | Description
---- | --- | ---
-fitPage (default) | 0 | fits the whole page
-fit width | 1 | fits page using width
-fit hieght | 2 | fits page using height
-
-```js
-<DocumentView
-  fitPolicy={2}
-/>
-```
-
 #### layoutMode
 one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 
@@ -886,17 +851,6 @@ Defines the initial page number that viewer displays when the document is opened
 ```js
 <DocumentView
   initialPageNumber={5}
-/>
-```
-
-#### page
-number, optional
-
-Defines the initial page number that viewer displays when the document is opened. Note that page numbers are 1-indexed.
-
-```js
-<DocumentView
-  page={5}
 />
 ```
 
@@ -1069,24 +1023,6 @@ zoom | double | the current zoom ratio of the document
 <DocumentView
   onZoomChanged = {(zoom) => {
     console.log('Current zoom ratio is', zoom);
-  }}
-/>
-```
-#### onScaleChanged
-function, optional
-
-This function is called when the zoom scale has been changed.
-
-Parameters:
-
-Name | Type | Description
---- | --- | ---
-zoom | double | the current zoom ratio of the document
-
-```js
-<DocumentView
-  onScaleChanged = {(scale) => {
-    console.log('Current scale ratio is', scale);
   }}
 />
 ```
