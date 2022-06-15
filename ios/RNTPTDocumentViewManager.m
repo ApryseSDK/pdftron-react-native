@@ -644,6 +644,13 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideToolbarButtonBehavior = [RCTConvert NSArray:json];
+    }
+}
+
 
 - (UIView *)view
 {
@@ -957,6 +964,16 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         }];
                 
         sender.onChange(result);
+    }
+}
+
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarItemPress": @"onToolbarItemPress",
+            PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
+        });
     }
 }
 

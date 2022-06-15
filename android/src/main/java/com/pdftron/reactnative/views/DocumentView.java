@@ -713,6 +713,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setOverrideToolbarButtonBehavior(ReadableArray items) {
+
+    }
+
     public void setSignSignatureFieldsWithStamps(boolean signWithStamps) {
         mSignWithStamps = signWithStamps;
     }
