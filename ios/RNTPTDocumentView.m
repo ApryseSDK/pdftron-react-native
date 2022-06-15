@@ -175,6 +175,7 @@ NS_ASSUME_NONNULL_END
 
     _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
     _annotationToolbarItemCounter = 0;
+    _maxSignatureCount = -1;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
