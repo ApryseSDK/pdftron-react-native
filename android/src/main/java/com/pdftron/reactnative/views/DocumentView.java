@@ -154,6 +154,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
     private File mCollabTempFile;
 
+    // toolbar buttons
+    private ArrayList<Object> mToolbarOverrideButtons;
+
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
     private ArrayList<Object> mAnnotMenuOverrideItems;
@@ -714,7 +717,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setOverrideToolbarButtonBehavior(ReadableArray items) {
-
+        mToolbarOverrideButtons = items != null ? items.toArrayList() : null;
     }
 
     public void setSignSignatureFieldsWithStamps(boolean signWithStamps) {
@@ -1679,6 +1682,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Nullable
+    private String convItemIdToString(int id) {
+        String buttonId = null;
+        if (id == R.id.action_tabs) {
+            buttonId = BUTTON_TABS;
+        } else if (id == R.id.action_search) {
+            buttonId = BUTTON_SEARCH;
+        } else if (id == R.id.action_viewmode) {
+            buttonId = BUTTON_VIEW_CONTROLS;
+        } else if (id == R.id.action_thumbnails) {
+            buttonId = BUTTON_THUMBNAILS;
+        } else if (id == R.id.action_outline) {
+            buttonId = BUTTON_OUTLINE_LIST;
+        } else if (id == R.id.undo) {
+            buttonId = BUTTON_UNDO;
+        } else if (id == R.id.action_share) {
+            buttonId = BUTTON_SHARE;
+        } else if (id == R.id.action_reflow_mode) {
+            buttonId = BUTTON_REFLOW;
+        } else if (id == R.id.action_editpages) {
+            buttonId = BUTTON_EDIT_PAGES;
+        } else if (id == R.id.action_export_options) {
+            buttonId = BUTTON_SAVE_COPY;
+        } else if (id == R.id.action_print) {
+            buttonId = BUTTON_PRINT;
+        } else if (id == R.id.action_file_attachment) {
+            buttonId = BUTTON_FILE_ATTACHMENT;
+        } else if (id == R.id.action_pdf_layers) {
+            buttonId = BUTTON_VIEW_LAYERS;
+        } else if (id == R.id.action_digital_signatures) {
+            buttonId = BUTTON_DIGITAL_SIGNATURE;
+        } else if (id == R.id.action_close_tab) {
+            buttonId = BUTTON_CLOSE;
+        }
+
+        return buttonId;
+    }
+
+    @Nullable
     private ToolbarButtonType convStringToToolbarType(String item) {
         ToolbarButtonType buttonType = null;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
@@ -2165,6 +2206,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);
             onReceiveNativeEvent(params);
             return true;
+        } else {
+            itemKey = convItemIdToString(itemId);
+            // check if the item's behavior should be overridden
+            if (mToolbarOverrideButtons != null && mToolbarOverrideButtons.contains(itemKey)) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_TOOLBAR_BUTTON_PRESS, ON_TOOLBAR_BUTTON_PRESS);
+                params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);
+                onReceiveNativeEvent(params);
+                return true;
+            }
         }
 
         return super.onToolbarOptionsItemSelected(item);
