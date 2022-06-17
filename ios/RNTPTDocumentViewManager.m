@@ -971,7 +971,7 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
 {
     if (sender.onChange) {
         sender.onChange(@{
-            @"onToolbarItemPress": @"onToolbarItemPress",
+            @"onToolbarButtonPress": @"onToolbarButtonPress",
             PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
         });
     }

@@ -2511,6 +2511,24 @@ NS_ASSUME_NONNULL_END
         }
         documentController.toolbarItems = [bottomToolbarItems copy];
     }
+    
+    // Override action of overridden toolbar button items
+    if (self.overrideToolbarButtonBehavior) {
+        for (NSString *buttonString in self.overrideToolbarButtonBehavior) {
+            UIBarButtonItem *toolbarItem = [self itemForButton:buttonString
+                                                 inViewController:documentController];
+            
+            NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
+                                    buttonString];
+            const SEL selector = NSSelectorFromString(actionName);
+            
+            RNTPT_addMethod([documentController class], selector, ^(id documentController) {
+                [self.delegate toolbarButtonPressed:self withKey:buttonString];
+            });
+            
+            toolbarItem.action = selector;
+        }
+    }
 }
 
 - (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
