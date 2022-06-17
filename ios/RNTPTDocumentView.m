@@ -175,6 +175,7 @@ NS_ASSUME_NONNULL_END
 
     _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
     _annotationToolbarItemCounter = 0;
+    _maxSignatureCount = -1;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -2154,6 +2155,8 @@ NS_ASSUME_NONNULL_END
     toolManager.signatureAnnotationOptions.storeNewSignature = self.storeNewSignature;
     
     toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
+    
+    toolManager.signatureAnnotationOptions.maxSignatureCount = self.maxSignatureCount;
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
@@ -2927,9 +2930,17 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setMaxSignatureCount:(int)maxSignatureCount
+{
+    _maxSignatureCount = maxSignatureCount;
+    
+    [self applyViewerSettings];
+}
+
 - (NSArray *)getSavedSignatures
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    signaturesManager.showDefaultSignature = self.showSavedSignatures;
     NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
     NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
     
@@ -4866,10 +4877,10 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Export as image
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat transparent:(BOOL)transparent
 {
     PTPDFDoc * doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
+    return [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat transparent:transparent];
 }
 
 #pragma mark - Tabs

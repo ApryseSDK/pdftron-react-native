@@ -24,7 +24,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 21
@@ -57,7 +57,7 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.1'
 
-    implementation "com.pdftron:pdftron:9.2.3-beta04"
-    implementation "com.pdftron:tools:9.2.3-beta04"
-    implementation "com.pdftron:collab:9.2.3-beta04"
+    implementation "com.pdftron:pdftron:9.2.4-beta05"
+    implementation "com.pdftron:tools:9.2.4-beta05"
+    implementation "com.pdftron:collab:9.2.4-beta05"
 }

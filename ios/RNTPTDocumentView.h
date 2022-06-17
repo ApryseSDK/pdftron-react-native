@@ -452,6 +452,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic) BOOL storeNewSignature;
 
+@property (nonatomic, assign) int maxSignatureCount;
+
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
 @property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
@@ -542,7 +544,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSMutableArray<NSDictionary *> *)getAllFieldsForDocumentViewTag:(int)pageNumber;
 
-- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat;
+- (NSString *)exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat transparent:(BOOL)transparent;
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 

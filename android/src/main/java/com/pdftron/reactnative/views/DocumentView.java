@@ -4561,14 +4561,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-    public String exportAsImage(int pageNumber, double dpi, String exportFormat) {
+    public String exportAsImage(int pageNumber, double dpi, String exportFormat, boolean transparent) {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         if (pdfViewCtrl != null) {
             boolean shouldUnlockRead = false;
             try {
                 pdfViewCtrl.docLockRead();
                 shouldUnlockRead = true;
-                return ReactUtils.exportAsImageHelper(pdfViewCtrl.getDoc(), pageNumber, dpi, exportFormat);
+                return ReactUtils.exportAsImageHelper(pdfViewCtrl.getDoc(), pageNumber, dpi, exportFormat, transparent);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             } finally {

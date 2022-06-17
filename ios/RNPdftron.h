@@ -8,7 +8,7 @@
 @class PTPDFDoc;
 @interface RNPdftron : NSObject <RCTBridgeModule>
 
-+(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)imageFormat;
++(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)imageFormat transparent:(BOOL)transparent;
 
 @end
   

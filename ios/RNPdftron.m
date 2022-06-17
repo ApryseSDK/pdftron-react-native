@@ -200,11 +200,17 @@ RCT_EXPORT_METHOD(pdfFromOfficeTemplate:(NSString *)docxPath json:(NSDictionary 
     }    
 }
 
-RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat filePath:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber
+                  dpi:(int)dpi
+                  exportFormat:(NSString*)exportFormat
+                  filePath:(NSString*)filePath
+                  transparent:(BOOL)transparent
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
         PTPDFDoc * doc = [[PTPDFDoc alloc] initWithFilepath:filePath];
-        NSString * resultImagePath = [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat];
+        NSString * resultImagePath = [RNPdftron exportAsImageHelper:doc pageNumber:pageNumber dpi:dpi exportFormat:exportFormat transparent:transparent];
         
         resolve(resultImagePath);
     }
@@ -223,7 +229,7 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
             }];
 }
 
-+(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat
++(NSString*)exportAsImageHelper:(PTPDFDoc*)doc pageNumber:(int)pageNumber dpi:(int)dpi exportFormat:(NSString*)exportFormat transparent:(BOOL)transparent
 {
     NSString * resultImagePath = nil;
     BOOL shouldUnlock = NO;
@@ -233,6 +239,7 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
 
         if (pageNumber <= [doc GetPageCount] && pageNumber >= 1) {
             PTPDFDraw *draw = [[PTPDFDraw alloc] initWithDpi:dpi];
+            [draw SetPageTransparent:transparent];
             NSString* tempDir = NSTemporaryDirectory();
             NSString* fileName = [NSUUID UUID].UUIDString;
             resultImagePath = [tempDir stringByAppendingPathComponent:fileName];
