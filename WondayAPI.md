@@ -1,5 +1,5 @@
 # Wonday Compatibility API
-
+These APIs are convenience APIs for those migrating from a Wonday implementation.
 ### DocumentView - Props
 
 #### source
