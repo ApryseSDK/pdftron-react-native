@@ -2904,6 +2904,7 @@ NS_ASSUME_NONNULL_END
 - (NSArray *)getSavedSignatures
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    signaturesManager.showDefaultSignature = self.showSavedSignatures;
     NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
     NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
     
