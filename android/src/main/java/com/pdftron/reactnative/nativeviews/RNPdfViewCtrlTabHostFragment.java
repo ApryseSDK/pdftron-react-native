@@ -27,4 +27,8 @@ public class RNPdfViewCtrlTabHostFragment extends PdfViewCtrlTabHostFragment2 {
             mListener.onHostFragmentViewCreated();
         }
     }
+
+    public void setItemEnabled(int itemId, boolean enabled) {
+        mAnnotationToolbarComponent.setItemEnabled(itemId, enabled);
+    }
 }

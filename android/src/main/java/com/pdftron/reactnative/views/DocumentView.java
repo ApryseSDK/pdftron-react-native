@@ -3496,6 +3496,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return customData;
     }
 
+    public void setAnnotationToolbarItemEnabled(String itemId, boolean enable) {
+        if (mPdfViewCtrlTabHostFragment != null &&
+            mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
+            int buttonId = convStringToButtonId(itemId);
+            if (buttonId == 0) {
+                for (int i = 0; i < mToolIdMap.size(); i++) {
+                    if (mToolIdMap.valueAt(i).equals(itemId)) {
+                        buttonId = mToolIdMap.keyAt(i);
+                        break;
+                    }
+                }
+            }
+            ((RNPdfViewCtrlTabHostFragment) mPdfViewCtrlTabHostFragment).setItemEnabled(buttonId, enable);
+        }
+    }
+
     public void setValuesForFields(ReadableMap readableMap) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
         PDFDoc pdfDoc = pdfViewCtrl.getDoc();

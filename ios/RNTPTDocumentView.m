@@ -1847,6 +1847,42 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable
+{
+    if ([self.documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *controller = (PTDocumentController *) self.documentViewController;
+        Class toolClass = [[self class] toolClassForKey:itemId];
+
+        if (toolClass != Nil) {
+            // default toolbar button
+            for (PTToolGroup *toolGroup in controller.toolGroupManager.groups) {
+                for (UIBarButtonItem *item in toolGroup.barButtonItems) {
+                    if ([item isKindOfClass:[PTToolBarButtonItem class]]) {
+                        PTToolBarButtonItem *toolItem = (PTToolBarButtonItem *)item;
+                        
+                        if ([toolItem.toolClass isEqual:toolClass]) {
+                            toolItem.enabled = enable;
+                        }
+                    }
+                }
+            }
+        } else {
+            // custom toolbar button
+            NSNumber *const itemTag = _annotationToolbarItemKeyMap[itemId];
+            
+            if (itemTag) {
+                for (PTToolGroup *toolGroup in controller.toolGroupManager.groups) {
+                    for (UIBarButtonItem *item in toolGroup.barButtonItems) {
+                        if (item.tag == itemTag.integerValue) {
+                            item.enabled = enable;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
@@ -2577,10 +2613,10 @@ NS_ASSUME_NONNULL_END
             
             UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
             // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
-            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
-                                                                                                style:UIBarButtonItemStylePlain
-                                                                                               target:self
-                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc]                                                                 initWithImage:toolbarItemIcon
+                                                      style:UIBarButtonItemStylePlain
+                                                      target:self
+                                                      action:@selector(customToolGroupToolbarItemPressed:)];
             item.title = toolbarItemName;
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
