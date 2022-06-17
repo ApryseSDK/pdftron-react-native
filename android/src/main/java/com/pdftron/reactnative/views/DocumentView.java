@@ -2209,7 +2209,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         } else {
             itemKey = convItemIdToString(itemId);
             // check if the item's behavior should be overridden
-            if (mToolbarOverrideButtons != null && mToolbarOverrideButtons.contains(itemKey)) {
+            if (itemKey != null && mToolbarOverrideButtons != null && mToolbarOverrideButtons.contains(itemKey)) {
                 WritableMap params = Arguments.createMap();
                 params.putString(ON_TOOLBAR_BUTTON_PRESS, ON_TOOLBAR_BUTTON_PRESS);
                 params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);

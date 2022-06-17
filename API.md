@@ -856,12 +856,19 @@ Defines whether the viewer will add padding to take account of the system status
 #### overrideToolbarButtonBehavior
 array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, defaults to none
 
-Defines the buttons in the right section of the top app nav bar or the bottom toolbar that will skip default behavior when pressed.
+Defines the option buttons in the top app nav bar or the bottom toolbar that will skip default behavior when pressed.
 They will still be displayed in the toolbar, and the function [`onToolbarButtonPress`](#ontoolbarbuttonpress) will be called where custom behavior can be implemented.
 
 ```js
 <DocumentView
   overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
+  onToolbarButtonPress={({id}) => {
+    if (id === Config.Buttons.shareButton) {
+      console.log('Share button pressed');
+    } else if (id === Config.Buttons.searchButton) {
+      console.log('Search button pressed');
+    }
+  }}
 />
 ```
 
@@ -878,6 +885,7 @@ id | string | one of [`Config.Buttons`](./src/Config/Config.ts) constants repres
 
 ```js
 <DocumentView
+  overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
   onToolbarButtonPress={({id}) => {
     if (id === Config.Buttons.shareButton) {
       console.log('Share button pressed');
