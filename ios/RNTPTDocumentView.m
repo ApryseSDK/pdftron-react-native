@@ -2521,9 +2521,23 @@ NS_ASSUME_NONNULL_END
             NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
                                     buttonString];
             const SEL selector = NSSelectorFromString(actionName);
-            
+
             RNTPT_addMethod([documentController class], selector, ^(id documentController) {
-                [self.delegate toolbarButtonPressed:self withKey:buttonString];
+                if ([documentController isKindOfClass:[RNTPTDocumentController class]]) {
+                    RNTPTDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                } else if ([documentController isKindOfClass:[RNTPTCollaborationDocumentController class]]) {
+                    RNTPTCollaborationDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                }
             });
             
             toolbarItem.action = selector;
@@ -3485,6 +3499,14 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(savedSignaturesChanged:)]) {
         [self.delegate savedSignaturesChanged:self];
+    }
+}
+
+- (void)rnt_documentViewControllerToolbarButtonPressed:(PTDocumentBaseViewController *)documentViewController
+                                          buttonString:(NSString *)buttonString
+{
+    if ([self.delegate respondsToSelector:@selector(toolbarButtonPressed:withKey:)]) {
+        [self.delegate toolbarButtonPressed:self withKey:buttonString];
     }
 }
 
