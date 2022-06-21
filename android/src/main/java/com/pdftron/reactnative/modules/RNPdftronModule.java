@@ -16,6 +16,7 @@ import com.pdftron.pdf.model.StandardStampOption;
 import com.pdftron.pdf.utils.AppUtils;
 import com.pdftron.pdf.utils.PdfViewCtrlSettingsManager;
 import com.pdftron.pdf.utils.PdfViewCtrlTabsManager;
+import com.pdftron.pdf.utils.RecentFilesManager;
 import com.pdftron.pdf.utils.Utils;
 import com.pdftron.pdf.utils.ViewerUtils;
 import com.pdftron.reactnative.utils.ReactUtils;
@@ -218,6 +219,7 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clearSavedViewerState(final Promise promise) {
         try {
+            RecentFilesManager.getInstance().clearFiles(getReactApplicationContext());
             PdfViewCtrlTabsManager.getInstance().cleanup();
             PdfViewCtrlTabsManager.getInstance().clearAllPdfViewCtrlTabInfo(getReactApplicationContext());
             PdfViewCtrlSettingsManager.setOpenUrlAsyncCache(getReactApplicationContext(), "");
