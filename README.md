@@ -36,8 +36,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ## Installation
 
-0. If using yarn, do: `yarn global add react-native-cli`
-
 1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup). The following steps will assume your app is created through `react-native init MyApp`. This guide also applies if you are using the [TypeScript template](https://reactnative.dev/docs/environment-setup#optional-using-a-specific-version-or-template).
 
 2. There are two ways to integrate the SDK:
@@ -48,9 +46,9 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      yarn add github:PDFTron/pdftron-react-native
-     yarn add @react-native-community/cli --dev
-     yarn add @react-native-community/cli-platform-android --dev
-     yarn add @react-native-community/cli-platform-ios --dev
+     yarn add @react-native-community/cli@7.0.1 --dev
+     yarn add @react-native-community/cli-platform-android@7.0.1 --dev
+     yarn add @react-native-community/cli-platform-ios@7.0.1 --dev
      yarn install
      ```
 
@@ -58,9 +56,9 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      npm install github:PDFTron/pdftron-react-native --save
-     npm install @react-native-community/cli --save-dev
-     npm install @react-native-community/cli-platform-android --save-dev
-     npm install @react-native-community/cli-platform-ios --save-dev
+     npm install @react-native-community/cli@7.0.1 --save-dev
+     npm install @react-native-community/cli-platform-android@7.0.1 --save-dev
+     npm install @react-native-community/cli-platform-ios@7.0.1 --save-dev
      npm install
      ```
 
@@ -70,9 +68,9 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      yarn add @pdftron/react-native-pdf
-     yarn add @react-native-community/cli --dev
-     yarn add @react-native-community/cli-platform-android --dev
-     yarn add @react-native-community/cli-platform-ios --dev
+     yarn add @react-native-community/cli@7.0.1 --dev
+     yarn add @react-native-community/cli-platform-android@7.0.1 --dev
+     yarn add @react-native-community/cli-platform-ios@7.0.1 --dev
      yarn install
      ```
 
@@ -80,9 +78,9 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      npm install @pdftron/react-native-pdf
-     npm install @react-native-community/cli --save-dev
-     npm install @react-native-community/cli-platform-android --save-dev
-     npm install @react-native-community/cli-platform-ios --save-dev
+     npm install @react-native-community/cli@7.0.1 --save-dev
+     npm install @react-native-community/cli-platform-android@7.0.1 --save-dev
+     npm install @react-native-community/cli-platform-ios@7.0.1 --save-dev
      npm install
      ```
 
