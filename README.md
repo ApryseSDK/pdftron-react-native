@@ -46,9 +46,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      yarn add github:PDFTron/pdftron-react-native
-     yarn add @react-native-community/cli@7.0.1 --dev
-     yarn add @react-native-community/cli-platform-android@7.0.1 --dev
-     yarn add @react-native-community/cli-platform-ios@7.0.1 --dev
      yarn install
      ```
 
@@ -56,9 +53,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      npm install github:PDFTron/pdftron-react-native --save
-     npm install @react-native-community/cli@7.0.1 --save-dev
-     npm install @react-native-community/cli-platform-android@7.0.1 --save-dev
-     npm install @react-native-community/cli-platform-ios@7.0.1 --save-dev
      npm install
      ```
 
@@ -68,9 +62,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      yarn add @pdftron/react-native-pdf
-     yarn add @react-native-community/cli@7.0.1 --dev
-     yarn add @react-native-community/cli-platform-android@7.0.1 --dev
-     yarn add @react-native-community/cli-platform-ios@7.0.1 --dev
      yarn install
      ```
 
@@ -78,9 +69,6 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
      ```shell
      npm install @pdftron/react-native-pdf
-     npm install @react-native-community/cli@7.0.1 --save-dev
-     npm install @react-native-community/cli-platform-android@7.0.1 --save-dev
-     npm install @react-native-community/cli-platform-ios@7.0.1 --save-dev
      npm install
      ```
 
