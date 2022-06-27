@@ -2,9 +2,6 @@
   package="com.example">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Required to read and write documents from device storage -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- Required if you want to record audio annotations -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
@@ -13,9 +10,7 @@
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:theme="@style/AppTheme"
-      android:largeHeap="true"
-      android:usesCleartextTraffic="true">
+      android:theme="@style/AppTheme">
 
       <meta-data
         android:name="pdftron_license_key"
@@ -27,7 +22,7 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
         android:launchMode="singleTask"
         android:exported="true"
-        android:windowSoftInputMode="adjustPan"
+        android:windowSoftInputMode="adjustResize"
         android:theme="@style/CustomAppTheme">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
