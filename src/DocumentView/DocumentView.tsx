@@ -693,6 +693,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  setAnnotationToolbarItemEnabled = (itemId: string, enable: boolean) : Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setAnnotationToolbarItemEnabled(tag, itemId, enable);
+    }
+    return Promise.resolve();
+  }
+
   getPageCropBox = (pageNumber: number): Promise<void | AnnotOptions.CropBox> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {

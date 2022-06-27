@@ -16,8 +16,6 @@ export default class App extends Component<Props> {
 
   constructor(props) {
     super(props);
-
-    RNPdftron.initialize("");
   }
 
   onLeadingNavButtonPressed = () => {
