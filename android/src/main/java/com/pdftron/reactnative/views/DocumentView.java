@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -280,6 +281,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 builder2.usingFileExtension(mDocumentExtension);
             }
             return builder2.usingTheme(R.style.RNAppTheme).build(getContext());
+        } else {
+            //add your custom toolbar menu here
+            mViewerBuilder.usingCustomToolbar(new int[]{R.menu.my_toolbar});
         }
         return super.getViewer();
     }
@@ -2162,6 +2166,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             onReceiveNativeEvent(params);
             return true;
         }
+        //check for you menu items here
+        if (item.getItemId() == R.id.action_show_toast) {
+            Toast.makeText(this.getContext(), "Show toast is clicked!", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.action_item_a) {
+            Toast.makeText(this.getContext(), "Item A clicked!", Toast.LENGTH_SHORT).show();
+        }
 
         return super.onToolbarOptionsItemSelected(item);
     }
@@ -3498,7 +3508,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAnnotationToolbarItemEnabled(String itemId, boolean enable) {
         if (mPdfViewCtrlTabHostFragment != null &&
-            mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
+                mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
             int buttonId = convStringToButtonId(itemId);
             if (buttonId == 0) {
                 for (int i = 0; i < mToolIdMap.size(); i++) {

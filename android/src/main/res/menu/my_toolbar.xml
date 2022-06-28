@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_item_a"
+        android:icon="@android:drawable/arrow_up_float"
+        android:title="item A"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_show_toast"
+        android:title="Show toast"
+        app:showAsAction="never" />
+</menu>
