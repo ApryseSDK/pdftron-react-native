@@ -2166,7 +2166,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             onReceiveNativeEvent(params);
             return true;
         }
-        //check for you menu items here
+        //check for your menu items here
         if (item.getItemId() == R.id.action_show_toast) {
             Toast.makeText(this.getContext(), "Show toast is clicked!", Toast.LENGTH_SHORT).show();
         } else if (item.getItemId() == R.id.action_item_a) {

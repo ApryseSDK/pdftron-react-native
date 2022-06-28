@@ -2,7 +2,6 @@
 <resources>
 
     <style name="RNAppTheme" parent="RNAppThemeBase">
-        <item name="toolbarNavigationButtonStyle">@style/ToolbarButtonNavigationStyle</item>
     </style>
 
     <style name="RNAppThemeBase" parent="PDFTronAppTheme">
@@ -11,15 +10,6 @@
 
     <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
         <item name="showSearchWeb">false</item>
-    </style>
-
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorControlNormal">@android:color/holo_red_dark</item>
-        <item name="iconTint">@android:color/holo_red_dark</item>
-    </style>
-
-    <style name="ToolbarButtonNavigationStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="android:tint">@android:color/holo_red_dark</item>
     </style>
 
 </resources>
