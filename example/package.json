@@ -13,9 +13,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "^18.0.0",
-    "react-native": "^0.69.0",
     "deprecated-react-native-prop-types": "^2.3.0",
+    "react": "^18.0.0",
+    "react-native": "^0.69.1",
     "react-native-pdftron": "file:../"
   },
   "devDependencies": {

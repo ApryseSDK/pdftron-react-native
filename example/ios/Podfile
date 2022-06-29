@@ -6,6 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 
 target 'example' do
   # PDFTron
+  use_frameworks!
   pod 'PDFNet', podspec: 'https://pdftron.com/downloads/ios/react-native/latest.podspec'
   pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
   config = use_native_modules!
@@ -31,7 +32,7 @@ target 'example' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # use_flipper!()
 
   post_install do |installer|
     react_native_post_install(installer)
