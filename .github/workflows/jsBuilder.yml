@@ -18,8 +18,9 @@ jobs:
 
       - name: Install dependencies
         run: | 
+          npm i react-native@0.68.2
           npm i
-      
+
       - name: Node setup
         uses: actions/setup-node@v2
         with:
@@ -46,7 +47,7 @@ jobs:
           branch: ${{ github.event.pull_request.head.ref }} # pushes the commit to the branch being merged into `master`
 
   package-json-update:
-    needs: transpile-ts    
+    needs: transpile-ts
     runs-on: ubuntu-latest
 
     steps:
@@ -55,7 +56,7 @@ jobs:
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token.
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo.
-          ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master` 
+          ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master`
 
       - name: Get Latest package.json
         run: | 
@@ -65,18 +66,18 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -m "Updating package.json" -a || echo "No commit needed. Package.json is already up-to-date"
-      
+
       - name: Node setup
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org/         
+          registry-url: https://registry.npmjs.org/
 
       - name: Update package.json
         run: node scripts/update_version.js
 
-      - name: Add package.json 
-        run: git add package.json  
+      - name: Add package.json
+        run: git add package.json
 
       - name: Commit files
         run: | # Change last line to your preferred commit message (I like `chore: build js files`).
