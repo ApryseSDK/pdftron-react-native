@@ -27,6 +27,9 @@ jobs:
           node-version: '16'
           cache: 'npm'
 
+      - name: Clean install dependencies
+        run: npm ci
+
       - name: Build JavaScript files
         run: | # Change line to your build script command.
           npm run start 
