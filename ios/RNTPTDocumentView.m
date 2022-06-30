@@ -2547,6 +2547,38 @@ NS_ASSUME_NONNULL_END
         }
         documentController.toolbarItems = [bottomToolbarItems copy];
     }
+    
+    // Override action of overridden toolbar button items
+    if (self.overrideToolbarButtonBehavior) {
+        for (NSString *buttonString in self.overrideToolbarButtonBehavior) {
+            UIBarButtonItem *toolbarItem = [self itemForButton:buttonString
+                                                 inViewController:documentController];
+            
+            NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
+                                    buttonString];
+            const SEL selector = NSSelectorFromString(actionName);
+
+            RNTPT_addMethod([documentController class], selector, ^(id documentController) {
+                if ([documentController isKindOfClass:[RNTPTDocumentController class]]) {
+                    RNTPTDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                } else if ([documentController isKindOfClass:[RNTPTCollaborationDocumentController class]]) {
+                    RNTPTCollaborationDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                }
+            });
+            
+            toolbarItem.action = selector;
+        }
+    }
 }
 
 - (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
@@ -3504,6 +3536,14 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(savedSignaturesChanged:)]) {
         [self.delegate savedSignaturesChanged:self];
+    }
+}
+
+- (void)rnt_documentViewControllerToolbarButtonPressed:(PTDocumentBaseViewController *)documentViewController
+                                          buttonString:(NSString *)buttonString
+{
+    if ([self.delegate respondsToSelector:@selector(toolbarButtonPressed:withKey:)]) {
+        [self.delegate toolbarButtonPressed:self withKey:buttonString];
     }
 }
 

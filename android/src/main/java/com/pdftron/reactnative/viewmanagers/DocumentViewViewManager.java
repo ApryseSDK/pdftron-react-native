@@ -526,6 +526,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
     }
 
+    @ReactProp(name = "overrideToolbarButtonBehavior")
+    public void setOverrideToolbarButtonBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideToolbarButtonBehavior(items);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

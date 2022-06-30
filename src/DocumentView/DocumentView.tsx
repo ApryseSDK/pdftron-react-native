@@ -160,6 +160,8 @@ const propTypes = {
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
   maxSignatureCount: PropTypes.number,
+  overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
+  onToolbarButtonPress: func<(event: {id: string}) => void>(),
   ...ViewPropTypes,
 };
 
@@ -410,6 +412,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onTabChanged) {
         this.props.onTabChanged({
           'currentTab': event.nativeEvent.currentTab
+        });
+      }
+    } else if (event.nativeEvent.onToolbarButtonPress) {
+      if (this.props.onToolbarButtonPress) {
+        this.props.onToolbarButtonPress({
+          'id': event.nativeEvent.id,
         });
       }
     }

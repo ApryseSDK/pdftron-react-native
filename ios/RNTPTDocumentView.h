@@ -379,6 +379,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -527,6 +529,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSString* annotationManagerEditMode;
 
 @property (nonatomic, copy, nullable) NSString *defaultEraserType;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideToolbarButtonBehavior;
 
 #pragma mark - Methods
 
