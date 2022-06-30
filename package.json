@@ -29,14 +29,14 @@
   ],
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "prop-types": "*",
     "react": "*",
-    "react-native": "^0.68.2"
+    "react-native": "*",
+    "prop-types": "*"
   },
   "devDependencies": {
-    "@types/react": "*",
-    "@types/react-native": "^0.68.1",
     "react": "*",
+    "@types/react": "*",
+    "@types/react-native": "*",
     "typescript": "*"
   }
 }
