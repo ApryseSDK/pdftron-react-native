@@ -38,7 +38,7 @@ jobs:
         run: | # Change last line to your preferred commit message (I like `chore: build js files`).
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Updating JS files" -a || echo "No commit needed. JS files are already up-to-date"
+          git commit -m "Updating JS files" || echo "No commit needed. JS files are already up-to-date"
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
