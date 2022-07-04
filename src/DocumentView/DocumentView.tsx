@@ -1225,6 +1225,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       // @ts-ignore
       <RCTDocumentView
         ref={this._setNativeRef}
+        // @ts-ignore
+        style={{flex: 1}}
         // @ts-ignore: Intentionally exclude `onChange` from being exposed as a prop.
         onChange={this.onChange}
         {...this.props}

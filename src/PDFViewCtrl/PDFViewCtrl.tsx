@@ -22,6 +22,8 @@ export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
   render() {
     return (
       <RCTPDFViewCtrl
+        // @ts-ignore
+        style={{flex: 1}}
         {...this.props}
       />
     )
