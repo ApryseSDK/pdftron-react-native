@@ -32,6 +32,8 @@ public final class Constants {
     public static final String ON_SAVED_SIGNATURES_CHANGED = "onSavedSignaturesChanged";
     public static final String ON_TOOLBAR_BUTTON_PRESS = "onToolbarButtonPress";
 
+    // Hygen Generated Event Listeners
+
     // BUTTONS
     public static final String BUTTON_TOOLS = "toolsButton";
     public static final String BUTTON_SEARCH = "searchButton";
@@ -360,6 +362,8 @@ public final class Constants {
     public static final String KEY_TOOL = "tool";
 
     public static final String KEY_CURRENT_TAB = "currentTab";
+
+    // Hygen Generated Keys
 
     // Color RGBA
     public static final String COLOR_RED = "red";

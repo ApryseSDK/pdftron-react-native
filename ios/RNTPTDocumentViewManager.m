@@ -651,6 +651,8 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
     }
 }
 
+// Hygen Generated Props
+
 
 - (UIView *)view
 {
@@ -976,6 +978,8 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
         });
     }
 }
+
+// Hygen Generated Event Listeners
 
 #pragma mark - Methods
 
@@ -1650,6 +1654,8 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
+
+#pragma mark - Hygen Generated Methods
 
 #pragma mark - Coordination
 

@@ -746,6 +746,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    // Hygen Generated Props
+
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
             if (mPdfViewCtrlTabHostFragment != null) {
@@ -3099,6 +3101,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return true;
     }
 
+    // Hygen Generated Event Listeners
+
     public void importBookmarkJson(String bookmarkJson) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
 
@@ -4808,6 +4812,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return "";
     }
+
+    // Hygen Generated Methods
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;

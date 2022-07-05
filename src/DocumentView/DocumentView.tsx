@@ -162,6 +162,9 @@ const propTypes = {
   maxSignatureCount: PropTypes.number,
   overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
+
+  // Hygen Generated Props
+  
   ...ViewPropTypes,
 };
 
@@ -420,6 +423,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
           'id': event.nativeEvent.id,
         });
       }
+    // Hygen Generated Event Listeners
     }
   }
 
@@ -563,6 +567,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     }
     return Promise.resolve();
   }
+
+  // Hygen Generated Methods
 
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.

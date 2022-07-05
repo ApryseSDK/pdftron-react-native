@@ -195,4 +195,6 @@
 
 - (NSString *)getSavedSignatureFolderForDocumentViewTag:(NSNumber *)tag;
 
+#pragma mark - Hygen Generated Methods
+
 @end
