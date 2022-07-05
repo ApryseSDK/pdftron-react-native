@@ -96,8 +96,6 @@ const propTypes = {
   maxTabCount: PropTypes.number,
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
-  // Hygen Generated Props
-  maxSignatureCount: PropTypes.number,
   annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
     oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
     PropTypes.exact({
@@ -161,6 +159,12 @@ const propTypes = {
   onTabChanged: func<(event: {currentTab: string}) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
+  maxSignatureCount: PropTypes.number,
+  overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
+  onToolbarButtonPress: func<(event: {id: string}) => void>(),
+
+  // Hygen Generated Props
+  
   ...ViewPropTypes,
 };
 
@@ -411,6 +415,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
       if (this.props.onTabChanged) {
         this.props.onTabChanged({
           'currentTab': event.nativeEvent.currentTab
+        });
+      }
+    } else if (event.nativeEvent.onToolbarButtonPress) {
+      if (this.props.onToolbarButtonPress) {
+        this.props.onToolbarButtonPress({
+          'id': event.nativeEvent.id,
         });
       }
     // Hygen Generated Event Listeners
@@ -685,6 +695,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
       return DocumentViewManager.getCustomDataForAnnotation(tag, annotationID, pageNumber, key);
+    }
+    return Promise.resolve();
+  }
+
+  setAnnotationToolbarItemEnabled = (itemId: string, enable: boolean) : Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setAnnotationToolbarItemEnabled(tag, itemId, enable);
     }
     return Promise.resolve();
   }

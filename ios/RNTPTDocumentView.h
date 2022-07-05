@@ -379,6 +379,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
+
 // Hygen Generated Event Listeners
 
 @end
@@ -456,6 +458,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic) BOOL storeNewSignature;
 
+@property (nonatomic, assign) int maxSignatureCount;
+
 @property (nonatomic, assign, getter=isCollabEnabled) BOOL collabEnabled;
 
 @property (nonatomic, assign, getter=isReplyReviewStateEnabled) BOOL replyReviewStateEnabled;
@@ -530,6 +534,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, copy, nullable) NSString *defaultEraserType;
 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideToolbarButtonBehavior;
+
 #pragma mark - Methods
 
 - (void)setToolMode:(NSString *)toolMode;
@@ -586,6 +592,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (NSString *)getCustomDataForAnnotation: (NSString *)annotationId
     pageNumber:(NSInteger)pageNumber key:(NSString *)key;
+
+- (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable;
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBox:(NSInteger)pageNumber;
 

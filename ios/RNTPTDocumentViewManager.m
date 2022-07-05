@@ -270,6 +270,13 @@ RCT_CUSTOM_VIEW_PROPERTY(signSignatureFieldsWithStamps, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(maxSignatureCount, int, RNTPTDocumentView)
+{
+    if (json) {
+        view.maxSignatureCount = [RCTConvert int:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(followSystemDarkMode, BOOL, RNTPTDocumentView)
 {
     if (json) {
@@ -637,7 +644,15 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideToolbarButtonBehavior = [RCTConvert NSArray:json];
+    }
+}
+
 // Hygen Generated Props
+
 
 - (UIView *)view
 {
@@ -954,6 +969,16 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarButtonPress": @"onToolbarButtonPress",
+            PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
+        });
+    }
+}
+
 // Hygen Generated Event Listeners
 
 #pragma mark - Methods
@@ -1256,6 +1281,15 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+- (void)setAnnotationToolbarItemEnabled:(NSNumber *)tag itemId:(NSString *)itemId enable:(BOOL)enable
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView setAnnotationToolbarItemEnabled:itemId enable:enable];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
+    }
+}
 
 - (NSDictionary<NSString *, NSNumber *> *)getPageCropBoxForDocumentViewTag:(NSNumber *)tag pageNumber:(NSInteger)pageNumber
 {

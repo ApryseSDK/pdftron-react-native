@@ -489,6 +489,22 @@ RCT_REMAP_METHOD(getCustomDataForAnnotation,
     }
 }
 
+RCT_REMAP_METHOD(setAnnotationToolbarItemEnabled,
+                 setAnnotationToolbarItemEnabledForDocumentViewTag:(nonnull NSNumber *)tag
+                 itemId:(NSString *)itemId
+                 enable:(BOOL)enable
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejector:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setAnnotationToolbarItemEnabled:tag itemId:itemId enable:enable];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_annotation_toolbar_item_enabled", @"Failed to set item enabled/disabled", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(getPageCropBox,
                  getPageCropBoxForDocumentViewTag: (nonnull NSNumber *)tag
                  pageNumber:(NSInteger)pageNumber

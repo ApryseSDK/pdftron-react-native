@@ -528,6 +528,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
     // Hygen Generated Props
 
+    @ReactProp(name = "overrideToolbarButtonBehavior")
+    public void setOverrideToolbarButtonBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideToolbarButtonBehavior(items);
+    }
+
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
@@ -726,6 +731,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             return documentView.getCustomDataForAnnotation(annotationID, pageNumber, key);
         } else {
             throw new PDFNetException("", 0L, getName(), "getCustomDataForAnnotation", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setAnnotationToolbarItemEnabled(int tag, String itemId, boolean enable) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setAnnotationToolbarItemEnabled(itemId, enable);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setAnnotationToolbarItemEnabled", "Unable to find DocumentView.");
         }
     }
 

@@ -853,6 +853,49 @@ Defines whether the viewer will add padding to take account of the system status
 />
 ```
 
+#### overrideToolbarButtonBehavior
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, defaults to none
+
+Defines the option buttons in the top app nav bar or the bottom toolbar that will skip default behavior when pressed.
+They will still be displayed in the toolbar, and the function [`onToolbarButtonPress`](#ontoolbarbuttonpress) will be called where custom behavior can be implemented.
+
+```js
+<DocumentView
+  overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
+  onToolbarButtonPress={({id}) => {
+    if (id === Config.Buttons.shareButton) {
+      console.log('Share button pressed');
+    } else if (id === Config.Buttons.searchButton) {
+      console.log('Search button pressed');
+    }
+  }}
+/>
+```
+
+#### onToolbarButtonPress
+function, optional
+
+This function is called when a toolbar item passed in to [`overrideToolbarButtonBehavior`](#overridetoolbarbuttonbehavior) is pressed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | one of [`Config.Buttons`](./src/Config/Config.ts) constants representing the item that has been pressed
+
+```js
+<DocumentView
+  overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
+  onToolbarButtonPress={({id}) => {
+    if (id === Config.Buttons.shareButton) {
+      console.log('Share button pressed');
+    } else if (id === Config.Buttons.searchButton) {
+      console.log('Search button pressed');
+    }
+  }}
+/>
+```
+
 ### Layout
 
 #### fitMode
@@ -1851,12 +1894,11 @@ number, optional
 
 Defines the maximum number of signatures you can create for a document.
 
-Android only.
-
 ```js 
 <DocumentView
   maxSignatureCount={3}
 />
+```
 
 #### photoPickerEnabled
 bool, optional, defaults to true. Android only.
@@ -2172,6 +2214,29 @@ committed | bool | true if either ink or poly-shape tool is committed, false oth
 this._viewer.commitTool().then((committed) => {
   // committed: true if either ink or poly-shape tool is committed, false otherwise
 });
+```
+
+#### setAnnotationToolbarItemEnabled
+Sets the annotation toolbar item corresponding to the given string key enabled/disabled.
+
+Returns a Promise.
+
+Parameters:
+
+Name | Type    | Description
+--- |---------| ---
+itemId | string  | one of the constants defined in `Config.Tools` or the `Config.CustomToolItemKey.Id` defined in a custom tool item object
+enable | boolean | whether to enable or disable the item
+
+```js
+this._viewer
+  .setAnnotationToolbarItemEnabled(
+    Config.Tools.annotationCreateSignature,
+    false,
+  )
+  .then(() => {
+    console.log('disabled');
+  });
 ```
 
 ### Page

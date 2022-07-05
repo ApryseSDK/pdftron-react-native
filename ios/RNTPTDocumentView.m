@@ -175,6 +175,7 @@ NS_ASSUME_NONNULL_END
 
     _annotationToolbarItemKeyMap = [NSMutableDictionary dictionary];
     _annotationToolbarItemCounter = 0;
+    _maxSignatureCount = -1;
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -1846,6 +1847,42 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable
+{
+    if ([self.documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController *controller = (PTDocumentController *) self.documentViewController;
+        Class toolClass = [[self class] toolClassForKey:itemId];
+
+        if (toolClass != Nil) {
+            // default toolbar button
+            for (PTToolGroup *toolGroup in controller.toolGroupManager.groups) {
+                for (UIBarButtonItem *item in toolGroup.barButtonItems) {
+                    if ([item isKindOfClass:[PTToolBarButtonItem class]]) {
+                        PTToolBarButtonItem *toolItem = (PTToolBarButtonItem *)item;
+                        
+                        if ([toolItem.toolClass isEqual:toolClass]) {
+                            toolItem.enabled = enable;
+                        }
+                    }
+                }
+            }
+        } else {
+            // custom toolbar button
+            NSNumber *const itemTag = _annotationToolbarItemKeyMap[itemId];
+            
+            if (itemTag) {
+                for (PTToolGroup *toolGroup in controller.toolGroupManager.groups) {
+                    for (UIBarButtonItem *item in toolGroup.barButtonItems) {
+                        if (item.tag == itemTag.integerValue) {
+                            item.enabled = enable;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 #pragma mark - Viewer options
 
 -(void)setNightModeEnabled:(BOOL)nightModeEnabled
@@ -2118,6 +2155,8 @@ NS_ASSUME_NONNULL_END
     toolManager.signatureAnnotationOptions.storeNewSignature = self.storeNewSignature;
     
     toolManager.signatureAnnotationOptions.signSignatureFieldsWithStamps = self.signSignatureFieldsWithStamps;
+    
+    toolManager.signatureAnnotationOptions.maxSignatureCount = self.maxSignatureCount;
 
     // Annotation permission check
     toolManager.annotationPermissionCheckEnabled = self.annotationPermissionCheckEnabled;
@@ -2508,6 +2547,38 @@ NS_ASSUME_NONNULL_END
         }
         documentController.toolbarItems = [bottomToolbarItems copy];
     }
+    
+    // Override action of overridden toolbar button items
+    if (self.overrideToolbarButtonBehavior) {
+        for (NSString *buttonString in self.overrideToolbarButtonBehavior) {
+            UIBarButtonItem *toolbarItem = [self itemForButton:buttonString
+                                                 inViewController:documentController];
+            
+            NSString *actionName = [NSString stringWithFormat:@"overriddenPressed_%@",
+                                    buttonString];
+            const SEL selector = NSSelectorFromString(actionName);
+
+            RNTPT_addMethod([documentController class], selector, ^(id documentController) {
+                if ([documentController isKindOfClass:[RNTPTDocumentController class]]) {
+                    RNTPTDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                } else if ([documentController isKindOfClass:[RNTPTCollaborationDocumentController class]]) {
+                    RNTPTCollaborationDocumentController *controller = documentController;
+                    
+                    if ([controller.delegate respondsToSelector:@selector(rnt_documentViewControllerToolbarButtonPressed:buttonString:)]) {
+                        [controller.delegate rnt_documentViewControllerToolbarButtonPressed:controller
+                                                                               buttonString:buttonString];
+                    }
+                }
+            });
+            
+            toolbarItem.action = selector;
+        }
+    }
 }
 
 - (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
@@ -2574,10 +2645,10 @@ NS_ASSUME_NONNULL_END
             
             UIImage * const toolbarItemIcon = [self imageForImageName:toolbarItemIconName];
             // NOTE: Use the image-based initializer to avoid showing the title (safe to set the title afterwards though).
-            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc] initWithImage:toolbarItemIcon
-                                                                                                style:UIBarButtonItemStylePlain
-                                                                                               target:self
-                                                                                               action:@selector(customToolGroupToolbarItemPressed:)];
+            PTSelectableBarButtonItem * const item = [[PTSelectableBarButtonItem alloc]                                                                 initWithImage:toolbarItemIcon
+                                                      style:UIBarButtonItemStylePlain
+                                                      target:self
+                                                      action:@selector(customToolGroupToolbarItemPressed:)];
             item.title = toolbarItemName;
             
             NSAssert(toolbarItemId != nil, @"Expected a toolbar item id");
@@ -2891,9 +2962,17 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setMaxSignatureCount:(int)maxSignatureCount
+{
+    _maxSignatureCount = maxSignatureCount;
+    
+    [self applyViewerSettings];
+}
+
 - (NSArray *)getSavedSignatures
 {
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];
+    signaturesManager.showDefaultSignature = self.showSavedSignatures;
     NSUInteger numOfSignatures = [signaturesManager numberOfSavedSignatures];
     NSMutableArray<NSString*> *signatures = [[NSMutableArray alloc] initWithCapacity:numOfSignatures];
     
@@ -3457,6 +3536,14 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(savedSignaturesChanged:)]) {
         [self.delegate savedSignaturesChanged:self];
+    }
+}
+
+- (void)rnt_documentViewControllerToolbarButtonPressed:(PTDocumentBaseViewController *)documentViewController
+                                          buttonString:(NSString *)buttonString
+{
+    if ([self.delegate respondsToSelector:@selector(toolbarButtonPressed:withKey:)]) {
+        [self.delegate toolbarButtonPressed:self withKey:buttonString];
     }
 }
 
