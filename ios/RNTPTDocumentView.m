@@ -2036,8 +2036,7 @@ NS_ASSUME_NONNULL_END
         pencilTool = [PTPencilDrawingCreate class];
     }
 
-    toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTFreeHandCreate class];
-    // self.toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
+    toolManager.pencilTool = self.useStylusAsPen ? pencilTool : [PTPanTool class];
 
     // Disable UI elements.
     [self disableElementsInternal:self.disabledElements documentViewController:documentViewController];
