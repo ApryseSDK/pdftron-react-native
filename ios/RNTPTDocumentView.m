@@ -526,6 +526,15 @@ NS_ASSUME_NONNULL_END
                selector:@selector(undoManagerStateDidChangeWithModification:)
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
+    
+    if ([[documentViewController class] isSubclassOfClass:[PTDocumentController class]]) {
+        PTToolGroupManager *toolGroupManager = ((PTDocumentController *) documentViewController).toolGroupManager;
+        
+        [center addObserver:self
+                   selector:@selector(toolGroupDidChangeWithNotification:)
+                       name:PTToolGroupDidChangeNotification
+                     object:toolGroupManager];
+    }
 }
 
 - (void)deregisterForPDFViewCtrlNotifications:(PTDocumentBaseViewController *)documentViewController
@@ -575,6 +584,14 @@ NS_ASSUME_NONNULL_END
     [center removeObserver:self
                    name:NSUndoManagerDidRedoChangeNotification
                  object:undoManager];
+    
+    if ([[documentViewController class] isSubclassOfClass:[PTDocumentController class]]) {
+        PTToolGroupManager *toolGroupManager = ((PTDocumentController *) documentViewController).toolGroupManager;
+        
+        [center removeObserver:self
+                          name:PTToolGroupDidChangeNotification
+                        object:toolGroupManager];
+    }
 }
 
 - (void)registerForTabbedDocumentViewControllerNotifications:(PTTabbedDocumentViewController *)tabbedDocumentViewController
@@ -2581,6 +2598,33 @@ NS_ASSUME_NONNULL_END
     }
 }
 
+- (PTDefaultAnnotationToolbarKey)keyForToolGroup:(PTToolGroup *)toolGroup toolGroupManager:(PTToolGroupManager *)toolGroupManager
+{
+    if ([toolGroup isEqual:toolGroupManager.viewItemGroup]) {
+        return PTAnnotationToolbarView;
+    } else if ([toolGroup isEqual:toolGroupManager.annotateItemGroup]) {
+        return PTAnnotationToolbarAnnotate;
+    } else if ([toolGroup isEqual:toolGroupManager.drawItemGroup]) {
+        return PTAnnotationToolbarDraw;
+    } else if ([toolGroup isEqual:toolGroupManager.insertItemGroup]) {
+        return PTAnnotationToolbarInsert;
+    } else if ([toolGroup isEqual:toolGroupManager.fillAndSignItemGroup]) {
+        return PTAnnotationToolbarFillAndSign;
+    } else if ([toolGroup isEqual:toolGroupManager.prepareFormItemGroup]) {
+        return PTAnnotationToolbarPrepareForm;
+    } else if ([toolGroup isEqual:toolGroupManager.measureItemGroup]) {
+        return PTAnnotationToolbarMeasure;
+    } else if ([toolGroup isEqual:toolGroupManager.redactItemGroup]) {
+        return PTAnnotationToolbarRedaction;
+    } else if ([toolGroup isEqual:toolGroupManager.pensItemGroup]) {
+        return PTAnnotationToolbarPens;
+    } else if ([toolGroup isEqual:toolGroupManager.favoritesItemGroup]) {
+        return PTAnnotationToolbarFavorite;
+    }
+    
+    return nil;
+}
+
 - (PTToolGroup *)toolGroupForKey:(PTDefaultAnnotationToolbarKey)key toolGroupManager:(PTToolGroupManager *)toolGroupManager
 {
     NSDictionary<PTDefaultAnnotationToolbarKey, PTToolGroup *> *toolGroupMap = @{
@@ -4253,6 +4297,28 @@ NS_ASSUME_NONNULL_END
         if ([createTool isUndoManagerEnabled]) {
             [self beginObservingUndoManager:createTool.undoManager];
         }
+    }
+}
+
+-(void)toolGroupDidChangeWithNotification:(NSNotification *)notification
+{
+    if (![[self.currentDocumentViewController class] isSubclassOfClass:[PTDocumentController class]] ||
+        notification.object != ((PTDocumentController *) self.currentDocumentViewController).toolGroupManager) {
+        return;
+    }
+    
+    PTToolGroupManager *toolGroupManager = ((PTDocumentController *) self.currentDocumentViewController).toolGroupManager;
+    PTToolGroup *toolGroup = toolGroupManager.selectedGroup;
+    
+    NSString *toolGroupId = [self keyForToolGroup:toolGroup toolGroupManager:toolGroupManager];
+    
+    if (!toolGroupId) {
+        // custom toolbar
+        toolGroupId = toolGroup.identifier;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(currentToolbarChanged:toolbar:)]) {
+        [self.delegate currentToolbarChanged:self toolbar:toolGroupId];
     }
 }
 

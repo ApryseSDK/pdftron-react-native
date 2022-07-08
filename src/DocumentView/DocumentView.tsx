@@ -164,6 +164,7 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
+  onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
   
   ...ViewPropTypes,
 };
@@ -424,6 +425,12 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
         });
       }
     // Hygen Generated Event Listeners
+    } else if (event.nativeEvent.onCurrentToolbarChanged) {
+      if (this.props.onCurrentToolbarChanged) {
+        this.props.onCurrentToolbarChanged({
+          'toolbar': event.nativeEvent.toolbar,
+        });
+      }
     }
   }
 

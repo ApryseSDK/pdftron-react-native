@@ -980,6 +980,16 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
 }
 
 // Hygen Generated Event Listeners
+- (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onCurrentToolbarChanged": @"onCurrentToolbarChanged",
+            @"toolbar": toolbar,
+        });
+    }
+}
+
 
 #pragma mark - Methods
 
