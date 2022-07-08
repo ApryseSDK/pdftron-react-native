@@ -164,9 +164,11 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
-  
+
   ...ViewPropTypes,
 };
+
+// testing purposes, will delete
 
 // Generates the prop types for TypeScript users, from PropTypes.
 type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
