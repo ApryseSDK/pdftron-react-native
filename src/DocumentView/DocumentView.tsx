@@ -161,14 +161,12 @@ const propTypes = {
   overflowMenuButtonIcon: PropTypes.string,
   maxSignatureCount: PropTypes.number,
   overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
-  onToolbarButtonPress: func<(event: {id: string}) => void>(),
+  onToolbarButtonPress: func<(event: {tempchange: string}) => void>(),
 
   // Hygen Generated Props
 
   ...ViewPropTypes,
 };
-
-// testing purposes, will delete
 
 // Generates the prop types for TypeScript users, from PropTypes.
 type DocumentViewProps = PropTypes.InferProps<typeof propTypes>;
@@ -422,7 +420,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onToolbarButtonPress) {
       if (this.props.onToolbarButtonPress) {
         this.props.onToolbarButtonPress({
-          'id': event.nativeEvent.id,
+          'tempchange': event.nativeEvent.tempchange,
         });
       }
     // Hygen Generated Event Listeners
