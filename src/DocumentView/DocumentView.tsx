@@ -161,7 +161,7 @@ const propTypes = {
   overflowMenuButtonIcon: PropTypes.string,
   maxSignatureCount: PropTypes.number,
   overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
-  onToolbarButtonPress: func<(event: {tempchange: string}) => void>(),
+  onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
 
@@ -420,7 +420,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     } else if (event.nativeEvent.onToolbarButtonPress) {
       if (this.props.onToolbarButtonPress) {
         this.props.onToolbarButtonPress({
-          'tempchange': event.nativeEvent.tempchange,
+          'id': event.nativeEvent.id,
         });
       }
     // Hygen Generated Event Listeners

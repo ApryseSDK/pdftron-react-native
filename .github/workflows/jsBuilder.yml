@@ -60,7 +60,7 @@ jobs:
 
       - name: Get Latest package.json
         run: | 
-          git fetch 
+          git pull 
           git checkout -m origin/master package.json 
           git add package.json
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
