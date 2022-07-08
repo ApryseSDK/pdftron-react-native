@@ -709,6 +709,25 @@ const myToolbar = {
 />
 ```
 
+#### onCurrentToolbarChanged
+function, optional
+
+This function is called when the current toolbar has changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | The current toolbar. One of the [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or the `id` of a custom toolbar object.
+
+```js
+<DocumentView
+  onCurrentToolbarChanged = {({toolbar}) => {
+    console.log('toolbar changed to: ' + toolbar);
+  }}
+/>
+```
+
 #### onAnnotationToolbarItemPress
 function, optional
 
