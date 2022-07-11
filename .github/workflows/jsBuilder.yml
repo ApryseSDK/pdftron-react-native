@@ -61,11 +61,7 @@ jobs:
       - name: Get Latest package.json
         run: | 
           git pull origin ${{ github.head_ref }}
-          git checkout -m origin/master package.json 
-          git add package.json
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Updating package.json" -a || echo "No commit needed. Package.json is already up-to-date"
+          git checkout -m origin/master package.json
 
       - name: Node setup
         uses: actions/setup-node@v2
@@ -83,7 +79,7 @@ jobs:
         run: | # Change last line to your preferred commit message (I like `chore: build js files`).
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Updating package version" 
+          git commit -m "Updating package version" || echo "No commit needed. Package.json is already up-to-date"
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
