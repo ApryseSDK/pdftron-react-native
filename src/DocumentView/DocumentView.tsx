@@ -164,7 +164,7 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
-
+  
   ...ViewPropTypes,
 };
 
