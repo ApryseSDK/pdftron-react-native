@@ -2157,6 +2157,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         ActionUtils.getInstance().setActionInterceptCallback(null);
 
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.removeOnToolbarChangedListener(mToolbarChangedListener);
+        }
+
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
@@ -2811,6 +2815,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private final PdfViewCtrlTabHostFragment2.OnToolbarChangedListener mToolbarChangedListener = new PdfViewCtrlTabHostFragment2.OnToolbarChangedListener() {
+        @Override
+        public void onToolbarChanged(String toolbar) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_CURRENT_TOOLBAR_CHANGED, ON_CURRENT_TOOLBAR_CHANGED);
+            params.putString(KEY_TOOLBAR, toolbar);
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -2990,6 +3005,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         StampManager.getInstance().setSignatureListener(mSignatureListener);
 
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
+
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.addOnToolbarChangedListener(mToolbarChangedListener);
+        }
 
         // collab
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment2) {
