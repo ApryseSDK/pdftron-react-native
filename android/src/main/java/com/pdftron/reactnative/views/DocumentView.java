@@ -769,10 +769,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 if (isValidToolbarTag(tag)) {
                     AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars
                             .getDefaultAnnotationToolbarBuilderByTag(tag);
-                    // SDK Support Issue 22893
-                    // To ensure if the client changes the order of the annotation tools that the UI
-                    // will reflect the changed state
-                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
                     annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
