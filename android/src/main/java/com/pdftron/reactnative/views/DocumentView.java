@@ -769,6 +769,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 if (isValidToolbarTag(tag)) {
                     AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars
                             .getDefaultAnnotationToolbarBuilderByTag(tag);
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
                     annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
