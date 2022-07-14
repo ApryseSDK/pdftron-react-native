@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
   requireNativeComponent,
-  ViewPropTypes,
   Platform,
   Alert,
   NativeModules,
   findNodeHandle,
 } from 'react-native';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 const { DocumentViewManager } = NativeModules;
 import { Config } from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";

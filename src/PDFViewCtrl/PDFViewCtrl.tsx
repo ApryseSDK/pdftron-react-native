@@ -2,9 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import {
   requireNativeComponent,
-  ViewPropTypes,
   Platform
 } from 'react-native';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 
 const propTypes = {
   document: PropTypes.string.isRequired,
