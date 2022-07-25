@@ -1,7 +1,7 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "3.0.2-beta.119",
+  "version": "3.0.2-beta.120",
   "description": "React Native Pdftron",
   "main": "./lib/index.js",
   "typings": "index.ts",
@@ -29,6 +29,7 @@
   ],
   "readmeFilename": "README.md",
   "peerDependencies": {
+    "deprecated-react-native-prop-types": "*",
     "react": "*",
     "react-native": "*",
     "prop-types": "*"

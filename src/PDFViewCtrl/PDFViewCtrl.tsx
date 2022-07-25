@@ -4,7 +4,6 @@ import {
   requireNativeComponent,
   Platform
 } from 'react-native';
-// @ts-ignore
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 
 const propTypes = {
@@ -23,7 +22,7 @@ export class PDFViewCtrl extends PureComponent<PDFViewCtrlProps, any> {
     return (
       <RCTPDFViewCtrl
         // @ts-ignore
-        style={{flex: 1}}
+        style={{ flex:1 }}
         {...this.props}
       />
     )
