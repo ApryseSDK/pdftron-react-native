@@ -2,12 +2,12 @@ import React, { PureComponent } from 'react';
 import PropTypes, { Requireable, Validator } from 'prop-types';
 import {
   requireNativeComponent,
-  ViewPropTypes,
   Platform,
   Alert,
   NativeModules,
   findNodeHandle,
 } from 'react-native';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 const { DocumentViewManager } = NativeModules;
 import { Config } from "../Config/Config";
 import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
@@ -165,7 +165,7 @@ const propTypes = {
 
   // Hygen Generated Props
   onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
-  
+
   ...ViewPropTypes,
 };
 
@@ -1242,9 +1242,9 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   render() {
     return (
-      // @ts-ignore
       <RCTDocumentView
         ref={this._setNativeRef}
+        // @ts-ignore
         style={{ flex: 1 }}
         // @ts-ignore: Intentionally exclude `onChange` from being exposed as a prop.
         onChange={this.onChange}
