@@ -709,6 +709,25 @@ const myToolbar = {
 />
 ```
 
+#### onCurrentToolbarChanged
+function, optional
+
+This function is called when the current toolbar has changed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+toolbar | string | The current toolbar. One of the [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or the `id` of a custom toolbar object.
+
+```js
+<DocumentView
+  onCurrentToolbarChanged = {({toolbar}) => {
+    console.log('toolbar changed to: ' + toolbar);
+  }}
+/>
+```
+
 #### onAnnotationToolbarItemPress
 function, optional
 
@@ -850,6 +869,49 @@ Defines whether the viewer will add padding to take account of the system status
 ```js
 <DocumentView
   padStatusBar={true}
+/>
+```
+
+#### overrideToolbarButtonBehavior
+array of [`Config.Buttons`](./src/Config/Config.ts) constants, optional, defaults to none
+
+Defines the option buttons in the top app nav bar or the bottom toolbar that will skip default behavior when pressed.
+They will still be displayed in the toolbar, and the function [`onToolbarButtonPress`](#ontoolbarbuttonpress) will be called where custom behavior can be implemented.
+
+```js
+<DocumentView
+  overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
+  onToolbarButtonPress={({id}) => {
+    if (id === Config.Buttons.shareButton) {
+      console.log('Share button pressed');
+    } else if (id === Config.Buttons.searchButton) {
+      console.log('Search button pressed');
+    }
+  }}
+/>
+```
+
+#### onToolbarButtonPress
+function, optional
+
+This function is called when a toolbar item passed in to [`overrideToolbarButtonBehavior`](#overridetoolbarbuttonbehavior) is pressed.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+id | string | one of [`Config.Buttons`](./src/Config/Config.ts) constants representing the item that has been pressed
+
+```js
+<DocumentView
+  overrideToolbarButtonBehavior={[Config.Buttons.shareButton, Config.Buttons.searchButton]}
+  onToolbarButtonPress={({id}) => {
+    if (id === Config.Buttons.shareButton) {
+      console.log('Share button pressed');
+    } else if (id === Config.Buttons.searchButton) {
+      console.log('Search button pressed');
+    }
+  }}
 />
 ```
 

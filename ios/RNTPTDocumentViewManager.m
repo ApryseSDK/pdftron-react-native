@@ -644,6 +644,15 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.overrideToolbarButtonBehavior = [RCTConvert NSArray:json];
+    }
+}
+
+// Hygen Generated Props
+
 
 - (UIView *)view
 {
@@ -959,6 +968,28 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         sender.onChange(result);
     }
 }
+
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarButtonPress": @"onToolbarButtonPress",
+            PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
+        });
+    }
+}
+
+// Hygen Generated Event Listeners
+- (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onCurrentToolbarChanged": @"onCurrentToolbarChanged",
+            @"toolbar": toolbar,
+        });
+    }
+}
+
 
 #pragma mark - Methods
 
@@ -1633,6 +1664,8 @@ RCT_CUSTOM_VIEW_PROPERTY(defaultEraserType, NSString, RNTPTDocumentView)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
+
+#pragma mark - Hygen Generated Methods
 
 #pragma mark - Coordination
 

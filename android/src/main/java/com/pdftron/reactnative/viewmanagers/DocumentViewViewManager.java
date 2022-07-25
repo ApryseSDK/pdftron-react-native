@@ -524,6 +524,13 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "maxSignatureCount")
     public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount) {
         SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
+   }
+
+    // Hygen Generated Props
+
+    @ReactProp(name = "overrideToolbarButtonBehavior")
+    public void setOverrideToolbarButtonBehavior(DocumentView documentView, @NonNull ReadableArray items) {
+        documentView.setOverrideToolbarButtonBehavior(items);
     }
 
     public void importBookmarkJson(int tag, String bookmarkJson) throws PDFNetException {
@@ -1404,6 +1411,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "getSavedSignatureJpgFolder", "Unable to find DocumentView.");
         }
     }
+
+    // Hygen Generated Methods
 
     @Override
     public boolean needsCustomLayoutForChildren() {

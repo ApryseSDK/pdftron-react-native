@@ -161,6 +161,12 @@ const propTypes = {
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
   maxSignatureCount: PropTypes.number,
+  overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
+  onToolbarButtonPress: func<(event: {id: string}) => void>(),
+
+  // Hygen Generated Props
+  onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
+  
   ...ViewPropTypes,
 };
 
@@ -413,6 +419,19 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
           'currentTab': event.nativeEvent.currentTab
         });
       }
+    } else if (event.nativeEvent.onToolbarButtonPress) {
+      if (this.props.onToolbarButtonPress) {
+        this.props.onToolbarButtonPress({
+          'id': event.nativeEvent.id,
+        });
+      }
+    // Hygen Generated Event Listeners
+    } else if (event.nativeEvent.onCurrentToolbarChanged) {
+      if (this.props.onCurrentToolbarChanged) {
+        this.props.onCurrentToolbarChanged({
+          'toolbar': event.nativeEvent.toolbar,
+        });
+      }
     }
   }
 
@@ -556,6 +575,8 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     }
     return Promise.resolve();
   }
+
+  // Hygen Generated Methods
 
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.

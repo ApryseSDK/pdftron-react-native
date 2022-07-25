@@ -379,6 +379,12 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
+- (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
+
+// Hygen Generated Event Listeners
+- (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar;
+
+
 @end
 
 @interface RNTPTDocumentView : UIView
@@ -410,6 +416,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
 @property (nonatomic, assign) BOOL enableAntialiasing;
+
+// Hygen Generated Props
 
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;
@@ -527,6 +535,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, copy, nullable) NSString* annotationManagerEditMode;
 
 @property (nonatomic, copy, nullable) NSString *defaultEraserType;
+
+@property (nonatomic, copy, nullable) NSArray<NSString *> *overrideToolbarButtonBehavior;
 
 #pragma mark - Methods
 
@@ -713,6 +723,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 -(NSString *)getSavedSignatureFolder;
 
+// Hygen Generated Methods
 @end
 
 

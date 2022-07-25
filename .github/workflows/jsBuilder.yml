@@ -17,9 +17,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master`
 
       - name: Install dependencies
-        run: | 
-          npm i
-      
+        run: |
+          npm i @types/react-native@0.68.1 --save-dev
+          npm i react-native@0.68.2
+
       - name: Node setup
         uses: actions/setup-node@v2
         with:
@@ -37,7 +38,7 @@ jobs:
         run: | # Change last line to your preferred commit message (I like `chore: build js files`).
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Updating JS files" -a || echo "No commit needed. JS files are already up-to-date"
+          git commit -m "Updating JS files" || echo "No commit needed. JS files are already up-to-date"
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
@@ -46,7 +47,7 @@ jobs:
           branch: ${{ github.event.pull_request.head.ref }} # pushes the commit to the branch being merged into `master`
 
   package-json-update:
-    needs: transpile-ts    
+    needs: transpile-ts
     runs-on: ubuntu-latest
 
     steps:
@@ -55,34 +56,28 @@ jobs:
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token.
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo.
-          ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master` 
+          ref: ${{ github.event.pull_request.head.sha }} # checks out the branch being merged into `master`
 
-      - name: Get Latest package.json
-        run: | 
-          git fetch 
-          git checkout -m origin/master package.json 
-          git add package.json
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "Updating package.json" -a || echo "No commit needed. Package.json is already up-to-date"
-      
       - name: Node setup
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org/         
+          registry-url: https://registry.npmjs.org/
+
+      - name: Get Latest package.json
+        run: |
+          git pull origin ${{ github.head_ref }}
+          git checkout -m origin/master package.json
 
       - name: Update package.json
         run: node scripts/update_version.js
 
-      - name: Add package.json 
-        run: git add package.json  
-
       - name: Commit files
         run: | # Change last line to your preferred commit message (I like `chore: build js files`).
+          git add package.json
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Updating package version" 
+          git commit -m "Updating package version" || echo "No commit needed. Package.json is already up-to-date"
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0

@@ -154,6 +154,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private PDFViewCtrl.AnnotationManagerMode mAnnotationManagerUndoMode = PDFViewCtrl.AnnotationManagerMode.ADMIN_UNDO_OWN;
     private File mCollabTempFile;
 
+    // toolbar buttons
+    private ArrayList<Object> mToolbarOverrideButtons;
+
     // quick menu
     private ArrayList<Object> mAnnotMenuItems;
     private ArrayList<Object> mAnnotMenuOverrideItems;
@@ -713,6 +716,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setOverrideToolbarButtonBehavior(ReadableArray items) {
+        mToolbarOverrideButtons = items != null ? items.toArrayList() : null;
+    }
+
     public void setSignSignatureFieldsWithStamps(boolean signWithStamps) {
         mSignWithStamps = signWithStamps;
     }
@@ -739,6 +746,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    // Hygen Generated Props
+
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
             if (mPdfViewCtrlTabHostFragment != null) {
@@ -760,10 +769,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 if (isValidToolbarTag(tag)) {
                     AnnotationToolbarBuilder toolbarBuilder = DefaultToolbars
                             .getDefaultAnnotationToolbarBuilderByTag(tag);
-                    // SDK Support Issue 22893
-                    // To ensure if the client changes the order of the annotation tools that the UI
-                    // will reflect the changed state
-                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder).saveToolbarItemOrder(false);
+                    mBuilder = mBuilder.addToolbarBuilder(toolbarBuilder);
                     annotationToolbarBuilders.add(toolbarBuilder);
                 }
             } else if (type == ReadableType.Map) {
@@ -1675,6 +1681,44 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Nullable
+    private String convItemIdToString(int id) {
+        String buttonId = null;
+        if (id == R.id.action_tabs) {
+            buttonId = BUTTON_TABS;
+        } else if (id == R.id.action_search) {
+            buttonId = BUTTON_SEARCH;
+        } else if (id == R.id.action_viewmode) {
+            buttonId = BUTTON_VIEW_CONTROLS;
+        } else if (id == R.id.action_thumbnails) {
+            buttonId = BUTTON_THUMBNAILS;
+        } else if (id == R.id.action_outline) {
+            buttonId = BUTTON_OUTLINE_LIST;
+        } else if (id == R.id.undo) {
+            buttonId = BUTTON_UNDO;
+        } else if (id == R.id.action_share) {
+            buttonId = BUTTON_SHARE;
+        } else if (id == R.id.action_reflow_mode) {
+            buttonId = BUTTON_REFLOW;
+        } else if (id == R.id.action_editpages) {
+            buttonId = BUTTON_EDIT_PAGES;
+        } else if (id == R.id.action_export_options) {
+            buttonId = BUTTON_SAVE_COPY;
+        } else if (id == R.id.action_print) {
+            buttonId = BUTTON_PRINT;
+        } else if (id == R.id.action_file_attachment) {
+            buttonId = BUTTON_FILE_ATTACHMENT;
+        } else if (id == R.id.action_pdf_layers) {
+            buttonId = BUTTON_VIEW_LAYERS;
+        } else if (id == R.id.action_digital_signatures) {
+            buttonId = BUTTON_DIGITAL_SIGNATURE;
+        } else if (id == R.id.action_close_tab) {
+            buttonId = BUTTON_CLOSE;
+        }
+
+        return buttonId;
+    }
+
+    @Nullable
     private ToolbarButtonType convStringToToolbarType(String item) {
         ToolbarButtonType buttonType = null;
         if (TOOL_BUTTON_FREE_HAND.equals(item) || TOOL_ANNOTATION_CREATE_FREE_HAND.equals(item)) {
@@ -2110,6 +2154,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         ActionUtils.getInstance().setActionInterceptCallback(null);
 
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.removeOnToolbarChangedListener(mToolbarChangedListener);
+        }
+
         super.onDetachedFromWindow();
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
@@ -2161,6 +2209,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);
             onReceiveNativeEvent(params);
             return true;
+        } else {
+            itemKey = convItemIdToString(itemId);
+            // check if the item's behavior should be overridden
+            if (itemKey != null && mToolbarOverrideButtons != null && mToolbarOverrideButtons.contains(itemKey)) {
+                WritableMap params = Arguments.createMap();
+                params.putString(ON_TOOLBAR_BUTTON_PRESS, ON_TOOLBAR_BUTTON_PRESS);
+                params.putString(TOOLBAR_ITEM_KEY_ID, itemKey);
+                onReceiveNativeEvent(params);
+                return true;
+            }
         }
 
         return super.onToolbarOptionsItemSelected(item);
@@ -2754,6 +2812,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private final PdfViewCtrlTabHostFragment2.OnToolbarChangedListener mToolbarChangedListener = new PdfViewCtrlTabHostFragment2.OnToolbarChangedListener() {
+        @Override
+        public void onToolbarChanged(String toolbar) {
+            WritableMap params = Arguments.createMap();
+            params.putString(ON_CURRENT_TOOLBAR_CHANGED, ON_CURRENT_TOOLBAR_CHANGED);
+            params.putString(KEY_TOOLBAR, toolbar);
+
+            onReceiveNativeEvent(params);
+        }
+    };
+
     private void handleAnnotationChanged(String action, Map<Annot, Integer> map) {
         WritableMap params = Arguments.createMap();
         params.putString(ON_ANNOTATION_CHANGED, ON_ANNOTATION_CHANGED);
@@ -2934,6 +3003,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         ActionUtils.getInstance().setActionInterceptCallback(mActionInterceptCallback);
 
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.addOnToolbarChangedListener(mToolbarChangedListener);
+        }
+
         // collab
         if (mPdfViewCtrlTabHostFragment instanceof CollabViewerTabHostFragment2) {
             CollabViewerTabHostFragment2 collabHost = (CollabViewerTabHostFragment2) mPdfViewCtrlTabHostFragment;
@@ -3043,6 +3116,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         onReceiveNativeEvent(ON_DOCUMENT_ERROR, error);
         return true;
     }
+
+    // Hygen Generated Event Listeners
 
     public void importBookmarkJson(String bookmarkJson) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
@@ -4753,6 +4828,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
         return "";
     }
+
+    // Hygen Generated Methods
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
