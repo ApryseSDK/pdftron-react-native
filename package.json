@@ -28,8 +28,10 @@
     "office"
   ],
   "readmeFilename": "README.md",
+  "dependencies": {
+    "deprecated-react-native-prop-types": "*"
+  },
   "peerDependencies": {
-    "deprecated-react-native-prop-types": "*",
     "react": "*",
     "react-native": "*",
     "prop-types": "*"
