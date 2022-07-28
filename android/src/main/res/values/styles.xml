@@ -6,21 +6,23 @@
 
     <style name="RNAppThemeBase" parent="PDFTronAppTheme">
         <item name="search_toolbar">@style/RNSearchToolbarStyle</item>
-        <item name="rect_default_style">@style/ShapeProperty</item>
+        <item name="rect_presets">@array/custom_presets</item>
     </style>
 
     <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
         <item name="showSearchWeb">false</item>
     </style>
 
-    <style name="ShapeProperty"  parent="AnnotPresetStyle4">
-        <!-- border color -->
+    <style name="CustomPresetStyle1">
+        <item name="annot_color">@android:color/holo_purple</item>
+    </style>
+    <style name="CustomPresetStyle2">
         <item name="annot_color">@android:color/black</item>
-        <!-- fill color -->
-        <item name="annot_fill_color">@android:color/holo_purple</item>
-        <!-- thickness -->
-        <item name="annot_thickness">1.0</item>
-        <!-- opacity -->
-        <item name="annot_opacity">1.0</item>
+    </style>
+    <style name="CustomPresetStyle3">
+        <item name="annot_color">@android:color/white</item>
+    </style>
+    <style name="CustomPresetStyle4">
+        <item name="annot_color">@android:color/holo_red_dark</item>
     </style>
 </resources>

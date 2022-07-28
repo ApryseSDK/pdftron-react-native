@@ -3,4 +3,10 @@
     <string-array name="disable_tool_modes">
         <item>STAMPER</item>
     </string-array>
+    <array name="custom_presets">
+        <item>@style/CustomPresetStyle1</item>
+        <item>@style/CustomPresetStyle2</item>
+        <item>@style/CustomPresetStyle3</item>
+        <item>@style/CustomPresetStyle4</item>
+    </array>
 </resources>

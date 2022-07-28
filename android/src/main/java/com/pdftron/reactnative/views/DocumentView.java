@@ -3,6 +3,7 @@ package com.pdftron.reactnative.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -72,6 +73,7 @@ import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.RectCreate;
 import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
@@ -217,7 +219,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // DigitalSignatureDialogFragment
         DigitalSignatureDialogFragment.HANDLE_INTENT_IN_ACTIVITY = true;
         ThumbnailsViewFragment.HANDLE_INTENT_IN_ACTIVITY = true;
-        ToolStyleConfig.getInstance().addDefaultStyleMap(Annot.e_Square, R.style.ShapeProperty);
 
         // intercept toast
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {
@@ -264,7 +265,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
                 .showConversionDialog(false)
+                .addToolbarBuilder(CustomToolBar(currentActivity))
                 .skipReadOnlyCheck(true);
+    }
+
+    private AnnotationToolbarBuilder CustomToolBar(Context context){
+        return AnnotationToolbarBuilder.withTag("Shapes").addToolButton(ToolbarButtonType.SQUARE, DefaultToolbars.ButtonId.SQUARE.value());
     }
 
     @Override
