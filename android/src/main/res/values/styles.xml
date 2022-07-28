@@ -13,6 +13,7 @@
         <item name="showSearchWeb">false</item>
     </style>
 
+    <!--CustomPresetStyle1 is your default style for square in this sample. Modify this to your desired default style -->
     <style name="CustomPresetStyle1">
         <item name="annot_color">@android:color/holo_purple</item>
     </style>

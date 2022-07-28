@@ -262,7 +262,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
                 .showConversionDialog(false)
-                .hidePresetBar(true)
+                .hidePresetBar(true) //set to true to hide preset bar
                 .skipReadOnlyCheck(true);
     }
 
