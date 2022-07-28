@@ -265,12 +265,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 .showCloseTabOption(false)
                 .useSupportActionBar(false)
                 .showConversionDialog(false)
-                .addToolbarBuilder(CustomToolBar(currentActivity))
+                .hidePresetBar(true)
                 .skipReadOnlyCheck(true);
-    }
-
-    private AnnotationToolbarBuilder CustomToolBar(Context context){
-        return AnnotationToolbarBuilder.withTag("Shapes").addToolButton(ToolbarButtonType.SQUARE, DefaultToolbars.ButtonId.SQUARE.value());
     }
 
     @Override
