@@ -53,6 +53,7 @@ import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
+import com.pdftron.pdf.config.ToolStyleConfig;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
@@ -216,6 +217,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // DigitalSignatureDialogFragment
         DigitalSignatureDialogFragment.HANDLE_INTENT_IN_ACTIVITY = true;
         ThumbnailsViewFragment.HANDLE_INTENT_IN_ACTIVITY = true;
+        ToolStyleConfig.getInstance().addDefaultStyleMap(Annot.e_Square, R.style.ShapeProperty);
 
         // intercept toast
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {

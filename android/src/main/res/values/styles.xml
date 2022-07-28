@@ -6,8 +6,7 @@
 
     <style name="RNAppThemeBase" parent="PDFTronAppTheme">
         <item name="search_toolbar">@style/RNSearchToolbarStyle</item>
-        <item name="other_default_style">@style/ShapeProperty</item>
-        <item name="freehand_default_style">@style/ShapeProperty</item>
+        <item name="rect_default_style">@style/ShapeProperty</item>
     </style>
 
     <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
