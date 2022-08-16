@@ -223,6 +223,7 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
             PdfViewCtrlTabsManager.getInstance().cleanup();
             PdfViewCtrlTabsManager.getInstance().clearAllPdfViewCtrlTabInfo(getReactApplicationContext());
             PdfViewCtrlSettingsManager.setOpenUrlAsyncCache(getReactApplicationContext(), "");
+            PdfViewCtrlSettingsManager.setOpenUrlPageStateAsyncCache(getReactApplicationContext(), "");
             promise.resolve(null);
         } catch (Exception e) {
             promise.reject(e);
