@@ -118,7 +118,6 @@ RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
         NSArray *disabledElements = [RCTConvert NSArray:json];
         view.disabledElements = disabledElements;
     }
-    
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
