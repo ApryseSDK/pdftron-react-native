@@ -436,9 +436,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setReadOnly(boolean readOnly) {
         mReadOnly = readOnly;
         if (readOnly) {
-            mBuilder = mBuilder.skipReadOnlyCheck(false);
+            mBuilder = mBuilder.skipReadOnlyCheck(false)
+                    .documentEditingEnabled(false);
         } else {
-            mBuilder = mBuilder.skipReadOnlyCheck(true);
+            mBuilder = mBuilder.skipReadOnlyCheck(true)
+                    .documentEditingEnabled(true);
         }
         if (getToolManager() != null) {
             getToolManager().setSkipReadOnlyCheck(false);
