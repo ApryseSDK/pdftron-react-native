@@ -116,6 +116,7 @@ NS_ASSUME_NONNULL_END
     
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
+    _hidePresetBar = NO;
     
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
@@ -1864,6 +1865,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setHidePresetBar:(BOOL)hidePresetBar
+{
+    _hidePresetBar = hidePresetBar;
+    
+    [self applyViewerSettings];
+}
+
 - (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable
 {
     if ([self.documentViewController isKindOfClass:[PTDocumentController class]]) {
@@ -1952,6 +1960,14 @@ NS_ASSUME_NONNULL_END
     
     [self applyViewerSettings];
 }
+
+-(void)setPresetBarEnabled:(BOOL)presetBarEnabled
+{
+    _hidePresetBar = presetBarEnabled;
+    
+    [self applyViewerSettings];
+}
+
 
 #pragma mark - Document Slider
 
@@ -3563,6 +3579,11 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(textSearchStart:)]) {
         [self.delegate textSearchStart:self];
     }
+}
+
+- (BOOL)rnt_documentViewControllerIsPresetBarEnabled:(PTDocumentBaseViewController *)documentViewController
+{
+    return !self.hidePresetBar;
 }
 
 - (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection

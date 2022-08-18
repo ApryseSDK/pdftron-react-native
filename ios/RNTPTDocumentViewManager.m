@@ -157,6 +157,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hidePresetBar, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.hidePresetBar = [RCTConvert BOOL:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(keyboardShortcutsEnabled, BOOL, RNTPTDocumentView)
 {
     if (json) {
