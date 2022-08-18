@@ -112,7 +112,7 @@ const FileItem = ({
   const [itemActionsVisible, setItemActionsVisible] = useState(false);
   const [renameDialogVisible, setRenameDialogVisible] = useState(false);
 
-  // splitting the file name from its extension; fileName will be empty if there is no extension
+  // splitting the file name from its extension; fileName is empty if there is no extension
   const fileName = file.name.substring(0, file.name.indexOf('.'));
   const fileExt = file.name.substring(file.name.indexOf('.') + 1);
 
@@ -161,8 +161,8 @@ const FileItem = ({
   };
 
   const rename = (input: string) => {
-    const path = file.uri.substring(0, file.uri.lastIndexOf('/'));
-    const name = input + '.' + fileExt;
+    const path = currentDir.substring(0, currentDir.lastIndexOf('/'));
+    const name = fileName === '' ? input : input + '.' + fileExt;
 
     FileSystem.getInfoAsync(path + '/' + name).then(res => {
       if (res.exists) {
@@ -176,7 +176,8 @@ const FileItem = ({
             setRenameDialogVisible(false);
             refreshFiles();
           })
-          .catch(() => {
+          .catch(e => {
+            console.log(e);
             setSnack(
               `Error renaming the ${file.isDirectory ? 'folder' : 'file'}.`,
             );
