@@ -161,16 +161,15 @@ const FileItem = ({
   };
 
   const rename = (input: string) => {
-    const path = currentDir.substring(0, currentDir.lastIndexOf('/'));
     const name = fileName === '' ? input : input + '.' + fileExt;
 
-    FileSystem.getInfoAsync(path + '/' + name).then(res => {
+    FileSystem.getInfoAsync(currentDir + '/' + name).then(res => {
       if (res.exists) {
         setSnack('A folder or file with the same name already exists.');
       } else
         FileSystem.moveAsync({
           from: file.uri,
-          to: path + '/' + name,
+          to: currentDir + '/' + name,
         })
           .then(() => {
             setRenameDialogVisible(false);
