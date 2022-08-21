@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -20,6 +21,7 @@ import {RNPdftron} from 'react-native-pdftron';
 
 import BottomSheet from './BottomSheet';
 import InputDialog from './InputDialog';
+import {fileIcons, officeFileTypes, humanFileSize} from '../utils/Utils';
 
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 
@@ -32,30 +34,6 @@ export type FileInfo = {
   isDirectory: boolean;
   modificationTime: number;
   md5?: string;
-};
-
-const fileIcons: {
-  [key: string]: React.ComponentProps<typeof MaterialCommunityIcons>['name'];
-} = {
-  json: 'code-json',
-  pdf: 'file-pdf-box',
-  msword: 'file-word-outline',
-  'vnd.openxmlformats-officedocument.wordprocessingml.document':
-    'file-word-outline',
-  'vnd.ms-excel': 'file-excel-outline',
-  'vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'file-excel-outline',
-  'vnd.ms-powerpoint': 'file-powerpoint-outline',
-  'vnd.openxmlformats-officedocument.presentationml.presentation':
-    'file-powerpoint-outline',
-  zip: 'folder-zip-outline',
-  'vnd.rar': 'folder-zip-outline',
-  'x-7z-compressed': 'folder-zip-outline',
-  xml: 'xml',
-  css: 'language-css3',
-  csv: 'file-delimited-outline',
-  html: 'language-html5',
-  javascript: 'language-javascript',
-  plain: 'text-box-outline',
 };
 
 type FileItemProps = {
@@ -83,12 +61,6 @@ const FileThumbnail = ({type, format, uri}: FileThumbnailProps) => {
     case 'font':
       return <MaterialCommunityIcons name="format-font" size={35} />;
     case 'application':
-      return (
-        <MaterialCommunityIcons
-          name={fileIcons[format] || 'file-outline'}
-          size={35}
-        />
-      );
     case 'text':
       return (
         <MaterialCommunityIcons
@@ -138,28 +110,6 @@ const FileItem = ({
     }
   };
 
-  const humanFileSize = (bytes: number) => {
-    const threshold = 1000;
-    const dp = 1;
-    const r = 10 ** dp;
-    const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    if (Math.abs(bytes) < threshold) {
-      return bytes + ' B';
-    }
-
-    let u = -1;
-    do {
-      bytes /= threshold;
-      ++u;
-    } while (
-      Math.round(Math.abs(bytes) * r) / r >= threshold &&
-      u < units.length - 1
-    );
-
-    return bytes.toFixed(dp) + ' ' + units[u];
-  };
-
   const rename = (input: string) => {
     const name = fileName === '' ? input : input + '.' + fileExt;
 
@@ -185,13 +135,20 @@ const FileItem = ({
   };
 
   const share = () => {
-    Sharing.isAvailableAsync().then(canShare => {
-      if (canShare) {
-        Sharing.shareAsync(file.uri).catch(() =>
-          setSnack('Error opening sharing options.'),
-        );
-      }
-    });
+    setItemActionsVisible(false);
+
+    const openShare = () => {
+      Sharing.isAvailableAsync().then(canShare => {
+        if (canShare) {
+          Sharing.shareAsync(file.uri).catch(() =>
+            setSnack('Error opening sharing options.'),
+          );
+        }
+      });
+    };
+
+    if (Platform.OS === 'ios') setTimeout(openShare, 500);
+    else openShare();
   };
 
   const deleteFile = () => {
@@ -221,14 +178,6 @@ const FileItem = ({
     );
   };
 
-  const officeFileTypes = [
-    'vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'vnd.ms-excel',
-    'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'vnd.ms-powerpoint',
-    'vnd.openxmlformats-officedocument.presentationml.presentation',
-  ];
-
   let items = ['Rename', 'Share', 'Delete'];
   let itemIcons: React.ComponentProps<typeof MaterialCommunityIcons>['name'][] =
     ['pencil', 'share', 'delete'];
@@ -241,6 +190,7 @@ const FileItem = ({
     deleteFile,
   ];
 
+  // if this file is an office file, include the option to export to PDF in the bottom sheet
   if (officeFileTypes.includes(fileFormat)) {
     items.splice(1, 0, 'Export to PDF');
     itemIcons.splice(1, 0, 'file-pdf-box');

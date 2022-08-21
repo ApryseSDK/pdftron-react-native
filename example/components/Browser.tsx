@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  Platform,
 } from 'react-native';
 import {Snackbar, Menu, Provider} from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
@@ -23,6 +24,7 @@ import BottomSheet from './BottomSheet';
 import FileItem, {FileInfo} from './FileItem';
 import InputDialog from './InputDialog';
 import LoadingDialog from './LoadingDialog';
+import {pdfUrls} from '../utils/Utils';
 
 type BrowserParams = {
   Browser: {currDir: string; path: string};
@@ -43,12 +45,7 @@ const Browser = ({navigation, route}: BrowserProps) => {
 
   const [files, setFiles] = useState<FileInfo[]>([]);
 
-  const root: string = FileSystem.documentDirectory || '';
-  const [currentDir] = useState<string>(
-    route?.params?.path !== undefined
-      ? route?.params?.path + '/' + route.params.currDir
-      : root,
-  );
+  const [currentDir] = useState(route.params.path + '/' + route.params.currDir);
 
   const insets = useSafeAreaInsets();
 
@@ -87,10 +84,12 @@ const Browser = ({navigation, route}: BrowserProps) => {
     const fileName =
       '/DL_' + DateTime.now().toFormat('yyyyMMddHHmmss') + '.' + fileExt;
 
-    FileSystem.downloadAsync(url, currentDir + fileName).finally(() => {
-      getFiles();
-      setLoadingDialogVisible(false);
-    });
+    FileSystem.downloadAsync(url, currentDir + fileName)
+      .catch(e => console.log(e))
+      .finally(() => {
+        getFiles();
+        setLoadingDialogVisible(false);
+      });
   };
 
   const createDirectory = (name: string) => {
@@ -104,41 +103,50 @@ const Browser = ({navigation, route}: BrowserProps) => {
   };
 
   const pickFromStorage = () => {
-    DocumentPicker.getDocumentAsync({
-      copyToCacheDirectory: false,
-    })
-      .then(result => {
-        if (result.type === 'success') {
-          FileSystem.getInfoAsync(currentDir + '/' + result.name).then(res => {
-            const copy = () => {
-              FileSystem.copyAsync({
-                from: result.uri,
-                to: currentDir + '/' + result.name,
-              })
-                .then(() => {
-                  getFiles();
-                })
-                .catch(() => {
-                  setSnack('File could not be copied successfully.');
-                });
-            };
+    setPlusVisible(false);
 
-            if (res.exists) {
-              Alert.alert(
-                'Conflicting File',
-                `The destination has a file with the same name ${result.name}.`,
-                [
-                  {text: 'Cancel', style: 'cancel'},
-                  {text: 'Replace', style: 'default', onPress: copy},
-                ],
-              );
-            } else copy();
-          });
-        }
+    const pick = () => {
+      DocumentPicker.getDocumentAsync({
+        copyToCacheDirectory: false,
       })
-      .catch(() => {
-        setSnack('Failed opening the document picker.');
-      });
+        .then(result => {
+          if (result.type === 'success') {
+            FileSystem.getInfoAsync(currentDir + '/' + result.name).then(
+              res => {
+                const copy = () => {
+                  FileSystem.copyAsync({
+                    from: result.uri,
+                    to: currentDir + '/' + result.name,
+                  })
+                    .then(() => {
+                      getFiles();
+                    })
+                    .catch(() => {
+                      setSnack('File could not be copied successfully.');
+                    });
+                };
+
+                if (res.exists) {
+                  Alert.alert(
+                    'Conflicting File',
+                    `The destination has a file with the same name ${result.name}.`,
+                    [
+                      {text: 'Cancel', style: 'cancel'},
+                      {text: 'Replace', style: 'default', onPress: copy},
+                    ],
+                  );
+                } else copy();
+              },
+            );
+          }
+        })
+        .catch(() => {
+          setSnack('Failed opening the document picker.');
+        });
+    };
+
+    if (Platform.OS === 'ios') setTimeout(pick, 500);
+    else pick();
   };
 
   const setSnack = (msg: string) => {
@@ -146,10 +154,41 @@ const Browser = ({navigation, route}: BrowserProps) => {
     setSnackVisible(true);
   };
 
+  // effect to automatically download sample PDF files to the root folder
+  React.useEffect(() => {
+    const root: string = FileSystem.documentDirectory || '';
+    const path = root.endsWith('/') ? root + 'Browser' : root + '/' + 'Browser';
+    if (currentDir !== path) return;
+
+    FileSystem.makeDirectoryAsync(path)
+      .then(() => {
+        // browser root folder newly created, therefore download sample files
+        setLoadingDialogVisible(true);
+        const download = pdfUrls.map(url =>
+          FileSystem.downloadAsync(
+            url,
+            path + '/' + url.substring(url.lastIndexOf('/') + 1),
+          ),
+        );
+
+        Promise.all(download)
+          .catch(e => console.log(e))
+          .finally(() => {
+            getFiles();
+            setLoadingDialogVisible(false);
+          });
+      })
+      .catch(() => {
+        // browser root folder already exists, do nothing
+      });
+  }, [currentDir, getFiles]);
+
+  // load in files when currentDir is set
   useEffect(() => {
     getFiles();
   }, [getFiles]);
 
+  // reload files when this screen comes back in focus (i.e. when user navigates back to it)
   useEffect(() => {
     return navigation.addListener('focus', () => {
       getFiles();
@@ -196,7 +235,7 @@ const Browser = ({navigation, route}: BrowserProps) => {
         />
         <LoadingDialog visible={loadingDialogVisible} />
         <View style={[styles.topRow, {paddingTop: insets.top}]}>
-          {currentDir === root ? (
+          {route.params.currDir === 'Browser' ? (
             <View style={styles.topRowLeft} />
           ) : (
             <TouchableOpacity
@@ -204,9 +243,7 @@ const Browser = ({navigation, route}: BrowserProps) => {
               style={styles.topRowLeft}>
               <MaterialIcons name="arrow-back-ios" size={25} />
               <Text numberOfLines={1} style={styles.topRowBackText}>
-                {route?.params?.path !== root
-                  ? route.params.path.split('/').pop()
-                  : 'Browser'}
+                {route.params.path.split('/').pop()}
               </Text>
             </TouchableOpacity>
           )}

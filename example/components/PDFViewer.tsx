@@ -6,6 +6,7 @@ import {
   BackHandler,
   Alert,
   View,
+  Text,
 } from 'react-native';
 
 import * as FileSystem from 'expo-file-system';
@@ -25,10 +26,7 @@ const PDFViewer = ({navigation, route}: PDFViewerProps) => {
   const insets = useSafeAreaInsets();
 
   const root: string = FileSystem.documentDirectory || '';
-  const path =
-    route?.params?.path !== undefined
-      ? route?.params?.path + '/' + route.params.currDir
-      : root;
+  const path = route.params.path + '/' + route.params.currDir;
 
   const myToolbar = {
     [Config.CustomToolbarKey.Id]: 'myToolbar',
