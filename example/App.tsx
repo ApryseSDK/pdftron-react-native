@@ -5,6 +5,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
+import * as FileSystem from 'expo-file-system';
+
 import Browser from './components/Browser';
 import PDFViewer from './components/PDFViewer';
 
@@ -22,6 +24,9 @@ type StackParams = {
 const Stack = createStackNavigator<StackParams>();
 
 export default function App() {
+  const root: string = FileSystem.documentDirectory || '';
+  const path = root.endsWith('/') ? root.substring(0, root.length - 1) : root;
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
@@ -33,7 +38,10 @@ export default function App() {
           <Stack.Screen
             name="Browser"
             component={Browser}
-            initialParams={{currDir: 'Browser'}}
+            initialParams={{
+              path: path,
+              currDir: 'Browser',
+            }}
             options={({route}) => ({
               title: route?.params?.currDir || 'Browser',
             })}
