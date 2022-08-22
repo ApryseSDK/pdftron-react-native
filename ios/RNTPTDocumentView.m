@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_END
     
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
-    _hidePresetBar = NO;
+    _presetsToolbarHidden = NO;
     
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
@@ -1865,9 +1865,9 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setHidePresetBar:(BOOL)hidePresetBar
+- (void)setHidePresetBar:(BOOL)presetsToolbarHidden
 {
-    _hidePresetBar = hidePresetBar;
+    _presetsToolbarHidden = presetsToolbarHidden;
     
     [self applyViewerSettings];
 }
@@ -1961,9 +1961,9 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
--(void)setPresetBarEnabled:(BOOL)presetBarEnabled
+-(void)setPresetsToolbarHidden:(BOOL)presetsToolbarHidden
 {
-    _hidePresetBar = presetBarEnabled;
+    _presetsToolbarHidden = presetsToolbarHidden;
     
     [self applyViewerSettings];
 }
@@ -3583,7 +3583,7 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)rnt_documentViewControllerIsPresetBarEnabled:(PTDocumentBaseViewController *)documentViewController
 {
-    return !self.hidePresetBar;
+    return !self.presetsToolbarHidden;
 }
 
 - (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection
