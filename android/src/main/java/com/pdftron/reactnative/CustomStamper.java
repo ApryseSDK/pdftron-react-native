@@ -19,13 +19,6 @@ public class CustomStamper extends Stamper {
         mUri = uri;
     }
 
-    public static ToolManager.ToolModeBase MODE = ToolManager.ToolMode.STAMPER;
-
-    @Override
-    public ToolManager.ToolModeBase getToolMode() {
-        return MODE;
-    }
-
     @Override
     protected void addStamp() {
         if (mUri != null) {
