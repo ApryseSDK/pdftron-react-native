@@ -186,6 +186,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private final SparseArray<String> mToolIdMap = new SparseArray<>();
     private final AtomicInteger mToolIdGenerator = new AtomicInteger(1000);
 
+    // custom image map path
+    Map<String, Uri> mLocalImageMap = new HashMap<>();
+
     private ArrayList<ViewModePickerDialogFragment.ViewModePickerItems> mViewModePickerItems = new ArrayList<>();
     private final RNPdfViewCtrlTabHostFragment.RNHostFragmentListener mRNHostFragmentListener =
             new RNPdfViewCtrlTabHostFragment.RNHostFragmentListener() {
@@ -2197,7 +2200,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     public void onNavButtonPressed() {
         if (getToolManager() != null) {
-            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+//            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
         }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
@@ -2772,12 +2775,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             params.putString(ON_TOOL_CHANGED, ON_TOOL_CHANGED);
             params.putString(KEY_PREVIOUS_TOOL, oldToolString != null ? oldToolString : unknownString);
             params.putString(KEY_TOOL, newToolString != null ? newToolString : unknownString);
-
-            if (newTool.getToolMode() == ToolManager.ToolMode.STAMPER) {
-                File resource = Utils.copyResourceToLocal(getContext(), R.raw.pdftron, "PDFTronLogo", "png");
-                ((CustomStamper) newTool).setUri(Uri.fromFile(resource));
-            }
-
             onReceiveNativeEvent(params);
         }
     };
@@ -2952,6 +2949,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
+        File resource = Utils.copyResourceToLocal(getContext(), R.raw.pdftron, "PDFTronLogo", "png");
+        mLocalImageMap.put("PDFTronLogo", Uri.fromFile(resource));
         // set react context
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
@@ -3877,6 +3876,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             boolean continuousAnnot = PdfViewCtrlSettingsManager.getContinuousAnnotationEdit(getContext());
             tool.setForceSameNextToolMode(continuousAnnot);
             getToolManager().setTool(tool);
+        }
+    }
+
+    public void setImageStampPath(String path) {
+        if (getToolManager() != null) {
+            ToolManager.Tool currentTool = getToolManager().getTool();
+            if (currentTool instanceof CustomStamper) {
+                ((CustomStamper) currentTool).setUri(mLocalImageMap.get(path));
+            }
         }
     }
 
