@@ -90,6 +90,7 @@ import com.pdftron.pdf.widget.toolbar.TopToolbarMenuId;
 import com.pdftron.pdf.widget.toolbar.builder.AnnotationToolbarBuilder;
 import com.pdftron.pdf.widget.toolbar.builder.ToolbarButtonType;
 import com.pdftron.pdf.widget.toolbar.component.DefaultToolbars;
+import com.pdftron.reactnative.CustomStamper;
 import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNCollabViewerTabHostFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
@@ -253,6 +254,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         mToolManagerBuilder = ToolManagerBuilder.from()
                 .setShowRichContentOption(false)
+                .addCustomizedTool(CustomStamper.MODE, CustomStamper.class)
                 .setOpenToolbar(true);
         mBuilder = new ViewerConfig.Builder();
         mBuilder
@@ -263,6 +265,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 .useSupportActionBar(false)
                 .showConversionDialog(false)
                 .skipReadOnlyCheck(true);
+    }
+
+    public void useCustomTool(@NonNull PdfViewCtrlTabHostFragment2 fragment) {
+        // Create our custom tool
+        ToolManager toolManager = fragment.getCurrentPdfViewCtrlFragment().getToolManager();
+        ToolManager.Tool customTool = toolManager.createTool(CustomStamper.MODE, toolManager.getTool());
+        // Then set it in ToolManager
+        toolManager.setTool(customTool);
     }
 
     @Override
@@ -2771,6 +2781,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             params.putString(KEY_PREVIOUS_TOOL, oldToolString != null ? oldToolString : unknownString);
             params.putString(KEY_TOOL, newToolString != null ? newToolString : unknownString);
 
+            if (newTool.getToolMode() == CustomStamper.MODE) {
+                File resource = Utils.copyResourceToLocal(getContext(), R.raw.pdftron, "PDFTronLogo", "png");
+                ((CustomStamper) newTool).setUri(Uri.fromFile(resource));
+            }
+
             onReceiveNativeEvent(params);
         }
     };
@@ -3064,6 +3079,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
+
     }
 
     @Override
