@@ -157,7 +157,7 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(presetsToolbarHidden, BOOL, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(hidePresetBar, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.presetsToolbarHidden = [RCTConvert BOOL:json];
