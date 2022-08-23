@@ -2197,7 +2197,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     public void onNavButtonPressed() {
         if (getToolManager() != null) {
-            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
+//            getToolManager().setTool(getToolManager().createTool(ToolManager.ToolMode.PAN, null));
         }
         onReceiveNativeEvent(ON_NAV_BUTTON_PRESSED, ON_NAV_BUTTON_PRESSED);
     }
@@ -3878,7 +3878,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getToolManager() != null) {
             ToolManager.Tool currentTool = getToolManager().getTool();
             if (currentTool instanceof CustomStamper) {
-                ((CustomStamper) currentTool).setUri(Uri.fromFile(new File(path)));
+                ((CustomStamper) currentTool).setUri(Uri.fromFile(new File(getContext().getFilesDir(), path)));
             }
         }
     }
