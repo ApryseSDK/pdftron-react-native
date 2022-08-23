@@ -3878,7 +3878,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getToolManager() != null) {
             ToolManager.Tool currentTool = getToolManager().getTool();
             if (currentTool instanceof CustomStamper) {
-                ((CustomStamper) currentTool).setUri(Uri.fromFile(new File(getContext().getFilesDir(), path)));
+                ((CustomStamper) currentTool).setUri(Uri.fromFile(new File(path)));
             }
         }
     }
