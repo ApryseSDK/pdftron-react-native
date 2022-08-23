@@ -1865,13 +1865,6 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setHidePresetBar:(BOOL)presetsToolbarHidden
-{
-    _presetsToolbarHidden = presetsToolbarHidden;
-    
-    [self applyViewerSettings];
-}
-
 - (void)setAnnotationToolbarItemEnabled:(NSString *)itemId enable:(BOOL)enable
 {
     if ([self.documentViewController isKindOfClass:[PTDocumentController class]]) {
@@ -2431,6 +2424,7 @@ NS_ASSUME_NONNULL_END
     }
     
     documentController.toolGroupToolbar.itemsAlignment = PTToolGroupToolbarAlignmentTrailing;
+    documentController.toolGroupToolbar.presetsToolbarEnabled = !self.presetsToolbarHidden;
     
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
@@ -3579,11 +3573,6 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(textSearchStart:)]) {
         [self.delegate textSearchStart:self];
     }
-}
-
-- (BOOL)rnt_documentViewControllerIsPresetBarEnabled:(PTDocumentBaseViewController *)documentViewController
-{
-    return !self.presetsToolbarHidden;
 }
 
 - (void)rnt_documentViewControllerTextSearchDidFindResult:(PTDocumentBaseViewController *)documentViewController selection:(PTSelection *)selection
