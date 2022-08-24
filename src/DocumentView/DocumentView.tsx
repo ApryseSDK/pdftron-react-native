@@ -118,6 +118,7 @@ const propTypes = {
   hideAnnotationToolbarSwitcher: PropTypes.bool,
   hideTopToolbars: PropTypes.bool,
   hideTopAppNavBar: PropTypes.bool,
+  hidePresetBar: PropTypes.bool,
   onBookmarkChanged: func<(event: { bookmarkJson: string }) => void>(),
   hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
   onToolChanged: func<(event: { previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool" }) => void>(),

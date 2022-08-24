@@ -116,6 +116,7 @@ NS_ASSUME_NONNULL_END
     
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
+    _presetsToolbarHidden = NO;
     
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
@@ -1953,6 +1954,14 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setPresetsToolbarHidden:(BOOL)presetsToolbarHidden
+{
+    _presetsToolbarHidden = presetsToolbarHidden;
+    
+    [self applyViewerSettings];
+}
+
+
 #pragma mark - Document Slider
 
 - (void)setDocumentSliderEnabled:(BOOL)documentSliderEnabled
@@ -2415,6 +2424,7 @@ NS_ASSUME_NONNULL_END
     }
     
     documentController.toolGroupToolbar.itemsAlignment = PTToolGroupToolbarAlignmentTrailing;
+    documentController.toolGroupToolbar.presetsToolbarEnabled = !self.presetsToolbarHidden;
     
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];

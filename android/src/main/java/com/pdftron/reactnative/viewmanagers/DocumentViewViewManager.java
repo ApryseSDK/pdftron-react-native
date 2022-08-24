@@ -419,7 +419,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     public void setHideToolbarsOnAppear(DocumentView documentView, boolean hideToolbarsOnAppear) {
         documentView.setHideToolbarsOnAppear(hideToolbarsOnAppear);
     }
-    
+
     @ReactProp(name = "showQuickNavigationButton")
     public void setShowQuickNavigationButton(DocumentView documentView, boolean showQuickNavigationButton) {
         documentView.setShowQuickNavigationButton(showQuickNavigationButton);
@@ -511,6 +511,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setTopAppNavBarRightBar(menus);
     }
 
+    @ReactProp(name = "hidePresetBar")
+    public void setHidePresetBar(DocumentView documentView, boolean hidePresetBar) {
+        documentView.setHidePresetBar(hidePresetBar);
+    }
+
     @ReactProp(name = "hideThumbnailsViewItems")
     public void setHideThumbnailsViewItems(DocumentView documentView, ReadableArray thumbnailViewItems) {
         documentView.setHideThumbnailsViewItems(thumbnailViewItems);
@@ -524,7 +529,7 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     @ReactProp(name = "maxSignatureCount")
     public void setMaxSignatureCount(DocumentView documentView, int maxSignatureCount) {
         SignatureDialogFragment.MAX_SIGNATURES = maxSignatureCount;
-   }
+    }
 
     // Hygen Generated Props
 

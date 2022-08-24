@@ -684,6 +684,17 @@ Defines whether the bottom toolbar of the viewer is enabled.
 />
 ```
 
+#### hidePresetBar
+bool, optional, defaults to false
+
+Defines whether preset bar is hidden or not
+
+```js
+<DocumentView
+  hidePresetBar={true}
+/>
+```
+
 #### annotationToolbars
 array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or custom toolbar objects, optional, defaults to none
 
