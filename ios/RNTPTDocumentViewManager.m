@@ -658,6 +658,12 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
 }
 
 // Hygen Generated Props
+RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.signatureColors = [RCTConvert NSArray:json];
+    }
+}
 
 
 - (UIView *)view

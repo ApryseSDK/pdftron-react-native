@@ -532,6 +532,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
+    @ReactProp(name = "signatureColors")
+    public void setSignatureColors(DocumentView documentView, @NonNull ReadableArray signatureColors) {
+        documentView.setSignatureColors(signatureColors);
+    }
 
     @ReactProp(name = "overrideToolbarButtonBehavior")
     public void setOverrideToolbarButtonBehavior(DocumentView documentView, @NonNull ReadableArray items) {
