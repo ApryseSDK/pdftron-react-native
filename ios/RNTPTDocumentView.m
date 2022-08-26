@@ -2237,6 +2237,9 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.pageRotationHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
             documentViewController.settingsViewController.cropPagesHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeReaderModeSettingsKey]) {
+            documentViewController.automaticallyHidesReflowSettingsButton = NO;
+            documentViewController.reflowSettingsButtonHidden = YES;
         }
     }
 

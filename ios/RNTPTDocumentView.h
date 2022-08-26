@@ -127,7 +127,7 @@ static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverCont
 static NSString * const PTViewModeCropKey = @"viewModeCrop";
 static NSString * const PTViewModeRotationKey = @"viewModeRotation";
 static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
-
+static NSString * const PTViewModeReaderModeSettingsKey = @"viewModeReaderModeSettings";
 
 static NSString * const PTThumbnailsViewInsertPagesKey = @"thumbnailsInsertPages";
 static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages";

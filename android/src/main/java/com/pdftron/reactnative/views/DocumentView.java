@@ -942,6 +942,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_ROTATION);
             } else if (VIEW_MODE_COLORMODE.equals(mode)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_COLORMODE);
+            } else if (VIEW_MODE_READER_MODE_SETTINGS.equals(mode)) {
+                mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_READING_MODE);
             }
         }
     }

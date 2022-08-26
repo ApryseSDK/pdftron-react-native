@@ -278,6 +278,7 @@ public final class Constants {
     public static final String VIEW_MODE_CROP = "viewModeCrop";
     public static final String VIEW_MODE_ROTATION = "viewModeRotation";
     public static final String VIEW_MODE_COLORMODE = "viewModeColorMode";
+    public static final String VIEW_MODE_READER_MODE_SETTINGS = "viewModeReaderModeSettings";
 
     public static final String PREV_PAGE_KEY = "previousPageNumber";
     public static final String PAGE_CURRENT_KEY = "pageNumber";
