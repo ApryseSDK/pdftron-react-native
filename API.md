@@ -639,7 +639,8 @@ Defines view mode items to be hidden in the view mode dialog.
   hideViewModeItems={[
     Config.ViewModePickerItem.Crop,
     Config.ViewModePickerItem.Rotation,
-    Config.ViewModePickerItem.ColorMode
+    Config.ViewModePickerItem.ColorMode,
+    Config.ViewModePickerItem.ReaderModeSettings,
   ]}
 />
 ```
@@ -681,6 +682,17 @@ Defines whether the bottom toolbar of the viewer is enabled.
 ```js
 <DocumentView
   bottomToolbarEnabled={false}
+/>
+```
+
+#### hidePresetBar
+bool, optional, defaults to false
+
+Defines whether preset bar is hidden or not
+
+```js
+<DocumentView
+  hidePresetBar={true}
 />
 ```
 
@@ -1927,6 +1939,23 @@ Defines whether to show the option to pick images in the signature dialog.
 ```js
 <DocumentView
   photoPickerEnabled={true}
+/>
+```
+
+#### signatureColors
+array of objects containing keys `red`, `green`, and `blue`, optional
+
+The colors that the user can select to create a signature. Maximum of three colors. 
+
+On Android, when this config is set, the user will not be able to customize each color shown.
+Defaults to black, blue, green for Android, and black, blue, red for iOS.
+
+```js
+<DocumentView
+  signatureColors={[
+    { 'red': 255, 'green': 0, 'blue': 0 },
+    { 'red':   0, 'green': 0, 'blue': 0 },
+  ]}
 />
 ```
 

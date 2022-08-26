@@ -3,6 +3,7 @@ package com.pdftron.reactnative.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -436,9 +437,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setReadOnly(boolean readOnly) {
         mReadOnly = readOnly;
         if (readOnly) {
-            mBuilder = mBuilder.skipReadOnlyCheck(false);
+            mBuilder = mBuilder.skipReadOnlyCheck(false)
+                    .documentEditingEnabled(false);
         } else {
-            mBuilder = mBuilder.skipReadOnlyCheck(true);
+            mBuilder = mBuilder.skipReadOnlyCheck(true)
+                    .documentEditingEnabled(true);
         }
         if (getToolManager() != null) {
             getToolManager().setSkipReadOnlyCheck(false);
@@ -747,6 +750,25 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setSignatureColors(@NonNull ReadableArray signatureColors) {
+        int[] result = new int[signatureColors.size()];
+
+        for (int i = 0; i < signatureColors.size(); i++) {
+            ReadableType type = signatureColors.getType(i);
+
+            if (type == ReadableType.Map) {
+                ReadableMap map = signatureColors.getMap(i);
+
+                int red = map.getInt(COLOR_RED);
+                int green = map.getInt(COLOR_GREEN);
+                int blue = map.getInt(COLOR_BLUE);
+
+                result[i] = Color.rgb(red, green, blue);
+            }
+        }
+
+        mToolManagerBuilder = mToolManagerBuilder.setSignatureColors(result);
+    }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
@@ -920,6 +942,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_ROTATION);
             } else if (VIEW_MODE_COLORMODE.equals(mode)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_COLORMODE);
+            } else if (VIEW_MODE_READER_MODE_SETTINGS.equals(mode)) {
+                mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_READING_MODE);
             }
         }
     }
@@ -1053,6 +1077,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAutoResizeFreeTextEnabled(boolean autoResizeFreeTextEnabled) {
         mToolManagerBuilder = mToolManagerBuilder.setAutoResizeFreeText(autoResizeFreeTextEnabled);
+    }
+
+    public void setHidePresetBar(boolean hidePresetBar) {
+        mBuilder = mBuilder.hidePresetBar(hidePresetBar);
     }
 
     public void setShowNavigationListAsSidePanelOnLargeDevices(boolean showNavigationListAsSidePanelOnLargeDevices) {
@@ -3573,7 +3601,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setAnnotationToolbarItemEnabled(String itemId, boolean enable) {
         if (mPdfViewCtrlTabHostFragment != null &&
-            mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
+                mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
             int buttonId = convStringToButtonId(itemId);
             if (buttonId == 0) {
                 for (int i = 0; i < mToolIdMap.size(); i++) {

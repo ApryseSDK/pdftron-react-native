@@ -118,7 +118,6 @@ RCT_CUSTOM_VIEW_PROPERTY(disabledElements, NSArray, RNTPTDocumentView)
         NSArray *disabledElements = [RCTConvert NSArray:json];
         view.disabledElements = disabledElements;
     }
-    
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(disabledTools, NSArray, RNTPTDocumentView)
@@ -155,6 +154,13 @@ RCT_CUSTOM_VIEW_PROPERTY(hideToolbarsOnTap, BOOL, RNTPTDocumentView)
 {
     if (json) {
         view.hideToolbarsOnTap = [RCTConvert BOOL:json];
+    }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hidePresetBar, BOOL, RNTPTDocumentView)
+{
+    if (json) {
+        view.presetsToolbarHidden = [RCTConvert BOOL:json];
     }
 }
 
@@ -652,6 +658,12 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
 }
 
 // Hygen Generated Props
+RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.signatureColors = [RCTConvert NSArray:json];
+    }
+}
 
 
 - (UIView *)view

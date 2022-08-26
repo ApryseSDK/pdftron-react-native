@@ -127,7 +127,7 @@ static NSString * const PTFacingCoverContinuousLayoutModeKey = @"FacingCoverCont
 static NSString * const PTViewModeCropKey = @"viewModeCrop";
 static NSString * const PTViewModeRotationKey = @"viewModeRotation";
 static NSString * const PTViewModeColorModeKey = @"viewModeColorMode";
-
+static NSString * const PTViewModeReaderModeSettingsKey = @"viewModeReaderModeSettings";
 
 static NSString * const PTThumbnailsViewInsertPagesKey = @"thumbnailsInsertPages";
 static NSString * const PTThumbnailsViewExportPagesKey = @"thumbnailsExportPages";
@@ -418,6 +418,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL enableAntialiasing;
 
 // Hygen Generated Props
+@property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;
 
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;
@@ -502,6 +503,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic) BOOL hideAnnotationToolbarSwitcher;
 @property (nonatomic) BOOL hideTopToolbars;
 @property (nonatomic) BOOL hideTopAppNavBar;
+@property (nonatomic) BOOL presetsToolbarHidden;
 
 @property (nonatomic, copy, nullable) NSArray<NSString *> *hideThumbnailFilterModes;
 
