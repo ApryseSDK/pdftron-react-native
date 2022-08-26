@@ -3,6 +3,7 @@ package com.pdftron.reactnative.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -749,6 +750,25 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setSignatureColors(@NonNull ReadableArray signatureColors) {
+        int[] result = new int[signatureColors.size()];
+
+        for (int i = 0; i < signatureColors.size(); i++) {
+            ReadableType type = signatureColors.getType(i);
+
+            if (type == ReadableType.Map) {
+                ReadableMap map = signatureColors.getMap(i);
+
+                int red = map.getInt(COLOR_RED);
+                int green = map.getInt(COLOR_GREEN);
+                int blue = map.getInt(COLOR_BLUE);
+
+                result[i] = Color.rgb(red, green, blue);
+            }
+        }
+
+        mToolManagerBuilder = mToolManagerBuilder.setSignatureColors(result);
+    }
 
     public void setAnnotationToolbars(ReadableArray toolbars) {
         if (toolbars.size() == 0) {
