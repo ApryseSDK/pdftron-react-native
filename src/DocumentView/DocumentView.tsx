@@ -165,6 +165,11 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
+  signatureColors: PropTypes.arrayOf(PropTypes.exact({
+    red: PropTypes.number.isRequired,
+    green: PropTypes.number.isRequired,
+    blue: PropTypes.number.isRequired,
+  })),
   onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
 
   ...ViewPropTypes,

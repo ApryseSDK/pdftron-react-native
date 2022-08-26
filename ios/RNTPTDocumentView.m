@@ -2350,6 +2350,24 @@ NS_ASSUME_NONNULL_END
     // Enable/disable restoring state (last read page).
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
+    
+    // Signature colors
+    if (self.signatureColors) {
+        NSMutableArray<UIColor *> *colorArray = [[NSMutableArray alloc] init];
+
+        for (NSDictionary *color in self.signatureColors) {
+            NSNumber *red = color[PTColorRedKey];
+            NSNumber *green = color[PTColorGreenKey];
+            NSNumber *blue = color[PTColorBlueKey];
+
+            [colorArray addObject:[UIColor colorWithRed:[red doubleValue] / 255
+                                                  green:[green doubleValue] / 255
+                                                   blue:[blue doubleValue] / 255
+                                                  alpha:1.0]];
+        }
+
+        toolManager.signatureAnnotationOptions.signatureColors = [colorArray copy];
+    }
 }
 
 - (void)applyLeadingNavButton
@@ -2918,13 +2936,15 @@ NS_ASSUME_NONNULL_END
     if( [documentViewController.document HasDownloader] )
     {
         if( ![toolManager isReadonly] )
-         {
+        {
             toolManager.readonly = self.readOnly;
+            toolManager.annotateOnReflowEnabled = !self.readOnly;
         }
     }
     else
     {
         toolManager.readonly = self.readOnly;
+        toolManager.annotateOnReflowEnabled = !self.readOnly;
     }
     
     documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
@@ -6064,6 +6084,13 @@ NS_ASSUME_NONNULL_END
 }
 
 #pragma mark - Hygen Generated Props/Methods
+
+- (void)setSignatureColors:(NSArray *)signatureColors
+{
+    _signatureColors = [signatureColors copy];
+    
+    [self applyViewerSettings];
+}
 
 @end
 
