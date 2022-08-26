@@ -2915,13 +2915,15 @@ NS_ASSUME_NONNULL_END
     if( [documentViewController.document HasDownloader] )
     {
         if( ![toolManager isReadonly] )
-         {
+        {
             toolManager.readonly = self.readOnly;
+            toolManager.annotateOnReflowEnabled = !self.readOnly;
         }
     }
     else
     {
         toolManager.readonly = self.readOnly;
+        toolManager.annotateOnReflowEnabled = !self.readOnly;
     }
     
     documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
