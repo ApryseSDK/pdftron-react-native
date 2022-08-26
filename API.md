@@ -639,7 +639,8 @@ Defines view mode items to be hidden in the view mode dialog.
   hideViewModeItems={[
     Config.ViewModePickerItem.Crop,
     Config.ViewModePickerItem.Rotation,
-    Config.ViewModePickerItem.ColorMode
+    Config.ViewModePickerItem.ColorMode,
+    Config.ViewModePickerItem.ReaderModeSettings,
   ]}
 />
 ```
