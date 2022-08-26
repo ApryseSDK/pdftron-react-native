@@ -6,10 +6,19 @@
 
     <style name="RNAppThemeBase" parent="PDFTronAppTheme">
         <item name="search_toolbar">@style/RNSearchToolbarStyle</item>
+        <item name="line_presets">@array/custom_presets</item>
+        <item name="polyline_presets">@array/custom_presets</item>
     </style>
 
     <style name="RNSearchToolbarStyle" parent="BaseSearchToolbarStyle">
         <item name="showSearchWeb">false</item>
+    </style>
+
+    <style name="custom_preset">
+        <item name="annot_color">#fffd3c</item>
+        <item name="annot_opacity">0.65</item>
+        <item name="annot_thickness">5.0</item>
+        <item name="annot_line_style">DASHED</item>
     </style>
 
 </resources>
