@@ -116,6 +116,7 @@ NS_ASSUME_NONNULL_END
     
     _hideTopAppNavBar = NO;
     _hideTopToolbars = NO;
+    _presetsToolbarHidden = NO;
     
     _bottomToolbarEnabled = YES;
     _hideToolbarsOnTap = YES;
@@ -1953,6 +1954,14 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+-(void)setPresetsToolbarHidden:(BOOL)presetsToolbarHidden
+{
+    _presetsToolbarHidden = presetsToolbarHidden;
+    
+    [self applyViewerSettings];
+}
+
+
 #pragma mark - Document Slider
 
 - (void)setDocumentSliderEnabled:(BOOL)documentSliderEnabled
@@ -2228,6 +2237,9 @@ NS_ASSUME_NONNULL_END
             documentViewController.settingsViewController.pageRotationHidden = YES;
         } else if ([viewModeItemString isEqualToString:PTViewModeCropKey]) {
             documentViewController.settingsViewController.cropPagesHidden = YES;
+        } else if ([viewModeItemString isEqualToString:PTViewModeReaderModeSettingsKey]) {
+            documentViewController.automaticallyHidesReflowSettingsButton = NO;
+            documentViewController.reflowSettingsButtonHidden = YES;
         }
     }
 
@@ -2337,6 +2349,26 @@ NS_ASSUME_NONNULL_END
 
     // Enable/disable restoring state (last read page).
     documentViewController.viewStatePersistenceEnabled = self.saveStateEnabled;
+    [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
+                                          forKey:@"gotoLastPage"];
+    
+    // Signature colors
+    if (self.signatureColors) {
+        NSMutableArray<UIColor *> *colorArray = [[NSMutableArray alloc] init];
+
+        for (NSDictionary *color in self.signatureColors) {
+            NSNumber *red = color[PTColorRedKey];
+            NSNumber *green = color[PTColorGreenKey];
+            NSNumber *blue = color[PTColorBlueKey];
+
+            [colorArray addObject:[UIColor colorWithRed:[red doubleValue] / 255
+                                                  green:[green doubleValue] / 255
+                                                   blue:[blue doubleValue] / 255
+                                                  alpha:1.0]];
+        }
+
+        toolManager.signatureAnnotationOptions.signatureColors = [colorArray copy];
+    }
 }
 
 - (void)applyLeadingNavButton
@@ -2414,6 +2446,7 @@ NS_ASSUME_NONNULL_END
     }
     
     documentController.toolGroupToolbar.itemsAlignment = PTToolGroupToolbarAlignmentTrailing;
+    documentController.toolGroupToolbar.presetsToolbarEnabled = !self.presetsToolbarHidden;
     
     if ([documentController areToolGroupsEnabled]) {
         NSMutableArray<PTToolGroup *> *toolGroups = [toolGroupManager.groups mutableCopy];
@@ -2904,13 +2937,15 @@ NS_ASSUME_NONNULL_END
     if( [documentViewController.document HasDownloader] )
     {
         if( ![toolManager isReadonly] )
-         {
+        {
             toolManager.readonly = self.readOnly;
+            toolManager.annotateOnReflowEnabled = !self.readOnly;
         }
     }
     else
     {
         toolManager.readonly = self.readOnly;
+        toolManager.annotateOnReflowEnabled = !self.readOnly;
     }
     
     documentViewController.thumbnailsViewController.editingEnabled = !self.readOnly;
@@ -6050,6 +6085,13 @@ NS_ASSUME_NONNULL_END
 }
 
 #pragma mark - Hygen Generated Props/Methods
+
+- (void)setSignatureColors:(NSArray *)signatureColors
+{
+    _signatureColors = [signatureColors copy];
+    
+    [self applyViewerSettings];
+}
 
 @end
 
