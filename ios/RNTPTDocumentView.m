@@ -2348,6 +2348,7 @@ NS_ASSUME_NONNULL_END
     }
 
     // Enable/disable restoring state (last read page).
+    documentViewController.viewStatePersistenceEnabled = self.saveStateEnabled;
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
     
