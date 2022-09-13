@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_END
     
     _saveStateEnabled = YES;
     
-    _openUrlPath = YES;
+    _openUrlCachePath = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
@@ -2354,8 +2354,6 @@ NS_ASSUME_NONNULL_END
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
     
-    // openUrlPath
-//    self.documentViewController.openUrlPath = self.openUrlPath;
     
     // Signature colors
     if (self.signatureColors) {
@@ -2977,13 +2975,10 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setOpenUrlPath:(BOOL)openUrlPath
+- (void)setOpenUrlCachePath:(BOOL)openUrlCachePath
 {
-    _openUrlPath = openUrlPath;
-    
-    if (self.documentViewController) {
-        [self applyViewerSettings];
-    }
+    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openURLCachePath isDirectory:YES];
+    self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
 }
 
 #pragma mark - Fit mode
