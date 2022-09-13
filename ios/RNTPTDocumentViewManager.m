@@ -657,10 +657,10 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
     }
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(openUrlCachePath, BOOL, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(openUrlPath, BOOL, RNTPTDocumentView)
 {
     if (json) {
-        view.openUrlCachePath = [RCTConvert BOOL:json];
+        view.openUrlPath = [RCTConvert BOOL:json];
     }
 }
 

@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_END
     
     _saveStateEnabled = YES;
     
-    _openUrlCachePath = YES;
+    _openUrlPath = YES;
     
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
@@ -2975,9 +2975,9 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setOpenUrlCachePath:(BOOL)openUrlCachePath
+- (void)setOpenUrlCachePath:(BOOL)openUrlPath
 {
-    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openURLCachePath isDirectory:YES];
+    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openURLPath isDirectory:YES];
     self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
 }
 
