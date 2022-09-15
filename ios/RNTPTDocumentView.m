@@ -2975,7 +2975,7 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setOpenUrlCachePath:(BOOL)openUrlPath
+- (void)setOpenUrlCachePath:(NSString *)openUrlPath
 {
     NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openURLPath isDirectory:YES];
     self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
