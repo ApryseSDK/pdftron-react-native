@@ -150,8 +150,6 @@ NS_ASSUME_NONNULL_END
     
     _saveStateEnabled = YES;
     
-    _openUrlPath = YES;
-    
     [PTOverrides overrideClass:[PTThumbnailsViewController class]
                      withClass:[RNTPTThumbnailsViewController class]];
 
@@ -2975,10 +2973,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)setOpenUrlCachePath:(NSString *)openUrlPath
+- (void)setOpenUrlCachePath:(NSString *)openUrlCachePath
 {
-    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openURLPath isDirectory:YES];
-    self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
+    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openUrlCachePath isDirectory:YES];
+    
+    if ([NSFileManager.defaultManager createDirectoryAtURL:cacheDirectoryURL withIntermediateDirectories:YES attributes:nil error:nil]) {
+        self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
+    }
 }
 
 #pragma mark - Fit mode
