@@ -530,6 +530,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 @property (nonatomic, assign) BOOL saveStateEnabled;
 
+@property (nonatomic, copy, nullable) NSString* openUrlPath;
+
 @property (nonatomic, copy, nullable) NSArray<NSString *> *excludedAnnotationListTypes;
 
 @property (nonatomic, copy, nullable) NSString* annotationManagerUndoMode;

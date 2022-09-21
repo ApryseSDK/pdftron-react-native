@@ -657,6 +657,13 @@ RCT_CUSTOM_VIEW_PROPERTY(overrideToolbarButtonBehavior, NSArray, RNTPTDocumentVi
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(openUrlPath, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.openUrlPath = [RCTConvert NSString:json];
+    }
+}
+
 // Hygen Generated Props
 RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 {

@@ -2352,6 +2352,7 @@ NS_ASSUME_NONNULL_END
     [NSUserDefaults.standardUserDefaults setBool:self.saveStateEnabled
                                           forKey:@"gotoLastPage"];
     
+    
     // Signature colors
     if (self.signatureColors) {
         NSMutableArray<UIColor *> *colorArray = [[NSMutableArray alloc] init];
@@ -2970,6 +2971,15 @@ NS_ASSUME_NONNULL_END
     _saveStateEnabled = enabled;
     
     [self applyViewerSettings];
+}
+
+- (void)setOpenUrlCachePath:(NSString *)openUrlCachePath
+{
+    NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openUrlCachePath isDirectory:YES];
+    
+    if ([NSFileManager.defaultManager createDirectoryAtURL:cacheDirectoryURL withIntermediateDirectories:YES attributes:nil error:nil]) {
+        self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
+    }
 }
 
 #pragma mark - Fit mode
