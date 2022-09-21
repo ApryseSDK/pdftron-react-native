@@ -1270,6 +1270,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = Annot.e_Widget;
         } else if (TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
+        } else if (TOOL_COUNT_TOOL.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
         }
         return annotType;
     }
@@ -1445,6 +1447,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.SMART_PEN_INK;
         } else if (TOOL_FORM_FILL.equals(item)) {
             mode = ToolManager.ToolMode.FORM_FILL;
+        } else if (TOOL_COUNT_TOOL.equals(item)) {
+            mode = ToolManager.ToolMode.COUNT_MEASUREMENT;
         }
         return mode;
     }
@@ -1583,6 +1587,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             case FREE_TEXT_DATE_CREATE:
                 toolModeString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
+            case COUNT_MEASUREMENT:
+                toolModeString = TOOL_COUNT_TOOL;
+                break;
         }
 
         return toolModeString;
@@ -1668,6 +1675,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.REDO.value();
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
+        } else if (TOOL_BUTTON_COUNT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.COUNT_TOOL.value();
         }
         return buttonId;
     }
@@ -1827,6 +1836,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.REDO;
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
+        } else if (TOOL_BUTTON_COUNT.equals(item)) {
+            buttonType = ToolbarButtonType.COUNT_MEASUREMENT;
         }
         return buttonType;
     }
