@@ -56,7 +56,6 @@ static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
 static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
 static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
 static NSString * const PTInsertFromScannerButton = @"insertFromScannerButton";
-static NSString * const PTCountToolButton = @"countToolButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";

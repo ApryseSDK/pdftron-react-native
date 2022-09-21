@@ -1675,8 +1675,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.REDO.value();
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
-        } else if (TOOL_BUTTON_COUNT.equals(item)) {
-            buttonId = DefaultToolbars.ButtonId.COUNT_TOOL.value();
         }
         return buttonId;
     }
@@ -1836,8 +1834,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.REDO;
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
-        } else if (TOOL_BUTTON_COUNT.equals(item)) {
-            buttonType = ToolbarButtonType.COUNT_MEASUREMENT;
         }
         return buttonType;
     }
