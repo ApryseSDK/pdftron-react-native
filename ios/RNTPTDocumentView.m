@@ -966,6 +966,9 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
+            else if([string isEqualToString:PTCountToolButton]){
+                // TODO
+            }
         }
     }
     if([addPagesItems count] == 0){
@@ -1081,6 +1084,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTAnnotationEraserToolKey]) {
         toolClass = [PTEraser class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCountToolKey]) {
+        toolClass = [PTCountCreate class];
     }
     else if ( [toolMode isEqualToString:PTPencilKitDrawingToolKey]) {
         toolClass = [PTPencilDrawingCreate class];
@@ -5700,6 +5706,9 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationEraserToolKey]) {
         return [PTEraser class];
     }
+    else if ([key isEqualToString:PTAnnotationCountToolKey]) {
+        return [PTCountCreate class];
+    }
     else if ([key isEqualToString:PTAnnotationCreateFreeHighlighterToolKey]) {
         return [PTFreeHandHighlightCreate class];
     }
@@ -5823,6 +5832,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTEraser class]) {
         return PTAnnotationEraserToolKey;
+    }
+    else if (toolClass == [PTCountCreate class]) {
+        return PTAnnotationCountToolKey;
     }
     else if (toolClass == [PTFreeHandHighlightCreate class]) {
         return PTAnnotationCreateFreeHighlighterToolKey;
