@@ -49,7 +49,6 @@ export const Config = {
     addPageButton: 'addPageButton',
     insertPageButton: 'insertPageButton',
     saveCroppedCopyButton: 'saveCroppedCopyButton',
-
     // iOS only
     InsertBlankPage: "insertBlankPageButton",
     InsertFromImage: "insertFromImageButton",
@@ -71,6 +70,7 @@ export const Config = {
     multiSelect: 'MultiSelect',
     pan: 'Pan',
     annotationEraserTool: 'AnnotationEraserTool',
+    annotationCountTool: 'AnnotationCountTool',
     annotationCreateSticky: 'AnnotationCreateSticky',
     annotationCreateFreeHand: 'AnnotationCreateFreeHand',
     annotationCreateTextHighlight: 'AnnotationCreateTextHighlight',
