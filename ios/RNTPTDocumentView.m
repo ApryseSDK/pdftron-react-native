@@ -966,9 +966,6 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
-            else if([string isEqualToString:PTCountToolButton]){
-                // TODO
-            }
         }
     }
     if([addPagesItems count] == 0){
