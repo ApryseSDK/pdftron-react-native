@@ -83,6 +83,7 @@ static NSString * const PTAnnotationCreatePerimeterMeasurementToolKey = @"Annota
 static NSString * const PTAnnotationCreateAreaMeasurementToolKey = @"AnnotationCreateAreaMeasurement";
 static NSString * const PTPanToolKey = @"Pan";
 static NSString * const PTAnnotationEraserToolKey = @"AnnotationEraserTool";
+static NSString * const PTAnnotationCountToolKey = @"AnnotationCountTool";
 static NSString * const PTAnnotationCreateSoundToolKey = @"AnnotationCreateSound";
 static NSString * const PTPencilKitDrawingToolKey = @"PencilKitDrawing";
 static NSString * const PTAnnotationCreateFreeHighlighterToolKey = @"AnnotationCreateFreeHighlighter";
