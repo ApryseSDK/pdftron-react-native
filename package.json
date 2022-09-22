@@ -1,7 +1,8 @@
 {
   "name": "react-native-pdftron",
   "title": "React Native Pdftron",
-  "version": "3.0.2-beta.134",
+
+  "version": "3.0.2-beta.136",
   "description": "React Native Pdftron",
   "main": "./lib/index.js",
   "typings": "index.ts",
