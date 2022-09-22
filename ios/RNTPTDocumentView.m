@@ -2978,7 +2978,7 @@ NS_ASSUME_NONNULL_END
     NSURL *cacheDirectoryURL = [NSURL fileURLWithPath:openUrlCachePath isDirectory:YES];
     
     if ([NSFileManager.defaultManager createDirectoryAtURL:cacheDirectoryURL withIntermediateDirectories:YES attributes:nil error:nil]) {
-        self.documentController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
+        self.documentViewController.documentManager.documentCacheDirectoryURL = cacheDirectoryURL;
     }
 }
 
