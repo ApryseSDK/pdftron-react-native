@@ -945,6 +945,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTPanToolKey]) {
                 // TODO
             }
+            else if ([string isEqualToString:PTAnnotationCountToolKey]) {
+                toolManager.countAnnotationOptions.canCreate = value;
+            }
             else if ([string isEqualToString:PTAnnotationCreateSmartPenToolKey]) {
                 toolManager.smartPenEnabled = value;
             }
