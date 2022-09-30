@@ -214,6 +214,39 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
     }
 }
 
+RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSURL *url = [[NSURL alloc] initWithString:baseUrl];
+        [PTConvert convertHTMLStringToPDF:htmlStr baseURL:url paperSize:CGSizeZero completion:^(NSString *pathToPDF) {
+            if (!pathToPDF) {
+                // Failed to convert HTML to PDF.
+                return;
+            }
+            
+            NSString *documentDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+            // Copy temporary PDF to persistent location.
+            NSURL *urlToPDF = [NSURL fileURLWithPath:pathToPDF];
+            int timestamp = [[NSDate date] timeIntervalSince1970];
+            NSString *uniqueFileName = [NSString stringWithFormat:@"%d_%@",timestamp , urlToPDF.lastPathComponent];
+            NSURL *destinationURL = [[NSURL fileURLWithPath:documentDirectory] URLByAppendingPathComponent:uniqueFileName];
+            NSError *error = nil;
+            BOOL result = [NSFileManager.defaultManager copyItemAtURL:urlToPDF toURL:destinationURL error:&error];
+            if (!result) {
+                // Failed to copy PDF to persistent location.
+                reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+            }
+            
+            resolve(destinationURL.absoluteString);
+            // Do something with PDF output.
+        }];
+    }
+    @catch (NSException* exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+    }
+}
+
 - (NSError *)errorFromException:(NSException *)exception
 {
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
