@@ -234,7 +234,7 @@ RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl
             BOOL result = [NSFileManager.defaultManager copyItemAtURL:urlToPDF toURL:destinationURL error:&error];
             if (!result) {
                 // Failed to copy PDF to persistent location.
-                reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+                reject(@"generation_failed", @"Failed to generate pdf from html", nil);
             }
             
             resolve(destinationURL.absoluteString);
