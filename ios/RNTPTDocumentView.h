@@ -93,6 +93,7 @@ static NSString * const PTAnnotationCreateLinkToolKey = @"AnnotationCreateLink";
 static NSString * const PTAnnotationCreateRedactionTextToolKey = @"AnnotationCreateRedactionText";
 static NSString * const PTAnnotationCreateLinkTextToolKey = @"AnnotationCreateLinkText";
 static NSString * const PTAnnotationCreateSmartPenToolKey = @"AnnotationCreateSmartPen";
+static NSString * const PTAnnotationCreateFreeTextDateToolKey = @"AnnotationCreateFreeTextDate";
 static NSString * const PTFormCreateTextFieldToolKey = @"FormCreateTextField";
 static NSString * const PTFormCreateCheckboxFieldToolKey = @"FormCreateCheckboxField";
 static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatureField";
