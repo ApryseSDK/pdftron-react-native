@@ -1128,6 +1128,9 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
         toolClass = [PTListBoxCreate class];
     }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+        toolClass = [PTDateTextCreate class];
+    }
     
     if (toolClass) {
         PTTool *tool = [self.currentDocumentViewController.toolManager changeTool:toolClass];
