@@ -15,7 +15,7 @@ rootProject.allprojects {
         google()
         mavenCentral()
         maven {
-            url "https://pdftron-maven.s3.amazonaws.com/snapshot"
+            url "https://pdftron-maven.s3.amazonaws.com/release"
         }
     }
 }
@@ -57,7 +57,7 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.1'
 
-    implementation "com.pdftron:pdftron:9.3.2-beta05"
-    implementation "com.pdftron:tools:9.3.2-beta05"
-    implementation "com.pdftron:collab:9.3.2-beta05"
+    implementation "com.pdftron:pdftron:9.4.0"
+    implementation "com.pdftron:tools:9.4.0"
+    implementation "com.pdftron:collab:9.4.0"
 }
