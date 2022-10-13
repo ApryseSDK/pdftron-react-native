@@ -951,6 +951,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateSmartPenToolKey]) {
                 toolManager.smartPenEnabled = value;
             }
+            else if ([string isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+                toolManager.dateTextAnnotationOptions.canCreate = value;
+            }
             else if ([string isEqualToString:PTFormFillToolKey]) {
                 toolManager.widgetAnnotationOptions.canEdit = value;
             }
@@ -1124,6 +1127,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
         toolClass = [PTListBoxCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+        toolClass = [PTDateTextCreate class];
     }
     
     if (toolClass) {
@@ -5853,6 +5859,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTSmartPen class]) {
         return PTAnnotationCreateSmartPenToolKey;
+    }
+    else if (toolClass == [PTDateTextCreate class]) {
+        return PTAnnotationCreateFreeTextDateToolKey;
     }
     else if (toolClass == [PTLinkCreate class]) {
        return PTAnnotationCreateLinkToolKey;
