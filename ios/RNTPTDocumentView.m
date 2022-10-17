@@ -5752,6 +5752,9 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTFormCreateListBoxFieldToolKey]) {
         return [PTListBoxCreate class];
     }
+    else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+        return [PTDateTextCreate class];
+    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
