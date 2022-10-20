@@ -85,7 +85,7 @@ const propTypes = {
   collabEnabled: PropTypes.bool,
   currentUser: PropTypes.string,
   currentUserName: PropTypes.string,
-  onExportAnnotationCommand: func<(event: { action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  onExportAnnotationCommand: func<(event: { action: "modify" | "delete" | "add" | "undo" | "redo", xfdfCommand: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
   autoSaveEnabled: PropTypes.bool,
   pageChangeOnTap: PropTypes.bool,
   followSystemDarkMode: PropTypes.bool,
