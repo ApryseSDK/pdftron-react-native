@@ -1684,7 +1684,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | the action that occurred (add, delete, modify)
+action | string | the action that occurred (add, delete, modify, undo, redo)
 xfdfCommand | string | an xfdf string containing info about the edit
 annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
 
