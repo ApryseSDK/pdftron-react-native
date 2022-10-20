@@ -33,7 +33,11 @@ interface RNPdftron {
     exportFormat: Config.ExportFormat,
     filePath: string
   ): Promise<string>;
+<<<<<<< HEAD
   extractText(filePath: string): Promise<string>;
+=======
+  convertHtmlToPdf(htmlStr: string, baseUrl: string): Promise<string>;
+>>>>>>> 3.0.2-beta.35-htmlToPdf
 }
 
 const RNPdftron: RNPdftron = NativeModules.RNPdftron;
