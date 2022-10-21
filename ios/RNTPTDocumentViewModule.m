@@ -229,6 +229,20 @@ RCT_REMAP_METHOD(deleteAnnotations,
     }
 }
 
+RCT_REMAP_METHOD(addAnnotations,
+                    addAnnotationsForDocumentViewTag:(nonnull NSNumber *)tag
+                    annotations:(NSArray *)annotations
+                    resolver:(RCTPromiseResolveBlock)resolve
+                    rejecter:(RCTPromiseRejectBlock)reject)
+{
+        @try {
+            NSArray *addedAnnotations = [[self documentViewManager] addAnnotationsForDocumentViewTag:tag annotations:annotations];
+            resolve(addedAnnotations);
+        }
+        @catch (NSException *exception) {
+            reject(@"add_failed", @"Failed to add annotations", [self errorFromException:exception]);
+        }
+}
 RCT_REMAP_METHOD(saveDocument,
                  saveDocumentForDocumentViewTag:(nonnull NSNumber *)tag
                  resolver:(RCTPromiseResolveBlock)resolve
