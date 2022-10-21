@@ -3524,7 +3524,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         PDFDoc doc = getPdfDoc();
         Page docPage = doc.getPage(page);
 
-        Highlight hl = Highlight.create(doc, new Rect(100, 490, 150, 515));
+        Highlight hl = Highlight.create(doc, new com.pdftron.pdf.Rect(100, 490, 150, 515));
 
         int coordsSize = coords.size();
         for (int i = 0; i < coordsSize; i++) {
@@ -3538,12 +3538,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             double y3 = coord.getDouble("y3");
             double y4 = coord.getDouble("y4");
 
-            Point point1 = new Point(x1, y1);
-            Point point2 = new Point(x2, y2);
-            Point point3 = new Point(x3, y3);
-            Point point4 = new Point(x4, y4);
+            com.pdftron.pdf.Point point1 = new com.pdftron.pdf.Point(x1, y1);
+            com.pdftron.pdf.Point point2 = new com.pdftron.pdf.Point(x2, y2);
+            com.pdftron.pdf.Point point3 = new com.pdftron.pdf.Point(x3, y3);
+            com.pdftron.pdf.Point point4 = new com.pdftron.pdf.Point(x4, y4);
 
-            QuadPoint quad = new QuadPoint(point1, point2, point3, point4);
+            com.pdftron.pdf.QuadPoint quad = new com.pdftron.pdf.QuadPoint(point1, point2, point3, point4);
             hl.setQuadPoint(i, quad);
         }
 
