@@ -622,6 +622,13 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     }
     return Promise.resolve();
   };
+  addAnnotations = (annotation: AnnotOptions.Annotation): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.addAnnotations(tag, annotation);
+    }
+    return Promise.resolve();
+  }
 
   deleteAnnotations = (
     annotations: Array<AnnotOptions.Annotation>

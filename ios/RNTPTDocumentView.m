@@ -1481,6 +1481,53 @@ NS_ASSUME_NONNULL_END
     [toolManager changeTool:[PTPanTool class]];
 }
 
+-(void)addAnnotations:(NSDictionary *)annotation
+{
+    if (!annotation) {
+        return;
+    }
+    
+    PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
+    PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
+    PTToolManager *toolManager = documentViewController.toolManager;
+    
+    NSString *annotId = annotation[PTAnnotationIdKey];
+    NSNumber *pageNumber = annotation[PTAnnotationPageNumberKey];
+    if (!annotId || !pageNumber) {
+        return;
+    }
+    int pageNumberValue = pageNumber.intValue;
+    
+    __block PTAnnot *annot = nil;
+    NSError *error = nil;
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        
+        annot = [self findAnnotWithUniqueID:annotId onPageNumber:pageNumberValue pdfViewCtrl:pdfViewCtrl];
+        if (![annot IsValid]) {
+            NSLog(@"Failed to find annotation with id \"%@\" on page number %d",
+                  annotId, pageNumberValue);
+            annot = nil;
+            return;
+        }
+        
+        PTPage *page = [doc GetPage:pageNumberValue];
+        if ([page IsValid]) {
+            [page AnnotPushBack:annot];
+        }
+        
+        [pdfViewCtrl UpdateWithAnnot:annot page_num:pageNumberValue];
+    } error:&error];
+    
+    // Throw error as exception to reject promise.
+    if (error) {
+        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    } else if (annot) {
+        [toolManager annotationAdded:annot onPageNumber:pageNumberValue];
+    }
+    
+    [toolManager changeTool:[PTPanTool class]];
+}
+
 #pragma mark - Saving
 
 - (void)saveDocumentWithCompletionHandler:(void (^)(NSString * _Nullable filePath))completionHandler
