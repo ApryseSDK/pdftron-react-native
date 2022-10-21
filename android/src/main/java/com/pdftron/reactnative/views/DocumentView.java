@@ -3468,6 +3468,34 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             }
         }
     }
+    public void addAnnotations(ReadableArray annots) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        int annotCount = annots.size();
+        ToolManager toolManager = (ToolManager) pdfViewCtrl.getToolManager();
+
+        for (int i = 0; i < annotCount; i++) {
+            ReadableMap annotData = annots.getMap(i);
+            if (null == annotData) {
+                continue;
+            }
+            String xfdf = annotData.getString(KEY_ANNOTATION_XFDF);
+            if (xfdf != null) {
+                boolean shouldUnlock = false;
+                try {
+                    pdfViewCtrl.docLock(true);
+                    shouldUnlock = true;
+
+                    FDFDoc fdfDoc = FDFDoc.createFromXFDF(xfdf);
+                    pdfViewCtrl.getDoc().fdfUpdate(fdfDoc);
+                    pdfViewCtrl.update(true);
+                } finally {
+                    if (shouldUnlock) {
+                        pdfViewCtrl.docUnlock();
+                    }
+                }
+            }
+        }
+    }
 
     public WritableMap getAnnotationAt(int x, int y, double distanceThreshold, double minimumLineWeight) throws PDFNetException {
         PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();

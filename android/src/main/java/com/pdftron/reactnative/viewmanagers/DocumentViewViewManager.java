@@ -695,6 +695,14 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
             throw new PDFNetException("", 0L, getName(), "deleteAnnotations", "Unable to find DocumentView.");
         }
     }
+    public void addAnnotations(int tag, ReadableArray annots) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.addAnnotations(annots);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "addAnnotations", "Unable to find DocumentView.");
+        }
+    }
 
     public ReadableMap getAnnotationAt(int tag, int x, int y, double distanceThreshold, double minimumLineWeight)
             throws PDFNetException {
