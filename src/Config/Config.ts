@@ -146,7 +146,6 @@ export const Config = {
     note: 'note',
     copy: 'copy',
     duplicate: 'duplicate',
-    appraise:'appraise',
     delete: 'delete',
     flatten: 'flatten',
     editText: 'editText',
