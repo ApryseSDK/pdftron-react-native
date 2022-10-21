@@ -38,16 +38,8 @@ import com.pdftron.collab.ui.viewer.CollabViewerTabHostFragment2;
 import com.pdftron.collab.utils.Keys;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
-import com.pdftron.pdf.Action;
-import com.pdftron.pdf.ActionParameter;
-import com.pdftron.pdf.Annot;
-import com.pdftron.pdf.ColorPt;
-import com.pdftron.pdf.DigitalSignatureField;
-import com.pdftron.pdf.Field;
-import com.pdftron.pdf.PDFDoc;
-import com.pdftron.pdf.PDFViewCtrl;
-import com.pdftron.pdf.Page;
-import com.pdftron.pdf.ViewChangeCollection;
+import com.pdftron.pdf.*;
+import com.pdftron.pdf.annots.Highlight;
 import com.pdftron.pdf.annots.Markup;
 import com.pdftron.pdf.annots.SignatureWidget;
 import com.pdftron.pdf.annots.Widget;
@@ -3525,6 +3517,40 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return annotations;
+    }
+
+    public void addHighlight(ReadableArray coords, int page) throws PDFNetException {
+        PDFViewCtrl pdfViewCtrl = getPdfViewCtrl();
+        PDFDoc doc = getPdfDoc();
+        Page docPage = doc.getPage(page);
+
+        Highlight hl = Highlight.create(doc, new Rect(100, 490, 150, 515));
+
+        int coordsSize = coords.size();
+        for (int i = 0; i < coordsSize; i++) {
+            ReadableMap coord = coords.getMap(i);
+            double x1 = coord.getDouble("x1");
+            double x2 = coord.getDouble("x2");
+            double x3 = coord.getDouble("x3");
+            double x4 = coord.getDouble("x4");
+            double y1 = coord.getDouble("y1");
+            double y2 = coord.getDouble("y2");
+            double y3 = coord.getDouble("y3");
+            double y4 = coord.getDouble("y4");
+
+            Point point1 = new Point(x1, y1);
+            Point point2 = new Point(x2, y2);
+            Point point3 = new Point(x3, y3);
+            Point point4 = new Point(x4, y4);
+
+            QuadPoint quad = new QuadPoint(point1, point2, point3, point4);
+            hl.setQuadPoint(i, quad);
+        }
+
+        hl.setColor(new ColorPt(0, 1, 0), 3);
+        hl.refreshAppearance();
+
+        docPage.annotPushBack(hl);
     }
 
     public WritableArray getAnnotationListOnPage(int pageNumber) throws PDFNetException {

@@ -715,6 +715,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void addHighlight(int tag, ReadableArray coords, int page) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.addHighlight(coords, page);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "addHighlight", "Unable to find DocumentView.");
+        }
+    }
+
     public ReadableArray getAnnotationListOnPage(int tag, int pageNumber) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
