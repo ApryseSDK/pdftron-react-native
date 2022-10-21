@@ -1148,11 +1148,11 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }
 }
--(void)addAnnotationForDocumentViewTag:(NSNumber *)tag annotation:(NSDictionary *)annotation
+-(void)addAnnotationsForDocumentViewTag:(NSNumber *)tag annotation:(NSDictionary *)annotation
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        [documentView addAnnotation:annotation];
+        [documentView addAnnotations:annotation];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to find DocumentView for tag" userInfo:nil];
     }

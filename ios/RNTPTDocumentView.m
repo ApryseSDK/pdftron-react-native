@@ -1481,7 +1481,7 @@ NS_ASSUME_NONNULL_END
     [toolManager changeTool:[PTPanTool class]];
 }
 
--(void)addAnnotation:(NSDictionary *)annotation
+-(void)addAnnotations:(NSDictionary *)annotation
 {
     if (!annotation) {
         return;
