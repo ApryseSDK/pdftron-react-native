@@ -214,6 +214,24 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
     }
 }
 
+RCT_EXPORT_METHOD(extractText:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    PTPDFDoc *doc = [[PTPDFDoc alloc] initWithFilepath: filePath];
+    PTPage *page = [doc GetPage:1];
+
+    PTTextExtractor *txt = [[PTTextExtractor alloc] init];
+    [txt Begin: page clip_ptr: 0 flags: 0]; // Read the page.
+
+    PTTextExtractorLine *line = [txt GetFirstLine];
+    PTWord *word;
+    for (; [line IsValid]; line=[line GetNextLine])    {
+        for (word=[line GetFirstWord]; [word IsValid]; word=[word GetNextWord]) {
+            NSArray *wordsArray = [word GetQuad];
+            NSLog(@"file path: %@", wordsArray);
+        }
+    }
+}
+  
 RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
