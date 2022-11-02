@@ -63,6 +63,51 @@ RCT_EXPORT_METHOD(getVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
+RCT_EXPORT_METHOD(getPlistValue:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSString *resPath = [@"~/Library/Preferences/" stringByExpandingTildeInPath];
+        NSString *bundlePath = [[NSBundle mainBundle] bundlePath]; //Path of your bundle
+          NSString *path = [resPath stringByAppendingPathComponent:@"org.reactjs.native.example.ScribbleMobile.plist"];
+          NSFileManager *fileManager = [NSFileManager defaultManager];
+          NSMutableDictionary *event = [[NSMutableDictionary alloc] init];
+          
+          if (![fileManager fileExistsAtPath: path]) {
+              NSError *error = [NSError errorWithDomain:@"plist_not_found"
+                                                   code:100
+                                               userInfo:@{
+                                                   NSLocalizedDescriptionKey:@"Requested plist doesn't exist"
+                                               }];
+              
+              reject(@"plist Doesn't exist", @"Requested plist doesn't exist", error);
+              
+          } else {
+              NSMutableDictionary *savedValue = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
+              NSString *value = [savedValue objectForKey:@"PTLastSelectedSignature"];
+              [event setValue:value forKey:@"Value"];
+              if (value.length > 0) {
+                  resolve(event);
+              } else {
+                  NSError *error = [NSError errorWithDomain:@"value_not_found"
+                                                       code:100
+                                                   userInfo:@{
+                                                       NSLocalizedDescriptionKey:@"Requested key doesn't exist"
+                                                   }];
+                  
+                  reject(@"key Doesn't exist", @"Requested value for key doesn't exist", error);
+              }
+              
+          }
+        
+//        NSLog(@"asjbcbc");
+//        return Bundle.main.object(forInfoDictionaryKey: "PTLastSelectedSignature") as? String
+    }
+    @catch (NSException *exception) {
+        reject(@"get_failed", @"Failed to get PDFNet version", [self errorFromException:exception]);
+    }
+}
+
 RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
