@@ -11,8 +11,6 @@ capture:
       project:
         languages:
           - "java"
-        excludes:
-          - build.gradle
 analyze:
   mode: central
 install:
