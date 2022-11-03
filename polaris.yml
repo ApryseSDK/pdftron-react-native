@@ -1,0 +1,23 @@
+version: "1"
+project:
+  name: ${scm.git.repo}/typescript
+  branch: ${scm.git.branch}
+  revision:
+    name: ${scm.git.commit}
+    date: ${scm.git.commit.date}
+capture:
+  fileSystem:
+    javascript:
+      files:
+        - directory: ./lib/src
+        - excludeRegex: node_modules|__test__
+    typescript:
+      files:
+        - directory: ./src
+        - excludeRegex: node_modules|__test__
+analyze:
+  mode: central
+install:
+  coverity:
+    version: default
+serverUrl: https://pdftron.polaris.synopsys.com/
