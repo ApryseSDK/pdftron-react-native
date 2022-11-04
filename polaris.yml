@@ -1,12 +1,15 @@
 version: "1"
 project:
-  name: ${scm.git.repo}/typescript
+  name: ${scm.git.repo}
   branch: ${scm.git.branch}
   revision:
     name: ${scm.git.commit}
     date: ${scm.git.commit.date}
 capture:
   fileSystem:
+    java:
+      files:
+        - directory: ./android
     javascript:
       files:
         - directory: ./lib/src
