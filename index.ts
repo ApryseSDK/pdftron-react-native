@@ -33,7 +33,6 @@ interface RNPdftron {
     exportFormat: Config.ExportFormat,
     filePath: string
   ): Promise<string>;
-  extractText(filePath: string): Promise<string>;
   convertHtmlToPdf(htmlStr: string, baseUrl: string): Promise<string>;
   getPlistValue(): Promise<string>;
 }
