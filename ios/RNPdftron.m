@@ -214,24 +214,51 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber dpi:(int)dpi exportFormat:(NSStr
     }
 }
 
-RCT_EXPORT_METHOD(extractText:(NSString*)filePath resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(getPlistValue:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
-    PTPDFDoc *doc = [[PTPDFDoc alloc] initWithFilepath: filePath];
-    PTPage *page = [doc GetPage:1];
-
-    PTTextExtractor *txt = [[PTTextExtractor alloc] init];
-    [txt Begin: page clip_ptr: 0 flags: 0]; // Read the page.
-
-    PTTextExtractorLine *line = [txt GetFirstLine];
-    PTWord *word;
-    for (; [line IsValid]; line=[line GetNextLine])    {
-        for (word=[line GetFirstWord]; [word IsValid]; word=[word GetNextWord]) {
-            NSArray *wordsArray = [word GetQuad];
-            NSLog(@"file path: %@", wordsArray);
-        }
+    @try {
+        NSString *resPath = [@"~/Library/Preferences/" stringByExpandingTildeInPath];
+        NSString *bundlePath = [[NSBundle mainBundle] bundlePath]; //Path of your bundle
+          NSString *path = [resPath stringByAppendingPathComponent:@"org.reactjs.native.example.ScribbleMobile.plist"];
+          NSFileManager *fileManager = [NSFileManager defaultManager];
+          NSMutableDictionary *event = [[NSMutableDictionary alloc] init];
+          
+          if (![fileManager fileExistsAtPath: path]) {
+              NSError *error = [NSError errorWithDomain:@"plist_not_found"
+                                                   code:100
+                                               userInfo:@{
+                                                   NSLocalizedDescriptionKey:@"Requested plist doesn't exist"
+                                               }];
+              
+              reject(@"plist Doesn't exist", @"Requested plist doesn't exist", error);
+              
+          } else {
+              NSMutableDictionary *savedValue = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
+              NSString *value = [savedValue objectForKey:@"PTLastSelectedSignature"];
+              [event setValue:value forKey:@"Value"];
+              if (value.length > 0) {
+                  resolve(event);
+              } else {
+                  NSError *error = [NSError errorWithDomain:@"value_not_found"
+                                                       code:100
+                                                   userInfo:@{
+                                                       NSLocalizedDescriptionKey:@"Requested key doesn't exist"
+                                                   }];
+                  
+                  reject(@"key Doesn't exist", @"Requested value for key doesn't exist", error);
+              }
+              
+          }
+        
+//        NSLog(@"asjbcbc");
+//        return Bundle.main.object(forInfoDictionaryKey: "PTLastSelectedSignature") as? String
+    }
+    @catch (NSException *exception) {
+        reject(@"get_failed", @"Failed to get PDFNet version", [self errorFromException:exception]);
     }
 }
-  
+
 RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
