@@ -18,6 +18,12 @@ capture:
       files:
         - directory: ./src
         - excludeRegex: node_modules|__test__
+  build:
+    buildCommands:
+      - shell: [bash, -e, scripts/ios/run_polaris.sh]
+    coverity:
+      skipFiles:
+      - "example/ios/Pods"
 analyze:
   mode: central
 install:
