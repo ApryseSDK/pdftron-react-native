@@ -1,0 +1,32 @@
+version: "1"
+project:
+  name: ${scm.git.repo}
+  branch: ${scm.git.branch}
+  revision:
+    name: ${scm.git.commit}
+    date: ${scm.git.commit.date}
+capture:
+  fileSystem:
+    java:
+      files:
+        - directory: ./android
+    javascript:
+      files:
+        - directory: ./lib/src
+        - excludeRegex: node_modules|__test__
+    typescript:
+      files:
+        - directory: ./src
+        - excludeRegex: node_modules|__test__
+  build:
+    buildCommands:
+      - shell: [bash, -e, scripts/ios/run_polaris.sh]
+    coverity:
+      skipFiles:
+      - "example/ios/Pods"
+analyze:
+  mode: central
+install:
+  coverity:
+    version: default
+serverUrl: https://pdftron.polaris.synopsys.com/
