@@ -4881,7 +4881,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         writer.begin(doc, true);
         File imageFile = new File("/data/data/com.pdftron.completereader/files/image389.png");
 
-        Annot annot = ViewerUtils.getAnnotById(doc, "a3302f72-bfef-664c-b2d3-28055684b483", 1);
+        Annot annot = ViewerUtils.getAnnotById(doc, annotationId, pageNumber);
 
         // Initialize the new image
         Image image = Image.create(doc, imageFile.getAbsolutePath());

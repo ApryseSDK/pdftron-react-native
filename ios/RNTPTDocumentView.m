@@ -6120,88 +6120,90 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
-//- (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
-//{
-//    if (stampImageDataUrl) {
-//
-//        PTPDFDoc* doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-//
-//        // Initialize a new PTElementWriter and PTElementBuilder
-//        PTElementWriter* writer = [[PTElementWriter alloc] init];
-//        PTElementBuilder* builder = [[PTElementBuilder alloc] init];
-//
-//        [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
-//
-//        __block UIImage *image = nil;
-//        NSURL *imageUrl = [NSURL URLWithString: stampImageDataUrl];
-//        //async download URL
-//        //async task to download data
-//        NSURLSessionDataTask* task = [NSURLSession.sharedSession dataTaskWithURL:imageUrl completionHandler:^(NSData * _Nullable data,
-//                                                                                                                       NSURLResponse * _Nullable response, NSError * _Nullable error) {
-//                if (!error) {
-//                    image = [[UIImage alloc] initWithData:data];
-//                }
-//
-//                if (image != nil) {
-//                    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
-//                    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
-//                                                    onPageNumber:(int)pageNumber
-//                                                     pdfViewCtrl:pdfViewCtrl];
-//
-//
-//                    // Initialize the new image with downloaded file
-//                    NSData* data = UIImageJPEGRepresentation(image, 0.7);
-//                           PTObjSet* hintSet = [[PTObjSet alloc] init];
-//                           PTObj* encoderHints = [hintSet CreateArray];
-//
-//                           NSString *compressionAlgorithm = @"png";
-//                           NSInteger compressionQuality = 50;
-//                           [encoderHints PushBackName:compressionAlgorithm];
-//                           [encoderHints PushBackName:@"Quality"];
-//                           [encoderHints PushBackNumber:compressionQuality];
-//                    PTImage* img = [PTImage CreateWithDataSimple:[doc GetSDFDoc] buf:data buf_size:data.length encoder_hints:encoderHints];
-//                    int w = [img GetImageWidth], h = [img GetImageHeight];
-//
-//                    // Initialize a new image element
-//                    PTElement* img_element = [builder CreateImageWithCornerAndScale:img x:0 y:0 hscale:w vscale:h];
-//
-//                    // Write the element
-//                    [writer WritePlacedElement:img_element];
-//
-//                    // Get the bounding box of the new element
-//                    PTPDFRect* bbox = [img_element GetBBox];
-//
-//                    // Configure the appearance stream that will be written to the annotation
-//                    PTObj* appearance_stream = [writer End];
-//
-//                    // Set the bounding box to be the rect of the new element
-//                    [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY1]];
-//
-//                    // Overwrite the annotation's appearance with the new appearance stream
-//                    [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
-//                }
-//            }];
-//
-//        [task resume];
-//
-//    }
-//}
-
 - (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
 {
-    
-    PTPDFDoc* doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
-    
-    // Initialize a new PTElementWriter and PTElementBuilder
-    PTElementWriter* writer = [[PTElementWriter alloc] init];
-    PTElementBuilder* builder = [[PTElementBuilder alloc] init];
+    if (stampImageDataUrl) {
 
-    [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
+        PTPDFDoc* doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
 
-    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
-    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
-                            onPageNumber:(int)pageNumber
-                            pdfViewCtrl:pdfViewCtrl];
+        // Initialize a new PTElementWriter and PTElementBuilder
+        PTElementWriter* writer = [[PTElementWriter alloc] init];
+        PTElementBuilder* builder = [[PTElementBuilder alloc] init];
+
+        [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
+
+        __block UIImage *image = nil;
+        NSURL *imageUrl = [NSURL URLWithString: stampImageDataUrl];
+        //async download URL
+        //async task to download data
+        NSURLSessionDataTask* task = [NSURLSession.sharedSession dataTaskWithURL:imageUrl completionHandler:^(NSData * _Nullable data,
+                                                                                                                       NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                if (!error) {
+                    image = [[UIImage alloc] initWithData:data];
+                }
+
+                if (image != nil) {
+                    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+                    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
+                                                    onPageNumber:(int)pageNumber
+                                                     pdfViewCtrl:pdfViewCtrl];
+
+
+                    // Initialize the new image with downloaded file
+                    NSData* data = UIImageJPEGRepresentation(image, 0.7);
+                           PTObjSet* hintSet = [[PTObjSet alloc] init];
+                           PTObj* encoderHints = [hintSet CreateArray];
+
+                           NSString *compressionAlgorithm = @"png";
+                           NSInteger compressionQuality = 50;
+                           [encoderHints PushBackName:compressionAlgorithm];
+                           [encoderHints PushBackName:@"Quality"];
+                           [encoderHints PushBackNumber:compressionQuality];
+                    PTImage* img = [PTImage CreateWithDataSimple:[doc GetSDFDoc] buf:data buf_size:data.length encoder_hints:encoderHints];
+                    int w = [img GetImageWidth], h = [img GetImageHeight];
+
+                    // Initialize a new image element
+                    PTElement* img_element = [builder CreateImageWithCornerAndScale:img x:0 y:0 hscale:w vscale:h];
+
+                    // Write the element
+                    [writer WritePlacedElement:img_element];
+
+                    // Get the bounding box of the new element
+                    PTPDFRect* bbox = [img_element GetBBox];
+
+                    // Configure the appearance stream that will be written to the annotation
+                    PTObj* appearance_stream = [writer End];
+
+                    // Set the bounding box to be the rect of the new element
+                    [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY1]];
+
+                    // Overwrite the annotation's appearance with the new appearance stream
+                    [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
+                    
+                    [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+                }
+            }];
+
+        [task resume];
+
+    }
+}
+
+//- (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
+//{
+//    
+//    PTPDFDoc* doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
+//    
+//    // Initialize a new PTElementWriter and PTElementBuilder
+//    PTElementWriter* writer = [[PTElementWriter alloc] init];
+//    PTElementBuilder* builder = [[PTElementBuilder alloc] init];
+//
+//    [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
+//
+//    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+//    PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
+//                            onPageNumber:(int)pageNumber
+//                            pdfViewCtrl:pdfViewCtrl];
 
     // Initialize the new image
 //    PTImage* img = [PTImage Create:[doc GetSDFDoc] filename:@"/Users/darrenchan/Library/Developer/CoreSimulator/Devices/08468861-B2FA-4514-8676-4063E62B5127/data/Downloads/image370.png"];
@@ -6213,29 +6215,29 @@ NS_ASSUME_NONNULL_END
 //    [encoderHints PushBackName:compressionAlgorithm];
 //    [encoderHints PushBackName:@"Quality"];
 //    [encoderHints PushBackNumber:compressionQuality];
-    PTImage* img = [PTImage CreateWithFile:[doc GetSDFDoc] filename:@"/Users/darrenchan/Library/Developer/CoreSimulator/Devices/08468861-B2FA-4514-8676-4063E62B5127/data/Downloads/image389jpg.jpg" encoder_hints:nil];
-    int w = [img GetImageWidth], h = [img GetImageHeight];
-
-    // Initialize a new image element
-    PTElement* img_element = [builder CreateImageWithCornerAndScale:img x:0 y:0 hscale:w vscale:h];
-
-    // Write the element
-    [writer WritePlacedElement:img_element];
-
-    // Get the bounding box of the new element
-    PTPDFRect* bbox = [img_element GetBBox];
-
-    // Configure the appearance stream that will be written to the annotation
-    PTObj* appearance_stream = [writer End];
-
-    // Set the bounding box to be the rect of the new element
-    [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY1]];
-
-    // Overwrite the annotation's appearance with the new appearance stream
-    [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
-    
-    [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
-}
+//    PTImage* img = [PTImage CreateWithFile:[doc GetSDFDoc] filename:@"/Users/darrenchan/Library/Developer/CoreSimulator/Devices/08468861-B2FA-4514-8676-4063E62B5127/data/Downloads/image389jpg.jpg" encoder_hints:nil];
+//    int w = [img GetImageWidth], h = [img GetImageHeight];
+//
+//    // Initialize a new image element
+//    PTElement* img_element = [builder CreateImageWithCornerAndScale:img x:0 y:0 hscale:w vscale:h];
+//
+//    // Write the element
+//    [writer WritePlacedElement:img_element];
+//
+//    // Get the bounding box of the new element
+//    PTPDFRect* bbox = [img_element GetBBox];
+//
+//    // Configure the appearance stream that will be written to the annotation
+//    PTObj* appearance_stream = [writer End];
+//
+//    // Set the bounding box to be the rect of the new element
+//    [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY1]];
+//
+//    // Overwrite the annotation's appearance with the new appearance stream
+//    [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
+//    
+//    [pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+//}
 
 - (void)setSignatureColors:(NSArray *)signatureColors
 {
