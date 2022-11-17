@@ -1423,6 +1423,15 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
     // Hygen Generated Methods
 
+    public void setStampImageData(int tag, String annotationId, int pageNumber, String stampImageDataUrl) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setStampImageData(annotationId, pageNumber, stampImageDataUrl);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setStampImageData", "Unable to find DocumentView.");
+        }
+    }
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;

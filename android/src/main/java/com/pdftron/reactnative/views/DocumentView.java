@@ -43,7 +43,11 @@ import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.ColorPt;
 import com.pdftron.pdf.DigitalSignatureField;
+import com.pdftron.pdf.Element;
+import com.pdftron.pdf.ElementBuilder;
+import com.pdftron.pdf.ElementWriter;
 import com.pdftron.pdf.Field;
+import com.pdftron.pdf.Image;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
@@ -96,7 +100,9 @@ import com.pdftron.reactnative.nativeviews.RNCollabViewerTabHostFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
 import com.pdftron.reactnative.utils.ReactUtils;
+import com.pdftron.sdf.Doc;
 import com.pdftron.sdf.Obj;
+import com.pdftron.sdf.SDFDoc;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -4865,6 +4871,49 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Methods
+    public void setStampImageData(String annotationId, int pageNumber, String stampImageDataUrl) throws PDFNetException {
+
+        Doc doc = getPdfDoc().getSDFDoc();
+        // Initialize a new ElementWriter and ElementBuilder
+        ElementWriter writer = new ElementWriter();
+        ElementBuilder builder = new ElementBuilder();
+
+        writer.begin(doc, true);
+        File imageFile = new File("/data/data/com.pdftron.completereader/files/image389.png");
+
+        Annot annot = ViewerUtils.getAnnotById(doc, "a3302f72-bfef-664c-b2d3-28055684b483", 1);
+
+        // Initialize the new image
+        Image image = Image.create(doc, imageFile.getAbsolutePath());
+        int w = image.getImageWidth();
+        int h = image.getImageHeight();
+
+        // Initialize a new image element
+        Element element = builder.createImage(image, 0, 0, w, h);
+
+        // Write the element
+        writer.writePlacedElement(element);
+
+        // Get the bounding box of the new element
+        com.pdftron.pdf.Rect bbox = element.getBBox();
+
+        // Configure the appearance stream that will be written to the annotation
+        Obj new_appearance_stream = writer.end();
+
+        // Set the bounding box to be the rect of the new element
+        new_appearance_stream.putRect(
+                "BBox",
+                bbox.getX1(),
+                bbox.getY1(),
+                bbox.getX2(),
+                bbox.getY2());
+
+        // Overwrite the annotation's appearance with the new appearance stream
+        annot.setAppearance(new_appearance_stream);
+
+        getPdfViewCtrl().update(annot, 1);
+    }
+
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;

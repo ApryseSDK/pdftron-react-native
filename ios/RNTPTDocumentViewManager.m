@@ -1685,6 +1685,16 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 }
 
 #pragma mark - Hygen Generated Methods
+- (void)setStampImageDataForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setStampImageData:annotationId pageNumber:pageNumber stampImageDataUrl:stampImageDataUrl];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
+    }
+}
+
 
 #pragma mark - Coordination
 

@@ -1457,6 +1457,22 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
 
     // Hygen Generated Methods
 
+    @ReactMethod
+    public void setStampImageData(final int tag, final String annotationId, final int pageNumber, final String stampImageDataUrl, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setStampImageData(tag, annotationId, pageNumber, stampImageDataUrl);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);
