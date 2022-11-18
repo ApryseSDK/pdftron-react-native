@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -1423,10 +1424,10 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
 
     // Hygen Generated Methods
 
-    public void setStampImageData(int tag, String annotationId, int pageNumber, String stampImageDataUrl) throws PDFNetException {
+    public void setStampImageData(int tag, String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {
-            documentView.setStampImageData(annotationId, pageNumber, stampImageDataUrl);
+            documentView.setStampImageData(annotationId, pageNumber, stampImageDataUrl, promise);
         } else {
             throw new PDFNetException("", 0L, getName(), "setStampImageData", "Unable to find DocumentView.");
         }

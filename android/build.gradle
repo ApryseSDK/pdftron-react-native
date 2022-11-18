@@ -1,5 +1,6 @@
 
 buildscript {
+    ext.kotlinVersion = '1.6.0'
     repositories {
         google()
         mavenCentral()
@@ -7,6 +8,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -21,6 +23,9 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 31
@@ -36,6 +41,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
     lintOptions {
         abortOnError false
@@ -60,4 +68,7 @@ dependencies {
     implementation "com.pdftron:pdftron:9.4.0"
     implementation "com.pdftron:tools:9.4.0"
     implementation "com.pdftron:collab:9.4.0"
+
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 }

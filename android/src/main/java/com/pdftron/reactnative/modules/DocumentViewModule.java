@@ -1463,7 +1463,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
             @Override
             public void run() {
                 try {
-                    mDocumentViewInstance.setStampImageData(tag, annotationId, pageNumber, stampImageDataUrl);
+                    mDocumentViewInstance.setStampImageData(tag, annotationId, pageNumber, stampImageDataUrl, promise);
                     promise.resolve(null);
                 } catch (Exception ex) {
                     promise.reject(ex);

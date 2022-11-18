@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -99,10 +100,10 @@ import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNCollabViewerTabHostFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
+import com.pdftron.reactnative.utils.DocumentViewUtilsKt;
+import com.pdftron.reactnative.utils.DownloadFileCallback;
 import com.pdftron.reactnative.utils.ReactUtils;
-import com.pdftron.sdf.Doc;
 import com.pdftron.sdf.Obj;
-import com.pdftron.sdf.SDFDoc;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
@@ -4871,49 +4872,61 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Methods
-    public void setStampImageData(String annotationId, int pageNumber, String stampImageDataUrl) throws PDFNetException {
-
-        Doc doc = getPdfDoc().getSDFDoc();
+    public void setStampImageData(String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
         // Initialize a new ElementWriter and ElementBuilder
         ElementWriter writer = new ElementWriter();
         ElementBuilder builder = new ElementBuilder();
 
-        writer.begin(doc, true);
-        File imageFile = new File("/data/data/com.pdftron.completereader/files/image389.png");
+        writer.begin(getPdfViewCtrl().getDoc().getSDFDoc(), true);
 
-        Annot annot = ViewerUtils.getAnnotById(doc, annotationId, pageNumber);
+        Annot annot = ViewerUtils.getAnnotById(getPdfViewCtrl().getDoc(), annotationId, pageNumber);
+        File file = new File(getContext().getFilesDir(), "image.png");
+        DocumentViewUtilsKt.downloadFromURL(stampImageDataUrl, file.getAbsolutePath(), new DownloadFileCallback() {
+            @Override
+            public void downloadSuccess(@NonNull String path) {
+                // Initialize the new image
+                int w, h = 0;
+                try {
+                    Image image = Image.create(getPdfViewCtrl().getDoc().getSDFDoc(), path);
 
-        // Initialize the new image
-        Image image = Image.create(doc, imageFile.getAbsolutePath());
-        int w = image.getImageWidth();
-        int h = image.getImageHeight();
+                    w = image.getImageWidth();
+                    h = image.getImageHeight();
+                    // Initialize a new image element
+                    Element element = builder.createImage(image, 0, 0, w, h);
 
-        // Initialize a new image element
-        Element element = builder.createImage(image, 0, 0, w, h);
+                    // Write the element
+                    writer.writePlacedElement(element);
 
-        // Write the element
-        writer.writePlacedElement(element);
+                    // Get the bounding box of the new element
+                    com.pdftron.pdf.Rect bbox = element.getBBox();
 
-        // Get the bounding box of the new element
-        com.pdftron.pdf.Rect bbox = element.getBBox();
+                    // Configure the appearance stream that will be written to the annotation
+                    Obj new_appearance_stream = writer.end();
 
-        // Configure the appearance stream that will be written to the annotation
-        Obj new_appearance_stream = writer.end();
+                    // Set the bounding box to be the rect of the new element
+                    new_appearance_stream.putRect(
+                            "BBox",
+                            bbox.getX1(),
+                            bbox.getY1(),
+                            bbox.getX2(),
+                            bbox.getY2());
 
-        // Set the bounding box to be the rect of the new element
-        new_appearance_stream.putRect(
-                "BBox",
-                bbox.getX1(),
-                bbox.getY1(),
-                bbox.getX2(),
-                bbox.getY2());
+                    // Overwrite the annotation's appearance with the new appearance stream
+                    annot.setAppearance(new_appearance_stream);
 
-        // Overwrite the annotation's appearance with the new appearance stream
-        annot.setAppearance(new_appearance_stream);
+                    getPdfViewCtrl().update(annot, pageNumber);
+                } catch (PDFNetException e) {
+                    e.printStackTrace();
+                }
+                promise.resolve(annotationId);
+            }
 
-        getPdfViewCtrl().update(annot, 1);
+            @Override
+            public void downloadFailed(@NonNull Exception e) {
+                promise.reject("setStampData Error", e);
+            }
+        });
     }
-
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
