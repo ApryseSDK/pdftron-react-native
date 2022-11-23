@@ -165,6 +165,7 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
+  forceAppTheme: oneOf<Config.ThemeOptions>(Config.ThemeOptions),
   signatureColors: PropTypes.arrayOf(PropTypes.exact({
     red: PropTypes.number.isRequired,
     green: PropTypes.number.isRequired,

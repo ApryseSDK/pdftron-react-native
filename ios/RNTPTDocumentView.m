@@ -6120,6 +6120,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
+- (void)setForceAppTheme:(NSArray *)forcedAppThemeItems
+{
+
+}
+
 - (void)setSignatureColors:(NSArray *)signatureColors
 {
     _signatureColors = [signatureColors copy];

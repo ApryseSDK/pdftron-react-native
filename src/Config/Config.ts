@@ -321,6 +321,11 @@ export const Config = {
     Own: "own",
     All: "all",
   },
+
+  ThemeOptions: {
+    ThemeDark: "theme_dark",
+    ThemeLight: "theme_light",
+  },
 } as const;
 
 /**
@@ -383,4 +388,5 @@ export module Config {
     icon: ToolbarIcons;
     items: (Tools | Buttons)[];
   };
+  export type ThemeOptions = ValueOf<typeof Config.ThemeOptions>;
 }

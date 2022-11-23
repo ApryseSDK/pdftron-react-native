@@ -18,6 +18,7 @@ import android.view.ViewTreeObserver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -750,6 +751,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setForceAppTheme(String forcedAppThemeItems) {
+        if (THEME_DARK.equals(forcedAppThemeItems)) {
+            PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NIGHT);
+        } else if (THEME_LIGHT.equals(forcedAppThemeItems)) {
+            PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NORMAL);
+        }
+    }
+
     public void setSignatureColors(@NonNull ReadableArray signatureColors) {
         int[] result = new int[signatureColors.size()];
 

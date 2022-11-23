@@ -420,6 +420,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL enableAntialiasing;
 
 // Hygen Generated Props
+@property (nonatomic, copy, nullable) NSArray<NSString *> forceAppTheme; 
 @property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;
 
 @property (nonatomic, copy, nullable) NSString *password;
