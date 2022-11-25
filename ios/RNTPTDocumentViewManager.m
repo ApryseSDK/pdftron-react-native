@@ -665,10 +665,10 @@ RCT_CUSTOM_VIEW_PROPERTY(openUrlPath, NSString, RNTPTDocumentView)
 }
 
 // Hygen Generated Props
-RCT_CUSTOM_VIEW_PROPERTY(forceAppTheme, NSArray, RNTPTDocumentView)
+RCT_CUSTOM_VIEW_PROPERTY(forceAppTheme, NSString, RNTPTDocumentView)
 {
     if (json) {
-        view.forcedAppThemeItems = [RCTConvert NSArray:json];
+        view.forceAppTheme = [RCTConvert NSString:json];
     }
 }
 

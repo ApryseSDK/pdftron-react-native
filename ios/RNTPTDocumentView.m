@@ -2217,7 +2217,10 @@ NS_ASSUME_NONNULL_END
                                                  UIUserInterfaceStyleLight);
         }
     }
-
+    
+    // Apply forced app theme
+    [self applyForcedAppTheme];
+    
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.1, *)) {
@@ -2845,6 +2848,21 @@ NS_ASSUME_NONNULL_END
     }
     else if ([self.layoutMode isEqualToString:PTFacingCoverContinuousLayoutModeKey]) {
         [pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
+
+- (void)applyForcedAppTheme
+{
+    if (@available(iOS 13.0, *)) {
+        PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+
+        if (pdfViewCtrl) {
+            if ([self.forceAppTheme isEqualToString:PTAppDarkTheme]) {
+                [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
+            } else if ([self.forceAppTheme isEqualToString:PTAppLightTheme]) {
+                [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+            }
+        }
     }
 }
 
@@ -4065,6 +4083,8 @@ NS_ASSUME_NONNULL_END
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
+    
+    [self applyForcedAppTheme];
 }
 
 - (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
@@ -6120,9 +6140,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
-- (void)setForceAppTheme:(NSArray *)forcedAppThemeItems
+- (void)setForceAppTheme:(NSString *)forcedAppTheme
 {
-
+    _forceAppTheme = forcedAppTheme;
+    
+    [self applyViewerSettings];
 }
 
 - (void)setSignatureColors:(NSArray *)signatureColors
