@@ -291,6 +291,31 @@ RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl
     }
 }
 
+RCT_EXPORT_METHOD(mergeDocuments:(NSArray *)documentsArray resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    @try
+    {
+        PTPDFDoc *new_doc = [[PTPDFDoc alloc] init];
+        [new_doc InitSecurityHandler];
+        
+        for (id doc in documentsArray) {
+            PTPDFDoc *in_doc = [[PTPDFDoc alloc] initWithFilepath: doc];
+            [new_doc InsertPages:[new_doc GetPageCount]+1 src_doc:in_doc start_page:1 end_page:[in_doc GetPageCount] flag:e_ptinsert_none];
+        };
+
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        NSString* resultDocPath = [tempDir stringByAppendingPathComponent:fileName];
+        resultDocPath = [resultDocPath stringByAppendingPathExtension:@"pdf"];
+        [new_doc SaveToFile: resultDocPath flags: e_ptremove_unused];
+        NSLog(@"Done. Result saved in newsletter_merge_pages.pdf");
+        resolve(resultDocPath);
+    }
+    @catch(NSException *exception)
+    {
+        reject(@"merging_failed", @"Failed to merge documents", [self errorFromException:exception]);
+    }
+}
+
 - (NSError *)errorFromException:(NSException *)exception
 {
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
