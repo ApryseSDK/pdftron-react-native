@@ -3934,3 +3934,14 @@ flattening | bool | Whether the shared copy should be flattened before sharing.
 ```js
 this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
 ```
+
+#### forceAppTheme
+Forces application theme to either [`Config.ThemeOptions`](./src/Config/Config.ts) constants, optional
+
+Requires followSystemDarkMode={false} in order for functionality of this prop
+
+```js
+<DocumentView
+  forceAppTheme={Config.ThemeOptions.ThemeDark}
+/>
+```
