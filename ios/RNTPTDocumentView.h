@@ -297,6 +297,10 @@ static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 static NSString * const PTReflowOrientationHorizontalKey = @"horizontal";
 static NSString * const PTReflowOrientationVerticalKey = @"veritcal";
 
+// App Theme keys
+static NSString * const PTAppDarkTheme = @"theme_dark";
+static NSString * const PTAppLightTheme = @"theme_light";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -420,6 +424,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL enableAntialiasing;
 
 // Hygen Generated Props
+@property (nonatomic, copy, nullable) NSString* forceAppTheme;
 @property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;
 
 @property (nonatomic, copy, nullable) NSString *password;
