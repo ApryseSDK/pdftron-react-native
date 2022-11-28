@@ -2218,9 +2218,6 @@ NS_ASSUME_NONNULL_END
         }
     }
     
-    // Apply forced app theme
-    [self applyForcedAppTheme];
-    
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.1, *)) {
@@ -6144,7 +6141,7 @@ NS_ASSUME_NONNULL_END
 {
     _forceAppTheme = forcedAppTheme;
     
-    [self applyViewerSettings];
+    [self applyForcedAppTheme];
 }
 
 - (void)setSignatureColors:(NSArray *)signatureColors
