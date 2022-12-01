@@ -2850,14 +2850,23 @@ NS_ASSUME_NONNULL_END
 
 - (void)applyForcedAppTheme
 {
+    // Force App Theme
     if (@available(iOS 13.0, *)) {
-        PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
-
-        if (pdfViewCtrl) {
-            if ([self.forceAppTheme isEqualToString:PTAppDarkTheme]) {
-                [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_night_mode];
-            } else if ([self.forceAppTheme isEqualToString:PTAppLightTheme]) {
-                [pdfViewCtrl SetColorPostProcessMode:e_ptpostprocess_none];
+        if ([self.forceAppTheme isEqualToString:PTAppDarkTheme]) {
+            UIViewController * const viewController = self.viewController.navigationController;
+            viewController.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+            
+            UIWindow * const window = self.window;
+            if (window) {
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+            }
+        } else if ([self.forceAppTheme isEqualToString:PTAppLightTheme]) {
+            UIViewController * const viewController = self.viewController.navigationController;
+            viewController.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+            
+            UIWindow * const window = self.window;
+            if (window) {
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
             }
         }
     }
