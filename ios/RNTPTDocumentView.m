@@ -6205,6 +6205,7 @@ NS_ASSUME_NONNULL_END
 
     // Overwrite the annotation's appearance with the new appearance stream
     [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
+}
 
 - (void)setForceAppTheme:(NSString *)forcedAppTheme
 {
