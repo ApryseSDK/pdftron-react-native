@@ -1689,7 +1689,7 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        [documentView setStampImageData:annotationId pageNumber:pageNumber stampImageDataUrl:stampImageDataUrl];
+        [documentView setStampImageWithURL:stampImageDataUrl onAnnotationID:annotationId pageNumber:pageNumber];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
     }
