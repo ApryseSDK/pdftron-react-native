@@ -18,9 +18,9 @@ jsonReader('./package.json', (err, data) => {
     if(err){
         console.log(err);
     } else {
-        let version = data.version.split('.');
-        version[3] =(parseInt(version[3])+1);
-        data.version = version.join('.'); 
+        let version = data.version.split('-');
+        version[1] =(parseInt(version[1])+1);
+        data.version = version.join('-'); 
         fs.writeFile('./package.json', JSON.stringify(data, null, 2), err => {
             if(err) {
                 console.log(err);

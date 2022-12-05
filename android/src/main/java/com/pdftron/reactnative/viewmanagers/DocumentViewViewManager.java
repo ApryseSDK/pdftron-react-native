@@ -533,6 +533,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
+    @ReactProp(name = "forceAppTheme")
+    public void setForceAppTheme(DocumentView documentView, @NonNull String forcedAppThemeItems) {
+        documentView.setForceAppTheme(forcedAppThemeItems);
+    }
+
     @ReactProp(name = "signatureColors")
     public void setSignatureColors(DocumentView documentView, @NonNull ReadableArray signatureColors) {
         documentView.setSignatureColors(signatureColors);
