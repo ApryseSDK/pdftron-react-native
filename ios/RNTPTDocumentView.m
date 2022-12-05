@@ -6176,17 +6176,6 @@ NS_ASSUME_NONNULL_END
 
     // Set the bounding box to be the rect of the new element
     [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY2]];
-    
-    PTPDFRect* rect = [annot GetRect];
-    
-    if ([rect Width] != [bbox Width]) {
-        [rect SetX2: [rect GetX2] + ([bbox Width] - [rect Width])];
-    }
-    if ([rect Height] != [bbox Height]) {
-        [rect SetY2: [rect GetY2] + ([bbox Height] - [rect Height])];
-    }
-    
-    [annot SetRect:rect];
 
     // Overwrite the annotation's appearance with the new appearance stream
     [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
