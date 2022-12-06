@@ -1409,5 +1409,20 @@ RCT_REMAP_METHOD(importAnnotationCommand,
 }
 
 #pragma mark - Hygen Generated Methods
+RCT_REMAP_METHOD(setFormFieldHighlightColor,
+                 setFormFieldHighlightColorForDocumentViewTag:(nonnull NSNumber *)tag
+                 fieldHighlightColor:(NSDictionary *)fieldHighlightColor
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setFormFieldHighlightColorForDocumentViewTag:tag fieldHighlightColor:fieldHighlightColor];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_form_field_highlight_color", @"Failed to set form field highlight color", [self errorFromException:exception]);
+    }
+}
+
 
 @end

@@ -1457,6 +1457,22 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
 
     // Hygen Generated Methods
 
+    @ReactMethod
+    public void setFormFieldHighlightColor(final int tag, final ReadableMap fieldHighlightColor, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setFormFieldHighlightColor(tag, fieldHighlightColor);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         mDocumentViewInstance.onActivityResult(requestCode, resultCode, data);

@@ -4873,6 +4873,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Methods
+    public void setFormFieldHighlightColor(ReadableMap fieldHighlightColor) throws PDFNetException {
+        if (getPdfViewCtrl() != null) {
+            int red = fieldHighlightColor.getInt(COLOR_RED);
+            int green = fieldHighlightColor.getInt(COLOR_GREEN);
+            int blue = fieldHighlightColor.getInt(COLOR_BLUE);
+            getPdfViewCtrl().setFieldHighlightColor(new ColorPt(red/255., green/255., blue/255.));
+            getPdfViewCtrl().update(true);
+        }
+    }
+
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;

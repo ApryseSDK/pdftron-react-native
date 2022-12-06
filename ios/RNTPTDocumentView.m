@@ -6146,6 +6146,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor
+{
+
+}
+
 - (void)setForceAppTheme:(NSString *)forcedAppTheme
 {
     _forceAppTheme = forcedAppTheme;

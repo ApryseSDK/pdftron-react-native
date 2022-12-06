@@ -735,6 +735,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 -(NSString *)getSavedSignatureFolder;
 
 // Hygen Generated Methods
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor;
+
 @end
 
 
