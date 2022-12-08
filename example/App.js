@@ -21,8 +21,10 @@ export default class App extends Component<Props> {
   onLeadingNavButtonPressed = () => {
     console.log('leading nav button pressed');
     if (this._viewer) {
-      this._viewer.exportAnnotations().then((xfdf) => {
-        console.log('xfdf', xfdf);
+      this._viewer.setStampImageData().then((annotationId, pageNumber, stampImageDataUrl) => {
+        annotationID = '75911d3a-f1fa-7a4f-8137-5885e3a4c4ae',
+        pageNumber = 1,
+        stampImageData = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
       });
     }
 
@@ -66,6 +68,12 @@ export default class App extends Component<Props> {
     console.log('xfdfCommand', xfdfCommand);
   }
 
+  setStampImageData = ({annotationId, pageNumber, stampImageDataUrl}) => {
+    annotationID = '75911d3a-f1fa-7a4f-8137-5885e3a4c4ae',
+    pageNumber = 1,
+    stampImageData = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+  }
+
   render() {
     const path = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_about.pdf";
     const myToolbar = {
@@ -97,6 +105,8 @@ export default class App extends Component<Props> {
           disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
           fitMode={Config.FitMode.FitPage}
           layoutMode={Config.LayoutMode.Continuous}
+          setStampImageData = {this.setStampImageData}
+          openOutlineList = {true}
         />
     );
   }

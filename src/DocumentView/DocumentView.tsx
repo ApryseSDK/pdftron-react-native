@@ -583,6 +583,13 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
   // Hygen Generated Methods
+  setStampImageData = (annotationId: string, pageNumber: number, stampImageDataUrl: string): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setStampImageData(tag, annotationId, pageNumber, stampImageDataUrl);
+    }
+    return Promise.resolve();
+  }
 
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.

@@ -1409,5 +1409,20 @@ RCT_REMAP_METHOD(importAnnotationCommand,
 }
 
 #pragma mark - Hygen Generated Methods
-
+RCT_REMAP_METHOD(setStampImageData,
+                 setStampImageDataForDocumentViewTag:(nonnull NSNumber *)tag
+                 annotationId:(NSString *)annotationId
+                 pageNumber:(NSInteger)pageNumber
+                 stampImageDataUrl:(NSString *)stampImageDataUrl
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setStampImageDataForDocumentViewTag:tag annotationId:annotationId pageNumber:pageNumber stampImageDataUrl:stampImageDataUrl];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_stamp_image_data", @"Failed to set stamp image data", [self errorFromException:exception]);
+    }
+}
 @end
