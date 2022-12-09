@@ -5,6 +5,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.pdftron.reactnative.modules.DocumentViewModule;
+import com.pdftron.reactnative.modules.KotlinModule;
 import com.pdftron.reactnative.modules.RNPdftronModule;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 import com.pdftron.reactnative.viewmanagers.PDFViewCtrlViewManager;
@@ -23,7 +24,8 @@ public class RNPdftronPackage implements ReactPackage {
         }
         return Arrays.<NativeModule>asList(
                 new RNPdftronModule(reactContext),
-                new DocumentViewModule(reactContext, mDocumentViewViewManager)
+                new DocumentViewModule(reactContext, mDocumentViewViewManager),
+                new KotlinModule(reactContext)
         );
     }
 
