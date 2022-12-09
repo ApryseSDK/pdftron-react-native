@@ -9,7 +9,7 @@ import {
   Alert
 } from 'react-native';
 
-import { DocumentView, RNPdftron, Config } from 'react-native-pdftron';
+import { DocumentView, RNPdftron, KotlinModule, Config } from 'react-native-pdftron';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -19,27 +19,28 @@ export default class App extends Component<Props> {
   }
 
   onLeadingNavButtonPressed = () => {
-    console.log('leading nav button pressed');
-    if (this._viewer) {
-      this._viewer.setStampImageData().then((annotationId, pageNumber, stampImageDataUrl) => {
-        annotationID = '75911d3a-f1fa-7a4f-8137-5885e3a4c4ae',
-        pageNumber = 1,
-        stampImageData = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
-      });
-    }
+    KotlinModule.showMyToast();
+    // console.log('leading nav button pressed');
+    // if (this._viewer) {
+    //   this._viewer.setStampImageData().then((annotationId, pageNumber, stampImageDataUrl) => {
+    //     annotationID = '75911d3a-f1fa-7a4f-8137-5885e3a4c4ae',
+    //     pageNumber = 1,
+    //     stampImageData = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png';
+    //   });
+    // }
 
-    if (Platform.OS === 'ios') {
-      Alert.alert(
-        'App',
-        'onLeadingNavButtonPressed',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        { cancelable: true }
-      )
-    } else {
-      BackHandler.exitApp();
-    }
+    // if (Platform.OS === 'ios') {
+    //   Alert.alert(
+    //     'App',
+    //     'onLeadingNavButtonPressed',
+    //     [
+    //       {text: 'OK', onPress: () => console.log('OK Pressed')},
+    //     ],
+    //     { cancelable: true }
+    //   )
+    // } else {
+    //   BackHandler.exitApp();
+    // }
   }
 
   onDocumentLoaded = () => {
