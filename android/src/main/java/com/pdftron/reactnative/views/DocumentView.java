@@ -1287,6 +1287,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
         } else if (TOOL_COUNT_TOOL.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
         }
         return annotType;
     }
@@ -1369,6 +1371,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case Annot.e_Widget:
                 annotString = TOOL_FORM_CREATE_TEXT_FIELD;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
+                annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
             default:
                 annotString = "";
@@ -1464,6 +1469,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FORM_FILL;
         } else if (TOOL_COUNT_TOOL.equals(item)) {
             mode = ToolManager.ToolMode.COUNT_MEASUREMENT;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            mode = ToolManager.ToolMode.FREE_TEXT_DATE_CREATE;
         }
         return mode;
     }
@@ -1690,6 +1697,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.REDO.value();
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.DATE.value();
         }
         return buttonId;
     }
@@ -1849,6 +1858,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.REDO;
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            buttonType = ToolbarButtonType.DATE;
         }
         return buttonType;
     }
