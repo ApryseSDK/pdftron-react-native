@@ -1437,6 +1437,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         }
     }
 
+    public void setFormFieldHighlightColor(int tag, ReadableMap fieldHighlightColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setFormFieldHighlightColor(fieldHighlightColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setFormFieldHighlightColor", "Unable to find DocumentView.");
+        }
+    }
+
+
     @Override
     public boolean needsCustomLayoutForChildren() {
         return true;
