@@ -736,7 +736,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 // Hygen Generated Methods
 - (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl;
-
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor;
 @end
 
 

@@ -6221,6 +6221,11 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor
+{
+
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController
