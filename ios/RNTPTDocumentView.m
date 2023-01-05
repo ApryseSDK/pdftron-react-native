@@ -6223,7 +6223,28 @@ NS_ASSUME_NONNULL_END
 
 - (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor
 {
-
+    PTPDFViewCtrl *pdfViewCtrl = _documentViewController.pdfViewCtrl;
+    
+    if (fieldHighlightColor) {
+        NSArray *keyList = fieldHighlightColor.allKeys;
+        
+        BOOL containsValidKeys = [keyList containsObject:PTColorRedKey] &&
+        [keyList containsObject:PTColorGreenKey] &&
+        [keyList containsObject:PTColorBlueKey];
+        NSAssert(containsValidKeys,
+                 @"default page color does not have red, green or blue keys");
+        
+        if (!containsValidKeys) {
+            return;
+        }
+         
+        PTPDFViewCtrl *pdfViewCtrl = self.documentViewController.pdfViewCtrl;
+            
+        [pdfViewCtrl setFieldHighlightColor:[defaultPageColor[PTColorRedKey] unsignedCharValue] g:[defaultPageColor[PTColorGreenKey] unsignedCharValue]
+                b:[defaultPageColor[PTColorBlueKey] unsignedCharValue]];
+            
+        [pdfViewCtrl Update:YES];
+    }
 }
 
 @end
