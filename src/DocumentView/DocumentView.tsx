@@ -1250,6 +1250,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
     return Promise.resolve();
   }
 
+  addAnnotation = (type: string, x1: number, y1: number, x2: number, y2: number): Promise<void | {id: string}> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if(tag != null) {
+      return DocumentViewManager.addAnnotation(tag, type, x1, y1, x2, y2);
+    }
+    return Promise.resolve();
+}
+
   _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
   };

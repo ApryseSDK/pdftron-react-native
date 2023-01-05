@@ -6221,6 +6221,28 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (NSDictionary *)getField:(NSString *)fieldName
+{
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+    
+    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+    NSError *error;
+    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
+            
+        
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to get field. %@", error.localizedDescription);
+    }
+    
+    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController

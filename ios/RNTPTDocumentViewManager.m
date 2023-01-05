@@ -1996,4 +1996,15 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
     [self.documentViews removeObjectForKey:documentView.reactTag];
 }
 
+- (NSDictionary *)addAnnotationToDocument:(NSNumber *)tag type:(NSString *)type x1:(NSNumber *)x1 y1:(NSNumber *)y1 x2:(NSNumber *)x2 y2:(NSNumber *)y2;
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        return [documentView addAnnotation:type x1:x1 y1:y1 x2:x2 y2:y2];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
+        return nil;
+    }
+}
+
 @end
