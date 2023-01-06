@@ -593,7 +593,6 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   setFormFieldHighlightColor = (fieldHighlightColor: AnnotOptions.Color): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      console.log("hello branden");
       return DocumentViewManager.setFormFieldHighlightColor(tag, fieldHighlightColor);
     }
     return Promise.resolve();
