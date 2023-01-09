@@ -1472,6 +1472,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
         });
     }
 
+    @ReactMethod
     public void setFormFieldHighlightColor(final int tag, final ReadableMap fieldHighlightColor, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

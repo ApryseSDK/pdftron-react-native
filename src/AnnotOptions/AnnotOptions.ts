@@ -25,7 +25,7 @@ export interface Color {
     blue: number;
 }
 
-export interface ColorAlpha {
+export interface ColorWithAlpha {
     red: number;
     green: number;
     blue: number;

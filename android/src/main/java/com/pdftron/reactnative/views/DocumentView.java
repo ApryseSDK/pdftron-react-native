@@ -4948,11 +4948,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     public void setFormFieldHighlightColor(ReadableMap fieldHighlightColor) throws PDFNetException {
-        if (getPdfViewCtrl() != null) {
-            int red = fieldHighlightColor.getInt(COLOR_RED);
-            int green = fieldHighlightColor.getInt(COLOR_GREEN);
-            int blue = fieldHighlightColor.getInt(COLOR_BLUE);
-            getPdfViewCtrl().setFieldHighlightColor(new ColorPt(red/255., green/255., blue/255.));
+        if (getPdfViewCtrl() != null && fieldHighlightColor != null) {
+            double red = (double) (fieldHighlightColor.getInt(COLOR_RED) / 255f);
+            double green = (double) (fieldHighlightColor.getInt(COLOR_GREEN) / 255f);
+            double blue = (double) (fieldHighlightColor.getInt(COLOR_BLUE) / 255f);
+            double alpha = (double) (fieldHighlightColor.getInt(COLOR_ALPHA) / 255f);
+            ColorPt colorPt = new ColorPt(red, green, blue, alpha);
+            getPdfViewCtrl().setFieldHighlightColor(colorPt);
             getPdfViewCtrl().update(true);
         }
     }

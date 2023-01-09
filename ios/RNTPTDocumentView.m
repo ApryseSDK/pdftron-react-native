@@ -6226,7 +6226,7 @@ NS_ASSUME_NONNULL_END
     PTPDFViewCtrl *pdfViewCtrl = _documentViewController.pdfViewCtrl;
     
     if (pdfViewCtrl) {
-        UIColor *combinedColor = [self convertRGBAToUIColor:fieldHighlightColor];
+        UIColor *combinedColor = [self convertRGBAToUIColor:field HighlightColor];
         [pdfViewCtrl SetFieldHighlightColor:combinedColor];
         [pdfViewCtrl Update:YES];
     }
