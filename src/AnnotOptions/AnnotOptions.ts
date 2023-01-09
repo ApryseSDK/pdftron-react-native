@@ -25,6 +25,13 @@ export interface Color {
     blue: number;
 }
 
+export interface ColorAlpha {
+    red: number;
+    green: number;
+    blue: number;
+    alpha: number;
+}
+
 export type RotationDegree = 0 | 90 | 180 | 270;
 
 export interface Field {
