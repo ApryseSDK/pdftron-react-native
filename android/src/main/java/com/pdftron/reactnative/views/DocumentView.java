@@ -4548,6 +4548,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return colorNumber;
     }
 
+    private ColorPt convertRGBAToColorPt(ReadableMap color) throws PDFNetException {
+        double red = (double) (color.getInt(COLOR_RED) / 255f);
+        double green = (double) (color.getInt(COLOR_GREEN) / 255f);
+        double blue = (double) (color.getInt(COLOR_BLUE) / 255f);
+        double alpha = (double) (color.getInt(COLOR_ALPHA) / 255f);
+        ColorPt colorPt = new ColorPt(red, green, blue, alpha);
+
+        return colorPt;
+    }
+
     public void startSearchMode(String searchString, boolean matchCase, boolean matchWholeWord) {
         PdfViewCtrlTabFragment2 fragment = getPdfViewCtrlTabFragment();
         if (fragment != null) {
@@ -4949,12 +4959,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     public void setFormFieldHighlightColor(ReadableMap fieldHighlightColor) throws PDFNetException {
         if (getPdfViewCtrl() != null && fieldHighlightColor != null) {
-            double red = (double) (fieldHighlightColor.getInt(COLOR_RED) / 255f);
-            double green = (double) (fieldHighlightColor.getInt(COLOR_GREEN) / 255f);
-            double blue = (double) (fieldHighlightColor.getInt(COLOR_BLUE) / 255f);
-            double alpha = (double) (fieldHighlightColor.getInt(COLOR_ALPHA) / 255f);
-            ColorPt colorPt = new ColorPt(red, green, blue, alpha);
-            getPdfViewCtrl().setFieldHighlightColor(colorPt);
+            getPdfViewCtrl().setFieldHighlightColor(convertRGBAToColorPt(fieldHighlightColor));
             getPdfViewCtrl().update(true);
         }
     }
