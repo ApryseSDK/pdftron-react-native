@@ -6221,8 +6221,9 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (NSDictionary *)addAnnotation:type:(NSString *)type x1:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
+- (NSDictionary *)addAnnotation:(NSString *)type x1:(NSNumber * _Nonnull)x1 y1:(NSNumber * _Nonnull)y1 x2:(NSNumber * _Nonnull)x2 y2:(NSNumber * _Nonnull)y2;
 {
+    
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
         return nil;
@@ -6235,30 +6236,28 @@ NS_ASSUME_NONNULL_END
         PTPage* page = [[doc GetPageIterator: 1] Current];
         PTObj* annots = [page GetAnnots];
 
-        if (!annots) 
-        {
+        if (!annots) {
             annots = [doc CreateIndirectArray];  
             [[page GetSDFObj] Put: @"Annots" obj:annots];
         }
 
-        if (type == 'Text') 
-        {
+        if ([type isEqualToString:@"Text"]) {
             // Create a Text annotation
             PTObj * annot = [doc CreateIndirectDict];
             [annot PutName: @"Subtype" name: @"Text"];
             [annot PutBool: @"Open" value: YES];
             [annot PutString: @"Contents" value: @"The quick brown fox ate the lazy mouse."];
-            [annot PutRect: @"Rect" x1:x1 y1:y1 x2:x2 y2:y2];
+            [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
         }
 
-        if (type == 'Sign') 
-        {
+        if ([type isEqualToString: @"Sign"]) {
             // Create a Signature annotation
             PTObj * annot = [doc CreateIndirectDict];
             [annot PutName: @"Subtype" name: @"Sign"];
             [annot PutBool: @"Open" value: YES];
-            [annot PutRect: @"Rect" x1:x1 y1:y1 x2:x2 y2:y2];
-        }        
+            [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
+        }
+        
     } error:&error];
     
     if (error) {
