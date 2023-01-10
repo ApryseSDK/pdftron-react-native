@@ -1426,9 +1426,6 @@ RCT_REMAP_METHOD(setStampImageData,
     }
 }
 
-- (NSDictionary *)addAnnotation:(nonnull NSString *)type x1:(nonnull NSNumber *)x1 y1:(nonnull NSNumber *)y1 x2:( nonnull nonnull NSNumber *)x2 y2:(nonnull NSNumber *)y2;
-
-
 RCT_REMAP_METHOD(addAnnotation,
                  addAnnotationToDocument:(nonnull NSNumber *)tag
                  type:(nonnull NSString *)type
