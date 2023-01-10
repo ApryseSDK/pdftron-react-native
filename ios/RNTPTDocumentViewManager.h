@@ -198,6 +198,6 @@
 #pragma mark - Hygen Generated Methods
 - (void)setStampImageDataForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl;
 
-- (NSDictionary *)addAnnotationToDocument:(NSNumber *)tag type:(NSString *)type x1:(NSInteger)x1 y1:(NSInteger)y1 x2:(NSInteger)x2 y2:(NSInteger)y2;
+- (NSDictionary *)addAnnotation:(NSString *)type x1:(nonnull NSNumber *)x1 y1:(nonnull NSNumber *)y1 x2:( nonnull nonnull NSNumber *)x2 y2:(nonnull NSNumber *)y2;
 
 @end

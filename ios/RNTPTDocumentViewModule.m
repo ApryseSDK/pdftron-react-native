@@ -1425,13 +1425,17 @@ RCT_REMAP_METHOD(setStampImageData,
         reject(@"set_stamp_image_data", @"Failed to set stamp image data", [self errorFromException:exception]);
     }
 }
+
+- (NSDictionary *)addAnnotation:(nonnull NSString *)type x1:(nonnull NSNumber *)x1 y1:(nonnull NSNumber *)y1 x2:( nonnull nonnull NSNumber *)x2 y2:(nonnull NSNumber *)y2;
+
+
 RCT_REMAP_METHOD(addAnnotation,
                  addAnnotationToDocument:(nonnull NSNumber *)tag
-                 type:(NSString *)type
-                 x1:(NSInteger)x1
-                 y1:(NSInteger)y1
-                 x2:(NSInteger)x2
-                 y2:(NSInteger)y2
+                 type:(nonnull NSString *)type
+                 x1:(nonnull NSNumber *)x1
+                 y1:(nonnull NSNumber *)y1
+                 x2:(nonnull NSNumber *)x2
+                 y2:(nonnull NSNumber *)y2
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
