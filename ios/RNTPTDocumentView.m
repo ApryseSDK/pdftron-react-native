@@ -6229,41 +6229,38 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
-    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+    PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+    PTPage* page = [[doc GetPageIterator: 1] Current];
+    PTObj* annots = [page GetAnnots];
 
-    NSError *error;
-    [pdfViewCtrl DocLockReadWithBlock:^(PTPDFDoc * _Nullable doc) {
-        PTPage* page = [[doc GetPageIterator: 1] Current];
-        PTObj* annots = [page GetAnnots];
+    if (!annots) {
+        annots = [doc CreateIndirectArray];  
+        [[page GetSDFObj] Put: @"Annots" obj:annots];
+    }
 
-        if (!annots) {
-            annots = [doc CreateIndirectArray];  
-            [[page GetSDFObj] Put: @"Annots" obj:annots];
-        }
+    if ([type isEqualToString:@"Text"]) {
+        // Create a Text annotation
+        PTObj * annot = [doc CreateIndirectDict];
+        [annot PutName: @"Subtype" name: @"Text"];
+        [annot PutBool: @"Open" value: YES];
+        [annot PutString: @"Contents" value: @"The quick brown fox ate the lazy mouse."];
+        [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
+        [annots PushBack:annot];
+    }
 
-        if ([type isEqualToString:@"Text"]) {
-            // Create a Text annotation
-            PTObj * annot = [doc CreateIndirectDict];
-            [annot PutName: @"Subtype" name: @"Text"];
-            [annot PutBool: @"Open" value: YES];
-            [annot PutString: @"Contents" value: @"The quick brown fox ate the lazy mouse."];
-            [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
-        }
-
-        if ([type isEqualToString: @"Sign"]) {
-            // Create a Signature annotation
-            PTObj * annot = [doc CreateIndirectDict];
-            [annot PutName: @"Subtype" name: @"Sign"];
-            [annot PutBool: @"Open" value: YES];
-            [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
-        }
-        
-    } error:&error];
-    
-    if (error) {
-        NSLog(@"Error: There was an error while trying to get field. %@", error.localizedDescription);
+    if ([type isEqualToString: @"Sign"]) {
+        // Create a Signature annotation
+        PTObj * annot = [doc CreateIndirectDict];
+        [annot PutName: @"Subtype" name: @"Sign"];
+        [annot PutBool: @"Open" value: YES];
+        [annot PutRect: @"Rect" x1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue];
+        [annots PushBack:annot];
     }
     
+    [doc SaveToFile: @"../../TestFiles/Output/new_annot_test_api.pdf" flags: e_ptlinearized];
+    
+    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
     return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
