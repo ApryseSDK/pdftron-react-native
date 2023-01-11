@@ -6221,6 +6221,45 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (NSDictionary *)addAnnotation:(NSString *)type fieldName:(NSString *)fieldName pageNumber:(NSInteger *)pageNumber x1:(NSNumber * _Nonnull)x1 y1:(NSNumber * _Nonnull)y1 x2:(NSNumber * _Nonnull)x2 y2:(NSNumber * _Nonnull)y2;
+{
+    
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (!pdfViewCtrl) {
+        return nil;
+    }
+    
+    PTPDFDoc *doc = [pdfViewCtrl GetDoc];
+    PTPage* page = [[doc GetPageIterator: pageNumber] Current];
+    PTObj* annots = [page GetAnnots];
+
+    if (!annots) {
+        annots = [doc CreateIndirectArray];  
+        [[page GetSDFObj] Put: @"Annots" obj:annots];
+    }
+
+    if ([type isEqualToString:@"Text"]) {
+        PTField *text_field = [doc FieldCreateWithString: fieldName type: e_pttext field_value: @"" def_field_value: @""];
+        PTTextWidget *text = [PTTextWidget CreateWithField: doc pos: [[PTPDFRect alloc] initWithX1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue] field: text_field];
+        [text SetFont: [PTFont Create: [doc GetSDFDoc] type: e_pttimes_bold embed: NO]];
+        [text RefreshAppearance];
+        [annots PushBack:text];
+    }
+
+    if ([type isEqualToString: @"Sign"]) {
+        PTDigitalSignatureField* sig_field = [doc CreateDigitalSignatureField: fieldName];
+        PTSignatureWidget* signature = [PTSignatureWidget CreateWithDigitalSignatureField: doc pos: [[PTPDFRect alloc] initWithX1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue] field: sig_field];
+        [signature RefreshAppearance];
+        [annots PushBack:signature];
+    }
+    
+    [doc SaveToFile: @"../../TestFiles/Output/new_annot_test_api.pdf" flags: e_ptlinearized];
+    
+    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
+
+    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController

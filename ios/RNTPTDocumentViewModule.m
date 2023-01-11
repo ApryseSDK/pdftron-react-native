@@ -1425,4 +1425,25 @@ RCT_REMAP_METHOD(setStampImageData,
         reject(@"set_stamp_image_data", @"Failed to set stamp image data", [self errorFromException:exception]);
     }
 }
+
+RCT_REMAP_METHOD(addAnnotation,
+                 addAnnotationToDocument:(nonnull NSNumber *)tag
+                 type:(nonnull NSString *)type
+                 fieldName:(NSString *)fieldName
+                 pageNumber:(NSInteger *)pageNumber
+                 x1:(nonnull NSNumber *)x1
+                 y1:(nonnull NSNumber *)y1
+                 x2:(nonnull NSNumber *)x2
+                 y2:(nonnull NSNumber *)y2
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        NSDictionary *field = [[self documentViewManager] addAnnotationToDocument:tag type:type fieldName:fieldName pageNumber:pageNumber x1:x1 y1:y1 x2:x2 y2:y2];
+        resolve(field);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);
+    }
+}
 @end
