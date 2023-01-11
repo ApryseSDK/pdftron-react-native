@@ -3945,3 +3945,16 @@ Requires followSystemDarkMode={false} in order for functionality of this prop
   forceAppTheme={Config.ThemeOptions.ThemeDark}
 />
 ```
+
+#### setFormFieldHighlightColor
+Sets the form field's highlight color on the PDF.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldHightlightColor | object | the form field highlight color, in the format `{red: number, green: number, blue: number, alpha: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setFormFieldHighlightColor({red: 0, green: 0, blue: 255, alpha: 128}); // blue color
+```

@@ -6221,6 +6221,17 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor
+{
+    PTPDFViewCtrl *pdfViewCtrl = _documentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        UIColor *combinedColor = [self convertRGBAToUIColor:field HighlightColor];
+        [pdfViewCtrl SetFieldHighlightColor:combinedColor];
+        [pdfViewCtrl Update:YES];
+    }
+}
+
 @end
 
 #pragma mark - RNTPTThumbnailsViewController
