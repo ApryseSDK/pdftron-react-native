@@ -2000,10 +2000,9 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {
-        return [documentView addAnnotation:type fieldName:fieldName pageNumber:pageNumber x1:x1 y1:y1 x2:x2 y2:y2];
+        [documentView addAnnotation:type fieldName:fieldName pageNumber:pageNumber x1:x1 y1:y1 x2:x2 y2:y2];
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
-        return nil;
     }
 }
 

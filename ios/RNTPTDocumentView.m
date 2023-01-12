@@ -6226,7 +6226,7 @@ NS_ASSUME_NONNULL_END
     
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
-        return nil;
+        return;
     }
     
     PTPDFDoc *doc = [pdfViewCtrl GetDoc];
@@ -6241,7 +6241,7 @@ NS_ASSUME_NONNULL_END
     if ([type isEqualToString:@"Text"]) {
         PTField *text_field = [doc FieldCreateWithString: fieldName type: e_pttext field_value: @"" def_field_value: @""];
         PTTextWidget *text = [PTTextWidget CreateWithField: doc pos: [[PTPDFRect alloc] initWithX1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue] field: text_field];
-        [text SetFont: [PTFont Create: [doc GetSDFDoc] type: e_pttimes_bold embed: NO]];
+        // [text SetFont: [PTFont Create: [doc GetSDFDoc] type: e_pttimes_bold embed: NO]];
         [text RefreshAppearance];
         [annots PushBack:text];
     }
@@ -6249,6 +6249,10 @@ NS_ASSUME_NONNULL_END
     if ([type isEqualToString: @"Sign"]) {
         PTDigitalSignatureField* sig_field = [doc CreateDigitalSignatureField: fieldName];
         PTSignatureWidget* signature = [PTSignatureWidget CreateWithDigitalSignatureField: doc pos: [[PTPDFRect alloc] initWithX1:x1.doubleValue y1:y1.doubleValue x2:x2.doubleValue y2:y2.doubleValue] field: sig_field];
+
+        PTImage * img = [PTImage Create: [doc GetSDFDoc] filename: @"./sign-here.svg"];        
+        [signature CreateSignatureAppearance: img];
+
         [signature RefreshAppearance];
         [annots PushBack:signature];
     }
