@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		CE0885F620E2CAB100AB7A9B /* RNTPTPDFViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0885F520E2CAB100AB7A9B /* RNTPTPDFViewCtrl.m */; };
 		CE0885F920E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0885F820E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m */; };
 		D30BB17922EFA8D000D90D24 /* RNTPTDocumentViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */; };
+		DEE5F9A8296FF7DC0028F8C2 /* scribble.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE5F9A7296FF7DC0028F8C2 /* scribble.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,7 @@
 		CE0885F820E2CACB00AB7A9B /* RNTPTPDFViewCtrlManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTPTPDFViewCtrlManager.m; sourceTree = "<group>"; };
 		D30BB17722EFA8D000D90D24 /* RNTPTDocumentViewModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTPTDocumentViewModule.h; sourceTree = "<group>"; };
 		D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTPTDocumentViewModule.m; sourceTree = "<group>"; };
+		DEE5F9A7296FF7DC0028F8C2 /* scribble.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = scribble.xcframework; path = ../../../../Downloads/scribble.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEE5F9A8296FF7DC0028F8C2 /* scribble.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +81,16 @@
 				D30BB17722EFA8D000D90D24 /* RNTPTDocumentViewModule.h */,
 				D30BB17822EFA8D000D90D24 /* RNTPTDocumentViewModule.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				DEE5F9A6296FF7DC0028F8C2 /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		DEE5F9A6296FF7DC0028F8C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DEE5F9A7296FF7DC0028F8C2 /* scribble.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +132,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 58B511D21A9E6C8500147676;
