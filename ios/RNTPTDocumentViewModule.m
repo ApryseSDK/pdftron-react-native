@@ -1427,14 +1427,14 @@ RCT_REMAP_METHOD(setStampImageData,
 }
 
 RCT_REMAP_METHOD(addAnnotation,
-                 addAnnotationToDocument:(nonnull NSNumber *)tag
-                 type:(nonnull NSString *)type
-                 fieldName:(NSString *)fieldName
-                 pageNumber:(NSInteger *)pageNumber
-                 x1:(nonnull NSNumber *)x1
-                 y1:(nonnull NSNumber *)y1
-                 x2:(nonnull NSNumber *)x2
-                 y2:(nonnull NSNumber *)y2
+                 addAnnotationToDocument:(NSNumber * _Nonnull)tag 
+                 type:(NSString * _Nonnull)type
+                 fieldName:(NSString * _Nonnull)fieldName
+                 pageNumber:(NSInteger)pageNumber
+                 x1:(double)x1
+                 y1:(double)y1
+                 x2:(double)x2
+                 y2:(double)y2
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
