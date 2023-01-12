@@ -1439,8 +1439,8 @@ RCT_REMAP_METHOD(addAnnotation,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     @try {
-        NSDictionary *field = [[self documentViewManager] addAnnotationToDocument:tag type:type fieldName:fieldName pageNumber:pageNumber x1:x1 y1:y1 x2:x2 y2:y2];
-        resolve(field);
+        [[self documentViewManager] addAnnotationToDocument:tag type:type fieldName:fieldName pageNumber:pageNumber x1:x1 y1:y1 x2:x2 y2:y2];
+        resolve(nil);
     }
     @catch (NSException *exception) {
         reject(@"set_value_for_fields", @"Failed to set value on fields", [self errorFromException:exception]);

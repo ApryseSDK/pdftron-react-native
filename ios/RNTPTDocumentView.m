@@ -6221,7 +6221,7 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (NSDictionary *)addAnnotation:(NSString *)type fieldName:(NSString *)fieldName pageNumber:(NSInteger *)pageNumber x1:(NSNumber * _Nonnull)x1 y1:(NSNumber * _Nonnull)y1 x2:(NSNumber * _Nonnull)x2 y2:(NSNumber * _Nonnull)y2;
+- (void)addAnnotation:(NSString *)type fieldName:(NSString *)fieldName pageNumber:(NSInteger *)pageNumber x1:(NSNumber * _Nonnull)x1 y1:(NSNumber * _Nonnull)y1 x2:(NSNumber * _Nonnull)x2 y2:(NSNumber * _Nonnull)y2;
 {
     
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
@@ -6252,12 +6252,6 @@ NS_ASSUME_NONNULL_END
         [signature RefreshAppearance];
         [annots PushBack:signature];
     }
-    
-    [doc SaveToFile: @"../../TestFiles/Output/new_annot_test_api.pdf" flags: e_ptlinearized];
-    
-    NSMutableDictionary <NSString *, NSObject *> *fieldMap = [[NSMutableDictionary alloc] init];
-
-    return [[fieldMap allKeys] count] == 0 ? nil : fieldMap;
 }
 
 @end
