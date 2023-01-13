@@ -1430,7 +1430,7 @@ RCT_REMAP_METHOD(addAnnotation,
                  addAnnotationToDocument:(NSNumber * _Nonnull)tag 
                  type:(NSString * _Nonnull)type
                  fieldName:(NSString * _Nonnull)fieldName
-                 pageNumber:(NSInteger)pageNumber
+                 pageNumber:(int)pageNumber
                  x1:(double)x1
                  y1:(double)y1
                  x2:(double)x2

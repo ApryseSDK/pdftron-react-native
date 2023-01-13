@@ -1996,7 +1996,7 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
     [self.documentViews removeObjectForKey:documentView.reactTag];
 }
 
-- (void)addAnnotationToDocument:(NSNumber *_Nonnull)tag type:(NSString * _Nonnull)type fieldName:(NSString * _Nonnull)fieldName pageNumber:(NSInteger)pageNumber x1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
+- (void)addAnnotationToDocument:(NSNumber *_Nonnull)tag type:(NSString * _Nonnull)type fieldName:(NSString * _Nonnull)fieldName pageNumber:(int)pageNumber x1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
 {
     RNTPTDocumentView *documentView = self.documentViews[tag];
     if (documentView) {

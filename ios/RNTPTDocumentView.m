@@ -6221,9 +6221,8 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
-- (void)addAnnotation:(NSString * _Nonnull)type fieldName:(NSString * _Nonnull)fieldName pageNumber:(NSInteger)pageNumber x1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
+- (void)addAnnotation:(NSString * _Nonnull)type fieldName:(NSString * _Nonnull)fieldName pageNumber:(int)pageNumber x1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
 {
-    
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (!pdfViewCtrl) {
         return;
@@ -6237,7 +6236,7 @@ NS_ASSUME_NONNULL_END
         annots = [doc CreateIndirectArray];  
         [[page GetSDFObj] Put: @"Annots" obj:annots];
     }
-
+    
     if ([type isEqualToString:@"Text"]) {
         PTField *text_field = [doc FieldCreateWithString: fieldName type: e_pttext field_value: @"" def_field_value: @""];
         PTTextWidget *text = [PTTextWidget CreateWithField: doc pos: [[PTPDFRect alloc] initWithX1:x1 y1:y1 x2:x2 y2:y2] field: text_field];
@@ -6247,14 +6246,32 @@ NS_ASSUME_NONNULL_END
     }
 
     if ([type isEqualToString: @"Sign"]) {
-        PTDigitalSignatureField* sig_field = [doc CreateDigitalSignatureField: fieldName];
-        PTSignatureWidget* signature = [PTSignatureWidget CreateWithDigitalSignatureField: doc pos: [[PTPDFRect alloc] initWithX1:x1 y1:y1 x2:x2 y2:y2] field: sig_field];
+        PTDigitalSignatureField *sig_field = [doc CreateDigitalSignatureField: fieldName];
+        PTSignatureWidget *signature = [PTSignatureWidget CreateWithDigitalSignatureField: doc pos: [[PTPDFRect alloc] initWithX1:x1 y1:y1 x2:x2 y2:y2] field: sig_field];
 
-        PTImage * img = [PTImage Create: [doc GetSDFDoc] filename: @"./sign-here.svg"];        
+        PTElementBuilder *builder = [[PTElementBuilder alloc] init];    // Used to build new Element objects
+        PTElementWriter *writer = [[PTElementWriter alloc] init];      // Used to write Elements to the page 
+                
+        PTPDFRect *rect = [[PTPDFRect alloc] init]; 
+        [rect Set: 0 y1: 0 x2: 612 y2: 792];
+        PTPage *page = [doc PageCreate: rect];  // Start a new page
+        [writer WriterBeginWithPage: page placement: e_ptoverlay page_coord_sys: YES compress: YES resources: NULL]; 
+        
+        // ----------------------------------------------------------
+        // Add JPEG image to the output file
+        PTSDFDoc *imageDoc = [doc GetSDFDoc];
+        NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sign-here" ofType:@"jpg"];
+        PTImage *img = [PTImage Create:imageDoc filename:imagePath];
+        
+        PTElement *element = [builder CreateImageWithCornerAndScale: img x: 50 y: 500 hscale: [img GetImageWidth]/2 vscale: [img GetImageHeight]/2];
+        
+        [writer WritePlacedElement: element];
+        
         [signature CreateSignatureAppearance: img];
-
         [signature RefreshAppearance];
-        [annots PushBack:signature];
+        
+        [annots PushBack:[signature GetSDFObj]];
+        [writer End];               // Save the page
     }
 }
 
