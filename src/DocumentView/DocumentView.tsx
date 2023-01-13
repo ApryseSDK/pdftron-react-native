@@ -1252,11 +1252,21 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
 
   addAnnotation = (type: string, fieldName: string, pageNumber: number, x1: number, y1: number, x2: number, y2: number): Promise<void | {id: string}> => {
     const tag = findNodeHandle(this._viewerRef);
+    // TODO- remove after testing
+    console.log('loggin: tag', tag)
+    console.log('loggin: type', type)
+    console.log('loggin: fieldName', fieldName)
+    console.log('loggin: pageNumber', pageNumber)
+    console.log('loggin: x1', x1)
+    console.log('loggin: y1', y1)
+    console.log('loggin: x2', x2)
+    console.log('loggin: y2', y2)
+    // TODO- remove after testing
     if(tag != null) {
       return DocumentViewManager.addAnnotation(tag, type, fieldName, pageNumber, x1, y1, x2, y2);
     }
     return Promise.resolve();
-}
+  }
 
   _setNativeRef = (ref: any) => {
     this._viewerRef = ref;
