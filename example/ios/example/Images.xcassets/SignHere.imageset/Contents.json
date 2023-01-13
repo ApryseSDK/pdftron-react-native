@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "sign-here.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
