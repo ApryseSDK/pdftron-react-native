@@ -77,3 +77,11 @@ export interface StickyNoteData	{
     pageRect?: Rect;
     screenRect?: Rect;
 }
+
+export type DrawnSignature = 0;
+
+export type TypedSignature = 1;
+
+export type ImageSignature = 2;
+
+export type SignatureType = DrawnSignature | TypedSignature | ImageSignature;

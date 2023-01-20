@@ -2382,6 +2382,11 @@ NS_ASSUME_NONNULL_END
 
         toolManager.signatureAnnotationOptions.signatureColors = [colorArray copy];
     }
+
+    // Signature types
+    if (self.signatureTypes) {
+        toolManager.signatureAnnotationOptions.signatureTypes = [self.signatureTypes copy];
+    }
 }
 
 - (void)applyLeadingNavButton
@@ -6221,6 +6226,13 @@ NS_ASSUME_NONNULL_END
     [self applyViewerSettings];
 }
 
+- (void)setSignatureTypes:(NSArray *)signatureTypes
+{
+    _signatureTypes = [signatureTypes copy];
+    
+    [self applyViewerSettings];
+}
+
 - (void)addAnnotation:(NSString * _Nonnull)type fieldName:(NSString * _Nonnull)fieldName pageNumber:(int)pageNumber x1:(double)x1 y1:(double)y1 x2:(double)x2 y2:(double)y2;
 {
     PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
@@ -6248,7 +6260,7 @@ NS_ASSUME_NONNULL_END
         PTSignatureWidget *signature = [PTSignatureWidget Create:doc pos:[[PTPDFRect alloc] initWithX1:x1 y1:y1 x2:x2 y2:y2] field_name: fieldName];
         
         // ----------------------------------------------------------
-        Add JPEG image to the output file
+        // Add JPEG image to the output file
         PTSDFDoc *imageDoc = [doc GetSDFDoc];
         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"sign-here" ofType:@"jpg"];
         PTImage *img = [PTImage Create:imageDoc filename:imagePath];

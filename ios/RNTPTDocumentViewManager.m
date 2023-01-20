@@ -679,6 +679,13 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
     }
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(signatureTypes, NSArray, RNTPTDocumentView)
+{
+    if (json) {
+        view.signatureTypes = [RCTConvert NSArray:json];
+    }
+}
+
 
 - (UIView *)view
 {

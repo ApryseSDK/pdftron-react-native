@@ -426,6 +426,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 // Hygen Generated Props
 @property (nonatomic, copy, nullable) NSString* forceAppTheme;
 @property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;
+@property (nonatomic, copy, nullable) NSArray<NSNumber *> *signatureTypes;
 
 @property (nonatomic, copy, nullable) NSString *password;
 @property (nonatomic, copy, nullable) NSString *document;

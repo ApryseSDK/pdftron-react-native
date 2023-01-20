@@ -171,6 +171,7 @@ const propTypes = {
     green: PropTypes.number.isRequired,
     blue: PropTypes.number.isRequired,
   })),
+  signatureTypes: PropTypes.arrayOf(PropTypes.number),
   onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
 
   ...ViewPropTypes,
