@@ -2363,7 +2363,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         annotPair.putInt(KEY_ANNOTATION_PAGE, pageNumber);
         // try to obtain bbox and type
         try {
-            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot.getType()));
+            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(AnnotUtils.getAnnotType(annot)));
             // screen rect
             com.pdftron.pdf.Rect screenRect = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
             WritableMap screenRectMap = Arguments.createMap();
