@@ -63,50 +63,6 @@ RCT_EXPORT_METHOD(getVersion:(RCTPromiseResolveBlock)resolve
     }
 }
 
-RCT_EXPORT_METHOD(getPlistValue:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
-{
-    @try {
-        NSString *resPath = [@"~/Library/Preferences/" stringByExpandingTildeInPath];
-        NSString *bundlePath = [[NSBundle mainBundle] bundlePath]; //Path of your bundle
-          NSString *path = [resPath stringByAppendingPathComponent:@"org.reactjs.native.example.ScribbleMobile.plist"];
-          NSFileManager *fileManager = [NSFileManager defaultManager];
-          NSMutableDictionary *event = [[NSMutableDictionary alloc] init];
-          
-          if (![fileManager fileExistsAtPath: path]) {
-              NSError *error = [NSError errorWithDomain:@"plist_not_found"
-                                                   code:100
-                                               userInfo:@{
-                                                   NSLocalizedDescriptionKey:@"Requested plist doesn't exist"
-                                               }];
-              
-              reject(@"plist Doesn't exist", @"Requested plist doesn't exist", error);
-              
-          } else {
-              NSMutableDictionary *savedValue = [[NSMutableDictionary alloc] initWithContentsOfFile: path];
-              NSString *value = [savedValue objectForKey:@"PTLastSelectedSignature"];
-              [event setValue:value forKey:@"Value"];
-              if (value.length > 0) {
-                  resolve(event);
-              } else {
-                  NSError *error = [NSError errorWithDomain:@"value_not_found"
-                                                       code:100
-                                                   userInfo:@{
-                                                       NSLocalizedDescriptionKey:@"Requested key doesn't exist"
-                                                   }];
-                  
-                  reject(@"key Doesn't exist", @"Requested value for key doesn't exist", error);
-              }
-              
-          }
-        
-//        NSLog(@"asjbcbc");
-//        return Bundle.main.object(forInfoDictionaryKey: "PTLastSelectedSignature") as? String
-    }
-    @catch (NSException *exception) {
-        reject(@"get_failed", @"Failed to get PDFNet version", [self errorFromException:exception]);
-    }
-}
 
 RCT_EXPORT_METHOD(getPlatformVersion:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
@@ -274,7 +230,7 @@ RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl
                 // Failed to convert HTML to PDF.
                 return;
             }
-            
+
             NSString *documentDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
             // Copy temporary PDF to persistent location.
             NSURL *urlToPDF = [NSURL fileURLWithPath:pathToPDF];
@@ -285,16 +241,40 @@ RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl
             BOOL result = [NSFileManager.defaultManager copyItemAtURL:urlToPDF toURL:destinationURL error:&error];
             if (!result) {
                 // Failed to copy PDF to persistent location.
-                reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+//                reject(@"generation_failed", @"Failed to generate pdf from html", nil);
             }
-            
-            resolve(destinationURL.absoluteString);
             // Do something with PDF output.
+            resolve(destinationURL.absoluteString);
         }];
     }
     @catch (NSException* exception) {
         NSLog(@"Exception: %@, %@", exception.name, exception.reason);
         reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+    }
+}
+
+RCT_EXPORT_METHOD(mergeDocuments:(NSArray *)documentsArray resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+    @try
+    {
+        PTPDFDoc *new_doc = [[PTPDFDoc alloc] init];
+        [new_doc InitSecurityHandler];
+
+        for (id doc in documentsArray) {
+            PTPDFDoc *in_doc = [[PTPDFDoc alloc] initWithFilepath: doc];
+            [new_doc InsertPages:[new_doc GetPageCount]+1 src_doc:in_doc start_page:1 end_page:[in_doc GetPageCount] flag:e_ptinsert_none];
+        };
+
+        NSString* tempDir = NSTemporaryDirectory();
+        NSString* fileName = [NSUUID UUID].UUIDString;
+        NSString* resultDocPath = [tempDir stringByAppendingPathComponent:fileName];
+        resultDocPath = [resultDocPath stringByAppendingPathExtension:@"pdf"];
+        [new_doc SaveToFile: resultDocPath flags: e_ptremove_unused];
+        NSLog(@"Done. Result saved in newsletter_merge_pages.pdf");
+        resolve(resultDocPath);
+    }
+    @catch(NSException *exception)
+    {
+        reject(@"merging_failed", @"Failed to merge documents", [self errorFromException:exception]);
     }
 }
 

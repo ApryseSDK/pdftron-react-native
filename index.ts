@@ -36,7 +36,7 @@ interface RNPdftron {
   ): Promise<string>;
   clearSavedViewerState(): Promise<void>;
   convertHtmlToPdf(htmlStr: string, baseUrl: string): Promise<string>;
-  getPlistValue():Promise<string>;
+  mergeDocuments(documentsArray: Array<string>): Promise<string>;
 }
 
 const RNPdftron: RNPdftron = NativeModules.RNPdftron;
