@@ -415,4 +415,8 @@ public final class Constants {
     // AnnotationManagerUndoMode
     public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_OWN = "own";
     public static final String KEY_ANNOTATION_MANAGER_UNDO_MODE_ALL = "all";
+
+    // Application Theme
+    public static final String THEME_DARK = "theme_dark";
+    public static final String THEME_LIGHT = "theme_light";
 }

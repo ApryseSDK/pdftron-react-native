@@ -85,7 +85,7 @@ const propTypes = {
   collabEnabled: PropTypes.bool,
   currentUser: PropTypes.string,
   currentUserName: PropTypes.string,
-  onExportAnnotationCommand: func<(event: { action: string, xfdfCommand: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  onExportAnnotationCommand: func<(event: { action: "modify" | "delete" | "add" | "undo" | "redo", xfdfCommand: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
   autoSaveEnabled: PropTypes.bool,
   pageChangeOnTap: PropTypes.bool,
   followSystemDarkMode: PropTypes.bool,
@@ -165,6 +165,7 @@ const propTypes = {
   onToolbarButtonPress: func<(event: {id: string}) => void>(),
 
   // Hygen Generated Props
+  forceAppTheme: oneOf<Config.ThemeOptions>(Config.ThemeOptions),
   signatureColors: PropTypes.arrayOf(PropTypes.exact({
     red: PropTypes.number.isRequired,
     green: PropTypes.number.isRequired,
@@ -582,6 +583,20 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
   // Hygen Generated Methods
+  setStampImageData = (annotationId: string, pageNumber: number, stampImageDataUrl: string): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setStampImageData(tag, annotationId, pageNumber, stampImageDataUrl);
+    }
+    return Promise.resolve();
+  }
+  setFormFieldHighlightColor = (fieldHighlightColor: AnnotOptions.ColorWithAlpha): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setFormFieldHighlightColor(tag, fieldHighlightColor);
+    }
+    return Promise.resolve();
+  }
 
   /**
   * note: this function exists for supporting the old version. It simply calls setValuesForFields.

@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -532,6 +533,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
+    @ReactProp(name = "forceAppTheme")
+    public void setForceAppTheme(DocumentView documentView, @NonNull String forcedAppThemeItems) {
+        documentView.setForceAppTheme(forcedAppThemeItems);
+    }
+
     @ReactProp(name = "signatureColors")
     public void setSignatureColors(DocumentView documentView, @NonNull ReadableArray signatureColors) {
         documentView.setSignatureColors(signatureColors);
@@ -1422,6 +1428,24 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Methods
+    public void setStampImageData(int tag, String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setStampImageData(annotationId, pageNumber, stampImageDataUrl, promise);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setStampImageData", "Unable to find DocumentView.");
+        }
+    }
+
+    public void setFormFieldHighlightColor(int tag, ReadableMap fieldHighlightColor) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setFormFieldHighlightColor(fieldHighlightColor);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setFormFieldHighlightColor", "Unable to find DocumentView.");
+        }
+    }
+
 
     @Override
     public boolean needsCustomLayoutForChildren() {

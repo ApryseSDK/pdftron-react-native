@@ -1684,7 +1684,7 @@ Parameters:
 
 Name | Type | Description
 --- | --- | ---
-action | string | the action that occurred (add, delete, modify)
+action | string | the action that occurred (add, delete, modify, undo, redo)
 xfdfCommand | string | an xfdf string containing info about the edit
 annotations | array | an array of annotation data. When collaboration is enabled data comes in the format `{id: string}`, otherwise the format is `{id: string, pageNumber: number, type: string}`. In both cases, the data represents the annotations that have been changed. `type` is one of the [`Config.Tools`](./src/Config/Config.ts) constants 
 
@@ -3933,4 +3933,28 @@ flattening | bool | Whether the shared copy should be flattened before sharing.
 
 ```js
 this._viewer.shareCopy({'x1': 10.0, 'y1': 10.0, 'x2': 20.0, 'y2': 20.0}, true);
+```
+
+#### forceAppTheme
+Forces application theme to either [`Config.ThemeOptions`](./src/Config/Config.ts) constants, optional
+
+Requires followSystemDarkMode={false} in order for functionality of this prop
+
+```js
+<DocumentView
+  forceAppTheme={Config.ThemeOptions.ThemeDark}
+/>
+```
+
+#### setFormFieldHighlightColor
+Sets the form field's highlight color on the PDF.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+fieldHightlightColor | object | the form field highlight color, in the format `{red: number, green: number, blue: number, alpha: number}`, each number in range [0, 255]
+
+```js
+this._viewer.setFormFieldHighlightColor({red: 0, green: 0, blue: 255, alpha: 128}); // blue color
 ```

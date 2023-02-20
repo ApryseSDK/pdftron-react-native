@@ -93,6 +93,7 @@ static NSString * const PTAnnotationCreateLinkToolKey = @"AnnotationCreateLink";
 static NSString * const PTAnnotationCreateRedactionTextToolKey = @"AnnotationCreateRedactionText";
 static NSString * const PTAnnotationCreateLinkTextToolKey = @"AnnotationCreateLinkText";
 static NSString * const PTAnnotationCreateSmartPenToolKey = @"AnnotationCreateSmartPen";
+static NSString * const PTAnnotationCreateFreeTextDateToolKey = @"AnnotationCreateFreeTextDate";
 static NSString * const PTFormCreateTextFieldToolKey = @"FormCreateTextField";
 static NSString * const PTFormCreateCheckboxFieldToolKey = @"FormCreateCheckboxField";
 static NSString * const PTFormCreateSignatureFieldToolKey = @"FormCreateSignatureField";
@@ -296,6 +297,10 @@ static NSString * const PTInkEraserModePointsKey = @"hybrideEraser";
 static NSString * const PTReflowOrientationHorizontalKey = @"horizontal";
 static NSString * const PTReflowOrientationVerticalKey = @"veritcal";
 
+// App Theme keys
+static NSString * const PTAppDarkTheme = @"theme_dark";
+static NSString * const PTAppLightTheme = @"theme_light";
+
 // Default annotation toolbar names.
 typedef NSString * PTDefaultAnnotationToolbarKey;
 static const PTDefaultAnnotationToolbarKey PTAnnotationToolbarView = @"PDFTron_View";
@@ -419,6 +424,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL enableAntialiasing;
 
 // Hygen Generated Props
+@property (nonatomic, copy, nullable) NSString* forceAppTheme;
 @property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;
 
 @property (nonatomic, copy, nullable) NSString *password;
@@ -729,6 +735,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 -(NSString *)getSavedSignatureFolder;
 
 // Hygen Generated Methods
+- (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl;
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor;
 @end
 
 

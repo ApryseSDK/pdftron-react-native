@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -43,7 +44,11 @@ import com.pdftron.pdf.ActionParameter;
 import com.pdftron.pdf.Annot;
 import com.pdftron.pdf.ColorPt;
 import com.pdftron.pdf.DigitalSignatureField;
+import com.pdftron.pdf.Element;
+import com.pdftron.pdf.ElementBuilder;
+import com.pdftron.pdf.ElementWriter;
 import com.pdftron.pdf.Field;
+import com.pdftron.pdf.Image;
 import com.pdftron.pdf.PDFDoc;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
@@ -95,6 +100,8 @@ import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.nativeviews.RNCollabViewerTabHostFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabFragment;
 import com.pdftron.reactnative.nativeviews.RNPdfViewCtrlTabHostFragment;
+import com.pdftron.reactnative.utils.DocumentViewUtilsKt;
+import com.pdftron.reactnative.utils.DownloadFileCallback;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
@@ -750,6 +757,14 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setForceAppTheme(String forcedAppThemeItems) {
+        if (THEME_DARK.equals(forcedAppThemeItems)) {
+            PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NIGHT);
+        } else if (THEME_LIGHT.equals(forcedAppThemeItems)) {
+            PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NORMAL);
+        }
+    }
+
     public void setSignatureColors(@NonNull ReadableArray signatureColors) {
         int[] result = new int[signatureColors.size()];
 
@@ -1272,6 +1287,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_HIGHLIGHTER;
         } else if (TOOL_COUNT_TOOL.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
         }
         return annotType;
     }
@@ -1354,6 +1371,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case Annot.e_Widget:
                 annotString = TOOL_FORM_CREATE_TEXT_FIELD;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
+                annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
             default:
                 annotString = "";
@@ -1449,6 +1469,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.FORM_FILL;
         } else if (TOOL_COUNT_TOOL.equals(item)) {
             mode = ToolManager.ToolMode.COUNT_MEASUREMENT;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            mode = ToolManager.ToolMode.FREE_TEXT_DATE_CREATE;
         }
         return mode;
     }
@@ -1675,6 +1697,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.REDO.value();
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.DATE.value();
         }
         return buttonId;
     }
@@ -1834,6 +1858,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.REDO;
         } else if (BUTTON_EDIT_MENU.equals(item)) {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
+        } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
+            buttonType = ToolbarButtonType.DATE;
         }
         return buttonType;
     }
@@ -2337,7 +2363,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         annotPair.putInt(KEY_ANNOTATION_PAGE, pageNumber);
         // try to obtain bbox and type
         try {
-            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot.getType()));
+            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(AnnotUtils.getAnnotType(annot)));
             // screen rect
             com.pdftron.pdf.Rect screenRect = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
             WritableMap screenRectMap = Arguments.createMap();
@@ -4522,6 +4548,16 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return colorNumber;
     }
 
+    private ColorPt convertRGBAToColorPt(ReadableMap color) throws PDFNetException {
+        double red = (double) (color.getInt(COLOR_RED) / 255f);
+        double green = (double) (color.getInt(COLOR_GREEN) / 255f);
+        double blue = (double) (color.getInt(COLOR_BLUE) / 255f);
+        double alpha = (double) (color.getInt(COLOR_ALPHA) / 255f);
+        ColorPt colorPt = new ColorPt(red, green, blue, alpha);
+
+        return colorPt;
+    }
+
     public void startSearchMode(String searchString, boolean matchCase, boolean matchWholeWord) {
         PdfViewCtrlTabFragment2 fragment = getPdfViewCtrlTabFragment();
         if (fragment != null) {
@@ -4865,6 +4901,69 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Methods
+    public void setStampImageData(String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
+        // Initialize a new ElementWriter and ElementBuilder
+        ElementWriter writer = new ElementWriter();
+        ElementBuilder builder = new ElementBuilder();
+
+        writer.begin(getPdfViewCtrl().getDoc().getSDFDoc(), true);
+
+        Annot annot = ViewerUtils.getAnnotById(getPdfViewCtrl().getDoc(), annotationId, pageNumber);
+        File file = new File(getContext().getFilesDir(), "image.png");
+        DocumentViewUtilsKt.downloadFromURL(stampImageDataUrl, file.getAbsolutePath(), new DownloadFileCallback() {
+            @Override
+            public void downloadSuccess(@NonNull String path) {
+                // Initialize the new image
+                int w, h = 0;
+                try {
+                    Image image = Image.create(getPdfViewCtrl().getDoc().getSDFDoc(), path);
+
+                    w = image.getImageWidth();
+                    h = image.getImageHeight();
+                    // Initialize a new image element
+                    Element element = builder.createImage(image, 0, 0, w, h);
+
+                    // Write the element
+                    writer.writePlacedElement(element);
+
+                    // Get the bounding box of the new element
+                    com.pdftron.pdf.Rect bbox = element.getBBox();
+
+                    // Configure the appearance stream that will be written to the annotation
+                    Obj new_appearance_stream = writer.end();
+
+                    // Set the bounding box to be the rect of the new element
+                    new_appearance_stream.putRect(
+                            "BBox",
+                            bbox.getX1(),
+                            bbox.getY1(),
+                            bbox.getX2(),
+                            bbox.getY2());
+
+                    // Overwrite the annotation's appearance with the new appearance stream
+                    annot.setAppearance(new_appearance_stream);
+
+                    getPdfViewCtrl().update(annot, pageNumber);
+                } catch (PDFNetException e) {
+                    e.printStackTrace();
+                }
+                promise.resolve(annotationId);
+            }
+
+            @Override
+            public void downloadFailed(@NonNull Exception e) {
+                promise.reject("setStampData Error", e);
+            }
+        });
+    }
+
+    public void setFormFieldHighlightColor(ReadableMap fieldHighlightColor) throws PDFNetException {
+        if (getPdfViewCtrl() != null && fieldHighlightColor != null) {
+            getPdfViewCtrl().setFieldHighlightColor(convertRGBAToColorPt(fieldHighlightColor));
+            getPdfViewCtrl().update(true);
+        }
+    }
+
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;

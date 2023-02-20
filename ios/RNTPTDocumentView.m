@@ -951,6 +951,9 @@ NS_ASSUME_NONNULL_END
             else if ([string isEqualToString:PTAnnotationCreateSmartPenToolKey]) {
                 toolManager.smartPenEnabled = value;
             }
+            else if ([string isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+                toolManager.dateTextAnnotationOptions.canCreate = value;
+            }
             else if ([string isEqualToString:PTFormFillToolKey]) {
                 toolManager.widgetAnnotationOptions.canEdit = value;
             }
@@ -1124,6 +1127,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTFormCreateListBoxFieldToolKey]) {
         toolClass = [PTListBoxCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+        toolClass = [PTDateTextCreate class];
     }
     
     if (toolClass) {
@@ -2211,7 +2217,7 @@ NS_ASSUME_NONNULL_END
                                                  UIUserInterfaceStyleLight);
         }
     }
-
+    
     // Use Apple Pencil as a pen
     Class pencilTool = [PTFreeHandCreate class];
     if (@available(iOS 13.1, *)) {
@@ -2839,6 +2845,30 @@ NS_ASSUME_NONNULL_END
     }
     else if ([self.layoutMode isEqualToString:PTFacingCoverContinuousLayoutModeKey]) {
         [pdfViewCtrl SetPagePresentationMode:e_trn_facing_continuous_cover];
+    }
+}
+
+- (void)applyForcedAppTheme
+{
+    // Force App Theme
+    if (@available(iOS 13.0, *)) {
+        if ([self.forceAppTheme isEqualToString:PTAppDarkTheme]) {
+            UIViewController * const viewController = self.viewController.navigationController;
+            viewController.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+            
+            UIWindow * const window = self.window;
+            if (window) {
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+            }
+        } else if ([self.forceAppTheme isEqualToString:PTAppLightTheme]) {
+            UIViewController * const viewController = self.viewController.navigationController;
+            viewController.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+            
+            UIWindow * const window = self.window;
+            if (window) {
+                window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+            }
+        }
     }
 }
 
@@ -4059,6 +4089,8 @@ NS_ASSUME_NONNULL_END
     if ([self isReadOnly] && ![documentViewController.toolManager isReadonly]) {
         documentViewController.toolManager.readonly = YES;
     }
+    
+    [self applyForcedAppTheme];
 }
 
 - (void)pdfViewCtrlDidChangePageWithNotification:(NSNotification *)notification
@@ -5746,6 +5778,9 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTFormCreateListBoxFieldToolKey]) {
         return [PTListBoxCreate class];
     }
+    else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
+        return [PTDateTextCreate class];
+    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
@@ -5853,6 +5888,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTSmartPen class]) {
         return PTAnnotationCreateSmartPenToolKey;
+    }
+    else if (toolClass == [PTDateTextCreate class]) {
+        return PTAnnotationCreateFreeTextDateToolKey;
     }
     else if (toolClass == [PTLinkCreate class]) {
        return PTAnnotationCreateLinkToolKey;
@@ -6108,11 +6146,90 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
+- (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
+{
+    NSURL *imageUrl = [NSURL URLWithString: stampImageDataUrl];
+        
+        NSURLSessionDataTask* task = [NSURLSession.sharedSession dataTaskWithURL:imageUrl completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error) {
+                return;
+            }
+                        
+            // Initialize the new image with downloaded file
+            PTObjSet* hintSet = [[PTObjSet alloc] init];
+            PTObj* encoderHints = [hintSet CreateArray];
+            
+            NSString *compressionAlgorithm = @"png";
+            NSInteger compressionQuality = 50;
+            [encoderHints PushBackName:compressionAlgorithm];
+            [encoderHints PushBackName:@"Quality"];
+            [encoderHints PushBackNumber:compressionQuality];
+            PTPDFDoc* doc = [self.currentDocumentViewController.pdfViewCtrl GetDoc];
+            PTImage* image = [PTImage CreateWithDataSimple:[doc GetSDFDoc] buf:data buf_size:data.length encoder_hints:encoderHints];
+            
+            PTAnnot *annot = [self findAnnotWithUniqueID:annotationId
+                                            onPageNumber:(int)pageNumber
+                                             pdfViewCtrl:self.currentDocumentViewController.pdfViewCtrl];
+            [self setCustomImage:image OnAnnotation:annot onDoc:doc];
+            [self.currentDocumentViewController.pdfViewCtrl UpdateWithAnnot:annot page_num:(int)pageNumber];
+        }];
+        
+        [task resume];
+
+}
+
+- (void)setCustomImage:(PTImage*)image OnAnnotation:(PTAnnot*)annot onDoc:(PTPDFDoc*)doc
+{
+    // Initialize a new PTElementWriter and PTElementBuilder
+    PTElementWriter* writer = [[PTElementWriter alloc] init];
+    PTElementBuilder* builder = [[PTElementBuilder alloc] init];
+
+    [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
+
+    int w = [image GetImageWidth], h = [image GetImageHeight];
+
+    // Initialize a new image element
+    PTElement* img_element = [builder CreateImageWithCornerAndScale:image x:0 y:0 hscale:w vscale:h];
+
+    // Write the element
+    [writer WritePlacedElement:img_element];
+
+    // Get the bounding box of the new element
+    PTPDFRect* bbox = [img_element GetBBox];
+
+    // Configure the appearance stream that will be written to the annotation
+    PTObj* appearance_stream = [writer End];
+
+    // Set the bounding box to be the rect of the new element
+    [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY2]];
+
+    // Overwrite the annotation's appearance with the new appearance stream
+    [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
+}
+
+- (void)setForceAppTheme:(NSString *)forcedAppTheme
+{
+    _forceAppTheme = forcedAppTheme;
+    
+    [self applyForcedAppTheme];
+}
+
 - (void)setSignatureColors:(NSArray *)signatureColors
 {
     _signatureColors = [signatureColors copy];
     
     [self applyViewerSettings];
+}
+
+- (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor
+{
+    PTPDFViewCtrl *pdfViewCtrl = _documentViewController.pdfViewCtrl;
+    
+    if (pdfViewCtrl) {
+        UIColor *combinedColor = [self convertRGBAToUIColor:fieldHighlightColor];
+        [pdfViewCtrl SetFieldHighlightColor:combinedColor];
+        [pdfViewCtrl Update:YES];
+    }
 }
 
 @end

@@ -665,6 +665,13 @@ RCT_CUSTOM_VIEW_PROPERTY(openUrlPath, NSString, RNTPTDocumentView)
 }
 
 // Hygen Generated Props
+RCT_CUSTOM_VIEW_PROPERTY(forceAppTheme, NSString, RNTPTDocumentView)
+{
+    if (json) {
+        view.forceAppTheme = [RCTConvert NSString:json];
+    }
+}
+
 RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 {
     if (json) {
@@ -1685,6 +1692,26 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
 }
 
 #pragma mark - Hygen Generated Methods
+- (void)setStampImageDataForDocumentViewTag:(NSNumber *)tag annotationId:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setStampImageData:annotationId pageNumber:pageNumber stampImageDataUrl:stampImageDataUrl];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
+    }
+}
+
+- (void)setFormFieldHighlightColorForDocumentViewTag:(NSNumber *)tag fieldHighlightColor:(NSDictionary *)fieldHighlightColor
+{
+    RNTPTDocumentView *documentView = self.documentViews[tag];
+    if (documentView) {
+        [documentView setFormFieldHighlightColor:fieldHighlightColor];
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Unable to get field for tag" userInfo:nil];
+    }
+}
+
 
 #pragma mark - Coordination
 
