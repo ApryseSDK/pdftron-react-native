@@ -706,7 +706,8 @@ It is possible to mix and match with default toolbars. See example below:
 const myToolItem = {
   [Config.CustomToolItemKey.Id]: 'add_page',
   [Config.CustomToolItemKey.Name]: 'Add page',
-  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white',
+  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white', //for custom android icons
+  //[Config.CustomToolItemKey.Icon]: 'pencil.circle', //for custom iOS icons
 };
 
 const myToolbar = {
