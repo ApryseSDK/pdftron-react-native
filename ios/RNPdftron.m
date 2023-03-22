@@ -223,59 +223,76 @@ RCT_EXPORT_METHOD(exportAsImage:(int)pageNumber
 
 RCT_EXPORT_METHOD(convertHtmlToPdf:(NSString*)htmlStr baseUrl:(NSString*)baseUrl resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    @try {
-        NSURL *url = [[NSURL alloc] initWithString:baseUrl];
-        [PTConvert convertHTMLStringToPDF:htmlStr baseURL:url paperSize:CGSizeZero completion:^(NSString *pathToPDF) {
-            if (!pathToPDF) {
-                // Failed to convert HTML to PDF.
-                return;
-            }
-
-            NSString *documentDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-            // Copy temporary PDF to persistent location.
-            NSURL *urlToPDF = [NSURL fileURLWithPath:pathToPDF];
-            int timestamp = [[NSDate date] timeIntervalSince1970];
-            NSString *uniqueFileName = [NSString stringWithFormat:@"%d_%@",timestamp , urlToPDF.lastPathComponent];
-            NSURL *destinationURL = [[NSURL fileURLWithPath:documentDirectory] URLByAppendingPathComponent:uniqueFileName];
-            NSError *error = nil;
-            BOOL result = [NSFileManager.defaultManager copyItemAtURL:urlToPDF toURL:destinationURL error:&error];
-            if (!result) {
-                // Failed to copy PDF to persistent location.
-//                reject(@"generation_failed", @"Failed to generate pdf from html", nil);
-            }
-            // Do something with PDF output.
-            resolve(destinationURL.absoluteString);
-        }];
-    }
-    @catch (NSException* exception) {
-        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
-        reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
-    }
+ @try {
+  NSURL *url = [[NSURL alloc] initWithString:baseUrl];
+  [PTConvert convertHTMLStringToPDF:htmlStr baseURL:url paperSize:CGSizeZero completion:^(NSString *pathToPDF) {
+   if (!pathToPDF) {
+    // Failed to convert HTML to PDF.
+    return;
+   }
+    NSString* tempDir = NSTemporaryDirectory();
+   NSString *documentDirectory = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+   // Copy temporary PDF to temp directory.
+   NSURL *urlToPDF = [NSURL fileURLWithPath:pathToPDF];
+   NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
+   NSString *ext = [urlToPDF pathExtension];
+   NSString *uniqueFileName = [NSString stringWithFormat:@"%@.%@", guid , ext];
+   NSURL *destinationURL = [[NSURL fileURLWithPath:tempDir] URLByAppendingPathComponent: uniqueFileName];
+   NSLog(@"URl: %@", destinationURL.absoluteURL);
+   NSError *error = nil;
+   BOOL result = [NSFileManager.defaultManager copyItemAtURL:urlToPDF toURL:destinationURL error:&error];
+   if (!result) {
+    // Failed to copy PDF to persistent location.
+    // reject(@"generation_failed", @"Failed to generate pdf from html", nil);
+   }
+   // Do something with PDF output.
+   resolve(destinationURL.absoluteString);
+  }];
+ }
+ @catch (NSException* exception) {
+  NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+  reject(@"generation_failed", @"Failed to generate pdf from html", [self errorFromException:exception]);
+ }
 }
-
 RCT_EXPORT_METHOD(mergeDocuments:(NSArray *)documentsArray resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    @try
-    {
-        PTPDFDoc *new_doc = [[PTPDFDoc alloc] init];
-        [new_doc InitSecurityHandler];
-
-        for (id doc in documentsArray) {
-            PTPDFDoc *in_doc = [[PTPDFDoc alloc] initWithFilepath: doc];
-            [new_doc InsertPages:[new_doc GetPageCount]+1 src_doc:in_doc start_page:1 end_page:[in_doc GetPageCount] flag:e_ptinsert_none];
-        };
-
-        NSString* tempDir = NSTemporaryDirectory();
-        NSString* fileName = [NSUUID UUID].UUIDString;
-        NSString* resultDocPath = [tempDir stringByAppendingPathComponent:fileName];
-        resultDocPath = [resultDocPath stringByAppendingPathExtension:@"pdf"];
-        [new_doc SaveToFile: resultDocPath flags: e_ptremove_unused];
-        NSLog(@"Done. Result saved in newsletter_merge_pages.pdf");
-        resolve(resultDocPath);
-    }
-    @catch(NSException *exception)
-    {
-        reject(@"merging_failed", @"Failed to merge documents", [self errorFromException:exception]);
-    }
+  @try
+  {
+    PTPDFDoc *new_doc = [[PTPDFDoc alloc] init];
+    [new_doc InitSecurityHandler];
+    NSString* tempDir = NSTemporaryDirectory();
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    for (id doc in documentsArray) {
+      @try {
+        PTPDFDoc *in_doc = [[PTPDFDoc alloc] initWithFilepath: doc];
+        [new_doc InsertPages:[new_doc GetPageCount]+1 src_doc:in_doc start_page:1 end_page:[in_doc GetPageCount] flag:e_ptinsert_none];
+        NSURL *tempDoc = [NSURL fileURLWithPath:doc];
+        NSString *filePath = [tempDir stringByAppendingPathComponent:tempDoc.lastPathComponent];
+        if ([fileManager fileExistsAtPath:filePath]) {
+          NSError *error = nil;
+           if ([fileManager removeItemAtPath:filePath error:&error]) {
+             NSLog(@"File deleted successfully.");
+           } else {
+             NSLog(@"Error deleting file: %@", error);
+           }
+        }
+      }
+      @catch(NSException *exception)
+      {
+        NSLog(@"Error repairing document: %@", exception.reason);
+        continue;
+      }
+    };
+    NSString* fileName = [NSUUID UUID].UUIDString;
+    NSString* resultDocPath = [tempDir stringByAppendingPathComponent:fileName];
+    resultDocPath = [resultDocPath stringByAppendingPathExtension:@"pdf"];
+    [new_doc SaveToFile: resultDocPath flags: e_ptremove_unused];
+    NSLog(@"Done. Result saved in newsletter_merge_pages.pdf");
+    resolve(resultDocPath);
+  }
+  @catch(NSException *exception)
+  {
+    reject(@"merging_failed", @"Failed to merge documents", [self errorFromException:exception]);
+  }
 }
 
 - (NSError *)errorFromException:(NSException *)exception
