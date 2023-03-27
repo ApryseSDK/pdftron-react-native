@@ -17,7 +17,7 @@ rootProject.allprojects {
         google()
         mavenCentral()
         maven {
-            url "https://pdftron-maven.s3.amazonaws.com/snapshot"
+            url "https://pdftron-maven.s3.amazonaws.com/release"
         }
     }
 }
@@ -68,7 +68,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     
-    implementation "com.pdftron:pdftron:9.5.1-beta01"
-    implementation "com.pdftron:tools:9.5.1-beta01"
-    implementation "com.pdftron:collab:9.5.1-beta01"
+    implementation "com.pdftron:pdftron:10.0.0"
+    implementation "com.pdftron:tools:10.0.0"
+    implementation "com.pdftron:collab:10.0.0"
 }
