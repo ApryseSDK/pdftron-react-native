@@ -50,7 +50,6 @@ import com.pdftron.pdf.ElementWriter;
 import com.pdftron.pdf.Field;
 import com.pdftron.pdf.Image;
 import com.pdftron.pdf.PDFDoc;
-import com.pdftron.pdf.PDFNet;
 import com.pdftron.pdf.PDFViewCtrl;
 import com.pdftron.pdf.Page;
 import com.pdftron.pdf.ViewChangeCollection;
@@ -1391,17 +1390,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 int fieldType = field.getType();
                 if (fieldType == Field.e_text) {
                     return TOOL_FORM_CREATE_TEXT_FIELD;
-                }
-                else if (fieldType == Field.e_radio) {
+                } else if (fieldType == Field.e_radio) {
                     return TOOL_FORM_CREATE_RADIO_FIELD;
-                }
-                else if (fieldType == Field.e_check) {
+                } else if (fieldType == Field.e_check) {
                     return TOOL_FORM_CREATE_CHECKBOX_FIELD;
-                }
-                else if (fieldType == Field.e_choice) {
+                } else if (fieldType == Field.e_choice) {
                     return TOOL_FORM_CREATE_COMBO_BOX_FIELD;
-                }
-                else if (fieldType == Field.e_signature) {
+                } else if (fieldType == Field.e_signature) {
                     return TOOL_FORM_CREATE_SIGNATURE_FIELD;
                 }
             }
@@ -4992,7 +4987,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrl().update(true);
         }
     }
-
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
