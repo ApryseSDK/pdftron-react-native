@@ -3686,7 +3686,7 @@ NS_ASSUME_NONNULL_END
     PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot page_num:pageNumber];
     PTPDFRect *pageRect = [self convertScreenRectToPageRect:screenRect pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl];
     
-    NSString *annotationType = [RNTPTDocumentView stringForAnnotType:[annot GetType]];
+    NSString *annotationType = [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]];
     
     return @{
         PTAnnotationIdKey: (uniqueId ?: @""),
@@ -4159,7 +4159,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
         } action:PTAddAnnotationActionKey];
     }
     if (!self.collaborationManager) {
@@ -4170,7 +4170,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4202,7 +4202,7 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
             PTAnnotationPageNumberKey: @(pageNumber),
         } action:PTModifyAnnotationActionKey];
     }
@@ -4214,7 +4214,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4247,7 +4247,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType: annot type:[annot GetType]],
         } action:PTRemoveAnnotationActionKey];
     }
     if (!self.collaborationManager) {
@@ -4258,7 +4258,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4290,7 +4290,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationFlattened:self annotation:@{
             PTAnnotationIdKey: [annotId isEqualToString:@""] ? [NSNull null] : annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
         }];
     }
 }
@@ -4342,7 +4342,7 @@ NS_ASSUME_NONNULL_END
             [collabAnnot setAnnotationID:annotId];
             [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
             
-            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
         }
     }
 }
@@ -5923,7 +5923,7 @@ NS_ASSUME_NONNULL_END
     return Nil;
 }
 
-+ (NSString *)stringForAnnotType:(PTAnnotType)type {
++ (NSString *)stringForAnnotType:(PTAnnot *)annot type:(PTAnnotType)type {
     if (type == e_ptText) {
         return PTAnnotationCreateStickyToolKey;
     } else if (type == e_ptLink) {
@@ -5963,7 +5963,7 @@ NS_ASSUME_NONNULL_END
     } else if (type == e_ptMovie) {
         return @"";
     } else if (type == e_ptWidget) {
-        return PTFormCreateTextFieldToolKey;
+        return [self getWidgetFieldType:annot];
     } else if (type == e_ptScreen) {
         return @"";
     } else if (type == e_ptPrinterMark) {
@@ -5981,6 +5981,32 @@ NS_ASSUME_NONNULL_END
     } else if (type == e_ptRichMedia) {
         return @"";
     } else if (type == e_ptUnknown) {
+        return @"";
+    }
+    
+    return @"";
+}
+
++ (NSString *)getWidgetFieldType:(PTAnnot *)annot
+{
+    @try {
+        PTWidget *widget = [[PTWidget alloc] initWithAnn:annot];
+        PTField *field = [widget GetField];
+        PTFieldType fieldType = [field GetType];
+        
+        if (fieldType == e_pttext) {
+            return PTFormCreateTextFieldToolKey;
+        } else if (fieldType == e_ptcheck) {
+            return PTFormCreateCheckboxFieldToolKey;
+        } else if (fieldType == e_ptradio) {
+            return PTFormCreateRadioFieldToolKey;
+        } else if (fieldType == e_ptchoice) {
+            return PTFormCreateComboBoxFieldToolKey;
+        } else if (fieldType == e_ptsignature) {
+            return PTFormCreateSignatureFieldToolKey;
+        }
+    }
+    @catch (NSException *e) {
         return @"";
     }
     
