@@ -5987,32 +5987,6 @@ NS_ASSUME_NONNULL_END
     return @"";
 }
 
-+ (NSString *)getWidgetFieldType:(PTAnnot *)annot
-{
-    @try {
-        PTWidget *widget = [[PTWidget alloc] initWithAnn:annot];
-        PTField *field = [widget GetField];
-        PTFieldType fieldType = [field GetType];
-        
-        if (fieldType == e_pttext) {
-            return PTFormCreateTextFieldToolKey;
-        } else if (fieldType == e_ptcheck) {
-            return PTFormCreateCheckboxFieldToolKey;
-        } else if (fieldType == e_ptradio) {
-            return PTFormCreateRadioFieldToolKey;
-        } else if (fieldType == e_ptchoice) {
-            return PTFormCreateComboBoxFieldToolKey;
-        } else if (fieldType == e_ptsignature) {
-            return PTFormCreateSignatureFieldToolKey;
-        }
-    }
-    @catch (NSException *e) {
-        return @"";
-    }
-    
-    return @"";
-}
-
 + (PTAnnotType)annotTypeForString:(NSString *)string {
     if ([string isEqualToString:PTAnnotationCreateStickyToolKey]) {
         return e_ptText;
@@ -6104,6 +6078,32 @@ NS_ASSUME_NONNULL_END
         }
     }
     return nil;
+}
+
++ (NSString *)getWidgetFieldType:(PTAnnot *)annot
+{
+    @try {
+        PTWidget *widget = [[PTWidget alloc] initWithAnn:annot];
+        PTField *field = [widget GetField];
+        PTFieldType fieldType = [field GetType];
+        
+        if (fieldType == e_pttext) {
+            return PTFormCreateTextFieldToolKey;
+        } else if (fieldType == e_ptcheck) {
+            return PTFormCreateCheckboxFieldToolKey;
+        } else if (fieldType == e_ptradio) {
+            return PTFormCreateRadioFieldToolKey;
+        } else if (fieldType == e_ptchoice) {
+            return PTFormCreateComboBoxFieldToolKey;
+        } else if (fieldType == e_ptsignature) {
+            return PTFormCreateSignatureFieldToolKey;
+        }
+    }
+    @catch (NSException *e) {
+        return @"";
+    }
+    
+    return @"";
 }
 
 #pragma mark - Display Responsiveness
