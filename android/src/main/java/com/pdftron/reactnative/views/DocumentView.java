@@ -1294,7 +1294,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Nullable
-    private String convAnnotTypeToString(int annotType) {
+    private String convAnnotTypeToString(Annot annot, int annotType) {
         String annotString;
         switch (annotType) {
             case Annot.e_Ink:
@@ -1370,7 +1370,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 annotString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
                 break;
             case Annot.e_Widget:
-                annotString = TOOL_FORM_CREATE_TEXT_FIELD;
+                annotString = getWidgetFieldType(annot);
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
@@ -1380,6 +1380,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
         }
         return annotString;
+    }
+
+    private String getWidgetFieldType(Annot annot) {
+        try {
+            if (annot != null && annot.isValid()) {
+                Widget widget = new Widget(annot);
+                Field field = widget.getField();
+                int fieldType = field.getType();
+                if (fieldType == Field.e_text) {
+                    return TOOL_FORM_CREATE_TEXT_FIELD;
+                } else if (fieldType == Field.e_radio) {
+                    return TOOL_FORM_CREATE_RADIO_FIELD;
+                } else if (fieldType == Field.e_check) {
+                    return TOOL_FORM_CREATE_CHECKBOX_FIELD;
+                } else if (fieldType == Field.e_choice) {
+                    return TOOL_FORM_CREATE_COMBO_BOX_FIELD;
+                } else if (fieldType == Field.e_signature) {
+                    return TOOL_FORM_CREATE_SIGNATURE_FIELD;
+                }
+            }
+        } catch (PDFNetException e) {
+            return "";
+        }
+        return "";
     }
 
     @Nullable
@@ -2363,7 +2387,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         annotPair.putInt(KEY_ANNOTATION_PAGE, pageNumber);
         // try to obtain bbox and type
         try {
-            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(AnnotUtils.getAnnotType(annot)));
+            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot, AnnotUtils.getAnnotType(annot)));
             // screen rect
             com.pdftron.pdf.Rect screenRect = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
             WritableMap screenRectMap = Arguments.createMap();
@@ -2700,7 +2724,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
                         annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                         try {
-                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
                         } catch (PDFNetException e) {
                             e.printStackTrace();
                         }
@@ -2914,7 +2938,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
             annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
             try {
-                annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
             } catch (PDFNetException e) {
                 e.printStackTrace();
             }
@@ -2967,7 +2991,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
                 annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                 try {
-                    annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                    annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
                 } catch (PDFNetException e) {
                     e.printStackTrace();
                 }
@@ -4963,7 +4987,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrl().update(true);
         }
     }
-
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;
