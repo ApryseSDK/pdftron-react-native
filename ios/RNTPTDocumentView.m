@@ -2576,11 +2576,11 @@ NS_ASSUME_NONNULL_END
                                                inViewController:documentController];
             if (rightBarItem) {
                 [self removeLeftBarButtonItem:rightBarItem
-                                     inViewController:documentController];
+                                inViewController:documentController];
                 [self removeToolbarButtonItem:rightBarItem
-                                     inViewController:documentController];
+                                inViewController:documentController];
                 [self removeRightBarButtonItem:rightBarItem
-                                     inViewController:documentController];
+                                inViewController:documentController];
                 
                 [rightBarItems addObject:rightBarItem];
             }
@@ -2603,7 +2603,7 @@ NS_ASSUME_NONNULL_END
                 [self removeRightBarButtonItem:bottomToolbarItem
                                 inViewController:documentController];
                 [self removeRightBarButtonItem:bottomToolbarItem
-                                     inViewController:documentController];
+                                inViewController:documentController];
                 
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 
