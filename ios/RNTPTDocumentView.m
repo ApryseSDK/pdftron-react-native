@@ -2580,7 +2580,6 @@ NS_ASSUME_NONNULL_END
                 [self removeToolbarButtonItem:rightBarItem
                                      inViewController:documentController];
                 
-                
                 [rightBarItems addObject:rightBarItem];
             }
         }
@@ -5593,9 +5592,7 @@ NS_ASSUME_NONNULL_END
                                    forSizeClass:UIUserInterfaceSizeClassCompact
                                        animated: NO];
 
-            
         }
-        
         NSArray<UIBarButtonItem *> * const regularToolbarItems = [documentController toolbarItemsForSizeClass:UIUserInterfaceSizeClassRegular];
         if ([regularToolbarItems containsObject:item]) {
             NSMutableArray<UIBarButtonItem *> * const mutableToolbarItems = [regularToolbarItems mutableCopy];
@@ -5606,7 +5603,6 @@ NS_ASSUME_NONNULL_END
                                      forSizeClass:UIUserInterfaceSizeClassRegular
                                          animated:NO];
         }
-        
     } else {
         PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
         
@@ -5628,7 +5624,7 @@ NS_ASSUME_NONNULL_END
     if (!item) {
         return;
     }
-    
+
     if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
         PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
         PTDocumentNavigationItem * const navigationItem = documentController.navigationItem;
@@ -5643,7 +5639,6 @@ NS_ASSUME_NONNULL_END
                                       forSizeClass:UIUserInterfaceSizeClassCompact
                                           animated:NO];
         }
-        
         NSArray<UIBarButtonItem *> * const regularRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
         if ([regularRightBarButtonItems containsObject:item]) {
             NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [regularRightBarButtonItems mutableCopy];
@@ -5654,7 +5649,6 @@ NS_ASSUME_NONNULL_END
                                       forSizeClass:UIUserInterfaceSizeClassRegular
                                           animated:NO];
         }
-
     } else {
         UINavigationItem * const navigationItem = documentViewController.navigationItem;
         
@@ -5691,7 +5685,6 @@ NS_ASSUME_NONNULL_END
                                      forSizeClass:UIUserInterfaceSizeClassCompact
                                          animated:NO];
         }
-        
         NSArray<UIBarButtonItem *> * const regularLeftBarButtonItems = [navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
         if ([regularLeftBarButtonItems containsObject:item]) {
             NSMutableArray<UIBarButtonItem *> * const mutableLeftBarButtonItems = [regularLeftBarButtonItems mutableCopy];
@@ -5702,7 +5695,6 @@ NS_ASSUME_NONNULL_END
                                      forSizeClass:UIUserInterfaceSizeClassRegular
                                          animated:NO];
         }
-        
     } else {
         UINavigationItem * const navigationItem = documentViewController.navigationItem;
         
