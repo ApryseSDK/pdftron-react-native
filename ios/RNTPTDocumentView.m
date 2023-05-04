@@ -2579,6 +2579,8 @@ NS_ASSUME_NONNULL_END
                                      inViewController:documentController];
                 [self removeToolbarButtonItem:rightBarItem
                                      inViewController:documentController];
+                [self removeRightBarButtonItem:rightBarItem
+                                     inViewController:documentController];
                 
                 [rightBarItems addObject:rightBarItem];
             }
@@ -2600,6 +2602,8 @@ NS_ASSUME_NONNULL_END
                                 inViewController:documentController];
                 [self removeRightBarButtonItem:bottomToolbarItem
                                 inViewController:documentController];
+                [self removeRightBarButtonItem:bottomToolbarItem
+                                     inViewController:documentController];
                 
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 
