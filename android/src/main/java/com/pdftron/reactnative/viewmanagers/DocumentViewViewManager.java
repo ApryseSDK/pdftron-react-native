@@ -186,6 +186,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setFitPolicy(fitPolicy);
     }
 
+    @ReactProp(name = "maintainZoomEnabled")
+    public void setMaintainZoomEnabled(DocumentView documentView, boolean maintainZoomEnabled) {
+        documentView.setMaintainZoomEnabled(maintainZoomEnabled);
+    }
+
     @ReactProp(name = "layoutMode")
     public void setLayoutMode(DocumentView documentView, String layoutMode) {
         documentView.setLayoutMode(layoutMode);

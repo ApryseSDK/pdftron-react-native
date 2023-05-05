@@ -497,6 +497,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setMaintainZoomEnabled(boolean maintainZoomEnabled) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setMaintainZoomEnabled(maintainZoomEnabled);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (mPDFViewCtrlConfig != null) {
+            mPDFViewCtrlConfig.setMaintainZoomEnabled(maintainZoomEnabled);
+        }
+    }
+
     public void setLayoutMode(String layoutMode) {
         String mode = null;
         PDFViewCtrl.PagePresentationMode presentationMode = null;
