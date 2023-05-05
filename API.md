@@ -960,6 +960,28 @@ fit hieght | 2 | fits page using height
 />
 ```
 
+#### maintainZoomEnabled
+bool, optional, defaults to true
+
+Defines whether the viewer should maintain zoom level when flipping pages.
+
+```js
+<DocumentView
+  maintainZoomEnabled={true}
+/>
+```
+
+#### maintainZoomEnabled
+bool, optional, defaults to true
+
+Defines whether the viewer should maintain zoom level when flipping pages.
+
+```js
+<DocumentView
+  maintainZoomEnabled={true}
+/>
+```
+
 #### layoutMode
 one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 
