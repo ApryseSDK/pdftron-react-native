@@ -971,17 +971,6 @@ Defines whether the viewer should maintain zoom level when flipping pages.
 />
 ```
 
-#### maintainZoomEnabled
-bool, optional, defaults to true
-
-Defines whether the viewer should maintain zoom level when flipping pages.
-
-```js
-<DocumentView
-  maintainZoomEnabled={true}
-/>
-```
-
 #### layoutMode
 one of the [`Config.LayoutMode`](./src/Config/Config.ts) constants, optional, default value is `Config.LayoutMode.Continuous`
 
