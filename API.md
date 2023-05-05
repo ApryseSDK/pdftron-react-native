@@ -961,7 +961,7 @@ fit hieght | 2 | fits page using height
 ```
 
 #### maintainZoomEnabled
-bool, optional, defaults to true
+bool, optional, defaults to true, Android only.
 
 Defines whether the viewer should maintain zoom level when flipping pages.
 
