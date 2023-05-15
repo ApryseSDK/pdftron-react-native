@@ -20,10 +20,11 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency 'React-Core'
-  s.dependency 'PDFNet'
+  s.dependency 'PDFTron'
+  s.dependency 'PDFTronTools'
 
   s.pod_target_xcconfig = {
-    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/PDFNet"'
+    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/**"'
   }
 end
 
