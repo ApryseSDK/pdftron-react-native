@@ -68,7 +68,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     
-    implementation "com.pdftron:pdftron:10.2.0"
-    implementation "com.pdftron:tools:10.2.0"
-    implementation "com.pdftron:collab:10.2.0"
+    implementation "com.pdftron:pdftron:10.3.0"
+    implementation "com.pdftron:tools:10.3.0"
+    implementation "com.pdftron:collab:10.3.0"
 }
