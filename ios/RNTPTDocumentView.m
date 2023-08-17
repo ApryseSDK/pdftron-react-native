@@ -3261,7 +3261,7 @@ NS_ASSUME_NONNULL_END
 # pragma mark - Color Post Process
 - (void)setColorPostProcessMode:(NSString *)colorPostProcessMode
 {
-    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (pdfViewCtrl) {
         
         if ([colorPostProcessMode isEqualToString:PTColorPostProcessModeNoneKey]) {
@@ -3278,7 +3278,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)setColorPostProcessColors:(NSDictionary *)whiteColor blackColor:(NSDictionary *)blackColor
 {
-    PTPDFViewCtrl *pdfViewCtrl = [[self documentViewController] pdfViewCtrl];
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
     if (pdfViewCtrl) {
         
         UIColor *whiteUIColor = [self convertRGBAToUIColor:whiteColor];
