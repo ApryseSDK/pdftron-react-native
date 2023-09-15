@@ -770,6 +770,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setDisableReadingModeQuickMenu(boolean disabled) {
+        getToolManager().setReflowTextSelectionMenuEnabled(disabled);
+    }
+
     public void setForceAppTheme(String forcedAppThemeItems) {
         if (THEME_DARK.equals(forcedAppThemeItems)) {
             PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NIGHT);

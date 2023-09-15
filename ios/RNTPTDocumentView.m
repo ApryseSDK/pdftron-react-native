@@ -6243,6 +6243,11 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
+- (void)setDisableReadingModeQuickMenu:(BOOL)disabled
+{
+
+}
+
 - (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
 {
     NSURL *imageUrl = [NSURL URLWithString: stampImageDataUrl];
