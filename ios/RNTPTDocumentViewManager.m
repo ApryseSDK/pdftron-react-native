@@ -665,13 +665,6 @@ RCT_CUSTOM_VIEW_PROPERTY(openUrlPath, NSString, RNTPTDocumentView)
 }
 
 // Hygen Generated Props
-RCT_CUSTOM_VIEW_PROPERTY(enableReadingModeQuickMenu, BOOL, RNTPTDocumentView)
-{
-    if (json) {
-        view.enabled = [RCTConvert BOOL:json];
-    }
-}
-
 RCT_CUSTOM_VIEW_PROPERTY(forceAppTheme, NSString, RNTPTDocumentView)
 {
     if (json) {
