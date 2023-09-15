@@ -538,6 +538,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
+    @ReactProp(name = "enableReadingModeQuickMenu")
+    public void setEnableReadingModeQuickMenu(DocumentView documentView, boolean enabled) {
+        documentView.setEnableReadingModeQuickMenu(enabled);
+    }
+
     @ReactProp(name = "forceAppTheme")
     public void setForceAppTheme(DocumentView documentView, @NonNull String forcedAppThemeItems) {
         documentView.setForceAppTheme(forcedAppThemeItems);
