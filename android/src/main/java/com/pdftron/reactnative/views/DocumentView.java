@@ -3104,7 +3104,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
-        getToolManager().setReflowTextSelectionMenuEnabled(mEnableQuickMenu);
+        getToolManager().setReflowTextSelectionMenuEnabled(mEnableReadingModeQuickMenu);
 
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
