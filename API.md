@@ -3974,7 +3974,7 @@ this._viewer.setFormFieldHighlightColor({red: 0, green: 0, blue: 255, alpha: 128
 ```
 
 #### disableReadingModeQuickMenu
-bool, optional, defaults to false
+bool, optional, defaults to false (Android Only)
 
 Defines whether the viewer disables long press quick menu in read-only. If true, the UI will not allow the user to long press to open the quick menu.
 
