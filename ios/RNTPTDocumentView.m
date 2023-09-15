@@ -6243,7 +6243,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - Hygen Generated Props/Methods
 
-- (void)setDisableReadingModeQuickMenu:(BOOL)disabled
+- (void)setEnableReadingModeQuickMenu:(BOOL)enabled
 {
 
 }

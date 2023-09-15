@@ -101,6 +101,7 @@ export default class App extends Component<Props> {
           onExportAnnotationCommand={this.onExportAnnotationCommand}
           onZoomChanged={this.onZoomChanged}
           readOnly={false}
+          enableReadingModeQuickMenu={true}
           disabledElements={[Config.Buttons.userBookmarkListButton]}
           disabledTools={[Config.Tools.annotationCreateLine, Config.Tools.annotationCreateRectangle]}
           fitMode={Config.FitMode.FitPage}

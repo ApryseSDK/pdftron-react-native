@@ -770,7 +770,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
-    public void setDisableReadingModeQuickMenu(boolean disabled) {
+    public void setEnableReadingModeQuickMenu(boolean disabled) {
         getToolManager().setReflowTextSelectionMenuEnabled(disabled);
     }
 
