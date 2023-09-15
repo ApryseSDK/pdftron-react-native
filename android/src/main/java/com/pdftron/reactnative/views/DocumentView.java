@@ -150,7 +150,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
 
-    private boolean mEnableQuickMenu;
+    private boolean mEnableQuickMenu = true;
 
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
