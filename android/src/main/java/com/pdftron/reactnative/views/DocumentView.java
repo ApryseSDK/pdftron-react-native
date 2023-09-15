@@ -150,7 +150,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
 
-    private boolean mEnableReflowQuickMenu = true;
+    private boolean mEnableReadingModeQuickMenu = true;
 
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
@@ -773,7 +773,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     // Hygen Generated Props
     public void setEnableReadingModeQuickMenu(boolean enabled) {
-        mEnableReflowQuickMenu = enabled;
+        mEnableReadingModeQuickMenu = enabled;
     }
 
     public void setForceAppTheme(String forcedAppThemeItems) {
