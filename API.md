@@ -3973,13 +3973,13 @@ fieldHightlightColor | object | the form field highlight color, in the format `{
 this._viewer.setFormFieldHighlightColor({red: 0, green: 0, blue: 255, alpha: 128}); // blue color
 ```
 
-#### disableReadingModeQuickMenu
-bool, optional, defaults to false (Android Only)
+#### enableReadingModeQuickMenu
+bool, optional, defaults to true (Android Only)
 
-Defines whether the viewer disables long press quick menu in read-only. If true, the UI will not allow the user to long press to open the quick menu.
+Defines whether the viewer disables long press quick menu in read-only. If false, the UI will not allow the user to long press to open the quick menu.
 
 ```js
 <DocumentView
-  disableReadingModeQuickMenu={true}
+  enableReadingModeQuickMenu={false}
 />
 ```
