@@ -538,8 +538,8 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
-    @ReactProp(name = "disableReadingModeQuickMenu")
-    public void setDisableReadingModeQuickMenu(DocumentView documentView, boolean enabled) {
+    @ReactProp(name = "enableReadingModeQuickMenu")
+    public void setEnableReadingModeQuickMenu(DocumentView documentView, boolean enabled) {
         documentView.setEnableReadingModeQuickMenu(enabled);
     }
 
