@@ -150,6 +150,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
 
+    private boolean mEnableReadingModeQuickMenu = true;
+
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
     public boolean isAnnotationListVisible = true;
@@ -770,6 +772,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setEnableReadingModeQuickMenu(boolean enabled) {
+        mEnableReadingModeQuickMenu = enabled;
+    }
+
     public void setForceAppTheme(String forcedAppThemeItems) {
         if (THEME_DARK.equals(forcedAppThemeItems)) {
             PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NIGHT);
@@ -3098,6 +3104,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
+        getToolManager().setReflowTextSelectionMenuEnabled(mEnableReadingModeQuickMenu);
 
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
