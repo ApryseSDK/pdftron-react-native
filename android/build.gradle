@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.kotlinVersion = '1.6.0'
+    def kotlinVersion = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : "1.6.20"
     repositories {
         google()
         mavenCentral()
@@ -28,12 +28,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -68,7 +68,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     
-    implementation "com.pdftron:pdftron:9.5.0"
-    implementation "com.pdftron:tools:9.5.0"
-    implementation "com.pdftron:collab:9.5.0"
+    implementation "com.pdftron:pdftron:10.4.0"
+    implementation "com.pdftron:tools:10.4.0"
+    implementation "com.pdftron:collab:10.4.0"
 }

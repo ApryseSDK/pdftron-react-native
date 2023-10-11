@@ -186,6 +186,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         documentView.setFitPolicy(fitPolicy);
     }
 
+    @ReactProp(name = "maintainZoomEnabled")
+    public void setMaintainZoomEnabled(DocumentView documentView, boolean maintainZoomEnabled) {
+        documentView.setMaintainZoomEnabled(maintainZoomEnabled);
+    }
+
     @ReactProp(name = "layoutMode")
     public void setLayoutMode(DocumentView documentView, String layoutMode) {
         documentView.setLayoutMode(layoutMode);
@@ -533,6 +538,11 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Props
+    @ReactProp(name = "enableReadingModeQuickMenu")
+    public void setEnableReadingModeQuickMenu(DocumentView documentView, boolean enabled) {
+        documentView.setEnableReadingModeQuickMenu(enabled);
+    }
+
     @ReactProp(name = "forceAppTheme")
     public void setForceAppTheme(DocumentView documentView, @NonNull String forcedAppThemeItems) {
         documentView.setForceAppTheme(forcedAppThemeItems);

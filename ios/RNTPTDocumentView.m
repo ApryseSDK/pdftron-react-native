@@ -2575,10 +2575,18 @@ NS_ASSUME_NONNULL_END
             UIBarButtonItem *rightBarItem = [self itemForButton:rightBarItemString
                                                inViewController:documentController];
             if (rightBarItem) {
+                [self removeLeftBarButtonItem:rightBarItem
+                                inViewController:documentController];
+                [self removeToolbarButtonItem:rightBarItem
+                                inViewController:documentController];
+                [self removeRightBarButtonItem:rightBarItem
+                                inViewController:documentController];
+                
                 [rightBarItems addObject:rightBarItem];
             }
         }
         NSArray * reversedArray = [[rightBarItems reverseObjectEnumerator] allObjects];
+        
         documentController.navigationItem.rightBarButtonItems = reversedArray;
     }
     
@@ -2590,8 +2598,12 @@ NS_ASSUME_NONNULL_END
             UIBarButtonItem *bottomToolbarItem = [self itemForButton:bottomToolbarString
                                                     inViewController:documentController];
             if (bottomToolbarItem) {
-                [self ensureUniqueBottomBarButtonItem:bottomToolbarItem
-                                     inViewController:documentController];
+                [self removeLeftBarButtonItem:bottomToolbarItem
+                                inViewController:documentController];
+                [self removeRightBarButtonItem:bottomToolbarItem
+                                inViewController:documentController];
+                [self removeToolbarButtonItem:bottomToolbarItem
+                                inViewController:documentController];
                 
                 [bottomToolbarItems addObject:bottomToolbarItem];
                 
@@ -3686,7 +3698,7 @@ NS_ASSUME_NONNULL_END
     PTPDFRect *screenRect = [pdfViewCtrl GetScreenRectForAnnot:annot page_num:pageNumber];
     PTPDFRect *pageRect = [self convertScreenRectToPageRect:screenRect pageNumber:pageNumber pdfViewCtrl:pdfViewCtrl];
     
-    NSString *annotationType = [RNTPTDocumentView stringForAnnotType:[annot GetType]];
+    NSString *annotationType = [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]];
     
     return @{
         PTAnnotationIdKey: (uniqueId ?: @""),
@@ -4159,7 +4171,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
         } action:PTAddAnnotationActionKey];
     }
     if (!self.collaborationManager) {
@@ -4170,7 +4182,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTAddAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4202,7 +4214,7 @@ NS_ASSUME_NONNULL_END
     if ([self.delegate respondsToSelector:@selector(annotationChanged:annotation:action:)]) {
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
             PTAnnotationPageNumberKey: @(pageNumber),
         } action:PTModifyAnnotationActionKey];
     }
@@ -4214,7 +4226,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4247,7 +4259,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationChanged:self annotation:@{
             PTAnnotationIdKey: annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType: annot type:[annot GetType]],
         } action:PTRemoveAnnotationActionKey];
     }
     if (!self.collaborationManager) {
@@ -4258,7 +4270,7 @@ NS_ASSUME_NONNULL_END
         [collabAnnot setAnnotationID:annotId];
         [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
         
-        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+        [self rnt_sendExportAnnotationCommandWithAction:PTDeleteAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
     }
 }
 
@@ -4290,7 +4302,7 @@ NS_ASSUME_NONNULL_END
         [self.delegate annotationFlattened:self annotation:@{
             PTAnnotationIdKey: [annotId isEqualToString:@""] ? [NSNull null] : annotId,
             PTAnnotationPageNumberKey: @(pageNumber),
-            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:[annot GetType]],
+            PTAnnotationTypeKey: [RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]],
         }];
     }
 }
@@ -4342,7 +4354,7 @@ NS_ASSUME_NONNULL_END
             [collabAnnot setAnnotationID:annotId];
             [collabAnnot setXfdf:[self generateXfdfCommand:[[PTVectorAnnot alloc] init] modified:annots deleted:[[PTVectorAnnot alloc] init] pdfViewCtrl:pdfViewCtrl]];
             
-            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:[annot GetType]]];
+            [self rnt_sendExportAnnotationCommandWithAction:PTModifyAnnotationActionKey annotation:collabAnnot pageNumber:pageNumber annotType:[RNTPTDocumentView stringForAnnotType:annot type:[annot GetType]]];
         }
     }
 }
@@ -5564,7 +5576,99 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (void)ensureUniqueBottomBarButtonItem:(UIBarButtonItem *)item
+- (void)removeToolbarButtonItem:(UIBarButtonItem *)item
+                       inViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    if (!item) {
+        return;
+    }
+    
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
+
+        NSArray<UIBarButtonItem *> * const compactToolbarItems = [documentController toolbarItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+        if ([compactToolbarItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableToolbarItems = [compactToolbarItems mutableCopy];
+            
+            [mutableToolbarItems removeObject:item];
+            
+            [documentController setToolbarItems: [mutableToolbarItems copy]
+                                   forSizeClass:UIUserInterfaceSizeClassCompact
+                                       animated: NO];
+
+        }
+        NSArray<UIBarButtonItem *> * const regularToolbarItems = [documentController toolbarItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+        if ([regularToolbarItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableToolbarItems = [regularToolbarItems mutableCopy];
+            
+            [mutableToolbarItems removeObject:item];
+            
+            [documentController setToolbarItems:[mutableToolbarItems copy]
+                                     forSizeClass:UIUserInterfaceSizeClassRegular
+                                         animated:NO];
+        }
+    } else {
+        PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
+        
+        NSArray<UIBarButtonItem *> * const toolbarItems = documentController.toolbarItems;
+        if ([toolbarItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableToolbarItems = [toolbarItems mutableCopy];
+            
+            [mutableToolbarItems removeObject:item];
+            
+            [documentController setToolbarItems:[mutableToolbarItems copy]
+                                       animated:NO];
+        }
+    }
+}
+
+- (void)removeRightBarButtonItem:(UIBarButtonItem *)item
+                       inViewController:(PTDocumentBaseViewController *)documentViewController
+{
+    if (!item) {
+        return;
+    }
+
+    if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+        PTDocumentController * const documentController = (PTDocumentController *)documentViewController;
+        PTDocumentNavigationItem * const navigationItem = documentController.navigationItem;
+        
+        NSArray<UIBarButtonItem *> * const compactRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
+        if ([compactRightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [compactRightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                      forSizeClass:UIUserInterfaceSizeClassCompact
+                                          animated:NO];
+        }
+        NSArray<UIBarButtonItem *> * const regularRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
+        if ([regularRightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [regularRightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                      forSizeClass:UIUserInterfaceSizeClassRegular
+                                          animated:NO];
+        }
+    } else {
+        UINavigationItem * const navigationItem = documentViewController.navigationItem;
+        
+        NSArray<UIBarButtonItem *> * const rightBarButtonItems = navigationItem.rightBarButtonItems;
+        if ([rightBarButtonItems containsObject:item]) {
+            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [rightBarButtonItems mutableCopy];
+            
+            [mutableRightBarButtonItems removeObject:item];
+            
+            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
+                                          animated:NO];
+        }
+    }
+}
+
+- (void)removeLeftBarButtonItem:(UIBarButtonItem *)item
                        inViewController:(PTDocumentBaseViewController *)documentViewController
 {
     if (!item) {
@@ -5585,7 +5689,6 @@ NS_ASSUME_NONNULL_END
                                      forSizeClass:UIUserInterfaceSizeClassCompact
                                          animated:NO];
         }
-        
         NSArray<UIBarButtonItem *> * const regularLeftBarButtonItems = [navigationItem leftBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
         if ([regularLeftBarButtonItems containsObject:item]) {
             NSMutableArray<UIBarButtonItem *> * const mutableLeftBarButtonItems = [regularLeftBarButtonItems mutableCopy];
@@ -5595,28 +5698,6 @@ NS_ASSUME_NONNULL_END
             [navigationItem setLeftBarButtonItems:[mutableLeftBarButtonItems copy]
                                      forSizeClass:UIUserInterfaceSizeClassRegular
                                          animated:NO];
-        }
-        
-        NSArray<UIBarButtonItem *> * const compactRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassCompact];
-        if ([compactRightBarButtonItems containsObject:item]) {
-            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [compactRightBarButtonItems mutableCopy];
-            
-            [mutableRightBarButtonItems removeObject:item];
-            
-            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
-                                      forSizeClass:UIUserInterfaceSizeClassCompact
-                                          animated:NO];
-        }
-        
-        NSArray<UIBarButtonItem *> * const regularRightBarButtonItems = [navigationItem rightBarButtonItemsForSizeClass:UIUserInterfaceSizeClassRegular];
-        if ([regularRightBarButtonItems containsObject:item]) {
-            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [regularRightBarButtonItems mutableCopy];
-            
-            [mutableRightBarButtonItems removeObject:item];
-            
-            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
-                                      forSizeClass:UIUserInterfaceSizeClassRegular
-                                          animated:NO];
         }
     } else {
         UINavigationItem * const navigationItem = documentViewController.navigationItem;
@@ -5629,16 +5710,6 @@ NS_ASSUME_NONNULL_END
             
             [navigationItem setLeftBarButtonItems:[mutableLeftBarButtonItems copy]
                                          animated:NO];
-        }
-
-        NSArray<UIBarButtonItem *> * const rightBarButtonItems = navigationItem.rightBarButtonItems;
-        if ([rightBarButtonItems containsObject:item]) {
-            NSMutableArray<UIBarButtonItem *> * const mutableRightBarButtonItems = [rightBarButtonItems mutableCopy];
-            
-            [mutableRightBarButtonItems removeObject:item];
-            
-            [navigationItem setRightBarButtonItems:[mutableRightBarButtonItems copy]
-                                          animated:NO];
         }
     }
 }
@@ -5923,7 +5994,7 @@ NS_ASSUME_NONNULL_END
     return Nil;
 }
 
-+ (NSString *)stringForAnnotType:(PTAnnotType)type {
++ (NSString *)stringForAnnotType:(PTAnnot *)annot type:(PTAnnotType)type {
     if (type == e_ptText) {
         return PTAnnotationCreateStickyToolKey;
     } else if (type == e_ptLink) {
@@ -5963,7 +6034,7 @@ NS_ASSUME_NONNULL_END
     } else if (type == e_ptMovie) {
         return @"";
     } else if (type == e_ptWidget) {
-        return PTFormCreateTextFieldToolKey;
+        return [self getWidgetFieldType:annot];
     } else if (type == e_ptScreen) {
         return @"";
     } else if (type == e_ptPrinterMark) {
@@ -6078,6 +6149,32 @@ NS_ASSUME_NONNULL_END
         }
     }
     return nil;
+}
+
++ (NSString *)getWidgetFieldType:(PTAnnot *)annot
+{
+    @try {
+        PTWidget *widget = [[PTWidget alloc] initWithAnn:annot];
+        PTField *field = [widget GetField];
+        PTFieldType fieldType = [field GetType];
+        
+        if (fieldType == e_pttext) {
+            return PTFormCreateTextFieldToolKey;
+        } else if (fieldType == e_ptcheck) {
+            return PTFormCreateCheckboxFieldToolKey;
+        } else if (fieldType == e_ptradio) {
+            return PTFormCreateRadioFieldToolKey;
+        } else if (fieldType == e_ptchoice) {
+            return PTFormCreateComboBoxFieldToolKey;
+        } else if (fieldType == e_ptsignature) {
+            return PTFormCreateSignatureFieldToolKey;
+        }
+    }
+    @catch (NSException *e) {
+        return @"";
+    }
+    
+    return @"";
 }
 
 #pragma mark - Display Responsiveness

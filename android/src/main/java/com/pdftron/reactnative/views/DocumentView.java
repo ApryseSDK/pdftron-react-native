@@ -71,6 +71,7 @@ import com.pdftron.pdf.dialog.pdflayer.PdfLayerDialog;
 import com.pdftron.pdf.model.AnnotStyle;
 import com.pdftron.pdf.model.UserBookmarkItem;
 import com.pdftron.pdf.tools.AdvancedShapeCreate;
+import com.pdftron.pdf.tools.AnnotEditTextMarkup;
 import com.pdftron.pdf.tools.AnnotManager;
 import com.pdftron.pdf.tools.Eraser;
 import com.pdftron.pdf.tools.FreehandCreate;
@@ -148,6 +149,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     private boolean mUseStylusAsPen = true;
     private boolean mSignWithStamps;
+
+    private boolean mEnableReadingModeQuickMenu = true;
 
     public boolean isBookmarkListVisible = true;
     public boolean isOutlineListVisible = true;
@@ -497,6 +500,18 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public void setMaintainZoomEnabled(boolean maintainZoomEnabled) {
+        if (getPdfViewCtrl() != null) {
+            try {
+                getPdfViewCtrl().setMaintainZoomEnabled(maintainZoomEnabled);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (mPDFViewCtrlConfig != null) {
+            mPDFViewCtrlConfig.setMaintainZoomEnabled(maintainZoomEnabled);
+        }
+    }
+
     public void setLayoutMode(String layoutMode) {
         String mode = null;
         PDFViewCtrl.PagePresentationMode presentationMode = null;
@@ -757,6 +772,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     // Hygen Generated Props
+    public void setEnableReadingModeQuickMenu(boolean enabled) {
+        mEnableReadingModeQuickMenu = enabled;
+    }
+
     public void setForceAppTheme(String forcedAppThemeItems) {
         if (THEME_DARK.equals(forcedAppThemeItems)) {
             PdfViewCtrlSettingsManager.setColorMode(getContext(), PdfViewCtrlSettingsManager.KEY_PREF_COLOR_MODE_NIGHT);
@@ -1294,7 +1313,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     }
 
     @Nullable
-    private String convAnnotTypeToString(int annotType) {
+    private String convAnnotTypeToString(Annot annot, int annotType) {
         String annotString;
         switch (annotType) {
             case Annot.e_Ink:
@@ -1370,7 +1389,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 annotString = TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER;
                 break;
             case Annot.e_Widget:
-                annotString = TOOL_FORM_CREATE_TEXT_FIELD;
+                annotString = getWidgetFieldType(annot);
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
@@ -1380,6 +1399,30 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
         }
         return annotString;
+    }
+
+    private String getWidgetFieldType(Annot annot) {
+        try {
+            if (annot != null && annot.isValid()) {
+                Widget widget = new Widget(annot);
+                Field field = widget.getField();
+                int fieldType = field.getType();
+                if (fieldType == Field.e_text) {
+                    return TOOL_FORM_CREATE_TEXT_FIELD;
+                } else if (fieldType == Field.e_radio) {
+                    return TOOL_FORM_CREATE_RADIO_FIELD;
+                } else if (fieldType == Field.e_check) {
+                    return TOOL_FORM_CREATE_CHECKBOX_FIELD;
+                } else if (fieldType == Field.e_choice) {
+                    return TOOL_FORM_CREATE_COMBO_BOX_FIELD;
+                } else if (fieldType == Field.e_signature) {
+                    return TOOL_FORM_CREATE_SIGNATURE_FIELD;
+                }
+            }
+        } catch (PDFNetException e) {
+            return "";
+        }
+        return "";
     }
 
     @Nullable
@@ -2363,7 +2406,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         annotPair.putInt(KEY_ANNOTATION_PAGE, pageNumber);
         // try to obtain bbox and type
         try {
-            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(AnnotUtils.getAnnotType(annot)));
+            annotPair.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(annot, AnnotUtils.getAnnotType(annot)));
             // screen rect
             com.pdftron.pdf.Rect screenRect = getPdfViewCtrl().getScreenRectForAnnot(annot, pageNumber);
             WritableMap screenRectMap = Arguments.createMap();
@@ -2465,7 +2508,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
             // remove unwanted items
             ToolManager.Tool currentTool = getToolManager() != null ? getToolManager().getTool() : null;
-            if (mAnnotMenuItems != null && !(currentTool instanceof Pan) && !(currentTool instanceof TextSelect)) {
+            boolean isPanOrTextSelect = (currentTool instanceof Pan || (currentTool instanceof TextSelect && !(currentTool instanceof AnnotEditTextMarkup)));
+            if (mAnnotMenuItems != null && !isPanOrTextSelect) {
                 List<QuickMenuItem> removeList = new ArrayList<>();
                 checkQuickMenu(quickMenu.getFirstRowMenuItems(), mAnnotMenuItems, removeList);
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), mAnnotMenuItems, removeList);
@@ -2476,7 +2520,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                     quickMenu.setDividerVisibility(View.GONE);
                 }
             }
-            if (mLongPressMenuItems != null && (currentTool instanceof Pan || currentTool instanceof TextSelect)) {
+            if (mLongPressMenuItems != null && isPanOrTextSelect) {
                 List<QuickMenuItem> removeList = new ArrayList<>();
                 checkQuickMenu(quickMenu.getFirstRowMenuItems(), mLongPressMenuItems, removeList);
                 checkQuickMenu(quickMenu.getSecondRowMenuItems(), mLongPressMenuItems, removeList);
@@ -2700,7 +2744,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                         annotData.putString(KEY_ANNOTATION_ID, Utils.isNullOrEmpty(uid) ? null : uid);
                         annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                         try {
-                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                            annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
                         } catch (PDFNetException e) {
                             e.printStackTrace();
                         }
@@ -2791,6 +2835,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             params.putInt(PAGE_CURRENT_KEY, to);
 
             onReceiveNativeEvent(params);
+        }
+
+        @Override
+        public void onPagesMoved(List<Integer> pagesMoved, int to, int currentPage) {
+
         }
 
         @Override
@@ -2914,7 +2963,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
             annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
             try {
-                annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
             } catch (PDFNetException e) {
                 e.printStackTrace();
             }
@@ -2967,7 +3016,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 annotData.putString(KEY_ANNOTATION_ID, uid == null ? "" : uid);
                 annotData.putInt(KEY_ANNOTATION_PAGE, entry.getValue());
                 try {
-                    annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key.getType()));
+                    annotData.putString(KEY_ANNOTATION_TYPE, convAnnotTypeToString(key, key.getType()));
                 } catch (PDFNetException e) {
                     e.printStackTrace();
                 }
@@ -3055,6 +3104,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
+        getToolManager().setReflowTextSelectionMenuEnabled(mEnableReadingModeQuickMenu);
 
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
@@ -4963,7 +5013,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             getPdfViewCtrl().update(true);
         }
     }
-
 
     public void setSaveStateEnabled(boolean saveStateEnabled) {
         mSaveStateEnabled = saveStateEnabled;

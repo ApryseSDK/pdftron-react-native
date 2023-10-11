@@ -699,14 +699,17 @@ Defines whether preset bar is hidden or not
 #### annotationToolbars
 array of [`Config.DefaultToolbars`](./src/Config/Config.ts) constants or custom toolbar objects, optional, defaults to none
 
-Defines custom toolbars. If passed in, the default toolbars will no longer appear.
+Defines custom toolbars. If passed in, the default toolbars will no longer appear. When indicating the icon of a custom toolbar item, ensure that the resource for either Android or iOS exists.
 It is possible to mix and match with default toolbars. See example below:
 
 ```js
 const myToolItem = {
   [Config.CustomToolItemKey.Id]: 'add_page',
   [Config.CustomToolItemKey.Name]: 'Add page',
-  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white',
+  // An example of custom Android icon:
+  [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white', 
+  // An example of custom iOS icon:
+  //[Config.CustomToolItemKey.Icon]: 'pencil.circle', 
 };
 
 const myToolbar = {
@@ -954,6 +957,17 @@ fit hieght | 2 | fits page using height
 ```js
 <DocumentView
   fitPolicy={2}
+/>
+```
+
+#### maintainZoomEnabled
+bool, optional, defaults to true, Android only.
+
+Defines whether the viewer should maintain zoom level when flipping pages.
+
+```js
+<DocumentView
+  maintainZoomEnabled={true}
 />
 ```
 
@@ -3957,4 +3971,15 @@ fieldHightlightColor | object | the form field highlight color, in the format `{
 
 ```js
 this._viewer.setFormFieldHighlightColor({red: 0, green: 0, blue: 255, alpha: 128}); // blue color
+```
+
+#### enableReadingModeQuickMenu
+bool, optional, defaults to true (Android Only)
+
+Defines whether the viewer disables long press quick menu in read-only. If false, the UI will not allow the user to long press to open the quick menu.
+
+```js
+<DocumentView
+  enableReadingModeQuickMenu={false}
+/>
 ```
