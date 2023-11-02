@@ -294,7 +294,35 @@ RCT_EXPORT_METHOD(mergeDocuments:(NSArray *)documentsArray resolver:(RCTPromiseR
     reject(@"merging_failed", @"Failed to merge documents", [self errorFromException:exception]);
   }
 }
-
+RCT_EXPORT_METHOD(createStamper:(NSString*)filePath
+                  stampText:(NSString*)stampText
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        PTPDFDoc * doc = [[PTPDFDoc alloc] initWithFilepath:filePath];
+        
+        PTStamper *s = [[PTStamper alloc] initWithSize_type: e_ptrelative_scale a: 0.05 b: 0.05];
+        [doc InitSecurityHandler];
+        [s SetAlignment: e_pthorizontal_center vertical_alignment: e_ptvertical_bottom];
+        [s SetPosition: 0 vertical_distance: 5 use_percentage: false];
+        [s SetFont: [PTFont Create: [doc GetSDFDoc] type: e_pthelvetica embed: YES]];
+        [s SetSize: e_pts_font_size a: 9 b: -1];
+        [s SetTextAlignment: e_ptalign_center];
+        for (int page = 1; page <= [doc GetPageCount]; page++)
+        {
+            NSString *pageText = [NSString stringWithFormat:@"%@Page %i of %i",stampText,page,[doc GetPageCount]];
+            PTPageSet *page_ps = [[PTPageSet alloc] initWithOne_page: page];
+            [s StampText: doc src_txt: pageText dest_pages: page_ps];
+        }
+        [doc SaveToFile: filePath flags: e_ptremove_unused];
+        resolve(filePath);
+    }
+    @catch (NSException* exception) {
+        NSLog(@"Exception: %@, %@", exception.name, exception.reason);
+        reject(@"generation_failed", @"Failed to generate stamp", [self errorFromException:exception]);
+    }
+}
 - (NSError *)errorFromException:(NSException *)exception
 {
     return [NSError errorWithDomain:@"com.pdftron.react-native" code:0 userInfo:
