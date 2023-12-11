@@ -1130,6 +1130,15 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         toolClass = [PTDateTextCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTFormFillCheckToolKey] ) {
+        toolClass = [PTCheckMarkStampCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTFormFillCrossToolKey] ) {
+        toolClass = [PTCrossMarkStampCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTFormFillDotToolKey] ) {
+        toolClass = [PTDotStampCreate class];
     }
     
     if (toolClass) {

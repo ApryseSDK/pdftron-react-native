@@ -101,7 +101,10 @@ static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
 static NSString * const PTInsertPageToolKey = @"InsertPage";
-static NSString *const PTFormFillToolKey = @"FormFill";
+static NSString * const PTFormFillToolKey = @"FormFill";
+static NSString * const PTFormFillCheckToolKey = @"FormFillCheck";
+static NSString * const PTFormFillCrossToolKey = @"FormFillCross";
+static NSString * const PTFormFillDotToolKey = @"FormFillDot";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";

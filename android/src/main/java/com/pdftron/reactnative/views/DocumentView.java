@@ -56,6 +56,7 @@ import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.annots.Markup;
 import com.pdftron.pdf.annots.SignatureWidget;
 import com.pdftron.pdf.annots.Widget;
+import com.pdftron.pdf.annots.RubberStamp;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
@@ -1903,6 +1904,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonType = ToolbarButtonType.DATE;
+        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+            buttonType = ToolbarButtonType.CHECKMARK;
+        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+            buttonType = ToolbarButtonType.CROSS;
+        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+            buttonType = ToolbarButtonType.DOT;
         }
         return buttonType;
     }
