@@ -5861,6 +5861,15 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         return [PTDateTextCreate class];
     }
+    else if ( [key isEqualToString:PTFormFillCheckToolKey] ) {
+        return [PTCheckMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTFormFillCrossToolKey] ) {
+        return [PTCrossMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTFormFillDotToolKey] ) {
+        return [PTDotStampCreate class];
+    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
@@ -5992,6 +6001,15 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTRadioButtonCreate class]) {
         return PTFormCreateRadioFieldToolKey;
+    }
+    else if (toolClass == [PTCheckMarkStampCreate class]) {
+        return PTFormFillCheckToolKey;
+    }
+    else if (toolClass == [PTCrossMarkStampCreate class]) {
+        return PTFormFillCrossToolKey;
+    }
+    else if (toolClass == [PTDotStampCreate class]) {
+        return PTFormFillDotToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
