@@ -56,7 +56,6 @@ import com.pdftron.pdf.ViewChangeCollection;
 import com.pdftron.pdf.annots.Markup;
 import com.pdftron.pdf.annots.SignatureWidget;
 import com.pdftron.pdf.annots.Widget;
-import com.pdftron.pdf.annots.RubberStamp;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
