@@ -1309,6 +1309,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
+        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP;
+        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP;
+        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP;
         }
         return annotType;
     }
@@ -1394,6 +1400,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP:
+                annotString = TOOL_FORM_FILL_CHECK;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP:
+                annotString = TOOL_FORM_FILL_CROSS;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP:
+                annotString = TOOL_FORM_FILL_DOT;
                 break;
             default:
                 annotString = "";
@@ -1743,6 +1758,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.DATE.value();
+        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CHECKMARK.value();
+        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CROSS.value();
+        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.DOT.value();
         }
         return buttonId;
     }
