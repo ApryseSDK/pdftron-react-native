@@ -102,9 +102,9 @@ static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxF
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
 static NSString * const PTInsertPageToolKey = @"InsertPage";
 static NSString * const PTFormFillToolKey = @"FormFill";
-static NSString * const PTFormFillCheckToolKey = @"FormFillCheck";
-static NSString * const PTFormFillCrossToolKey = @"FormFillCross";
-static NSString * const PTFormFillDotToolKey = @"FormFillDot";
+static NSString * const PTAnnotationCreateCheckMarkStampKey = @"AnnotationCreateCheckMarkStamp";
+static NSString * const PTAnnotationCreateCrossMarkStampKey = @"AnnotationCreateCrossMarkStamp";
+static NSString * const PTAnnotationCreateDotStampKey = @"AnnotationCreateDotStamp";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";

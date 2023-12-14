@@ -1308,11 +1308,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
-        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP;
-        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP;
-        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP;
         }
         return annotType;
@@ -1401,13 +1401,13 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP:
-                annotString = TOOL_FORM_FILL_CHECK;
+                annotString = TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP;
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP:
-                annotString = TOOL_FORM_FILL_CROSS;
+                annotString = TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP;
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP:
-                annotString = TOOL_FORM_FILL_DOT;
+                annotString = TOOL_ANNOTATION_CREATE_DOT_STAMP;
                 break;
             default:
                 annotString = "";
@@ -1757,11 +1757,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.DATE.value();
-        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CHECKMARK.value();
-        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.CROSS.value();
-        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.DOT.value();
         }
         return buttonId;
@@ -1924,11 +1924,11 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonType = ToolbarButtonType.DATE;
-        } else if (TOOL_FORM_FILL_CHECK.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
             buttonType = ToolbarButtonType.CHECKMARK;
-        } else if (TOOL_FORM_FILL_CROSS.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
             buttonType = ToolbarButtonType.CROSS;
-        } else if (TOOL_FORM_FILL_DOT.equals(item)) {
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
             buttonType = ToolbarButtonType.DOT;
         }
         return buttonType;

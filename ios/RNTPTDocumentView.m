@@ -1131,13 +1131,13 @@ NS_ASSUME_NONNULL_END
     else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         toolClass = [PTDateTextCreate class];
     } 
-    else if ( [toolMode isEqualToString:PTFormFillCheckToolKey] ) {
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
         toolClass = [PTCheckMarkStampCreate class];
     } 
-    else if ( [toolMode isEqualToString:PTFormFillCrossToolKey] ) {
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
         toolClass = [PTCrossMarkStampCreate class];
     }
-    else if ( [toolMode isEqualToString:PTFormFillDotToolKey] ) {
+    else if ( [toolMode isEqualToString:PTAnnotationCreateDotStampKey] ) {
         toolClass = [PTDotStampCreate class];
     }
     
@@ -5861,13 +5861,13 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         return [PTDateTextCreate class];
     }
-    else if ( [key isEqualToString:PTFormFillCheckToolKey] ) {
+    else if ( [key isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
         return [PTCheckMarkStampCreate class];
     }
-    else if ( [key isEqualToString:PTFormFillCrossToolKey] ) {
+    else if ( [key isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
         return [PTCrossMarkStampCreate class];
     }
-    else if ( [key isEqualToString:PTFormFillDotToolKey] ) {
+    else if ( [key isEqualToString:PTAnnotationCreateDotStampKey] ) {
         return [PTDotStampCreate class];
     }
     
@@ -6003,13 +6003,13 @@ NS_ASSUME_NONNULL_END
         return PTFormCreateRadioFieldToolKey;
     }
     else if (toolClass == [PTCheckMarkStampCreate class]) {
-        return PTFormFillCheckToolKey;
+        return PTAnnotationCreateCheckMarkStampKey;
     }
     else if (toolClass == [PTCrossMarkStampCreate class]) {
-        return PTFormFillCrossToolKey;
+        return PTAnnotationCreateCrossMarkStampKey;
     }
     else if (toolClass == [PTDotStampCreate class]) {
-        return PTFormFillDotToolKey;
+        return PTAnnotationCreateDotStampKey;
     }
     
     if (@available(iOS 13.1, *)) {

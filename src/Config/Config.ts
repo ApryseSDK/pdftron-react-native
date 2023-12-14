@@ -107,9 +107,9 @@ export const Config = {
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
     formFill: 'FormFill',
-    formFillCheck: 'FormFillCheck',
-    formFillCross: 'FormFillCross',
-    formFillDot: 'FormFillDot',
+    annotationCreateCheckMarkStamp: 'AnnotationCreateCheckMarkStamp',
+    annotationCreateCrossMarkStamp: 'AnnotationCreateCrossMarkStamp',
+    annotationCreateDotStamp: 'AnnotationCreateDotStamp',
     insertPage: 'InsertPage',
 
     // iOS only.
