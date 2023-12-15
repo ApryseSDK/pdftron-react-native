@@ -972,6 +972,15 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
+            else if([string isEqualToString:PTAnnotationCreateCheckMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateCrossMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateDotStampKey]) {
+                // TODO
+            }
         }
     }
     if([addPagesItems count] == 0){
