@@ -972,6 +972,15 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
+            else if([string isEqualToString:PTAnnotationCreateCheckMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateCrossMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateDotStampKey]) {
+                // TODO
+            }
         }
     }
     if([addPagesItems count] == 0){
@@ -1130,6 +1139,15 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         toolClass = [PTDateTextCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
+        toolClass = [PTCheckMarkStampCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
+        toolClass = [PTCrossMarkStampCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateDotStampKey] ) {
+        toolClass = [PTDotStampCreate class];
     }
     
     if (toolClass) {
@@ -5852,6 +5870,15 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         return [PTDateTextCreate class];
     }
+    else if ( [key isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
+        return [PTCheckMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
+        return [PTCrossMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTAnnotationCreateDotStampKey] ) {
+        return [PTDotStampCreate class];
+    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
@@ -5983,6 +6010,15 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTRadioButtonCreate class]) {
         return PTFormCreateRadioFieldToolKey;
+    }
+    else if (toolClass == [PTCheckMarkStampCreate class]) {
+        return PTAnnotationCreateCheckMarkStampKey;
+    }
+    else if (toolClass == [PTCrossMarkStampCreate class]) {
+        return PTAnnotationCreateCrossMarkStampKey;
+    }
+    else if (toolClass == [PTDotStampCreate class]) {
+        return PTAnnotationCreateDotStampKey;
     }
     
     if (@available(iOS 13.1, *)) {
