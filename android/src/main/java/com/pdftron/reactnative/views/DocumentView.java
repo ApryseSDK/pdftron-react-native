@@ -78,6 +78,7 @@ import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.RubberStampCreate;
 import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
@@ -138,6 +139,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ViewerConfig.Builder mBuilder;
 
     private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
+    private ArrayList<ToolbarButtonType> mDisabledButtonTypes = new ArrayList<>(); // used to disabled button types that are with specific a with explicit tool type (e.g. checkmark, dot, cross stamps)
 
     private String mExportPath;
     private String mOpenUrlPath;
@@ -1224,6 +1226,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
+            } else { // if there is no tool associated, then disable the button type instead
+                ToolbarButtonType buttonType = convStringToToolbarType(item);
+                mDisabledButtonTypes.add(buttonType);
             }
         }
     }
@@ -1308,6 +1313,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP;
         }
         return annotType;
     }
@@ -1393,6 +1404,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 break;
             case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_DOT_STAMP;
                 break;
             default:
                 annotString = "";
@@ -1514,6 +1534,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             mode = ToolManager.ToolMode.FREE_TEXT_DATE_CREATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
         }
         return mode;
     }
@@ -1742,6 +1768,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.DATE.value();
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CHECKMARK.value();
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CROSS.value();
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.DOT.value();
         }
         return buttonId;
     }
@@ -1903,6 +1935,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonType = ToolbarButtonType.DATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.CHECKMARK;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.CROSS;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.DOT;
         }
         return buttonType;
     }
@@ -3064,6 +3102,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
         }
 
+        if (!mDisabledButtonTypes.isEmpty()) {
+            for (ToolbarButtonType disabledButtonType : mDisabledButtonTypes) {
+                mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(disabledButtonType, false);
+            }
+        }
+
         if (!mCollabEnabled && getToolManager() != null) {
             getToolManager().setStickyNoteShowPopup(!isOverrideAction(KEY_CONFIG_STICKY_NOTE_SHOW_POP_UP));
         }
@@ -3974,9 +4018,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setToolMode(String item) {
         if (getToolManager() != null) {
             ToolManager.ToolMode mode = convStringToToolMode(item);
+            ToolbarButtonType buttonType = convStringToToolbarType(item);
+
             Tool tool = (Tool) getToolManager().createTool(mode, null);
             boolean continuousAnnot = PdfViewCtrlSettingsManager.getContinuousAnnotationEdit(getContext());
             tool.setForceSameNextToolMode(continuousAnnot);
+            if (buttonType != null && mode == ToolManager.ToolMode.RUBBER_STAMPER && tool instanceof RubberStampCreate) { // check whether dot, checkmark, or cross
+                RubberStampCreate rubberStampCreateTool = (RubberStampCreate) tool;
+                switch (buttonType) {
+                    case DOT:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sDOT_LABEL);
+                        break;
+                    case CROSS:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sCROSS_LABEL);
+                        break;
+                    case CHECKMARK:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sCHECK_MARK_LABEL);
+                        break;
+                }
+            }
+
             getToolManager().setTool(tool);
         }
     }
