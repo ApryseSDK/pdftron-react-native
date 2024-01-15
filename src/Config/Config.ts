@@ -92,6 +92,7 @@ export const Config = {
     annotationCreateDistanceMeasurement: 'AnnotationCreateDistanceMeasurement',
     annotationCreatePerimeterMeasurement: 'AnnotationCreatePerimeterMeasurement',
     annotationCreateAreaMeasurement: 'AnnotationCreateAreaMeasurement',
+    annotationCreateRectAreaMeasurement: 'AnnotationCreateRectAreaMeasurement',
     annotationCreateFileAttachment: 'AnnotationCreateFileAttachment',
     annotationCreateSound: 'AnnotationCreateSound',
     annotationCreateRedaction: 'AnnotationCreateRedaction',
