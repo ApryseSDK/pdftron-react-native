@@ -1276,6 +1276,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_PERIMETER_MEASURE;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_AREA_MEASURE;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_RECT_AREA_MEASURE;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             annotType = Annot.e_FileAttachment;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1490,6 +1492,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.PERIMETER_MEASURE_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            mode = ToolManager.ToolMode.RECT_AREA_MEASURE_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1730,6 +1734,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.PERIMETER.value();
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.AREA.value();
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RECT_AREA.value();
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.ATTACHMENT.value();
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1897,6 +1903,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.PERIMETER;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             buttonType = ToolbarButtonType.AREA;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.RECT_AREA;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             buttonType = ToolbarButtonType.ATTACHMENT;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
