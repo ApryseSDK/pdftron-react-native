@@ -4404,6 +4404,12 @@ NS_ASSUME_NONNULL_END
     }
 
     PTTool *tool = self.currentDocumentViewController.toolManager.tool;
+
+    if([tool isKindOfClass:[PTDigitalSignatureTool class]]){
+        [(PTDigitalSignatureTool *)tool showSignatureList];
+        return;
+    }
+
     if ([tool isKindOfClass:[PTCreateToolBase class]]) {
         PTCreateToolBase *createTool = (PTCreateToolBase *)tool;
         if ([createTool isUndoManagerEnabled]) {
@@ -5878,6 +5884,9 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [key isEqualToString:PTAnnotationCreateDotStampKey] ) {
         return [PTDotStampCreate class];
+    }
+    else if (toolClass == [RNTPTDigitalSignatureTool class]) {
+        return PTAnnotationCreateSignatureToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
