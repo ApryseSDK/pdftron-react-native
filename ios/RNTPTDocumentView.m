@@ -5885,9 +5885,6 @@ NS_ASSUME_NONNULL_END
     else if ( [key isEqualToString:PTAnnotationCreateDotStampKey] ) {
         return [PTDotStampCreate class];
     }
-    else if (toolClass == [RNTPTDigitalSignatureTool class]) {
-        return PTAnnotationCreateSignatureToolKey;
-    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
@@ -6028,6 +6025,9 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTDotStampCreate class]) {
         return PTAnnotationCreateDotStampKey;
+    }
+    else if (toolClass == [RNTPTDigitalSignatureTool class]) {
+        return PTAnnotationCreateSignatureToolKey;
     }
     
     if (@available(iOS 13.1, *)) {
