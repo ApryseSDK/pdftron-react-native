@@ -64,10 +64,10 @@ dependencies {
 
     implementation 'androidx.fragment:fragment:1.2.1'
 
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     
-    implementation "com.pdftron:pdftron:10.6.0"
-    implementation "com.pdftron:tools:10.6.0"
-    implementation "com.pdftron:collab:10.6.0"
+    implementation "com.pdftron:pdftron:10.7.0"
+    implementation "com.pdftron:tools:10.7.0"
+    implementation "com.pdftron:collab:10.7.0"
 }
