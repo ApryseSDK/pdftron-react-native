@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -2218,7 +2219,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     protected void prepView() {
-        super.prepView();
+        // Create a viewer builder with the specified parameters
+        buildViewer();
+        if (mViewerBuilder == null) {
+            return;
+        }
+
+        Context context = getContext();
+        Activity activity = null;
+        if (context instanceof ThemedReactContext) {
+            activity = ((ThemedReactContext) context).getCurrentActivity();
+        }
+        if (activity instanceof AppCompatActivity) {
+            if (activity.isFinishing() || !((AppCompatActivity) activity).getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                return;
+            }
+        }
+
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOpenAddNewTab(mViewerBuilder.createBundle(getContext()));
+        } else {
+            mPdfViewCtrlTabHostFragment = getViewer();
+            mPdfViewCtrlTabHostFragment.addHostListener(this);
+
+            if (mFragmentManager != null) {
+                mFragmentManager.beginTransaction()
+                        .add(mPdfViewCtrlTabHostFragment, String.valueOf(getId()))
+                        .commitNowAllowingStateLoss();
+
+                View fragmentView = mPdfViewCtrlTabHostFragment.getView();
+                if (fragmentView != null) {
+                    fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
+                    addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                }
+            }
+        }
 
         if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getView() == null) {
             if (mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
@@ -3103,6 +3138,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
             fragment.setReactContext((ReactContext) getContext(), getId());
+        }
+
+        if (getPdfViewCtrl() == null || getToolManager() == null) {
+            return;
         }
 
         // Hide add page annotation toolbar button
