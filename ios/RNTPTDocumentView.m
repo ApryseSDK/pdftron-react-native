@@ -1353,7 +1353,7 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString replace:(BOOL)replace
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
@@ -1369,12 +1369,24 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
-    PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
+    if (self.collaborationManager != nil) {
+        [self.collaborationManager importAnnotationsWithXFDFString:xfdfString];
+        return [self getAnnotationFromXFDF:xfdfString];
+    }
     
-    const BOOL updateSuccess = [annotationManager updateAnnotationsWithXFDFString:xfdfString
-                                                                            error:&error];
-    if (!updateSuccess || error) {
-        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+        if (replace) {
+            [doc FDFUpdate:fdfDoc];
+        } else {
+            [doc FDFMerge:fdfDoc];
+        }
+        [pdfViewCtrl Update:YES];
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to import annotations. %@", error.localizedDescription);
+        return nil;
     }
     
     return [self getAnnotationFromXFDF:xfdfString];
