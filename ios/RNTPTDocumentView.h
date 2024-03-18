@@ -572,7 +572,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
-- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString;
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString replace:(BOOL)replace;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 

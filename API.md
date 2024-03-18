@@ -2580,7 +2580,7 @@ Parameters:
 Name | Type | Description
 --- | --- | ---
 xfdf | string | annotation string in XFDF format for import
-replace | boolean | whether to replace existing form and annotation data with those imported from the XFDF string (Android only) 
+replace | boolean | whether to replace existing form and annotation data with those imported from the XFDF string
 
 Returns a Promise.
 Promise Parameters:
