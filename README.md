@@ -36,7 +36,7 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
 
 ## Pre-Java 17
 
-Version `3.0.4-0` is the last stable release for pre-Java 17.
+Version `3.0.3-38` is the last stable release for pre-Java 17.
 
 The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/pre-java17.
 
