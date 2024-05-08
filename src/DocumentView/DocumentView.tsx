@@ -948,7 +948,7 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   setColorPostProcessMode = (colorPostProcessMode: Config.ColorPostProcessMode): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
-      DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
+      return DocumentViewManager.setColorPostProcessMode(tag, colorPostProcessMode);
     }
     return Promise.resolve();
   }

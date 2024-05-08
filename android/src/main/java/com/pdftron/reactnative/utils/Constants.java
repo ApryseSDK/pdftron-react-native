@@ -137,6 +137,9 @@ public final class Constants {
     public static final String TOOL_ANNOTATION_CREATE_FREE_SPACING_TEXT = "AnnotationCreateFreeSpacingText";
     public static final String TOOL_INSERT_PAGE = "InsertPage";
     public static final String TOOL_FORM_FILL = "FormFill";
+    public static final String TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP = "AnnotationCreateCheckMarkStamp";
+    public static final String TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP = "AnnotationCreateCrossMarkStamp";
+    public static final String TOOL_ANNOTATION_CREATE_DOT_STAMP = "AnnotationCreateDotStamp";
     public static final String TOOL_COUNT_TOOL = "AnnotationCountTool";
 
     // Field types

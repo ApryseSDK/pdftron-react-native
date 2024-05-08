@@ -34,6 +34,12 @@ Version `2.0.2` is the last stable release for the legacy UI.
 
 The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/legacy-ui.
 
+## Pre-Java 17
+
+Version `3.0.3-38` is the last stable release for pre-Java 17.
+
+The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/pre-java17.
+
 ## Installation
 
 1. First, follow the official getting started guide on [setting up the React Native environment](https://reactnative.dev/docs/environment-setup), [setting up the iOS and Android environment](https://reactnative.dev/docs/environment-setup), and [creating a React Native project](https://reactnative.dev/docs/environment-setup). The following steps will assume your app is created through `react-native init MyApp`. This guide also applies if you are using the [TypeScript template](https://reactnative.dev/docs/environment-setup#optional-using-a-specific-version-or-template).

@@ -101,7 +101,10 @@ static NSString * const PTFormCreateRadioFieldToolKey = @"FormCreateRadioField";
 static NSString * const PTFormCreateComboBoxFieldToolKey = @"FormCreateComboBoxField";
 static NSString * const PTFormCreateListBoxFieldToolKey = @"FormCreateListBoxField";
 static NSString * const PTInsertPageToolKey = @"InsertPage";
-static NSString *const PTFormFillToolKey = @"FormFill";
+static NSString * const PTFormFillToolKey = @"FormFill";
+static NSString * const PTAnnotationCreateCheckMarkStampKey = @"AnnotationCreateCheckMarkStamp";
+static NSString * const PTAnnotationCreateCrossMarkStampKey = @"AnnotationCreateCrossMarkStamp";
+static NSString * const PTAnnotationCreateDotStampKey = @"AnnotationCreateDotStamp";
 
 static NSString * const PTHiddenAnnotationFlagKey = @"hidden";
 static NSString * const PTInvisibleAnnotationFlagKey = @"invisible";
@@ -569,7 +572,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (nullable NSString *)exportAnnotationsWithOptions:(NSDictionary *)options;
 
-- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString;
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString replace:(BOOL)replace;
 
 - (void)flattenAnnotations:(BOOL)formsOnly;
 

@@ -972,6 +972,15 @@ NS_ASSUME_NONNULL_END
             else if([string isEqualToString:PTInsertFromDocumentButton]){
                 [addPagesItems removeObject:documentViewController.addPagesViewController.addDocumentPagesButtonItem];
             }
+            else if([string isEqualToString:PTAnnotationCreateCheckMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateCrossMarkStampKey]) {
+                // TODO
+            }
+            else if([string isEqualToString:PTAnnotationCreateDotStampKey]) {
+                // TODO
+            }
         }
     }
     if([addPagesItems count] == 0){
@@ -1130,6 +1139,15 @@ NS_ASSUME_NONNULL_END
     }
     else if ( [toolMode isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         toolClass = [PTDateTextCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
+        toolClass = [PTCheckMarkStampCreate class];
+    } 
+    else if ( [toolMode isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
+        toolClass = [PTCrossMarkStampCreate class];
+    }
+    else if ( [toolMode isEqualToString:PTAnnotationCreateDotStampKey] ) {
+        toolClass = [PTDotStampCreate class];
     }
     
     if (toolClass) {
@@ -1335,7 +1353,7 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 
-- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString
+- (nullable NSArray<NSDictionary *> *)importAnnotations:(NSString *)xfdfString replace:(BOOL)replace
 {
     PTDocumentBaseViewController *documentViewController = self.currentDocumentViewController;
     PTPDFViewCtrl *pdfViewCtrl = documentViewController.pdfViewCtrl;
@@ -1351,12 +1369,24 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     
-    PTAnnotationManager * const annotationManager = documentViewController.toolManager.annotationManager;
+    if (self.collaborationManager != nil) {
+        [self.collaborationManager importAnnotationsWithXFDFString:xfdfString];
+        return [self getAnnotationFromXFDF:xfdfString];
+    }
     
-    const BOOL updateSuccess = [annotationManager updateAnnotationsWithXFDFString:xfdfString
-                                                                            error:&error];
-    if (!updateSuccess || error) {
-        @throw [NSException exceptionWithName:NSGenericException reason:error.localizedFailureReason userInfo:error.userInfo];
+    [pdfViewCtrl DocLock:YES withBlock:^(PTPDFDoc * _Nullable doc) {
+        PTFDFDoc *fdfDoc = [PTFDFDoc CreateFromXFDF:xfdfString];
+        if (replace) {
+            [doc FDFUpdate:fdfDoc];
+        } else {
+            [doc FDFMerge:fdfDoc];
+        }
+        [pdfViewCtrl Update:YES];
+    } error:&error];
+    
+    if (error) {
+        NSLog(@"Error: There was an error while trying to import annotations. %@", error.localizedDescription);
+        return nil;
     }
     
     return [self getAnnotationFromXFDF:xfdfString];
@@ -5852,6 +5882,15 @@ NS_ASSUME_NONNULL_END
     else if ([key isEqualToString:PTAnnotationCreateFreeTextDateToolKey]) {
         return [PTDateTextCreate class];
     }
+    else if ( [key isEqualToString:PTAnnotationCreateCheckMarkStampKey] ) {
+        return [PTCheckMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTAnnotationCreateCrossMarkStampKey] ) {
+        return [PTCrossMarkStampCreate class];
+    }
+    else if ( [key isEqualToString:PTAnnotationCreateDotStampKey] ) {
+        return [PTDotStampCreate class];
+    }
     
     if (@available(iOS 13.1, *)) {
         if ([key isEqualToString:PTPencilKitDrawingToolKey]) {
@@ -5983,6 +6022,15 @@ NS_ASSUME_NONNULL_END
     }
     else if (toolClass == [PTRadioButtonCreate class]) {
         return PTFormCreateRadioFieldToolKey;
+    }
+    else if (toolClass == [PTCheckMarkStampCreate class]) {
+        return PTAnnotationCreateCheckMarkStampKey;
+    }
+    else if (toolClass == [PTCrossMarkStampCreate class]) {
+        return PTAnnotationCreateCrossMarkStampKey;
+    }
+    else if (toolClass == [PTDotStampCreate class]) {
+        return PTAnnotationCreateDotStampKey;
     }
     
     if (@available(iOS 13.1, *)) {
