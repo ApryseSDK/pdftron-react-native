@@ -264,6 +264,8 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
+    implementation project(':react-native-screens')
+
     implementation "androidx.multidex:multidex:2.0.1"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
