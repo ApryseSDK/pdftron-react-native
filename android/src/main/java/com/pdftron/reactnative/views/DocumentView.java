@@ -123,6 +123,10 @@ import static com.pdftron.reactnative.utils.Constants.*;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
+   private int mFontSize;
+   private ReadableArray mSignatureArrayUrl;
+
+
     private static final String TAG = DocumentView.class.getSimpleName();
 
     private String mDocumentPath;
@@ -212,6 +216,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 }
             };
     private ArrayList<ThumbnailsViewFragment.ThumbnailsViewEditOptions> mThumbnailViewItems = new ArrayList<>();
+
 
     public DocumentView(Context context) {
         super(context);
@@ -317,6 +322,33 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
     }
+
+   public String getStyleId() {
+       return DefaultToolbars.TAG_ANNOTATE_TOOLBAR + String.valueOf(ToolbarButtonType.FREE_TEXT.getValue()) + String.valueOf(DefaultToolbars.ButtonId.FREE_TEXT.value());
+   }
+
+
+   public void updatePresetTextSize(int textSize) {
+       // Get the first preset style
+       AnnotStyle annotStylePreset = ToolStyleConfig.getInstance().getAnnotPresetStyle(getContext(), Annot.e_FreeText, 0, getStyleId());
+       annotStylePreset.setTextSize(textSize);
+       annotStylePreset.setStrokeColor(Color.TRANSPARENT);
+       // Save the preset style
+       PdfViewCtrlSettingsManager.setAnnotStylePreset(getContext(), Annot.e_FreeText, 0, getStyleId(), annotStylePreset.toJSONString());
+   }
+
+
+
+   public void setFontSize(int fontSize) {
+       mFontSize = fontSize;
+        updatePresetTextSize(fontSize);
+   }
+
+
+   public void setSignatureArrayUrl(ReadableArray array) {
+       mSignatureArrayUrl = array;
+   }
+
 
     public void setDocument(String path) {
         if (Utils.isNullOrEmpty(path)) {
@@ -3133,6 +3165,51 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Override
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
+
+
+           // set default signature 
+           Thread thread = new Thread(new Runnable() {
+           @Override
+           public void run() {
+
+
+               try { 
+                   File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext()); 
+                   for (File signature : savedSignatures) { 
+                       StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath()); 
+                   } 
+              
+                   for (int i = 0; i < mSignatureArrayUrl.size(); i++) { 
+                       URL url = new URL(mSignatureArrayUrl.getString(i)); 
+                       HttpURLConnection connection = (HttpURLConnection) url.openConnection(); 
+                       connection.setDoInput(true); 
+                       connection.connect(); 
+                       InputStream input = connection.getInputStream(); 
+                       Bitmap bitmap = BitmapFactory.decodeStream(input); 
+                       File directory = getContext().getFilesDir(); 
+                       String filename = "signaturefilename" + i + ".jpg"; 
+                       File file = new File(directory, filename); 
+              
+                       FileOutputStream fOut = new FileOutputStream(file); 
+                       bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut); 
+                       fOut.flush(); 
+                       fOut.close();                 
+              
+                       StampManager.getInstance().setDefaultSignatureFile(file.getAbsolutePath()); 
+                       Uri imageUri = Uri.fromFile(file); 
+                       StampManager.getInstance().createSignatureFromImage(getContext(),imageUri,0); 
+                   } 
+               } catch (Exception e) { 
+                   e.printStackTrace(); 
+               } 
+
+
+           }
+       });
+
+
+       thread.start();
+
 
         // set react context
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {

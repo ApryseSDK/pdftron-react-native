@@ -426,6 +426,10 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL autoSaveEnabled;
 @property (nonatomic, assign) BOOL enableAntialiasing;
 
+
+@property (nonatomic) int fontSize; 
+@property (nonatomic, copy, nullable) NSArray<NSString *> *signatureArrayUrl;
+
 // Hygen Generated Props
 @property (nonatomic, copy, nullable) NSString* forceAppTheme;
 @property (nonatomic, copy, nullable) NSArray<NSDictionary *> *signatureColors;

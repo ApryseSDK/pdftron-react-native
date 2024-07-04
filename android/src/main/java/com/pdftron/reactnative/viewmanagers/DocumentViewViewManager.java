@@ -56,6 +56,18 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
         return documentView;
     }
 
+
+    @ReactProp(name = "fontSize")
+    public void setFontSize(DocumentView documentView, int fontSize) {
+       documentView.setFontSize(fontSize);
+    }
+
+    @ReactProp(name = "signatureArrayUrl")
+    public void setSignatureArrayUrl(DocumentView documentView, @NonNull ReadableArray array) {
+        documentView.setSignatureArrayUrl(array);
+    }
+
+
     @ReactProp(name = "document")
     public void setDocument(DocumentView documentView, @NonNull String filepath) {
         documentView.setDocument(filepath);

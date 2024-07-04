@@ -27,6 +27,25 @@ RCT_EXPORT_MODULE(RNTPTDocumentView)
 
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 
+
+RCT_CUSTOM_VIEW_PROPERTY(fontSize, int, RNTPTDocumentView)
+{
+   if (json) {
+       view.fontSize = [RCTConvert int:json];
+   }   
+}
+
+
+RCT_CUSTOM_VIEW_PROPERTY(signatureArrayUrl, NSArray, RNTPTDocumentView)
+{
+   if (json) {
+       NSArray *signatureArrayUrl = [RCTConvert NSArray:json];
+       view.signatureArrayUrl = signatureArrayUrl;
+   }
+}
+
+
+
 RCT_CUSTOM_VIEW_PROPERTY(document, NSString, RNTPTDocumentView)
 {
     if (json && [RCTConvert NSString:json]) {
