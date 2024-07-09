@@ -108,6 +108,16 @@ import com.pdftron.reactnative.utils.DownloadFileCallback;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
+import com.pdftron.pdf.config.ToolStyleConfig;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 
