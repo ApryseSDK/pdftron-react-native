@@ -108,6 +108,16 @@ import com.pdftron.reactnative.utils.DownloadFileCallback;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
+import com.pdftron.pdf.config.ToolStyleConfig;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 
@@ -332,25 +342,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
-   public String getStyleId() {
-       return DefaultToolbars.TAG_ANNOTATE_TOOLBAR + String.valueOf(ToolbarButtonType.FREE_TEXT.getValue()) + String.valueOf(DefaultToolbars.ButtonId.FREE_TEXT.value());
-   }
+    public String getStyleId(String toolbarTag, ToolbarButtonType buttonType) {  
+        return toolbarTag + String.valueOf(buttonType.getValue()) + String.valueOf(DefaultToolbars.ButtonId.FREE_TEXT.value());  
+    }  
 
 
-   public void updatePresetTextSize(int textSize) {
-       // Get the first preset style
-       AnnotStyle annotStylePreset = ToolStyleConfig.getInstance().getAnnotPresetStyle(getContext(), Annot.e_FreeText, 0, getStyleId());
-       annotStylePreset.setTextSize(textSize);
-       annotStylePreset.setStrokeColor(Color.TRANSPARENT);
-       // Save the preset style
-       PdfViewCtrlSettingsManager.setAnnotStylePreset(getContext(), Annot.e_FreeText, 0, getStyleId(), annotStylePreset.toJSONString());
-   }
-
+    public void updatePresetTextSize(int textSize, String toolbarTag, ToolbarButtonType buttonType) {  
+        // Get the first preset style  
+        AnnotStyle annotStylePreset = ToolStyleConfig.getInstance().getAnnotPresetStyle(getContext(), buttonType.getValue(), 0, getStyleId(toolbarTag, buttonType));  
+        annotStylePreset.setTextSize(textSize);  
+        annotStylePreset.setStrokeColor(Color.TRANSPARENT);  
+        // Save the preset style  
+        PdfViewCtrlSettingsManager.setAnnotStylePreset(getContext(), buttonType.getValue(), 0, getStyleId(toolbarTag, buttonType), annotStylePreset.toJSONString());  
+    }          
 
 
    public void setFontSize(int fontSize) {
        mFontSize = fontSize;
-        updatePresetTextSize(fontSize);
+        
+        updatePresetTextSize(fontSize, DefaultToolbars.TAG_ANNOTATE_TOOLBAR, ToolbarButtonType.FREE_TEXT);  
+        updatePresetTextSize(fontSize, DefaultToolbars.TAG_FILL_AND_SIGN_TOOLBAR, ToolbarButtonType.FREE_TEXT);           
    }
 
 
