@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -78,6 +79,7 @@ import com.pdftron.pdf.tools.FreehandCreate;
 import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
+import com.pdftron.pdf.tools.RubberStampCreate;
 import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
@@ -138,6 +140,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ViewerConfig.Builder mBuilder;
 
     private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
+    private ArrayList<ToolbarButtonType> mDisabledButtonTypes = new ArrayList<>(); // used to disabled button types that are with specific a with explicit tool type (e.g. checkmark, dot, cross stamps)
 
     private String mExportPath;
     private String mOpenUrlPath;
@@ -232,9 +235,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {
             @Override
             public boolean canShowToast(int res, @Nullable CharSequence charSequence) {
-                if (res == R.string.download_finished_message ||
-                        res == R.string.document_saved_toast_message ||
-                        res == R.string.download_failed_message) {
+                if (res == com.pdftron.pdf.tools.R.string.download_finished_message ||
+                        res == com.pdftron.pdf.tools.R.string.document_saved_toast_message ||
+                        res == com.pdftron.pdf.tools.R.string.download_failed_message) {
                     return false;
                 }
                 return true;
@@ -407,17 +410,17 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             String item = bottomToolbarItems.getString(i);
 
             if (BUTTON_THUMBNAILS.equals(item)) {
-                customBottomBar.addCustomButton(R.string.pref_viewmode_thumbnails, R.drawable.ic_thumbnails_grid_black_24dp, R.id.action_thumbnails);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.pref_viewmode_thumbnails, com.pdftron.pdf.tools.R.drawable.ic_thumbnails_grid_black_24dp, com.pdftron.pdf.tools.R.id.action_thumbnails);
             } else if (BUTTON_LISTS.equals(item)) {
-                customBottomBar.addCustomButton(R.string.action_outline, R.drawable.ic_outline_white_24dp, R.id.action_outline);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.action_outline, com.pdftron.pdf.tools.R.drawable.ic_outline_white_24dp, com.pdftron.pdf.tools.R.id.action_outline);
             } else if (BUTTON_SHARE.equals(item)) {
-                customBottomBar.addCustomButton(R.string.action_file_share, R.drawable.ic_share_black_24dp, R.id.action_share);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.action_file_share, com.pdftron.pdf.tools.R.drawable.ic_share_black_24dp, com.pdftron.pdf.tools.R.id.action_share);
             } else if (BUTTON_VIEW_CONTROLS.equals(item)) {
-                customBottomBar.addCustomButton(R.string.action_view_mode, R.drawable.ic_viewing_mode_white_24dp, R.id.action_viewmode);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.action_view_mode, com.pdftron.pdf.tools.R.drawable.ic_viewing_mode_white_24dp, com.pdftron.pdf.tools.R.id.action_viewmode);
             } else if (BUTTON_SEARCH.equals(item)) {
-                customBottomBar.addCustomButton(R.string.action_search, R.drawable.ic_search_white_24dp, R.id.action_search);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.action_search, com.pdftron.pdf.tools.R.drawable.ic_search_white_24dp, com.pdftron.pdf.tools.R.id.action_search);
             } else if (BUTTON_REFLOW.equals(item)) {
-                customBottomBar.addCustomButton(R.string.pref_viewmode_reflow, R.drawable.ic_view_mode_reflow_black_24dp, R.id.action_reflow_mode);
+                customBottomBar.addCustomButton(com.pdftron.pdf.tools.R.string.pref_viewmode_reflow, com.pdftron.pdf.tools.R.drawable.ic_view_mode_reflow_black_24dp, com.pdftron.pdf.tools.R.id.action_reflow_mode);
             }
         }
 
@@ -1190,15 +1193,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             } else if (BUTTON_CROP_PAGE.equals(item)) {
                 mViewModePickerItems.add(ViewModePickerDialogFragment.ViewModePickerItems.ITEM_ID_USERCROP);
             } else if (BUTTON_SAVE_IDENTICAL_COPY.equals(item)) {
-                saveCopyOptions.add(R.id.menu_export_copy);
+                saveCopyOptions.add(com.pdftron.pdf.tools.R.id.menu_export_copy);
             } else if (BUTTON_SAVE_FLATTENED_COPY.equals(item)) {
-                saveCopyOptions.add(R.id.menu_export_flattened_copy);
+                saveCopyOptions.add(com.pdftron.pdf.tools.R.id.menu_export_flattened_copy);
             } else if (BUTTON_SAVE_REDUCED_COPY.equals(item)) {
-                saveCopyOptions.add(R.id.menu_export_optimized_copy);
+                saveCopyOptions.add(com.pdftron.pdf.tools.R.id.menu_export_optimized_copy);
             } else if (BUTTON_SAVE_CROPPED_COPY.equals(item)) {
-                saveCopyOptions.add(R.id.menu_export_cropped_copy);
+                saveCopyOptions.add(com.pdftron.pdf.tools.R.id.menu_export_cropped_copy);
             } else if (BUTTON_SAVE_PASSWORD_COPY.equals(item)) {
-                saveCopyOptions.add(R.id.menu_export_password_copy);
+                saveCopyOptions.add(com.pdftron.pdf.tools.R.id.menu_export_password_copy);
             }
         }
 
@@ -1224,6 +1227,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             ToolManager.ToolMode mode = convStringToToolMode(item);
             if (mode != null) {
                 mDisabledTools.add(mode);
+            } else { // if there is no tool associated, then disable the button type instead
+                ToolbarButtonType buttonType = convStringToToolbarType(item);
+                mDisabledButtonTypes.add(buttonType);
             }
         }
     }
@@ -1271,6 +1277,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_PERIMETER_MEASURE;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_AREA_MEASURE;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_RECT_AREA_MEASURE;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             annotType = Annot.e_FileAttachment;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1308,6 +1316,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP;
         }
         return annotType;
     }
@@ -1394,6 +1408,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             case AnnotStyle.CUSTOM_ANNOT_TYPE_FREE_TEXT_DATE:
                 annotString = TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE;
                 break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CHECKMARK_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP;
+                break;
+            case AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP:
+                annotString = TOOL_ANNOTATION_CREATE_DOT_STAMP;
+                break;
             default:
                 annotString = "";
                 break;
@@ -1470,6 +1493,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.PERIMETER_MEASURE_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             mode = ToolManager.ToolMode.AREA_MEASURE_CREATE;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            mode = ToolManager.ToolMode.RECT_AREA_MEASURE_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             mode = ToolManager.ToolMode.FILE_ATTACHMENT_CREATE;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1514,6 +1539,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mode = ToolManager.ToolMode.COUNT_MEASUREMENT;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             mode = ToolManager.ToolMode.FREE_TEXT_DATE_CREATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            mode = ToolManager.ToolMode.RUBBER_STAMPER;
         }
         return mode;
     }
@@ -1704,6 +1735,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.PERIMETER.value();
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.AREA.value();
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.RECT_AREA.value();
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.ATTACHMENT.value();
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1742,6 +1775,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonId = DefaultToolbars.ButtonId.CUSTOMIZE.value();
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonId = DefaultToolbars.ButtonId.DATE.value();
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CHECKMARK.value();
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.CROSS.value();
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            buttonId = DefaultToolbars.ButtonId.DOT.value();
         }
         return buttonId;
     }
@@ -1785,35 +1824,35 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Nullable
     private String convItemIdToString(int id) {
         String buttonId = null;
-        if (id == R.id.action_tabs) {
+        if (id == com.pdftron.pdf.tools.R.id.action_tabs) {
             buttonId = BUTTON_TABS;
-        } else if (id == R.id.action_search) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_search) {
             buttonId = BUTTON_SEARCH;
-        } else if (id == R.id.action_viewmode) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_viewmode) {
             buttonId = BUTTON_VIEW_CONTROLS;
-        } else if (id == R.id.action_thumbnails) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_thumbnails) {
             buttonId = BUTTON_THUMBNAILS;
-        } else if (id == R.id.action_outline) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_outline) {
             buttonId = BUTTON_OUTLINE_LIST;
-        } else if (id == R.id.undo) {
+        } else if (id == com.pdftron.pdf.tools.R.id.undo) {
             buttonId = BUTTON_UNDO;
-        } else if (id == R.id.action_share) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_share) {
             buttonId = BUTTON_SHARE;
-        } else if (id == R.id.action_reflow_mode) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_reflow_mode) {
             buttonId = BUTTON_REFLOW;
-        } else if (id == R.id.action_editpages) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_editpages) {
             buttonId = BUTTON_EDIT_PAGES;
-        } else if (id == R.id.action_export_options) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_export_options) {
             buttonId = BUTTON_SAVE_COPY;
-        } else if (id == R.id.action_print) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_print) {
             buttonId = BUTTON_PRINT;
-        } else if (id == R.id.action_file_attachment) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_file_attachment) {
             buttonId = BUTTON_FILE_ATTACHMENT;
-        } else if (id == R.id.action_pdf_layers) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_pdf_layers) {
             buttonId = BUTTON_VIEW_LAYERS;
-        } else if (id == R.id.action_digital_signatures) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_digital_signatures) {
             buttonId = BUTTON_DIGITAL_SIGNATURE;
-        } else if (id == R.id.action_close_tab) {
+        } else if (id == com.pdftron.pdf.tools.R.id.action_close_tab) {
             buttonId = BUTTON_CLOSE;
         }
 
@@ -1865,6 +1904,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.PERIMETER;
         } else if (TOOL_ANNOTATION_CREATE_AREA_MEASUREMENT.equals(item)) {
             buttonType = ToolbarButtonType.AREA;
+        } else if (TOOL_ANNOTATION_CREATE_RECT_AREA_MEASUREMENT.equals(item)) {
+            buttonType = ToolbarButtonType.RECT_AREA;
         } else if (TOOL_ANNOTATION_CREATE_FILE_ATTACHMENT.equals(item)) {
             buttonType = ToolbarButtonType.ATTACHMENT;
         } else if (TOOL_ANNOTATION_CREATE_SOUND.equals(item)) {
@@ -1903,31 +1944,37 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             buttonType = ToolbarButtonType.EDIT_TOOLBAR;
         } else if (TOOL_ANNOTATION_CREATE_FREE_TEXT_DATE.equals(item)) {
             buttonType = ToolbarButtonType.DATE;
+        } else if (TOOL_ANNOTATION_CREATE_CHECK_MARK_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.CHECKMARK;
+        } else if (TOOL_ANNOTATION_CREATE_CROSS_MARK_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.CROSS;
+        } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
+            buttonType = ToolbarButtonType.DOT;
         }
         return buttonType;
     }
 
     private int convStringToToolbarDefaultIconRes(String item) {
         if (TAG_VIEW_TOOLBAR.equals(item)) {
-            return R.drawable.ic_view;
+            return com.pdftron.pdf.tools.R.drawable.ic_view;
         } else if (TAG_ANNOTATE_TOOLBAR.equals(item)) {
-            return R.drawable.ic_annotation_underline_black_24dp;
+            return com.pdftron.pdf.tools.R.drawable.ic_annotation_underline_black_24dp;
         } else if (TAG_DRAW_TOOLBAR.equals(item)) {
-            return R.drawable.ic_pens_and_shapes;
+            return com.pdftron.pdf.tools.R.drawable.ic_pens_and_shapes;
         } else if (TAG_INSERT_TOOLBAR.equals(item)) {
-            return R.drawable.ic_add_image_white;
+            return com.pdftron.pdf.tools.R.drawable.ic_add_image_white;
         } else if (TAG_FILL_AND_SIGN_TOOLBAR.equals(item)) {
-            return R.drawable.ic_fill_and_sign;
+            return com.pdftron.pdf.tools.R.drawable.ic_fill_and_sign;
         } else if (TAG_PREPARE_FORM_TOOLBAR.equals(item)) {
-            return R.drawable.ic_prepare_form;
+            return com.pdftron.pdf.tools.R.drawable.ic_prepare_form;
         } else if (TAG_MEASURE_TOOLBAR.equals(item)) {
-            return R.drawable.ic_annotation_distance_black_24dp;
+            return com.pdftron.pdf.tools.R.drawable.ic_annotation_distance_black_24dp;
         } else if (TAG_PENS_TOOLBAR.equals(item)) {
-            return R.drawable.ic_annotation_freehand_black_24dp;
+            return com.pdftron.pdf.tools.R.drawable.ic_annotation_freehand_black_24dp;
         } else if (TAG_REDACTION_TOOLBAR.equals(item)) {
-            return R.drawable.ic_annotation_redact_black_24dp;
+            return com.pdftron.pdf.tools.R.drawable.ic_annotation_redact_black_24dp;
         } else if (TAG_FAVORITE_TOOLBAR.equals(item)) {
-            return R.drawable.ic_star_white_24dp;
+            return com.pdftron.pdf.tools.R.drawable.ic_star_white_24dp;
         }
         return 0;
     }
@@ -1949,151 +1996,151 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     @Nullable
     private String convQuickMenuIdToString(int id) {
         String menuStr = null;
-        if (id == R.id.qm_appearance) {
+        if (id == com.pdftron.pdf.tools.R.id.qm_appearance) {
             menuStr = MENU_ID_STRING_STYLE;
-        } else if (id == R.id.qm_note) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_note) {
             menuStr = MENU_ID_STRING_NOTE;
-        } else if (id == R.id.qm_copy) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_copy) {
             menuStr = MENU_ID_STRING_COPY;
-        } else if (id == R.id.qm_delete) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_delete) {
             menuStr = MENU_ID_STRING_DELETE;
-        } else if (id == R.id.qm_flatten) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_flatten) {
             menuStr = MENU_ID_STRING_FLATTEN;
-        } else if (id == R.id.qm_duplicate) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_duplicate) {
             menuStr = MENU_ID_STRING_DUPLICATE;
-        } else if (id == R.id.qm_text) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_text) {
             menuStr = MENU_ID_STRING_TEXT;
-        } else if (id == R.id.qm_edit) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_edit) {
             menuStr = MENU_ID_STRING_EDIT_INK;
-        } else if (id == R.id.qm_search) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_search) {
             menuStr = MENU_ID_STRING_SEARCH;
-        } else if (id == R.id.qm_share) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_share) {
             menuStr = MENU_ID_STRING_SHARE;
-        } else if (id == R.id.qm_type) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_type) {
             menuStr = MENU_ID_STRING_MARKUP_TYPE;
-        } else if (id == R.id.qm_screencap_create) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_screencap_create) {
             menuStr = MENU_ID_STRING_SCREEN_CAPTURE;
-        } else if (id == R.id.qm_play_sound) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_play_sound) {
             menuStr = MENU_ID_STRING_PLAY_SOUND;
-        } else if (id == R.id.qm_open_attachment) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_open_attachment) {
             menuStr = MENU_ID_STRING_OPEN_ATTACHMENT;
-        } else if (id == R.id.qm_tts) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_tts) {
             menuStr = MENU_ID_STRING_READ;
-        } else if (id == R.id.qm_calibrate) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_calibrate) {
             menuStr = MENU_ID_STRING_CALIBRATE;
-        } else if (id == R.id.qm_underline) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_underline) {
             menuStr = MENU_ID_STRING_UNDERLINE;
-        } else if (id == R.id.qm_redact) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_redact) {
             menuStr = MENU_ID_STRING_REDACT;
-        } else if (id == R.id.qm_redaction) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_redaction) {
             menuStr = MENU_ID_STRING_REDACTION;
-        } else if (id == R.id.qm_strikeout) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_strikeout) {
             menuStr = MENU_ID_STRING_STRIKEOUT;
-        } else if (id == R.id.qm_squiggly) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_squiggly) {
             menuStr = MENU_ID_STRING_SQUIGGLY;
-        } else if (id == R.id.qm_link) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_link) {
             menuStr = MENU_ID_STRING_LINK;
-        } else if (id == R.id.qm_highlight) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_highlight) {
             menuStr = MENU_ID_STRING_HIGHLIGHT;
-        } else if (id == R.id.qm_floating_sig) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_floating_sig) {
             menuStr = MENU_ID_STRING_SIGNATURE;
-        } else if (id == R.id.qm_rectangle) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_rectangle) {
             menuStr = MENU_ID_STRING_RECTANGLE;
-        } else if (id == R.id.qm_line) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_line) {
             menuStr = MENU_ID_STRING_LINE;
-        } else if (id == R.id.qm_free_hand) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_free_hand) {
             menuStr = MENU_ID_STRING_FREE_HAND;
-        } else if (id == R.id.qm_image_stamper) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_image_stamper) {
             menuStr = MENU_ID_STRING_IMAGE;
-        } else if (id == R.id.qm_form_text) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_text) {
             menuStr = MENU_ID_STRING_FORM_TEXT;
-        } else if (id == R.id.qm_sticky_note) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_sticky_note) {
             menuStr = MENU_ID_STRING_STICKY_NOTE;
-        } else if (id == R.id.qm_overflow) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_overflow) {
             menuStr = MENU_ID_STRING_OVERFLOW;
-        } else if (id == R.id.qm_ink_eraser) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_ink_eraser) {
             menuStr = MENU_ID_STRING_ERASER;
-        } else if (id == R.id.qm_rubber_stamper) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_rubber_stamper) {
             menuStr = MENU_ID_STRING_STAMP;
-        } else if (id == R.id.qm_page_redaction) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_page_redaction) {
             menuStr = MENU_ID_STRING_PAGE_REDACTION;
-        } else if (id == R.id.qm_rect_redaction) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_rect_redaction) {
             menuStr = MENU_ID_STRING_RECT_REDACTION;
-        } else if (id == R.id.qm_search_redaction) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_search_redaction) {
             menuStr = MENU_ID_STRING_SEARCH_REDACTION;
-        } else if (id == R.id.qm_shape) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_shape) {
             menuStr = MENU_ID_STRING_SHAPE;
-        } else if (id == R.id.qm_cloud) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_cloud) {
             menuStr = MENU_ID_STRING_CLOUD;
-        } else if (id == R.id.qm_polygon) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_polygon) {
             menuStr = MENU_ID_STRING_POLYGON;
-        } else if (id == R.id.qm_polyline) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_polyline) {
             menuStr = MENU_ID_STRING_POLYLINE;
-        } else if (id == R.id.qm_free_highlighter) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_free_highlighter) {
             menuStr = MENU_ID_STRING_FREE_HIGHLIGHTER;
-        } else if (id == R.id.qm_arrow) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_arrow) {
             menuStr = MENU_ID_STRING_ARROW;
-        } else if (id == R.id.qm_oval) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_oval) {
             menuStr = MENU_ID_STRING_OVAL;
-        } else if (id == R.id.qm_callout) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_callout) {
             menuStr = MENU_ID_STRING_CALLOUT;
-        } else if (id == R.id.qm_measurement) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_measurement) {
             menuStr = MENU_ID_STRING_MEASUREMENT;
-        } else if (id == R.id.qm_area_measure) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_area_measure) {
             menuStr = MENU_ID_STRING_AREA_MEASUREMENT;
-        } else if (id == R.id.qm_perimeter_measure) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_perimeter_measure) {
             menuStr = MENU_ID_STRING_PERIMETER_MEASUREMENT;
-        } else if (id == R.id.qm_rect_area_measure) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_rect_area_measure) {
             menuStr = MENU_ID_STRING_RECT_AREA_MEASUREMENT;
-        } else if (id == R.id.qm_ruler) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_ruler) {
             menuStr = MENU_ID_STRING_RULER;
-        } else if (id == R.id.qm_form) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form) {
             menuStr = MENU_ID_STRING_FORM;
-        } else if (id == R.id.qm_form_combo_box) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_combo_box) {
             menuStr = MENU_ID_STRING_FORM_COMBO_BOX;
-        } else if (id == R.id.qm_form_list_box) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_list_box) {
             menuStr = MENU_ID_STRING_FORM_LIST_BOX;
-        } else if (id == R.id.qm_form_check_box) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_check_box) {
             menuStr = MENU_ID_STRING_FORM_CHECK_BOX;
-        } else if (id == R.id.qm_form_signature) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_signature) {
             menuStr = MENU_ID_STRING_FORM_SIGNATURE;
-        } else if (id == R.id.qm_form_radio_group) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_form_radio_group) {
             menuStr = MENU_ID_STRING_FORM_RADIO_GROUP;
-        } else if (id == R.id.qm_attach) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_attach) {
             menuStr = MENU_ID_STRING_ATTACH;
-        } else if (id == R.id.qm_file_attachment) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_file_attachment) {
             menuStr = MENU_ID_STRING_FILE_ATTACHMENT;
-        } else if (id == R.id.qm_sound) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_sound) {
             menuStr = MENU_ID_STRING_SOUND;
-        } else if (id == R.id.qm_free_text) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_free_text) {
             menuStr = MENU_ID_STRING_FREE_TEXT;
-        } else if (id == R.id.qm_crop) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_crop) {
             menuStr = MENU_ID_STRING_CROP;
-        } else if (id == R.id.qm_crop_ok) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_crop_ok) {
             menuStr = MENU_ID_STRING_CROP_OK;
-        } else if (id == R.id.qm_crop_cancel) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_crop_cancel) {
             menuStr = MENU_ID_STRING_CROP_CANCEL;
-        } else if (id == R.id.qm_define) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_define) {
             menuStr = MENU_ID_STRING_DEFINE;
-        } else if (id == R.id.qm_field_signed) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_field_signed) {
             menuStr = MENU_ID_STRING_FIELD_SIGNED;
-        } else if (id == R.id.qm_first_row_group) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_first_row_group) {
             menuStr = MENU_ID_STRING_FIRST_ROW_GROUP;
-        } else if (id == R.id.qm_second_row_group) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_second_row_group) {
             menuStr = MENU_ID_STRING_SECOND_ROW_GROUP;
-        } else if (id == R.id.qm_group) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_group) {
             menuStr = MENU_ID_STRING_GROUP;
-        } else if (id == R.id.qm_paste) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_paste) {
             menuStr = MENU_ID_STRING_PASTE;
-        } else if (id == R.id.qm_rect_group_select) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_rect_group_select) {
             menuStr = MENU_ID_STRING_RECT_GROUP_SELECT;
-        } else if (id == R.id.qm_sign_and_save) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_sign_and_save) {
             menuStr = MENU_ID_STRING_SIGN_AND_SAVE;
-        } else if (id == R.id.qm_thickness) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_thickness) {
             menuStr = MENU_ID_STRING_THICKNESS;
-        } else if (id == R.id.qm_translate) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_translate) {
             menuStr = MENU_ID_STRING_TRANSLATE;
-        } else if (id == R.id.qm_ungroup) {
+        } else if (id == com.pdftron.pdf.tools.R.id.qm_ungroup) {
             menuStr = MENU_ID_STRING_UNGROUP;
         }
 
@@ -2172,7 +2219,41 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
     @Override
     protected void prepView() {
-        super.prepView();
+        // Create a viewer builder with the specified parameters
+        buildViewer();
+        if (mViewerBuilder == null) {
+            return;
+        }
+
+        Context context = getContext();
+        Activity activity = null;
+        if (context instanceof ThemedReactContext) {
+            activity = ((ThemedReactContext) context).getCurrentActivity();
+        }
+        if (activity instanceof AppCompatActivity) {
+            if (activity.isFinishing() || !((AppCompatActivity) activity).getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                return;
+            }
+        }
+
+        if (mPdfViewCtrlTabHostFragment != null) {
+            mPdfViewCtrlTabHostFragment.onOpenAddNewTab(mViewerBuilder.createBundle(getContext()));
+        } else {
+            mPdfViewCtrlTabHostFragment = getViewer();
+            mPdfViewCtrlTabHostFragment.addHostListener(this);
+
+            if (mFragmentManager != null) {
+                mFragmentManager.beginTransaction()
+                        .add(mPdfViewCtrlTabHostFragment, String.valueOf(getId()))
+                        .commitNowAllowingStateLoss();
+
+                View fragmentView = mPdfViewCtrlTabHostFragment.getView();
+                if (fragmentView != null) {
+                    fragmentView.clearFocus(); // work around issue where somehow new ui obtains focus
+                    addView(fragmentView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                }
+            }
+        }
 
         if (mPdfViewCtrlTabHostFragment != null && mPdfViewCtrlTabHostFragment.getView() == null) {
             if (mPdfViewCtrlTabHostFragment instanceof RNPdfViewCtrlTabHostFragment) {
@@ -2213,19 +2294,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // since we are using this component as an individual component,
         // we don't want to fit system window, unless user specifies
         if (!mPadStatusBar) {
-            View host = findViewById(R.id.pdfviewctrl_tab_host);
+            View host = findViewById(com.pdftron.pdf.tools.R.id.pdfviewctrl_tab_host);
             if (host != null) {
                 host.setFitsSystemWindows(false);
             }
-            View tabContent = findViewById(R.id.realtabcontent);
+            View tabContent = findViewById(com.pdftron.pdf.tools.R.id.realtabcontent);
             if (tabContent != null) {
                 tabContent.setFitsSystemWindows(false);
             }
-            View appBar = findViewById(R.id.app_bar_layout);
+            View appBar = findViewById(com.pdftron.pdf.tools.R.id.app_bar_layout);
             if (appBar != null) {
                 appBar.setFitsSystemWindows(false);
             }
-            View annotToolbar = findViewById(R.id.annotation_toolbar);
+            View annotToolbar = findViewById(com.pdftron.pdf.tools.R.id.annotation_toolbar);
             if (annotToolbar != null) {
                 annotToolbar.setFitsSystemWindows(false);
             }
@@ -3059,9 +3140,19 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             fragment.setReactContext((ReactContext) getContext(), getId());
         }
 
+        if (getPdfViewCtrl() == null || getToolManager() == null) {
+            return;
+        }
+
         // Hide add page annotation toolbar button
         if (!mShowAddPageToolbarButton) {
             mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(ToolbarButtonType.ADD_PAGE, false);
+        }
+
+        if (!mDisabledButtonTypes.isEmpty()) {
+            for (ToolbarButtonType disabledButtonType : mDisabledButtonTypes) {
+                mPdfViewCtrlTabHostFragment.toolbarButtonVisibility(disabledButtonType, false);
+            }
         }
 
         if (!mCollabEnabled && getToolManager() != null) {
@@ -3203,23 +3294,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         String error = "Unknown error";
         if (getPdfViewCtrlTabFragment() != null) {
-            int messageId = R.string.error_opening_doc_message;
+            int messageId = com.pdftron.pdf.tools.R.string.error_opening_doc_message;
             int errorCode = getPdfViewCtrlTabFragment().getTabErrorCode();
             switch (errorCode) {
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_ZERO_PAGE:
-                    messageId = R.string.error_empty_file_message;
+                    messageId = com.pdftron.pdf.tools.R.string.error_empty_file_message;
                     break;
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_OPENURL_CANCELLED:
-                    messageId = R.string.download_cancelled_message;
+                    messageId = com.pdftron.pdf.tools.R.string.download_cancelled_message;
                     break;
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_WRONG_PASSWORD:
-                    messageId = R.string.password_not_valid_message;
+                    messageId = com.pdftron.pdf.tools.R.string.password_not_valid_message;
                     break;
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_NOT_EXIST:
-                    messageId = R.string.file_does_not_exist_message;
+                    messageId = com.pdftron.pdf.tools.R.string.file_does_not_exist_message;
                     break;
                 case PdfDocManager.DOCUMENT_SETDOC_ERROR_DOWNLOAD_CANCEL:
-                    messageId = R.string.download_size_cancelled_message;
+                    messageId = com.pdftron.pdf.tools.R.string.download_size_cancelled_message;
                     break;
             }
             error = mPdfViewCtrlTabHostFragment.getString(messageId);
@@ -3974,9 +4065,26 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void setToolMode(String item) {
         if (getToolManager() != null) {
             ToolManager.ToolMode mode = convStringToToolMode(item);
+            ToolbarButtonType buttonType = convStringToToolbarType(item);
+
             Tool tool = (Tool) getToolManager().createTool(mode, null);
             boolean continuousAnnot = PdfViewCtrlSettingsManager.getContinuousAnnotationEdit(getContext());
             tool.setForceSameNextToolMode(continuousAnnot);
+            if (buttonType != null && mode == ToolManager.ToolMode.RUBBER_STAMPER && tool instanceof RubberStampCreate) { // check whether dot, checkmark, or cross
+                RubberStampCreate rubberStampCreateTool = (RubberStampCreate) tool;
+                switch (buttonType) {
+                    case DOT:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sDOT_LABEL);
+                        break;
+                    case CROSS:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sCROSS_LABEL);
+                        break;
+                    case CHECKMARK:
+                        rubberStampCreateTool.setStampName(RubberStampCreate.sCHECK_MARK_LABEL);
+                        break;
+                }
+            }
+
             getToolManager().setTool(tool);
         }
     }
@@ -4815,7 +4923,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         if (mPdfViewCtrlTabHostFragment == null || !(currentFragment instanceof RNPdfViewCtrlTabFragment)) {
             return;
         }
-        if (!mPdfViewCtrlTabHostFragment.checkTabConversionAndAlert(R.string.cant_share_while_converting_message, true)) {
+        if (!mPdfViewCtrlTabHostFragment.checkTabConversionAndAlert(com.pdftron.pdf.tools.R.string.cant_share_while_converting_message, true)) {
             currentFragment.save(false, true, true);
             ((RNPdfViewCtrlTabFragment) currentFragment).shareCopy(flattening);
         }

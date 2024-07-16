@@ -107,6 +107,9 @@ export const Config = {
     formCreateComboBoxField: 'FormCreateComboBoxField',
     formCreateListBoxField: 'FormCreateListBoxField',
     formFill: 'FormFill',
+    annotationCreateCheckMarkStamp: 'AnnotationCreateCheckMarkStamp',
+    annotationCreateCrossMarkStamp: 'AnnotationCreateCrossMarkStamp',
+    annotationCreateDotStamp: 'AnnotationCreateDotStamp',
     insertPage: 'InsertPage',
 
     // iOS only.
@@ -114,6 +117,7 @@ export const Config = {
 
     // Android only.
     annotationCreateLinkText: 'AnnotationCreateLinkText',
+    annotationCreateRectAreaMeasurement: 'AnnotationCreateRectAreaMeasurement',
   },
 
   // FitMode define how a page should fit relative to the viewer, alternatively, the default zoom level

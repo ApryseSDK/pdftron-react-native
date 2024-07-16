@@ -67,7 +67,7 @@ jobs:
       - name: Get Latest package.json
         run: |
           git pull origin ${{ github.head_ref }}
-          git checkout -m origin/master package.json
+          git checkout origin/master package.json
 
       - name: Update package.json
         run: node scripts/update_version.js
