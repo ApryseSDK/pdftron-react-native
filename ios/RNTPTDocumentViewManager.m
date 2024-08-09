@@ -35,6 +35,12 @@ RCT_CUSTOM_VIEW_PROPERTY(fontSize, int, RNTPTDocumentView)
    }   
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(hideCreateNewSignatureButton, BOOL, RNTPTDocumentView)
+{
+    view.hideCreateNewSignatureButton = [RCTConvert BOOL:json];
+}
+
+
 
 RCT_CUSTOM_VIEW_PROPERTY(signatureArrayUrl, NSArray, RNTPTDocumentView)
 {

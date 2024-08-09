@@ -428,6 +428,7 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 
 @property (nonatomic) int fontSize; 
+@property (nonatomic, assign) BOOL hideCreateNewSignatureButton;
 @property (nonatomic, copy, nullable) NSArray<NSString *> *signatureArrayUrl;
 
 // Hygen Generated Props

@@ -2081,6 +2081,12 @@ NS_ASSUME_NONNULL_END
    _fontSize = fontSize;
 }
 
+- (BOOL)savedSignaturesControllerShouldHideCreateNewSignatureButton:(nonnull PTSavedSignaturesViewController *)savedSignaturesController
+{
+    return self.hideCreateNewSignatureButton;
+}
+
+
 - (void)setSignatureArrayUrl:(NSArray<NSString *> *)signatureArrayUrl {  
 
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];  
