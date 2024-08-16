@@ -3294,17 +3294,6 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
         getToolManager().setReflowTextSelectionMenuEnabled(mEnableReadingModeQuickMenu);
 
-        // Prevents signature dialog from showing
-        getToolManager().addDialogListener(new ToolManager.DialogListener() {
-        @Override
-        public boolean onInterceptDialog(DialogFragment dialog) {
-        if (dialog instanceof SignatureDialogFragment) {
-            return true;
-        } else {
-            return false;
-        }
-        }});
-
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
