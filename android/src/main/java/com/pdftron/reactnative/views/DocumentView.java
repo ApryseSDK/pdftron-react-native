@@ -137,6 +137,9 @@ import android.graphics.BitmapFactory;
 import java.io.FileOutputStream;
 import com.pdftron.pdf.config.ToolStyleConfig;
 
+import androidx.fragment.app.DialogFragment;
+import com.pdftron.pdf.dialog.signature.SignatureDialogFragment
+
 
 import static com.pdftron.reactnative.utils.Constants.*;
 
@@ -3285,10 +3288,23 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
         getPdfViewCtrl().addTextSearchListener(mTextSearchListener);
 
+        
+
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
         getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
         getToolManager().addToolChangedListener(mToolChangedListener);
+
+        getToolManager().addDialogListener(new ToolManager.DialogListener() {
+        @Override
+        public boolean onInterceptDialog(DialogFragment dialog) {
+            if (dialog instanceof SignatureDialogFragment) {
+                return true;
+            } else {
+                    return false;
+            }
+            
+        }});
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
