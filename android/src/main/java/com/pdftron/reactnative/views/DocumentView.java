@@ -138,7 +138,7 @@ import java.io.FileOutputStream;
 import com.pdftron.pdf.config.ToolStyleConfig;
 
 import androidx.fragment.app.DialogFragment;
-import com.pdftron.pdf.dialog.signature.SignatureDialogFragment
+import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
 
 
 import static com.pdftron.reactnative.utils.Constants.*;
