@@ -253,7 +253,7 @@ NS_ASSUME_NONNULL_END
                      withClass:[RNTPTDigitalSignatureTool class]];
     
     [PTOverrides overrideClass:[PTSavedSignaturesViewController class]
-                     withClass:[CustomSavedSignaturesViewController class]];
+                     withClass:[RNPTSavedSignaturesViewController class]];
 
     _tempFilePaths = [[NSMutableArray alloc] init];
     
