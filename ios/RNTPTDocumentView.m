@@ -24,7 +24,96 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate, PTToolManagerDelegate>
+@interface RNPTSavedSignaturesViewController : PTSavedSignaturesViewController<UITableViewDelegate>
+@end
+
+@implementation RNPTSavedSignaturesViewController
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIViewController *parentViewController = self.parentViewController;
+     
+     // Log the parent view controller class name
+//     NSLog(@"Parent View Controller: %@", NSStringFromClass([parentViewController class]));
+     
+     // Check if there's a parent and log its view hierarchy
+     if (parentViewController) {
+         [self hideAndDisableButtons:parentViewController.view];
+     }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Set the delegate to handle the swipe action for the table view
+    self.tableView.delegate = self;
+}
+
+// Disable swipe actions by returning NO in the UITableViewDelegate method
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Disable swipe-to-delete (editing) for saved signatures cells
+    return NO;
+}
+
+// Recursive method to log all subviews in the view hierarchy
+- (void)hideAndDisableButtons:(UIView *)view {
+    for (UIView *subview in view.subviews) {
+        
+        if ([subview isKindOfClass:[UIToolbar class]]) {
+                    // Log the class of the toolbar
+                    NSLog(@"Found UIToolbar: %@", NSStringFromClass([subview class]));
+                    
+                    // Remove the toolbar from the view
+                    [subview removeFromSuperview];
+                    NSLog(@"Toolbar removed");
+                }
+        
+        
+//        if ([subview isKindOfClass:[UIButton class]]) {
+//            UIButton *button = (UIButton *)subview;
+//            // Try to find a UILabel inside the UIButton to get the text
+//            NSString *buttonLabel = [self findLabelInButton:button];
+//            if (buttonLabel) {
+//                NSLog(@"Button Label: %@", buttonLabel);
+//                
+//                // Check the label text to hide or disable specific buttons
+//                if ([buttonLabel isEqualToString:@"Create New Signature"]  ||
+//                    [buttonLabel isEqualToString:@"Done"] ||
+//                    [buttonLabel isEqualToString:@"Edit"] ||
+//                    [buttonLabel isEqualToString:@"New Signature"]
+//                    ) {
+//                    subview.hidden = YES;  // Hide the button
+//                    subview.userInteractionEnabled = NO;
+//                    button.hidden = YES;  // Hide the button
+//                    button.enabled = NO;  // Disable the button
+//                    button.userInteractionEnabled = NO;
+//                }
+//            }
+//        }else{
+//            NSLog(@"Parent View Controller: %@", NSStringFromClass([subview class]));
+//        }
+        
+        // Recursively call this method for all subviews
+        [self hideAndDisableButtons:subview];
+    }
+}
+
+// Method to find the label inside a UIButton and return its text
+- (NSString *)findLabelInButton:(UIButton *)button {
+    for (UIView *subview in button.subviews) {
+        if ([subview isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)subview;
+            return label.text;  // Return the label text
+        }
+    }
+    return nil;  // No label found
+}
+
+
+@end
+
+@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate, PTToolManagerDelegate, PTSavedSignaturesViewControllerDelegate>
 {
     NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
     NSUInteger _annotationToolbarItemCounter;
@@ -53,6 +142,7 @@ NS_ASSUME_NONNULL_END
 
 
 @interface RNTPTCollaborationService : NSObject<PTCollaborationServerCommunication>
+
 
 @property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
 
@@ -161,6 +251,9 @@ NS_ASSUME_NONNULL_END
     
     [PTOverrides overrideClass:[PTDigitalSignatureTool class]
                      withClass:[RNTPTDigitalSignatureTool class]];
+    
+    [PTOverrides overrideClass:[PTSavedSignaturesViewController class]
+                     withClass:[RNPTSavedSignaturesViewController class]];
 
     _tempFilePaths = [[NSMutableArray alloc] init];
     
@@ -2083,7 +2176,8 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)savedSignaturesControllerShouldHideCreateNewSignatureButton:(nonnull PTSavedSignaturesViewController *)savedSignaturesController
 {
-    return self.hideCreateNewSignatureButton;
+    NSLog(@"123 shouldCreateNewSignature called");  
+    return NO;
 }
 
 
@@ -2116,6 +2210,21 @@ NS_ASSUME_NONNULL_END
         }  
     }  
 }  
+
+// Helper method to hide the "Edit" button
+- (void)hideEditButtonInView:(UIView *)view {
+  for (UIView *subview in view.subviews) {
+    if ([subview isKindOfClass:[UIButton class]]) {
+      UIButton *button = (UIButton *)subview;
+      if ([button.currentTitle isEqualToString:@"Edit"]) {
+        button.hidden = YES; // Hide the "Edit" button
+      }
+    }
+    
+    // Recursively hide in all subviews
+    [self hideEditButtonInView:subview];
+  }
+}
 
 
 - (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
@@ -6493,6 +6602,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - RNTPTDigitalSignatureTool
 
+
 @implementation RNTPTDigitalSignatureTool
 
 - (void)signaturesManagerNumberOfSignaturesDidChange:(PTSignaturesManager *)signaturesManager numberOfSignatures:(int)numberOfSignatures
@@ -6518,6 +6628,11 @@ NS_ASSUME_NONNULL_END
             [viewController.delegate rnt_documentViewControllerSavedSignaturesChanged:viewController];
         }
     }
+}
+
+- (BOOL)shouldCreateNewSignature {
+    NSLog(@"Custom shouldCreateNewSignature called");
+    return NO; // Prevent the creation of new signatures
 }
 
 @end
