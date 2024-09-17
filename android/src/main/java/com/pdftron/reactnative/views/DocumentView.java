@@ -3,13 +3,16 @@ package com.pdftron.reactnative.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +36,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.gson.Gson;
 import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
@@ -80,6 +84,7 @@ import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.RubberStampCreate;
+import com.pdftron.pdf.tools.Signature;
 import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
@@ -124,18 +129,13 @@ import org.json.JSONException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.io.InputStream;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import java.io.FileOutputStream;
-import com.pdftron.pdf.config.ToolStyleConfig;
 
 import androidx.fragment.app.DialogFragment;
 import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
@@ -150,6 +150,10 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
 
     private static final String TAG = DocumentView.class.getSimpleName();
+
+    private static final String APP_PREFERNCES  ="APP_PREFERNCES";
+
+    private static final String SIGNATURE_TAG  ="SIGNATURE_TAG";
 
     private String mDocumentPath;
     private String mTabTitle;
@@ -3189,42 +3193,61 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
-
-           // set default signature 
+        Log.d(TAG, "onTabDocumentLoaded: Started");
+           // set default signature
            Thread thread = new Thread(new Runnable() {
            @Override
            public void run() {
 
 
-               try { 
-                   File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext()); 
-                   for (File signature : savedSignatures) { 
-                       StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath()); 
-                   } 
-              
-                   for (int i = 0; i < mSignatureArrayUrl.size(); i++) { 
-                       URL url = new URL(mSignatureArrayUrl.getString(i)); 
-                       HttpURLConnection connection = (HttpURLConnection) url.openConnection(); 
-                       connection.setDoInput(true); 
-                       connection.connect(); 
-                       InputStream input = connection.getInputStream(); 
-                       Bitmap bitmap = BitmapFactory.decodeStream(input); 
-                       File directory = getContext().getFilesDir(); 
-                       String filename = "signaturefilename" + i + ".jpg"; 
-                       File file = new File(directory, filename); 
-              
-                       FileOutputStream fOut = new FileOutputStream(file); 
-                       bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut); 
-                       fOut.flush(); 
-                       fOut.close();                 
-              
-                       StampManager.getInstance().setDefaultSignatureFile(file.getAbsolutePath()); 
-                       Uri imageUri = Uri.fromFile(file); 
-                       StampManager.getInstance().createSignatureFromImage(getContext(),imageUri,0); 
-                   } 
-               } catch (Exception e) { 
-                   e.printStackTrace(); 
-               } 
+               try {
+
+                   String currentSignatureUrls = convertReadableArrayToString(mSignatureArrayUrl); // Helper method to convert ReadableArray to string
+                   String savedSignatureUrls = getSignatureUrlsFromPreferences(getContext()); // Get saved signature URLs from preferences
+
+                   if (!savedSignatureUrls.equals(currentSignatureUrls)) {
+                       try {
+                           // Save the current mSignatureArrayUrl to SharedPreferences
+                           saveSignatureUrlsToPreferences(getContext(), mSignatureArrayUrl); // Save the updated URLs
+                           // Proceed with your signature processing logic
+                           File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext());
+                           for (File signature : savedSignatures) {
+                               Log.d(TAG, "run: " + signature.getAbsolutePath());
+                               StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath());
+                           }
+
+                           for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
+                               URL url = new URL(mSignatureArrayUrl.getString(i));
+                               Log.d(TAG, "run: " + url.getPath());
+                               HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                               connection.setDoInput(true);
+                               connection.connect();
+                               InputStream input = connection.getInputStream();
+                               Bitmap bitmap = BitmapFactory.decodeStream(input);
+                               File directory = getContext().getFilesDir();
+                               String filename = "signaturefilename" + i + ".jpg";
+                               File file = new File(directory, filename);
+                               FileOutputStream fOut = new FileOutputStream(file);
+                               bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                               fOut.flush();
+                               fOut.close();
+
+                               StampManager.getInstance().setDefaultSignatureFile(file.getAbsolutePath());
+                               Uri imageUri = Uri.fromFile(file);
+                               Log.d(TAG, "onTabDocumentLoaded: Signature Saved");
+                               StampManager.getInstance().createSignatureFromImage(getContext(), imageUri, 0);
+                           }
+
+                       } catch (Exception e) {
+                           e.printStackTrace();
+                       }
+                   } else {
+                       Log.d(TAG, "No changes in signature URLs. Skipping task.");
+                   }
+
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
 
 
            }
@@ -3312,6 +3335,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
 
+
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
         StampManager.getInstance().setSignatureListener(mSignatureListener);
@@ -3378,6 +3402,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
     }
+
 
     @Override
     public void onTabHostShown() {
@@ -5272,5 +5297,43 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 getId(),
                 "topChange",
                 event);
+    }
+
+        private String convertReadableArrayToString(ReadableArray readableArray) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < readableArray.size(); i++) {
+            sb.append(readableArray.getString(i));
+            if (i < readableArray.size() - 1) {
+                sb.append(","); // Separator for each URL
+            }
+        }
+        return sb.toString();
+    }
+
+    // Method to save signature URLs to SharedPreferences
+    private void saveSignatureUrlsToPreferences(Context context, ReadableArray mSignatureArrayUrl) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_PREFERNCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Convert mSignatureArrayUrl (ReadableArray) to a comma-separated string
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
+            sb.append(mSignatureArrayUrl.getString(i));
+            if (i < mSignatureArrayUrl.size() - 1) {
+                sb.append(","); // Separator for each URL
+            }
+        }
+        String currentSignatureUrls = sb.toString();
+
+        // Save the string to SharedPreferences
+        editor.putString(SIGNATURE_TAG, currentSignatureUrls);
+        editor.apply(); // Apply changes
+    }
+
+    // Method to retrieve saved signature URLs from SharedPreferences
+    private String getSignatureUrlsFromPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_PREFERNCES, Context.MODE_PRIVATE);
+        // Return saved signature URLs or empty string if not found
+        return sharedPreferences.getString(SIGNATURE_TAG, "");
     }
 }
