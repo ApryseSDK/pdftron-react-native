@@ -80,6 +80,34 @@ public class RNPdftronModule extends ReactContextBaseJavaModule {
         });
     }
 
+       @ReactMethod
+    public void mergeDocuments(ReadableArray documentsArray, final Promise promise) {
+        try {
+            PDFDoc newDoc = new PDFDoc();
+            newDoc.initSecurityHandler();
+
+            for (int i = 0; i < documentsArray.size(); i++) {
+                String filePath = documentsArray.getString(i);
+                try (PDFDoc inDoc = new PDFDoc(filePath)) {
+                    inDoc.initSecurityHandler();
+                    newDoc.insertPages(newDoc.getPageCount() + 1, inDoc, 1, inDoc.getPageCount(), PDFDoc.InsertBookmarkMode.NONE, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+            }
+
+            File resultFile = File.createTempFile("merged_", ".pdf", getReactApplicationContext().getCacheDir());
+            String resultDocPath = resultFile.getAbsolutePath();
+            newDoc.save(resultDocPath, SDFDoc.SaveMode.REMOVE_UNUSED, null);
+            newDoc.close();
+
+            promise.resolve(resultDocPath);
+        } catch (Exception e) {
+            promise.reject("merging_failed", "Failed to merge documents", e);
+        }
+    }
+
     @ReactMethod
     public void clearRubberStampCache(final Promise promise) {
         StandardStampOption.clearCache(getReactApplicationContext());
