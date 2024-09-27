@@ -9,12 +9,12 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                   RNPdftron
                    DESC
-  s.homepage     = "https://github.com/PDFTron/pdftron-react-native"
+  s.homepage     = "https://github.com/ApryseSDK/pdftron-react-native"
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
   s.author       = { "author" => "author@domain.cn" }
   s.platform     = :ios, "11.0"
-  s.source       = { :git => "https://github.com/PDFTron/pdftron-react-native.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/ApryseSDK/pdftron-react-native.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
