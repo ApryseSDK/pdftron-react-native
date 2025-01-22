@@ -2185,31 +2185,53 @@ NS_ASSUME_NONNULL_END
 
     PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];  
     NSInteger numberOfSignatures = [signaturesManager numberOfSavedSignatures];  
-  
+
+    // Delete all existing signatures
     for (NSInteger i = numberOfSignatures - 1; i >= 0; i--) {  
         [signaturesManager deleteSignatureAtIndex:i];  
     }  
-  
+
+    // Process each signature URL
     for (NSString *signatureUrl in signatureArrayUrl) {  
-        NSLog(@"YYY%@", signatureUrl);  
-          
-        if([signatureUrl length] != 0){  
-            NSURL *url = [NSURL URLWithString:signatureUrl];  
-            NSData *imageData = [NSData dataWithContentsOfURL:url];  
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);  
-            NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"signature.png"];  
-            [imageData writeToFile:filePath atomically:YES];  
-            UIImage *image = [UIImage imageWithData:imageData];  
-  
-            NSData *imageDatafromFile = [NSData dataWithContentsOfFile:filePath];  
-            UIImage *fileImage = [UIImage imageWithData:imageDatafromFile];  
-  
-            if (fileImage) {  
-                [signaturesManager createSignatureWithImage:fileImage data:imageDatafromFile saveSignature:YES];  
-            }  
-        }  
-    }  
-}  
+        NSLog(@"Processing Signature URL: %@", signatureUrl);  
+
+        if ([signatureUrl length] != 0) {  
+            NSURL *url;
+
+            // Check if it's a local file path or remote URL
+            if ([signatureUrl hasPrefix:@"/"]) {
+                url = [NSURL fileURLWithPath:signatureUrl]; // Local file path
+            } else {
+                url = [NSURL URLWithString:signatureUrl]; // Remote URL
+            }
+
+            NSData *imageData = [NSData dataWithContentsOfURL:url];
+            if (imageData) { // Proceed if image data was successfully loaded
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *uniqueFileName = [NSString stringWithFormat:@"signature_%@.png", [[NSUUID UUID] UUIDString]];
+                NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:uniqueFileName];
+                
+                // Save image data to the file system
+                BOOL success = [imageData writeToFile:filePath atomically:YES];
+                if (success) {
+                    NSLog(@"Image saved to: %@", filePath);
+                    
+                    UIImage *image = [UIImage imageWithData:imageData];
+                    if (image) {
+                        [signaturesManager createSignatureWithImage:image data:imageData saveSignature:YES];
+                    } else {
+                        NSLog(@"Failed to create UIImage from image data.");
+                    }
+                } else {
+                    NSLog(@"Failed to save image to path: %@", filePath);
+                }
+            } else {
+                NSLog(@"Failed to load data from URL: %@", signatureUrl);
+            }
+        }
+    }
+}
+
 
 // Helper method to hide the "Edit" button
 - (void)hideEditButtonInView:(UIView *)view {
