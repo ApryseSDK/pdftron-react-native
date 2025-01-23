@@ -3193,68 +3193,101 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
-        Log.d(TAG, "onTabDocumentLoaded: Started");
-           // set default signature
-           Thread thread = new Thread(new Runnable() {
-           @Override
-           public void run() {
+Log.d(TAG, "onTabDocumentLoaded: Started");
+// set default signature
+Thread thread = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        try {
+            String currentSignatureUrls = convertReadableArrayToString(mSignatureArrayUrl); // Helper method to convert ReadableArray to string
+            String savedSignatureUrls = getSignatureUrlsFromPreferences(getContext()); // Get saved signature URLs from preferences
+
+            if (!savedSignatureUrls.equals(currentSignatureUrls)) {
+                try {
+                    // Save the current mSignatureArrayUrl to SharedPreferences
+                    saveSignatureUrlsToPreferences(getContext(), mSignatureArrayUrl); // Save the updated URLs
+
+                    // Proceed with your signature processing logic
+                    File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext());
+                    for (File signature : savedSignatures) {
+                        Log.d(TAG, "run: " + signature.getAbsolutePath());
+                        StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath());
+                    }
+
+                    for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
+                        try {
+                            String pathOrUrl = mSignatureArrayUrl.getString(i);
+                            Bitmap bitmap;
+
+                            if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
+                                // It's a URL, download the image
+                                URL url = new URL(pathOrUrl);
+                                Log.d(TAG, "Downloading from URL: " + url.getPath());
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setDoInput(true);
+                                connection.connect();
+                                InputStream input = connection.getInputStream();
+                                bitmap = BitmapFactory.decodeStream(input);
+                            } else {
+                                // It's a local file path, load directly
+                                File file = new File(pathOrUrl);
+                                if (file.exists()) {
+                                    Log.d(TAG, "Loading from local file: " + file.getAbsolutePath());
+                                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                } else {
+                                    Log.e(TAG, "File not found: " + pathOrUrl);
+                                    continue;
+                                }
+                            }
+
+                            // Save the bitmap locally as before
+                            File directory = getContext().getFilesDir();
+                            if (!directory.exists()) {
+                                directory.mkdirs();
+                            }
+
+                            String filename = "signaturefilename" + i + ".jpg";
+                            File outputFile = new File(directory, filename);
+
+                            if (bitmap != null) {
+                                try {
+                                    FileOutputStream fOut = new FileOutputStream(outputFile);
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                                    fOut.flush();
+                                    fOut.close();
+
+                                    StampManager.getInstance().setDefaultSignatureFile(outputFile.getAbsolutePath());
+                                    Uri imageUri = Uri.fromFile(outputFile);
+                                    Log.d(TAG, "onTabDocumentLoaded: Signature Saved");
+                                    StampManager.getInstance().createSignatureFromImage(getContext(), imageUri, 0);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error compressing and saving bitmap: ", e);
+                                }
+                            } else {
+                                Log.e(TAG, "Bitmap is null. Skipping compression for: " + pathOrUrl);
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error processing signature: ", e);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Error updating signatures: ", e);
+                }
+            } else {
+                Log.d(TAG, "No changes in signature URLs. Skipping task.");
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Unexpected error: ", e);
+        }
+    }
+});
+
+thread.start();
 
 
-               try {
-
-                   String currentSignatureUrls = convertReadableArrayToString(mSignatureArrayUrl); // Helper method to convert ReadableArray to string
-                   String savedSignatureUrls = getSignatureUrlsFromPreferences(getContext()); // Get saved signature URLs from preferences
-
-                   if (!savedSignatureUrls.equals(currentSignatureUrls)) {
-                       try {
-                           // Save the current mSignatureArrayUrl to SharedPreferences
-                           saveSignatureUrlsToPreferences(getContext(), mSignatureArrayUrl); // Save the updated URLs
-                           // Proceed with your signature processing logic
-                           File[] savedSignatures = StampManager.getInstance().getSavedSignatures(getContext());
-                           for (File signature : savedSignatures) {
-                               Log.d(TAG, "run: " + signature.getAbsolutePath());
-                               StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath());
-                           }
-
-                           for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
-                               URL url = new URL(mSignatureArrayUrl.getString(i));
-                               Log.d(TAG, "run: " + url.getPath());
-                               HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                               connection.setDoInput(true);
-                               connection.connect();
-                               InputStream input = connection.getInputStream();
-                               Bitmap bitmap = BitmapFactory.decodeStream(input);
-                               File directory = getContext().getFilesDir();
-                               String filename = "signaturefilename" + i + ".jpg";
-                               File file = new File(directory, filename);
-                               FileOutputStream fOut = new FileOutputStream(file);
-                               bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                               fOut.flush();
-                               fOut.close();
-
-                               StampManager.getInstance().setDefaultSignatureFile(file.getAbsolutePath());
-                               Uri imageUri = Uri.fromFile(file);
-                               Log.d(TAG, "onTabDocumentLoaded: Signature Saved");
-                               StampManager.getInstance().createSignatureFromImage(getContext(), imageUri, 0);
-                           }
-
-                       } catch (Exception e) {
-                           e.printStackTrace();
-                       }
-                   } else {
-                       Log.d(TAG, "No changes in signature URLs. Skipping task.");
-                   }
-
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-
-
-           }
-       });
-
-
-       thread.start();
 
 
         // set react context
