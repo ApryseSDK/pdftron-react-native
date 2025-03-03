@@ -32,13 +32,13 @@ APIs are available on the [API page](API.md).
 
 Version `2.0.2` is the last stable release for the legacy UI.
 
-The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/legacy-ui.
+The release can be found here: https://github.com/ApryseSDK/pdftron-react-native/releases/tag/legacy-ui.
 
 ## Pre-Java 17
 
 Version `3.0.3-38` is the last stable release for pre-Java 17.
 
-The release can be found here: https://github.com/PDFTron/pdftron-react-native/releases/tag/pre-java17.
+The release can be found here: https://github.com/ApryseSDK/pdftron-react-native/releases/tag/pre-java17.
 
 ## Installation
 
@@ -51,14 +51,14 @@ The release can be found here: https://github.com/PDFTron/pdftron-react-native/r
      In `MyApp` folder, install `react-native-pdftron` by calling:
 
      ```shell
-     yarn add github:PDFTron/pdftron-react-native
+     yarn add github:ApryseSDK/pdftron-react-native
      yarn install
      ```
 
      or
 
      ```shell
-     npm install github:PDFTron/pdftron-react-native --save
+     npm install github:ApryseSDK/pdftron-react-native --save
      npm install
      ```
 
