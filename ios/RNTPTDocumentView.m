@@ -6325,16 +6325,36 @@ NS_ASSUME_NONNULL_END
 
 - (void)setCustomImage:(PTImage*)image OnAnnotation:(PTAnnot*)annot onDoc:(PTPDFDoc*)doc
 {
-    // Initialize a new PTElementWriter and PTElementBuilder
+    // Save the original bounding box
+    PTPDFRect* original_bbox = [annot GetRect];
+    double orig_x1 = [original_bbox GetX1];
+    double orig_y1 = [original_bbox GetY1];
+    double orig_x2 = [original_bbox GetX2];
+    double orig_y2 = [original_bbox GetY2];
+    
+    double original_width = orig_x2 - orig_x1;
+    double original_height = orig_y2 - orig_y1;
+
+    // Get image dimensions
+    double image_width = [image GetImageWidth];
+    double image_height = [image GetImageHeight];
+
+    // Calculate aspect-fit scaling ratio to retain size
+    double aspectFitRatio = fmin(original_width / image_width, original_height / image_height);
+
+    // Compute new image dimensions
+    double new_width = image_width * aspectFitRatio;
+    double new_height = image_height * aspectFitRatio;
+    
+    // Initialize a new PTElementWriter, PTElementBuilder and new markup object
     PTElementWriter* writer = [[PTElementWriter alloc] init];
     PTElementBuilder* builder = [[PTElementBuilder alloc] init];
+    PTMarkup *markupAnnot = [[PTMarkup alloc] initWithAnn:annot];
 
     [writer WriterBeginWithSDFDoc:[doc GetSDFDoc] compress:YES];
-
-    int w = [image GetImageWidth], h = [image GetImageHeight];
-
+    
     // Initialize a new image element
-    PTElement* img_element = [builder CreateImageWithCornerAndScale:image x:0 y:0 hscale:w vscale:h];
+    PTElement* img_element = [builder CreateImageWithCornerAndScale:image x:0 y:0 hscale:image_width vscale:image_height];
 
     // Write the element
     [writer WritePlacedElement:img_element];
@@ -6344,12 +6364,28 @@ NS_ASSUME_NONNULL_END
 
     // Configure the appearance stream that will be written to the annotation
     PTObj* appearance_stream = [writer End];
-
+    
     // Set the bounding box to be the rect of the new element
     [appearance_stream PutRect:@"BBox" x1:[bbox GetX1] y1:[bbox GetY1] x2:[bbox GetX2] y2:[bbox GetY2]];
-
+        
     // Overwrite the annotation's appearance with the new appearance stream
     [annot SetAppearance:appearance_stream annot_state:e_ptnormal app_state:0];
+
+    // Compute the final annotation rect from the appearance bounding box
+    PTPDFRect* new_annot_rect = [[PTPDFRect alloc] initWithX1:orig_x1
+                                                          y1:orig_y1
+                                                          x2:(orig_x1 + new_width)
+                                                          y2:(orig_y1 + new_height)];
+
+    // Apply the computed annotation rect
+    [annot SetRect:new_annot_rect];
+    
+    // Rotate the new appearance
+    [markupAnnot RotateAppearance:[[[annot GetSDFObj] FindObj:@"Rotate"] GetNumber]];
+    
+    // Apply original bbox to maintain size
+    [annot SetRect:original_bbox];
+
 }
 
 - (void)setForceAppTheme:(NSString *)forcedAppTheme
