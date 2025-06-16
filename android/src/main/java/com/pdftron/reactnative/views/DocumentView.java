@@ -161,7 +161,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private String mBase64Extension = ".pdf";
     private String mDocumentExtension;
 
-    private ArrayList<File> mTempFiles = new ArrayList<>();
+    private final ArrayList<File> mTempFiles = new ArrayList<>();
 
     private FragmentManager mFragmentManagerSave; // used to deal with lifecycle issue
 
@@ -169,8 +169,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     private ToolManagerBuilder mToolManagerBuilder;
     private ViewerConfig.Builder mBuilder;
 
-    private ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
-    private ArrayList<ToolbarButtonType> mDisabledButtonTypes = new ArrayList<>(); // used to disabled button types that are with specific a with explicit tool type (e.g. checkmark, dot, cross stamps)
+    private final ArrayList<ToolManager.ToolMode> mDisabledTools = new ArrayList<>();
+    private final ArrayList<ToolbarButtonType> mDisabledButtonTypes = new ArrayList<>(); // used to disabled button types that are with specific a with explicit tool type (e.g. checkmark, dot, cross stamps)
 
     private String mExportPath;
     private String mOpenUrlPath;
@@ -2406,14 +2406,12 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
-        if (mTempFiles != null) {
-            for (File file : mTempFiles) {
-                if (file != null && file.exists()) {
-                    file.delete();
-                }
+        for (File file : mTempFiles) {
+            if (file != null && file.exists()) {
+                file.delete();
             }
-            mTempFiles = null;
         }
+        mTempFiles.clear();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
