@@ -86,7 +86,7 @@ The release can be found here: https://github.com/ApryseSDK/pdftron-react-native
 	defaultConfig {
 	    applicationId "com.example.myapp"
 	    minSdkVersion rootProject.ext.minSdkVersion
-      targetSdkVersion rootProject.ext.targetSdkVersion
+	    targetSdkVersion rootProject.ext.targetSdkVersion
 	    versionCode 1
 	    versionName "1.0.0"
 
