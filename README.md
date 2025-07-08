@@ -82,88 +82,47 @@ The release can be found here: https://github.com/ApryseSDK/pdftron-react-native
 
 1. Add the following in your `android/app/build.gradle` file:
 
-   ```diff
-   android {
-       ndkVersion rootProject.ext.ndkVersion
+	```diff
+	defaultConfig {
+	    applicationId "com.example.myapp"
+	    minSdkVersion rootProject.ext.minSdkVersion
+	    targetSdkVersion rootProject.ext.targetSdkVersion
+	    versionCode 1
+	    versionName "1.0.0"
+
+	+   resValue("string", "PDFTRON_LICENSE_KEY", "\"LICENSE_KEY_GOES_HERE\"")
+	}
+	```
    
-       compileSdkVersion rootProject.ext.compileSdkVersion
+2. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
 
-       defaultConfig {
-           applicationId "com.reactnativesample"
-           minSdkVersion rootProject.ext.minSdkVersion
-           targetSdkVersion rootProject.ext.targetSdkVersion
-           versionCode 1
-           versionName "1.0"
-           buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
-   +       multiDexEnabled true
-   +       manifestPlaceholders = [pdftronLicenseKey:PDFTRON_LICENSE_KEY]
-       }
-       ...
-   }
-   ...
+	```diff
+	<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.example.myapp">
+ 
+	  <!-- Required if you want to work with online documents -->
+	+ <uses-permission android:name="android.permission.INTERNET" />
+	  <!-- Required if you want to record audio annotations -->
+	+ <uses-permission android:name="android.permission.RECORD_AUDIO" />
+ 
+	  <application
+	    ...
+	+   android:largeHeap="true">
+	
+	    <!-- Add license key in meta-data tag here. This should be inside the application tag. -->
+	+   <meta-data
+	+     android:name="pdftron_license_key"
+	+     android:value="@string/PDFTRON_LICENSE_KEY" />
+	    ...
+      <activity
+	      ...
+	-     android:windowSoftInputMode="adjustResize"
+	+     android:windowSoftInputMode="adjustPan">
+      </activity>
+	```
 
-   dependencies {
-   +   implementation "androidx.multidex:multidex:2.0.1"
-       ...
-   }
-   ```
-   
-2. In your `android/gradle.properties` file, add the following line:
-   ```diff
-   # Add the PDFTRON_LICENSE_KEY variable here.
-   # For trial purposes leave it blank.
-   # For production add a valid commercial license key.
-   PDFTRON_LICENSE_KEY=
-   ```
-3. Add the following to your `android/app/src/main/AndroidManifest.xml` file:
-
-   ```diff
-   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-     package="com.myapp">
-
-     <uses-permission android:name="android.permission.INTERNET" />
-     <!-- Required to read and write documents from device storage -->
-   + <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-     <!-- Required if you want to record audio annotations -->
-   + <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-     <application
-       ...
-   +   android:largeHeap="true"
-   +   android:usesCleartextTraffic="true">
-
-       <!-- Add license key in meta-data tag here. This should be inside the application tag. -->
-   +   <meta-data
-   +       android:name="pdftron_license_key"
-   +       android:value="${pdftronLicenseKey}"/>
-
-       <activity
-         ...
-   -     android:windowSoftInputMode="adjustResize"
-   +     android:windowSoftInputMode="adjustPan"
-   +     android:exported="true">
-         <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-             <category android:name="android.intent.category.LAUNCHER" />
-         </intent-filter>
-       </activity>
-       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-     </application>
-   </manifest>
-   ```
-
-4. In your `android/app/src/main/java/com/myapp/MainApplication.java` file, change `Application` to `MultiDexApplication`:
-
-   ```diff
-   - import android.app.Application;
-   + import androidx.multidex.MultiDexApplication;
-   ...
-   - public class MainApplication extends Application implements ReactApplication {
-   + public class MainApplication extends MultiDexApplication implements ReactApplication {
-   ```
-
-5. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
-6. Finally in the root project directory, run `react-native run-android`.
+3. Replace `App.js` (or `App.tsx`) with what is shown for [NPM](#Usage-NPM) or [GitHub](#Usage-Github)
+4. Finally in the root project directory, run `react-native run-android`.
 
 ### iOS
 
