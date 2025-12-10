@@ -7,7 +7,7 @@ install! 'cocoapods', :deterministic_uuids => false
 target 'example' do
   # PDFTron
   use_frameworks!
-  pod 'PDFNet', podspec: 'https://pdftron.com/downloads/ios/react-native/latest.podspec'
+  pod 'PDFNet', podspec: 'https://www.pdftron.com/downloads/ios/cocoapods/xcframeworks/pdfnet/latest.podspec'
   pod 'RNPdftron', :path => '../node_modules/react-native-pdftron'
   config = use_native_modules!
 
