@@ -127,9 +127,11 @@ The release can be found here: https://github.com/ApryseSDK/pdftron-react-native
 ### iOS
 
 > [!IMPORTANT]
-> As of March 2025, use of the podspec distributed specifically for the PDFTron React Native wrapper (`https://www.pdftron.com/downloads/ios/cocoapods/xcframeworks/pdfnet/latest.podspec`) is deprecated.
-> 
-> **All new and existing users are recommended to use the standard [Apryse iOS SDK CocoaPods](https://docs.apryse.com/ios/guides/get-started/integration?tab=cocoapods) instead.**
+> As of March 2025, use of the podspec distributed specifically for the PDFTron React Native wrapper (`https://pdftron.com/downloads/ios/react-native/latest.podspec`) is deprecated and no longer maintained.
+>
+> Please update to the latest podspec provided for the wrapper as soon as possible (`https://www.pdftron.com/downloads/ios/cocoapods/xcframeworks/pdfnet/latest.podspec`)
+>
+> See more information here: [Apryse iOS SDK CocoaPods](https://docs.apryse.com/ios/guides/get-started/integration?tab=cocoapods)
 >
 > Please update your `Podfile` accordingly.
 
