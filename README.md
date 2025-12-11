@@ -131,8 +131,6 @@ The release can be found here: https://github.com/ApryseSDK/pdftron-react-native
 >
 > Please update to the latest podspec provided for the wrapper as soon as possible (`https://www.pdftron.com/downloads/ios/cocoapods/xcframeworks/pdfnet/latest.podspec`)
 >
-> See more information here: [Apryse iOS SDK CocoaPods](https://docs.apryse.com/ios/guides/get-started/integration?tab=cocoapods)
->
 > Please update your `Podfile` accordingly.
 
 1. Open `Podfile` in the `ios` folder, add the following line to the `target 'MyApp' do ... end` block:
