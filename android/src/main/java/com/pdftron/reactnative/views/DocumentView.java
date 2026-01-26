@@ -3228,12 +3228,17 @@ Thread thread = new Thread(new Runnable() {
                                 bitmap = BitmapFactory.decodeStream(input);
                             } else {
                                 // It's a local file path, load directly
-                                File file = new File(pathOrUrl);
+                                // Strip file:// prefix if present
+                                String localPath = pathOrUrl;
+                                if (localPath.startsWith("file://")) {
+                                    localPath = localPath.substring(7);
+                                }
+                                File file = new File(localPath);
                                 if (file.exists()) {
                                     Log.d(TAG, "Loading from local file: " + file.getAbsolutePath());
                                     bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                                 } else {
-                                    Log.e(TAG, "File not found: " + pathOrUrl);
+                                    Log.e(TAG, "File not found: " + localPath);
                                     continue;
                                 }
                             }
