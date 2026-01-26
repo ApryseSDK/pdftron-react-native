@@ -3357,12 +3357,8 @@ thread.start();
         getToolManager().addDialogListener(new ToolManager.DialogListener() {
         @Override
         public boolean onInterceptDialog(DialogFragment dialog) {
-            if (dialog instanceof SignatureDialogFragment) {
-                return true;
-            } else {
-                    return false;
-            }
-            
+            // Allow SignatureDialogFragment to show so users can select signatures
+            return false;
         }});
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
