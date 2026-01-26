@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -139,7 +141,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import androidx.fragment.app.DialogFragment;
 import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
-
+import com.pdftron.pdf.widget.preset.signature.SignatureSelectionDialog;
 
 import static com.pdftron.reactnative.utils.Constants.*;
 
@@ -3357,9 +3359,30 @@ thread.start();
         getToolManager().addDialogListener(new ToolManager.DialogListener() {
         @Override
         public boolean onInterceptDialog(DialogFragment dialog) {
-            // Allow SignatureDialogFragment to show so users can select signatures
+            // Block SignatureDialogFragment to prevent creating new signatures
+            // This matches iOS behavior where users can only select from pre-loaded signatures
+            if (dialog instanceof SignatureDialogFragment) {
+                // Intercept and block the create signature dialog
+                return true;
+            }
+            // Allow other dialogs
             return false;
         }});
+
+        // Register fragment lifecycle callback to hide Create button in SignatureSelectionDialog
+        if (mFragmentManagerSave != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mFragmentManagerSave.registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
+                @Override
+                public void onFragmentStarted(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                    super.onFragmentStarted(fm, f);
+                    if (f instanceof SignatureSelectionDialog) {
+                        SignatureSelectionDialog dialog = (SignatureSelectionDialog) f;
+                        View view = dialog.getView();
+                        hideSignatureCreateButton(view);
+                    }
+                }
+            }, true);
+        }
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
@@ -5367,5 +5390,26 @@ thread.start();
         SharedPreferences sharedPreferences = context.getSharedPreferences(APP_PREFERNCES, Context.MODE_PRIVATE);
         // Return saved signature URLs or empty string if not found
         return sharedPreferences.getString(SIGNATURE_TAG, "");
+    }
+
+    // Helper method to recursively hide Create button in SignatureSelectionDialog
+    // This matches iOS behavior where users can only select from pre-loaded signatures
+    private void hideSignatureCreateButton(View view) {
+        if (view == null) return;
+        if (view instanceof Button) {
+            Button button = (Button) view;
+            String buttonText = button.getText().toString();
+            // Hide Create, Manage, and Delete buttons to match iOS behavior
+            if (buttonText.equalsIgnoreCase("Create") ||
+                buttonText.equalsIgnoreCase("Manage") ||
+                buttonText.equalsIgnoreCase("Delete")) {
+                button.setVisibility(View.INVISIBLE);
+            }
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                hideSignatureCreateButton(viewGroup.getChildAt(i));
+            }
+        }
     }
 }
