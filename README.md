@@ -1,5 +1,8 @@
 # PDFTron React Native Wrapper
 
+> [!IMPORTANT]
+> This repository serves as a wrapper around the native SDKs. It exposes only a limited set of APIs intended for basic viewing, annotating and removing components from the out‑of‑box UI. Any advanced customization or access to lower‑level functionality should be performed directly through the native SDKs rather than this wrapper.
+
 - [API](API.md)
 - [Prerequisites](#prerequisites)
 - [Preview](#preview)
