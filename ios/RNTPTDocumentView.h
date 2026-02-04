@@ -56,6 +56,7 @@ static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
 static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
 static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
 static NSString * const PTInsertFromScannerButton = @"insertFromScannerButton";
+static NSString * const PTImportFromBinaButton = @"importFromBinaButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -143,6 +144,7 @@ static NSString * const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertF
 static NSString * const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
 static NSString * const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
 static NSString * const PTThumbnailsViewInsertFromScannerKey = @"thumbnailsInsertFromScanner";
+static NSString * const PTThumbnailsViewImportFromBinaKey = @"thumbnailsImportFromBina";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
@@ -389,6 +391,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 - (void)annotationToolbarItemPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
 - (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
+
+- (void)importFromBinaPressed:(RNTPTDocumentView *)sender;
 
 // Hygen Generated Event Listeners
 - (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar;

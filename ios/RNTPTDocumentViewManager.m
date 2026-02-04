@@ -1030,6 +1030,16 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
     }
 }
 
+- (void)importFromBinaPressed:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarButtonPress": @"onToolbarButtonPress",
+            PTAnnotationToolbarItemKeyId: PTImportFromBinaButton
+        });
+    }
+}
+
 // Hygen Generated Event Listeners
 - (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar
 {

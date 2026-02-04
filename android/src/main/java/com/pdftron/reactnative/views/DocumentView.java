@@ -19,8 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.os.Build;
 import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.leinardi.android.speeddial.SpeedDialView;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -245,6 +249,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             };
     private ArrayList<ThumbnailsViewFragment.ThumbnailsViewEditOptions> mThumbnailViewItems = new ArrayList<>();
 
+    private boolean mShowImportFromBina = true;
+    private ExtendedFloatingActionButton mImportFromBinaFab;
 
     public DocumentView(Context context) {
         super(context);
@@ -1066,6 +1072,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_IMAGE);
             } else if (THUMBNAIL_INSERT_FROM_DOCUMENT.equals(viewItem)) {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_DOCUMENT);
+            } else if (THUMBNAIL_IMPORT_FROM_BINA.equals(viewItem)) {
+                mShowImportFromBina = false;
             }
         }
     }
@@ -3544,6 +3552,11 @@ thread.start();
                 super.onFragmentStarted(fm, f);
                 Log.d(TAG, "*** Fragment Started: " + f.getClass().getSimpleName() + " in FM: " + fm.toString());
 
+                // Show Import from Bina FAB when ThumbnailsViewFragment is started
+                if (f instanceof ThumbnailsViewFragment && mShowImportFromBina) {
+                    showImportFromBinaFab(f);
+                }
+
                 // Dismiss SignatureSelectionDialog (only shows 2 signatures) and show our custom dialog
                 if (f instanceof SignatureSelectionDialog) {
                     Log.d(TAG, "!!! SignatureSelectionDialog detected - DISMISSING and showing custom dialog");
@@ -3609,6 +3622,17 @@ thread.start();
                     if (view != null) {
                         hideSignatureCreateOptions(view);
                     }
+                }
+            }
+
+            @Override
+            public void onFragmentStopped(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                super.onFragmentStopped(fm, f);
+                Log.d(TAG, "*** Fragment Stopped: " + f.getClass().getSimpleName());
+
+                // Hide Import from Bina FAB when ThumbnailsViewFragment is stopped
+                if (f instanceof ThumbnailsViewFragment) {
+                    hideImportFromBinaFab();
                 }
             }
         };
@@ -5459,6 +5483,182 @@ thread.start();
         if (pdfViewCtrl != null) {
             mPdfViewCtrlTabHostFragment.onPageThumbnailOptionSelected(false, null);
         }
+    }
+
+    public boolean isImportFromBinaEnabled() {
+        return mShowImportFromBina;
+    }
+
+    public void emitImportFromBinaPressed() {
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_TOOLBAR_BUTTON_PRESS, ON_TOOLBAR_BUTTON_PRESS);
+        params.putString(TOOLBAR_ITEM_KEY_ID, BUTTON_IMPORT_FROM_BINA);
+        onReceiveNativeEvent(params);
+    }
+
+    private static final int IMPORT_FROM_BINA_FAB_ID = 999999;
+    private SpeedDialView mSpeedDialView;
+    private SpeedDialView.OnActionSelectedListener mOriginalSpeedDialListener;
+
+    private void showImportFromBinaFab(Fragment thumbnailsFragment) {
+        View fragmentView = thumbnailsFragment.getView();
+        if (fragmentView == null) {
+            // View not ready yet, post delayed
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                View view = thumbnailsFragment.getView();
+                if (view != null) {
+                    addImportFromBinaToSpeedDial(view, thumbnailsFragment);
+                }
+            }, 500);
+        } else {
+            // Still delay a bit to let the fragment fully initialize
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                addImportFromBinaToSpeedDial(fragmentView, thumbnailsFragment);
+            }, 500);
+        }
+    }
+
+    private void addImportFromBinaToSpeedDial(View parentView, Fragment thumbnailsFragment) {
+        // Find the SpeedDialView in the view hierarchy
+        SpeedDialView speedDialView = findSpeedDialView(parentView);
+        if (speedDialView == null) {
+            Log.d(TAG, "SpeedDialView not found in view hierarchy, trying by ID...");
+            // Try to find by known ID
+            View fabView = parentView.findViewById(com.pdftron.pdf.tools.R.id.fab_menu);
+            if (fabView instanceof SpeedDialView) {
+                speedDialView = (SpeedDialView) fabView;
+            }
+        }
+
+        if (speedDialView == null) {
+            Log.e(TAG, "SpeedDialView not found, creating fallback FAB");
+            // Fallback: add a separate FAB
+            addFallbackImportFromBinaFab(parentView);
+            return;
+        }
+
+        addImportFromBinaItemToSpeedDial(speedDialView, thumbnailsFragment);
+    }
+
+    private SpeedDialView findSpeedDialView(View view) {
+        if (view instanceof SpeedDialView) {
+            return (SpeedDialView) view;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                SpeedDialView result = findSpeedDialView(viewGroup.getChildAt(i));
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void addImportFromBinaItemToSpeedDial(SpeedDialView speedDialView, Fragment thumbnailsFragment) {
+        mSpeedDialView = speedDialView;
+
+        // Check if already added
+        if (speedDialView.getActionItem(IMPORT_FROM_BINA_FAB_ID) != null) {
+            Log.d(TAG, "Import from Bina item already exists in SpeedDial");
+            return;
+        }
+
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        // Create the action item for Import from Bina
+        SpeedDialActionItem importFromBinaItem = new SpeedDialActionItem.Builder(
+                IMPORT_FROM_BINA_FAB_ID,
+                android.R.drawable.ic_menu_upload)
+                .setLabel("Import from Bina")
+                .setFabBackgroundColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_blue_light))
+                .setLabelBackgroundColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.white))
+                .create();
+
+        // Add to the SpeedDialView at position 0 (top of the expanded list)
+        speedDialView.addActionItem(importFromBinaItem, 0);
+
+        // Get ThumbnailsViewFragment to use as the original handler
+        final ThumbnailsViewFragment tvf = (thumbnailsFragment instanceof ThumbnailsViewFragment)
+            ? (ThumbnailsViewFragment) thumbnailsFragment : null;
+
+        // Set up click listener that handles our item and delegates others
+        speedDialView.setOnActionSelectedListener(actionItem -> {
+            if (actionItem.getId() == IMPORT_FROM_BINA_FAB_ID) {
+                Log.d(TAG, "Import from Bina clicked!");
+                emitImportFromBinaPressed();
+                speedDialView.close();
+                return true;
+            }
+            // For other items, let ThumbnailsViewFragment handle them
+            if (tvf != null) {
+                return tvf.onActionSelected(actionItem);
+            }
+            return false;
+        });
+
+        Log.d(TAG, "Import from Bina item added to SpeedDialView successfully");
+    }
+
+    private void addFallbackImportFromBinaFab(View parentView) {
+        if (mImportFromBinaFab != null) {
+            return; // Already added
+        }
+
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        ViewGroup container = null;
+        if (parentView instanceof ViewGroup) {
+            container = (ViewGroup) parentView;
+        }
+        if (container == null) {
+            return;
+        }
+
+        // Create a standalone FAB as fallback
+        mImportFromBinaFab = new ExtendedFloatingActionButton(context);
+        mImportFromBinaFab.setText("Import from Bina");
+        mImportFromBinaFab.setIconResource(android.R.drawable.ic_menu_upload);
+        mImportFromBinaFab.setId(View.generateViewId());
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.START;
+        int margin = (int) (16 * context.getResources().getDisplayMetrics().density);
+        params.setMargins(margin, margin, margin, margin);
+        mImportFromBinaFab.setLayoutParams(params);
+
+        mImportFromBinaFab.setOnClickListener(v -> {
+            emitImportFromBinaPressed();
+        });
+
+        container.addView(mImportFromBinaFab);
+        Log.d(TAG, "Fallback Import from Bina FAB added");
+    }
+
+    private void hideImportFromBinaFab() {
+        if (mSpeedDialView != null) {
+            mSpeedDialView.removeActionItem(IMPORT_FROM_BINA_FAB_ID);
+            mSpeedDialView = null;
+            Log.d(TAG, "Import from Bina item removed from SpeedDial");
+        }
+        if (mImportFromBinaFab != null) {
+            ViewGroup parent = (ViewGroup) mImportFromBinaFab.getParent();
+            if (parent != null) {
+                parent.removeView(mImportFromBinaFab);
+            }
+            mImportFromBinaFab = null;
+        }
+        mOriginalSpeedDialListener = null;
     }
 
     public ReadableArray getSavedSignatures() {

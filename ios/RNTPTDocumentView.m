@@ -136,6 +136,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) RNTPTCollaborationService* collabService;
 
+@property (nonatomic, strong, nullable) UIBarButtonItem *importFromBinaButtonItem;
+
 @end
 
 NS_ASSUME_NONNULL_END
@@ -2493,6 +2495,22 @@ NS_ASSUME_NONNULL_END
             [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addScannedPageButtonItem];
         }
     }
+
+    // Add Import from Bina button if not hidden
+    BOOL hideImportFromBina = [self.hideThumbnailsViewItems containsObject:PTThumbnailsViewImportFromBinaKey];
+    if (!hideImportFromBina) {
+        if (!self.importFromBinaButtonItem) {
+            self.importFromBinaButtonItem = [[UIBarButtonItem alloc]
+                initWithTitle:@"Import from Bina"
+                style:UIBarButtonItemStylePlain
+                target:self
+                action:@selector(importFromBinaButtonPressed:)];
+        }
+        if (![addPagesItems containsObject:self.importFromBinaButtonItem]) {
+            [addPagesItems addObject:self.importFromBinaButtonItem];
+        }
+    }
+
     if([addPagesItems count] == 0){
         documentViewController.thumbnailsViewController.addPagesEnabled = NO;
     }
@@ -3919,6 +3937,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(toolbarButtonPressed:withKey:)]) {
         [self.delegate toolbarButtonPressed:self withKey:buttonString];
+    }
+}
+
+- (void)importFromBinaButtonPressed:(UIBarButtonItem *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(importFromBinaPressed:)]) {
+        [self.delegate importFromBinaPressed:self];
     }
 }
 
