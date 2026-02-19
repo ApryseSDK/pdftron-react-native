@@ -24,7 +24,96 @@ static BOOL RNTPT_addMethod(Class cls, SEL selector, void (^block)(id))
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate>
+@interface RNPTSavedSignaturesViewController : PTSavedSignaturesViewController<UITableViewDelegate>
+@end
+
+@implementation RNPTSavedSignaturesViewController
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    UIViewController *parentViewController = self.parentViewController;
+     
+     // Log the parent view controller class name
+//     NSLog(@"Parent View Controller: %@", NSStringFromClass([parentViewController class]));
+     
+     // Check if there's a parent and log its view hierarchy
+     if (parentViewController) {
+         [self hideAndDisableButtons:parentViewController.view];
+     }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Set the delegate to handle the swipe action for the table view
+    self.tableView.delegate = self;
+}
+
+// Disable swipe actions by returning NO in the UITableViewDelegate method
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Disable swipe-to-delete (editing) for saved signatures cells
+    return NO;
+}
+
+// Recursive method to log all subviews in the view hierarchy
+- (void)hideAndDisableButtons:(UIView *)view {
+    for (UIView *subview in view.subviews) {
+        
+        if ([subview isKindOfClass:[UIToolbar class]]) {
+                    // Log the class of the toolbar
+                    NSLog(@"Found UIToolbar: %@", NSStringFromClass([subview class]));
+                    
+                    // Remove the toolbar from the view
+                    [subview removeFromSuperview];
+                    NSLog(@"Toolbar removed");
+                }
+        
+        
+//        if ([subview isKindOfClass:[UIButton class]]) {
+//            UIButton *button = (UIButton *)subview;
+//            // Try to find a UILabel inside the UIButton to get the text
+//            NSString *buttonLabel = [self findLabelInButton:button];
+//            if (buttonLabel) {
+//                NSLog(@"Button Label: %@", buttonLabel);
+//                
+//                // Check the label text to hide or disable specific buttons
+//                if ([buttonLabel isEqualToString:@"Create New Signature"]  ||
+//                    [buttonLabel isEqualToString:@"Done"] ||
+//                    [buttonLabel isEqualToString:@"Edit"] ||
+//                    [buttonLabel isEqualToString:@"New Signature"]
+//                    ) {
+//                    subview.hidden = YES;  // Hide the button
+//                    subview.userInteractionEnabled = NO;
+//                    button.hidden = YES;  // Hide the button
+//                    button.enabled = NO;  // Disable the button
+//                    button.userInteractionEnabled = NO;
+//                }
+//            }
+//        }else{
+//            NSLog(@"Parent View Controller: %@", NSStringFromClass([subview class]));
+//        }
+        
+        // Recursively call this method for all subviews
+        [self hideAndDisableButtons:subview];
+    }
+}
+
+// Method to find the label inside a UIButton and return its text
+- (NSString *)findLabelInButton:(UIButton *)button {
+    for (UIView *subview in button.subviews) {
+        if ([subview isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)subview;
+            return label.text;  // Return the label text
+        }
+    }
+    return nil;  // No label found
+}
+
+
+@end
+
+@interface RNTPTDocumentView () <PTTabbedDocumentViewControllerDelegate, RNTPTDocumentViewControllerDelegate, RNTPTDocumentControllerDelegate, PTCollaborationServerCommunication, RNTPTNavigationControllerDelegate, PTBookmarkViewControllerDelegate, PTToolManagerDelegate, PTSavedSignaturesViewControllerDelegate>
 {
     NSMutableDictionary<NSString *, NSNumber *> *_annotationToolbarItemKeyMap;
     NSUInteger _annotationToolbarItemCounter;
@@ -47,12 +136,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, nullable) RNTPTCollaborationService* collabService;
 
+@property (nonatomic, strong, nullable) UIBarButtonItem *importFromBinaButtonItem;
+
 @end
 
 NS_ASSUME_NONNULL_END
 
 
 @interface RNTPTCollaborationService : NSObject<PTCollaborationServerCommunication>
+
 
 @property (nonatomic, weak, nullable) RNTPTDocumentView* viewProxy;
 
@@ -161,6 +253,9 @@ NS_ASSUME_NONNULL_END
     
     [PTOverrides overrideClass:[PTDigitalSignatureTool class]
                      withClass:[RNTPTDigitalSignatureTool class]];
+    
+    [PTOverrides overrideClass:[PTSavedSignaturesViewController class]
+                     withClass:[RNPTSavedSignaturesViewController class]];
 
     _tempFilePaths = [[NSMutableArray alloc] init];
     
@@ -266,7 +361,18 @@ NS_ASSUME_NONNULL_END
         [self.tabbedDocumentViewController openDocumentWithURL:fileURL
                                                        options:options];
     }
+
+    [self setToolManagerDelegate];
 }
+
+- (void)setToolManagerDelegate {
+    PTDocumentViewController *docController = self.currentDocumentViewController;
+    if (docController) {
+        PTToolManager *toolManager = docController.toolManager;
+        toolManager.delegate = self;
+    }
+}
+
 
 - (void)setDocument:(NSString *)document
 {
@@ -2064,6 +2170,87 @@ NS_ASSUME_NONNULL_END
 
 }
 
+
+- (void)setFontSize:(int)fontSize
+{
+   _fontSize = fontSize;
+}
+
+- (BOOL)savedSignaturesControllerShouldHideCreateNewSignatureButton:(nonnull PTSavedSignaturesViewController *)savedSignaturesController
+{
+    NSLog(@"123 shouldCreateNewSignature called");  
+    return NO;
+}
+
+
+- (void)setSignatureArrayUrl:(NSArray<NSString *> *)signatureArrayUrl {  
+
+    PTSignaturesManager *signaturesManager = [[PTSignaturesManager alloc] init];  
+    NSInteger numberOfSignatures = [signaturesManager numberOfSavedSignatures];  
+
+    // Delete all existing signatures
+    for (NSInteger i = numberOfSignatures - 1; i >= 0; i--) {  
+        [signaturesManager deleteSignatureAtIndex:i];  
+    }  
+
+    // Process each signature URL
+    for (NSString *signatureUrl in signatureArrayUrl) {  
+        NSLog(@"Processing Signature URL: %@", signatureUrl);  
+
+        if ([signatureUrl length] != 0) {  
+            NSURL *url;
+
+            // Check if it's a local file path or remote URL
+            if ([signatureUrl hasPrefix:@"/"]) {
+                url = [NSURL fileURLWithPath:signatureUrl]; // Local file path
+            } else {
+                url = [NSURL URLWithString:signatureUrl]; // Remote URL
+            }
+
+            NSData *imageData = [NSData dataWithContentsOfURL:url];
+            if (imageData) { // Proceed if image data was successfully loaded
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *uniqueFileName = [NSString stringWithFormat:@"signature_%@.png", [[NSUUID UUID] UUIDString]];
+                NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:uniqueFileName];
+                
+                // Save image data to the file system
+                BOOL success = [imageData writeToFile:filePath atomically:YES];
+                if (success) {
+                    NSLog(@"Image saved to: %@", filePath);
+                    
+                    UIImage *image = [UIImage imageWithData:imageData];
+                    if (image) {
+                        [signaturesManager createSignatureWithImage:image data:imageData saveSignature:YES];
+                    } else {
+                        NSLog(@"Failed to create UIImage from image data.");
+                    }
+                } else {
+                    NSLog(@"Failed to save image to path: %@", filePath);
+                }
+            } else {
+                NSLog(@"Failed to load data from URL: %@", signatureUrl);
+            }
+        }
+    }
+}
+
+
+// Helper method to hide the "Edit" button
+- (void)hideEditButtonInView:(UIView *)view {
+  for (UIView *subview in view.subviews) {
+    if ([subview isKindOfClass:[UIButton class]]) {
+      UIButton *button = (UIButton *)subview;
+      if ([button.currentTitle isEqualToString:@"Edit"]) {
+        button.hidden = YES; // Hide the "Edit" button
+      }
+    }
+    
+    // Recursively hide in all subviews
+    [self hideEditButtonInView:subview];
+  }
+}
+
+
 - (void)setPageChangeOnTap:(BOOL)pageChangeOnTap
 {
     _pageChangeOnTap = pageChangeOnTap;
@@ -2308,6 +2495,22 @@ NS_ASSUME_NONNULL_END
             [addPagesItems removeObject:documentViewController.thumbnailsViewController.addPagesViewController.addScannedPageButtonItem];
         }
     }
+
+    // Add Import from Bina button if not hidden
+    BOOL hideImportFromBina = [self.hideThumbnailsViewItems containsObject:PTThumbnailsViewImportFromBinaKey];
+    if (!hideImportFromBina) {
+        if (!self.importFromBinaButtonItem) {
+            self.importFromBinaButtonItem = [[UIBarButtonItem alloc]
+                initWithTitle:@"Import from Bina"
+                style:UIBarButtonItemStylePlain
+                target:self
+                action:@selector(importFromBinaButtonPressed:)];
+        }
+        if (![addPagesItems containsObject:self.importFromBinaButtonItem]) {
+            [addPagesItems addObject:self.importFromBinaButtonItem];
+        }
+    }
+
     if([addPagesItems count] == 0){
         documentViewController.thumbnailsViewController.addPagesEnabled = NO;
     }
@@ -3509,6 +3712,30 @@ NS_ASSUME_NONNULL_END
     return self.currentDocumentViewController;
 }
 
+
+- (void)toolManagerToolChanged:(nonnull PTToolManager *)toolManager;
+{
+   //set default font size
+   if ([toolManager.tool isKindOfClass:[PTFreeTextCreate class]]) {
+       PTAnnotationStyleManager *styleManager = [PTAnnotationStyleManager defaultManager];
+      
+       PTAnnotationStylePresetsGroup *presets = [styleManager stylePresetsForAnnotationType:PTExtendedAnnotTypeFreeText
+                                                                             identifier:toolManager.tool.identifier];
+      
+       for (PTAnnotStyle *preset in presets.styles) {
+           if ([preset.availableStyleKeys containsObject:PTAnnotStyleKeyTextSize]) {
+               preset.textSize = _fontSize;
+              
+           }
+       }
+      
+       [presets.selectedStyle setCurrentValuesAsDefaults];
+   }   
+
+
+}
+
+
 - (BOOL)toolManager:(PTToolManager *)toolManager shouldHandleLinkAnnotation:(PTAnnot *)annotation orLinkInfo:(PTLinkInfo *)linkInfo onPageNumber:(unsigned long)pageNumber
 {
     if (![self.overrideBehavior containsObject:PTLinkPressLinkAnnotationKey]) {
@@ -3710,6 +3937,13 @@ NS_ASSUME_NONNULL_END
 {
     if ([self.delegate respondsToSelector:@selector(toolbarButtonPressed:withKey:)]) {
         [self.delegate toolbarButtonPressed:self withKey:buttonString];
+    }
+}
+
+- (void)importFromBinaButtonPressed:(UIBarButtonItem *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(importFromBinaPressed:)]) {
+        [self.delegate importFromBinaPressed:self];
     }
 }
 
@@ -6451,6 +6685,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark - RNTPTDigitalSignatureTool
 
+
 @implementation RNTPTDigitalSignatureTool
 
 - (void)signaturesManagerNumberOfSignaturesDidChange:(PTSignaturesManager *)signaturesManager numberOfSignatures:(int)numberOfSignatures
@@ -6476,6 +6711,11 @@ NS_ASSUME_NONNULL_END
             [viewController.delegate rnt_documentViewControllerSavedSignaturesChanged:viewController];
         }
     }
+}
+
+- (BOOL)shouldCreateNewSignature {
+    NSLog(@"Custom shouldCreateNewSignature called");
+    return NO; // Prevent the creation of new signatures
 }
 
 @end
