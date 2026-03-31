@@ -27,6 +27,31 @@ RCT_EXPORT_MODULE(RNTPTDocumentView)
 
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock)
 
+
+RCT_CUSTOM_VIEW_PROPERTY(fontSize, int, RNTPTDocumentView)
+{
+   if (json) {
+       view.fontSize = [RCTConvert int:json];
+   }   
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(hideCreateNewSignatureButton, BOOL, RNTPTDocumentView)
+{
+    view.hideCreateNewSignatureButton = [RCTConvert BOOL:json];
+}
+
+
+
+RCT_CUSTOM_VIEW_PROPERTY(signatureArrayUrl, NSArray, RNTPTDocumentView)
+{
+   if (json) {
+       NSArray *signatureArrayUrl = [RCTConvert NSArray:json];
+       view.signatureArrayUrl = signatureArrayUrl;
+   }
+}
+
+
+
 RCT_CUSTOM_VIEW_PROPERTY(document, NSString, RNTPTDocumentView)
 {
     if (json && [RCTConvert NSString:json]) {
@@ -1001,6 +1026,16 @@ RCT_CUSTOM_VIEW_PROPERTY(signatureColors, NSArray, RNTPTDocumentView)
         sender.onChange(@{
             @"onToolbarButtonPress": @"onToolbarButtonPress",
             PTAnnotationToolbarItemKeyId: (itemKey ?: @"")
+        });
+    }
+}
+
+- (void)importFromBinaPressed:(RNTPTDocumentView *)sender
+{
+    if (sender.onChange) {
+        sender.onChange(@{
+            @"onToolbarButtonPress": @"onToolbarButtonPress",
+            PTAnnotationToolbarItemKeyId: PTImportFromBinaButton
         });
     }
 }

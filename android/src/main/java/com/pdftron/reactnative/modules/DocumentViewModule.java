@@ -1,10 +1,25 @@
 package com.pdftron.reactnative.modules;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -13,10 +28,14 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.google.android.material.internal.ToolbarUtils;
 import com.pdftron.pdf.dialog.digitalsignature.DigitalSignatureDialogFragment;
+import com.pdftron.pdf.dialog.digitalsignature.validation.list.DigitalSignatureListDialog;
+import com.pdftron.pdf.widget.preset.signature.SignatureSelectionDialog;
+import com.pdftron.reactnative.R;
 import com.pdftron.reactnative.viewmanagers.DocumentViewViewManager;
 
-public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+public class DocumentViewModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
 
     private static final String REACT_CLASS = "DocumentViewManager";
 
@@ -25,6 +44,7 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     public DocumentViewModule(ReactApplicationContext reactContext, DocumentViewViewManager viewManager) {
         super(reactContext);
         reactContext.addActivityEventListener(this);
+        reactContext.addLifecycleEventListener(this);
 
         mDocumentViewInstance = viewManager;
     }
@@ -1502,6 +1522,71 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
 
     @Override
     public void onNewIntent(Intent intent) {
+
+    }
+
+    @Override
+    public void onHostResume() {
+
+        if (getCurrentActivity() != null && getCurrentActivity() instanceof AppCompatActivity) {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)  {
+            ((AppCompatActivity) getCurrentActivity()).getSupportFragmentManager().registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
+
+                    @Override
+                    public void onFragmentStarted(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                        super.onFragmentStarted(fm, f);
+                        if (f instanceof SignatureSelectionDialog) {
+                            SignatureSelectionDialog dialog = (SignatureSelectionDialog) f;
+                            View view = dialog.getView();
+                            hideButtons(view);
+                        }
+                    }
+                }, true);
+            }
+             else{
+                 FragmentManager fragmentManager = ((AppCompatActivity) getCurrentActivity()).getSupportFragmentManager();
+                 fragmentManager.addOnBackStackChangedListener(() -> {
+                     Log.d("TAG_FRAG", "HELLO How are you ?");
+                     for (Fragment fragment : fragmentManager.getFragments()) {
+                         Log.d("TAG_FRAG", fragment.getClass().getName());
+
+                         if (fragment instanceof SignatureSelectionDialog) {
+
+                             SignatureSelectionDialog dialog = (SignatureSelectionDialog) fragment;
+                             View view = dialog.getView();
+                             hideButtons(view);
+
+                         }
+                     }
+                 });
+             }
+
+        }
+    }
+
+    private void hideButtons(View view){
+        if(view == null) return;
+        if (view instanceof Button) {
+            Button button = (Button) view;
+            if (button.getText().toString().equalsIgnoreCase("Manage") ||
+                    button.getText().toString().equalsIgnoreCase("Delete") || button.getText().toString().equalsIgnoreCase("Create")) {
+                button.setVisibility(View.INVISIBLE); // Hide Manage and Delete buttons
+            }
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                hideButtons(viewGroup.getChildAt(i)); // Recursively check all child views
+            }
+        }
+    }
+
+    @Override
+    public void onHostPause() {
+
+    }
+
+    @Override
+    public void onHostDestroy() {
 
     }
 }

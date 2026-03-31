@@ -55,6 +55,7 @@ export const Config = {
     InsertFromDocument: "insertFromDocumentButton",
     InsertFromPhoto: "insertFromPhotoButton",
     InsertFromScanner: "insertFromScannerButton",
+    ImportFromBina: "importFromBinaButton",
 
     // Android only
     saveReducedCopyButton: 'saveReducedCopyButton',
@@ -261,7 +262,8 @@ export const Config = {
     DuplicatePages: "thumbnailsDuplicatePages",
     RotatePages: "thumbnailsRotatePages",
     DeletePages: "thumbnailsDeletePages",
-    InsertFromScanner: "thumbnailsInsertFromScanner"
+    InsertFromScanner: "thumbnailsInsertFromScanner",
+    ImportFromBina: "thumbnailsImportFromBina",
   },
 
   // Conversion defines conversion sources and destinations

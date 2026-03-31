@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="disable_tool_modes">
-        <item>STAMPER</item>
-    </string-array>
+   <array name="custom_free_text_presets">
+       <item>@style/CustomFreeTextPresetStyle</item>
+   </array>
 </resources>

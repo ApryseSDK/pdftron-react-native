@@ -3,19 +3,28 @@ package com.pdftron.reactnative.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.os.Build;
 import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.leinardi.android.speeddial.SpeedDialView;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -33,6 +42,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.google.gson.Gson;
 import com.pdftron.collab.db.entity.AnnotationEntity;
 import com.pdftron.collab.ui.viewer.CollabManager;
 import com.pdftron.collab.ui.viewer.CollabViewerBuilder2;
@@ -80,6 +90,7 @@ import com.pdftron.pdf.tools.Pan;
 import com.pdftron.pdf.tools.QuickMenu;
 import com.pdftron.pdf.tools.QuickMenuItem;
 import com.pdftron.pdf.tools.RubberStampCreate;
+import com.pdftron.pdf.tools.Signature;
 import com.pdftron.pdf.tools.TextSelect;
 import com.pdftron.pdf.tools.Tool;
 import com.pdftron.pdf.tools.ToolManager;
@@ -108,22 +119,47 @@ import com.pdftron.reactnative.utils.DownloadFileCallback;
 import com.pdftron.reactnative.utils.ReactUtils;
 import com.pdftron.sdf.Obj;
 
+import com.pdftron.pdf.config.ToolStyleConfig;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
+
+import androidx.fragment.app.DialogFragment;
+import com.pdftron.pdf.dialog.signature.SignatureDialogFragment;
+import com.pdftron.pdf.widget.preset.signature.SignatureSelectionDialog;
 
 import static com.pdftron.reactnative.utils.Constants.*;
 
 public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
+   private int mFontSize;
+   private ReadableArray mSignatureArrayUrl;
+
+
     private static final String TAG = DocumentView.class.getSimpleName();
+
+    private static final String APP_PREFERNCES  ="APP_PREFERNCES";
+
+    private static final String SIGNATURE_TAG  ="SIGNATURE_TAG";
 
     private String mDocumentPath;
     private String mTabTitle;
@@ -213,6 +249,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             };
     private ArrayList<ThumbnailsViewFragment.ThumbnailsViewEditOptions> mThumbnailViewItems = new ArrayList<>();
 
+    private boolean mShowImportFromBina = true;
+    private ExtendedFloatingActionButton mImportFromBinaFab;
+
     public DocumentView(Context context) {
         super(context);
     }
@@ -230,6 +269,9 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         // DigitalSignatureDialogFragment
         DigitalSignatureDialogFragment.HANDLE_INTENT_IN_ACTIVITY = true;
         ThumbnailsViewFragment.HANDLE_INTENT_IN_ACTIVITY = true;
+
+        // Set max signatures to 4 to show all preloaded signatures
+        SignatureDialogFragment.MAX_SIGNATURES = 4;
 
         // intercept toast
         CommonToast.CommonToastHandler.getInstance().setCommonToastListener(new CommonToast.CommonToastListener() {
@@ -317,6 +359,34 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             mViewerBuilder.usingTheme(R.style.RNAppTheme);
         }
     }
+
+    public String getStyleId(String toolbarTag, ToolbarButtonType buttonType) {  
+        return toolbarTag + String.valueOf(buttonType.getValue()) + String.valueOf(DefaultToolbars.ButtonId.FREE_TEXT.value());  
+    }  
+
+
+    public void updatePresetTextSize(int textSize, String toolbarTag, ToolbarButtonType buttonType) {  
+        // Get the first preset style  
+        AnnotStyle annotStylePreset = ToolStyleConfig.getInstance().getAnnotPresetStyle(getContext(), buttonType.getValue(), 0, getStyleId(toolbarTag, buttonType));  
+        annotStylePreset.setTextSize(textSize);  
+        annotStylePreset.setStrokeColor(Color.TRANSPARENT);  
+        // Save the preset style  
+        PdfViewCtrlSettingsManager.setAnnotStylePreset(getContext(), buttonType.getValue(), 0, getStyleId(toolbarTag, buttonType), annotStylePreset.toJSONString());  
+    }          
+
+
+   public void setFontSize(int fontSize) {
+       mFontSize = fontSize;
+        
+        updatePresetTextSize(fontSize, DefaultToolbars.TAG_ANNOTATE_TOOLBAR, ToolbarButtonType.FREE_TEXT);  
+        updatePresetTextSize(fontSize, DefaultToolbars.TAG_FILL_AND_SIGN_TOOLBAR, ToolbarButtonType.FREE_TEXT);           
+   }
+
+
+   public void setSignatureArrayUrl(ReadableArray array) {
+       mSignatureArrayUrl = array;
+   }
+
 
     public void setDocument(String path) {
         if (Utils.isNullOrEmpty(path)) {
@@ -1002,6 +1072,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_IMAGE);
             } else if (THUMBNAIL_INSERT_FROM_DOCUMENT.equals(viewItem)) {
                 mThumbnailViewItems.add(ThumbnailsViewFragment.ThumbnailsViewEditOptions.OPTION_INSERT_FROM_DOCUMENT);
+            } else if (THUMBNAIL_IMPORT_FROM_BINA.equals(viewItem)) {
+                mShowImportFromBina = false;
             }
         }
     }
@@ -2937,6 +3009,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     };
 
+    private boolean mShowingCustomSignatureDialog = false;
+
     private final ToolManager.ToolChangedListener mToolChangedListener = new ToolManager.ToolChangedListener() {
         @Override
         public void toolChanged(ToolManager.Tool newTool, @Nullable ToolManager.Tool oldTool) {
@@ -3132,6 +3206,272 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
     public void onTabDocumentLoaded(String tag) {
         super.onTabDocumentLoaded(tag);
 
+Log.d(TAG, "onTabDocumentLoaded: Started");
+// set default signature - always ensure preloaded signatures exist
+Thread thread = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        try {
+            if (mSignatureArrayUrl == null || mSignatureArrayUrl.size() == 0) {
+                Log.d(TAG, "No signature URLs provided. Skipping.");
+                return;
+            }
+
+            // Get current saved signatures count
+            File[] existingSignatures = StampManager.getInstance().getSavedSignatures(getContext());
+            int expectedCount = mSignatureArrayUrl.size();
+
+            Log.d(TAG, "Existing signatures: " + existingSignatures.length + ", Expected: " + expectedCount);
+
+            // Always reload if we don't have enough signatures
+            // This ensures preloaded signatures are always available
+            boolean needsReload = existingSignatures.length < expectedCount;
+
+            String currentSignatureUrls = convertReadableArrayToString(mSignatureArrayUrl);
+            String savedSignatureUrls = getSignatureUrlsFromPreferences(getContext());
+
+            if (needsReload || !savedSignatureUrls.equals(currentSignatureUrls)) {
+                Log.d(TAG, "Loading signatures. needsReload=" + needsReload + ", urlsChanged=" + !savedSignatureUrls.equals(currentSignatureUrls));
+
+                try {
+                    // Save the current mSignatureArrayUrl to SharedPreferences
+                    saveSignatureUrlsToPreferences(getContext(), mSignatureArrayUrl);
+
+                    // Delete existing signatures to reload fresh
+                    for (File signature : existingSignatures) {
+                        Log.d(TAG, "Deleting existing signature: " + signature.getAbsolutePath());
+                        StampManager.getInstance().deleteSignature(getContext(), signature.getAbsolutePath());
+                    }
+
+                    // Get the signature JPG preview directory
+                    File jpgPreviewDir = new File(getContext().getFilesDir(), "_pdftron_SignatureJPG");
+                    if (!jpgPreviewDir.exists()) {
+                        jpgPreviewDir.mkdirs();
+                    }
+
+                    // Load all preloaded signatures one by one
+                    for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
+                        try {
+                            String pathOrUrl = mSignatureArrayUrl.getString(i);
+                            Log.d(TAG, "Processing signature " + i + ": " + pathOrUrl);
+                            Bitmap bitmap;
+
+                            if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
+                                // It's a URL, download the image
+                                URL url = new URL(pathOrUrl);
+                                Log.d(TAG, "Downloading from URL: " + url.getPath());
+                                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                                connection.setDoInput(true);
+                                connection.setConnectTimeout(10000);
+                                connection.setReadTimeout(10000);
+                                connection.connect();
+                                InputStream input = connection.getInputStream();
+                                bitmap = BitmapFactory.decodeStream(input);
+                                input.close();
+                                connection.disconnect();
+                            } else {
+                                // It's a local file path, load directly
+                                // Strip file:// prefix if present
+                                String localPath = pathOrUrl;
+                                if (localPath.startsWith("file://")) {
+                                    localPath = localPath.substring(7);
+                                }
+                                File file = new File(localPath);
+                                if (file.exists()) {
+                                    Log.d(TAG, "Loading from local file: " + file.getAbsolutePath());
+                                    bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                } else {
+                                    Log.e(TAG, "File not found: " + localPath);
+                                    continue;
+                                }
+                            }
+
+                            if (bitmap == null) {
+                                Log.e(TAG, "Bitmap is null. Skipping for: " + pathOrUrl);
+                                continue;
+                            }
+
+                            // Save the bitmap locally as PNG to preserve transparency
+                            File directory = getContext().getFilesDir();
+                            if (!directory.exists()) {
+                                directory.mkdirs();
+                            }
+
+                            String filename = "signaturefilename" + i + ".png";
+                            File outputFile = new File(directory, filename);
+
+                            try {
+                                FileOutputStream fOut = new FileOutputStream(outputFile);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                                fOut.flush();
+                                fOut.close();
+                                Log.d(TAG, "Saved temp file: " + outputFile.getAbsolutePath());
+
+                                // Record existing PDFs before creating new one
+                                File[] beforeSigs = StampManager.getInstance().getSavedSignatures(getContext());
+                                Set<String> beforeNames = new HashSet<>();
+                                for (File f : beforeSigs) {
+                                    beforeNames.add(f.getName());
+                                }
+                                Log.d(TAG, "Before creating signature " + i + ", existing count: " + beforeSigs.length);
+
+                                // Create signature using StampManager
+                                Uri imageUri = Uri.fromFile(outputFile);
+                                Log.d(TAG, "Signature " + i + " creating from image...");
+                                StampManager.getInstance().createSignatureFromImage(getContext(), imageUri, 0);
+
+                                // Wait for the SDK to process
+                                Thread.sleep(500);
+
+                                // Get saved signatures after creation
+                                File[] afterSigs = StampManager.getInstance().getSavedSignatures(getContext());
+                                Log.d(TAG, "After signature " + i + " creation, saved count: " + afterSigs.length);
+
+                                // Find the newly created PDF (one that wasn't in beforeNames)
+                                File newPdf = null;
+                                for (File f : afterSigs) {
+                                    if (!beforeNames.contains(f.getName())) {
+                                        newPdf = f;
+                                        break;
+                                    }
+                                }
+
+                                // Create JPG preview for the new PDF
+                                if (newPdf != null) {
+                                    String pdfName = newPdf.getName();
+                                    // PDFTron uses ".pdf.jpg" naming for JPG previews
+                                    String jpgName = pdfName + ".jpg";
+                                    File jpgPreviewFile = new File(jpgPreviewDir, jpgName);
+
+                                    Log.d(TAG, "Creating JPG preview: " + jpgPreviewFile.getAbsolutePath());
+
+                                    // Create a new bitmap with white background for JPEG (JPEG doesn't support transparency)
+                                    Bitmap jpgBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                                    android.graphics.Canvas canvas = new android.graphics.Canvas(jpgBitmap);
+                                    canvas.drawColor(android.graphics.Color.WHITE); // Fill with white background
+                                    canvas.drawBitmap(bitmap, 0, 0, null); // Draw original bitmap on top
+
+                                    FileOutputStream jpgOut = new FileOutputStream(jpgPreviewFile);
+                                    jpgBitmap.compress(Bitmap.CompressFormat.JPEG, 90, jpgOut);
+                                    jpgOut.flush();
+                                    jpgOut.close();
+                                    jpgBitmap.recycle(); // Free the temporary bitmap
+                                    Log.d(TAG, "Created JPG preview with white background for: " + pdfName);
+                                } else {
+                                    Log.w(TAG, "Could not find newly created PDF for signature " + i);
+                                }
+
+                                File[] jpgFiles = jpgPreviewDir.listFiles();
+                                int jpgCount = jpgFiles != null ? jpgFiles.length : 0;
+                                Log.d(TAG, "JPG preview count: " + jpgCount);
+                                Log.d(TAG, "Signature " + i + " saved successfully");
+
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error compressing and saving bitmap for signature " + i + ": ", e);
+                            }
+
+                            // Recycle bitmap to free memory
+                            if (bitmap != null && !bitmap.isRecycled()) {
+                                bitmap.recycle();
+                            }
+
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error processing signature " + i + ": ", e);
+                        }
+                    }
+
+                    // Final verification and fix missing JPG previews
+                    File[] finalSigs = StampManager.getInstance().getSavedSignatures(getContext());
+                    File[] finalJpgs = jpgPreviewDir.listFiles();
+                    Log.d(TAG, "After loop - signature count: " + finalSigs.length +
+                              ", JPG preview count: " + (finalJpgs != null ? finalJpgs.length : 0));
+
+                    // Create a set of existing JPG names for quick lookup
+                    Set<String> existingJpgNames = new HashSet<>();
+                    if (finalJpgs != null) {
+                        for (File jpg : finalJpgs) {
+                            existingJpgNames.add(jpg.getName());
+                        }
+                    }
+
+                    // Check each PDF and create missing JPG previews
+                    // Map PDF index to temp file: _pdftron_Signature.pdf -> 0, _pdftron_Signature (1).pdf -> 1, etc.
+                    for (File pdfFile : finalSigs) {
+                        String pdfName = pdfFile.getName();
+                        String expectedJpgName = pdfName + ".jpg";
+
+                        if (!existingJpgNames.contains(expectedJpgName)) {
+                            // Determine which temp file corresponds to this PDF
+                            int tempIndex = 0;
+                            if (pdfName.contains("(") && pdfName.contains(")")) {
+                                // Extract number from parentheses, e.g., "_pdftron_Signature (1).pdf" -> 1
+                                int start = pdfName.lastIndexOf("(") + 1;
+                                int end = pdfName.lastIndexOf(")");
+                                try {
+                                    tempIndex = Integer.parseInt(pdfName.substring(start, end));
+                                } catch (NumberFormatException e) {
+                                    tempIndex = 0;
+                                }
+                            }
+                            // _pdftron_Signature.pdf (no number) is the first one, index 0
+
+                            Log.d(TAG, "Missing JPG for: " + pdfName + ", using temp file index " + tempIndex);
+
+                            // Load the saved temp image file
+                            String tempFilename = "signaturefilename" + tempIndex + ".png";
+                            File tempFile = new File(getContext().getFilesDir(), tempFilename);
+
+                            if (tempFile.exists()) {
+                                try {
+                                    Bitmap bitmap = BitmapFactory.decodeFile(tempFile.getAbsolutePath());
+                                    if (bitmap != null) {
+                                        // Create a new bitmap with white background for JPEG
+                                        Bitmap jpgBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                                        android.graphics.Canvas canvas = new android.graphics.Canvas(jpgBitmap);
+                                        canvas.drawColor(android.graphics.Color.WHITE);
+                                        canvas.drawBitmap(bitmap, 0, 0, null);
+
+                                        File jpgPreviewFile = new File(jpgPreviewDir, expectedJpgName);
+                                        FileOutputStream jpgOut = new FileOutputStream(jpgPreviewFile);
+                                        jpgBitmap.compress(Bitmap.CompressFormat.JPEG, 90, jpgOut);
+                                        jpgOut.flush();
+                                        jpgOut.close();
+                                        jpgBitmap.recycle();
+                                        bitmap.recycle();
+                                        Log.d(TAG, "Created missing JPG with white background: " + jpgPreviewFile.getAbsolutePath());
+                                    }
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Error creating missing JPG for " + pdfName + ": ", e);
+                                }
+                            } else {
+                                Log.w(TAG, "Temp file not found: " + tempFile.getAbsolutePath());
+                            }
+                        }
+                    }
+
+                    // Final count
+                    File[] verifyJpgs = jpgPreviewDir.listFiles();
+                    Log.d(TAG, "Finished loading. Final signature count: " + finalSigs.length +
+                              ", Final JPG preview count: " + (verifyJpgs != null ? verifyJpgs.length : 0));
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Error updating signatures: ", e);
+                }
+            } else {
+                Log.d(TAG, "Signatures already loaded. Count: " + existingSignatures.length);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Unexpected error: ", e);
+        }
+    }
+});
+
+thread.start();
+
+
+
+
         // set react context
         if (getPdfViewCtrlTabFragment() instanceof RNPdfViewCtrlTabFragment) {
             RNPdfViewCtrlTabFragment fragment = (RNPdfViewCtrlTabFragment) getPdfViewCtrlTabFragment();
@@ -3186,16 +3526,134 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         getPdfViewCtrl().addOnLayoutChangeListener(mLayoutChangedListener);
         getPdfViewCtrl().addTextSearchListener(mTextSearchListener);
 
+        
+
         getToolManager().addAnnotationModificationListener(mAnnotationModificationListener);
         getToolManager().addAnnotationsSelectionListener(mAnnotationsSelectionListener);
         getToolManager().addPdfDocModificationListener(mPdfDocModificationListener);
         getToolManager().addToolChangedListener(mToolChangedListener);
+
+        Log.d(TAG, "=== SIGNATURE CONFIG ===");
+        Log.d(TAG, "ToolManager.isShowSignaturePresets() = " + getToolManager().isShowSignaturePresets());
+        Log.d(TAG, "ToolManager.isShowSavedSignature() = " + getToolManager().isShowSavedSignature());
+        Log.d(TAG, "SignatureDialogFragment.MAX_SIGNATURES = " + SignatureDialogFragment.MAX_SIGNATURES);
+
+        // Also get the Activity's FragmentManager to register callbacks there
+        FragmentManager activityFM = null;
+        if (getContext() instanceof AppCompatActivity) {
+            activityFM = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+            Log.d(TAG, "Got Activity FragmentManager");
+        }
+
+        // Register fragment lifecycle callback on BOTH managers
+        FragmentManager.FragmentLifecycleCallbacks callbacks = new FragmentManager.FragmentLifecycleCallbacks() {
+            @Override
+            public void onFragmentStarted(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                super.onFragmentStarted(fm, f);
+                Log.d(TAG, "*** Fragment Started: " + f.getClass().getSimpleName() + " in FM: " + fm.toString());
+
+                // Show Import from Bina FAB when ThumbnailsViewFragment is started
+                if (f instanceof ThumbnailsViewFragment && mShowImportFromBina) {
+                    showImportFromBinaFab(f);
+                }
+
+                // Dismiss SignatureSelectionDialog (only shows 2 signatures) and show our custom dialog
+                if (f instanceof SignatureSelectionDialog) {
+                    Log.d(TAG, "!!! SignatureSelectionDialog detected - DISMISSING and showing custom dialog");
+                    SignatureSelectionDialog selectionDialog = (SignatureSelectionDialog) f;
+                    selectionDialog.dismiss();
+
+                    // Show our custom dialog with all 4 signatures
+                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                        ToolManager tm = getToolManager();
+                        if (tm != null && tm.getTool() instanceof Signature) {
+                            showCustomSignatureDialog((Signature) tm.getTool());
+                        }
+                    }, 100);
+                    return;
+                }
+
+                // Set listener and hide create options in SignatureDialogFragment
+                if (f instanceof SignatureDialogFragment) {
+                    Log.d(TAG, "!!! SignatureDialogFragment detected - setting listener and hiding create options");
+                    SignatureDialogFragment dialog = (SignatureDialogFragment) f;
+
+                    // Set the listener to handle signature selection
+                    ToolManager tm = getToolManager();
+                    if (tm != null && tm.getTool() instanceof Signature) {
+                        final Signature sigTool = (Signature) tm.getTool();
+                        Log.d(TAG, "Setting OnCreateSignatureListener on SignatureDialogFragment");
+
+                        dialog.setOnCreateSignatureListener(new com.pdftron.pdf.interfaces.OnCreateSignatureListener() {
+                            @Override
+                            public void onSignatureCreated(String filePath, boolean storeSignature) {
+                                Log.d(TAG, "SignatureDialogFragment.onSignatureCreated: " + filePath);
+                                if (filePath != null) {
+                                    sigTool.create(filePath, null);
+                                }
+                            }
+
+                            @Override
+                            public void onSignatureFromImage(android.graphics.PointF targetPoint, int targetPage, Long widget) {
+                                Log.d(TAG, "SignatureDialogFragment.onSignatureFromImage");
+                            }
+
+                            @Override
+                            public void onAnnotStyleDialogFragmentDismissed(com.pdftron.pdf.controls.AnnotStyleDialogFragment annotDialog) {
+                                Log.d(TAG, "SignatureDialogFragment.onAnnotStyleDialogFragmentDismissed");
+                            }
+                        });
+                    }
+
+                    View view = dialog.getView();
+                    if (view != null) {
+                        hideSignatureCreateOptions(view);
+                    }
+                }
+            }
+
+            @Override
+            public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                super.onFragmentResumed(fm, f);
+                Log.d(TAG, "*** Fragment Resumed: " + f.getClass().getSimpleName());
+                if (f instanceof SignatureDialogFragment) {
+                    SignatureDialogFragment dialog = (SignatureDialogFragment) f;
+                    View view = dialog.getView();
+                    if (view != null) {
+                        hideSignatureCreateOptions(view);
+                    }
+                }
+            }
+
+            @Override
+            public void onFragmentStopped(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                super.onFragmentStopped(fm, f);
+                Log.d(TAG, "*** Fragment Stopped: " + f.getClass().getSimpleName());
+
+                // Hide Import from Bina FAB when ThumbnailsViewFragment is stopped
+                if (f instanceof ThumbnailsViewFragment) {
+                    hideImportFromBinaFab();
+                }
+            }
+        };
+
+        // Register on saved FragmentManager
+        if (mFragmentManagerSave != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mFragmentManagerSave.registerFragmentLifecycleCallbacks(callbacks, true);
+            Log.d(TAG, "Registered callbacks on mFragmentManagerSave");
+        }
+        // Also register on Activity's FragmentManager if different
+        if (activityFM != null && activityFM != mFragmentManagerSave && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activityFM.registerFragmentLifecycleCallbacks(callbacks, true);
+            Log.d(TAG, "Registered callbacks on Activity FragmentManager");
+        }
 
         getToolManager().setStylusAsPen(mUseStylusAsPen);
         getToolManager().setSignSignatureFieldsWithStamps(mSignWithStamps);
         getToolManager().setReflowTextSelectionMenuEnabled(mEnableReadingModeQuickMenu);
 
         getToolManager().getUndoRedoManger().addUndoRedoStateChangeListener(mUndoRedoStateChangedListener);
+
 
         getPdfViewCtrlTabFragment().addQuickMenuListener(mQuickMenuListener);
 
@@ -3263,6 +3721,7 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
 
         onReceiveNativeEvent(ON_DOCUMENT_LOADED, tag);
     }
+
 
     @Override
     public void onTabHostShown() {
@@ -5026,6 +5485,182 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
     }
 
+    public boolean isImportFromBinaEnabled() {
+        return mShowImportFromBina;
+    }
+
+    public void emitImportFromBinaPressed() {
+        WritableMap params = Arguments.createMap();
+        params.putString(ON_TOOLBAR_BUTTON_PRESS, ON_TOOLBAR_BUTTON_PRESS);
+        params.putString(TOOLBAR_ITEM_KEY_ID, BUTTON_IMPORT_FROM_BINA);
+        onReceiveNativeEvent(params);
+    }
+
+    private static final int IMPORT_FROM_BINA_FAB_ID = 999999;
+    private SpeedDialView mSpeedDialView;
+    private SpeedDialView.OnActionSelectedListener mOriginalSpeedDialListener;
+
+    private void showImportFromBinaFab(Fragment thumbnailsFragment) {
+        View fragmentView = thumbnailsFragment.getView();
+        if (fragmentView == null) {
+            // View not ready yet, post delayed
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                View view = thumbnailsFragment.getView();
+                if (view != null) {
+                    addImportFromBinaToSpeedDial(view, thumbnailsFragment);
+                }
+            }, 500);
+        } else {
+            // Still delay a bit to let the fragment fully initialize
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                addImportFromBinaToSpeedDial(fragmentView, thumbnailsFragment);
+            }, 500);
+        }
+    }
+
+    private void addImportFromBinaToSpeedDial(View parentView, Fragment thumbnailsFragment) {
+        // Find the SpeedDialView in the view hierarchy
+        SpeedDialView speedDialView = findSpeedDialView(parentView);
+        if (speedDialView == null) {
+            Log.d(TAG, "SpeedDialView not found in view hierarchy, trying by ID...");
+            // Try to find by known ID
+            View fabView = parentView.findViewById(com.pdftron.pdf.tools.R.id.fab_menu);
+            if (fabView instanceof SpeedDialView) {
+                speedDialView = (SpeedDialView) fabView;
+            }
+        }
+
+        if (speedDialView == null) {
+            Log.e(TAG, "SpeedDialView not found, creating fallback FAB");
+            // Fallback: add a separate FAB
+            addFallbackImportFromBinaFab(parentView);
+            return;
+        }
+
+        addImportFromBinaItemToSpeedDial(speedDialView, thumbnailsFragment);
+    }
+
+    private SpeedDialView findSpeedDialView(View view) {
+        if (view instanceof SpeedDialView) {
+            return (SpeedDialView) view;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                SpeedDialView result = findSpeedDialView(viewGroup.getChildAt(i));
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void addImportFromBinaItemToSpeedDial(SpeedDialView speedDialView, Fragment thumbnailsFragment) {
+        mSpeedDialView = speedDialView;
+
+        // Check if already added
+        if (speedDialView.getActionItem(IMPORT_FROM_BINA_FAB_ID) != null) {
+            Log.d(TAG, "Import from Bina item already exists in SpeedDial");
+            return;
+        }
+
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        // Create the action item for Import from Bina
+        SpeedDialActionItem importFromBinaItem = new SpeedDialActionItem.Builder(
+                IMPORT_FROM_BINA_FAB_ID,
+                android.R.drawable.ic_menu_upload)
+                .setLabel("Import from Bina")
+                .setFabBackgroundColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.holo_blue_light))
+                .setLabelBackgroundColor(androidx.core.content.ContextCompat.getColor(context, android.R.color.white))
+                .create();
+
+        // Add to the SpeedDialView at position 0 (top of the expanded list)
+        speedDialView.addActionItem(importFromBinaItem, 0);
+
+        // Get ThumbnailsViewFragment to use as the original handler
+        final ThumbnailsViewFragment tvf = (thumbnailsFragment instanceof ThumbnailsViewFragment)
+            ? (ThumbnailsViewFragment) thumbnailsFragment : null;
+
+        // Set up click listener that handles our item and delegates others
+        speedDialView.setOnActionSelectedListener(actionItem -> {
+            if (actionItem.getId() == IMPORT_FROM_BINA_FAB_ID) {
+                Log.d(TAG, "Import from Bina clicked!");
+                emitImportFromBinaPressed();
+                speedDialView.close();
+                return true;
+            }
+            // For other items, let ThumbnailsViewFragment handle them
+            if (tvf != null) {
+                return tvf.onActionSelected(actionItem);
+            }
+            return false;
+        });
+
+        Log.d(TAG, "Import from Bina item added to SpeedDialView successfully");
+    }
+
+    private void addFallbackImportFromBinaFab(View parentView) {
+        if (mImportFromBinaFab != null) {
+            return; // Already added
+        }
+
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        ViewGroup container = null;
+        if (parentView instanceof ViewGroup) {
+            container = (ViewGroup) parentView;
+        }
+        if (container == null) {
+            return;
+        }
+
+        // Create a standalone FAB as fallback
+        mImportFromBinaFab = new ExtendedFloatingActionButton(context);
+        mImportFromBinaFab.setText("Import from Bina");
+        mImportFromBinaFab.setIconResource(android.R.drawable.ic_menu_upload);
+        mImportFromBinaFab.setId(View.generateViewId());
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.START;
+        int margin = (int) (16 * context.getResources().getDisplayMetrics().density);
+        params.setMargins(margin, margin, margin, margin);
+        mImportFromBinaFab.setLayoutParams(params);
+
+        mImportFromBinaFab.setOnClickListener(v -> {
+            emitImportFromBinaPressed();
+        });
+
+        container.addView(mImportFromBinaFab);
+        Log.d(TAG, "Fallback Import from Bina FAB added");
+    }
+
+    private void hideImportFromBinaFab() {
+        if (mSpeedDialView != null) {
+            mSpeedDialView.removeActionItem(IMPORT_FROM_BINA_FAB_ID);
+            mSpeedDialView = null;
+            Log.d(TAG, "Import from Bina item removed from SpeedDial");
+        }
+        if (mImportFromBinaFab != null) {
+            ViewGroup parent = (ViewGroup) mImportFromBinaFab.getParent();
+            if (parent != null) {
+                parent.removeView(mImportFromBinaFab);
+            }
+            mImportFromBinaFab = null;
+        }
+        mOriginalSpeedDialListener = null;
+    }
+
     public ReadableArray getSavedSignatures() {
         WritableArray signatures = Arguments.createArray();
         Context context = getContext();
@@ -5157,5 +5792,224 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
                 getId(),
                 "topChange",
                 event);
+    }
+
+        private String convertReadableArrayToString(ReadableArray readableArray) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < readableArray.size(); i++) {
+            sb.append(readableArray.getString(i));
+            if (i < readableArray.size() - 1) {
+                sb.append(","); // Separator for each URL
+            }
+        }
+        return sb.toString();
+    }
+
+    // Method to save signature URLs to SharedPreferences
+    private void saveSignatureUrlsToPreferences(Context context, ReadableArray mSignatureArrayUrl) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_PREFERNCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Convert mSignatureArrayUrl (ReadableArray) to a comma-separated string
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mSignatureArrayUrl.size(); i++) {
+            sb.append(mSignatureArrayUrl.getString(i));
+            if (i < mSignatureArrayUrl.size() - 1) {
+                sb.append(","); // Separator for each URL
+            }
+        }
+        String currentSignatureUrls = sb.toString();
+
+        // Save the string to SharedPreferences
+        editor.putString(SIGNATURE_TAG, currentSignatureUrls);
+        editor.apply(); // Apply changes
+    }
+
+    // Method to retrieve saved signature URLs from SharedPreferences
+    private String getSignatureUrlsFromPreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(APP_PREFERNCES, Context.MODE_PRIVATE);
+        // Return saved signature URLs or empty string if not found
+        return sharedPreferences.getString(SIGNATURE_TAG, "");
+    }
+
+    // Helper method to recursively hide Create button in SignatureSelectionDialog
+    // This matches iOS behavior where users can only select from pre-loaded signatures
+    private void hideSignatureCreateButton(View view) {
+        if (view == null) return;
+        if (view instanceof Button) {
+            Button button = (Button) view;
+            String buttonText = button.getText().toString();
+            // Hide Create, Manage, and Delete buttons to match iOS behavior
+            if (buttonText.equalsIgnoreCase("Create") ||
+                buttonText.equalsIgnoreCase("Manage") ||
+                buttonText.equalsIgnoreCase("Delete")) {
+                button.setVisibility(View.INVISIBLE);
+            }
+        } else if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                hideSignatureCreateButton(viewGroup.getChildAt(i));
+            }
+        }
+    }
+
+    // Custom signature selection dialog that shows all 4 preloaded signatures
+    // This replaces PDFTron's built-in SignatureSelectionDialog which only shows 2 signatures
+    private void showCustomSignatureDialog(final Signature sigTool) {
+        Context context = getContext();
+        if (context == null) {
+            mShowingCustomSignatureDialog = false;
+            return;
+        }
+
+        // Get signature files from PDFTron's signature directory
+        File sigDir = new File(context.getFilesDir(), "signatures");
+        File jpgDir = new File(sigDir, "_pdftron_SignatureJPG");
+
+        Log.d(TAG, "Looking for signatures in: " + jpgDir.getAbsolutePath());
+
+        if (!jpgDir.exists() || !jpgDir.isDirectory()) {
+            Log.d(TAG, "No signature JPG directory found");
+            mShowingCustomSignatureDialog = false;
+            return;
+        }
+
+        // Get all JPG preview files
+        File[] jpgFiles = jpgDir.listFiles((dir, name) -> name.endsWith(".jpg"));
+        if (jpgFiles == null || jpgFiles.length == 0) {
+            Log.d(TAG, "No JPG signature files found");
+            mShowingCustomSignatureDialog = false;
+            return;
+        }
+
+        // Sort files by name to maintain consistent order
+        java.util.Arrays.sort(jpgFiles, (a, b) -> a.getName().compareTo(b.getName()));
+
+        Log.d(TAG, "Found " + jpgFiles.length + " signature files");
+
+        // Create dialog
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Select Signature");
+
+        // Create a horizontal scroll view with signature images
+        android.widget.HorizontalScrollView scrollView = new android.widget.HorizontalScrollView(context);
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(context);
+        layout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        layout.setPadding(16, 16, 16, 16);
+
+        final android.app.AlertDialog[] dialogRef = new android.app.AlertDialog[1];
+
+        for (File jpgFile : jpgFiles) {
+            // Create image view for each signature
+            android.widget.ImageView imageView = new android.widget.ImageView(context);
+            Bitmap bitmap = BitmapFactory.decodeFile(jpgFile.getAbsolutePath());
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+                imageView.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+
+                // Set size
+                android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                        300, 200);
+                params.setMargins(8, 8, 8, 8);
+                imageView.setLayoutParams(params);
+
+                // Add border
+                imageView.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
+                imageView.setPadding(8, 8, 8, 8);
+
+                // Get corresponding PDF file
+                String jpgName = jpgFile.getName();
+                String pdfName = jpgName.replace(".jpg", ".pdf");
+                File pdfFile = new File(sigDir, pdfName);
+
+                Log.d(TAG, "Signature: " + jpgName + " -> PDF: " + pdfFile.getAbsolutePath() + " exists: " + pdfFile.exists());
+
+                if (pdfFile.exists()) {
+                    final String pdfPath = pdfFile.getAbsolutePath();
+                    imageView.setOnClickListener(v -> {
+                        Log.d(TAG, "Signature selected: " + pdfPath);
+                        if (dialogRef[0] != null) {
+                            dialogRef[0].dismiss();
+                        }
+                        // Apply the signature using the Signature tool
+                        if (sigTool != null) {
+                            sigTool.create(pdfPath, null);
+                        } else {
+                            // Fallback: create a new Signature tool
+                            ToolManager tm = getToolManager();
+                            if (tm != null) {
+                                Signature newSigTool = (Signature) tm.createTool(ToolManager.ToolMode.SIGNATURE, null);
+                                tm.setTool(newSigTool);
+                                newSigTool.create(pdfPath, null);
+                            }
+                        }
+                        mShowingCustomSignatureDialog = false;
+                    });
+                }
+
+                layout.addView(imageView);
+            }
+        }
+
+        scrollView.addView(layout);
+        builder.setView(scrollView);
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+            mShowingCustomSignatureDialog = false;
+        });
+        builder.setOnDismissListener(dialog -> {
+            mShowingCustomSignatureDialog = false;
+        });
+
+        dialogRef[0] = builder.create();
+        dialogRef[0].show();
+    }
+
+    // Helper method to hide create options (Draw, Type, Image tabs) in SignatureDialogFragment
+    // This allows only saved signatures to be visible, matching iOS behavior
+    private void hideSignatureCreateOptions(View view) {
+        if (view == null) return;
+
+        // Look for TabLayout or similar tab container and hide Draw, Type, Image tabs
+        if (view instanceof com.google.android.material.tabs.TabLayout) {
+            com.google.android.material.tabs.TabLayout tabLayout = (com.google.android.material.tabs.TabLayout) view;
+            // Hide tabs except the first one (usually Saved signatures)
+            for (int i = 1; i < tabLayout.getTabCount(); i++) {
+                com.google.android.material.tabs.TabLayout.Tab tab = tabLayout.getTabAt(i);
+                if (tab != null && tab.view != null) {
+                    tab.view.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        // Also hide any buttons with create-related text
+        if (view instanceof Button) {
+            Button button = (Button) view;
+            String buttonText = button.getText().toString().toLowerCase();
+            if (buttonText.contains("draw") ||
+                buttonText.contains("type") ||
+                buttonText.contains("image") ||
+                buttonText.contains("create") ||
+                buttonText.contains("new")) {
+                button.setVisibility(View.GONE);
+            }
+        }
+
+        // Hide views with specific content descriptions
+        CharSequence contentDesc = view.getContentDescription();
+        if (contentDesc != null) {
+            String desc = contentDesc.toString().toLowerCase();
+            if (desc.contains("draw") || desc.contains("type") || desc.contains("image")) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        // Recursively process child views
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                hideSignatureCreateOptions(viewGroup.getChildAt(i));
+            }
+        }
     }
 }
