@@ -24,8 +24,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm i @types/react-native@0.68.1 --save-dev
-          npm i react-native@0.68.2
+          npm i @types/react-native@0.68.1 --save-dev --legacy-peer-deps
+          npm i react-native@0.68.2 --legacy-peer-deps
 
       - name: Build JavaScript files
         run: | # Change line to your build script command.
