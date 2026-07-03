@@ -1,13 +1,13 @@
 
 buildscript {
-    def kotlinVersion = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : "1.8.22"
+    def kotlinVersion = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : "2.1.0"
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath 'com.android.tools.build:gradle:8.9.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
@@ -62,12 +62,12 @@ repositories {
 dependencies {
     implementation "com.facebook.react:react-native:+"
 
-    implementation 'androidx.fragment:fragment:1.5.1'
+    implementation 'androidx.fragment:fragment:1.8.6'
 
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
     
-    implementation "com.pdftron:pdftron:11.13.0"
-    implementation "com.pdftron:tools:11.13.0"
-    implementation "com.pdftron:collab:11.13.0"
+    implementation "com.pdftron:pdftron:12.0.0"
+    implementation "com.pdftron:tools:12.0.0"
+    implementation "com.pdftron:collab:12.0.0"
 }
