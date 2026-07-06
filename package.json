@@ -29,7 +29,7 @@
   ],
   "readmeFilename": "README.md",
   "dependencies": {
-    "deprecated-react-native-prop-types": "*"
+    "deprecated-react-native-prop-types": "^5.0.0"
   },
   "peerDependencies": {
     "react": "*",
@@ -37,7 +37,7 @@
     "prop-types": "*"
   },
   "devDependencies": {
-    "react": "*",
+    "react": "^18.0.0",
     "react-native": "^0.73.0",
     "@types/react": "^18.0.0",
     "@types/react-native": "^0.73.0",
