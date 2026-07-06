@@ -38,9 +38,9 @@
   },
   "devDependencies": {
     "react": "*",
-    "@types/react": "*",
-    "@types/react-native": "*",
-    "@types/prop-types": "*",
-    "typescript": "*"
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.73.0",
+    "@types/prop-types": "^15.0.0",
+    "typescript": "^5.2.0"
   }
 }
