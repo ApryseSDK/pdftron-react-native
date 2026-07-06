@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm i react-native@latest
+          npm i typescript@5 react-native@latest
 
       - name: Build JavaScript files
         run: | # Change line to your build script command.
