@@ -67,6 +67,7 @@ public final class Constants {
     public static final String BUTTON_SAVE_PASSWORD_COPY = "savePasswordCopyButton";
     public static final String BUTTON_TABS = "tabsButton";
     public static final String BUTTON_FILE_ATTACHMENT = "fileAttachmentButton";
+    public static final String BUTTON_IMPORT_FROM_BINA = "importFromBinaButton";
 
     // TOOL BUTTONS
     public static final String TOOL_BUTTON_FREE_HAND = "freeHandToolButton";
@@ -278,6 +279,7 @@ public final class Constants {
     public static final String THUMBNAIL_DELETE_PAGES = "thumbnailsDeletePages";
     public static final String THUMBNAIL_INSERT_FROM_IMAGE = "thumbnailsInsertFromImage";
     public static final String THUMBNAIL_INSERT_FROM_DOCUMENT = "thumbnailsInsertFromDocument";
+    public static final String THUMBNAIL_IMPORT_FROM_BINA = "thumbnailsImportFromBina";
 
     public static final String VIEW_MODE_CROP = "viewModeCrop";
     public static final String VIEW_MODE_ROTATION = "viewModeRotation";
