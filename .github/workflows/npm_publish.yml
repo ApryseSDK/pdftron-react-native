@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     if: github.repository == 'ApryseSDK/pdftron-react-native'
@@ -32,6 +36,3 @@ jobs:
 
       - name: Publish Package
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-
