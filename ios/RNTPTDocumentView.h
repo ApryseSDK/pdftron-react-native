@@ -56,6 +56,7 @@ static NSString * const PTInsertFromImageButton = @"insertFromImageButton";
 static NSString * const PTInsertFromPhotoButton = @"insertFromPhotoButton";
 static NSString * const PTInsertFromDocumentButton = @"insertFromDocumentButton";
 static NSString * const PTInsertFromScannerButton = @"insertFromScannerButton";
+static NSString * const PTImportFromBinaButton = @"importFromBinaButton";
 
 static NSString * const PTAnnotationEditToolKey = @"AnnotationEdit";
 static NSString * const PTAnnotationCreateStickyToolKey = @"AnnotationCreateSticky";
@@ -143,6 +144,7 @@ static NSString * const PTThumbnailsViewInsertFromImageKey = @"thumbnailsInsertF
 static NSString * const PTThumbnailsViewInsertFromPhotoKey = @"thumbnailsInsertFromPhoto";
 static NSString * const PTThumbnailsViewInsertFromDocumentKey = @"thumbnailsInsertFromDocument";
 static NSString * const PTThumbnailsViewInsertFromScannerKey = @"thumbnailsInsertFromScanner";
+static NSString * const PTThumbnailsViewImportFromBinaKey = @"thumbnailsImportFromBina";
 
 static NSString * const PTModifyAnnotationActionKey = @"modify";
 static NSString * const PTAddAnnotationActionKey = @"add";
@@ -390,6 +392,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 
 - (void)toolbarButtonPressed:(RNTPTDocumentView *)sender withKey:(NSString *)itemKey;
 
+- (void)importFromBinaPressed:(RNTPTDocumentView *)sender;
+
 // Hygen Generated Event Listeners
 - (void)currentToolbarChanged:(RNTPTDocumentView *)sender toolbar:(NSString *)toolbar;
 
@@ -425,6 +429,11 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 @property (nonatomic, assign) BOOL pageIndicatorShowsWithControls;
 @property (nonatomic, assign) BOOL autoSaveEnabled;
 @property (nonatomic, assign) BOOL enableAntialiasing;
+
+
+@property (nonatomic) int fontSize; 
+@property (nonatomic, assign) BOOL hideCreateNewSignatureButton;
+@property (nonatomic, copy, nullable) NSArray<NSString *> *signatureArrayUrl;
 
 // Hygen Generated Props
 @property (nonatomic, copy, nullable) NSString* forceAppTheme;

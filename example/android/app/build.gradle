@@ -266,18 +266,19 @@ dependencies {
 
     implementation "androidx.multidex:multidex:2.0.1"
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.fbjni'
-    }
+    // Flipper disabled due to AGP compatibility issues
+    // debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+    //     exclude group:'com.facebook.fbjni'
+    // }
 
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
-    }
+    // debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+    //     exclude group:'com.facebook.flipper'
+    //     exclude group:'com.squareup.okhttp3', module:'okhttp'
+    // }
 
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
-    }
+    // debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+    //     exclude group:'com.facebook.flipper'
+    // }
 
     if (enableHermes) {
         //noinspection GradleDynamicVersion
