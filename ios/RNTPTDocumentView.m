@@ -3410,6 +3410,7 @@ NS_ASSUME_NONNULL_END
         PTFormCreateCheckboxFieldToolKey : @(PTExtendedAnnotTypeCheckBox),
         PTFormCreateComboBoxFieldToolKey : @(PTExtendedAnnotTypeComboBox),
         PTAnnotationCreateRedactionTextToolKey : @(PTExtendedAnnotTypeTextRedact),
+        PTAnnotationEraserToolKey : @(PTExtendedAnnotTypeEraser),
 //        PTAnnotationEditToolKey: @(),
 //        PTMultiSelectToolKey: @(),
     };
@@ -6290,6 +6291,139 @@ NS_ASSUME_NONNULL_END
 }
 
 #pragma mark - Hygen Generated Props/Methods
+
+// What each tool actually does with each property.
+//
+// The SDK can be asked -- -[PTAnnotStyle availableStyleKeys] -- but that answers what the SDK's
+// own style picker offers for an annotation type, not what the create tool reads. It is wrong in
+// both directions: it lists nothing at all for the signature tool, whose colour is simply
+// configured elsewhere, and on Android the mirror-image predicate denies a thickness to the
+// redaction tool, which honours one. A check built on it rejected a call that demonstrably works.
+//
+// So this table comes from reading the created annotation back out of an XFDF export, two
+// distinct values per entry and in both orders (set before the tool is armed, and while it is
+// already armed). The same table is measured on Android and the entries agree, so the behaviour
+// of this API does not depend on the platform.
+//
+// The eraser is the exception to that method, because it alters existing ink instead of creating
+// an annotation: its entry was measured by erasing across a stroke and comparing the width of the
+// gap. On Android it is also the one tool whose behaviour depended on the order, which is why the
+// Android implementation pushes the style into the live tool; here the tools re-read on every
+// draw, so nothing of the sort is needed.
+//
+// A tool that is absent is absent because nothing has measured it, not because it cannot work.
+// The sticky note is the one entry deliberately left out after measurement: Android writes its
+// colour as given and iOS ignores it, so honouring it here would mean the same call behaving
+// differently per platform.
++ (NSDictionary<NSString *, NSSet<NSString *> *> *)supportedToolProperties
+{
+    static NSDictionary<NSString *, NSSet<NSString *> *> *table = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSSet *strokeAndThickness = [NSSet setWithObjects:
+                PTToolDefaultStrokeColorKey, PTToolDefaultThicknessKey, nil];
+        table = @{
+            PTAnnotationCreateFreeHandToolKey            : strokeAndThickness,
+            PTAnnotationCreateFreeHighlighterToolKey     : strokeAndThickness,
+            PTAnnotationCreateLineToolKey                : strokeAndThickness,
+            PTAnnotationCreateArrowToolKey               : strokeAndThickness,
+            PTAnnotationCreateRectangleToolKey           : strokeAndThickness,
+            PTAnnotationCreateEllipseToolKey             : strokeAndThickness,
+            PTAnnotationCreateDistanceMeasurementToolKey : strokeAndThickness,
+            PTAnnotationCreateRedactionToolKey           : strokeAndThickness,
+            PTAnnotationCreateFreeTextToolKey            : [NSSet setWithObjects:
+                    PTToolDefaultStrokeColorKey, PTToolDefaultThicknessKey,
+                    PTToolDefaultTextColorKey, PTToolDefaultTextSizeKey, nil],
+            // The eraser has no colour and no text; its thickness is the width of the track it cuts.
+            PTAnnotationEraserToolKey                    : [NSSet setWithObject:
+                    PTToolDefaultThicknessKey],
+        };
+    });
+    return table;
+}
+
+- (void)rejectPropertiesUnsupportedByTool:(NSString *)tool
+                               properties:(NSDictionary *)properties
+{
+    NSDictionary<NSString *, NSSet<NSString *> *> *table =
+            [RNTPTDocumentView supportedToolProperties];
+    NSSet<NSString *> *supported = table[tool];
+    if (!supported) {
+        NSArray *tools = [table.allKeys sortedArrayUsingSelector:@selector(compare:)];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"\"%@\" is not one of the tools this method supports. It accepts %@.", tool, [tools componentsJoinedByString:@", "]]
+                                     userInfo:nil];
+    }
+
+    NSMutableArray<NSString *> *unsupported = [NSMutableArray array];
+    for (NSString *key in @[PTToolDefaultStrokeColorKey, PTToolDefaultThicknessKey,
+                            PTToolDefaultTextColorKey, PTToolDefaultTextSizeKey]) {
+        if (properties[key] && ![supported containsObject:key]) {
+            [unsupported addObject:key];
+        }
+    }
+    if (unsupported.count > 0) {
+        NSArray *accepted = [supported.allObjects sortedArrayUsingSelector:@selector(compare:)];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"\"%@\" does not use %@, so setting it would have no effect. It accepts %@.", tool, [unsupported componentsJoinedByString:@", "], [accepted componentsJoinedByString:@", "]]
+                                     userInfo:nil];
+    }
+}
+
+- (void)setDefaultPropertiesForTool:(NSString *)tool properties:(NSDictionary *)properties
+{
+    [self rejectPropertiesUnsupportedByTool:tool properties:properties];
+
+    PTExtendedAnnotType annotType = [self reactAnnotationNameToAnnotType:tool];
+    if (annotType == PTExtendedAnnotTypeUnknown) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:[NSString stringWithFormat:@"\"%@\" does not create annotations, so it has no default properties.", tool]
+                                     userInfo:nil];
+    }
+
+    // Write the defaults under the post-process mode the viewer is drawing with, because that
+    // is the mode PTCreateToolBase reads them back under.
+    PTColorPostProcessMode postProcessMode = e_ptpostprocess_none;
+    PTPDFViewCtrl *pdfViewCtrl = self.currentDocumentViewController.pdfViewCtrl;
+    if (pdfViewCtrl) {
+        postProcessMode = [pdfViewCtrl GetColorPostProcessMode];
+    }
+
+    NSDictionary *strokeColorMap = [RNTPTDocumentView PT_idAsNSDictionary:properties[PTToolDefaultStrokeColorKey]];
+    if (strokeColorMap) {
+        UIColor *strokeColor = [self convertRGBAToUIColor:strokeColorMap];
+        if (strokeColor) {
+            [PTColorDefaults setDefaultColor:strokeColor
+                                forAnnotType:annotType
+                                   attribute:ATTRIBUTE_STROKE_COLOR
+                        colorPostProcessMode:postProcessMode];
+        }
+    }
+
+    NSDictionary *textColorMap = [RNTPTDocumentView PT_idAsNSDictionary:properties[PTToolDefaultTextColorKey]];
+    if (textColorMap) {
+        UIColor *textColor = [self convertRGBAToUIColor:textColorMap];
+        if (textColor) {
+            [PTColorDefaults setDefaultColor:textColor
+                                forAnnotType:annotType
+                                   attribute:ATTRIBUTE_TEXT_COLOR
+                        colorPostProcessMode:postProcessMode];
+        }
+    }
+
+    NSNumber *thickness = [RNTPTDocumentView PT_idAsNSNumber:properties[PTToolDefaultThicknessKey]];
+    if (thickness) {
+        [PTColorDefaults setDefaultBorderThickness:[thickness doubleValue] forAnnotType:annotType];
+    }
+
+    NSNumber *textSize = [RNTPTDocumentView PT_idAsNSNumber:properties[PTToolDefaultTextSizeKey]];
+    if (textSize) {
+        [PTColorDefaults setDefaultFreeTextSize:[textSize doubleValue] forAnnotType:annotType];
+    }
+
+    // No live-tool step is needed here, unlike Android: PTCreateToolBase and PTEraser both
+    // re-read these defaults in -setupContext: on every draw.
+}
 
 - (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl
 {

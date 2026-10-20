@@ -2776,6 +2776,73 @@ this._viewer.setPropertiesForAnnotation('Pdftron', 1, {
 });
 ```
 
+#### setDefaultPropertiesForTool
+Sets the properties that a tool gives the annotations it creates from now on.
+
+Unlike `setPropertiesForAnnotation`, which changes an annotation that already exists, this
+changes the properties that the next annotation is created with. It lets a custom toolbar pick 
+a colour or a thickness before the user draws.
+
+Note: the underlying SDK stores these as user defaults, so they persist for the lifetime of the
+app installation, not only for the current view or document.
+
+Parameters:
+
+Name | Type | Description
+--- | --- | ---
+tool | string | the tool to configure, one of [`Config.Tools`](./src/Config/Config.ts) constants. It must be a tool that creates annotations
+propertyMap | object | an object containing properties to be set. Only the properties present are changed. The others keep their current values
+
+Properties in propertyMap:
+
+Name | Type | Description | Example
+--- | --- | --- | ---
+strokeColor | object | stroke (line) colour | {red: 255, green: 0, blue: 0}
+thickness | number | line or border thickness in points. For `Config.Tools.annotationEraserTool` this is the erase width | 8
+textColor | object | text colour, for tools that create text | {red: 255, green: 0, blue: 0}
+textSize | number | text size in points, for tools that create text | 24
+
+Which tools and properties this accepts, on both Android and iOS:
+
+Tool | strokeColor | thickness | textColor | textSize
+--- | --- | --- | --- | ---
+`annotationCreateFreeHand` | yes | yes | no | no
+`annotationCreateFreeHighlighter` | yes | yes | no | no
+`annotationCreateLine` | yes | yes | no | no
+`annotationCreateArrow` | yes | yes | no | no
+`annotationCreateRectangle` | yes | yes | no | no
+`annotationCreateEllipse` | yes | yes | no | no
+`annotationCreateDistanceMeasurement` | yes | yes | no | no
+`annotationCreateRedaction` | yes | yes | no | no
+`annotationCreateFreeText` | yes | yes | yes | yes
+`annotationEraserTool` | no | yes, the width of the track it erases | no | no
+
+Anything not listed is rejected rather than silently stored, so a call that resolves has had an
+effect.
+
+It makes no difference whether this is called before or after the tool is selected: the
+properties apply to the next annotation that tool creates either way. An annotation already being
+drawn keeps the style it started with.
+
+Returns a promise.
+
+```js
+// The next freehand stroke will be yellow, 8 points wide.
+await this._viewer.setDefaultPropertiesForTool(Config.Tools.annotationCreateFreeHand, {
+  strokeColor: {
+    "red": 255,
+    "green": 214,
+    "blue": 0
+  },
+  thickness: 8
+});
+
+// The eraser will erase a 30 point wide track.
+await this._viewer.setDefaultPropertiesForTool(Config.Tools.annotationEraserTool, {
+  thickness: 30
+});
+```
+
 #### getPropertiesForAnnotation
 Gets properties for specified annotation in the current document, if it is valid. 
 
