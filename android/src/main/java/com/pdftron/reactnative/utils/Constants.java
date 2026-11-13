@@ -320,6 +320,12 @@ public final class Constants {
     public static final String KEY_ANNOTATION_CUSTOM_DATA = "customData";
     public static final String KEY_ANNOTATION_STROKE_COLOR = "strokeColor";
 
+    // keys of AnnotOptions.ToolDefaultProperties, for setDefaultPropertiesForTool
+    public static final String KEY_TOOL_DEFAULT_STROKE_COLOR = "strokeColor";
+    public static final String KEY_TOOL_DEFAULT_THICKNESS = "thickness";
+    public static final String KEY_TOOL_DEFAULT_TEXT_COLOR = "textColor";
+    public static final String KEY_TOOL_DEFAULT_TEXT_SIZE = "textSize";
+
     public static final String KEY_ACTION = "action";
     public static final String KEY_ACTION_ADD = "add";
     public static final String KEY_ACTION_MODIFY = "modify";

@@ -1438,6 +1438,16 @@ public class DocumentViewViewManager extends ViewGroupManager<DocumentView> {
     }
 
     // Hygen Generated Methods
+
+    public void setDefaultPropertiesForTool(int tag, String tool, ReadableMap properties) throws PDFNetException {
+        DocumentView documentView = mDocumentViews.get(tag);
+        if (documentView != null) {
+            documentView.setDefaultPropertiesForTool(tool, properties);
+        } else {
+            throw new PDFNetException("", 0L, getName(), "setDefaultPropertiesForTool", "Unable to find DocumentView.");
+        }
+    }
+
     public void setStampImageData(int tag, String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
         DocumentView documentView = mDocumentViews.get(tag);
         if (documentView != null) {

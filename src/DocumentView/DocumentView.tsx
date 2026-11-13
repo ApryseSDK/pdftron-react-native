@@ -584,6 +584,14 @@ export class DocumentView extends PureComponent<DocumentViewProps, any> {
   }
 
   // Hygen Generated Methods
+  setDefaultPropertiesForTool = (tool: Config.Tools, properties: AnnotOptions.ToolDefaultProperties): Promise<void> => {
+    const tag = findNodeHandle(this._viewerRef);
+    if (tag != null) {
+      return DocumentViewManager.setDefaultPropertiesForTool(tag, tool, properties);
+    }
+    return Promise.resolve();
+  }
+
   setStampImageData = (annotationId: string, pageNumber: number, stampImageDataUrl: string): Promise<void> => {
     const tag = findNodeHandle(this._viewerRef);
     if (tag != null) {
