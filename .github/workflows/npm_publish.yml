@@ -34,5 +34,7 @@ jobs:
 
       - run: npm install --no-save json
 
+      - run: node -v && npm -v
+
       - name: Publish Package
-        run: npm publish --access public --tag latest
+        run: npm publish --access public --tag latest --loglevel verbose
