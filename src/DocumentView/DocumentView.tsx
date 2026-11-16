@@ -21,6 +21,7 @@ import * as AnnotOptions from "../AnnotOptions/AnnotOptions";
  * Config.Buttons values", please use {@link oneOf} or {@link arrayOf}.
  */
 const propTypes = {
+  hideCreateNewSignatureButton: PropTypes.bool,
   document: PropTypes.string.isRequired,
   source: PropTypes.string,
   password: PropTypes.string,
@@ -37,25 +38,44 @@ const propTypes = {
   onLoadComplete: func<(path: string) => void>(),
   onDocumentError: func<(error: string) => void>(),
   onError: func<(error: string) => void>(),
-  onPageChanged: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
-  onScrollChanged: func<(event: {horizontal: number, vertical: number}) => void>(),
-  onZoomChanged: func<(event: {zoom: number}) => void>(),
-  onScaleChanged: func<(event: {scale: number}) => void>(),
-  onZoomFinished: func<(event: {zoom: number}) => void>(),
+  onPageChanged:
+    func<(event: { previousPageNumber: number; pageNumber: number }) => void>(),
+  onScrollChanged:
+    func<(event: { horizontal: number; vertical: number }) => void>(),
+  onZoomChanged: func<(event: { zoom: number }) => void>(),
+  onScaleChanged: func<(event: { scale: number }) => void>(),
+  onZoomFinished: func<(event: { zoom: number }) => void>(),
   zoom: PropTypes.number,
   scale: PropTypes.number,
   disabledElements: arrayOf<Config.Buttons>(Config.Buttons),
   disabledTools: arrayOf<Config.Tools>(Config.Tools),
   longPressMenuItems: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
-  overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(Config.LongPressMenu),
-  onLongPressMenuPress: func<(event: { longPressMenu: string, longPressText: string }) => void>(),
+  overrideLongPressMenuBehavior: arrayOf<Config.LongPressMenu>(
+    Config.LongPressMenu
+  ),
+  onLongPressMenuPress:
+    func<(event: { longPressMenu: string; longPressText: string }) => void>(),
   longPressMenuEnabled: PropTypes.bool,
   annotationMenuItems: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
-  overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(Config.AnnotationMenu),
-  onAnnotationMenuPress: func<(event: { annotationMenu: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  overrideAnnotationMenuBehavior: arrayOf<Config.AnnotationMenu>(
+    Config.AnnotationMenu
+  ),
+  onAnnotationMenuPress:
+    func<
+      (event: {
+        annotationMenu: string;
+        annotations: Array<AnnotOptions.Annotation>;
+      }) => void
+    >(),
   hideAnnotationMenu: arrayOf<Config.Tools>(Config.Tools),
   overrideBehavior: arrayOf<Config.Actions>(Config.Actions),
-  onBehaviorActivated: func<(event: { action: Config.Actions, data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData }) => void>(),
+  onBehaviorActivated:
+    func<
+      (event: {
+        action: Config.Actions;
+        data: AnnotOptions.LinkPressData | AnnotOptions.StickyNoteData;
+      }) => void
+    >(),
   topToolbarEnabled: PropTypes.bool,
   bottomToolbarEnabled: PropTypes.bool,
   hideToolbarsOnTap: PropTypes.bool,
@@ -63,11 +83,20 @@ const propTypes = {
   downloadDialogEnabled: PropTypes.bool,
   pageIndicatorEnabled: PropTypes.bool,
   keyboardShortcutsEnabled: PropTypes.bool,
-  onAnnotationsSelected: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  onAnnotationChanged: func<(event: {action: string, annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  onAnnotationFlattened: func<(event: {annotations: Array<AnnotOptions.Annotation>}) => void>(),
-  onFormFieldValueChanged: func<(event: {fields: Array<AnnotOptions.Field>}) => void>(),
-  onAnnotationToolbarItemPress: func<(event: {id: string}) => void>(),
+  onAnnotationsSelected:
+    func<(event: { annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  onAnnotationChanged:
+    func<
+      (event: {
+        action: string;
+        annotations: Array<AnnotOptions.Annotation>;
+      }) => void
+    >(),
+  onAnnotationFlattened:
+    func<(event: { annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  onFormFieldValueChanged:
+    func<(event: { fields: Array<AnnotOptions.Field> }) => void>(),
+  onAnnotationToolbarItemPress: func<(event: { id: string }) => void>(),
   onSavedSignaturesChanged: func<() => void>(),
   readOnly: PropTypes.bool,
   thumbnailViewEditingEnabled: PropTypes.bool,
@@ -85,7 +114,14 @@ const propTypes = {
   collabEnabled: PropTypes.bool,
   currentUser: PropTypes.string,
   currentUserName: PropTypes.string,
-  onExportAnnotationCommand: func<(event: { action: "modify" | "delete" | "add" | "undo" | "redo", xfdfCommand: string, annotations: Array<AnnotOptions.Annotation> }) => void>(),
+  onExportAnnotationCommand:
+    func<
+      (event: {
+        action: "modify" | "delete" | "add" | "undo" | "redo";
+        xfdfCommand: string;
+        annotations: Array<AnnotOptions.Annotation>;
+      }) => void
+    >(),
   autoSaveEnabled: PropTypes.bool,
   pageChangeOnTap: PropTypes.bool,
   followSystemDarkMode: PropTypes.bool,
@@ -96,23 +132,30 @@ const propTypes = {
   maxTabCount: PropTypes.number,
   signSignatureFieldsWithStamps: PropTypes.bool,
   annotationPermissionCheckEnabled: PropTypes.bool,
-  annotationToolbars: PropTypes.arrayOf(PropTypes.oneOfType([
-    oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
-      items: PropTypes.arrayOf(PropTypes.oneOfType([
-        oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons).isRequired,
-        PropTypes.exact({
-          id: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          icon: PropTypes.string.isRequired,
-        })
-      ]))
-    })
-  ])),
-  hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+  annotationToolbars: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      oneOf<Config.DefaultToolbars>(Config.DefaultToolbars),
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        icon: oneOf<Config.ToolbarIcons>(Config.ToolbarIcons).isRequired,
+        items: PropTypes.arrayOf(
+          PropTypes.oneOfType([
+            oneOf<Config.Tools | Config.Buttons>(Config.Tools, Config.Buttons)
+              .isRequired,
+            PropTypes.exact({
+              id: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+              icon: PropTypes.string.isRequired,
+            }),
+          ])
+        ),
+      }),
+    ])
+  ),
+  hideDefaultAnnotationToolbars: arrayOf<Config.DefaultToolbars>(
+    Config.DefaultToolbars
+  ),
   topAppNavBarRightBar: arrayOf<Config.Buttons>(Config.Buttons),
   bottomToolbar: arrayOf<Config.Buttons>(Config.Buttons),
   hideAnnotationToolbarSwitcher: PropTypes.bool,
@@ -120,14 +163,32 @@ const propTypes = {
   hideTopAppNavBar: PropTypes.bool,
   hidePresetBar: PropTypes.bool,
   onBookmarkChanged: func<(event: { bookmarkJson: string }) => void>(),
-  hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(Config.ThumbnailFilterMode),
-  onToolChanged: func<(event: { previousTool: Config.Tools | "unknown tool", tool: Config.Tools | "unknown tool" }) => void>(),
+  hideThumbnailFilterModes: arrayOf<Config.ThumbnailFilterMode>(
+    Config.ThumbnailFilterMode
+  ),
+  onToolChanged:
+    func<
+      (event: {
+        previousTool: Config.Tools | "unknown tool";
+        tool: Config.Tools | "unknown tool";
+      }) => void
+    >(),
   horizontalScrollPos: PropTypes.number,
   verticalScrollPos: PropTypes.number,
   onTextSearchStart: func<() => void>(),
-  onTextSearchResult: func<(event: { found: boolean, textSelection: AnnotOptions.TextSelectionResult | null }) => void>(),
-  hideViewModeItems: arrayOf<Config.ViewModePickerItem>(Config.ViewModePickerItem),
-  hideThumbnailsViewItems: arrayOf<Config.ThumbnailsViewItem>(Config.ThumbnailsViewItem),
+  onTextSearchResult:
+    func<
+      (event: {
+        found: boolean;
+        textSelection: AnnotOptions.TextSelectionResult | null;
+      }) => void
+    >(),
+  hideViewModeItems: arrayOf<Config.ViewModePickerItem>(
+    Config.ViewModePickerItem
+  ),
+  hideThumbnailsViewItems: arrayOf<Config.ThumbnailsViewItem>(
+    Config.ThumbnailsViewItem
+  ),
   pageStackEnabled: PropTypes.bool,
   showQuickNavigationButton: PropTypes.bool,
   photoPickerEnabled: PropTypes.bool,
@@ -150,28 +211,35 @@ const propTypes = {
   saveStateEnabled: PropTypes.bool,
   openSavedCopyInNewTab: PropTypes.bool,
   excludedAnnotationListTypes: arrayOf<Config.Tools>(Config.Tools),
-  annotationManagerEditMode: oneOf<Config.AnnotationManagerEditMode>(Config.AnnotationManagerEditMode),
-  annotationManagerUndoMode: oneOf<Config.AnnotationManagerUndoMode>(Config.AnnotationManagerUndoMode),
+  annotationManagerEditMode: oneOf<Config.AnnotationManagerEditMode>(
+    Config.AnnotationManagerEditMode
+  ),
+  annotationManagerUndoMode: oneOf<Config.AnnotationManagerUndoMode>(
+    Config.AnnotationManagerUndoMode
+  ),
   replyReviewStateEnabled: PropTypes.bool,
-  onPageMoved: func<(event: {previousPageNumber: number, pageNumber: number}) => void>(),
-  onPagesAdded: func<(event: {pageNumbers: Array<number>}) => void>(),
-  onPagesRemoved: func<(event: {pageNumbers: Array<number>}) => void>(),
-  onPagesRotated: func<(event: {pageNumbers: Array<number>}) => void>(),
-  onTabChanged: func<(event: {currentTab: string}) => void>(),
+  onPageMoved:
+    func<(event: { previousPageNumber: number; pageNumber: number }) => void>(),
+  onPagesAdded: func<(event: { pageNumbers: Array<number> }) => void>(),
+  onPagesRemoved: func<(event: { pageNumbers: Array<number> }) => void>(),
+  onPagesRotated: func<(event: { pageNumbers: Array<number> }) => void>(),
+  onTabChanged: func<(event: { currentTab: string }) => void>(),
   rememberLastUsedTool: PropTypes.bool,
   overflowMenuButtonIcon: PropTypes.string,
   maxSignatureCount: PropTypes.number,
   overrideToolbarButtonBehavior: arrayOf<Config.Buttons>(Config.Buttons),
-  onToolbarButtonPress: func<(event: {id: string}) => void>(),
+  onToolbarButtonPress: func<(event: { id: string }) => void>(),
 
   // Hygen Generated Props
   enableReadingModeQuickMenu: PropTypes.bool,
   forceAppTheme: oneOf<Config.ThemeOptions>(Config.ThemeOptions),
-  signatureColors: PropTypes.arrayOf(PropTypes.exact({
-    red: PropTypes.number.isRequired,
-    green: PropTypes.number.isRequired,
-    blue: PropTypes.number.isRequired,
-  })),
+  signatureColors: PropTypes.arrayOf(
+    PropTypes.exact({
+      red: PropTypes.number.isRequired,
+      green: PropTypes.number.isRequired,
+      blue: PropTypes.number.isRequired,
+    })
+  ),
   onCurrentToolbarChanged: func<(event: { toolbar: string }) => void>(),
 
   ...ViewPropTypes,
