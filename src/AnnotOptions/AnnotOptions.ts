@@ -73,6 +73,23 @@ export interface AnnotationProperties {
     strokeColor?: Color;
 }
 
+/**
+ * The default properties a tool gives the annotations it creates. Set with
+ * {@link DocumentView.setDefaultPropertiesForTool}.
+ *
+ * Only the properties present are changed. The rest keep their current values.
+ */
+export interface ToolDefaultProperties {
+    /** Stroke (line) colour. */
+    strokeColor?: Color;
+    /** Line or border thickness in points. For the eraser tool this is the erase width. */
+    thickness?: number;
+    /** Text colour, for tools that create text. */
+    textColor?: Color;
+    /** Text size in points, for tools that create text. */
+    textSize?: number;
+}
+
 export interface LinkPressData {
     url: string;
 }

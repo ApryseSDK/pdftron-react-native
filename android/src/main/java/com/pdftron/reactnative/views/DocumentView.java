@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.SparseArray;
@@ -60,6 +61,7 @@ import com.pdftron.pdf.annots.Widget;
 import com.pdftron.pdf.config.PDFViewCtrlConfig;
 import com.pdftron.pdf.config.ToolConfig;
 import com.pdftron.pdf.config.ToolManagerBuilder;
+import com.pdftron.pdf.config.ToolStyleConfig;
 import com.pdftron.pdf.config.ViewerConfig;
 import com.pdftron.pdf.controls.PdfViewCtrlTabFragment2;
 import com.pdftron.pdf.controls.PdfViewCtrlTabHostFragment2;
@@ -113,9 +115,14 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -794,13 +801,15 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             ReadableType type = signatureColors.getType(i);
 
             if (type == ReadableType.Map) {
-                ReadableMap map = signatureColors.getMap(i);
-
-                int red = map.getInt(COLOR_RED);
-                int green = map.getInt(COLOR_GREEN);
-                int blue = map.getInt(COLOR_BLUE);
-
-                result[i] = Color.rgb(red, green, blue);
+                Integer color = convColorMapToInt(signatureColors.getMap(i));
+                // Behaviour change: before this used the shared helper, an incomplete entry
+                // threw NoSuchKeyException from the bridge. It still throws, and now names
+                // which entry.
+                if (color == null) {
+                    throw new IllegalArgumentException(
+                            "signatureColors[" + i + "] needs red, green and blue");
+                }
+                result[i] = color;
             }
         }
 
@@ -1322,6 +1331,8 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_CROSS_STAMP;
         } else if (TOOL_ANNOTATION_CREATE_DOT_STAMP.equals(item)) {
             annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_DOT_STAMP;
+        } else if (TOOL_ANNOTATION_ERASER_TOOL.equals(item)) {
+            annotType = AnnotStyle.CUSTOM_ANNOT_TYPE_ERASER;
         }
         return annotType;
     }
@@ -2145,6 +2156,22 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         }
 
         return menuStr;
+    }
+
+    // Returns null for a missing or incomplete colour, rather than a sentinel.
+    //
+    // convertRGBAToHex below does the same job but reports failure as -1, and -1 is also
+    // Color.rgb(255, 255, 255): with that helper an opaque white is indistinguishable from a
+    // colour that could not be read. White is an ordinary annotation colour, so callers that
+    // have to tell the two apart use this one.
+    @Nullable
+    private Integer convColorMapToInt(@Nullable ReadableMap colorMap) {
+        if (colorMap == null || !colorMap.hasKey(COLOR_RED) || !colorMap.hasKey(COLOR_GREEN)
+                || !colorMap.hasKey(COLOR_BLUE)) {
+            return null;
+        }
+        return Color.rgb(colorMap.getInt(COLOR_RED), colorMap.getInt(COLOR_GREEN),
+                colorMap.getInt(COLOR_BLUE));
     }
 
     private ViewerConfig getConfig() {
@@ -5056,7 +5083,126 @@ public class DocumentView extends com.pdftron.pdf.controls.DocumentView2 {
         return "";
     }
 
+    // What each tool actually does with each property.
+    //
+    // The SDK can be asked -- AnnotStyle.hasColor, hasThickness, hasFont -- but those answer what
+    // the SDK's own style picker offers for an annotation type, not what the create tool reads.
+    // They are wrong in both directions: they claim text properties for the signature tool, which
+    // has no text, and they deny a thickness to the redaction tool, which honours one. A check
+    // built on them rejected a call that demonstrably works.
+    //
+    // So this table comes from reading the created annotation back out of an XFDF export, two
+    // distinct values per entry and in both orders (set before the tool is armed, and while it is
+    // already armed). The same table is measured on iOS and the entries agree, so the behaviour
+    // of this API does not depend on the platform.
+    //
+    // The eraser is the exception to that method, because it alters existing ink instead of
+    // creating an annotation: its entry was measured by erasing across a stroke and comparing the
+    // width of the gap. It is also the one tool whose behaviour did depend on the order, which is
+    // why setDefaultPropertiesForTool pushes the style into the live tool as well.
+    //
+    // A tool that is absent is absent because nothing has measured it, not because it cannot
+    // work.
+    private static final Map<String, Set<String>> SUPPORTED_TOOL_PROPERTIES;
+
+    static {
+        Map<String, Set<String>> m = new HashMap<>();
+        Set<String> strokeAndThickness = new HashSet<>(Arrays.asList(
+                KEY_TOOL_DEFAULT_STROKE_COLOR, KEY_TOOL_DEFAULT_THICKNESS));
+        m.put(TOOL_ANNOTATION_CREATE_FREE_HAND, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_FREE_HIGHLIGHTER, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_LINE, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_ARROW, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_RECTANGLE, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_ELLIPSE, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_DISTANCE_MEASUREMENT, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_REDACTION, strokeAndThickness);
+        m.put(TOOL_ANNOTATION_CREATE_FREE_TEXT, new HashSet<>(Arrays.asList(
+                KEY_TOOL_DEFAULT_STROKE_COLOR, KEY_TOOL_DEFAULT_THICKNESS,
+                KEY_TOOL_DEFAULT_TEXT_COLOR, KEY_TOOL_DEFAULT_TEXT_SIZE)));
+        // The eraser has no colour and no text; its thickness is the width of the track it cuts.
+        m.put(TOOL_ANNOTATION_ERASER_TOOL, new HashSet<>(Collections.singletonList(
+                KEY_TOOL_DEFAULT_THICKNESS)));
+        SUPPORTED_TOOL_PROPERTIES = Collections.unmodifiableMap(m);
+    }
+
+    private void rejectPropertiesUnsupportedByTool(String tool, ReadableMap properties)
+            throws PDFNetException {
+        Set<String> supported = SUPPORTED_TOOL_PROPERTIES.get(tool);
+        if (supported == null) {
+            throw new PDFNetException("", 0L, TAG, "setDefaultPropertiesForTool",
+                    "\"" + tool + "\" is not one of the tools this method supports. It accepts "
+                            + TextUtils.join(", ", new TreeSet<>(SUPPORTED_TOOL_PROPERTIES.keySet()))
+                            + ".");
+        }
+
+        ArrayList<String> unsupported = new ArrayList<>();
+        for (String key : new String[]{KEY_TOOL_DEFAULT_STROKE_COLOR, KEY_TOOL_DEFAULT_THICKNESS,
+                KEY_TOOL_DEFAULT_TEXT_COLOR, KEY_TOOL_DEFAULT_TEXT_SIZE}) {
+            if (properties.hasKey(key) && !supported.contains(key)) {
+                unsupported.add(key);
+            }
+        }
+        if (!unsupported.isEmpty()) {
+            throw new PDFNetException("", 0L, TAG, "setDefaultPropertiesForTool",
+                    "\"" + tool + "\" does not use " + TextUtils.join(", ", unsupported)
+                            + ", so setting it would have no effect. It accepts "
+                            + TextUtils.join(", ", new TreeSet<>(supported)) + ".");
+        }
+    }
+
     // Hygen Generated Methods
+    public void setDefaultPropertiesForTool(String tool, ReadableMap properties) throws PDFNetException {
+        rejectPropertiesUnsupportedByTool(tool, properties);
+
+        int annotType = convStringToAnnotType(tool);
+        if (annotType == Annot.e_Unknown) {
+            throw new PDFNetException("", 0L, TAG, "setDefaultPropertiesForTool",
+                    "\"" + tool + "\" does not create annotations, so it has no default properties.");
+        }
+
+        Context context = getContext();
+        ToolStyleConfig styleConfig = ToolStyleConfig.getInstance();
+
+        // Read-modify-write. saveAnnotStyle persists every field of the style it is given, so
+        // starting from a blank AnnotStyle would reset the properties the caller did not set.
+        // The preset key must be "", because that is the key the tools themselves read from.
+        AnnotStyle annotStyle = styleConfig.getCustomAnnotStyle(context, annotType, "");
+
+        if (properties.hasKey(KEY_TOOL_DEFAULT_STROKE_COLOR)) {
+            Integer color = convColorMapToInt(properties.getMap(KEY_TOOL_DEFAULT_STROKE_COLOR));
+            if (color != null) {
+                annotStyle.setStrokeColor(color);
+            }
+        }
+        if (properties.hasKey(KEY_TOOL_DEFAULT_TEXT_COLOR)) {
+            Integer color = convColorMapToInt(properties.getMap(KEY_TOOL_DEFAULT_TEXT_COLOR));
+            if (color != null) {
+                annotStyle.setTextColor(color);
+            }
+        }
+        if (properties.hasKey(KEY_TOOL_DEFAULT_THICKNESS)) {
+            annotStyle.setThickness((float) properties.getDouble(KEY_TOOL_DEFAULT_THICKNESS));
+        }
+        if (properties.hasKey(KEY_TOOL_DEFAULT_TEXT_SIZE)) {
+            annotStyle.setTextSize((float) properties.getDouble(KEY_TOOL_DEFAULT_TEXT_SIZE));
+        }
+
+        styleConfig.saveAnnotStyle(context, annotStyle, "");
+
+        // Most creation tools re-read their style from the preferences at the start of every
+        // stroke, so saving is enough. The eraser does not: it reads only when it is
+        // constructed. Push the style into the live tool as well so that changing a property
+        // while its tool is already selected takes effect immediately.
+        ToolManager toolManager = getToolManager();
+        if (toolManager != null && toolManager.getTool() instanceof Tool) {
+            Tool currentTool = (Tool) toolManager.getTool();
+            if (currentTool.getCreateAnnotType() == annotType) {
+                currentTool.setupAnnotProperty(annotStyle);
+            }
+        }
+    }
+
     public void setStampImageData(String annotationId, int pageNumber, String stampImageDataUrl, Promise promise) throws PDFNetException {
         // Initialize a new ElementWriter and ElementBuilder
         ElementWriter writer = new ElementWriter();
