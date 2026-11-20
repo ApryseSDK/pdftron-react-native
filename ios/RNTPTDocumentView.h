@@ -31,6 +31,8 @@ static NSString * const PTFormToolsButtonKey = @"formToolsButton";
 static NSString * const PTFillSignToolsButtonKey = @"fillSignToolsButton";
 static NSString * const PTEditMenuButtonKey = @"editMenuButton";
 static NSString * const PTCropPageButtonKey = @"cropPageButton";
+static NSString * const PTUndoButtonKey = @"undo";
+static NSString * const PTRedoButtonKey = @"redo";
 
 static NSString * const PTStickyToolButtonKey = @"stickyToolButton";
 static NSString * const PTFreeHandToolButtonKey = @"freeHandToolButton";
