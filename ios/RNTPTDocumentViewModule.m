@@ -1409,6 +1409,22 @@ RCT_REMAP_METHOD(importAnnotationCommand,
 }
 
 #pragma mark - Hygen Generated Methods
+RCT_REMAP_METHOD(setDefaultPropertiesForTool,
+                 setDefaultPropertiesForToolForDocumentViewTag:(nonnull NSNumber *)tag
+                 tool:(NSString *)tool
+                 properties:(NSDictionary *)properties
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    @try {
+        [[self documentViewManager] setDefaultPropertiesForToolForDocumentViewTag:tag tool:tool properties:properties];
+        resolve(nil);
+    }
+    @catch (NSException *exception) {
+        reject(@"set_default_properties_for_tool", @"Failed to set default properties for tool", [self errorFromException:exception]);
+    }
+}
+
 RCT_REMAP_METHOD(setStampImageData,
                  setStampImageDataForDocumentViewTag:(nonnull NSNumber *)tag
                  annotationId:(NSString *)annotationId

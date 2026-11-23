@@ -1458,6 +1458,21 @@ public class DocumentViewModule extends ReactContextBaseJavaModule implements Ac
     // Hygen Generated Methods
 
     @ReactMethod
+    public void setDefaultPropertiesForTool(final int tag, final String tool, final ReadableMap properties, final Promise promise) {
+        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mDocumentViewInstance.setDefaultPropertiesForTool(tag, tool, properties);
+                    promise.resolve(null);
+                } catch (Exception ex) {
+                    promise.reject(ex);
+                }
+            }
+        });
+    }
+
+    @ReactMethod
     public void setStampImageData(final int tag, final String annotationId, final int pageNumber, final String stampImageDataUrl, final Promise promise) {
         getReactApplicationContext().runOnUiQueueThread(new Runnable() {
             @Override

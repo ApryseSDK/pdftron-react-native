@@ -228,6 +228,12 @@ static NSString * const PTRectHeightKey = @"height";
 
 static NSString * const PTStrokeColorKey = @"strokeColor";
 
+// keys of AnnotOptions.ToolDefaultProperties, for setDefaultPropertiesForTool
+static NSString * const PTToolDefaultStrokeColorKey = @"strokeColor";
+static NSString * const PTToolDefaultThicknessKey   = @"thickness";
+static NSString * const PTToolDefaultTextColorKey   = @"textColor";
+static NSString * const PTToolDefaultTextSizeKey    = @"textSize";
+
 static NSString * const PTScrollHorizontalKey = @"horizontal";
 static NSString * const PTScrollVerticalKey = @"vertical";
 
@@ -740,6 +746,8 @@ static NSString * const PTSignaturesManager_signatureDirectory = @"PTSignaturesM
 -(NSString *)getSavedSignatureFolder;
 
 // Hygen Generated Methods
+- (void)setDefaultPropertiesForTool:(NSString *)tool properties:(NSDictionary *)properties;
+
 - (void)setStampImageData:(NSString *)annotationId pageNumber:(NSInteger)pageNumber stampImageDataUrl:(NSString *)stampImageDataUrl;
 - (void)setFormFieldHighlightColor:(NSDictionary *)fieldHighlightColor;
 @end
