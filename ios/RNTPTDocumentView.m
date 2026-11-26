@@ -689,6 +689,31 @@ NS_ASSUME_NONNULL_END
                 documentController.toolGroupManager.editingEnabled = NO;
             }
         },
+        PTUndoButtonKey: ^{
+            if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+                PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+                PTToolGroupToolbar *toolGroupToolbar = documentController.toolGroupToolbar;
+                // The tool group toolbar normally shows/hides the undo and redo buttons
+                // automatically, based on whether undo/redo is currently available. This
+                // includes tools (e.g. PTPencilDrawingCreate, PTFreeHandCreate, PTPolylineCreate)
+                // that have their own tool-scoped undo stack, separate from the document's.
+                // Take over that responsibility so the button stays hidden in all of those cases.
+                toolGroupToolbar.automaticallyUpdatesTrailingItems = NO;
+                NSMutableArray<UIBarButtonItem *> *trailingItems = [toolGroupToolbar.trailingItems mutableCopy];
+                [trailingItems removeObject:documentController.toolGroupManager.undoButtonItem];
+                toolGroupToolbar.trailingItems = [trailingItems copy];
+            }
+        },
+        PTRedoButtonKey: ^{
+            if ([documentViewController isKindOfClass:[PTDocumentController class]]) {
+                PTDocumentController *documentController = (PTDocumentController *)documentViewController;
+                PTToolGroupToolbar *toolGroupToolbar = documentController.toolGroupToolbar;
+                toolGroupToolbar.automaticallyUpdatesTrailingItems = NO;
+                NSMutableArray<UIBarButtonItem *> *trailingItems = [toolGroupToolbar.trailingItems mutableCopy];
+                [trailingItems removeObject:documentController.toolGroupManager.redoButtonItem];
+                toolGroupToolbar.trailingItems = [trailingItems copy];
+            }
+        },
 //        PTPrintButtonKey: ^{
 //
 //        },
